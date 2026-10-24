@@ -43,3 +43,6 @@ Clarify that registration needs email verification; style successful requests se
 
 ## 1.1.4 navigation
 Kanban, Timeline and Calendar are grouped in one compact mode selector with distinct line icons. Versions moves to the menu footer and dashboard bottom. Settings consolidates account, notifications, sync and data tools.
+
+## 1.1.5 phone layout
+Sticky mobile menu/search and view switch; dismissible navigation drawer with scrim and Escape; 44px controls, 16px form inputs, single-column modal forms, scroll-snap Kanban columns, mobile task cards and calendar agenda. Safe-area spacing and responsive settings dialogs.
