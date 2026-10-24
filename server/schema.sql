@@ -14,3 +14,5 @@ CREATE INDEX IF NOT EXISTS tokens_expires ON tokens(expires);
 CREATE INDEX IF NOT EXISTS subscriptions_user ON subscriptions(user_id);
 CREATE INDEX IF NOT EXISTS rate_limits_expires ON rate_limits(expires);
 CREATE TABLE IF NOT EXISTS profiles(user_id TEXT PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,name TEXT NOT NULL DEFAULT '',birthday TEXT NOT NULL DEFAULT '',avatar TEXT NOT NULL DEFAULT '');
+
+CREATE TABLE IF NOT EXISTS reminder_settings(user_id TEXT PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,hour INTEGER NOT NULL DEFAULT 8,interval_days INTEGER NOT NULL DEFAULT 1);

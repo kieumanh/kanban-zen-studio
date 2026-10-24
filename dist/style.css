@@ -40,3 +40,5 @@ body{font-size:14px}.app{width:100%;min-width:0}.topbar{position:sticky;top:0;z-
 }
 
 .profile-card{background:#f8f3fc;border:1px solid var(--line);border-radius:16px;padding:20px;margin:20px 0}.profile-card label{display:grid;gap:6px;margin:14px 0;font-weight:500}.profile-card input{width:100%;min-height:44px;border:1px solid var(--line);border-radius:9px;background:white;padding:10px;font-size:16px}.profile-card img{border-radius:50%;object-fit:cover;margin-top:12px}.profile-card small{line-height:1.6}.settings-section{border-top:1px solid var(--line);padding-top:20px;margin-top:24px}#profile-status{margin-top:12px;color:var(--orange)}
+
+.reminder-options select{width:100%;min-height:44px;border:1px solid var(--line);border-radius:9px;padding:10px;background:white;font-size:16px}.reminder-options .btn{margin-top:16px}
