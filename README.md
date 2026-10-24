@@ -68,3 +68,6 @@ Archived completed projects and pinned tabs; visual note cards with groups, link
 
 ## Free storage guardrails
 R2 Standard: 25,000,000 bytes/file, 1,000,000,000 bytes for the entire Kanban bucket across all users (including trash, reserved uploads and legacy attachments). Atomic reservations prevent concurrent quota bypass. All asset API calls share a cap of 100,000 per UTC month, allowing headroom for cleanup. Other Cloudflare buckets/services have separate usage and must remain within account free allowances; this application cap is not an account-wide billing switch.
+
+## 1.3.1 Simple notes
+Replace visual board authoring with a flat Keep-inspired card grid, retaining existing notes (including nested content), checklists, sketches and attachments. Simple note editor, server-enforced free storage quotas retained. Remove dashboard health panel. Compact outlined menu icons, desktop search capsule, sync state icons and scoped account typography.
