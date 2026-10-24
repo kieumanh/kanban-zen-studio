@@ -46,3 +46,6 @@ Kanban, Timeline and Calendar are grouped in one compact mode selector with dist
 
 ## 1.1.5 phone layout
 Sticky mobile menu/search and view switch; dismissible navigation drawer with scrim and Escape; 44px controls, 16px form inputs, single-column modal forms, scroll-snap Kanban columns, mobile task cards and calendar agenda. Safe-area spacing and responsive settings dialogs.
+
+## 1.1.6 input and synchronization review
+Compact sidebar. Validate real calendar dates and trim empty labels on input/import. Revision-only polling skips unchanged workspace payloads; asynchronous polls never overwrite edits made while the request is in flight. Failed conflict reload preserves local dirty state. Concurrent signup uses insert-or-ignore without changing an existing password. Reminder queries exclude users without active delivery channels; additive indexes support cleanup and user lookups.

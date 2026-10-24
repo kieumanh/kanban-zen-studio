@@ -6,3 +6,10 @@ CREATE TABLE IF NOT EXISTS workspaces(user_id TEXT PRIMARY KEY,data TEXT NOT NUL
 CREATE TABLE IF NOT EXISTS rate_limits(key TEXT PRIMARY KEY,count INTEGER NOT NULL,expires INTEGER NOT NULL);
 CREATE TABLE IF NOT EXISTS subscriptions(endpoint TEXT PRIMARY KEY,user_id TEXT NOT NULL);
 CREATE TABLE IF NOT EXISTS deliveries(user_id TEXT NOT NULL,day TEXT NOT NULL,channel TEXT NOT NULL,status TEXT NOT NULL,PRIMARY KEY(user_id,day,channel));
+
+CREATE INDEX IF NOT EXISTS sessions_expires ON sessions(expires);
+CREATE INDEX IF NOT EXISTS sessions_user ON sessions(user_id);
+CREATE INDEX IF NOT EXISTS tokens_user_kind ON tokens(user_id,kind);
+CREATE INDEX IF NOT EXISTS tokens_expires ON tokens(expires);
+CREATE INDEX IF NOT EXISTS subscriptions_user ON subscriptions(user_id);
+CREATE INDEX IF NOT EXISTS rate_limits_expires ON rate_limits(expires);
