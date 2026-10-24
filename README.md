@@ -37,3 +37,6 @@ Purple, rose and warm orange palette; wisdom-eye SVG identity in the sidebar, au
 
 ## 1.1.2 completion celebrations
 Five randomized encouraging messages with illustrated icons and purple/rose/orange fireworks. Triggered by direct checklist completion and task transition into Done (including editor and drag-and-drop). Final checklist item celebrates once as task completion; reopen, refresh, import and remote sync do not trigger. Nonblocking, dismissible, automatic 4.5s dismissal; respects reduced motion.
+
+## 1.1.3 registration feedback
+Clarify that registration needs email verification; style successful requests separately from errors and clear/hide the password after successful submission. Investigated account metadata and provider delivery status without accessing password hashes or verification secrets.
