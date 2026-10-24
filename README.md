@@ -71,3 +71,6 @@ R2 Standard: 25,000,000 bytes/file, 1,000,000,000 bytes for the entire Kanban bu
 
 ## 1.3.1 Simple notes
 Replace visual board authoring with a flat Keep-inspired card grid, retaining existing notes (including nested content), checklists, sketches and attachments. Simple note editor, server-enforced free storage quotas retained. Remove dashboard health panel. Compact outlined menu icons, desktop search capsule, sync state icons and scoped account typography.
+
+## 1.3.2 Calendar and notices
+Monthly seven-column calendar with task/checklist date ranges, month navigation and Today. Project tabs retain Timeline/Calendar mode and filter immediately. Pinned tabs use initials and accessible full-name tooltips. Compact search, green cloud success/yellow warning, in-app task notices and private file update polling every minute while open. Existing daily email/push scheduling remains separate.

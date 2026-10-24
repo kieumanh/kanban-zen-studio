@@ -9,3 +9,12 @@ vm.runInContext("data.notes[0].boardId=data.notes[0].id",context);assert.equal(v
 console.log('PASS: script startup, board rendering, table cards, nested boards, recycle/restore and cycle rejection.');
 
 vm.runInContext("data={schema:1,projects:[],notes:[],trash:[{id:'old',at:Date.now(),kind:'note',name:'Old',payload:'{}',parent:''}]};const prior=structuredClone(data);data={schema:1,projects:[]};moveToTrash(prior)",context);assert.equal(vm.runInContext('data.trash.length',context),1);
+
+vm.runInContext("data=sample();let currentUser=null;function requestAPI(){};function setInterval(){};",context);
+vm.runInContext(readFileSync(new URL('../dist/ux.js',import.meta.url),'utf8'),context,{filename:'ux.js'});
+assert.ok(vm.runInContext('workCalendar()',context).includes('month-grid'));
+assert.equal(vm.runInContext("(workCalendar().match(/role=\"columnheader\"/g)||[]).length",context),7);
+vm.runInContext("view='calendar';active=data.projects[0].id;filterProject=active",context);
+assert.ok(vm.runInContext('scheduleEvents().every(t=>t.project.id===active)',context));
+assert.equal(vm.runInContext("workFilters()",context),'');
+console.log('PASS: calendar startup, seven weekdays and project filtering.');
