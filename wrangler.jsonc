@@ -1,0 +1,8 @@
+{
+  "name": "kanban-zen-studio",
+  "main": "worker.mjs",
+  "compatibility_date": "2026-10-24",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": { "enabled": true },
+  "routes": [{ "pattern": "kanban.huongthiennature.com", "custom_domain": true }]
+}
