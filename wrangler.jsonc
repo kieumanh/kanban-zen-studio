@@ -28,5 +28,11 @@
   },
   "vars": {
     "VAPID_PUBLIC": "BKbJzhTBKChNcGUQzGruhrQiATAx2R71XEpPCE-1ip8uhJviT0cqvvBPrxsH1P3juOIVPXJIMGbJ5JAwemzKujY"
-  }
+  },
+  "r2_buckets": [
+    {
+      "binding": "FILES",
+      "bucket_name": "kanban-zen-files"
+    }
+  ]
 }

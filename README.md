@@ -1,4 +1,4 @@
-# Kanban Zen Studio 1.1.2 — Small wins
+# Kanban Zen Studio 1.3.0 — Content Studio
 
 Production: https://kanban.huongthiennature.com/
 Private source: https://github.com/kieumanh/kanban-zen-studio
@@ -55,3 +55,13 @@ Compact capsule search with a single focus ring; remove nested input border on p
 
 ## 1.2.0
 Archived completed projects and pinned tabs; visual note cards with groups, links, sketches and ordering; private account attachments (1 MB/file, 20 MB/account); Eisenhower categories and filtering; dashboard overdue/upcoming/important work; task/checklist ranges on timeline and agenda calendar. Automatic online/focus retries retain local edits and keep CAS conflict protection. File upload requires connectivity. Notes are a lightweight visual notebook inspired by Milanote, not a full infinite canvas. JSON exports include notes and schedules; attachment binaries remain in the separate private file store.
+
+## 1.3.0 Content Studio and private R2 files
+- New private R2 bucket `kanban-zen-files`, binding `FILES`. Existing D1 attachments remain readable.
+- Browser multipart upload streams 64 MiB parts via authenticated Worker endpoints; 10,000 part ceiling gives a configured 625 GiB per file. This is an architectural limit, not a claim of a tested 625 GiB upload. Large storage can incur Cloudflare charges; no synthetic large uploads were performed.
+- No former 20 MB account quota on R2 files. File upload requires network; per-part retries and cancel supported. Incomplete uploads are cleaned after 24 hours. File download remains private; supported image/audio/video types can preview inside cards. Other types download as attachments.
+- Recycle bin: projects, tasks, checklists, notes (including nested boards) and individual files; restore within 30 days. Scheduled cleanup removes expired data and old objects. No manual permanent-delete button.
+- Content cards: note, heading, link, checklist, nested board, image, audio, video, document, swatch, table, comment note, connecting line, sketch, map link. Columns, grid and free canvas; drag position/order, lock, zoom, resize via card width; copy/move, content template, Markdown and print/PDF.
+- Seven-day revocable read-only snapshot links. Private attachments are excluded. This is not simultaneous multi-user editing, a Milanote clone, a formula engine or an arbitrary third-party embed system.
+- Migrate existing D1 with `server/migration-1.3.sql` once before deploy. New installs use `server/schema.sql`. Never reapply the ALTER statement.
+- Tests cover script initialization, content/trash recovery, graph cycles, multipart state, CSRF, cross-account isolation, file recycle/restore/cleanup, share revoke and existing auth/sync behavior. R2 unit tests use a mock bucket; large production uploads and visual browser QA remain unverified.
