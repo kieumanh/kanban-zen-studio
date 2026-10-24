@@ -52,3 +52,6 @@ Compact sidebar. Validate real calendar dates and trim empty labels on input/imp
 
 ## 1.1.7 mobile search and drawer
 Compact capsule search with a single focus ring; remove nested input border on phones. Smaller sticky header and mode strip. Narrower drawer, compact branding and project rows, single-line project names, tighter footer. Desktop styling remains unchanged.
+
+## 1.2.0
+Archived completed projects and pinned tabs; visual note cards with groups, links, sketches and ordering; private account attachments (1 MB/file, 20 MB/account); Eisenhower categories and filtering; dashboard overdue/upcoming/important work; task/checklist ranges on timeline and agenda calendar. Automatic online/focus retries retain local edits and keep CAS conflict protection. File upload requires connectivity. Notes are a lightweight visual notebook inspired by Milanote, not a full infinite canvas. JSON exports include notes and schedules; attachment binaries remain in the separate private file store.
