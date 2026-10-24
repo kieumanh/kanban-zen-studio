@@ -49,3 +49,6 @@ Sticky mobile menu/search and view switch; dismissible navigation drawer with sc
 
 ## 1.1.6 input and synchronization review
 Compact sidebar. Validate real calendar dates and trim empty labels on input/import. Revision-only polling skips unchanged workspace payloads; asynchronous polls never overwrite edits made while the request is in flight. Failed conflict reload preserves local dirty state. Concurrent signup uses insert-or-ignore without changing an existing password. Reminder queries exclude users without active delivery channels; additive indexes support cleanup and user lookups.
+
+## 1.1.7 mobile search and drawer
+Compact capsule search with a single focus ring; remove nested input border on phones. Smaller sticky header and mode strip. Narrower drawer, compact branding and project rows, single-line project names, tighter footer. Desktop styling remains unchanged.
