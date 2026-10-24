@@ -1,0 +1,8 @@
+-- Passwords use salted PBKDF2-SHA256; sessions and one-use email tokens store only SHA-256 digests.
+CREATE TABLE IF NOT EXISTS users(id TEXT PRIMARY KEY,email TEXT UNIQUE NOT NULL,password_hash TEXT NOT NULL,verified INTEGER DEFAULT 0,email_reminders INTEGER DEFAULT 0,created INTEGER NOT NULL);
+CREATE TABLE IF NOT EXISTS sessions(token_hash TEXT PRIMARY KEY,user_id TEXT NOT NULL,expires INTEGER NOT NULL);
+CREATE TABLE IF NOT EXISTS tokens(token_hash TEXT PRIMARY KEY,user_id TEXT NOT NULL,kind TEXT NOT NULL,expires INTEGER NOT NULL);
+CREATE TABLE IF NOT EXISTS workspaces(user_id TEXT PRIMARY KEY,data TEXT NOT NULL,revision INTEGER DEFAULT 0);
+CREATE TABLE IF NOT EXISTS rate_limits(key TEXT PRIMARY KEY,count INTEGER NOT NULL,expires INTEGER NOT NULL);
+CREATE TABLE IF NOT EXISTS subscriptions(endpoint TEXT PRIMARY KEY,user_id TEXT NOT NULL);
+CREATE TABLE IF NOT EXISTS deliveries(user_id TEXT NOT NULL,day TEXT NOT NULL,channel TEXT NOT NULL,status TEXT NOT NULL,PRIMARY KEY(user_id,day,channel));

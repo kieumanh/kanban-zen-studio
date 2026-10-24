@@ -2,7 +2,31 @@
   "name": "kanban-zen-studio",
   "main": "worker.mjs",
   "compatibility_date": "2026-10-24",
-  "compatibility_flags": ["nodejs_compat"],
-  "observability": { "enabled": true },
-  "routes": [{ "pattern": "kanban.huongthiennature.com", "custom_domain": true }]
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "observability": {
+    "enabled": true
+  },
+  "routes": [
+    {
+      "pattern": "kanban.huongthiennature.com",
+      "custom_domain": true
+    }
+  ],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "kanban-zen-studio",
+      "database_id": "d8ebf96e-eb66-4e8b-9668-a3d6da1ec455"
+    }
+  ],
+  "triggers": {
+    "crons": [
+      "0,15,30 1 * * *"
+    ]
+  },
+  "vars": {
+    "VAPID_PUBLIC": "BKbJzhTBKChNcGUQzGruhrQiATAx2R71XEpPCE-1ip8uhJviT0cqvvBPrxsH1P3juOIVPXJIMGbJ5JAwemzKujY"
+  }
 }

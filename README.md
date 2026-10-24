@@ -1,35 +1,33 @@
-# Kanban Zen Studio v1.0.0
+# Kanban Zen Studio 1.1.0 — Connected workspace
 
-A personal Kanban workspace for Hương Thiền Nature.
+Production: https://kanban.huongthiennature.com/
+Private source: https://github.com/kieumanh/kanban-zen-studio
 
-Production: https://kanban.huongthiennature.com
+Personal project tabs, Kanban boards, task checklists, colored keyword labels, dashboard, Timeline and Calendar.
 
-## Features
-- Chrome-inspired project tabs with custom colors; project create/edit/delete.
-- Idea / List / Doing / Done, plus custom columns.
-- Task create/edit/delete, descriptions, labels, due dates, drag-and-drop, accessible status selector.
-- Checklist create/check/delete; automatic completion and reopening.
-- Live project and overall progress, dashboard donut, full task search and filters.
-- Release timeline, browser persistence, JSON export/import with validation, one-level deletion/import undo.
-- Responsive desktop, tablet and phone layouts.
+## Accounts and synchronization
 
-## Data model
-Local-first, no login or backend database. Each browser origin has its own data. Task data never reaches the Worker or GitHub. Export JSON before clearing browser data or moving devices. Sample projects are illustrative, not actual tracked progress.
+Email/password signup requires email verification. Passwords use salted PBKDF2-SHA256 (100,000 iterations, the Workers Web Crypto iteration cap). Opaque session and email tokens use 256-bit randomness and only SHA-256 token digests are stored. Sessions are HttpOnly, Secure, SameSite=Strict, valid seven days. Reset links expire in 30 minutes, verification links in 24 hours; reset invalidates all sessions. Authentication and email requests are rate limited. Mutating API calls enforce same-origin and JSON Content-Type. Queries are parameterized; server validates workspace payloads and derives the owner from the session.
 
-Task percentage: completed checklist / total checklist. Task without checklist: 100% if Done, otherwise 0%.
-Project percentage: (Done tasks + completed checklist items) / (all tasks + all checklist items). Every task and item has equal weight. Moving a task to Done checks all items; moving a completed task to another column reopens its last checklist item. Checking all checklist items moves it to Done.
+Workspace updates use revision compare-and-swap. Other devices poll every ten seconds while open. Offline edits stay in an account-specific browser cache and are sent on reconnect. Conflicts never silently overwrite server data: export local JSON, then select the cloud version from account settings. A local conflict snapshot is retained. This is conflict detection rather than simultaneous collaborative editing. Existing pre-account local data remains untouched and can be explicitly imported after login.
 
-## Source and validation
-Edit `dist/index.html`, `dist/style.css`, `dist/app.js`.
+## Reminders
 
-```sh
+Opt-in email and Web Push send at 08:00 Asia/Ho_Chi_Minh for due/overdue incomplete work. Cron retries at 08:15 and 08:30 with daily delivery tracking and email idempotency keys. Notifications show a generic reminder to avoid exposing task content on the lock screen. Web Push requires browser permission and supported OS/browser; delivery can be restricted if the browser is fully shut down. Email can be disabled in account settings; push can be disabled per device. Logging out removes that device's push subscription.
+
+## Development and deployment
+
+Requires Node 24 for tests (node:sqlite); no npm dependencies.
+
+```
 npm run build
 npm test
 ```
 
-No dependencies are needed to build/test. Google Fonts is optional; system serif/sans fallbacks are present. The generated `worker.mjs` serves the three bundled assets. `wrangler.jsonc` declares the Worker and custom domain for manual deployment with an authenticated Cloudflare Wrangler installation.
+Edit assets in dist/ and backend in server/api.mjs; scripts/build.mjs bundles the Worker without dependencies. server/schema.sql is idempotent schema setup. Tests use an isolated in-memory SQLite database and a mock email provider: they send no real email.
 
-## Release 1.0.0 — 2026-10-24
-First spark: project tabs, Kanban CRUD, task checklists, aggregate progress, dashboard, release timeline, JSON backups and responsive layout. No multi-user accounts or cross-device synchronization in this release.
+Cloudflare config declares D1 and cron. Set server-only RESEND_API_KEY (sending access restricted to the verified domain) and VAPID_PRIVATE (P-256 JWK) secrets. Set VAPID_PUBLIC as the corresponding uncompressed public key in base64url in Worker variables. Never commit private keys or email credentials. Production secrets and bindings were configured through the Cloudflare API. Preserve VAPID keys across deploys so existing subscriptions continue working. GitHub is source storage; commits do not automatically deploy.
 
-Source repository: https://github.com/kieumanh/kanban-zen-studio (private). Production is deployed to Cloudflare Workers. Updating GitHub does not automatically redeploy the Worker; run the build and tests, then deploy the matching generated Worker with authenticated Cloudflare tooling.
+## Validation
+
+Core tests cover progress, schema validation and static routes. Account tests cover hashing, verification/replay prevention, secure sessions, password reset/revocation, account isolation, revision conflicts, CSRF, push endpoint allowlist, email opt-in and daily deduplication, and brute-force throttling. Real inbox delivery and OS push permission require the account holder to exercise them with their own email/device.
