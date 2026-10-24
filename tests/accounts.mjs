@@ -11,6 +11,9 @@ assert.equal((await req('me','GET',null,cookie)).status,200);const workspace={sc
 assert.equal((await(await req('workspace?revision=1','GET',null,cookie)).json()).unchanged,true);
 // A second verified account cannot read or overwrite the first account's workspace.
 const second='second-user',ph=await passwordHash(p);sql.prepare('INSERT INTO users(id,email,password_hash,verified,created) VALUES(?,?,?,1,?)').run(second,'second@example.test',ph,Date.now());const l2=await req('login','POST',{email:'second@example.test',password:p},'','192.0.2.2'),c2=l2.headers.get('Set-Cookie').split(';')[0];assert.equal((await(await req('workspace','GET',null,c2)).json()).revision,0);
+
+assert.equal((await req('profile','PUT',{name:'Kiều Mạnh',birthday:'1990-02-28',avatar:''},cookie)).status,200);assert.equal((await(await req('me','GET',null,cookie)).json()).user.name,'Kiều Mạnh');assert.equal((await(await req('me','GET',null,c2)).json()).user.name,undefined);assert.equal((await req('profile','PUT',{birthday:'2025-02-30'},cookie)).status,400);
+
 assert.equal((await req('push','POST',{endpoint:'https://127.0.0.1/private'},cookie)).status,400);const csrf=await api(new Request('https://kanban.huongthiennature.com/api/logout',{method:'POST',headers:{Origin:'https://evil.example','Content-Type':'application/json',Cookie:cookie},body:'{}'}),env);assert.equal(csrf.status,403);
 assert.equal((await req('forgot','POST',{email:'first@example.test'})).status,200);token=mails.at(-1).text.match(/#reset=([a-f0-9]+)/)[1];assert.equal((await req('reset','POST',{token,password:'New password 2026!'})).status,200);assert.equal((await req('reset','POST',{token,password:'Another password 2026!'})).status,400);assert.equal((await req('me','GET',null,cookie)).status,401);assert.equal((await req('login','POST',{email:'first@example.test',password:p})).status,401);
 // Scheduled digests are opt-in, include due tasks only, and deduplicate each day.
