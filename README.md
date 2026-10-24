@@ -1,4 +1,4 @@
-# Kanban Zen Studio 1.1.0 — Connected workspace
+# Kanban Zen Studio 1.1.1 — Wisdom eye
 
 Production: https://kanban.huongthiennature.com/
 Private source: https://github.com/kieumanh/kanban-zen-studio
@@ -31,3 +31,6 @@ Cloudflare config declares D1 and cron. Set server-only RESEND_API_KEY (sending 
 ## Validation
 
 Core tests cover progress, schema validation and static routes. Account tests cover hashing, verification/replay prevention, secure sessions, password reset/revocation, account isolation, revision conflicts, CSRF, push endpoint allowlist, email opt-in and daily deduplication, and brute-force throttling. Real inbox delivery and OS push permission require the account holder to exercise them with their own email/device.
+
+## 1.1.1 visual update
+Purple, rose and warm orange palette; wisdom-eye SVG identity in the sidebar, authentication screen and favicon. Inline accessible password visibility buttons on login, signup and reset-password forms (email-only recovery does not contain a password field).
