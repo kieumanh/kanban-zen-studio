@@ -1,4 +1,4 @@
-# Kanban Zen Studio 1.1.1 — Wisdom eye
+# Kanban Zen Studio 1.1.2 — Small wins
 
 Production: https://kanban.huongthiennature.com/
 Private source: https://github.com/kieumanh/kanban-zen-studio
@@ -34,3 +34,6 @@ Core tests cover progress, schema validation and static routes. Account tests co
 
 ## 1.1.1 visual update
 Purple, rose and warm orange palette; wisdom-eye SVG identity in the sidebar, authentication screen and favicon. Inline accessible password visibility buttons on login, signup and reset-password forms (email-only recovery does not contain a password field).
+
+## 1.1.2 completion celebrations
+Five randomized encouraging messages with illustrated icons and purple/rose/orange fireworks. Triggered by direct checklist completion and task transition into Done (including editor and drag-and-drop). Final checklist item celebrates once as task completion; reopen, refresh, import and remote sync do not trigger. Nonblocking, dismissible, automatic 4.5s dismissal; respects reduced motion.
