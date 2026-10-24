@@ -65,3 +65,6 @@ Archived completed projects and pinned tabs; visual note cards with groups, link
 - Seven-day revocable read-only snapshot links. Private attachments are excluded. This is not simultaneous multi-user editing, a Milanote clone, a formula engine or an arbitrary third-party embed system.
 - Migrate existing D1 with `server/migration-1.3.sql` once before deploy. New installs use `server/schema.sql`. Never reapply the ALTER statement.
 - Tests cover script initialization, content/trash recovery, graph cycles, multipart state, CSRF, cross-account isolation, file recycle/restore/cleanup, share revoke and existing auth/sync behavior. R2 unit tests use a mock bucket; large production uploads and visual browser QA remain unverified.
+
+## Free storage guardrails
+R2 Standard: 25,000,000 bytes/file, 1,000,000,000 bytes for the entire Kanban bucket across all users (including trash, reserved uploads and legacy attachments). Atomic reservations prevent concurrent quota bypass. All asset API calls share a cap of 100,000 per UTC month, allowing headroom for cleanup. Other Cloudflare buckets/services have separate usage and must remain within account free allowances; this application cap is not an account-wide billing switch.

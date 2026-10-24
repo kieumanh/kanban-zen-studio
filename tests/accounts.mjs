@@ -20,6 +20,15 @@ const uploads=new Map(),objects=new Map();env.FILES={async createMultipartUpload
 const assetStart=await req('assets/start','POST',{name:'large.txt',size:1500000,mime:'text/plain',scope:'note:note'},cookie);assert.equal(assetStart.status,200);const aid=(await assetStart.json()).id;assert.equal((await req('assets/'+aid+'/complete','POST',{},cookie)).status,400);
 const rawPart=async(c=cookie,origin='https://kanban.huongthiennature.com')=>api(new Request('https://kanban.huongthiennature.com/api/assets/'+aid+'/part?n=1',{method:'PUT',headers:{Cookie:c,Origin:origin,'Content-Type':'application/octet-stream','Content-Length':'1500000'},body:new Uint8Array(1500000)}),env);
 assert.equal((await rawPart(c2)).status,404);assert.equal((await rawPart(cookie,'https://evil.example')).status,403);assert.equal((await rawPart()).status,200);assert.equal((await req('assets/'+aid+'/complete','POST',{},cookie)).status,200);assert.equal((await req('assets/'+aid,'GET',null,c2)).status,404);assert.equal((await req('assets/'+aid,'GET',null,cookie)).headers.get('Content-Type'),'application/octet-stream');assert.equal((await req('assets/'+aid+'/trash','POST',{},cookie)).status,200);assert.equal((await req('assets/'+aid,'GET',null,cookie)).status,404);assert.equal((await(await req('assets/trash','GET',null,cookie)).json()).files.length,1);assert.equal((await req('assets/'+aid+'/restore','POST',{},cookie)).status,200);assert.equal((await req('assets/'+aid,'GET',null,cookie)).status,200);assert.equal((await req('assets/start','POST',{name:'huge',scope:'note:x',size:64*1024*1024*10000+1},cookie)).status,400);
+// Free tier: reject oversized files and count trash/reserved files across the entire bucket.
+assert.equal((await req('assets/start','POST',{name:'too-big',size:25000001,scope:'note:note'},cookie)).status,400);
+sql.prepare('UPDATE object_files SET size=999999999,deleted=? WHERE id=?').run(Date.now(),aid);
+assert.equal((await req('assets/start','POST',{name:'full',size:100,scope:'note:note'},cookie)).status,413);
+sql.prepare('UPDATE object_files SET size=1500000,deleted=0 WHERE id=?').run(aid);
+const budgetKey='r2-month:'+new Date().toISOString().slice(0,7);
+sql.prepare('UPDATE rate_limits SET count=100000 WHERE key=?').run(budgetKey);
+assert.equal((await req('assets?scope=note:note','GET',null,cookie)).status,429);
+sql.prepare('UPDATE rate_limits SET count=20 WHERE key=?').run(budgetKey);
 const share=await req('board-share','POST',{boardId:''},cookie);assert.equal(share.status,200);const shareURL=(await share.json()).url,shareToken=new URL(shareURL).searchParams.get('boardshare');const shared=await req('shared/'+shareToken);assert.equal(shared.status,200);assert.equal((await shared.json()).data.projects.length,0);await req('board-share','POST',{revoke:true},cookie);assert.equal((await req('shared/'+shareToken)).status,404);
 sql.prepare('UPDATE object_files SET deleted=? WHERE id=?').run(Date.now()-31*86400000,aid);await daily(env);assert.equal(sql.prepare('SELECT id FROM object_files WHERE id=?').get(aid),undefined);assert.equal(objects.size,0);
 
