@@ -114,3 +114,6 @@ Gantt displays dated task bars and progress with finish-to-start arrows. Drag be
 
 ### Notice detail actions (1.6.1)
 Release notifications open version details and mark the release viewed. Task notice cards explicitly show a detail action; opening one marks only that current notice signature as read. The global Mark all viewed action is retained. Dashboard stat icons share rounded botanical forms, and the sidebar footer shows only the version number.
+
+### Nhịp an nhiên (1.6.2)
+Rounded Nunito typography, note toolbar, colored priority radio choices, revised guide and red close buttons. Fix duplicated polish/Gantt script imports and missing navigation icon slots that interrupted rendering of the project count. PDF/HTML weekly report includes an SVG donut and rounded progress bars, with numerical distribution retained for email clients that omit SVG. Persistent HttpOnly cookie survives refresh; server session expiry is 10 minutes of inactivity, renewed only by the explicit activity endpoint. Background sync never extends the session. An idle tab checks the server deadline before locking to respect activity in another tab. Unsynced saved data remains in the per-account cache. Confirmed logout lives at the end of Settings.

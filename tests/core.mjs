@@ -10,3 +10,5 @@ const {default:worker}=await import('../worker.mjs');for(const p of ['/','/style
 console.log('PASS: seed, empty/full/partial progress, task without checklist, import validation, duplicate IDs, escaping, Worker routes/methods.');
 
 const unsafeID=JSON.parse(JSON.stringify(sample));unsafeID.projects[0].id='bad\"id';assert.equal(c.valid(unsafeID),false);
+
+const indexSource=readFileSync(new URL('../dist/index.html',import.meta.url),'utf8');const scriptNames=[...indexSource.matchAll(/<script[^>]+src="([^"]+)"/g)].map(m=>m[1]);assert.equal(new Set(scriptNames).size,scriptNames.length,'Load each UI script once');
