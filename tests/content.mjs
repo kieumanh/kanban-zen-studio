@@ -40,3 +40,14 @@ for(const author of ['Lão Tử','Trang Tử','Osho','Sadhguru'])assert.ok(wisdo
 assert.ok(wisdom.every(q=>!/[\u3400-\u9fff\u0600-\u06ff]/.test(q.vi)));
 assert.ok(readFileSync(new URL('../dist/welcome.js',import.meta.url),'utf8').includes('<blockquote lang=\"vi\">${esc(q.vi)}</blockquote>'));
 console.log('PASS: daily rotation, release read state isolation, pinned progress, direct note editor and 1,121 distinct sourced excerpts with complete Vietnamese coverage.');
+
+vm.runInContext(readFileSync(new URL('../dist/taskux.js',import.meta.url),'utf8'),context,{filename:'taskux.js'});
+vm.runInContext("data=sample();data.projects[0].tasks[0].priority='q1';localWrite('kanban-checks','on')",context);
+assert.match(vm.runInContext('taskCard(data.projects[0].tasks[0],data.projects[0])',context),/matrix-chip q1/);
+assert.doesNotMatch(vm.runInContext('taskCard(data.projects[0].tasks[0],data.projects[0])',context),/data-next-task/);
+assert.match(vm.runInContext('taskCard(data.projects[0].tasks[0],data.projects[0])',context),/card-checks/);
+vm.runInContext("localWrite('kanban-progress','off')",context);
+assert.doesNotMatch(vm.runInContext('taskCard(data.projects[0].tasks[0],data.projects[0])',context),/role="progressbar"/);
+assert.match(vm.runInContext('dashboard()',context),/overdue-total/);
+assert.match(vm.runInContext('timelineTask({...data.projects[0].tasks[0],project:data.projects[0]})',context),/role="progressbar"/);
+console.log('PASS: compact Kanban, priority chips, checklist and progress preferences, overdue overview and timeline bars.');
