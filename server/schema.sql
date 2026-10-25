@@ -24,3 +24,7 @@ CREATE INDEX IF NOT EXISTS object_owner_scope ON object_files(user_id,scope,dele
 CREATE TABLE IF NOT EXISTS object_parts(file_id TEXT NOT NULL,part INTEGER NOT NULL,etag TEXT NOT NULL,PRIMARY KEY(file_id,part));
 
 CREATE TABLE IF NOT EXISTS board_shares(token_hash TEXT PRIMARY KEY,user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,data TEXT NOT NULL,expires INTEGER NOT NULL);
+
+CREATE TABLE IF NOT EXISTS notification_preferences(user_id TEXT PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,weekly_reports INTEGER NOT NULL DEFAULT 0,weekly_hour INTEGER NOT NULL DEFAULT 8,repeat_alerts INTEGER NOT NULL DEFAULT 1);
+CREATE TABLE IF NOT EXISTS report_snapshots(user_id TEXT NOT NULL,day TEXT NOT NULL,data TEXT NOT NULL,PRIMARY KEY(user_id,day));
+CREATE TABLE IF NOT EXISTS notification_jobs(user_id TEXT NOT NULL,day TEXT NOT NULL,channel TEXT NOT NULL,subject TEXT NOT NULL,body TEXT NOT NULL,snapshot TEXT NOT NULL DEFAULT '',status TEXT NOT NULL DEFAULT 'pending',lease_until INTEGER NOT NULL DEFAULT 0,attempts INTEGER NOT NULL DEFAULT 0,last_error TEXT NOT NULL DEFAULT '',PRIMARY KEY(user_id,day,channel));

@@ -88,3 +88,11 @@ The four Eisenhower matrix labels are Important and urgent (purple), Important a
 ### Daily welcome refinement (1.3.8)
 
 The daily welcome shows the Vietnamese excerpt and source link without translation notes or an expandable English original. The quote uses Lora with left-aligned, balanced line wrapping; the close button sits at the upper right.
+
+### Work overview and reports (1.4.0)
+
+Dashboard uses mutually exclusive green Done, purple Doing, orange waiting and red overdue task groups. Hover, focus or tap reveals task-level progress and dates. Project cards align and clamp long descriptions. Project appearance uses an emoji/motif palette and keyboard-accessible HSV wheel with HEX/RGB input. Project keyword configuration is hidden; existing labels remain stored. Incomplete projects can be archived/restored without changing tasks and are excluded from reminders and reports.
+
+Apply `server/migration-1.4.sql` before deploying. Notification preferences expose daily reminder hour, repeated in-app due warnings, and separate opt-in Sunday weekly report hour (Vietnam time). Reports use deterministic rules and real workspace state, with comparisons to previous sent summaries; no AI services are called. `GET /api/weekly-report` previews only the signed-in account's report. Mail outbox freezes payloads, leases sends, retries at most four times daily and uses deterministic Resend idempotency keys. Settings opt-out suppresses pending deliveries. Upcoming reminders include the next 3 days, today and overdue tasks; archived projects are excluded. Sunday snapshots persist for 100 days, job records for 30. New email settings default off until opted in.
+
+The explicit URL `/?enable-notifications=1` opts only the signed-in browser account into daily email and Sunday summaries, retaining its chosen hours; anonymous visitors must sign in first. The query is removed after a successful account-scoped preferences update. No global user preference update is performed.
