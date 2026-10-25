@@ -16,6 +16,19 @@ for(const q of quotes){
   assert.ok(['https:','http:'].includes(new URL(q.url).protocol));
   if(q.batch)assert.equal(q.sourceChecked,true);
   if(q.kind==='reflection')assert.match(q.attribution,/Zen Studio/);
+  if(q.sourceFile){
+    const normalized=s=>q.language==='zh'?s.replace(/\s+/g,''):s.replace(/\s+/g,' ').trim();
+    assert.ok(normalized(read(q.sourceFile)).includes(normalized(q.text)),q.id+' source alignment');
+  }
+}
+assert.ok(active.some(q=>q.author==='Mạnh Tử'&&q.text.includes('養心莫善於寡欲')));
+assert.ok(active.some(q=>q.author==='Tuân Tử'&&q.text.includes('學不可以已')));
+assert.ok(active.filter(q=>q.sourceFile==='sources/zhuangzi-giles.txt').every(q=>q.attribution.includes('Nam Hoa Kinh')&&q.source.includes('nhân vật')));
+for(const name of ['Trang Tử','Tuân Tử']){
+  const profile=teachers.profiles.find(p=>p.name===name);
+  assert.ok(profile.image.startsWith('data:image/jpeg;base64,'));
+  assert.ok(profile.imageSource.startsWith('https://commons.wikimedia.org/wiki/File:'));
+  assert.ok(profile.imageKind.includes('Tranh'));
 }
 const ctx=vm.createContext({wisdomCache:quotes,teacherCache:teachers});
 const slot=source.slice(source.indexOf('function welcomeSlot('),source.indexOf('// Pure selection functions'));
@@ -49,5 +62,5 @@ assert.ok(source.includes('q.attribution||q.author'));
 const worker=read('worker.mjs');
 assert.ok(worker.includes('"/teachers.json"'));
 assert.ok(worker.includes('"/wisdom-status.json"'));
-assert.ok(worker.includes("version:'1.9.1'"));
+assert.ok(worker.includes("version:'1.9.2'"));
 console.log('Wisdom: '+active.length+' sourced excerpts; full-cycle, timezone, deduplication and idempotency checks passed.');

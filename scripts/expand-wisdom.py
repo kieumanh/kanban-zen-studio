@@ -9,6 +9,7 @@ import json
 import pathlib
 import re
 import unicodedata
+import runpy
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 def read(path):
@@ -62,9 +63,15 @@ for author, text, vi, url, source in read("scripts/official-excerpts.json"):
         translationNote="Bản dịch nghĩa tiếng Việt · tham khảo",
         batch="official-2026-10-25"))
 
+additions.extend(runpy.run_path(str(ROOT/"scripts/classical-passages.py"))["passages"]())
+for item in read("scripts/additional-sources.json"):
+    additions.append(dict(item,kind="excerpt",sourceChecked=True,batch="additional-2026-10-25"))
+
 seen_vi = {norm(x["vi"]) for x in q}
 seen_text = {(x["author"], norm(x.get("text", ""))) for x in q}
 skipped = []
+published_count = sum(x.get("kind") != "reflection" for x in q)
+assert published_count <= 9999, "Existing corpus exceeds target; review before publishing."
 for row in additions:
     # A quotation already present inside a longer excerpt is not new content.
     overlap = any(a == row["author"] and len(t) > 30 and
@@ -72,7 +79,12 @@ for row in additions:
     if norm(row["vi"]) in seen_vi or overlap:
         skipped.append(row.get("sourceRef", row["url"]))
         continue
+    if row.get("kind") != "reflection" and published_count >= 9999:
+        skipped.append(row.get("sourceRef", row["url"]))
+        continue
     q.append(row)
+    if row.get("kind") != "reflection":
+        published_count += 1
     seen_vi.add(norm(row["vi"]))
     seen_text.add((row["author"], norm(row["text"])))
 for row in q:
@@ -83,7 +95,7 @@ write("dist/wisdom.json", q)
 active = [x for x in q if x.get("kind") != "reflection"]
 stats = dict(target=9999, totalEntries=len(q), sourcedExcerpts=len(active),
     editorialReflections=len(q)-len(active), remaining=max(0,9999-len(active)),
-    sourceMatchedNewBatch=sum(x.get("batch") in ("classics-2026-10-25", "official-2026-10-25") for x in active),
+    sourceMatchedNewBatch=sum(x.get("sourceChecked") is True for x in active),
     allTranslationsHumanReviewed=False, complete=len(active) == 9999,
     countsByAuthor=dict(collections.Counter(x["author"] for x in active)),
     note="Có nguồn không đồng nghĩa với đã thẩm định toàn bộ bản dịch. Dữ liệu cũ cần tiếp tục rà soát. Không tính đoạn thô hoặc lời biên soạn vào mục tiêu trích đoạn.")

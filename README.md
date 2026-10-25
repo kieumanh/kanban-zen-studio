@@ -141,3 +141,13 @@ The corpus has 1,351 entries: 1,306 excerpts carrying source references and 45 e
 Selection uses every entry exactly once per full cycle, including Marcus Aurelius, instead of repeating single-entry authors every 45 slots and omitting unprofiled authors. Four Vietnam slots remain 05:00–10:59, 11:00–13:59, 14:00–17:59, 18:00–04:59 (the evening slot belongs to its starting date). Editorial reflections display Zen Studio as author. Existing data/sessions/notifications are preserved. Added a public-domain photo of a historical Marcus Aurelius bust; eight existing profiles still lack a sourced portrait and use an explicit initials fallback.
 
 Validation: npm test (accounts, sync, content, reports, project UX, resources, reminders, sharing, source/ID/duplicate checks, timezone boundaries, full-cycle coverage, import idempotency). This does not substitute for editorial review of all legacy translations.
+
+### 1.9.2 — classical sources and broader author coverage
+
+Added 261 Vietnamese excerpts after excluding two overlapping Zhuangzi passages: 103 Mencius passages, 109 Zhuangzi passages, 43 Xunzi passages, and six from Pema Chödrön, Sri Aurobindo, Master Oneness, Vạn Hạnh, Trần Nhân Tông and Tuệ Trung Thượng Sĩ.
+
+Chinese originals are translated as source excerpts, not copied from modern Vietnamese translations. Public-domain source snapshots, explicit Vietnamese selections and chapter/section alignment are versioned. Zhuangzi entries explicitly identify the literary work traditionally attributed to Zhuangzi; fictional dialogues are not certified as historical speech. The classical Vietnamese poems are each one complete entry, not multiple entries created by splitting their lines.
+
+Current corpus: 1,612 entries, including 1,567 sourced excerpts and 45 separately attributed editorial reflections. 8,432 sourced excerpts remain before the 9,999 target. The importer enforces the ceiling and does not count untranslated candidate passages. Source alignment does not mean all legacy translations have received human review.
+
+Added public-domain historical portrait illustrations of Zhuangzi and Xunzi from Wikimedia Commons with provenance and illustration labels. Six profiles still lack sourced images and retain their explicit initials fallback. No invented portrait is used. The existing four Vietnam slots and complete selection cycle are preserved.
