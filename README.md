@@ -111,3 +111,6 @@ The full date field opens an accessible custom calendar with 24-hour time choice
 
 ### Gantt and notes (1.6.0)
 Gantt displays dated task bars and progress with finish-to-start arrows. Drag between endpoint dots, tap dots in sequence or use Enter on focused dots. Cycles, duplicate links and self-links are rejected; links are limited to 1,000 per project and validated on server and client. Date conflicts remain visible and dates are never rescheduled automatically. Undated tasks remain in a separate list. Deleting tasks prunes orphan links. Note cards open directly and use reduced-motion-aware hover styling. Emoji search uses Unicode/system glyphs, not bundled JoyPixels artwork. Resource filenames can be renamed through an owner-scoped endpoint.
+
+### Notice detail actions (1.6.1)
+Release notifications open version details and mark the release viewed. Task notice cards explicitly show a detail action; opening one marks only that current notice signature as read. The global Mark all viewed action is retained. Dashboard stat icons share rounded botanical forms, and the sidebar footer shows only the version number.
