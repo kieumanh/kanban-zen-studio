@@ -1,5 +1,5 @@
 'use strict';
-const PRIORITIES={q1:'Quan trọng & khẩn cấp · Làm trước',q2:'Quan trọng, không khẩn cấp · Lên lịch',q3:'Khẩn cấp, ít quan trọng · Ủy quyền',q4:'Không quan trọng, không khẩn cấp · Để sau'};
+const PRIORITIES={q1:'Quan trọng, khẩn cấp',q2:'Quan trọng, không khẩn cấp',q3:'Không quan trọng, khẩn cấp',q4:'Không quan trọng, không khẩn cấp'};
 function visibleProjects(){return data.projects.filter(p=>!p.archived).sort((a,b)=>Number(!!b.pinned)-Number(!!a.pinned));}
 function priorityOptions(v){return '<option value="">Chưa phân loại</option>'+Object.entries(PRIORITIES).map(([k,n])=>`<option value="${k}" ${v===k?'selected':''}>${n}</option>`).join('');}
 function scheduleFields(t={}){return `<p class="help-copy">Lịch theo giờ Việt Nam</p><div class="fields-row">${field('Bắt đầu','start',t?.start||'','datetime-local')}${field('Kết thúc','end',t?.end||'','datetime-local')}</div>`;}

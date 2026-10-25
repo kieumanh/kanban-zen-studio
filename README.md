@@ -80,3 +80,7 @@ Monthly seven-column calendar with task/checklist date ranges, month navigation 
 The welcome card displays Vietnamese. Each entry retains its source text, attribution and reference URL for comparison; Vietnamese versions are reference translations or clearly labeled paraphrases. The corpus contains 1,121 distinct excerpts, including 26 additions from Laozi, Zhuangzi, Osho and Sadhguru. Classical Buddhist verses 294–295 include contextual notes about their metaphors. All text ships as a static asset: opening the daily welcome does not call a translation or inference service.
 
 Mobile search is centered on the viewport with reserved space for the menu, sync status and notification bell. Desktop search keeps its existing placement.
+
+### Matrix labels (1.3.7)
+
+The four Eisenhower matrix labels are Important and urgent (purple), Important and not urgent (green), Not important and urgent (pink), and Not important and not urgent (orange). Labels keep their existing q1–q4 values, so saved task classifications remain intact.

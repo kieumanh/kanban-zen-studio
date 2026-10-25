@@ -1,6 +1,6 @@
 'use strict';
 Object.assign(iconPaths,{pin:'M9 3h6l-1 6 4 4v2H6v-2l4-4-1-6 M12 15v6',plus:'M12 5v14 M5 12h14',check:'m5 12 4 4L19 6',leaf:'M20 4C5 2 2 10 6 16s15 3 14-12Z M6 18 16 8'});
-const APP_VERSION='1.3.6';
+const APP_VERSION='1.3.7';
 const RELEASES=[{version:APP_VERSION,title:'Toàn cảnh & công việc trong một màn hình',text:'Thống kê quá hạn, tổng quan đầu trang mobile, chỉnh task trực tiếp, ma trận bốn màu, tùy chọn Kanban và tiến độ Timeline/Calendar. Hướng dẫn đầy đủ.'},{version:'1.3.4',title:'Thông báo đã xem & chuyển bước công việc',text:'Nút Đã xem tất cả đưa bộ đếm về bình thường. Chuyển task sang cột kế tiếp ngay trên thẻ.'},{version:'1.3.3',title:'Ghi chú trực tiếp & lời chào mỗi ngày',text:'Viết ghi chú, thêm liên kết và tải tệp trong cùng khung. Lời chào hằng ngày có họa tiết thiên nhiên.'}];
 let latestVersion=APP_VERSION;
 function localRead(k){try{return localStorage.getItem(k);}catch{return null;}}
