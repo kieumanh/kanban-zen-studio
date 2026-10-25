@@ -8,3 +8,5 @@ const bad=JSON.parse(JSON.stringify(sample));bad.projects[0].color='red;position
 const dup=JSON.parse(JSON.stringify(sample));dup.projects[1].id=dup.projects[0].id;assert.equal(c.valid(dup),false);assert.equal(c.esc('<script>"&'), '&lt;script&gt;&quot;&amp;');
 const {default:worker}=await import('../worker.mjs');for(const p of ['/','/style.css','/app.js','/health']){assert.equal((await worker.fetch(new Request('https://kanban.huongthiennature.com'+p))).status,200);}assert.equal((await worker.fetch(new Request('https://kanban.huongthiennature.com/missing'))).status,404);assert.equal((await worker.fetch(new Request('https://kanban.huongthiennature.com/',{method:'POST'}))).status,405);assert.equal(await(await worker.fetch(new Request('https://kanban.huongthiennature.com/',{method:'HEAD'}))).text(),'');
 console.log('PASS: seed, empty/full/partial progress, task without checklist, import validation, duplicate IDs, escaping, Worker routes/methods.');
+
+const unsafeID=JSON.parse(JSON.stringify(sample));unsafeID.projects[0].id='bad\"id';assert.equal(c.valid(unsafeID),false);

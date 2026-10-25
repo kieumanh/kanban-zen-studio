@@ -43,3 +43,5 @@ for(let i=0;i<11;i++)await req('login','POST',{email:'brute@example.test',passwo
 console.log('PASS: hashing, verification + one-use links, secure sessions, reset revocation, isolation, CAS conflicts, invalid payloads, CSRF, push host restrictions, email opt-in/dedup, brute-force limits.');
 
 const validTask={id:"t",title:"Test",description:"",tag:"",due:"2026-02-30",col:"List",checks:[]};const badDate={schema:1,projects:[{id:"p",name:"Test",description:"",color:"#7950c8",icon:"x",columns:["Idea","List","Doing","Done"],tasks:[validTask]}]};assert.equal(validWorkspace(badDate),false);validTask.due="2024-02-29";assert.equal(validWorkspace(badDate),true);validTask.labels=[{name:"   ",color:"#7950c8"}];assert.equal(validWorkspace(badDate),false);console.log("PASS: real dates, leap days and blank labels.");
+
+assert.equal(validWorkspace({schema:1,projects:[{...fileProject,id:'bad\"id'}]}),false);
