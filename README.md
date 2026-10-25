@@ -74,3 +74,9 @@ Replace visual board authoring with a flat Keep-inspired card grid, retaining ex
 
 ## 1.3.2 Calendar and notices
 Monthly seven-column calendar with task/checklist date ranges, month navigation and Today. Project tabs retain Timeline/Calendar mode and filter immediately. Pinned tabs use initials and accessible full-name tooltips. Compact search, green cloud success/yellow warning, in-app task notices and private file update polling every minute while open. Existing daily email/push scheduling remains separate.
+
+### Daily welcome content (1.3.5)
+
+The welcome card displays Vietnamese. Each entry retains its source text, attribution and reference URL for comparison; Vietnamese versions are reference translations or clearly labeled paraphrases. The corpus contains 1,121 distinct excerpts, including 26 additions from Laozi, Zhuangzi, Osho and Sadhguru. Classical Buddhist verses 294–295 include contextual notes about their metaphors. All text ships as a static asset: opening the daily welcome does not call a translation or inference service.
+
+Mobile search is centered on the viewport with reserved space for the menu, sync status and notification bell. Desktop search keeps its existing placement.
