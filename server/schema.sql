@@ -28,3 +28,6 @@ CREATE TABLE IF NOT EXISTS board_shares(token_hash TEXT PRIMARY KEY,user_id TEXT
 CREATE TABLE IF NOT EXISTS notification_preferences(user_id TEXT PRIMARY KEY REFERENCES users(id) ON DELETE CASCADE,weekly_reports INTEGER NOT NULL DEFAULT 0,weekly_hour INTEGER NOT NULL DEFAULT 8,repeat_alerts INTEGER NOT NULL DEFAULT 1);
 CREATE TABLE IF NOT EXISTS report_snapshots(user_id TEXT NOT NULL,day TEXT NOT NULL,data TEXT NOT NULL,PRIMARY KEY(user_id,day));
 CREATE TABLE IF NOT EXISTS notification_jobs(user_id TEXT NOT NULL,day TEXT NOT NULL,channel TEXT NOT NULL,subject TEXT NOT NULL,body TEXT NOT NULL,snapshot TEXT NOT NULL DEFAULT '',status TEXT NOT NULL DEFAULT 'pending',lease_until INTEGER NOT NULL DEFAULT 0,attempts INTEGER NOT NULL DEFAULT 0,last_error TEXT NOT NULL DEFAULT '',html TEXT NOT NULL DEFAULT '',PRIMARY KEY(user_id,day,channel));
+CREATE TABLE IF NOT EXISTS report_shares(id TEXT PRIMARY KEY,token_hash TEXT NOT NULL UNIQUE,user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,title TEXT NOT NULL,html TEXT NOT NULL,password_hash TEXT NOT NULL DEFAULT '',created INTEGER NOT NULL,expires INTEGER NOT NULL);
+CREATE INDEX IF NOT EXISTS report_shares_owner ON report_shares(user_id,expires);
+CREATE INDEX IF NOT EXISTS report_shares_expiry ON report_shares(expires);
