@@ -1,0 +1,1 @@
+ALTER TABLE notification_jobs ADD COLUMN html TEXT NOT NULL DEFAULT '';

@@ -25,3 +25,6 @@ await request('preferences',{weeklyReports:true});let failures=0;globalThis.fetc
 // Monday only sends daily reminders; no weekly job is created.
 const n=mails.length;await daily(env,new Date('2026-10-26T01:15:00Z'));assert.equal(mails.length,n+1);assert.equal(db.prepare("SELECT COUNT(*) n FROM notification_jobs WHERE day='2026-10-26' AND channel='weekly'").get().n,0);
 console.log('PASS: 3-day reminder boundaries, overdue/completed/archived exclusions, Sunday opt-in, account-scoped settings/preview, partial preferences, deduplication, frozen retry payloads and weekly deltas.');
+assert.ok(weekly.html.includes('Phân bố công việc'));assert.ok(weekly.html.includes('bgcolor="#3b8b61"'));assert.ok(weekly.html.includes('Tiến độ dự án'));assert.ok(weekly.html.includes('@media print'));assert.ok(mails.some(m=>m.html&&m.html.includes('Bức tranh công việc')));
+const hostile=structuredClone(workspace);hostile.projects[0].name='<img src=x onerror=alert(1)>';hostile.projects[0].tasks[0].title='<script>alert(1)</script>';const safeHTML=weeklyReport(hostile,day).html;assert.ok(safeHTML.includes('&lt;img'));assert.ok(!safeHTML.includes('<script>'));assert.ok(!safeHTML.includes('<img src=x'));
+console.log('PASS: email HTML contains percentage charts/project bars, print styles and escaped account content.');

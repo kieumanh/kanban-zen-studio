@@ -1,10 +1,10 @@
 {
   "name": "kanban-zen-studio",
-  "version": "1.4.0",
+  "version": "1.4.1",
   "private": true,
   "type": "module",
   "scripts": {
     "build": "node scripts/build.mjs",
-    "test": "node tests/core.mjs && node tests/accounts.mjs && node tests/sync.mjs && node tests/content.mjs && node tests/reports.mjs && node tests/projectux.mjs"
+    "test": "node tests/core.mjs && node tests/accounts.mjs && node tests/sync.mjs && node tests/content.mjs && node tests/reports.mjs && node tests/projectux.mjs && node tests/resources.mjs"
   }
 }
