@@ -84,3 +84,7 @@ Mobile search is centered on the viewport with reserved space for the menu, sync
 ### Matrix labels (1.3.7)
 
 The four Eisenhower matrix labels are Important and urgent (purple), Important and not urgent (green), Not important and urgent (pink), and Not important and not urgent (orange). Labels keep their existing q1–q4 values, so saved task classifications remain intact.
+
+### Daily welcome refinement (1.3.8)
+
+The daily welcome shows the Vietnamese excerpt and source link without translation notes or an expandable English original. The quote uses Lora with left-aligned, balanced line wrapping; the close button sits at the upper right.
