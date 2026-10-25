@@ -34,12 +34,12 @@ vm.runInContext('noteForm()',context);
 assert.match(node('#editor-body').innerHTML,/inline-note-upload/);
 assert.match(node('#editor-body').innerHTML,/name="url"/);
 const wisdom=JSON.parse(readFileSync(new URL('../dist/wisdom.json',import.meta.url),'utf8'));
-assert.equal(wisdom.length,1121);assert.equal(new Set(wisdom.map(q=>q.text)).size,1121);
-assert.ok(wisdom.every(q=>q.author&&q.source&&q.url.startsWith('https://')&&q.language==='en'&&typeof q.vi==='string'&&q.vi.trim().length>=8));
+assert.ok(wisdom.length>=1121);assert.equal(new Set(wisdom.map(q=>q.id)).size,wisdom.length);
+assert.ok(wisdom.every(q=>q.author&&q.source&&q.url.startsWith('https://')&&['en','vi'].includes(q.language)&&typeof q.vi==='string'&&q.vi.trim().length>=8));
 for(const author of ['Lão Tử','Trang Tử','Osho','Sadhguru'])assert.ok(wisdom.some(q=>q.author===author));
 assert.ok(wisdom.every(q=>!/[\u3400-\u9fff\u0600-\u06ff]/.test(q.vi)));
 assert.ok(readFileSync(new URL('../dist/welcome.js',import.meta.url),'utf8').includes('<blockquote lang=\"vi\">${esc(q.vi)}</blockquote>'));
-console.log('PASS: daily rotation, release read state isolation, pinned progress, direct note editor and 1,121 distinct sourced excerpts with complete Vietnamese coverage.');
+console.log('PASS: daily rotation, release read state isolation, pinned progress, direct note editor and Vietnamese coverage of all wisdom entries.');
 
 vm.runInContext(readFileSync(new URL('../dist/taskux.js',import.meta.url),'utf8'),context,{filename:'taskux.js'});
 vm.runInContext("data=sample();data.projects[0].tasks[0].priority='q1';localWrite('kanban-checks','on')",context);

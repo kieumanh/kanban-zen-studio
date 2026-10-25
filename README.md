@@ -130,3 +130,14 @@ Trash combines workspace records and R2/legacy files, counts categories, offers 
 ### Chia sẻ điều đang lớn (1.8.0)
 Weekly report share links create fixed server-generated snapshots. Owners choose public-by-link or password protection and 1/3/5/7/10/15/30-day expiry, list active shares and revoke them. Tokens are random 256-bit values stored as SHA-256 hashes; passwords use salted PBKDF2. Anonymous reads check expiry/revocation and protected reports return no content before password verification; unlock requests have IP and token rate limits. The standalone /report.html#token viewer does not load account/workspace scripts, renders reports in a sandboxed iframe, and hides content on expiry. Apply migration-1.8.0.sql before deployment.
 Project icon library uses categorized native Unicode emoji with English keyword search, including tone variations. It does not bundle JoyPixels artwork. Note color controls reuse the existing HSV wheel with brightness, HEX and RGB inputs.
+
+
+### 1.9.1 — sourced wisdom expansion
+
+Recovered the deployed 1.9.0 assets and the existing report-view/report-table source changes before editing. Added 185 excerpts: 117 from Analects, 56 new passages from Tao Te King after excluding 5 overlaps, and 12 short excerpts from official teaching sites. Curated translations and public-domain English source snapshots are versioned in scripts/ and sources/. Every imported classical excerpt is matched to its source; the script is idempotent.
+
+The corpus has 1,351 entries: 1,306 excerpts carrying source references and 45 explicitly attributed Zen Studio editorial reflections. The 9,999-excerpt target is NOT complete: 8,693 remain. Legacy translations have not all been re-reviewed; source presence is not a claim of human validation. Raw downloaded passages do not count. Status is available at /wisdom-status.json.
+
+Selection uses every entry exactly once per full cycle, including Marcus Aurelius, instead of repeating single-entry authors every 45 slots and omitting unprofiled authors. Four Vietnam slots remain 05:00–10:59, 11:00–13:59, 14:00–17:59, 18:00–04:59 (the evening slot belongs to its starting date). Editorial reflections display Zen Studio as author. Existing data/sessions/notifications are preserved. Added a public-domain photo of a historical Marcus Aurelius bust; eight existing profiles still lack a sourced portrait and use an explicit initials fallback.
+
+Validation: npm test (accounts, sync, content, reports, project UX, resources, reminders, sharing, source/ID/duplicate checks, timezone boundaries, full-cycle coverage, import idempotency). This does not substitute for editorial review of all legacy translations.

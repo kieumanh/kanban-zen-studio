@@ -17,3 +17,5 @@ const renderBeforeNotesPlus=render;render=function(){renderBeforeNotesPlus();if(
 setInterval(()=>{if(currentUser&&!document.hidden){refreshBell();if(view==='dashboard'&&!$('#editor').open)render();}},60000);
 
 document.addEventListener('click',e=>{if(!e.target.closest('[data-note-reminders-all]'))return;modal('<h2>Ghi chú đã đặt lịch</h2><div class="notice-list">'+(data.notes||[]).filter(noteReminderActive).sort((a,b)=>a.remindAt.localeCompare(b.remindAt)).map(n=>'<button type="button" class="notice-item" data-open-note="'+esc(n.id)+'"><strong>'+esc(n.title)+'</strong><small>'+esc(n.remindAt.replace('T',' · '))+' · Giờ Việt Nam</small></button>').join('')+'</div>',null,true);});
+
+const noteFormBeforeLayout=noteForm;noteForm=function(n){noteFormBeforeLayout(n);const composer=document.querySelector('.note-composer');if(!composer)return;const kind=composer.querySelector('.note-type-field'),toolbar=composer.querySelector('.note-toolbar');if(kind&&toolbar)toolbar.before(kind);};

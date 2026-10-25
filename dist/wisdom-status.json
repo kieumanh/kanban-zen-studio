@@ -1,0 +1,30 @@
+{
+  "target": 9999,
+  "totalEntries": 1351,
+  "sourcedExcerpts": 1306,
+  "editorialReflections": 45,
+  "remaining": 8693,
+  "sourceMatchedNewBatch": 185,
+  "allTranslationsHumanReviewed": false,
+  "complete": false,
+  "countsByAuthor": {
+    "Phật Thích Ca · Kinh Pháp Cú": 392,
+    "Lão Tử": 71,
+    "Trang Tử": 6,
+    "Osho": 2,
+    "Sadhguru": 3,
+    "Marcus Aurelius": 703,
+    "Khổng Tử": 117,
+    "Thích Nhất Hạnh": 1,
+    "Ram Dass": 1,
+    "Đạt Lai Lạt Ma": 2,
+    "Eckhart Tolle": 1,
+    "Byron Katie": 2,
+    "Mooji": 1,
+    "Paramahansa Yogananda": 1,
+    "Jiddu Krishnamurti": 1,
+    "Alan Watts": 1,
+    "Adyashanti": 1
+  },
+  "note": "Có nguồn không đồng nghĩa với đã thẩm định toàn bộ bản dịch. Dữ liệu cũ cần tiếp tục rà soát. Không tính đoạn thô hoặc lời biên soạn vào mục tiêu trích đoạn."
+}
