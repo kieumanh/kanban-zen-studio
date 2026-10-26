@@ -703,3 +703,12 @@ dialog .modal-head{position:sticky;top:0;z-index:5;background:var(--paper);paddi
  #editor.keep-editor .note-unified-options>label.btn,#editor.keep-editor .note-unified-options>.note-color,#editor.keep-editor .note-unified-options>#note-save,#editor.keep-editor .note-unified-options>.note-history-button{grid-column:span 1}
  #editor.keep-editor .zen-list-picker{max-width:100%;flex:1 1 135px}
 }
+/* Three evenly sized note options per row. */
+#editor.keep-editor .note-unified-options{grid-template-columns:repeat(3,minmax(0,1fr));align-items:stretch}
+#editor.keep-editor .note-unified-options>*{grid-column:auto!important;min-width:0!important;margin:0!important;max-width:100%;width:100%}
+#editor.keep-editor .note-unified-options>details[open]{grid-column:1/-1!important}
+#editor.keep-editor .note-unified-options .note-group input{width:100%;min-height:42px;padding:9px 12px;border:1px solid #ded2e8;border-radius:10px;background:white;font:inherit;box-sizing:border-box}
+#editor.keep-editor .note-unified-options>.note-type-field{padding:10px;border:1px solid #e7dff0;border-radius:12px;justify-content:space-between;background:#faf7fc}
+#editor.keep-editor .note-unified-options>.btn,#editor.keep-editor .note-unified-options>label.btn{display:flex;align-items:center;justify-content:center;min-height:46px}
+#editor.keep-editor .note-unified-options .note-motif-current{max-width:45%;font-size:11px}
+@media(max-width:600px){#editor.keep-editor .note-unified-options{grid-template-columns:1fr}.note-unified-options>details[open]{grid-column:auto!important}}

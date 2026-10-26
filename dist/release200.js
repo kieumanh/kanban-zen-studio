@@ -47,6 +47,7 @@ noteForm=function(n){
  const row=document.createElement('div');row.className='note-unified-options';
  const toolbar=composer.querySelector('.note-toolbar'),motif=composer.querySelector('.note-motif-picker');
  if(toolbar){toolbar.before(row);const reminder=composer.querySelector('.note-reminder-options');if(reminder)row.append(reminder);if(motif)row.append(motif);for(const node of [...toolbar.children])row.append(node);toolbar.remove();}
+ const kind=composer.querySelector('.note-type-field'),color=composer.querySelector('.note-wheel-picker');if(kind)row.prepend(kind);if(color)row.append(color);
  const history=document.createElement('button');history.type='button';history.className='btn note-history-button';history.textContent='↶ Lịch sử 7 ngày';row.append(history);
  history.onclick=async()=>{
   editor.querySelector('.zen-wysiwyg')?.dispatchEvent(new Event('blur'));
