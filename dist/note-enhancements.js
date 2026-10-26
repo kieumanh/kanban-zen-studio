@@ -10,7 +10,8 @@ const NOTE_MOTIFS=Object.freeze({
   awareness:{label:'Tỉnh thức',icon:'✨'},
   yoga:{label:'Yoga',icon:'☯'},
   awakening:{label:'Khai sáng',icon:'☀'},
-  stream:{label:'Dòng suối',icon:'💧'}
+  stream:{label:'Dòng suối',icon:'💧'},
+  creative:{label:'Sáng tạo',icon:'🎨'},rest:{label:'Nghỉ ngơi',icon:'🌙'},travel:{label:'Du lịch',icon:'🧳'},freelancer:{label:'Freelancer',icon:'💻'}
 });
 function noteMotif(n){return typeof n?.motif==='string'&&Object.hasOwn(NOTE_MOTIFS,n.motif)?n.motif:'none';}
 function noteChecklistStats(n){

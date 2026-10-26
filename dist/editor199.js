@@ -19,7 +19,8 @@ function zenRichMarkdown(root){
    if(/text-decoration[^:]*:\s*[^;]*line-through/i.test(style))out='~~'+out+'~~';
   }
   if(/^h[1-3]$/.test(tag))return '#'.repeat(Number(tag[1]))+' '+out.trimEnd()+'\n';
-  if(['p','div','li','blockquote'].includes(tag))return out.replace(/\n+$/,'')+'\n';
+  if(tag==='li'){const parent=node.parentElement;const ordered=parent?.tagName==='OL';const i=parent?Array.from(parent.children).indexOf(node)+Number(parent.getAttribute('start')||1):1;const marker=parent?.classList?.contains('zen-list-circle')?'◦ ':parent?.classList?.contains('zen-list-square')?'▪ ':'- ';return (ordered?i+'. ':marker)+out.trimEnd()+'\n';}
+  if(['p','div','blockquote'].includes(tag))return out.replace(/\n+$/,'')+'\n';
   return out;
  }
  return Array.from(root.childNodes||[]).map(convert).join('').replace(/\r/g,'').replace(/\n{4,}/g,'\n\n\n').replace(/\n+$/,'');
@@ -27,7 +28,7 @@ function zenRichMarkdown(root){
 function zenApplyFormatting(rich,command){
  rich.focus();
  let success=false;
- const commands={bold:'bold',italic:'italic',underline:'underline',strike:'strikeThrough',h1:'formatBlock',h2:'formatBlock',plain:'formatBlock'};
+ const commands={bold:'bold',italic:'italic',underline:'underline',strike:'strikeThrough',h1:'formatBlock',h2:'formatBlock',plain:'formatBlock',bullets:'insertUnorderedList',circle:'insertUnorderedList',square:'insertUnorderedList',numbers:'insertOrderedList'};
  const action=commands[command];if(!action)return false;
  if(typeof document.execCommand==='function'){
   try{success=document.execCommand(action,false,command==='h1'?'h1':command==='h2'?'h2':command==='plain'?'p':undefined);}catch{}
@@ -44,6 +45,10 @@ function zenApplyFormatting(rich,command){
     success=true;
    }
   }
+ }
+ if(success&&['bullets','circle','square'].includes(command)){
+  const selection=window.getSelection(),node=selection?.anchorNode;const list=(node?.nodeType===1?node:node?.parentElement)?.closest('ul');
+  if(list&&rich.contains(list))list.className='zen-list-'+({bullets:'disc',circle:'circle',square:'square'}[command]);
  }
  return success;
 }
@@ -62,7 +67,7 @@ noteForm=function(n){
  // A new toolbar avoids the old textarea-oriented button handlers.
  const toolbar=document.createElement('div');toolbar.className='zen-format-tools zen-wysiwyg-toolbar';
  toolbar.setAttribute('role','toolbar');toolbar.setAttribute('aria-label','Định dạng trực tiếp nội dung');
- const commands=[['H1','h1','Tiêu đề lớn'],['H2','h2','Tiêu đề vừa'],['Aa','plain','Văn bản thường'],['B','bold','In đậm'],['I','italic','In nghiêng'],['U','underline','Gạch dưới'],['S̶','strike','Gạch ngang']];
+ const commands=[['H1','h1','Tiêu đề lớn'],['H2','h2','Tiêu đề vừa'],['Aa','plain','Văn bản thường'],['B','bold','In đậm'],['I','italic','In nghiêng'],['U','underline','Gạch dưới'],['S̶','strike','Gạch ngang'],['•','bullets','Danh sách ký hiệu'],['1.','numbers','Danh sách đánh số'],['◦','circle','Danh sách dấu tròn'],['▪','square','Danh sách dấu vuông']];
  for(const [label,action,tip] of commands){
   const button=document.createElement('button');button.type='button';button.dataset.zenFormat=action;
   button.setAttribute('aria-label',tip);button.title=tip;button.textContent=label;
@@ -88,7 +93,7 @@ noteForm=function(n){
   if(!pending||!editor.open)return;
   syncText();
   if(source.value.length>10000){notify('Nội dung ghi chú tối đa 10.000 ký tự.');return;}
-  if(editor.noteCommit?.()===true){pending=false;render();}
+  if(editor.noteCommit?.()===true){pending=false;const indicator=editor.querySelector('.zen-rich-save-state');if(indicator)indicator.textContent='Đã lưu trên thiết bị · Tự đồng bộ';render();}
  }
  function queue(){
   pending=true;syncText();clearTimeout(debounce);debounce=setTimeout(commit,900);

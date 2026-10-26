@@ -16,7 +16,7 @@ const context=vm.createContext({
 });
 vm.runInContext(asset,context,{filename:'note-enhancements.js'});
 const read=expression=>vm.runInContext(expression,context);
-assert.equal(read("Object.keys(NOTE_MOTIFS).length"),9);
+assert.equal(read("Object.keys(NOTE_MOTIFS).length"),13);
 assert.equal(read("noteMotif({motif:'lotus'})"),'lotus');
 assert.equal(read("noteMotif({motif:'../../oops'})"),'none');
 assert.equal(read("noteMotif({})"),'none');

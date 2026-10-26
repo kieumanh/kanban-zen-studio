@@ -37,11 +37,11 @@ function openResourceUploader(){
   const selected=options.some(o=>o.value===current)?current:options[0].value;
   modal('<h2>Tải tệp lên Tài nguyên</h2><p class="help-copy">Lưu vào kho riêng tư và chọn nơi quản lý tệp. Giới hạn 25 MB mỗi tệp; dữ liệu thuộc tài khoản của bạn.</p>'+
    '<label class="field">Lưu trong<select id="resource-upload-scope" aria-label="Chọn nơi lưu tệp">'+options.map(o=>'<option value="'+esc(o.value)+'" '+(o.value===selected?'selected':'')+'>'+esc(o.label)+'</option>').join('')+'</select></label>'+
-   '<label class="field">Chọn tệp<input type="file" id="resource-upload-files" multiple aria-label="Chọn tệp cần tải lên"></label>'+
+   '<label class="field upload-dropzone"><strong>↑ Chọn tệp từ thiết bị</strong><span>Chọn một hoặc nhiều tệp · tối đa 25 MB mỗi tệp</span><input type="file" id="resource-upload-files" multiple aria-label="Chọn tệp cần tải lên"></label><div id="upload-file-summary" aria-live="polite"></div>'+
    '<progress id="resource-upload-progress" value="0" max="100"></progress>'+
    '<p id="resource-upload-status" role="status" aria-live="polite">Chưa chọn tệp.</p>'+
    '<div class="resource-upload-actions"><button type="button" class="btn primary" id="resource-upload-start">↑ Tải lên</button><button type="button" class="btn ghost" id="resource-upload-cancel">Hủy</button></div>',null,true);
-  const dialog=$('#editor'),picker=$('#resource-upload-files'),submit=$('#resource-upload-start'),cancel=$('#resource-upload-cancel'),status=$('#resource-upload-status'),bar=$('#resource-upload-progress');
+  $('#editor').classList.add('resource-upload-dialog');$('#editor').addEventListener('close',()=>$('#editor').classList.remove('resource-upload-dialog'),{once:true});const dialog=$('#editor'),picker=$('#resource-upload-files'),submit=$('#resource-upload-start'),cancel=$('#resource-upload-cancel'),status=$('#resource-upload-status'),bar=$('#resource-upload-progress');
   let uploading=false,cancelled=false,controller=null;
   picker.onchange=()=>{status.textContent=picker.files.length?picker.files.length+' tệp đã chọn · tối đa 25 MB/tệp.':'Chưa chọn tệp.';};
   cancel.onclick=()=>{cancelled=true;controller?.abort();if(!uploading)dialog.close();else{status.textContent='Đang hủy tải…';cancel.disabled=true;}};
@@ -99,3 +99,5 @@ function openResourceUploader(){
   };
 }
 document.addEventListener('click',e=>{if(e.target.closest('[data-resource-upload]'))openResourceUploader();});
+
+document.addEventListener('change',e=>{if(e.target.id!=='resource-upload-files')return;const summary=document.querySelector('#upload-file-summary');if(!summary)return;summary.replaceChildren(...Array.from(e.target.files).map(f=>{const row=document.createElement('p');row.textContent=f.name+' · '+formatSize(f.size)+(f.size>25000000?' · Vượt giới hạn 25 MB':'');return row;}));});

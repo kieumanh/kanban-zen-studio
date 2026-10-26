@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 const read=p=>readFileSync(new URL('../'+p,import.meta.url),'utf8');
 const source=read('dist/editor199.js');
-const ctx=vm.createContext({noteForm(){},document:{},contentReadOnly:false});
+const ctx=vm.createContext({structuredClone,noteForm(){},document:{},contentReadOnly:false});
 vm.runInContext(source,ctx);
 const expr=code=>vm.runInContext(code,ctx);
 function txt(value){return {nodeType:3,nodeValue:value};}
@@ -30,7 +30,7 @@ const start=sync.indexOf('let syncAgain=false'),end=sync.indexOf('async function
 assert.ok(start>0&&end>start,'new sync implementation found');
 async function runSync(testcase){
  const status=[],calls=[];
- const context=vm.createContext({
+ const context=vm.createContext({structuredClone,
   TextEncoder,
   currentUser:{id:'user-1'},dirty:true,syncing:false,syncConflict:false,cloudRevision:4,
   data:{schema:1,projects:[],notes:[]},syncTimer:0,save:null,KEY:'test',

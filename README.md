@@ -1,4 +1,5 @@
-# Kanban Zen Studio 1.3.0 — Content Studio
+# Kanban Zen Studio v1.10.0
+
 
 Production: https://kanban.huongthiennature.com/
 Private source: https://github.com/kieumanh/kanban-zen-studio
@@ -151,3 +152,6 @@ Chinese originals are translated as source excerpts, not copied from modern Viet
 Current corpus: 1,612 entries, including 1,567 sourced excerpts and 45 separately attributed editorial reflections. 8,432 sourced excerpts remain before the 9,999 target. The importer enforces the ceiling and does not count untranslated candidate passages. Source alignment does not mean all legacy translations have received human review.
 
 Added public-domain historical portrait illustrations of Zhuangzi and Xunzi from Wikimedia Commons with provenance and illustration labels. Six profiles still lack sourced images and retain their explicit initials fallback. No invented portrait is used. The existing four Vietnam slots and complete selection cycle are preserved.
+
+## v1.10.0
+Note history retains accepted previous snapshots for seven days in an account-scoped D1 table; restoration creates a new save. History begins after this upgrade. Client sync now stores its acknowledged baseline for three-way merge; competing edits remain explicit, with an opt-in recovery preserving differing records as copies. Persistent legacy conflicts require Settings → Hợp nhất và giữ cả hai bản. No forced workspace overwrite. Added rich-text bullet/number lists, four illustrated motifs, a unified note action row, project assignment for task creation, a scoped uploader, sticky modal close controls and consistent release metadata.

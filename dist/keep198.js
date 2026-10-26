@@ -12,7 +12,7 @@ const ZEN_PALETTE={
 };
 /* Delicate illustrated themes. Art remains self-contained and privacy-safe (no network images). */
 function zenPattern(id){
- const palette=ZEN_PALETTE[id];if(!palette)return '';
+ const extra={creative:['#fff0e6','#b97870','#ecc2a1'],rest:['#e9e8f6','#807da8','#bbb9da'],travel:['#e5f1f3','#5f929e','#a7cfcd'],freelancer:['#eeebf5','#8573a3','#c4b6dc']};const palette=ZEN_PALETTE[id]||extra[id];if(!palette)return '';
  const [paper,ink,accent]=palette;
  const line=(d,w=2,opacity=.35)=>'<path d="'+d+'" fill="none" stroke="'+ink+'" stroke-width="'+w+'" stroke-linecap="round" stroke-linejoin="round" opacity="'+opacity+'"/>';
  const leaf=(x,y,rotate,scale=1)=>'<g transform="translate('+x+' '+y+') rotate('+rotate+') scale('+scale+')"><path d="M0 0Q44-53 101-3Q46 46 0 0Z" fill="'+accent+'" opacity=".43"/>'+line('M2 0L96 -3M35 -2L57 -22M54 -2L78 16',1.7,.43)+'</g>';
@@ -31,7 +31,7 @@ function zenPattern(id){
  const yoga='<circle cx="362" cy="159" r="144" fill="'+accent+'" opacity=".27"/>'+Array.from({length:7},(_,i)=>'<ellipse cx="362" cy="312" rx="43" ry="97" transform="rotate('+((i-3)*23)+' 362 351)" fill="'+accent+'" opacity=".21"/>').join('')+line('M362 150V246M362 203L282 253M362 203L443 253M362 247L279 338M362 247L443 338',8,.32)+'<circle cx="362" cy="118" r="20" fill="'+ink+'" opacity=".24"/>'+line('M105 383Q343 332 613 383',2,.22);
  const awakening='<circle cx="470" cy="219" r="106" fill="'+accent+'" opacity=".51"/>'+Array.from({length:21},(_,i)=>{const a=i*Math.PI*2/21;return line('M'+(470+117*Math.cos(a)).toFixed(1)+' '+(219+117*Math.sin(a)).toFixed(1)+'L'+(470+184*Math.cos(a)).toFixed(1)+' '+(219+184*Math.sin(a)).toFixed(1),1.7,.27);}).join('')+hill+sparkles;
  const stream='<path d="M0 294L155 134L251 262L410 81L557 251L680 172V420H0Z" fill="'+accent+'" opacity=".24"/>'+hill+'<path d="M-25 389Q190 256 327 352T703 297" fill="none" stroke="'+ink+'" stroke-width="50" opacity=".16" stroke-linecap="round"/><path d="M-25 389Q190 256 327 352T703 297" fill="none" stroke="#fff" stroke-width="16" opacity=".39" stroke-linecap="round"/>'+leaf(43,321,11,.6)+leaf(561,321,-160,.67)+line('M120 361Q170 334 218 344M458 349Q501 359 537 335',1.6,.32);
- const scene={leaves,forest,lotus:lotus(),meditation,awareness,yoga,awakening,stream}[id]||'';
+ const creative=sparkles+line('M250 310L430 130L460 160L280 340Z M250 310L238 355L280 340 M300 350H470',5,.4);const rest=hill+'<path d="M410 70A120 120 0 1 0 530 230A103 103 0 0 1 410 70" fill="'+accent+'" opacity=".5"/>'+sparkles;const travel=hill+line('M240 300V170H430V300Z M300 170V140H370V170 M280 170V300 M390 170V300 M200 335H490',5,.4);const freelancer=sparkles+line('M220 150H460V310H220Z M190 330H490 M280 285H400 M250 190H360 M250 220H420',5,.4);const scene={leaves,forest,lotus:lotus(),meditation,awareness,yoga,awakening,stream,creative,rest,travel,freelancer}[id]||'';
  return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 420" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="wash" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity=".74"/><stop offset=".55" stop-color="'+paper+'"/><stop offset="1" stop-color="'+accent+'" stop-opacity=".62"/></linearGradient><radialGradient id="light"><stop offset="0" stop-color="#ffffff" stop-opacity=".75"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></radialGradient></defs><rect width="680" height="420" fill="url(#wash)"/><circle cx="115" cy="65" r="260" fill="url(#light)"/><g>'+scene+'</g><path d="M0 405Q280 395 680 404" fill="none" stroke="'+ink+'" stroke-width="1" opacity=".09"/></svg>';
 }
 function zenArt(element,motif){
@@ -86,7 +86,14 @@ function zenApplyNoteCards(){
 }
 function zenFormattedHTML(text){
  function inline(s){return esc(s).replace(/\*\*([^*\n]+)\*\*/g,'<strong>$1</strong>').replace(/__([^_\n]+)__/g,'<u>$1</u>').replace(/~~([^~\n]+)~~/g,'<s>$1</s>').replace(/(^|[^\*])\*([^*\n]+)\*(?!\*)/g,'$1<em>$2</em>');}
- return String(text||'').split(/\r?\n/).map(line=>{const h=line.match(/^(#{1,3})\s+(.+)/);if(h)return '<h'+h[1].length+'>'+inline(h[2])+'</h'+h[1].length+'>';return line.trim()?'<p>'+inline(line)+'</p>':'<div class="zen-blank-line"></div>';}).join('');
+ const lines=String(text||'').split(/\r?\n/);let list='';const out=[];
+ const close=()=>{if(list){out.push('</'+list+'>');list='';}};
+ for(const line of lines){
+  const li=line.match(/^\s*([-•◦▪]|\d+\.)\s+(.*)/);
+  if(li){const type=/\d/.test(li[1])?'ol':'ul';if(type!==list){close();out.push('<'+type+(type==='ol'?' start="'+parseInt(li[1],10)+'"':' class="zen-list-'+(li[1]==='◦'?'circle':li[1]==='▪'?'square':'disc')+'"')+'>');list=type;}out.push('<li>'+inline(li[2])+'</li>');continue;}
+  close();const h=line.match(/^(#{1,3})\s+(.+)/);out.push(h?'<h'+h[1].length+'>'+inline(h[2])+'</h'+h[1].length+'>':line.trim()?'<p>'+inline(line)+'</p>':'<div class="zen-blank-line"></div>');
+ }
+ close();return out.join('');
 }
 const zenOldContent=noteContent;
 noteContent=function(n){
