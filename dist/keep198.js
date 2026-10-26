@@ -145,7 +145,7 @@ noteForm=function(note){
  const url=composer.querySelector('[name=url]');
  if(url){
   const preview=document.createElement('div');preview.className='zen-link-live';url.closest('.note-links')?.after(preview);
-  function paint(){preview.replaceChildren();const node=zenPreviewLink({url:url.value,title:title?.value||'',images:note?.images||[]});if(node)preview.append(node);}
+  function paint(){preview.replaceChildren();const node=zenPreviewLink({url:url.value,title:title?.value||'',images:note?.images||[]});if(node){const remove=document.createElement('button');remove.type='button';remove.className='zen-link-remove';remove.textContent='×';remove.title='Gỡ liên kết khỏi ghi chú';remove.setAttribute('aria-label','Gỡ liên kết khỏi ghi chú');remove.addEventListener('click',()=>{url.value='';url.dispatchEvent(new Event('input',{bubbles:true}));url.focus();});preview.append(node,remove);}}
   url.addEventListener('input',paint);title?.addEventListener('input',paint);paint();
  }
  if(text){
