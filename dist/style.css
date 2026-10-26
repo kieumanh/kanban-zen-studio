@@ -619,3 +619,38 @@ dialog .modal-head{position:sticky;top:0;z-index:5;background:var(--paper);paddi
 @media(prefers-reduced-motion:reduce){
  #editor.keep-editor .zen-editor-pin-row>.zen-editor-pin{transition:none}
 }
+
+/* v1.9.12 · Settings manual sync, accurate and accessible reporting */
+.account-dialog .sync-now-btn{
+ display:inline-flex;align-items:center;justify-content:center;gap:9px;min-height:44px;
+ padding:10px 15px;border:1px solid #c9b2dc;border-radius:11px;
+ background:#f4ecfa;color:#68408e;font-weight:700;
+}
+.account-dialog .sync-now-btn .sync-now-icon{display:inline-flex;align-items:center;justify-content:center;width:19px;height:19px}
+.account-dialog .sync-now-btn .ui-icon{width:19px;height:19px;stroke-width:1.8}
+.account-dialog .sync-now-btn:hover:not(:disabled){background:#eee1f8;border-color:#a87cc9}
+.account-dialog .sync-now-btn:disabled{opacity:.75;cursor:progress}
+.account-dialog .sync-now-btn.sync-now-working .sync-now-icon{animation:zen-spin 1s linear infinite}
+@keyframes zen-spin{to{transform:rotate(360deg)}}
+.account-dialog .sync-report{flex-basis:100%;width:100%;min-width:0;padding:14px 15px;margin:3px 0 6px;
+ border:1px solid #e3d9eb;border-radius:13px;background:#faf7fc;
+ color:#554460;line-height:1.6;overflow-wrap:anywhere}
+.account-dialog .sync-report[hidden]{display:none!important}
+.account-dialog .sync-report-heading{display:flex;align-items:center;gap:9px;margin-bottom:6px}
+.account-dialog .sync-report-heading strong{font-size:13px;font-weight:750;color:#4d3866}
+.account-dialog .sync-report-mark{width:25px;height:25px;display:grid;place-items:center;flex-shrink:0;
+ border-radius:50%;background:#e9dff4;color:#8054a2;font-size:14px;font-weight:800}
+.account-dialog .sync-report p{font-size:12px;margin:6px 0;line-height:1.6}
+.account-dialog .sync-report .sync-report-meta{margin-top:10px;color:#685778;font-weight:600}
+.account-dialog .sync-report-timestamp{display:block;margin-top:9px;color:#8a7894;font-size:11px}
+.account-dialog .sync-report[data-result=synced]{background:#f5faf5;border-color:#cce3d0}
+.account-dialog .sync-report[data-result=synced] .sync-report-mark{background:#deefe0;color:#3b7c52}
+.account-dialog .sync-report[data-result=synced] .sync-report-heading strong{color:#3b7450}
+.account-dialog .sync-report[data-result=conflict],.account-dialog .sync-report[data-result=invalid],.account-dialog .sync-report[data-result=error]{background:#fff9f6;border-color:#f0d7cf}
+.account-dialog .sync-report[data-result=conflict] .sync-report-mark,.account-dialog .sync-report[data-result=invalid] .sync-report-mark,.account-dialog .sync-report[data-result=error] .sync-report-mark{background:#fae6dc;color:#9a553e}
+@media(max-width:700px){
+ .account-dialog .sync-now-btn{min-height:46px;flex:1}
+ .account-dialog .sync-report{padding:13px 12px}
+ .account-dialog .sync-report p{font-size:13px}
+}
+@media(prefers-reduced-motion:reduce){.account-dialog .sync-now-btn.sync-now-working .sync-now-icon{animation:none}}
