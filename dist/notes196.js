@@ -51,7 +51,7 @@
   if(!needle||!currentUser){close();return;}
   panel.replaceChildren();header(q);open();
   const projects=(data.projects||[]).filter(p=>norm([p.name,p.description,p.keywords?.join(' '),p.tags?.join(' ')].join(' ')).includes(needle)).slice(0,3).map(p=>({title:p.name,subtitle:'Dự án',object:p}));
-  const tasks=(data.projects||[]).flatMap(p=>(p.tasks||[]).filter(t=>norm([t.title,t.description,t.tags?.join(' '),(t.checks||[]).map(c=>c.text).join(' ')].join(' ')).map(t=>({title:t.title,subtitle:p.name,object:t,project:p}))).slice(0,4);
+  const tasks=(data.projects||[]).flatMap(p=>(p.tasks||[]).filter(t=>norm([t.title,t.description,t.tags?.join(' '),(t.checks||[]).map(c=>c.text).join(' ')].join(' ')).includes(needle)).map(t=>({title:t.title,subtitle:p.name,object:t,project:p}))).slice(0,4);
   const notes=(data.notes||[]).filter(n=>norm([n.title,n.text,n.url,n.group,n.keywords?.join(' '),(n.items||[]).map(i=>i.text).join(' ')].join(' ')).includes(needle)).slice(0,5).map(n=>({title:n.title||'Ghi chú',subtitle:n.type==='todo'?'Checklist':n.group||'Ghi chú',object:n}));
   group('Dự án','▦',projects,item=>go('projects',item.object.id));
   group('Công việc','☑',tasks,item=>{go('projects',item.project.id);taskDetail(item.project,item.object);});
