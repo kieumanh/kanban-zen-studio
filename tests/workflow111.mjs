@@ -1,11 +1,114 @@
-import assert from 'node:assert/strict';import vm from 'node:vm';import {readFileSync} from 'node:fs';import {webcrypto} from 'node:crypto';import {DatabaseSync} from 'node:sqlite';import {taskAssetStatements} from '../server/task-workflow.mjs';import {validWorkspace} from '../server/api.mjs';import {reportTasks} from '../server/reports.mjs';
-const read=p=>readFileSync(new URL('../'+p,import.meta.url),'utf8'),app=read('dist/app.js'),wf=read('dist/workflow111.js'),ctx=vm.createContext({crypto:webcrypto,structuredClone,Date,console});vm.runInContext(app.slice(0,app.indexOf('let data;'))+wf.slice(0,wf.indexOf('const _WF=')),ctx);const run=s=>vm.runInContext(s,ctx);
-run("let w=sample(),p=w.projects[0],q=w.projects[1],tid=p.tasks[0].id;const oldChecks=p.tasks[0].checks.map(c=>c.id);const clone=wfTransferTask(w,p.id,tid,q.id,true,true);");assert.notEqual(run('clone.id'),run('tid'));assert.equal(run('clone.col'),'List');assert.equal(run('clone.checks.every(c=>!c.done)'),true);assert.equal(run('clone.checks.every(c=>!oldChecks.includes(c.id))'),true);assert.equal(run('valid(w)'),true);assert.equal(validWorkspace(JSON.parse(run('JSON.stringify(w)'))),true);
-run("p.dependencies=[{from:tid,to:p.tasks[1].id}];wfTransferTask(w,p.id,tid,q.id,false);");assert.equal(run('p.tasks.some(t=>t.id===tid)'),false);assert.equal(run('q.tasks.some(t=>t.id===tid)'),true);assert.equal(run('p.dependencies.length'),0);assert.equal(run('valid(w)'),true);
-run("wfOrderTask(w,q.id,tid,q.tasks[0].id,'Done');");assert.equal(run("q.tasks.find(t=>t.id===tid).checks.every(c=>c.done)"),true);assert.equal(run('q.tasks[0].id'),run('tid'));run("q.tasks[0].archived=true");assert.equal(validWorkspace(JSON.parse(run('JSON.stringify(w)'))),true);const d=JSON.parse(run('JSON.stringify(w)'));assert.ok(!reportTasks(d,'2026-10-26').some(t=>t.id===run('tid')));
-run("w.notes=[{id:'a',pinned:false},{id:'b',pinned:true},{id:'c',pinned:false}];wfOrderNote(w,'a','b',false);");assert.equal(run('w.notes[0].pinned'),true);assert.equal(run('w.notes[0].id'),'a');
-assert.throws(()=>run("wfTransferTask(w,q.id,tid,q.id,true)"));
-const db=new DatabaseSync(':memory:');db.exec(read('server/schema.sql'));for(const id of ['u1','u2'])db.prepare("INSERT INTO users VALUES(?,?, 'password',1,0,0)").run(id,id+'@test');const current={schema:1,projects:[{id:'p2',tasks:[{id:'t1'}]}]},raw=JSON.stringify(current);db.prepare('INSERT INTO workspaces VALUES(?,?,2)').run('u1',raw);
-for(const [id,user] of [['f1','u1'],['f2','u2']]){db.prepare("INSERT INTO object_files VALUES(?,?,?,'','image.png','image/png',10,'project:p1:task:t1','ready',1,0)").run(id,user,'original/'+id);db.prepare("INSERT INTO attachments VALUES(?,?, 'p1','t1','file.txt','YQ==',1,1,0)").run(id+'legacy',user);}
-const adapter={prepare(sql){return {bind(...values){return {run(){return db.prepare(sql).run(...values);}}}}}};for(const s of taskAssetStatements(adapter,'u1',raw,3))s.run();assert.equal(db.prepare('SELECT scope FROM object_files WHERE id=?').get('f1').scope,'project:p1:task:t1','stale CAS leaves attachments untouched');for(const s of taskAssetStatements(adapter,'u1',raw,2))s.run();assert.equal(db.prepare('SELECT scope,object_key FROM object_files WHERE id=?').get('f1').scope,'project:p2:task:t1');assert.equal(db.prepare('SELECT object_key FROM object_files WHERE id=?').get('f1').object_key,'original/f1','binary object preserved');assert.equal(db.prepare('SELECT project_id FROM attachments WHERE id=?').get('f1legacy').project_id,'p2');assert.equal(db.prepare('SELECT scope FROM object_files WHERE id=?').get('f2').scope,'project:p1:task:t1','another account never moved');
-console.log('PASS: transfer/copy IDs, reset checks, dependency cleanup, persistent order, archived report exclusion, pinned groups, CAS-bound attachment migration and account isolation.');
+import assert from "node:assert/strict";
+import vm from "node:vm";
+import { readFileSync } from "node:fs";
+import { webcrypto } from "node:crypto";
+import { DatabaseSync } from "node:sqlite";
+import { taskAssetStatements } from "../server/task-workflow.mjs";
+import { validWorkspace } from "../server/api.mjs";
+import { reportTasks } from "../server/reports.mjs";
+const read = (p) => readFileSync(new URL("../" + p, import.meta.url), "utf8"),
+  app = read("dist/app.js"),
+  wf = read("dist/workflow111.js"),
+  ctx = vm.createContext({ crypto: webcrypto, structuredClone, Date, console });
+vm.runInContext(
+  app.slice(0, app.indexOf("let data;")) +
+    wf.slice(0, wf.indexOf("const _WF =")),
+  ctx,
+);
+const run = (s) => vm.runInContext(s, ctx);
+run(
+  "let w=sample(),p=w.projects[0],q=w.projects[1],tid=p.tasks[0].id;const oldChecks=p.tasks[0].checks.map(c=>c.id);const clone=wfTransferTask(w,p.id,tid,q.id,true,true);",
+);
+assert.notEqual(run("clone.id"), run("tid"));
+assert.equal(run("clone.col"), "List");
+assert.equal(run("clone.checks.every(c=>!c.done)"), true);
+assert.equal(run("clone.checks.every(c=>!oldChecks.includes(c.id))"), true);
+assert.equal(run("valid(w)"), true);
+assert.equal(validWorkspace(JSON.parse(run("JSON.stringify(w)"))), true);
+run(
+  "p.dependencies=[{from:tid,to:p.tasks[1].id}];wfTransferTask(w,p.id,tid,q.id,false);",
+);
+assert.equal(run("p.tasks.some(t=>t.id===tid)"), false);
+assert.equal(run("q.tasks.some(t=>t.id===tid)"), true);
+assert.equal(run("p.dependencies.length"), 0);
+assert.equal(run("valid(w)"), true);
+run("wfOrderTask(w,q.id,tid,q.tasks[0].id,'Done');");
+assert.equal(run("q.tasks.find(t=>t.id===tid).checks.every(c=>c.done)"), true);
+assert.equal(run("q.tasks[0].id"), run("tid"));
+run("q.tasks[0].archived=true");
+assert.equal(validWorkspace(JSON.parse(run("JSON.stringify(w)"))), true);
+const d = JSON.parse(run("JSON.stringify(w)"));
+assert.ok(!reportTasks(d, "2026-10-26").some((t) => t.id === run("tid")));
+run(
+  "w.notes=[{id:'a',pinned:false},{id:'b',pinned:true},{id:'c',pinned:false}];wfOrderNote(w,'a','b',false);",
+);
+assert.equal(run("w.notes[0].pinned"), true);
+assert.equal(run("w.notes[0].id"), "a");
+assert.throws(() => run("wfTransferTask(w,q.id,tid,q.id,true)"));
+const db = new DatabaseSync(":memory:");
+db.exec(read("server/schema.sql"));
+for (const id of ["u1", "u2"])
+  db.prepare("INSERT INTO users VALUES(?,?, 'password',1,0,0)").run(
+    id,
+    id + "@test",
+  );
+const current = { schema: 1, projects: [{ id: "p2", tasks: [{ id: "t1" }] }] },
+  raw = JSON.stringify(current);
+db.prepare("INSERT INTO workspaces VALUES(?,?,2)").run("u1", raw);
+for (const [id, user] of [
+  ["f1", "u1"],
+  ["f2", "u2"],
+]) {
+  db.prepare(
+    "INSERT INTO object_files VALUES(?,?,?,'','image.png','image/png',10,'project:p1:task:t1','ready',1,0)",
+  ).run(id, user, "original/" + id);
+  db.prepare(
+    "INSERT INTO attachments VALUES(?,?, 'p1','t1','file.txt','YQ==',1,1,0)",
+  ).run(id + "legacy", user);
+}
+const adapter = {
+  prepare(sql) {
+    return {
+      bind(...values) {
+        return {
+          run() {
+            return db.prepare(sql).run(...values);
+          },
+        };
+      },
+    };
+  },
+};
+for (const s of taskAssetStatements(adapter, "u1", raw, 3)) s.run();
+assert.equal(
+  db.prepare("SELECT scope FROM object_files WHERE id=?").get("f1").scope,
+  "project:p1:task:t1",
+  "stale CAS leaves attachments untouched",
+);
+for (const s of taskAssetStatements(adapter, "u1", raw, 2)) s.run();
+assert.equal(
+  db.prepare("SELECT scope,object_key FROM object_files WHERE id=?").get("f1")
+    .scope,
+  "project:p2:task:t1",
+);
+assert.equal(
+  db.prepare("SELECT object_key FROM object_files WHERE id=?").get("f1")
+    .object_key,
+  "original/f1",
+  "binary object preserved",
+);
+assert.equal(
+  db.prepare("SELECT project_id FROM attachments WHERE id=?").get("f1legacy")
+    .project_id,
+  "p2",
+);
+assert.equal(
+  db.prepare("SELECT scope FROM object_files WHERE id=?").get("f2").scope,
+  "project:p1:task:t1",
+  "another account never moved",
+);
+console.log(
+  "PASS: transfer/copy IDs, reset checks, dependency cleanup, persistent order, archived report exclusion, pinned groups, CAS-bound attachment migration and account isolation.",
+);
+
+const badColumns=JSON.parse(run("JSON.stringify(w)"));badColumns.notes=[];badColumns.projects[0].columnNames={List:42};assert.equal(validWorkspace(badColumns),false);badColumns.projects[0].columnNames={List:"Cần làm"};assert.equal(validWorkspace(badColumns),true);

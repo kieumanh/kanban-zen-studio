@@ -96,6 +96,7 @@ noteForm=function(n){
  let debounce=0,pending=false;
  function syncText(){source.value=zenRichMarkdown(rich);}
  function commit(){
+  if(typeof _WF!=='undefined'&&_WF.note?.id===editor.dataset.noteId)return;
   if(!pending||!editor.open)return;
   syncText();
   if(source.value.length>10000){notify('Nội dung ghi chú tối đa 10.000 ký tự.');return;}
