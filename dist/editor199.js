@@ -77,6 +77,9 @@ noteForm=function(n){
  }
  const listPicker=document.createElement('select');listPicker.className='zen-list-picker';listPicker.setAttribute('aria-label','Kiểu danh sách');
  listPicker.innerHTML='<option value="">Danh sách…</option><option value="bullets">• Chấm tròn</option><option value="numbers">1. Đánh số</option><option value="circle">◦ Vòng tròn</option><option value="square">▪ Hình vuông</option>';
+ let savedListRange=null;
+ const rememberListRange=()=>{const selection=window.getSelection();if(selection?.rangeCount&&rich.contains(selection.anchorNode)&&rich.contains(selection.focusNode))savedListRange=selection.getRangeAt(0).cloneRange();};
+ listPicker.addEventListener('pointerdown',rememberListRange);listPicker.addEventListener('focus',rememberListRange);
  toolbar.append(listPicker);
  legacyToolbar?.replaceWith(toolbar);
  const rich=document.createElement('div');rich.className='zen-wysiwyg';
@@ -128,6 +131,7 @@ noteForm=function(n){
  });
  listPicker.addEventListener('change',()=>{
   const action=listPicker.value;if(!action)return;
+  if(savedListRange){rich.focus();const selection=window.getSelection();selection.removeAllRanges();selection.addRange(savedListRange);savedListRange=null;}
   const was=zenRichMarkdown(rich);
   if(zenApplyFormatting(rich,action)&&zenRichMarkdown(rich)!==was)queue();
   listPicker.value='';
