@@ -6,6 +6,7 @@ on:
       - 'dist/**'
       - 'scripts/build.mjs'
       - 'package.json'
+      - 'tests/**'
       - '.github/workflows/build-worker.yml'
   workflow_dispatch:
 permissions:
