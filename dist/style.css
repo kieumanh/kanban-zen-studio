@@ -547,3 +547,75 @@ dialog .modal-head{position:sticky;top:0;z-index:5;background:var(--paper);paddi
 @media(prefers-reduced-motion:reduce){
  #editor.keep-editor .zen-wysiwyg-toolbar button{transition:none}
 }
+
+/* v1.9.10 — pin control in dedicated layout row and illustrated textile-like motifs */
+#editor.keep-editor .note-composer .zen-editor-pin-row{
+ display:flex;align-items:center;justify-content:flex-end;gap:9px;
+ min-height:35px;margin:-2px 0 9px;padding:0 2px;
+ width:100%;max-width:100%;box-sizing:border-box;
+}
+#editor.keep-editor .note-composer .zen-editor-pin-hint{
+ color:#8a7b94;font:500 11px/1.45 var(--sans);letter-spacing:.01em;
+ white-space:normal;text-align:right;
+}
+#editor.keep-editor .zen-editor-pin-row>.zen-editor-pin{
+ position:static!important;inset:auto!important;transform:none!important;
+ width:auto!important;min-width:90px;max-width:125px;height:35px!important;
+ padding:6px 12px!important;line-height:1.3;font:650 12px/1.3 var(--sans)!important;
+ border:1px solid #d4c1e3;border-radius:10px;
+ background:#fbf7fc;color:#765392;
+ display:inline-flex;justify-content:center;align-items:center;
+ flex:0 0 auto;z-index:auto!important;box-shadow:none!important;
+}
+#editor.keep-editor .zen-editor-pin-row>.zen-editor-pin[aria-pressed=true]{
+ background:#eee4f6;border-color:#bc9cda;color:#654388;
+}
+#editor.keep-editor .note-composer>input[name=title]{
+ padding-right:12px!important;position:relative;z-index:1;
+}
+#editor.keep-editor .note-composer[data-zen-art]:not([data-zen-art=none]){
+ background-image:linear-gradient(98deg,rgba(255,255,255,.985),rgba(255,255,255,.94) 59%,rgba(255,255,255,.73)),var(--zen-art)!important;
+ background-position:center;background-size:cover;
+}
+.keep-card[data-zen-art]:not([data-zen-art=none]),
+.content-card[data-zen-art]:not([data-zen-art=none]){
+ background-image:linear-gradient(105deg,rgba(255,255,255,.96),rgba(255,255,255,.87) 53%,rgba(255,255,255,.57)),var(--zen-art)!important;
+ background-position:center;background-repeat:no-repeat;background-size:cover;
+}
+#editor.keep-editor .note-motif-picker .note-motif-options{
+ gap:10px;align-items:stretch;
+}
+#editor.keep-editor .note-motif-option{
+ min-height:110px;gap:7px;background:#ffffffda;
+ border:1px solid #e5dce9;border-radius:12px;
+ padding:7px 7px 9px;
+ box-shadow:0 2px 9px #68516e09;
+}
+#editor.keep-editor .note-motif-option .zen-motif-thumb{
+ display:block!important;flex:0 0 auto;
+ width:100%;height:67px;border-radius:8px;
+ background-size:cover;background-position:center;
+ font-size:0;line-height:0;border:1px solid #eae5e9;
+ box-sizing:border-box;
+}
+#editor.keep-editor .note-motif-option small{
+ color:#665474;font:600 11px/1.45 var(--sans);
+}
+#editor.keep-editor .note-motif-option[aria-pressed=true]{
+ background:#f5edf9;border:2px solid #9c73c9;
+ box-shadow:0 0 0 2px #ad86ce19;
+}
+@media(max-width:700px){
+ #editor.keep-editor .note-composer .zen-editor-pin-row{
+  gap:7px;min-height:34px;margin-bottom:7px;
+ }
+ #editor.keep-editor .note-composer .zen-editor-pin-hint{
+  font-size:10px;max-width:70%;
+ }
+ #editor.keep-editor .zen-editor-pin-row>.zen-editor-pin{min-width:80px;max-width:95px}
+ #editor.keep-editor .note-motif-option{min-height:97px;padding:5px 5px 7px}
+ #editor.keep-editor .note-motif-option .zen-motif-thumb{height:53px}
+}
+@media(prefers-reduced-motion:reduce){
+ #editor.keep-editor .zen-editor-pin-row>.zen-editor-pin{transition:none}
+}
