@@ -4,6 +4,8 @@ function mergeWorkspaceValue(base,local,remote){
  const equal=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
  if(equal(local,remote)||equal(base,remote))return structuredClone(local);
  if(equal(base,local))return structuredClone(remote);
+ if(base===undefined&&Array.isArray(local)&&Array.isArray(remote)&&[...local,...remote].every(x=>x&&typeof x.id==='string'))base=[];
+ if(base===undefined&&local&&remote&&typeof local==='object'&&typeof remote==='object'&&!Array.isArray(local)&&!Array.isArray(remote))base={};
  if([base,local,remote].every(v=>Array.isArray(v)&&v.every(x=>x&&typeof x.id==='string'))){
   const ids=new Set([...local,...remote].map(x=>x.id));const result=[];
   for(const id of ids){const b=base.find(x=>x.id===id),l=local.find(x=>x.id===id),r=remote.find(x=>x.id===id);const v=mergeWorkspaceValue(b,l,r);if(v!==undefined)result.push(v);}return result;
@@ -33,6 +35,7 @@ async function preserveConflictCopies(){
   for(const p of local.projects){const rp=merged.projects.find(x=>x.id===p.id);if(JSON.stringify(p)===JSON.stringify(rp))continue;const copy=structuredClone(p);copy.id=uid();copy.name=(copy.name+' · Bản thiết bị').slice(0,100);const ids=new Map();for(const t of copy.tasks){const old=t.id;t.id=uid();ids.set(old,t.id);for(const c of t.checks)c.id=uid();}for(const e of copy.dependencies||[]){e.from=ids.get(e.from);e.to=ids.get(e.to);}merged.projects.push(copy);}
   const remap=new Map();for(const n of local.notes||[]){const rn=merged.notes.find(x=>x.id===n.id);if(JSON.stringify(n)!==JSON.stringify(rn))remap.set(n.id,uid());}
   for(const n of local.notes||[])if(remap.has(n.id)){const copy=structuredClone(n);copy.id=remap.get(n.id);copy.title=(copy.title+' · Bản thiết bị').slice(0,150);for(const k of ['boardId','from','to'])if(remap.has(copy[k]))copy[k]=remap.get(copy[k]);merged.notes.push(copy);}
+  if(local.studio){merged.studio||={};for(const key of ['templates','filters','reviews']){const list=merged.studio[key]||[];for(const item of local.studio[key]||[]){const existing=list.find(x=>x.id===item.id);if(!existing)list.push(structuredClone(item));else if(JSON.stringify(existing)!==JSON.stringify(item)){const copy=structuredClone(item);copy.id=uid();if(copy.name)copy.name=(copy.name+' · Bản thiết bị').slice(0,100);list.push(copy);}}merged.studio[key]=list;}}
   if(!valid(merged)||new TextEncoder().encode(JSON.stringify(merged)).length>1850000)throw Error('Bản hợp nhất vượt giới hạn. Hãy xuất JSON và xử lý từng dự án; các bản gốc vẫn được giữ.');
   data=merged;cloudBase=structuredClone(remote.data);cloudRevision=remote.revision;dirty=true;syncConflict=false;syncBlocked=false;cacheCloud();await flushCloud(true);
   if(dirty||syncConflict)throw Error('Còn dữ liệu chờ. Bản hợp nhất đã lưu trên thiết bị để tiếp tục.');

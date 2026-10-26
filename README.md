@@ -1,4 +1,4 @@
-# Kanban Zen Studio v1.10.5
+# Kanban Zen Studio v2.0.0
 
 
 Production: https://kanban.huongthiennature.com/
@@ -181,3 +181,20 @@ Added public-domain historical portrait illustrations of Zhuangzi and Xunzi from
 
 ## v1.10.0
 Note history retains accepted previous snapshots for seven days in an account-scoped D1 table; restoration creates a new save. History begins after this upgrade. Client sync now stores its acknowledged baseline for three-way merge; competing edits remain explicit, with an opt-in recovery preserving differing records as copies. Persistent legacy conflicts require Settings → Hợp nhất và giữ cả hai bản. No forced workspace overwrite. Added rich-text bullet/number lists, four illustrated motifs, a unified note action row, project assignment for task creation, a scoped uploader, sticky modal close controls and consistent release metadata.
+
+
+## v2.0.0 · Không gian làm việc hằng ngày
+
+- Dashboard ưu tiên Hôm nay, Quá hạn, Tuần này và tối đa 3 việc tập trung. Gợi ý kế hoạch có giải thích, tổng kết tuần theo hướng dẫn và lưu lại 52 tuần.
+- Thư viện 60 mẫu dự án/task/checklist/ghi chú. Tạo mới ID, bỏ lịch và hoàn tất; không sao chép bình luận/lịch sử/tệp của bản gốc. Task có lặp hằng ngày/hằng tuần khi hoàn tất, không tạo bù hàng loạt.
+- Chi tiết task thống nhất bốn nhóm: nội dung, lịch, checklist, tài liệu. Bình luận riêng trong tài khoản (tối đa 100), lịch sử timeline 80 mốc gần nhất từ 2.0, liên kết ghi chú và chuyển ghi chú thành task giữ nguồn.
+- Chế độ tập trung một task và ghi chú liên quan; đồng hồ tùy chọn, chỉ đo phiên hiện tại.
+- 30 bộ lọc đã lưu, sắp xếp và thay đổi trạng thái/ưu tiên/hạn hàng loạt. Checklist trên Kanban mặc định bật, vẫn giữ tùy chọn cá nhân.
+- Calendar/Timeline ghi riêng bắt đầu/kết thúc/hạn hoàn thành, Hôm nay và Chưa lên lịch. Gantt mobile dùng danh sách và form đổi lịch. Hạn cam kết không tự đổi khi chỉnh lịch.
+- Điều hướng dự án/góc nhìn rõ hai lớp và nhớ theo tài khoản trên thiết bị. Cài đặt chia nhóm hồ sơ/thông báo/dữ liệu/phiên. Trạng thái đồng bộ thống nhất, hiển thị lần thành công gần nhất tại Cài đặt và tooltip.
+- Tìm kiếm nhóm task/ghi chú/tệp, tô từ khóa, hiển thị nguồn. Tệp có loại/tên/dung lượng/trạng thái và hành động tải có xử lý không khả dụng.
+- Báo cáo chia sẻ ghi rõ bản chụp lúc tạo; hỗ trợ chuột, chạm, Enter/Space, Escape và đóng bằng bàn phím.
+- `dist/studio.js` và `dist/studio.css` là lớp giao diện 2.0 dùng chung; `shared/studio-model.js` chứa quy tắc ngày, mẫu, lịch sử, xếp việc và kiểm tra dữ liệu dùng ở client/server. Build kiểm tra hai bản nhúng trùng nguồn shared. `scripts/ui-manifest.json` định thứ tự bundle duy nhất `/studio-app.js`.
+- Tương thích schema 1, không migration phá hủy dữ liệu. Mọi phần bổ sung đồng bộ trong workspace với CAS/three-way merge hiện có; không cộng tác thời gian thực. Lịch sử là nhật ký làm việc cá nhân, không phải audit log chống sửa đổi.
+
+Kiểm tra: `npm run build && npm test`; kiểm tra trình duyệt bằng `PLAYWRIGHT_MODULE=... CHROMIUM_PATH=... node tests/studio-browser.mjs`. Không cần Playwright trong runtime sản phẩm.

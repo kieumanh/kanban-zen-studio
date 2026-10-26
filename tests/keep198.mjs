@@ -34,7 +34,7 @@ assert.equal(evalJS("noteExtraValues({querySelector(){return {value:'true'}}},{}
 assert.equal(evalJS("noteExtraValues({querySelector(){return {value:'false'}}},{pinned:true}).pinned"),false);
 assert.ok(read('dist/notes196.js').includes("requestAPI('resources?"),'searches real resource API');
 assert.ok(read('dist/notes196.js').includes('n.items'),'searches checklist data');
-assert.ok(read('dist/index.html').includes('src="/keep198.js"'));
+assert.ok(JSON.parse(read('scripts/ui-manifest.json')).includes('keep198.js'));
 assert.ok(read('scripts/build.mjs').includes("'/keep198.js'"));
 for(const path of ['dist/app.js','server/api.mjs'])assert.ok(read(path).includes("typeof n.pinned!=='boolean'"),path+' pinned validator');
 console.log('PASS: illustrated motifs, formatted safe markup, PIN state, global resources search and JS syntax.');

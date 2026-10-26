@@ -2,3 +2,7 @@ node_modules/
 .wrangler/
 .DS_Store
 .openai/
+
+# Responsive browser verification artifacts
+qa/
+node_modules/

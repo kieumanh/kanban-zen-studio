@@ -34,6 +34,6 @@ assert.ok(asset.includes('data-note-add-item'),'visible add button');
 assert.ok(asset.includes("queueMicrotask"),'deletion commits after existing handler');
 assert.ok(app.includes("n.motif!==undefined"),'client validation');
 assert.ok(server.includes("n.motif!==undefined"),'server validation');
-assert.ok(html.includes('src="/note-enhancements.js"'),'bundled enhancement loaded');
+assert.ok(JSON.parse(readFileSync(new URL('../scripts/ui-manifest.json',import.meta.url),'utf8')).includes('note-enhancements.js'),'bundled enhancement loaded');
 assert.ok(css.includes('.note-motif-picker')&&css.includes('.note-progress-track'),'visual elements styled');
 console.log('PASS: motif allowlist, checklist progress, validated autosave hooks, script inclusion and client/server validation.');

@@ -1,7 +1,7 @@
 // Deterministic summaries from account data; no paid inference or external data.
 export const reportDate=(now=new Date())=>now.toLocaleDateString('en-CA',{timeZone:'Asia/Ho_Chi_Minh'});
 export const shiftDay=(day,n)=>new Date(Date.parse(day+'T12:00:00Z')+n*86400000).toISOString().slice(0,10);
-export const taskDeadline=t=>t.end?.slice(0,10)||t.due||'';
+export const taskDeadline=t=>t.due||'';
 export function reportCategory(t,day){return t.col==='Done'?'done':taskDeadline(t)&&taskDeadline(t)<day?'overdue':t.col==='Doing'?'doing':'todo';}
 const oneLine=s=>String(s||'').replace(/[\r\n]+/g,' ').trim();
 function reportProgress(tasks){let done=0,total=0;for(const t of tasks){total+=1+(t.checks||[]).length;done+=(t.col==='Done'?1:0)+(t.checks||[]).filter(c=>c.done).length;}return total?Math.round(done/total*100):0;}
