@@ -6,8 +6,68 @@ function authScreen(mode='login',message=''){document.body.classList.add('signed
 function syncStatus(text){const el=$('#save-state'),busy=/đang|chờ/i.test(text),warning=/lỗi|xung đột|mạng|chưa/i.test(text);el.innerHTML=svgIcon(warning||busy?'warning':'cloudCheck')+'<span>'+esc(text.replace(/^[●•]\s*/,''))+'</span>';el.setAttribute('role','status');el.dataset.sync=warning||busy?'warning':'saved';}
 function cacheCloud(){localStorage.setItem(KEY,JSON.stringify(data));localStorage.setItem(KEY+'-sync',JSON.stringify({revision:cloudRevision,dirty}));}
 async function openAccount(){const me=await requestAPI('me');currentUser=me.user;startIdleSession(me.user.session_expires);KEY='zen-account-'+currentUser.id;const remote=await requestAPI('workspace');cloudRevision=remote.revision;dirty=false;syncConflict=false;const cached=localStorage.getItem(KEY),meta=JSON.parse(localStorage.getItem(KEY+'-sync')||'{}');if(meta.dirty&&cached){const pending=JSON.parse(cached);if(valid(pending)){data=pending;cloudRevision=meta.revision;dirty=true;}}if(!dirty)data=remote.data;cacheCloud();document.body.classList.remove('signed-out');$('#auth-screen')?.remove();view='dashboard';active=null;query='';render();syncStatus(dirty?'● Đang đồng bộ…':'● Đã đồng bộ');renderAccountAvatar();if(dirty)await flushCloud();}
-async function flushCloud(){if(!currentUser||!dirty||syncing||syncConflict)return;syncing=true;const snapshot=JSON.stringify(data);try{syncStatus('● Đang đồng bộ…');const result=await requestAPI('workspace','PUT',{data:JSON.parse(snapshot),revision:cloudRevision});cloudRevision=result.revision;dirty=JSON.stringify(data)!==snapshot;cacheCloud();syncStatus(dirty?'● Đang đồng bộ…':'● Đã đồng bộ');}catch(e){if(e.status===409){syncConflict=true;syncStatus('⚠ Cần xử lý xung đột');notify('Có cập nhật trên thiết bị khác. Mở Tài khoản để giữ bản sao và chọn dữ liệu.');}else{syncStatus('⚠ Đã lưu trên máy · Chờ mạng');if(e.status===401)notify('Phiên đăng nhập hết hạn. Dữ liệu chưa gửi vẫn được lưu riêng trên máy.');}}finally{syncing=false;if(dirty&&!syncConflict&&navigator.onLine)syncTimer=setTimeout(flushCloud,10000);}}
-save=function(){if(!currentUser)return false;dirty=true;try{cacheCloud();syncStatus('● Đã lưu trên máy · Đang đồng bộ');clearTimeout(syncTimer);syncTimer=setTimeout(flushCloud,600);return true;}catch{notify('Không lưu được trên máy. Hãy xuất JSON để giữ dữ liệu.');return false;}};
+let syncAgain=false,invalidSyncNotified=false;
+async function flushCloud(){
+ if(!currentUser||!dirty||syncConflict)return;
+ if(syncing){syncAgain=true;return;}
+ if(!navigator.onLine){syncStatus('⚠ Đã lưu trên máy · Chờ kết nối');return;}
+ syncing=true;clearTimeout(syncTimer);
+ const userId=currentUser.id,snapshot=JSON.stringify(data);
+ let allowRetry=true;
+ try{
+  const payload=JSON.parse(snapshot);
+  if(!valid(payload)){
+   allowRetry=false;
+   syncStatus('⚠ Bản nháp chưa hợp lệ · Chưa lên máy chủ');
+   if(!invalidSyncNotified){notify('Không thể đồng bộ vì dữ liệu chưa hợp lệ. Bản lưu trên máy được giữ nguyên.');invalidSyncNotified=true;}
+   return;
+  }
+  syncStatus('● Đang đồng bộ…');
+  const result=await requestAPI('workspace','PUT',{data:payload,revision:cloudRevision});
+  if(currentUser?.id!==userId)return;
+  cloudRevision=result.revision;
+  dirty=JSON.stringify(data)!==snapshot;
+  cacheCloud();
+  invalidSyncNotified=false;
+  syncStatus(dirty?'● Đã lưu trên máy · Tiếp tục đồng bộ':'● Đã đồng bộ');
+ }catch(error){
+  if(currentUser?.id!==userId)return;
+  if(error.status===409){
+   syncConflict=true;allowRetry=false;
+   syncStatus('⚠ Xung đột dữ liệu · Chưa ghi đè');
+   notify('Có sửa đổi từ thiết bị khác. Bản của bạn vẫn được lưu riêng trên máy. Vào Settings để xử lý.');
+  }else if([400,413,422].includes(error.status)){
+   allowRetry=false;
+   syncStatus('⚠ Máy chủ từ chối dữ liệu · Đã lưu trên máy');
+   if(!invalidSyncNotified){notify('Chưa thể đồng bộ dữ liệu này. Hãy kiểm tra lại ghi chú hoặc nội dung vừa sửa.');invalidSyncNotified=true;}
+  }else{
+   syncStatus('⚠ Đã lưu trên máy · Chờ kết nối');
+   if(error.status===401)notify('Phiên đăng nhập hết hạn. Bản nháp vẫn được lưu riêng trên máy.');
+  }
+ }finally{
+  syncing=false;
+  if(dirty&&!syncConflict&&allowRetry&&navigator.onLine&&currentUser?.id===userId){
+   clearTimeout(syncTimer);
+   syncTimer=setTimeout(flushCloud,syncAgain?700:6000);
+  }
+  syncAgain=false;
+ }
+}
+save=function(){
+ if(!currentUser)return false;
+ dirty=true;
+ try{
+  cacheCloud();invalidSyncNotified=false;
+  syncStatus(navigator.onLine?'● Đã lưu trên máy · Đang đồng bộ':'⚠ Đã lưu trên máy · Chờ kết nối');
+  clearTimeout(syncTimer);
+  syncTimer=setTimeout(flushCloud,750);
+  return true;
+ }catch{
+  syncStatus('⚠ Không thể lưu bản nháp trên máy');
+  notify('Không lưu được trên máy. Hãy xuất JSON để giữ dữ liệu.');
+  return false;
+ }
+};
 async function pollCloud(){if(document.hidden||!currentUser||dirty||syncing||$('#editor').open||typeof ganttPointer!=='undefined'&&ganttPointer)return;try{const requestedRevision=cloudRevision;const remote=await requestAPI('workspace?revision='+requestedRevision);if(dirty||syncing||$('#editor').open||typeof ganttPointer!=='undefined'&&ganttPointer||requestedRevision!==cloudRevision)return;if(!remote.unchanged&&remote.revision!==cloudRevision){data=remote.data;cloudRevision=remote.revision;cacheCloud();render();syncStatus('● Đã cập nhật từ thiết bị khác');}}catch{syncStatus('⚠ Chờ kết nối');}}
 function accountPanel(){if(!currentUser)return;modal(`<h2>Settings <small>Cài đặt tài khoản</small></h2><section class="profile-card"><h3>Hồ sơ cá nhân</h3><p class="help-copy">Thông tin được lưu riêng theo tài khoản của bạn.</p><img id="profile-preview" alt="Ảnh đại diện" width="72" height="72" ${currentUser.avatar?'src="'+esc(currentUser.avatar)+'"':'hidden'}><label>Tên hiển thị<input id="profile-name" maxlength="100" value="${esc(currentUser.name||'')}" autocomplete="name"></label><label>Ngày sinh<input id="profile-birthday" type="date" max="${new Date().toISOString().slice(0,10)}" value="${esc(currentUser.birthday||'')}" autocomplete="bday"></label><label>Ảnh đại diện<input id="profile-photo" type="file" accept="image/png,image/jpeg,image/webp"></label><small>PNG, JPG hoặc WebP · tối đa 5 MB · tự thu nhỏ khi lưu.</small><div class="help-actions"><button class="btn primary" type="button" id="save-profile">Lưu hồ sơ</button><button class="btn" type="button" id="remove-photo">Xóa ảnh</button></div><p id="profile-status" role="status"></p></section><h3 class="settings-section">Tài khoản & bảo mật</h3><p>${esc(currentUser.email)}</p><p class="help-copy">Đồng bộ tự động khi chỉnh sửa. Thiết bị khác nhận cập nhật sau khoảng 10 giây khi đang mở; kết nối lại sẽ gửi dữ liệu chờ.</p><h3 class="settings-section">Thông báo</h3><label class="check-row"><input id="email-reminder" type="checkbox" ${currentUser.email_reminders?'checked':''}><span>Nhận email khi có việc đến hạn hoặc quá hạn.</span></label><div class="profile-card reminder-options"><label>Giờ gửi (Việt Nam)<select id="reminder-hour">${Array.from({length:24},(_,h)=>`<option value="${h}" ${h===(currentUser.reminder_hour??8)?'selected':''}>${String(h).padStart(2,'0')}:00</option>`).join('')}</select></label><label>Tần suất<select id="reminder-days">${[1,2,3,7].map(d=>`<option value="${d}" ${d===(currentUser.reminder_days??1)?'selected':''}>${d===1?'Mỗi ngày':d===7?'Mỗi tuần':'Mỗi '+d+' ngày'}</option>`).join('')}</select></label><small>Áp dụng cho email và thông báo trình duyệt. Chu kỳ tính từ lần gửi thành công gần nhất; chỉ gửi khi có việc cần nhắc.</small><button class="btn primary" type="button" id="save-reminders">Lưu lịch thông báo</button><p id="reminder-status" role="status"></p></div><div class="help-actions"><button class="btn" type="button" id="enable-push">Bật thông báo trình duyệt</button><button class="btn" type="button" id="disable-push">Tắt thông báo thiết bị này</button><h3 class="settings-section settings-full">Dữ liệu & đồng bộ</h3><button class="btn" type="button" id="sync-now">Đồng bộ ngay</button>${legacyData?'<button class="btn" type="button" id="import-legacy">Nhập dữ liệu cũ trên máy</button>':''}<button class="btn" type="button" data-action="export">Xuất bản sao JSON</button><button class="btn" type="button" data-action="import">Nhập JSON</button><button class="btn" type="button" data-action="undo" ${undoData?'':'disabled'}>Hoàn tác lần xóa</button><button class="btn danger" type="button" data-action="clear">Xóa dữ liệu</button>${syncConflict?'<button class="btn danger" type="button" id="resolve-cloud">Dùng bản trên máy chủ</button>':''}<button class="btn danger" type="button" id="sign-out">Đăng xuất</button></div><p class="help-copy" style="margin-top:15px">Thông báo cần được bạn cho phép. Trình duyệt có thể giới hạn thông báo khi bị đóng hoàn toàn. Email nhắc việc có thể tắt bất cứ lúc nào.</p>`,null,true);$('#editor').classList.add('account-dialog');$('#editor').addEventListener('close',()=>$('#editor').classList.remove('account-dialog'),{once:true});let profileAvatar=currentUser.avatar||'';$('#remove-photo').onclick=()=>{profileAvatar='';$('#profile-preview').hidden=true;$('#profile-photo').value='';};$('#profile-photo').onchange=async e=>{const file=e.target.files[0];if(!file)return;try{if(file.size>5*1024*1024||!['image/png','image/jpeg','image/webp'].includes(file.type))throw Error('Chọn ảnh PNG, JPG, WebP dưới 5 MB.');const bitmap=await createImageBitmap(file),canvas=document.createElement('canvas');canvas.width=canvas.height=192;const ctx=canvas.getContext('2d'),size=Math.min(bitmap.width,bitmap.height);ctx.drawImage(bitmap,(bitmap.width-size)/2,(bitmap.height-size)/2,size,size,0,0,192,192);bitmap.close();profileAvatar=canvas.toDataURL('image/webp',.8);$('#profile-preview').src=profileAvatar;$('#profile-preview').hidden=false;}catch(error){$('#profile-status').textContent=error.message;}};$('#save-profile').onclick=async e=>{e.target.disabled=true;try{const profile=await requestAPI('profile','PUT',{name:$('#profile-name').value,birthday:$('#profile-birthday').value,avatar:profileAvatar});Object.assign(currentUser,profile);renderAccountAvatar();$('#profile-status').textContent='Đã lưu hồ sơ. Các thiết bị khác nhận thông tin khi đăng nhập lại.';}catch(error){$('#profile-status').textContent=error.message;}finally{e.target.disabled=false;}};$('#save-reminders').onclick=async e=>{e.target.disabled=true;try{const hour=Number($('#reminder-hour').value),days=Number($('#reminder-days').value);await requestAPI('preferences','PUT',{emailReminders:$('#email-reminder').checked,hour,days});Object.assign(currentUser,{reminder_hour:hour,reminder_days:days});$('#reminder-status').textContent='Đã lưu lịch thông báo.';}catch(error){$('#reminder-status').textContent=error.message;}finally{e.target.disabled=false;}};$('#email-reminder').onchange=async e=>{try{await requestAPI('preferences','PUT',{emailReminders:e.target.checked});currentUser.email_reminders=e.target.checked?1:0;notify('Đã lưu cài đặt email.');}catch(error){e.target.checked=!e.target.checked;notify(error.message);}};$('#enable-push').onclick=enablePush;$('#disable-push').onclick=async()=>{try{const reg=await navigator.serviceWorker.ready,sub=await reg.pushManager.getSubscription();if(sub){await requestAPI('push','DELETE',{endpoint:sub.endpoint});await sub.unsubscribe();}notify('Đã tắt thông báo trên thiết bị này.');}catch(e){notify(e.message);}};$('#sync-now').onclick=async()=>{await flushCloud();await pollCloud();notify(syncConflict?'Cần xử lý xung đột dữ liệu.':dirty?'Đang chờ đồng bộ.':'Dữ liệu đã cập nhật.');};$('#import-legacy')?.addEventListener('click',()=>modal('<h2>Nhập dữ liệu cũ?</h2><p>Thao tác thêm dự án cũ vào tài khoản này; không xóa dữ liệu đang có. Nhập nhiều lần sẽ tạo các bản sao.</p>',()=>{try{const old=JSON.parse(legacyData);if(!valid(old))throw Error('Dữ liệu cũ không hợp lệ.');for(const p of old.projects){p.id=uid();for(const t of p.tasks){t.id=uid();t.checks.forEach(c=>c.id=uid());}}if(data.projects.length+old.projects.length>100)throw Error('Vượt giới hạn 100 dự án.');data.projects.push(...old.projects);save();render();$('#editor').close();notify('Đã nhập dữ liệu cũ vào tài khoản.');}catch(e){notify(e.message);}}));$('#resolve-cloud')?.addEventListener('click',()=>modal('<h2>Dùng dữ liệu trên máy chủ?</h2><p>Bản chỉnh sửa hiện tại vẫn được lưu thành bản sao trên máy. Bạn nên xuất JSON trước khi tiếp tục. Thao tác này thay bảng đang hiển thị bằng dữ liệu máy chủ.</p>',async()=>{localStorage.setItem(KEY+'-conflict-'+Date.now(),JSON.stringify(data));try{const remote=await requestAPI('workspace');data=remote.data;cloudRevision=remote.revision;dirty=false;syncConflict=false;cacheCloud();$('#editor').close();render();syncStatus('● Đã đồng bộ');}catch(e){notify('Chưa lấy được dữ liệu máy chủ. Bản chỉnh sửa của bạn vẫn được giữ.');}}));$('#sign-out').onclick=()=>modal('<h2>Đăng xuất tài khoản?</h2><p class="help-copy">Đồng bộ các thay đổi trước khi rời không gian làm việc.</p>',()=>signOutAccount(false));const logout=$('#sign-out'),section=document.createElement('section');section.className='settings-signout';section.innerHTML='<h3>Phiên đăng nhập</h3><p>Giữ đăng nhập khi tải lại trang. Tự khóa sau 10 phút không thao tác.</p>';$('#editor-body').append(section);section.append(logout);}
 
