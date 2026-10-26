@@ -88,7 +88,10 @@ for row in additions:
     seen_vi.add(norm(row["vi"]))
     seen_text.add((row["author"], norm(row["text"])))
 for row in q:
-    row["id"] = identity(row)
+    # Preserve imported Daoist IDs across reproducible re-imports.
+    # Existing corpus IDs continue to use author + normalized Vietnamese.
+    if not (row.get("batch", "").startswith("daoist-") and row.get("id")):
+        row["id"] = identity(row)
     if row.get("kind") == "reflection":
         row["attribution"] = "Zen Studio · lời chiêm nghiệm biên soạn"
 write("dist/wisdom.json", q)
