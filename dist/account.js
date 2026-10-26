@@ -147,6 +147,16 @@ function renderManualSyncReport(outcome,options={}){
  stamp.textContent=(outcome==='synced'?'Máy chủ xác nhận lúc ':'Kiểm tra lúc ')+new Intl.DateTimeFormat('vi-VN',{timeZone:'Asia/Ho_Chi_Minh',hour:'2-digit',minute:'2-digit',day:'2-digit',month:'2-digit',year:'numeric'}).format(new Date());
  node.append(stamp);
 }
+async function resolveManualSyncConflict(owner){
+ if(!syncConflict)return true;
+ if(typeof rebaseWorkspace==='function'&&await rebaseWorkspace(owner)){syncConflict=false;return true;}
+ // A manual sync keeps concurrent edits by copying the local version before retrying.
+ if(typeof preserveConflictCopies==='function'){
+  await preserveConflictCopies();
+  return currentUser?.id===owner&&!dirty&&!syncConflict&&!syncBlocked;
+ }
+ return false;
+}
 /* Keep remote conflicts and unsent drafts intact. GET is a read-only revision check. */
 async function runManualSyncReport(){
  const button=document.querySelector('#sync-now');
@@ -162,8 +172,8 @@ async function runManualSyncReport(){
  }
  let uploaded=false,downloaded=false;
  try{
-  if(syncConflict){if(typeof rebaseWorkspace==='function'&&await rebaseWorkspace(initialUser)){syncConflict=false;}else{renderManualSyncReport('conflict');return;}}
   if(!navigator.onLine){renderManualSyncReport('offline');return;}
+  if(syncConflict&&!await resolveManualSyncConflict(initialUser)){renderManualSyncReport('conflict');return;}
   if(syncing){
    const started=Date.now();
    while(syncing&&Date.now()-started<22000){
@@ -179,7 +189,7 @@ async function runManualSyncReport(){
    if(dirty&&!syncConflict&&!syncBlocked&&!syncing&&currentUser?.id===initialUser)await flushCloud(true);
    if(currentUser?.id!==initialUser)return;
    uploaded=cloudRevision>before;
-   if(syncConflict){if(typeof rebaseWorkspace==='function'&&await rebaseWorkspace(initialUser)){syncConflict=false;}else{renderManualSyncReport('conflict');return;}}
+   if(syncConflict&&!await resolveManualSyncConflict(initialUser)){renderManualSyncReport('conflict');return;}
    if(syncBlocked){renderManualSyncReport('invalid');return;}
    if(dirty){renderManualSyncReport(navigator.onLine?'pending':'offline');return;}
   }
