@@ -4,6 +4,7 @@ on:
     branches: [main]
     paths:
       - 'dist/**'
+      - 'server/**'
       - 'scripts/build.mjs'
       - 'package.json'
       - 'tests/**'
