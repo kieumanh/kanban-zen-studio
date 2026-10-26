@@ -52,6 +52,6 @@ async function runSync(testcase){
 let x=await runSync('success');assert.equal(x.ctx.dirty,false);assert.equal(x.ctx.cloudRevision,5);assert.match(x.status.at(-1),/Đã đồng bộ/);
 x=await runSync('pending');assert.equal(x.ctx.dirty,true);assert.ok(x.calls.includes(800));
 x=await runSync('conflict');assert.equal(x.ctx.syncConflict,true);assert.equal(x.ctx.cloudRevision,4);assert.ok(!x.calls.length);
-x=await runSync('invalid');assert.equal(x.ctx.dirty,true);assert.match(x.status.at(-1),/chưa hợp lệ/);assert.equal(x.calls.length,0);
+x=await runSync('invalid');assert.equal(x.ctx.dirty,true);assert.match(x.status.at(-1),/không hợp lệ/);assert.equal(x.calls.length,0);
 x=await runSync('offline');assert.equal(x.ctx.dirty,true);assert.match(x.status.at(-1),/Chờ kết nối/);assert.equal(x.calls.length,0);
 console.log('PASS: WYSIWYG formatting serializer, safe paste, live editor integration, compact search, sync success/pending/offline/invalid/conflict.');
