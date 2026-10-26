@@ -310,3 +310,47 @@ dialog .modal-head{position:sticky;top:0;z-index:5;background:var(--paper);paddi
  .resource-page-actions .btn{flex:1;justify-content:center;font-size:12px}
  .resource-upload-actions .btn{flex:1}
 }
+
+
+/* v1.9.6 — Gentle motifs and checklist progress; zero external art assets. */
+.note-progress{margin:11px 0 13px;max-width:100%}
+.note-progress-heading{display:flex;justify-content:space-between;gap:12px;align-items:center;color:#746580;font-size:11px;line-height:1.55;margin-bottom:6px}
+.note-progress-heading strong{color:#75509b;font-size:12px;font-variant-numeric:tabular-nums}
+.note-progress-track{height:7px;border-radius:999px;background:#e9dff0;overflow:hidden;width:100%}
+.note-progress-track>span{display:block;height:100%;background:linear-gradient(90deg,#8c57c7,#d16eaa);border-radius:inherit;transition:width .22s ease}
+.note-progress-editor{margin:2px 0 16px;padding:11px 12px;background:#f9f5fc;border:1px solid #e9dced;border-radius:12px}
+.note-check-add{margin-top:14px;display:grid;gap:7px;border-top:1px solid var(--line);padding-top:14px}
+.note-check-add>label{font-size:12px;font-weight:700;color:#6d567f}
+.note-check-add>div{display:flex;align-items:center;gap:9px;min-width:0}
+.note-check-add input{flex:1;min-width:0;width:100%;border:1px solid #dfd3e8;background:white;border-radius:10px;min-height:44px;padding:10px 12px;font-size:15px}
+.note-check-add button{flex:none;min-height:44px;white-space:nowrap;font-size:13px}
+.note-inline-save-status{font-size:11px;color:#87748e;line-height:1.5}
+.note-item-row[data-note-pending]{opacity:.7}
+.note-motif-picker{border:1px solid #e5dbe9;background:#faf7fc;border-radius:13px;padding:0 13px;max-width:100%;min-width:0}
+.note-motif-picker>summary{cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:49px;font-size:13px;font-weight:700;color:#66517c}
+.note-motif-picker>summary::marker{font-size:9px}
+.note-motif-picker .note-motif-current{margin-left:auto;font-size:12px;font-weight:600;color:#8d719c}
+.note-motif-picker>p{font-size:12px;line-height:1.55;color:var(--muted);margin:7px 0 12px}
+.note-motif-options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding-bottom:12px}
+.note-motif-option{min-width:0;min-height:76px;display:flex;flex-direction:column;gap:5px;justify-content:center;align-items:center;cursor:pointer;border:1px solid #e5d9ec;border-radius:12px;background:#fff;color:#6e5a7c;font-size:12px;padding:9px 6px}
+.note-motif-option>span{font-size:25px;line-height:1.2}
+.note-motif-option>small{font-size:11px;line-height:1.35;text-align:center}
+.note-motif-option[aria-pressed=true]{border-color:#9f6bd2;background:#f3eafd;box-shadow:inset 0 0 0 1px #9f6bd2;color:#5a358b}
+.note-motif-option:hover{background:#f7f0fb}
+.note-motif-option:focus-visible,.note-check-add button:focus-visible{outline:3px solid #9766ca;outline-offset:2px}
+.keep-card[data-motif]:not([data-motif=none]),.content-card[data-motif]:not([data-motif=none]){position:relative;isolation:isolate;overflow:hidden}
+.keep-card[data-motif]:not([data-motif=none])::before,.content-card[data-motif]:not([data-motif=none])::before{content:'';position:absolute;width:160px;height:160px;right:-60px;top:-60px;z-index:-1;pointer-events:none;background:radial-gradient(circle at 40% 45%,var(--motif-glow,#bda4d7) 0,transparent 68%);opacity:.32}
+.keep-card .note-ornament,.content-card .note-ornament{position:absolute;right:13px;top:12px;line-height:1;font-size:29px;pointer-events:none;opacity:.67;filter:saturate(.8);z-index:1}
+.keep-card[data-motif]:not([data-motif=none])>small,.keep-card[data-motif]:not([data-motif=none])>h3{padding-right:35px}
+.content-card[data-motif]:not([data-motif=none])>.card-handle{padding-right:40px}
+.keep-card[data-motif=leaves],.content-card[data-motif=leaves]{--motif-glow:#80bca0}
+.keep-card[data-motif=forest],.content-card[data-motif=forest]{--motif-glow:#86b68e}
+.keep-card[data-motif=lotus],.content-card[data-motif=lotus]{--motif-glow:#d7a4c3}
+.keep-card[data-motif=meditation],.content-card[data-motif=meditation]{--motif-glow:#bdaddf}
+.keep-card[data-motif=awareness],.content-card[data-motif=awareness]{--motif-glow:#e2c27f}
+.keep-card[data-motif=yoga],.content-card[data-motif=yoga]{--motif-glow:#b4b6df}
+.keep-card[data-motif=awakening],.content-card[data-motif=awakening]{--motif-glow:#f5bb85}
+.keep-card[data-motif=stream],.content-card[data-motif=stream]{--motif-glow:#9bcad6}
+@media(min-width:700px){.note-motif-options{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:520px){.note-check-add>div{flex-wrap:wrap}.note-check-add button{width:100%;justify-content:center}.note-motif-option{min-height:68px}.note-motif-current{max-width:50%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}}
+@media(prefers-reduced-motion:reduce){.note-progress-track>span{transition:none}}
