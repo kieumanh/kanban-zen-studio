@@ -24,6 +24,12 @@ jobs:
         run: node scripts/build.mjs
       - name: Run tests
         run: npm test
+      - name: Install responsive browser check
+        run: |
+          npm install --no-save --package-lock=false playwright
+          npx playwright install --with-deps chromium
+      - name: Verify established workflows on mobile tablet desktop
+        run: node tests/workflow111-browser.mjs
       - name: Sync generated Worker
         run: |
           if ! git diff --quiet -- worker.mjs; then

@@ -66,5 +66,5 @@ r=await caseRun('server down',{reject:503});
 assert.equal(r.state,'error');
 r=await caseRun('connection timed out',{reject:0});
 assert.equal(r.state,'offline');
-assert.ok(read('dist/index.html').includes('v1.9.11')||read('dist/index.html').includes('v1.10.3'),'valid release');
+assert.ok(read('dist/index.html').includes('v1.9.11')||read('dist/index.html').includes('v1.11.0'),'valid release');
 console.log('PASS: sync button icon + manual verified report across success/upload/download/offline/conflict/invalid/pending/error.');

@@ -38,7 +38,7 @@ function openResourceUploader(){
   modal('<h2>Tải tệp lên Tài nguyên</h2><p class="help-copy">Lưu vào kho riêng tư và chọn nơi quản lý tệp. Giới hạn 25 MB mỗi tệp; dữ liệu thuộc tài khoản của bạn.</p>'+
    '<label class="field">Lưu trong<select id="resource-upload-scope" aria-label="Chọn nơi lưu tệp">'+options.map(o=>'<option value="'+esc(o.value)+'" '+(o.value===selected?'selected':'')+'>'+esc(o.label)+'</option>').join('')+'</select></label>'+
    '<label class="field upload-dropzone"><strong>↑ Chọn tệp từ thiết bị</strong><span>Chọn một hoặc nhiều tệp · tối đa 25 MB mỗi tệp</span><input type="file" id="resource-upload-files" multiple aria-label="Chọn tệp cần tải lên"></label><div id="upload-file-summary" aria-live="polite"></div>'+
-   '<progress id="resource-upload-progress" value="0" max="100"></progress>'+
+   '<progress id="resource-upload-progress" value="0" max="100" hidden></progress>'+
    '<p id="resource-upload-status" role="status" aria-live="polite">Chưa chọn tệp.</p>'+
    '<div class="resource-upload-actions"><button type="button" class="btn primary" id="resource-upload-start">↑ Tải lên</button><button type="button" class="btn ghost" id="resource-upload-cancel">Hủy</button></div>',null,true);
   $('#editor').classList.add('resource-upload-dialog');$('#editor').addEventListener('close',()=>$('#editor').classList.remove('resource-upload-dialog'),{once:true});const dialog=$('#editor'),picker=$('#resource-upload-files'),submit=$('#resource-upload-start'),cancel=$('#resource-upload-cancel'),status=$('#resource-upload-status'),bar=$('#resource-upload-progress');
@@ -52,7 +52,7 @@ function openResourceUploader(){
     if(!files.length){status.textContent='Vui lòng chọn ít nhất một tệp.';picker.focus();return;}
     if(!options.some(o=>o.value===scope)){status.textContent='Vui lòng chọn nơi lưu hợp lệ.';return;}
     if(files.some(f=>f.size<=0||f.size>25000000)){status.textContent='Mỗi tệp phải lớn hơn 0 và không quá 25 MB.';return;}
-    uploading=true;cancelled=false;submit.disabled=true;picker.disabled=true;$('#resource-upload-scope').disabled=true;
+    uploading=true;bar.hidden=false;bar.value=0;cancelled=false;submit.disabled=true;picker.disabled=true;$('#resource-upload-scope').disabled=true;
     let completed=0;
     try{
       if(dirty){await flushCloud();if(dirty)throw Error('Dữ liệu chưa đồng bộ. Vui lòng thử lại.');}
@@ -93,7 +93,7 @@ function openResourceUploader(){
       if(dialog.open)status.textContent=(completed?'Đã lưu '+completed+' tệp. ':'')+(cancelled?'Đã hủy các tệp còn lại.':error.message);
       if(completed&&view==='resources'){resourceState.key='';loadResources(true);}
     }finally{
-      uploading=false;
+      uploading=false;bar.hidden=true;
       if(dialog.open){submit.disabled=false;picker.disabled=false;const select=$('#resource-upload-scope');if(select)select.disabled=false;cancel.disabled=false;}
     }
   };

@@ -1,4 +1,4 @@
-# Kanban Zen Studio v1.10.3
+# Kanban Zen Studio v1.11.0
 
 
 Production: https://kanban.huongthiennature.com/
@@ -171,3 +171,20 @@ Added public-domain historical portrait illustrations of Zhuangzi and Xunzi from
 
 ## v1.10.0
 Note history retains accepted previous snapshots for seven days in an account-scoped D1 table; restoration creates a new save. History begins after this upgrade. Client sync now stores its acknowledged baseline for three-way merge; competing edits remain explicit, with an opt-in recovery preserving differing records as copies. Persistent legacy conflicts require Settings → Hợp nhất và giữ cả hai bản. No forced workspace overwrite. Added rich-text bullet/number lists, four illustrated motifs, a unified note action row, project assignment for task creation, a scoped uploader, sticky modal close controls and consistent release metadata.
+
+
+## v1.11.0 · Giữ nhịp làm việc quen thuộc
+
+Phát triển trên v1.10.3 đã khôi phục. Giữ cấu trúc và các góc nhìn của dòng 1.x.
+
+- Chuyển/copy task giữa dự án. Chuyển giữ ID và tệp; cập nhật nơi quản lý tệp R2/legacy trong cùng giao dịch CAS workspace, không đổi đối tượng nhị phân. Gỡ phụ thuộc Gantt ở dự án cũ khi chuyển. Copy tạo mới ID checklist, cho phép bắt đầu lại trạng thái; tệp vẫn ở task gốc.
+- Lưu trữ và khôi phục task trong mục Lưu trữ; loại khỏi các góc nhìn đang làm, thống kê và nhắc hạn.
+- Thẻ Kanban có tiêu đề rõ, mô tả định dạng đầy đủ trong dữ liệu và phần xem gọn trên thẻ; phân loại/từ khóa nằm dưới nội dung và checklist.
+- Dùng định dạng H1/H2, đậm/nghiêng/gạch dưới/gạch ngang và danh sách trong mô tả task. Lưu bằng Markdown tương thích dữ liệu cũ, không lưu HTML tùy ý.
+- Nút Thêm checklist lưu nội dung task đang chỉnh và mở tiếp form. Kéo tay nắm đổi thứ tự checklist sẽ lưu cùng các trường đang chỉnh.
+- Tay nắm kéo thả task/ghi chú/checklist dùng được bằng chuột và cảm ứng; Alt + ↑/↓ là thao tác bàn phím tương ứng. Task đổi cột giữ quy tắc hoàn tất checklist hiện có. Ghi chú chuyển giữa nhóm ghim theo vị trí thả.
+- Ghi chú tự lưu sau 650 ms dừng nhập ở tiêu đề, nội dung, liên kết, màu, nhãn, từ khóa, checklist và tùy chọn nhắc. Đóng bằng X/Escape sẽ lưu phần đang chờ; dữ liệu không hợp lệ giữ trong form để sửa. Nút Xong đóng sau khi lưu thành công.
+- 12 họa tiết SVG bo tròn và icon ghim mềm mại, không phụ thuộc ảnh bên ngoài. Hướng dẫn viết lại ngắn gọn.
+- Thanh tiến độ tải Tài nguyên chỉ xuất hiện trong lúc tải.
+
+Kiểm tra: `npm run build && npm test`. Kiểm tra tương tác bằng `node tests/workflow111-browser.mjs` khi có Playwright/Chromium; biến PLAYWRIGHT_MODULE và CHROMIUM_PATH có thể trỏ tới runtime có sẵn.
