@@ -1,0 +1,22 @@
+/* Zen Studio v1.9.6: universal note search and mobile-first Keep-style editor */
+.top-actions{position:relative}
+.unified-note-results{position:absolute;right:0;top:calc(100% + 14px);width:min(380px,calc(100vw - 20px));max-height:55dvh;overflow:auto;background:#fffdfd;border:1px solid #ddcbea;border-radius:18px;padding:10px;box-shadow:0 15px 45px #3d235226;z-index:35}
+.unified-note-results[hidden]{display:none!important}
+.unified-note-heading{padding:8px 10px;color:#785491;font-size:12px;font-weight:800}
+.unified-note-hit{display:block;width:100%;text-align:left;border:0;background:transparent;border-radius:10px;padding:11px 12px;font-size:13px;min-height:44px}
+.unified-note-hit:hover,.unified-note-hit:focus-visible{background:#f2e9fa}
+.note-inline-images{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,160px),1fr));gap:8px;margin:12px 0}
+.note-inline-images img{display:block;width:100%;max-height:320px;object-fit:contain;border-radius:12px;background:#f4edf9}
+.keep-editor .inline-note-gallery{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px;margin:10px 0}
+.keep-editor .inline-note-gallery img{width:100%;height:110px;object-fit:cover;border-radius:10px}
+.keep-editor .inline-note-gallery button{display:block;font-size:12px;margin-top:4px;min-height:36px;color:#85518b}
+#editor.keep-editor{width:min(980px,calc(100vw - 16px));max-width:none;max-height:96dvh}
+#editor.keep-editor .note-composer>textarea[name=text]{min-height:38dvh}
+@media(max-width:700px){
+ #editor.keep-editor{position:fixed;inset:0!important;margin:0!important;width:100vw!important;max-width:100vw!important;max-height:100dvh!important;height:100dvh!important;border-radius:0;padding:18px 12px calc(12px + env(safe-area-inset-bottom));overflow-y:auto}
+ #editor.keep-editor .note-composer{width:100%;min-width:0;gap:10px}
+ #editor.keep-editor .note-composer>textarea[name=text]{min-height:45dvh!important;font-size:16px!important;line-height:1.7}
+ #editor.keep-editor .note-toolbar{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+ #editor.keep-editor .note-toolbar .btn.primary{grid-column:1/-1}
+ .unified-note-results{right:8px;top:calc(100% + 8px);max-width:calc(100vw - 16px)}
+}
