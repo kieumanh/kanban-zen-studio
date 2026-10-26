@@ -189,3 +189,36 @@ dialog .modal-head{position:sticky;top:0;z-index:5;background:var(--paper);paddi
 #editor.task-editor .modal-head{position:static;top:auto;z-index:auto}
 
 .wisdom-teacher{display:flex;gap:15px;align-items:center;text-align:left;justify-content:center;margin:20px 0}.wisdom-teacher img{width:88px;height:88px;object-fit:cover;border-radius:50%;border:3px solid #e8deef}.wisdom-teacher strong{font-size:18px}.wisdom-teacher small{font-size:13px;max-width:240px}.wisdom-initial{display:grid;place-items:center;width:72px;height:72px;flex-shrink:0;border-radius:50%;background:#eee5f5;color:#77518d;font-size:23px}.wisdom-kind{font-size:12px;line-height:1.65;color:#74627d;margin:12px 0}.wisdom-directory{margin:20px 0;text-align:left;border:1px solid var(--line);border-radius:12px;padding:12px}.wisdom-directory summary{cursor:pointer;font-size:13px;font-weight:700}.wisdom-directory[open]{max-height:240px;overflow:auto}.wisdom-directory a{display:block;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px}.wisdom-directory p{font-size:12px;line-height:1.7;margin:12px 0}@media(max-width:600px){.wisdom-teacher img{width:70px;height:70px}.wisdom-teacher strong{font-size:16px}}
+
+/* v1.9.3 · Mobile note editor */
+@media(max-width:700px){
+#editor.keep-editor{box-sizing:border-box;width:calc(100vw - 14px);max-width:none;max-height:calc(100dvh - 16px);padding:12px 14px calc(14px + env(safe-area-inset-bottom));border-radius:20px;overscroll-behavior:contain;scroll-padding-top:58px}
+#editor.keep-editor .modal-head{position:sticky;top:-12px;z-index:5;display:flex;align-items:center;min-height:44px;justify-content:space-between;padding:0 0 8px;background:var(--paper,#fff);border-bottom:1px solid var(--line)}
+#editor.keep-editor #modal-eyebrow{visibility:visible;font-size:11px;letter-spacing:.07em;color:#806394;line-height:1.3}
+#editor.keep-editor .modal-head [data-action=close-modal]{min-width:42px;min-height:42px;display:grid;place-items:center;border-radius:12px;flex:none}
+#editor.keep-editor .note-composer{gap:10px;min-width:0;padding-top:10px}
+#editor.keep-editor .note-composer>input[name=title]{font-size:18px;min-height:46px;padding:10px 12px}
+#editor.keep-editor .note-composer>textarea:not([hidden]){box-sizing:border-box;font-size:16px;min-height:100px;height:120px;max-height:30dvh;line-height:1.5;padding:10px 12px}
+#editor.keep-editor .note-type-field{min-height:44px;padding:7px 10px;gap:8px}
+#editor.keep-editor .note-type-field select{font-size:16px;min-height:38px;max-width:52%;margin-left:auto}
+#editor.keep-editor .note-keywords-field{gap:5px;font-size:12px}
+#editor.keep-editor .note-keywords-field input{min-height:44px;font-size:16px;padding:9px 11px}
+#editor.keep-editor .note-keywords-field small{font-size:11px;line-height:1.4}
+#editor.keep-editor .note-reminder-options{padding:10px 12px;margin:0}
+#editor.keep-editor .note-reminder-options summary{min-height:32px}
+#editor.keep-editor .note-toolbar{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;gap:8px;padding:11px;margin:0}
+#editor.keep-editor .note-toolbar>.btn{justify-content:center;min-height:42px;padding:8px;font-size:13px}
+#editor.keep-editor .note-toolbar .note-color{display:flex;justify-content:space-between;align-items:center;min-width:0;font-size:12px}
+#editor.keep-editor .note-toolbar .note-color input{width:40px;height:40px;flex-shrink:0}
+#editor.keep-editor .note-toolbar .note-group{grid-column:1/-1;gap:5px}
+#editor.keep-editor .note-toolbar input[name=group]{min-height:44px;font-size:16px}
+#editor.keep-editor .note-toolbar #note-save{grid-column:1/-1;width:100%;min-height:48px;margin:0;font-size:15px;font-weight:700;touch-action:manipulation}
+#editor.keep-editor .note-composer>small{font-size:11px;line-height:1.4}
+#editor.keep-editor .note-more-settings{border:1px solid var(--line);border-radius:12px;background:#faf8fc;padding:0 11px}
+#editor.keep-editor .note-more-settings>summary{display:flex;align-items:center;min-height:42px;cursor:pointer;font-size:12px;font-weight:700;color:#715783}
+#editor.keep-editor .note-more-settings[open]{padding-bottom:10px}
+#editor.keep-editor .note-more-settings .note-links input{font-size:16px;min-height:44px;width:100%}
+#editor.keep-editor .note-check-editor{max-width:100%;overflow-wrap:anywhere}
+#editor.keep-editor .note-file{min-width:0;overflow-wrap:anywhere}
+}
+@media(max-width:380px){#editor.keep-editor{width:calc(100vw - 10px);padding-left:10px;padding-right:10px}#editor.keep-editor .note-toolbar{padding:9px}}
