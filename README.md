@@ -1,4 +1,4 @@
-# Kanban Zen Studio v1.10.1
+# Kanban Zen Studio v1.10.2
 
 
 Production: https://kanban.huongthiennature.com/
@@ -152,6 +152,11 @@ Chinese originals are translated as source excerpts, not copied from modern Viet
 Current corpus: 1,612 entries, including 1,567 sourced excerpts and 45 separately attributed editorial reflections. 8,432 sourced excerpts remain before the 9,999 target. The importer enforces the ceiling and does not count untranslated candidate passages. Source alignment does not mean all legacy translations have received human review.
 
 Added public-domain historical portrait illustrations of Zhuangzi and Xunzi from Wikimedia Commons with provenance and illustration labels. Six profiles still lack sourced images and retain their explicit initials fallback. No invented portrait is used. The existing four Vietnam slots and complete selection cycle are preserved.
+
+## v1.10.2
+
+- Sửa lỗi tham chiếu ảnh còn sót sau khi gỡ khỏi ghi chú, tránh ảnh vỡ làm tràn hoặc lệch thẻ bên ngoài.
+- Tự ẩn ảnh đính kèm lỗi tải trong thẻ ghi chú và đồng bộ bản vá phiên bản 1.10.2 toàn ứng dụng.
 
 ## v1.10.1
 

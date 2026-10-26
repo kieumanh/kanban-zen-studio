@@ -770,7 +770,7 @@ dialog .modal-head{position:sticky;top:0;z-index:5;background:var(--paper);paddi
 #editor-form button[type=submit].primary.danger:hover{color:#fff!important;filter:brightness(1.06)}
 @media(max-width:600px){.task-project-options{max-height:34dvh}.task-project-picker>summary{min-height:46px;padding:7px 10px}}
 
-/* v1.10.1 — balanced note attachment groups for mixed file types. */
+/* v1.10.2 — balanced note attachment groups for mixed file types. */
 #editor.keep-editor #inline-note-files{display:grid;gap:10px;min-width:0;margin:10px 0}
 #editor.keep-editor .note-attachment-group{min-width:0;padding:10px;border:1px solid #e7dff0;border-radius:14px;background:#fcfaff}
 #editor.keep-editor .note-attachment-group>h4{display:flex;align-items:center;gap:7px;margin:0 0 9px;color:#705a82;font-size:12px;font-weight:700;line-height:1.4}
