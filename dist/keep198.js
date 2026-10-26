@@ -10,24 +10,29 @@ const ZEN_PALETTE={
  awakening:['#fff0d9','#dba36a','#efc681'],
  stream:['#e0f0eb','#74a8b6','#add5c8']
 };
+/* Delicate illustrated themes. Art remains self-contained and privacy-safe (no network images). */
 function zenPattern(id){
- const p=ZEN_PALETTE[id];if(!p)return '';
- const bg=p[0],ink=p[1],soft=p[2];
- const leaf='<path d="M8 325Q80 180 230 125Q390 56 688 0" fill="none" stroke="'+ink+'" stroke-width="9" opacity=".30"/><path d="M55 265Q145 170 240 219Q187 317 55 265Z M200 154Q280 60 385 112Q320 210 200 154Z M395 100Q493 20 572 75Q533 155 395 100Z M325 335Q420 230 535 280Q460 370 325 335Z" fill="'+soft+'" opacity=".60"/>';
- const trees=Array.from({length:7},(_,i)=>'<g transform="translate('+(i*104-10)+' '+(i%2*30)+')"><path d="M46 385V202" stroke="'+ink+'" stroke-width="7" opacity=".30"/><path d="M-10 223Q-24 92 46 89Q113 84 113 218Q60 250-10 223Z" fill="'+soft+'" opacity=".64"/></g>').join('');
- const petals=Array.from({length:9},(_,i)=>'<ellipse cx="340" cy="280" rx="34" ry="100" transform="rotate('+((i-4)*19)+' 340 330)" fill="'+(i%2?soft:ink)+'" opacity=".45"/>').join('');
- const star=Array.from({length:16},(_,i)=>{const x=(i*89+43)%680,y=(i*47+22)%420;return '<path d="M'+x+' '+(y-7)+'V'+(y+7)+'M'+(x-7)+' '+y+'H'+(x+7)+'" stroke="'+ink+'" stroke-width="2" opacity=".32"/>';}).join('');
- const scenes={
- leaves:leaf,
- forest:'<path d="M0 335Q180 230 360 300T680 240V420H0Z" fill="'+soft+'" opacity=".50"/>'+trees,
- lotus:'<path d="M0 360Q170 309 350 358T680 355M0 387Q140 328 340 380T680 382" stroke="'+ink+'" stroke-width="4" opacity=".23" fill="none"/>'+petals,
- meditation:'<circle cx="340" cy="167" r="124" fill="'+soft+'" opacity=".54"/><circle cx="340" cy="165" r="26" fill="'+ink+'" opacity=".47"/><path d="M310 202Q343 194 375 211L393 284Q330 306 284 277Z" fill="'+ink+'" opacity=".42"/><path d="M303 269Q236 296 189 330Q345 405 496 329Q429 289 369 264" fill="'+ink+'" opacity=".34"/><path d="M60 385Q330 275 620 380" stroke="'+soft+'" stroke-width="32" opacity=".62" fill="none"/>',
- awareness:'<circle cx="340" cy="204" r="143" fill="'+soft+'" opacity=".43"/><circle cx="340" cy="204" r="112" fill="none" stroke="'+ink+'" stroke-width="5" opacity=".26"/><circle cx="340" cy="204" r="77" fill="none" stroke="'+ink+'" stroke-width="4" opacity=".24"/><path d="M235 204Q340 92 448 204Q340 315 235 204Z" fill="'+ink+'" opacity=".21"/><circle cx="340" cy="204" r="30" fill="'+ink+'" opacity=".43"/>'+star,
- yoga:'<circle cx="340" cy="166" r="127" fill="'+soft+'" opacity=".45"/><path d="M340 126V233M340 183L269 237M340 183L412 237M340 233L279 313M340 233L410 311" stroke="'+ink+'" stroke-width="18" stroke-linecap="round" opacity=".44"/><circle cx="340" cy="96" r="26" fill="'+ink+'" opacity=".43"/><path d="M30 364Q320 255 655 357" stroke="'+soft+'" stroke-width="30" opacity=".54" fill="none"/>',
- awakening:'<circle cx="441" cy="219" r="113" fill="'+soft+'" opacity=".75"/>'+Array.from({length:16},(_,i)=>{const a=i*Math.PI/8;return '<path d="M'+(441+123*Math.cos(a))+' '+(219+123*Math.sin(a))+'L'+(441+184*Math.cos(a))+' '+(219+184*Math.sin(a))+'" stroke="'+ink+'" stroke-width="5" opacity=".35"/>';}).join('')+'<path d="M0 345Q165 248 330 328T680 288V420H0Z" fill="'+ink+'" opacity=".19"/>',
- stream:'<path d="M0 310L142 150L255 290L398 91L560 282L680 230V420H0Z" fill="'+soft+'" opacity=".55"/><path d="M-20 374Q173 270 307 353T700 310" stroke="'+ink+'" stroke-width="48" opacity=".30" fill="none"/><path d="M-20 374Q173 270 307 353T700 310" stroke="white" stroke-width="10" opacity=".35" fill="none"/>'
+ const palette=ZEN_PALETTE[id];if(!palette)return '';
+ const [paper,ink,accent]=palette;
+ const line=(d,w=2,opacity=.35)=>'<path d="'+d+'" fill="none" stroke="'+ink+'" stroke-width="'+w+'" stroke-linecap="round" stroke-linejoin="round" opacity="'+opacity+'"/>';
+ const leaf=(x,y,rotate,scale=1)=>'<g transform="translate('+x+' '+y+') rotate('+rotate+') scale('+scale+')"><path d="M0 0Q44-53 101-3Q46 46 0 0Z" fill="'+accent+'" opacity=".43"/>'+line('M2 0L96 -3M35 -2L57 -22M54 -2L78 16',1.7,.43)+'</g>';
+ const sparkles=Array.from({length:13},(_,i)=>{const x=(i*119+55)%668,y=(i*67+38)%390;return '<g opacity=".26"><path d="M'+x+' '+(y-5)+'v10m-5-5h10" stroke="'+ink+'" stroke-width="1.3"/><circle cx="'+x+'" cy="'+y+'" r="12" fill="none" stroke="'+ink+'" stroke-width=".6" opacity=".4"/></g>';}).join('');
+ const hill='<path d="M0 312Q154 248 284 294T680 266V420H0Z" fill="'+accent+'" opacity=".28"/><path d="M0 373Q206 304 383 365T680 322V420H0Z" fill="'+ink+'" opacity=".10"/>';
+ const lotus=()=>{
+  const petals=Array.from({length:11},(_,i)=>'<ellipse cx="344" cy="268" rx="23" ry="92" transform="rotate('+((i-5)*17)+' 344 310)" fill="'+(i%2?accent:ink)+'" opacity="'+(i%2?'.35':'.24')+'"/>').join('');
+  return '<path d="M0 349Q155 305 336 352T680 338M0 381Q145 338 340 384T680 364" fill="none" stroke="'+ink+'" stroke-width="2" opacity=".15"/>'+petals+'<ellipse cx="344" cy="331" rx="46" ry="9" fill="'+ink+'" opacity=".14"/>'+leaf(100,320,14,.75)+leaf(530,347,194,.73);
  };
- return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 420" preserveAspectRatio="xMidYMid slice"><rect width="680" height="420" fill="'+bg+'"/><circle cx="70" cy="44" r="214" fill="white" opacity=".43"/>'+scenes[id]+'</svg>';
+ const pine=(x,y,size)=>'<g transform="translate('+x+' '+y+') scale('+size+')">'+line('M0 0V190',4,.28)+'<path d="M0 -28L-55 78H-33L-68 132H72L37 78H57Z" fill="'+accent+'" opacity=".46"/>'+line('M0 -28L-55 78H-33L-68 132H72L37 78H57',1.7,.38)+'</g>';
+ const forest=hill+Array.from({length:8},(_,i)=>pine(28+i*95,145+(i%3)*17,.65+(i%3)*.13)).join('')+line('M-10 385Q180 343 333 379T710 352',2,.21);
+ const leaves=line('M-24 408Q99 253 215 216T451 122T706 -8',3,.29)+leaf(50,337,-40,1.1)+leaf(118,242,38,.95)+leaf(288,188,159,.9)+leaf(465,111,-32,.96)+leaf(525,337,156,1.05)+sparkles;
+ const meditation='<circle cx="358" cy="179" r="139" fill="'+accent+'" opacity=".25"/><circle cx="358" cy="179" r="113" fill="none" stroke="'+ink+'" stroke-width="1.4" opacity=".2"/><circle cx="358" cy="179" r="85" fill="none" stroke="'+ink+'" stroke-width=".8" opacity=".18"/><circle cx="358" cy="151" r="25" fill="'+ink+'" opacity=".23"/><path d="M330 194Q358 178 389 197L412 285Q358 314 306 285Z" fill="'+ink+'" opacity=".20"/><path d="M323 274Q228 289 188 353Q350 399 527 353Q468 288 389 270" fill="'+ink+'" opacity=".22"/>'+line('M52 397Q342 317 649 396',3,.26)+sparkles;
+ const ripples=[60,95,134,171].map(r=>'<circle cx="368" cy="217" r="'+r+'" stroke="'+ink+'" stroke-width="1.4" fill="none" opacity="'+(.35-r/800)+'"/>').join('');
+ const awareness=ripples+'<path d="M260 215Q367 122 472 215Q365 310 260 215Z" fill="'+accent+'" opacity=".26"/>'+line('M260 215Q367 122 472 215Q365 310 260 215',2,.35)+'<circle cx="368" cy="215" r="23" fill="'+ink+'" opacity=".23"/>'+sparkles;
+ const yoga='<circle cx="362" cy="159" r="144" fill="'+accent+'" opacity=".27"/>'+Array.from({length:7},(_,i)=>'<ellipse cx="362" cy="312" rx="43" ry="97" transform="rotate('+((i-3)*23)+' 362 351)" fill="'+accent+'" opacity=".21"/>').join('')+line('M362 150V246M362 203L282 253M362 203L443 253M362 247L279 338M362 247L443 338',8,.32)+'<circle cx="362" cy="118" r="20" fill="'+ink+'" opacity=".24"/>'+line('M105 383Q343 332 613 383',2,.22);
+ const awakening='<circle cx="470" cy="219" r="106" fill="'+accent+'" opacity=".51"/>'+Array.from({length:21},(_,i)=>{const a=i*Math.PI*2/21;return line('M'+(470+117*Math.cos(a)).toFixed(1)+' '+(219+117*Math.sin(a)).toFixed(1)+'L'+(470+184*Math.cos(a)).toFixed(1)+' '+(219+184*Math.sin(a)).toFixed(1),1.7,.27);}).join('')+hill+sparkles;
+ const stream='<path d="M0 294L155 134L251 262L410 81L557 251L680 172V420H0Z" fill="'+accent+'" opacity=".24"/>'+hill+'<path d="M-25 389Q190 256 327 352T703 297" fill="none" stroke="'+ink+'" stroke-width="50" opacity=".16" stroke-linecap="round"/><path d="M-25 389Q190 256 327 352T703 297" fill="none" stroke="#fff" stroke-width="16" opacity=".39" stroke-linecap="round"/>'+leaf(43,321,11,.6)+leaf(561,321,-160,.67)+line('M120 361Q170 334 218 344M458 349Q501 359 537 335',1.6,.32);
+ const scene={leaves,forest,lotus:lotus(),meditation,awareness,yoga,awakening,stream}[id]||'';
+ return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 420" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="wash" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity=".74"/><stop offset=".55" stop-color="'+paper+'"/><stop offset="1" stop-color="'+accent+'" stop-opacity=".62"/></linearGradient><radialGradient id="light"><stop offset="0" stop-color="#ffffff" stop-opacity=".75"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></radialGradient></defs><rect width="680" height="420" fill="url(#wash)"/><circle cx="115" cy="65" r="260" fill="url(#light)"/><g>'+scene+'</g><path d="M0 405Q280 395 680 404" fill="none" stroke="'+ink+'" stroke-width="1" opacity=".09"/></svg>';
 }
 function zenArt(element,motif){
  if(!element)return;const svg=zenPattern(motif);
@@ -103,14 +108,33 @@ noteForm=function(note){
  const title=composer.querySelector('[name=title]'),text=composer.querySelector('textarea[name=text]');
  if(title){
   const p=document.createElement('input');p.type='hidden';p.name='zen-pinned';p.value=String(!!note?.pinned);title.after(p);
-  const b=zenPinButton(note||{},true);title.after(b);
+  const pinRow=document.createElement('div');
+   pinRow.className='zen-editor-pin-row';
+   pinRow.setAttribute('role','group');pinRow.setAttribute('aria-label','Ghim ghi chú');
+   const pinHint=document.createElement('span');pinHint.className='zen-editor-pin-hint';
+   pinHint.textContent=note?.pinned?'Ghi chú đã ghim':'Giữ ghi chú quan trọng ở đầu';
+   const b=zenPinButton(note||{},true);
+   b.textContent=note?.pinned?'Bỏ ghim':'Ghim';
+   pinRow.append(pinHint,b);
+   composer.insertBefore(pinRow,title);
   b.onclick=()=>{const prev=p.value;p.value=String(prev!=='true');
    if(editor.noteCommit?.()!==true){p.value=prev;return;}
-   b.setAttribute('aria-pressed',p.value);b.title=p.value==='true'?'Bỏ ghim':'Ghim ghi chú';b.setAttribute('aria-label',b.title);b.textContent=p.value==='true'?'▣':'♧';render();
+   b.setAttribute('aria-pressed',p.value);b.title=p.value==='true'?'Bỏ ghim':'Ghim ghi chú';b.setAttribute('aria-label',b.title);b.textContent=p.value==='true'?'Bỏ ghim':'Ghim';pinHint.textContent=p.value==='true'?'Ghi chú đã ghim':'Giữ ghi chú quan trọng ở đầu';render();
   };
  }
  const draw=()=>zenArt(composer,composer.querySelector('[name=note-motif]')?.value||'none');
- draw();composer.querySelectorAll('[data-note-motif]').forEach(b=>b.addEventListener('click',()=>requestAnimationFrame(draw)));
+ draw();
+ composer.querySelectorAll('[data-note-motif]').forEach(button=>{
+  const motif=button.dataset.noteMotif,icon=button.querySelector('span');
+  if(icon&&motif!=='none'){
+   const svg=zenPattern(motif);
+   icon.classList.add('zen-motif-thumb');
+   icon.style.backgroundImage='url("data:image/svg+xml,'+encodeURIComponent(svg)+'")';
+   icon.textContent='';
+   icon.setAttribute('aria-hidden','true');
+  }
+  button.addEventListener('click',()=>requestAnimationFrame(draw));
+ });
  const url=composer.querySelector('[name=url]');
  if(url){
   const preview=document.createElement('div');preview.className='zen-link-live';url.closest('.note-links')?.after(preview);
