@@ -38,7 +38,7 @@ async function runSync(testcase){
   setTimeout:(fn,ms)=>{calls.push(ms);return 5;},clearTimeout:()=>{},
   requestAPI:async(path,method,body)=>{
    assert.equal(path,'workspace');assert.equal(method,'PUT');
-   if(testcase==='pending'){context.data.notes.push({id:'other-change'});context.syncAgain=true;}
+   if(testcase==='pending'){context.data.notes.push({id:'other-change'});await context.flushCloud();}
    if(testcase==='conflict')throw {status:409};
    return {revision:5};
   }
