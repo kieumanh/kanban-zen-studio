@@ -6,6 +6,7 @@ const read=p=>readFileSync(new URL('../'+p,import.meta.url),'utf8');
 for(const p of ['dist/keep198.js','dist/notes196.js','dist/note-enhancements.js'])execFileSync(process.execPath,['--check',new URL('../'+p,import.meta.url).pathname]);
 const source=read('dist/keep198.js');
 const ctx=vm.createContext({
+ URL,
  noteContent:()=>'<p>previous</p>',
  noteExtraValues:()=>({type:'note'}),
  noteForm:()=>{},render:()=>{},
