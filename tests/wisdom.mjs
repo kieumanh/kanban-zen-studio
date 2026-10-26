@@ -63,5 +63,5 @@ assert.ok(source.includes('q.attribution||q.author'));
 const worker=read('worker.mjs');
 assert.ok(worker.includes('"/teachers.json"'));
 assert.ok(worker.includes('"/wisdom-status.json"'));
-assert.ok(worker.includes("version:'1.9.8'"));
+assert.ok(worker.includes("version:'1.9.9'"));
 console.log('Wisdom: '+active.length+' sourced excerpts; full-cycle, timezone, deduplication and idempotency checks passed.');
