@@ -1,10 +1,10 @@
 {
   "name": "kanban-zen-studio",
-  "version": "1.9.11",
+  "version": "1.9.12",
   "private": true,
   "type": "module",
   "scripts": {
     "build": "node scripts/build.mjs",
-    "test": "node tests/core.mjs && node tests/accounts.mjs && node tests/sync.mjs && node tests/content.mjs && node tests/reports.mjs && node tests/projectux.mjs && node tests/resources.mjs && node tests/note-reminders.mjs && node tests/report-sharing.mjs && node tests/wisdom.mjs && node tests/note-enhancements.mjs && node tests/keep198.mjs && node tests/editor199.mjs && node tests/note110.mjs"
+    "test": "node tests/core.mjs && node tests/accounts.mjs && node tests/sync.mjs && node tests/content.mjs && node tests/reports.mjs && node tests/projectux.mjs && node tests/resources.mjs && node tests/note-reminders.mjs && node tests/report-sharing.mjs && node tests/wisdom.mjs && node tests/note-enhancements.mjs && node tests/keep198.mjs && node tests/editor199.mjs && node tests/note110.mjs && node tests/manual-sync.mjs"
   }
 }
