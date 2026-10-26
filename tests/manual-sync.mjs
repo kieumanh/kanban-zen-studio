@@ -29,7 +29,7 @@ async function caseRun(name,opts={}){
   document:{querySelector:k=>k==='#sync-now'?button:k==='#sync-report'?panel:null,createElement:node},
   requestAPI:async(path)=>{
    requests.push(path);
-   if(opts.reject)throw {status:opts.reject};
+   if(opts.reject!==undefined)throw {status:opts.reject};
    return opts.remote||{unchanged:true,revision:context.cloudRevision};
   },
   flushCloud:async()=>{events.push('upload');if(opts.upload==='success'){context.dirty=false;context.cloudRevision=8;}else if(opts.upload==='invalid'){context.syncBlocked=true;}},
