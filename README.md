@@ -1,4 +1,4 @@
-# Kanban Zen Studio v1.11.0
+# Kanban Zen Studio v1.11.1
 
 
 Production: https://kanban.huongthiennature.com/
@@ -188,3 +188,8 @@ Phát triển trên v1.10.3 đã khôi phục. Giữ cấu trúc và các góc n
 - Thanh tiến độ tải Tài nguyên chỉ xuất hiện trong lúc tải.
 
 Kiểm tra: `npm run build && npm test`. Kiểm tra tương tác bằng `node tests/workflow111-browser.mjs` khi có Playwright/Chromium; biến PLAYWRIGHT_MODULE và CHROMIUM_PATH có thể trỏ tới runtime có sẵn.
+
+
+## v1.11.1
+
+Đếm ghi chú theo từ khóa; tinh chỉnh lịch sử 7 ngày, Nhắc tôi, Đồng bộ ngay, danh sách và gạch ngang trên mobile. Gom tùy chọn thẻ trong menu Hiển thị. Giữ thông báo đã xem và chỉ hiện lại khi có nội dung mới. Đổi tên hiển thị cột theo dự án, giữ nguyên mã trạng thái để tiến độ và checklist hoạt động đúng.
