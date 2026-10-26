@@ -21,7 +21,7 @@ assert.ok(source.includes("setTimeout(commit,900)"),'debounced save');
 assert.ok(source.includes("editor.noteCommit?.()===true"),'uses existing validated workspace save');
 const css=read('dist/style.css'),html=read('dist/index.html');
 assert.ok(css.includes('#editor.keep-editor .zen-wysiwyg')&&css.includes('.zen-search-popover'));
-assert.ok(JSON.parse(readFileSync(new URL('../scripts/ui-manifest.json',import.meta.url),'utf8')).includes('editor199.js'));
+assert.ok(html.includes('src="/editor199.js"'));
 const search=read('dist/notes196.js');
 assert.ok(search.includes('document.body.append(panel)')&&search.includes('rect.right-width'),'search is attached to input, not top-actions');
 assert.ok(search.includes("requestAPI('resources?"),'server-side filename index still queried');

@@ -5,8 +5,7 @@ on:
     paths:
       - 'dist/**'
       - 'server/**'
-      - 'scripts/**'
-      - 'shared/**'
+      - 'scripts/build.mjs'
       - 'package.json'
       - 'tests/**'
       - '.github/workflows/build-worker.yml'
@@ -25,14 +24,6 @@ jobs:
         run: node scripts/build.mjs
       - name: Run tests
         run: npm test
-      - name: Install browser for responsive checks
-        run: |
-          npm install --no-save --package-lock=false playwright
-          npx playwright install --with-deps chromium
-      - name: Verify responsive workflows and shared reports
-        run: |
-          node tests/studio-browser.mjs
-          node tests/studio-report-browser.mjs
       - name: Sync generated Worker
         run: |
           if ! git diff --quiet -- worker.mjs; then

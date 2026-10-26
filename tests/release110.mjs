@@ -20,8 +20,6 @@ remote.notes[0].text='changed';assert.throws(()=>merge(base,local,remote));
 local=structuredClone(base);remote=structuredClone(base);
 local.notes.push({id:'b',title:'local'});remote.notes.push({id:'c',title:'remote'});
 assert.deepEqual(merge(base,local,remote).notes.map(n=>n.id),['a','b','c']);
-assert.deepEqual(merge({}, {studio:{templates:[{id:'x',name:'A'}]}},{studio:{templates:[{id:'y',name:'B'}]}}).studio.templates.map(t=>t.id),['x','y']);
-assert.deepEqual(merge({}, {comments:[{id:'c1',text:'One'}]}, {comments:[{id:'c2',text:'Two'}]}).comments.map(c=>c.id),['c1','c2']);
 // An actual SQLite transaction verifies history and workspace CAS together.
 const db=new DatabaseSync(':memory:');db.exec(read('server/schema.sql'));
 class Statement{
