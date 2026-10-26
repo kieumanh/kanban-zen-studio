@@ -47,7 +47,7 @@ function zenPreviewLink(n){
  const link=document.createElement('a');link.href=url.href;link.target='_blank';link.rel='noopener noreferrer';link.className='zen-link-card';
  const cover=document.createElement('div');cover.className='zen-link-cover';
  const image=(n.images||[])[0];
- if(image&&/^[a-zA-Z0-9_-]{1,100}$/.test(image)){const img=document.createElement('img');img.src=fileURL(image);img.alt='Ảnh minh họa liên kết';img.loading='lazy';cover.append(img);}
+ if(image&&/^[a-zA-Z0-9_-]{1,100}$/.test(image)){const img=document.createElement('img');img.src=fileURL(image);img.alt='Ảnh minh họa liên kết';img.loading='lazy';img.onerror=()=>{cover.innerHTML='<span class="zen-browser-illustration" aria-hidden="true"><i></i><i></i><i></i></span>';};cover.append(img);}
  else{cover.innerHTML='<span class="zen-browser-illustration" aria-hidden="true"><i></i><i></i><i></i></span>';}
  const info=document.createElement('div');info.className='zen-link-info';
  const name=document.createElement('strong');name.textContent=n.title||url.hostname;

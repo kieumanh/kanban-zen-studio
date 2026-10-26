@@ -769,3 +769,34 @@ dialog .modal-head{position:sticky;top:0;z-index:5;background:var(--paper);paddi
 #editor-form button[type=submit].primary.danger{color:#fff!important;background:linear-gradient(110deg,#7950c8,#ac62b9 64%,#d77798);border-color:transparent;text-shadow:0 1px 1px #55356d24}
 #editor-form button[type=submit].primary.danger:hover{color:#fff!important;filter:brightness(1.06)}
 @media(max-width:600px){.task-project-options{max-height:34dvh}.task-project-picker>summary{min-height:46px;padding:7px 10px}}
+
+/* v1.10.1 — balanced note attachment groups for mixed file types. */
+#editor.keep-editor #inline-note-files{display:grid;gap:10px;min-width:0;margin:10px 0}
+#editor.keep-editor .note-attachment-group{min-width:0;padding:10px;border:1px solid #e7dff0;border-radius:14px;background:#fcfaff}
+#editor.keep-editor .note-attachment-group>h4{display:flex;align-items:center;gap:7px;margin:0 0 9px;color:#705a82;font-size:12px;font-weight:700;line-height:1.4}
+#editor.keep-editor .note-attachment-group>h4 span{display:inline-grid;place-items:center;min-width:20px;height:20px;padding:0 5px;border-radius:999px;background:#f0e9f6;color:#80649a;font-size:10px}
+#editor.keep-editor .note-attachment-image-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,150px),1fr));gap:8px;min-width:0}
+#editor.keep-editor .note-attachment-image{min-width:0;max-width:100%;margin:0;overflow:hidden;border:1px solid #e8e0ef;border-radius:11px;background:#fff}
+#editor.keep-editor .note-attachment-image-preview{display:grid;place-items:center;width:100%;height:112px;overflow:hidden;background:#f6f2f9}
+#editor.keep-editor .note-attachment-image-preview img{display:block;max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain}
+#editor.keep-editor .note-attachment-image figcaption{display:flex;align-items:center;gap:6px;min-width:0;padding:5px 6px 5px 9px;border-top:1px solid #eee8f3}
+#editor.keep-editor .note-attachment-image figcaption>span{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#6f6279;font-size:10px}
+#editor.keep-editor .note-attachment-file-list{display:grid;gap:6px;min-width:0}
+#editor.keep-editor .note-attachment-file{display:flex;align-items:center;gap:9px;min-width:0;padding:7px 8px;border:1px solid #eee8f3;border-radius:10px;background:#fff}
+#editor.keep-editor .note-attachment-kind{display:grid;place-items:center;flex:0 0 40px;height:34px;padding:0 3px;border-radius:8px;background:#f1ebf7;color:#775696;font-size:9px;font-weight:800;letter-spacing:.2px}
+#editor.keep-editor .note-attachment-kind[data-kind=PDF]{background:#fff0ef;color:#a74d50}
+#editor.keep-editor .note-attachment-kind[data-kind=DOC],#editor.keep-editor .note-attachment-kind[data-kind=DOCX],#editor.keep-editor .note-attachment-kind[data-kind=TXT],#editor.keep-editor .note-attachment-kind[data-kind=MD]{background:#edf3ff;color:#526fa3}
+#editor.keep-editor .note-attachment-kind[data-kind=XLS],#editor.keep-editor .note-attachment-kind[data-kind=XLSX],#editor.keep-editor .note-attachment-kind[data-kind=CSV]{background:#edf7ef;color:#4d805b}
+#editor.keep-editor .note-attachment-meta{display:grid;gap:2px;flex:1;min-width:0}
+#editor.keep-editor .note-attachment-meta>a{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#51445e;font-size:12px;font-weight:600}
+#editor.keep-editor .note-attachment-meta>small{font-size:10px;line-height:1.3;color:#85788e}
+#editor.keep-editor .note-attachment-remove{flex:0 0 30px;width:30px;height:30px;border-radius:8px;font-size:19px}
+#editor.keep-editor .zen-link-live{margin:5px 0 10px}
+#editor.keep-editor .zen-link-live .zen-link-cover{flex:0 0 72px;width:72px;min-width:72px;min-height:62px}
+#editor.keep-editor .zen-link-live .zen-link-card{min-height:62px;border-radius:12px}
+#editor.keep-editor .zen-link-live .zen-link-info{padding:8px 11px}
+#editor.keep-editor .zen-link-live .zen-link-info strong{font-size:12px}
+#editor.keep-editor .zen-link-live .zen-link-info small{font-size:10px}
+#editor.keep-editor .zen-link-live .zen-link-remove{flex:0 0 32px;width:32px;height:32px}
+@media(max-width:560px){#editor.keep-editor .note-attachment-image-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#editor.keep-editor .note-attachment-image-preview{height:96px}}
+@media(max-width:360px){#editor.keep-editor .note-attachment-image-grid{grid-template-columns:1fr}}
