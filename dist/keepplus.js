@@ -19,3 +19,21 @@ setInterval(()=>{if(currentUser&&!document.hidden){refreshBell();if(view==='dash
 document.addEventListener('click',e=>{if(!e.target.closest('[data-note-reminders-all]'))return;modal('<h2>Ghi chú đã đặt lịch</h2><div class="notice-list">'+(data.notes||[]).filter(noteReminderActive).sort((a,b)=>a.remindAt.localeCompare(b.remindAt)).map(n=>'<button type="button" class="notice-item" data-open-note="'+esc(n.id)+'"><strong>'+esc(n.title)+'</strong><small>'+esc(n.remindAt.replace('T',' · '))+' · Giờ Việt Nam</small></button>').join('')+'</div>',null,true);});
 
 const noteFormBeforeLayout=noteForm;noteForm=function(n){noteFormBeforeLayout(n);const composer=document.querySelector('.note-composer');if(!composer)return;const kind=composer.querySelector('.note-type-field'),toolbar=composer.querySelector('.note-toolbar');if(kind&&toolbar)toolbar.before(kind);};
+
+/* v1.9.3 · Mobile note layout without modifying stored data. */
+const mobileNoteFormBefore=noteForm;
+noteForm=function(n){
+mobileNoteFormBefore(n);
+const editor=document.querySelector('#editor.keep-editor'),composer=editor?.querySelector('.note-composer');
+if(!composer)return;
+const eyebrow=editor.querySelector('#modal-eyebrow');
+if(eyebrow)eyebrow.textContent=n?'CHỈNH SỬA GHI CHÚ':'GHI CHÚ MỚI';
+const links=composer.querySelector('.note-links');
+if(links&&window.matchMedia('(max-width:700px)').matches){
+const advanced=document.createElement('details');advanced.className='note-more-settings';
+advanced.innerHTML='<summary>Liên kết và tùy chọn bổ sung</summary>';
+composer.insertBefore(advanced,links);advanced.appendChild(links);
+if(n?.url)advanced.open=true;
+}
+editor.scrollTop=0;requestAnimationFrame(()=>{if(editor.open)editor.scrollTop=0;});
+};
