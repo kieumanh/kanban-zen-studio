@@ -31,6 +31,7 @@ assert.ok(start>0&&end>start,'new sync implementation found');
 async function runSync(testcase){
  const status=[],calls=[];
  const context=vm.createContext({
+  TextEncoder,
   currentUser:{id:'user-1'},dirty:true,syncing:false,syncConflict:false,cloudRevision:4,
   data:{schema:1,projects:[],notes:[]},syncTimer:0,save:null,KEY:'test',
   navigator:{onLine:true},syncStatus:s=>status.push(s),notify:()=>{},
