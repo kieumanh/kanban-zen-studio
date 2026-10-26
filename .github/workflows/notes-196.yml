@@ -1,0 +1,30 @@
+name: Zen Studio Notes 1.9.6
+on:
+  push:
+    paths:
+      - "scripts/release-notes-196.mjs"
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  ship:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node scripts/release-notes-196.mjs
+      - run: |
+          node --check dist/content.js
+          node --check dist/notes196.js
+          node --check dist/app.js
+          npm test
+          npm run build
+          git diff --check
+      - run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add dist/ package.json scripts/build.mjs worker.mjs
+          git commit -m "feat(notes): universal search, inline images and wide mobile composer v1.9.6" || true
+          git push
