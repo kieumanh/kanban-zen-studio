@@ -1,9 +1,9 @@
 {
-  "target": 9999,
+  "target": 3333,
   "totalEntries": 1612,
   "sourcedExcerpts": 1567,
   "editorialReflections": 45,
-  "remaining": 8432,
+  "remaining": 1766,
   "sourceMatchedNewBatch": 446,
   "allTranslationsHumanReviewed": false,
   "complete": false,

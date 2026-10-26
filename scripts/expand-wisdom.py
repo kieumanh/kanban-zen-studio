@@ -71,7 +71,7 @@ seen_vi = {norm(x["vi"]) for x in q}
 seen_text = {(x["author"], norm(x.get("text", ""))) for x in q}
 skipped = []
 published_count = sum(x.get("kind") != "reflection" for x in q)
-assert published_count <= 9999, "Existing corpus exceeds target; review before publishing."
+assert published_count <= 3333, "Existing corpus exceeds target; review before publishing."
 for row in additions:
     # A quotation already present inside a longer excerpt is not new content.
     overlap = any(a == row["author"] and len(t) > 30 and
@@ -79,7 +79,7 @@ for row in additions:
     if norm(row["vi"]) in seen_vi or overlap:
         skipped.append(row.get("sourceRef", row["url"]))
         continue
-    if row.get("kind") != "reflection" and published_count >= 9999:
+    if row.get("kind") != "reflection" and published_count >= 3333:
         skipped.append(row.get("sourceRef", row["url"]))
         continue
     q.append(row)
@@ -93,10 +93,10 @@ for row in q:
         row["attribution"] = "Zen Studio · lời chiêm nghiệm biên soạn"
 write("dist/wisdom.json", q)
 active = [x for x in q if x.get("kind") != "reflection"]
-stats = dict(target=9999, totalEntries=len(q), sourcedExcerpts=len(active),
-    editorialReflections=len(q)-len(active), remaining=max(0,9999-len(active)),
+stats = dict(target=3333, totalEntries=len(q), sourcedExcerpts=len(active),
+    editorialReflections=len(q)-len(active), remaining=max(0,3333-len(active)),
     sourceMatchedNewBatch=sum(x.get("sourceChecked") is True for x in active),
-    allTranslationsHumanReviewed=False, complete=len(active) == 9999,
+    allTranslationsHumanReviewed=False, complete=len(active) == 3333,
     countsByAuthor=dict(collections.Counter(x["author"] for x in active)),
     note="Có nguồn không đồng nghĩa với đã thẩm định toàn bộ bản dịch. Dữ liệu cũ cần tiếp tục rà soát. Không tính đoạn thô hoặc lời biên soạn vào mục tiêu trích đoạn.")
 write("dist/wisdom-status.json", stats)
