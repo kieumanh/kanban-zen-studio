@@ -49,6 +49,7 @@ noteForm=function(n){
  if(toolbar){toolbar.before(row);const reminder=composer.querySelector('.note-reminder-options');if(reminder)row.append(reminder);if(motif)row.append(motif);for(const node of [...toolbar.children])row.append(node);toolbar.remove();}
  const kind=composer.querySelector('.note-type-field'),color=composer.querySelector('.note-wheel-picker');if(kind)row.prepend(kind);if(color)row.append(color);
  const history=document.createElement('button');history.type='button';history.className='btn note-history-button';history.textContent='↶ Lịch sử 7 ngày';row.append(history);
+ const group=row.querySelector('.note-group'),upload=row.querySelector('label.btn'),saveButton=row.querySelector('#note-save');const footer=document.createElement('div');footer.className='note-editor-actions';row.after(footer);for(const node of [kind,group,color,row.querySelector('.note-reminder-options'),motif,upload])if(node)row.append(node);if(history)footer.append(history);if(saveButton)footer.append(saveButton);
  history.onclick=async()=>{
   editor.querySelector('.zen-wysiwyg')?.dispatchEvent(new Event('blur'));
   if(editor.noteCommit?.()!==true)return;

@@ -712,3 +712,17 @@ dialog .modal-head{position:sticky;top:0;z-index:5;background:var(--paper);paddi
 #editor.keep-editor .note-unified-options>.btn,#editor.keep-editor .note-unified-options>label.btn{display:flex;align-items:center;justify-content:center;min-height:46px}
 #editor.keep-editor .note-unified-options .note-motif-current{max-width:45%;font-size:11px}
 @media(max-width:600px){#editor.keep-editor .note-unified-options{grid-template-columns:1fr}.note-unified-options>details[open]{grid-column:auto!important}}
+/* Consistent two-row settings and a separate action footer. */
+#editor.keep-editor .note-unified-options{gap:10px;padding:14px;background:#faf8fc;align-items:start}
+#editor.keep-editor .note-unified-options>*{min-height:68px!important;padding:12px!important;border:1px solid #e5dbea;border-radius:12px;background:#fff;box-sizing:border-box;align-self:stretch}
+#editor.keep-editor .note-unified-options>.note-group{font-size:12px;display:flex;flex-direction:column;justify-content:center;gap:5px}
+#editor.keep-editor .note-unified-options .note-group input{min-height:34px;padding:6px 9px;font-size:13px}
+#editor.keep-editor .note-unified-options summary{min-height:42px!important;outline:none;text-align:left}
+#editor.keep-editor .note-unified-options summary:focus-visible{outline:2px solid #aa85c9;outline-offset:3px;border-radius:6px}
+#editor.keep-editor .note-unified-options>label.btn{font-size:13px;font-weight:600}
+#editor.keep-editor .note-editor-actions{display:flex;justify-content:space-between;align-items:center;gap:12px;border-top:1px solid #e8e0ec;padding-top:14px;margin-top:2px}
+#editor.keep-editor .note-editor-actions .btn{min-height:42px;padding:9px 18px;border-radius:11px;font-size:13px;display:inline-flex;align-items:center;justify-content:center;gap:7px}
+#editor.keep-editor .note-editor-actions #note-save{width:auto!important;min-width:128px;margin:0!important}
+#editor.keep-editor .note-editor-actions .note-history-button{background:transparent;border-color:transparent;color:#7d6b8e}
+@media(max-width:700px){#editor.keep-editor .note-unified-options{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:440px){#editor.keep-editor .note-unified-options{grid-template-columns:1fr}.note-editor-actions .btn{padding:9px 12px!important}}
