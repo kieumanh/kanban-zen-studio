@@ -264,3 +264,49 @@ dialog .modal-head{position:sticky;top:0;z-index:5;background:var(--paper);paddi
  #tabs .tab.pinned{min-height:44px!important}
 }
 @media(prefers-reduced-motion:reduce){#tabs .tab{transition:none}}
+
+
+/* v1.9.5 · note preferences, compact desktop project strip and resource uploader */
+#editor.keep-editor .note-quick-options{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;min-width:0}
+#editor.keep-editor .note-quick-options>*{min-width:0;box-sizing:border-box;margin:0}
+#editor.keep-editor .note-quick-options .note-reminder-options,
+#editor.keep-editor .note-quick-options .note-type-field,
+#editor.keep-editor .note-quick-options .note-wheel-picker{border:1px solid var(--line);background:#faf7fc;border-radius:12px;padding:10px 12px}
+#editor.keep-editor .note-quick-options .note-type-field{display:flex;justify-content:space-between;align-items:center;gap:8px}
+#editor.keep-editor .note-quick-options .note-type-field select{margin-left:auto;min-width:0;max-width:120px;min-height:38px;padding:5px 7px}
+#editor.keep-editor .note-quick-options .note-reminder-options>summary{min-height:38px;display:flex;align-items:center;gap:8px;font-weight:700}
+#editor.keep-editor .note-quick-options .note-wheel-picker>summary{min-height:38px;padding:0!important;display:flex;align-items:center;justify-content:space-between;gap:6px}
+#editor.keep-editor .note-quick-options .note-wheel-picker .appearance-value{min-width:0;gap:5px}
+#editor.keep-editor .note-quick-options .note-wheel-picker .appearance-value b{font-size:11px}
+#editor.keep-editor .note-quick-options .note-wheel-picker .color-picker-panel{margin-top:12px}
+.resource-page-actions{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.resource-page-actions .btn{min-height:42px;white-space:nowrap;display:inline-flex;align-items:center;gap:7px}
+.resource-page-actions .btn.primary>span{font-size:19px;line-height:1;font-weight:700}
+.resource-upload-actions{display:flex;gap:10px;align-items:center;margin-top:14px;flex-wrap:wrap}
+.resource-upload-actions .btn{min-height:42px}
+#resource-upload-progress{display:block;width:100%;height:12px;accent-color:#8551bf;margin:15px 0 8px}
+#resource-upload-status{min-height:22px;color:var(--muted);font-size:12px;overflow-wrap:anywhere}
+#resource-upload-files{display:block;width:100%;min-height:43px;padding:9px;border:1px solid var(--line);border-radius:10px;background:#faf7fc}
+#resource-upload-scope{min-height:44px}
+@media(min-width:701px){
+ #editor.keep-editor .note-quick-options{grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1.12fr);gap:8px;align-items:start}
+ #editor.keep-editor .note-quick-options .note-reminder-options,
+ #editor.keep-editor .note-quick-options .note-type-field,
+ #editor.keep-editor .note-quick-options .note-wheel-picker{min-height:60px}
+ #editor.keep-editor .note-quick-options .note-reminder-options[open],
+ #editor.keep-editor .note-quick-options .note-wheel-picker[open]{grid-column:1/-1}
+ #editor.keep-editor .note-quick-options .note-wheel-picker .color-picker-panel{max-width:440px}
+ #tabs.tabs{padding-top:12px;padding-bottom:4px;align-items:flex-end;gap:7px}
+ #tabs .tab{height:60px;min-height:0!important;padding:7px 11px}
+ #tabs .tab.pinned{height:60px;min-height:0!important;padding:5px!important}
+ #tabs .tab.tab-home{height:60px;min-height:0!important;padding:6px 10px}
+ #tabs .tab-add{height:60px;min-height:0;display:grid;place-items:center}
+}
+@media(max-width:700px){
+ #editor.keep-editor .note-quick-options{grid-template-columns:minmax(0,1fr);gap:9px}
+ #editor.keep-editor .note-quick-options .note-type-field select{max-width:55%;min-height:40px;font-size:16px}
+ #editor.keep-editor .note-quick-options .note-reminder-options>summary{justify-content:flex-start;text-align:left}
+ .resource-page-actions{width:100%}
+ .resource-page-actions .btn{flex:1;justify-content:center;font-size:12px}
+ .resource-upload-actions .btn{flex:1}
+}
