@@ -1,15 +1,15 @@
 {
   "target": 3333,
-  "totalEntries": 1612,
-  "sourcedExcerpts": 1567,
+  "totalEntries": 1768,
+  "sourcedExcerpts": 1723,
   "editorialReflections": 45,
-  "remaining": 1766,
-  "sourceMatchedNewBatch": 446,
+  "remaining": 1610,
+  "sourceMatchedNewBatch": 602,
   "allTranslationsHumanReviewed": false,
   "complete": false,
   "countsByAuthor": {
     "Phật Thích Ca · Kinh Pháp Cú": 392,
-    "Lão Tử": 71,
+    "Lão Tử": 89,
     "Trang Tử": 115,
     "Osho": 2,
     "Sadhguru": 3,
@@ -32,7 +32,9 @@
     "Master Oneness": 1,
     "Vạn Hạnh": 1,
     "Trần Nhân Tông": 1,
-    "Tuệ Trung Thượng Sĩ": 1
+    "Tuệ Trung Thượng Sĩ": 1,
+    "Hoài Nam Tử · tập thể tác giả thời Tây Hán": 106,
+    "Trang Tử · Nam Hoa Kinh": 32
   },
-  "note": "Có nguồn không đồng nghĩa với đã thẩm định toàn bộ bản dịch. Dữ liệu cũ cần tiếp tục rà soát. Không tính đoạn thô hoặc lời biên soạn vào mục tiêu trích đoạn."
+  "note": "Các trích đoạn Đạo gia mới đối chiếu nguyên văn chữ Hán từ kho cổ thư, dịch nghĩa mới chỉ là bản tham khảo, chưa hiệu đính. Không tính câu trùng hoặc lời biên soạn vào 3.333."
 }
