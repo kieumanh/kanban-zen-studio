@@ -1,0 +1,100 @@
+{
+  "project": "Kanban Zen Studio · thư viện minh triết 3.333 câu",
+  "researchedDate": "2026-10-26",
+  "policy": {
+    "target": 3333,
+    "countRule": "Chỉ tính trích đoạn có nguyên văn đối chiếu, đoạn độc lập và bản dịch nghĩa tiếng Việt; không tính lời biên soạn, đoạn lặp hoặc văn bản chưa dịch.",
+    "translationCaveat": "Bản diễn nghĩa mới cần được hiệu đính ngữ nghĩa, văn cảnh, nhân vật phát ngôn trước khi coi là bản dịch chuẩn.",
+    "rights": "Kiểm tra giấy phép riêng của bản biên tập số và bản dịch hiện đại trước khi tái phân phối; nguyên tác cổ điển và bản điện tử không mặc nhiên cùng điều kiện sử dụng."
+  },
+  "sources": [
+    {
+      "work": "Liệt Tử",
+      "original": "列子 · 沖虛真經",
+      "url": "https://ctext.org/liezi",
+      "chapters": 8,
+      "priority": "high",
+      "theme": [
+        "vô vi",
+        "định mệnh",
+        "thực và mộng",
+        "chuyển hóa"
+      ],
+      "credit": "Tác phẩm lưu truyền qua nhiều lớp văn bản, không gán mọi câu cho nhân vật lịch sử Liệt Ngự Khấu."
+    },
+    {
+      "work": "Hoài Nam Tử",
+      "original": "淮南子",
+      "url": "https://ctext.org/huainanzi",
+      "chapters": 21,
+      "priority": "high",
+      "theme": [
+        "âm dương",
+        "đạo và đức",
+        "thân tâm",
+        "thuận tự nhiên"
+      ],
+      "credit": "Biên tập dưới thời Lưu An, tư tưởng dung hợp nhiều trường phái. Gán nguồn tác phẩm, tránh coi tất cả là lời cá nhân Lưu An."
+    },
+    {
+      "work": "Trang Tử / Nam Hoa Kinh",
+      "original": "莊子",
+      "url": "https://ctext.org/zhuangzi",
+      "chapters": 33,
+      "priority": "high",
+      "theme": [
+        "tề vật",
+        "tiêu dao",
+        "tâm trai",
+        "tọa vong"
+      ],
+      "credit": "Tác phẩm chứa nhiều nhân vật kể chuyện và nhiều lớp biên tập; ghi lời nhân vật khi xác định được."
+    },
+    {
+      "work": "Văn Tử / Thông Huyền Chân Kinh",
+      "original": "文子 · 通玄真經",
+      "url": "https://ctext.org/wenzi",
+      "priority": "high",
+      "theme": [
+        "đạo nguyên",
+        "hư tĩnh",
+        "đức"
+      ],
+      "credit": "Nhiều phiên bản và câu chồng lấn với Lão Tử. Cần đối chiếu dị bản, không đếm trùng."
+    },
+    {
+      "work": "Hạc Quan Tử",
+      "original": "鶡冠子",
+      "url": "https://ctext.org/he-guan-zi",
+      "priority": "medium",
+      "theme": [
+        "thiên đạo",
+        "đạo đức",
+        "chính trị"
+      ],
+      "credit": "Cần tách lời nhân vật khỏi nhận định của người biên soạn."
+    },
+    {
+      "work": "Đạo Đức Kinh",
+      "original": "道德經",
+      "url": "https://ctext.org/dao-de-jing",
+      "chapters": 81,
+      "priority": "medium",
+      "theme": [
+        "vô vi",
+        "nhu thắng cương",
+        "tri túc"
+      ],
+      "credit": "Đã có nguồn nền, cần lọc lặp chặt chẽ trước khi bổ sung."
+    },
+    {
+      "work": "Đạo Tạng (Kanseki KR5)",
+      "original": "道藏 · KR5",
+      "url": "https://github.com/tokushige-koyasan/kr5-corpus",
+      "priority": "research",
+      "documentCount": 1650,
+      "license": "CC BY-SA 4.0 cho tuyển tập này; cần tuân thủ ghi công/chia sẻ tương tự",
+      "credit": "Nguồn bổ trợ quy mô lớn nhưng nhiều bản chưa có dấu câu/kiểm chứng. Chưa đếm bản chữ Hán thô vào mục tiêu."
+    }
+  ]
+}
