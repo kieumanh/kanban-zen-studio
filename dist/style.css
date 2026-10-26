@@ -222,3 +222,45 @@ dialog .modal-head{position:sticky;top:0;z-index:5;background:var(--paper);paddi
 #editor.keep-editor .note-file{min-width:0;overflow-wrap:anywhere}
 }
 @media(max-width:380px){#editor.keep-editor{width:calc(100vw - 10px);padding-left:10px;padding-right:10px}#editor.keep-editor .note-toolbar{padding:9px}}
+
+ 
+/* v1.9.4 — modal, tabs and mobile alignment */
+#editor{overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain}
+#editor-form{display:flow-root;min-width:0}
+#editor .modal-head,#editor.keep-editor .modal-head,#editor.task-editor .modal-head{position:static!important;top:auto!important;z-index:auto!important;background:transparent!important;border-bottom:1px solid var(--line)!important;padding:0 56px 12px 0!important;margin:0 0 14px!important;min-height:33px!important;display:flex;align-items:center;justify-content:flex-start}
+#editor .modal-head #modal-eyebrow{visibility:visible!important;color:#806394;font-size:11px;line-height:1.5;letter-spacing:.075em}
+#editor .modal-close-pin{position:sticky!important;top:12px;float:right;z-index:35;display:grid!important;place-items:center;flex:0 0 44px;width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;margin:0 0 -44px 10px;padding:0!important;color:#bd344e!important;border:1px solid #eeb5c0!important;background:#fff3f5!important;border-radius:13px!important;box-shadow:0 3px 12px #432a4420;font:700 27px/1 var(--sans)!important;cursor:pointer;touch-action:manipulation}
+#editor .modal-close-pin:hover{background:#ffe4e9!important;border-color:#d77081!important}
+#editor .modal-close-pin:focus-visible{outline:3px solid #9a65c4;outline-offset:2px}
+#editor .modal-foot{position:static!important;bottom:auto!important;margin:20px 0 0!important;padding:15px 0 0!important;background:transparent!important}
+#editor:has(.notice-list) .notice-list{max-height:none!important;height:auto!important;overflow:visible!important;overscroll-behavior:auto!important;min-width:0;margin:16px 0}
+#editor:has(.notice-list) .notice-item{box-sizing:border-box;width:100%;min-width:0;overflow-wrap:anywhere;white-space:normal}
+#editor:has(.notice-list) #clear-file-alerts{display:block;position:static;width:100%;max-width:100%;min-height:44px;margin:18px 0 8px;text-align:center}
+#tabs.tabs{gap:8px;align-items:stretch;padding-bottom:7px;background:#f0e8f6;scroll-padding-inline:14px}
+#tabs .tab{--tab-edge:var(--color,#8b5bbe);position:relative;box-sizing:border-box;border:1px solid color-mix(in srgb,var(--tab-edge) 62%,#fff);border-top:3px solid var(--tab-edge);border-radius:12px;padding:8px 12px;opacity:1;background:color-mix(in srgb,var(--tab-edge) 9%,#fff);color:#544360;box-shadow:0 1px 4px #4c34520c;min-height:46px;font-weight:650;transition:background .18s,border-color .18s,box-shadow .18s}
+#tabs .tab-home{--color:#8752c7;--tint:#f0e6fb}
+#tabs .tab:hover{background:color-mix(in srgb,var(--tab-edge) 16%,#fff)}
+#tabs .tab.active{background:#fff;border-color:var(--tab-edge);box-shadow:0 0 0 2px color-mix(in srgb,var(--tab-edge) 21%,transparent),0 3px 10px #392a481a;color:#38284a}
+#tabs .tab.active::after{content:'';position:absolute;height:3px;bottom:0;left:11px;right:11px;background:var(--tab-edge);border-radius:3px}
+#tabs .tab:focus-visible,#tabs .tab-add:focus-visible{outline:3px solid #9c69cf;outline-offset:2px}
+#tabs .tab.pinned{min-height:46px!important}
+@media(max-width:700px){
+ #editor{box-sizing:border-box;max-height:calc(100dvh - 16px);scroll-padding-top:8px;padding-bottom:calc(20px + env(safe-area-inset-bottom));overflow-y:auto!important}
+ #editor .modal-head,#editor.keep-editor .modal-head,#editor.task-editor .modal-head{padding-right:54px!important;margin-bottom:12px!important;min-height:34px!important}
+ #editor .modal-close-pin{top:10px;width:44px!important;height:44px!important;min-width:44px!important;margin-bottom:-44px}
+ #editor:has(.notice-list){width:calc(100vw - 22px);max-width:560px;padding:18px 18px calc(24px + env(safe-area-inset-bottom));border-radius:20px}
+ #editor:has(.notice-list) h2{margin-top:16px;font-size:24px}
+ #editor:has(.notice-list) .notice-item{padding:13px 14px;gap:7px}
+ #editor:has(.notice-list) .notice-item strong{font-size:14px;line-height:1.45}
+ #editor:has(.notice-list) .notice-item span{line-height:1.55}
+ #editor.keep-editor .note-reminder-options>summary{display:flex;align-items:center;justify-content:flex-end;gap:8px;text-align:right;min-height:42px;cursor:pointer}
+ #editor.keep-editor .note-toolbar{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;align-items:center}
+ #editor.keep-editor .note-toolbar .note-color{grid-column:1;grid-row:1}
+ #editor.keep-editor .note-toolbar>label.btn:has(#inline-note-upload){grid-column:2;grid-row:1;justify-content:center;justify-self:stretch;min-width:0;min-height:44px}
+ #editor.keep-editor .note-toolbar .note-group{grid-column:1/-1;grid-row:2}
+ #editor.keep-editor .note-toolbar #note-save{grid-column:1/-1;grid-row:3}
+ #tabs.tabs{gap:6px;padding-bottom:6px}
+ #tabs .tab{min-height:44px;font-size:11px;padding:7px 10px}
+ #tabs .tab.pinned{min-height:44px!important}
+}
+@media(prefers-reduced-motion:reduce){#tabs .tab{transition:none}}
