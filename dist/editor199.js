@@ -67,7 +67,7 @@ noteForm=function(n){
  // A new toolbar avoids the old textarea-oriented button handlers.
  const toolbar=document.createElement('div');toolbar.className='zen-format-tools zen-wysiwyg-toolbar';
  toolbar.setAttribute('role','toolbar');toolbar.setAttribute('aria-label','Định dạng trực tiếp nội dung');
- const commands=[['H1','h1','Tiêu đề lớn'],['H2','h2','Tiêu đề vừa'],['Aa','plain','Văn bản thường'],['B','bold','In đậm'],['I','italic','In nghiêng'],['U','underline','Gạch dưới'],['S̶','strike','Gạch ngang'],['•','bullets','Danh sách ký hiệu'],['1.','numbers','Danh sách đánh số'],['◦','circle','Danh sách dấu tròn'],['▪','square','Danh sách dấu vuông']];
+ const commands=[['H1','h1','Tiêu đề lớn'],['H2','h2','Tiêu đề vừa'],['Aa','plain','Văn bản thường'],['B','bold','In đậm'],['I','italic','In nghiêng'],['U','underline','Gạch dưới'],['S̶','strike','Gạch ngang']];
  for(const [label,action,tip] of commands){
   const button=document.createElement('button');button.type='button';button.dataset.zenFormat=action;
   button.setAttribute('aria-label',tip);button.title=tip;button.textContent=label;
@@ -75,6 +75,9 @@ noteForm=function(n){
   button.addEventListener('mousedown',event=>event.preventDefault());
   toolbar.append(button);
  }
+ const listPicker=document.createElement('select');listPicker.className='zen-list-picker';listPicker.setAttribute('aria-label','Kiểu danh sách');
+ listPicker.innerHTML='<option value="">Danh sách…</option><option value="bullets">• Chấm tròn</option><option value="numbers">1. Đánh số</option><option value="circle">◦ Vòng tròn</option><option value="square">▪ Hình vuông</option>';
+ toolbar.append(listPicker);
  legacyToolbar?.replaceWith(toolbar);
  const rich=document.createElement('div');rich.className='zen-wysiwyg';
  rich.contentEditable='true';rich.setAttribute('role','textbox');rich.setAttribute('aria-multiline','true');
@@ -122,6 +125,12 @@ noteForm=function(n){
   if(zenApplyFormatting(rich,button.dataset.zenFormat)){
    if(zenRichMarkdown(rich)!==was)queue();
   }
+ });
+ listPicker.addEventListener('change',()=>{
+  const action=listPicker.value;if(!action)return;
+  const was=zenRichMarkdown(rich);
+  if(zenApplyFormatting(rich,action)&&zenRichMarkdown(rich)!==was)queue();
+  listPicker.value='';
  });
  const title=composer.querySelector('input[name=title]');
  title?.addEventListener('input',()=>{

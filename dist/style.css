@@ -662,3 +662,25 @@ dialog .modal-head{position:sticky;top:0;z-index:5;background:var(--paper);paddi
 #editor .modal-head .modal-close-pin{position:static!important;float:none!important;inset:auto!important;margin:0!important;flex:0 0 44px}
 .zen-list-circle{list-style-type:circle}.zen-list-square{list-style-type:square}.zen-list-disc{list-style-type:disc}
 .zen-wysiwyg ul,.zen-wysiwyg ol,.zen-formatted ul,.zen-formatted ol{padding-left:26px;margin:8px 0}.zen-wysiwyg li,.zen-formatted li{padding-left:3px;margin:4px 0}
+
+/* Compact, balanced note editor controls and keep the close action at the edge. */
+#editor .modal-head,#editor.keep-editor .modal-head,#editor.task-editor .modal-head{display:grid!important;grid-template-columns:minmax(0,1fr) 44px!important;align-items:center!important}
+#editor .modal-head .modal-close-pin{justify-self:end!important}
+#editor.keep-editor .zen-wysiwyg{min-height:210px;max-height:42dvh;resize:vertical}
+#editor.keep-editor .zen-wysiwyg-toolbar{display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:8px 10px;border:1px solid #e7dff0;border-radius:13px;background:#faf8fd}
+#editor.keep-editor .zen-wysiwyg-toolbar button{min-height:36px;min-width:36px}
+#editor.keep-editor .zen-list-picker{min-height:36px;max-width:190px;padding:6px 10px;border:1px solid #ded2e8;border-radius:9px;background:#fff;color:#51415e;font:500 13px var(--sans)}
+#editor.keep-editor .note-unified-options{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));align-items:center;gap:9px;padding:12px}
+#editor.keep-editor .note-unified-options>.note-reminder-options,#editor.keep-editor .note-unified-options>.note-motif-picker{grid-column:span 6;min-width:0}
+#editor.keep-editor .note-unified-options>label.btn{grid-column:span 3;justify-content:center}
+#editor.keep-editor .note-unified-options>.note-color{grid-column:span 3;justify-content:space-between}
+#editor.keep-editor .note-unified-options>.note-group{grid-column:span 6;min-width:0}
+#editor.keep-editor .note-unified-options>#note-save,#editor.keep-editor .note-unified-options>.note-history-button{grid-column:span 3;justify-content:center;min-width:0;white-space:normal;text-align:center}
+#editor.keep-editor .note-unified-options .note-motif-picker>summary{min-height:38px;font-size:12px}
+@media(max-width:650px){
+ #editor.keep-editor .zen-wysiwyg{min-height:160px;max-height:32dvh;padding:12px}
+ #editor.keep-editor .note-unified-options{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:10px}
+ #editor.keep-editor .note-unified-options>.note-reminder-options,#editor.keep-editor .note-unified-options>.note-motif-picker,#editor.keep-editor .note-unified-options>.note-group{grid-column:1/-1}
+ #editor.keep-editor .note-unified-options>label.btn,#editor.keep-editor .note-unified-options>.note-color,#editor.keep-editor .note-unified-options>#note-save,#editor.keep-editor .note-unified-options>.note-history-button{grid-column:span 1}
+ #editor.keep-editor .zen-list-picker{max-width:100%;flex:1 1 135px}
+}

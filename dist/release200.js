@@ -24,7 +24,7 @@ async function rebaseWorkspace(owner){
 }
 async function preserveConflictCopies(){
  if(!currentUser||syncing)return;const owner=currentUser.id;
- const button=document.querySelector('#merge-conflict');if(button)button.disabled=true;
+ const button=document.querySelector('#merge-conflict,#merge-conflict-report');if(button)button.disabled=true;
  try{
   const remote=await requestAPI('workspace');if(currentUser?.id!==owner)return;
   const local=structuredClone(data),merged=structuredClone(remote.data);localStorage.setItem(KEY+'-conflict-'+Date.now(),JSON.stringify(local));
@@ -39,7 +39,7 @@ async function preserveConflictCopies(){
   render();accountPanel();renderManualSyncReport('synced',{revision:cloudRevision,uploaded:true});notify('Đã hợp nhất. Các nội dung khác nhau được giữ thành bản sao để bạn đối chiếu.');
  }catch(e){notify(e.message);}finally{if(button?.isConnected)button.disabled=false;}
 }
-document.addEventListener('click',e=>{if(e.target.closest('#merge-conflict'))preserveConflictCopies();});
+document.addEventListener('click',e=>{if(e.target.closest('#merge-conflict,#merge-conflict-report'))preserveConflictCopies();});
 const historyNoteForm=noteForm;
 noteForm=function(n){
  historyNoteForm(n);if(contentReadOnly)return;

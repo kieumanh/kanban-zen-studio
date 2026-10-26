@@ -130,6 +130,11 @@ function renderManualSyncReport(outcome,options={}){
  const title=document.createElement('strong');title.textContent=summary.title;header.append(mark,title);
  const desc=document.createElement('p');desc.textContent=summary.detail;
  node.append(header,desc);
+ if(outcome==='conflict'){
+  const action=document.createElement('button');action.type='button';action.id='merge-conflict-report';action.className='btn';
+  action.textContent='Hợp nhất và đồng bộ, giữ cả hai bản';
+  node.append(action);
+ }
  if(outcome==='synced'&&Number.isInteger(options.revision)){
   const count=document.createElement('p');count.className='sync-report-meta';
   const projectTotal=(data.projects||[]).length;
