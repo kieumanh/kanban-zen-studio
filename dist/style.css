@@ -746,3 +746,26 @@ dialog .modal-head{position:sticky;top:0;z-index:5;background:var(--paper);paddi
 .keep-card .board-media,.content-card .board-media{display:block;width:auto;max-width:100%;max-height:min(42dvh,360px);height:auto;margin:10px auto;object-fit:contain}
 .note-inline-images img{max-width:100%;max-height:min(38dvh,280px);height:auto;object-fit:contain}
 @media(max-width:600px){#editor.keep-editor .inline-note-image img{max-height:min(32dvh,220px)}#editor.keep-editor .note-attachment-remove,#editor.keep-editor .zen-link-remove{flex-basis:34px;width:34px;height:34px}}
+
+/* Refined project choice and clearer permanent-delete confirmation. */
+.task-project-field{display:grid;gap:7px;min-width:0}
+.task-project-picker{position:relative;min-width:0}
+.task-project-picker>summary{display:flex;align-items:center;gap:10px;min-height:48px;padding:8px 12px;border:1px solid #ded2e8;border-radius:12px;background:#fff;cursor:pointer;list-style:none;color:#493b55}
+.task-project-picker>summary::-webkit-details-marker{display:none}
+.task-project-picker>summary:focus-visible{outline:2px solid #9b73ba;outline-offset:2px}
+.task-project-current-icon,.task-project-choice-icon{display:grid;place-items:center;flex:0 0 34px;width:34px;height:34px;border-radius:10px;background:color-mix(in srgb,var(--project-choice-color,#7950c8) 13%,white);color:var(--project-choice-color,#7950c8);font-size:18px}
+.task-project-current-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px;font-weight:700}
+.task-project-chevron{color:#897b95;font-size:18px;transition:transform .15s}
+.task-project-picker[open] .task-project-chevron{transform:rotate(180deg)}
+.task-project-options{position:absolute;z-index:50;top:calc(100% + 6px);left:0;right:0;display:grid;gap:4px;max-height:min(42dvh,280px);overflow:auto;padding:7px;border:1px solid #e5dbea;border-radius:14px;background:#fff;box-shadow:0 12px 32px #37244224}
+.task-project-choice{display:flex;align-items:center;gap:10px;min-width:0;width:100%;padding:8px 10px;border:1px solid transparent;border-radius:10px;text-align:left;background:#fff;color:#51445e}
+.task-project-choice:hover{background:#f8f4fb;border-color:#ede4f3}
+.task-project-choice[aria-pressed=true]{background:#f3edf8;border-color:#ddcbe9}
+.task-project-choice-copy{display:grid;gap:1px;flex:1;min-width:0}
+.task-project-choice-copy strong{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;font-weight:700}
+.task-project-choice-copy small{font-size:11px;color:#82768e}
+.task-project-choice-check{visibility:hidden;color:#7950c8;font-weight:800}
+.task-project-choice[aria-pressed=true] .task-project-choice-check{visibility:visible}
+#editor-form button[type=submit].primary.danger{color:#fff!important;background:linear-gradient(110deg,#7950c8,#ac62b9 64%,#d77798);border-color:transparent;text-shadow:0 1px 1px #55356d24}
+#editor-form button[type=submit].primary.danger:hover{color:#fff!important;filter:brightness(1.06)}
+@media(max-width:600px){.task-project-options{max-height:34dvh}.task-project-picker>summary{min-height:46px;padding:7px 10px}}
