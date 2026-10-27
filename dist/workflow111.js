@@ -199,7 +199,7 @@ function wfRichEditor(source) {
       ["B", "bold", "In đậm"],
       ["I", "italic", "In nghiêng"],
       ["U", "underline", "Gạch dưới"],
-      ["S̶", "strike", "Gạch ngang"],
+      ['<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h10M12 5v4m-8 3h16m-8 3v4m-5 0h10"/></svg>', "strike", "Gạch ngang"],
     ]
       .map(
         ([label, command, tip]) =>
@@ -447,6 +447,8 @@ taskDetail = function (p, t) {
     });
   };
   body.append(comments);
+  const actions = body.querySelector(".detail-actions");
+  if(actions) body.append(actions);
   const rows = [...body.querySelectorAll(".compact-check")];
   if (rows.length) {
     const list = document.createElement("div");
@@ -585,14 +587,7 @@ noteForm = function (n) {
       refresh();render();
     };choices.append(button);
   });
-  const taskLabel=document.createElement("h4");taskLabel.textContent="Liên kết với công việc";links.append(taskLabel);
-  const picker=document.createElement("select");picker.setAttribute("aria-label","Chọn công việc để liên kết");picker.innerHTML='<option value="">Chọn công việc…</option>';
-  data.projects.filter(p=>!p.archived).forEach(p=>{const group=document.createElement("optgroup");group.label=p.name;p.tasks.filter(t=>!t.archived).forEach(t=>{const option=document.createElement("option");option.value=t.id;option.textContent=t.title;option.selected=(t.noteIds||[]).includes(id);group.append(option);});picker.append(group);});picker.value="";
-  const linkTask=document.createElement("button");linkTask.type="button";linkTask.className="btn";linkTask.textContent="Liên kết / Bỏ liên kết";
-  const linked=document.createElement("p");linked.className="subtext";const refreshLinks=()=>{linked.replaceChildren();data.projects.forEach(p=>p.tasks.filter(t=>(t.noteIds||[]).includes(id)).forEach(t=>{const open=document.createElement('button');open.type='button';open.className='btn';open.textContent=p.name+' · '+t.title;open.onclick=()=>{if(state.pending&&!state.flush())return;taskDetail(p,t);};linked.append(open);}));if(!linked.childNodes.length)linked.textContent='Chưa liên kết công việc';};refreshLinks();
-  linkTask.onclick=()=>{const task=data.projects.flatMap(p=>p.tasks).find(t=>t.id===picker.value);if(!task)return;if((state.pending||!data.notes?.some(n=>n.id===id))&&!state.flush())return;if(wfSave(()=>{task.noteIds ||= [];if(task.noteIds.includes(id))task.noteIds=task.noteIds.filter(x=>x!==id);else {if(task.noteIds.length>=100)throw Error('Tối đa 100 liên kết.');task.noteIds.push(id);}})){refreshLinks();render();}};
-  links.append(picker,linkTask,linked);
-  const disclosure=document.createElement("details");disclosure.className="wf-link-picker";const summary=document.createElement("summary");summary.textContent="Liên kết dự án / công việc";disclosure.append(summary,links);
+  const disclosure=document.createElement("details");disclosure.className="wf-link-picker";const summary=document.createElement("summary");summary.textContent="Liên kết với dự án";disclosure.append(summary,links);
   const actions=composer.querySelector(".note-editor-actions");if(actions)actions.before(disclosure);else composer.append(disclosure);
   const queue = () => {
     if ((currentUser?.id || KEY) !== owner) return;
@@ -1336,8 +1331,26 @@ accountPanel=function(){wfSettingsBefore();const body=$('#editor-body');if(!body
  const sessions=body.querySelector('.settings-signout');if(sessions)wrap('Phiên đăng nhập',[sessions]);
  const other=[...body.children].filter(n=>n.tagName!=='H2');if(other.length)wrap('Các tính năng khác',other);
  const help=document.createElement('button');help.type='button';help.className='btn';help.dataset.action='help';help.textContent='Hướng dẫn sử dụng';wrap('Hướng dẫn',[help]);
+ const helpGroup=groups.pop();const sessionIndex=groups.findIndex(g=>g.querySelector('summary')?.textContent==='Phiên đăng nhập');groups.splice(sessionIndex<0?groups.length:sessionIndex,0,helpGroup);
  groups.forEach(group=>body.append(group));
  $('#editor').addEventListener('close',()=>body.classList.remove('wf-settings'),{once:true});
 };
 
 document.addEventListener('input',e=>{if(!e.target.matches('[data-wf-focus-search]'))return;const q=e.target.value.trim().toLocaleLowerCase('vi');e.target.closest('.wf-focus-note-picker').querySelectorAll('[data-wf-focus-link]').forEach(b=>b.hidden=!b.textContent.toLocaleLowerCase('vi').includes(q));});
+
+
+// Project keyword colors use the same hue/saturation model as project colors.
+function wfKeywordWheels(root){
+ root.querySelectorAll('.keyword-row input[type=color]:not([data-wheel])').forEach(input=>{
+  input.dataset.wheel='true';input.hidden=true;
+  const picker=document.createElement('details');picker.className='wf-keyword-color';
+  picker.innerHTML='<summary aria-label="Chọn màu từ khóa"><i></i></summary><div><canvas width="180" height="180" tabindex="0" role="slider" aria-label="Màu từ khóa: trái phải đổi sắc, lên xuống đổi bão hòa" aria-valuemin="0" aria-valuemax="360"></canvas><label>Độ sáng<input type="range" min="1" max="100"></label><label>HEX<input type="text" pattern="#[a-fA-F0-9]{6}" maxlength="7"></label></div>';
+  input.after(picker);const canvas=picker.querySelector('canvas'),ctx=canvas.getContext('2d'),range=picker.querySelector('input[type=range]'),hex=picker.querySelector('input[type=text]');let hsv=colorToHSV(input.value);
+  const paint=()=>{const img=ctx.createImageData(180,180);for(let y=0;y<180;y++)for(let x=0;x<180;x++){const dx=x-90,dy=y-90,r=Math.hypot(dx,dy)/89;if(r>1)continue;const rgb=hsvToColor((Math.atan2(dy,dx)*180/Math.PI+360)%360,r,hsv.v).rgb,i=(y*180+x)*4;img.data.set([...rgb,255],i);}ctx.putImageData(img,0,0);const angle=hsv.h*Math.PI/180;ctx.beginPath();ctx.arc(90+Math.cos(angle)*hsv.s*89,90+Math.sin(angle)*hsv.s*89,5,0,Math.PI*2);ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.stroke();};
+  const update=()=>{input.value=hsvToColor(hsv.h,hsv.s,hsv.v).hex;hex.value=input.value;range.value=hsv.v*100;picker.querySelector('i').style.background=input.value;canvas.setAttribute('aria-valuenow',Math.round(hsv.h));paint();input.dispatchEvent(new Event('input',{bubbles:true}));};
+  const point=e=>{const r=canvas.getBoundingClientRect(),dx=(e.clientX-r.left)*180/r.width-90,dy=(e.clientY-r.top)*180/r.height-90;hsv.h=(Math.atan2(dy,dx)*180/Math.PI+360)%360;hsv.s=Math.min(1,Math.hypot(dx,dy)/89);update();};
+  canvas.onpointerdown=e=>{canvas.setPointerCapture(e.pointerId);point(e);};canvas.onpointermove=e=>{if(e.buttons)point(e);};canvas.onkeydown=e=>{if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key))return;e.preventDefault();hsv.h=(hsv.h+(e.key==='ArrowRight'?5:e.key==='ArrowLeft'?-5:0)+360)%360;hsv.s=Math.max(0,Math.min(1,hsv.s+(e.key==='ArrowUp'?.05:e.key==='ArrowDown'?-.05:0)));update();};range.oninput=()=>{hsv.v=range.value/100;update();};hex.onchange=()=>{if(/^#[a-f0-9]{6}$/i.test(hex.value)){hsv=colorToHSV(hex.value);update();}};update();
+ });
+}
+const wfProjectRefineBefore=projectForm;
+projectForm=function(p){wfProjectRefineBefore(p);const form=$('#editor-form'),rows=form.querySelector('#keyword-rows');if(!rows)return;wfKeywordWheels(rows);const observer=new MutationObserver(()=>wfKeywordWheels(rows));observer.observe(rows,{childList:true});$('#editor').addEventListener('close',()=>observer.disconnect(),{once:true});form.addEventListener('submit',e=>{if(rows.children.length>5){e.preventDefault();e.stopImmediatePropagation();notify('Tối đa 5 từ khóa dự án. Hãy bỏ các từ khóa không cần thiết.');}},{capture:true});};
