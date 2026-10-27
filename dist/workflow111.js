@@ -448,7 +448,7 @@ taskDetail = function (p, t) {
   };
   body.append(comments);
   const actions = body.querySelector(".detail-actions");
-  if(actions) body.append(actions);
+  if(actions) { const h=[...body.querySelectorAll("h3")].find(x=>x.textContent==="Checklist");if(h)h.before(actions);else body.append(actions); }
   const rows = [...body.querySelectorAll(".compact-check")];
   if (rows.length) {
     const list = document.createElement("div");
@@ -803,7 +803,7 @@ function wfApplyCards() {
 }
 const wfSelectedTasks = new Set();
 function wfTaskListTools() {
-  const owner=currentUser?.id || KEY;if (_WF.selectedOwner !== owner) { wfSelectedTasks.clear(); _WF.selectedOwner=owner; }
+  const owner=currentUser?.id || KEY;if (_WF.selectedOwner !== owner) { wfSelectedTasks.clear(); _WF.selectedOwner=owner;_WF.listKeyword='';_WF.listSearch='';_WF.listSort='default'; }
   const table = $("#main .task-table"), panel = table?.closest(".table-wrap");
   if (!table || !panel || panel.querySelector(".wf-list-tools")) return;
   const tools = document.createElement("div"); tools.className="wf-list-tools";
@@ -812,9 +812,12 @@ function wfTaskListTools() {
   const rows=[...table.querySelectorAll("tbody tr[data-task]")], key=tools.querySelector(".wf-keyword");
   const find=row=>project(row.dataset.pid)?.tasks.find(t=>t.id===row.dataset.task);
   [...new Set(rows.flatMap(row=>(find(row)?.labels||[]).map(label=>label.name)))].sort((a,b)=>a.localeCompare(b,'vi')).forEach(name=>{const option=document.createElement('option');option.value=name;option.textContent=name;key.append(option);});
-  const update=()=>{const value=key.value;for(const row of rows)row.hidden=!!value&&!(find(row)?.labels||[]).some(label=>label.name===value);tools.querySelector('.wf-selected-count').textContent=wfSelectedTasks.size+' đã chọn';};
-  key.onchange=update;
-  tools.querySelector('.wf-sort').onchange=e=>{const mode=e.target.value;const sorted=[...rows].sort((a,b)=>mode==='title'?(find(a)?.title||'').localeCompare(find(b)?.title||'','vi'):mode==='due'?(find(a)?.due||'9999').localeCompare(find(b)?.due||'9999'):rows.indexOf(a)-rows.indexOf(b));sorted.forEach(row=>table.tBodies[0].append(row));};
+  const update=()=>{const value=key.value,q=searchLabel.querySelector('input').value.trim().toLocaleLowerCase('vi');for(const row of rows){const t=find(row);row.hidden=!!value&&!(t?.labels||[]).some(label=>label.name===value)||!!q&&![t?.title,t?.description,t?.tag,project(row.dataset.pid)?.name,...(t?.labels||[]).map(l=>l.name)].join(' ').toLocaleLowerCase('vi').includes(q);}tools.querySelector('.wf-selected-count').textContent=wfSelectedTasks.size+' đã chọn';};
+  key.onchange=()=>{_WF.listKeyword=key.value;update();};
+ const searchLabel=document.createElement('label');searchLabel.className='wf-filter-field';searchLabel.innerHTML='<span>Rechercher</span><input type="search" aria-label="Tìm trong kết quả" placeholder="Tên việc, dự án, từ khóa…">';searchLabel.firstChild.textContent='Tìm trong kết quả';
+ searchLabel.querySelector('input').value=_WF.listSearch||'';searchLabel.querySelector('input').oninput=e=>{_WF.listSearch=e.target.value;update();};key.value=_WF.listKeyword||'';
+ 
+  tools.querySelector('.wf-sort').onchange=e=>{const mode=e.target.value;_WF.listSort=mode;const sorted=[...rows].sort((a,b)=>mode==='title'?(find(a)?.title||'').localeCompare(find(b)?.title||'','vi'):mode==='due'?(find(a)?.due||'9999').localeCompare(find(b)?.due||'9999'):rows.indexOf(a)-rows.indexOf(b));sorted.forEach(row=>table.tBodies[0].append(row));};
   rows.forEach(row=>{const input=document.createElement('input');input.type='checkbox';input.checked=wfSelectedTasks.has(row.dataset.task);input.setAttribute('aria-label','Chọn '+(find(row)?.title||'công việc'));input.onclick=e=>e.stopPropagation();input.onchange=()=>{input.checked?wfSelectedTasks.add(row.dataset.task):wfSelectedTasks.delete(row.dataset.task);update();};row.cells[0].prepend(input);});
   tools.querySelector('.wf-select-all').onclick=()=>{rows.filter(row=>!row.hidden).forEach(row=>{wfSelectedTasks.add(row.dataset.task);row.querySelector('input').checked=true;});update();};
   const bulkState=tools.querySelector('.wf-bulk-state');[...new Set(data.projects.flatMap(p=>p.columns))].forEach(col=>{const option=document.createElement('option');option.value=col;option.textContent=col;bulkState.append(option);});
@@ -822,10 +825,13 @@ function wfTaskListTools() {
   tools.querySelector('.wf-archive-selected').onclick=()=>{if(!wfSelectedTasks.size)return;const count=wfSelectedTasks.size;if(!confirm('Lưu trữ '+count+' công việc đã chọn?'))return;if(wfSave(()=>{data.projects.forEach(p=>p.tasks.forEach(t=>{if(wfSelectedTasks.has(t.id))t.archived=true;}));})){wfSelectedTasks.clear();render();notify('Đã lưu trữ các công việc đã chọn.');}};
   const filters=document.createElement("details");filters.className="wf-filter-panel";filters.open=!!_WF.filtersOpen;const summary=document.createElement("summary");summary.textContent="☷ Bộ lọc & sắp xếp";filters.append(summary);const filterBody=document.createElement("div");filterBody.className="wf-filter-body";filters.append(filterBody);
   const original=$("#main .filter-row");if(original)filterBody.append(original);
-  filterBody.append(key.closest('label'),tools.querySelector('.wf-sort').closest('label'));wfFilterChoices(filterBody);tools.before(filters);filters.ontoggle=()=>{_WF.filtersOpen=filters.open;};
+  filterBody.append(key.closest('label'),tools.querySelector('.wf-sort').closest('label'),searchLabel);wfFilterChoices(filterBody);tools.before(filters);filters.ontoggle=()=>{_WF.filtersOpen=filters.open;};
   tools.querySelector('.wf-select-all').textContent='Chọn tất cả kết quả';
+ const clear=document.createElement('button');clear.type='button';clear.className='btn wf-clear-selection';clear.textContent='Bỏ chọn';clear.onclick=()=>{wfSelectedTasks.clear();rows.forEach(row=>row.querySelector('input').checked=false);update();visibility();};tools.append(clear);
   tools.classList.add('wf-bulk-tools');
-  const visibility=()=>{tools.classList.toggle('has-selection',wfSelectedTasks.size>0);};tools.addEventListener('change',visibility);tools.addEventListener('click',()=>queueMicrotask(visibility));table.addEventListener('change',visibility);visibility();
+  const visibility=()=>{tools.classList.toggle('has-selection',wfSelectedTasks.size>0);tools.querySelector('.wf-bulk-apply').disabled=!bulkState.value||!wfSelectedTasks.size;tools.querySelector('.wf-archive-selected').disabled=!wfSelectedTasks.size;};tools.addEventListener('change',visibility);tools.addEventListener('click',()=>queueMicrotask(visibility));table.addEventListener('change',visibility);visibility();
+  const sort=filters.querySelector('.wf-sort');sort.value=_WF.listSort||'default';sort.onchange({target:sort});
+  const reset=document.createElement('button');reset.type='button';reset.className='btn wf-clear-filters';reset.textContent='Xóa bộ lọc';reset.onclick=()=>{filterProject='';filterPriority='';filterStatus='';query='';$('#search').value='';_WF.listKeyword='';_WF.listSearch='';_WF.listSort='default';render();};filterBody.append(reset);
   update();
 }
 const wfRenderBefore = render;
@@ -833,6 +839,7 @@ render = function () {
   if(currentUser && _WF.navOwner!==currentUser.id){_WF.navOwner=currentUser.id;try{const last=JSON.parse(localStorage.getItem(KEY+'-navigation')||'null');if(last&&['projects','timeline','calendar','gantt'].includes(last.view)&&data.projects.some(p=>p.id===last.id&&!p.archived)){view=last.view;active=last.id;}}catch{}}
   wfRenderBefore();
   document.querySelector('#tabs')?.classList.toggle('has-current-project',!!active&&['projects','timeline','calendar','gantt'].includes(view));
+  const currentTab=document.querySelector('#tabs .tab.active .tab-initial');if(currentTab&&project()){const name=document.createElement('span');name.className='zen-active-tab-name';name.textContent=project().name;currentTab.replaceWith(name);}
   if (view === "notes") wfApplyCards();
   wfLabels();
   if (view === "tasks") wfTaskListTools();
@@ -1233,6 +1240,8 @@ function wfLabels() {
       detail.innerHTML = "<summary>Hiển thị</summary>";
       options.before(detail);
       detail.append(options);
+      const heading=$("#main .board-head,#main .page-heading"), toolbar=heading?.querySelector(".board-tools,.heading-actions,.project-actions");
+      if(toolbar)toolbar.insertBefore(detail,toolbar.querySelector('[data-action="new-task"]'));else heading?.append(detail);
     }
   }
 }
@@ -1317,9 +1326,12 @@ document.addEventListener('click',e=>{
 wfPaintFocus();
 
 function wfFilterChoices(root){
- root.querySelectorAll('select').forEach(select=>{
-  const picker=document.createElement('details');picker.className='wf-choice-picker';const summary=document.createElement('summary');const label=select.getAttribute('aria-label')||select.closest('label')?.firstChild?.textContent||'Lựa chọn';summary.textContent=label+' · '+(select.selectedOptions[0]?.textContent||'Tất cả');const choices=document.createElement('div');choices.className='wf-filter-chips';
-  [...select.options].forEach((option,index)=>{const b=document.createElement('button');b.type='button';b.textContent=option.textContent;b.setAttribute('aria-pressed',String(option.selected));const p=data.projects.find(p=>p.id===option.value),colors=['#7950c8','#aa5c87','#398365','#b57538'];const labelColor=data.projects.flatMap(p=>p.tasks.flatMap(t=>t.labels||[])).find(l=>l.name===option.value)?.color;b.style.setProperty('--chip-color',p?.color||labelColor||colors[index%colors.length]);b.onclick=()=>{select.value=option.value;select.dispatchEvent(new Event('change',{bubbles:true}));summary.textContent=label+' · '+option.textContent;choices.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));picker.open=false;};choices.append(b);});select.classList.add('wf-original-select');select.before(picker);picker.append(summary,choices);
+ const names=['Dự án','Mức độ','Trạng thái','Từ khóa','Sắp xếp'];
+ root.querySelectorAll('select').forEach((select,index)=>{
+  if(select.id==='filter-priority'&&select.options[0]?.value==='')select.options[0].textContent='Tất cả mức độ';
+  let label=select.closest('label');if(!label){label=document.createElement('label');select.before(label);label.append(select);}
+  label.classList.add('wf-filter-field');const name=names[index]||select.getAttribute('aria-label')||'Lựa chọn';
+  [...label.childNodes].filter(n=>n.nodeType===3).forEach(n=>n.remove());const title=document.createElement('span');title.textContent=name;label.prepend(title);select.setAttribute('aria-label',name);
  });
 }
 const wfSettingsBefore=accountPanel;
@@ -1354,3 +1366,36 @@ function wfKeywordWheels(root){
 }
 const wfProjectRefineBefore=projectForm;
 projectForm=function(p){wfProjectRefineBefore(p);const form=$('#editor-form'),rows=form.querySelector('#keyword-rows');if(!rows)return;wfKeywordWheels(rows);const observer=new MutationObserver(()=>wfKeywordWheels(rows));observer.observe(rows,{childList:true});$('#editor').addEventListener('close',()=>observer.disconnect(),{once:true});form.addEventListener('submit',e=>{if(rows.children.length>5){e.preventDefault();e.stopImmediatePropagation();notify('Tối đa 5 từ khóa dự án. Hãy bỏ các từ khóa không cần thiết.');}},{capture:true});};
+
+// Group task editing without changing the existing save handlers.
+const zenTaskDetailBefore=taskDetail;
+function zenArrangeTaskForm(isNew=false){const body=$('#editor-body'),form=$('#editor-form');
+ const heading=body.querySelector('.wf-task-heading');if(heading)heading.textContent=isNew?'Công việc mới':'Chi tiết công việc';
+ const sections={};const section=(key,title)=>{const s=document.createElement('section');s.className='zen-task-section';const h=document.createElement('h3');h.textContent=title;s.append(h);sections[key]=s;return s;};
+ const main=section('main','Nội dung chính'),schedule=section('schedule','Lịch & thời hạn'),actions=section('actions','Trạng thái & tài liệu'),checks=section('checks','Checklist');
+ const title=form.querySelector('[name=title]')?.closest('.field'),description=body.querySelector('.wf-description-field');if(title)main.append(title);if(description)main.append(description);
+ for(const selector of ['.form-intro','.priority-choices','[name=priority]','.keyword-choices','[name=tag]']){const el=body.querySelector(selector);if(el)main.append(el.closest('.field')||el);}
+ body.querySelectorAll(':scope>.help-copy').forEach(el=>{if(el.textContent.includes('Lịch theo giờ')||el.textContent.includes('Chỉnh trực tiếp'))el.remove();});
+ for(const name of ['due','start','end']){const label=form.querySelector('[name='+name+']')?.closest('.field');if(label)schedule.append(label);}
+ const info=document.createElement('p');info.className='help-copy';info.textContent='Bắt đầu và kết thúc là khoảng thực hiện. Hạn hoàn thành được đặt riêng. Giờ Việt Nam.';schedule.append(info);
+ const controls=body.querySelector('.detail-actions'),tools=body.querySelector('.wf-task-tools');const col=form.querySelector('[name=col]')?.closest('.field');if(col)actions.append(col);if(controls)actions.append(controls);if(tools)actions.append(tools);
+ const oldHeading=[...body.querySelectorAll(':scope>h3')].find(h=>h.textContent==='Checklist');if(oldHeading)oldHeading.remove();const list=body.querySelector('.wf-check-sort-list');if(list)checks.append(list);const extra=form.querySelector('[name=extra-checks],[name=checks]')?.closest('.field');if(extra)checks.append(extra);
+ const anchor=heading||body.firstChild;if(anchor){anchor.after(main);main.after(schedule);schedule.after(actions);actions.after(checks);}else body.prepend(main,schedule,actions,checks);
+ body.querySelectorAll('.fields-row').forEach(row=>{if(!row.children.length)row.remove();});
+ const status=document.createElement('p');status.className='zen-task-save-status';status.setAttribute('role','status');status.textContent=isNew?'Công việc mới chưa được lưu.':'Đã tải bản đã lưu. Chỉnh sửa rồi chọn Lưu thay đổi.';body.prepend(status);form.addEventListener('input',()=>{status.dataset.dirty='true';status.textContent='Có thay đổi chưa lưu · Chọn Lưu thay đổi để xác nhận.';},{signal:zenTaskSignal()});
+};
+taskDetail=function(p,t){zenTaskDetailBefore(p,t);zenArrangeTaskForm();};
+const zenTaskFormBefore=taskForm;taskForm=function(p,t,col='List'){zenTaskFormBefore(p,t,col);if(!t&&$('#editor-body [name=title]'))zenArrangeTaskForm(true);};
+function zenTaskSignal(){const c=new AbortController();$('#editor').addEventListener('close',()=>c.abort(),{once:true});return c.signal;}
+const zenProjectFormBefore=projectForm;
+projectForm=function(p){zenProjectFormBefore(p);if(!p)return;const appearance=$('#editor-body .project-appearance');if(!appearance)return;const section=document.createElement('section');section.className='zen-project-links';appearance.after(section);
+ const paint=()=>{section.replaceChildren();const h=document.createElement('h3');h.textContent='Ghi chú liên kết';section.append(h);const notes=(p.noteIds||[]).map(id=>data.notes?.find(n=>n.id===id)).filter(Boolean);if(!notes.length){const empty=document.createElement('p');empty.className='subtext';empty.textContent='Chưa có ghi chú liên kết. Chọn dự án này trong trình sửa ghi chú để thêm.';section.append(empty);}
+ notes.forEach(n=>{const row=document.createElement('div');row.className='zen-project-note';const open=document.createElement('button');open.type='button';open.className='zen-project-note-open';open.innerHTML=svgIcon('attach')+'<span>'+esc(n.title||'Ghi chú không tên')+'</span>';open.onclick=()=>{const preview=document.createElement('div');preview.className='zen-project-note-preview';preview.innerHTML=zenFormattedHTML(n.text||'');const old=row.querySelector('.zen-project-note-preview');if(old)old.remove();else row.append(preview);};const remove=document.createElement('button');remove.type='button';remove.className='zen-unlink-note';remove.textContent='×';remove.setAttribute('aria-label','Bỏ liên kết '+n.title);remove.title='Bỏ liên kết; giữ nguyên ghi chú';remove.onclick=()=>{if(wfSave(()=>{p.noteIds=p.noteIds.filter(id=>id!==n.id);})){paint();notify('Đã bỏ liên kết. Ghi chú vẫn được giữ.');}};row.append(open,remove);section.append(row);});};paint();};
+const zenScheduleBefore=scheduleEvents;
+scheduleEvents=function(){return dueTasks().flatMap(t=>{const events=[{...t,eventKind:t.start||t.end?'task':'deadline',eventStart:t.start||t.end||t.due,eventEnd:t.end||t.start||t.due}];if(t.due&&(t.start||t.end))events.push({...t,eventKind:'deadline',title:'Hạn: '+t.title,eventStart:t.due,eventEnd:t.due});for(const c of t.checks||[])if(c.start||c.end)events.push({...t,eventKind:'check',title:t.title+' / '+c.text,eventStart:c.start||c.end,eventEnd:c.end||c.start});return events;});};
+function zenDateDetails(t){return '<dl class="zen-date-details">'+[['Bắt đầu',t.start],['Kết thúc',t.end],['Hạn hoàn thành',t.due]].map(([label,value])=>'<div><dt>'+label+'</dt><dd>'+esc(value?value.replace('T',' · '):'Chưa đặt')+'</dd></div>').join('')+'</dl>';}
+function zenUnscheduled(){const tasks=dueTasks().filter(t=>!t.start&&!t.end&&!t.due);return '<section class="panel zen-unscheduled"><h2>Chưa lên lịch <small>'+tasks.length+'</small></h2>'+(tasks.map(t=>timelineTask(t)).join('')||'<p class="subtext">Mọi công việc đã có lịch hoặc hạn.</p>')+'</section>';}
+const zenCalendarBefore=workCalendar;
+workCalendar=function(){return zenCalendarBefore().replace('<p class="help-copy">Chạm vào công việc để xem chi tiết. Công việc chưa đặt ngày nằm trong Timeline.</p>','<p class="help-copy">Khoảng thực hiện: ngày bắt đầu → kết thúc. Mốc “Hạn” đánh dấu hạn hoàn thành riêng. Chạm task để xem đủ ba loại ngày.</p>')+zenUnscheduled();};
+workTimeline=function(){const tasks=dueTasks().filter(t=>t.start||t.end||t.due).sort((a,b)=>(a.start||a.end||a.due).localeCompare(b.start||b.end||b.due));return heading('LỊCH CÔNG VIỆC','Timeline','Bắt đầu, kết thúc và hạn hoàn thành · giờ Việt Nam','<button type="button" class="btn" data-zen-timeline-today>Hôm nay</button>')+'<section class="panel zen-timeline">'+tasks.map(t=>'<article class="timeline-item" data-zen-day="'+esc((t.start||t.end||t.due).slice(0,10))+'">'+timelineTask(t)+zenDateDetails(t)+'</article>').join('')+'</section>'+zenUnscheduled();};
+document.addEventListener('click',e=>{if(e.target.closest('[data-zen-timeline-today]')){const items=[...document.querySelectorAll('[data-zen-day]')];const target=items.find(x=>x.dataset.zenDay>=today())||items.at(-1);target?.scrollIntoView({behavior:'smooth',block:'center'});target?.classList.add('zen-today-focus');}});

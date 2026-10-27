@@ -177,4 +177,9 @@ function zenListMenu(select,rich){
   button.addEventListener('click',()=>{if(saved){rich.focus();const selection=window.getSelection();selection.removeAllRanges();selection.addRange(saved);}if(value==='indent'||value==='outdent'){document.execCommand(value,false);rich.dispatchEvent(new Event('input',{bubbles:true}));}else{select.value=value;select.dispatchEvent(new Event('change',{bubbles:true}));}details.open=false;});menu.append(button);
  }
  details.append(summary,menu);select.hidden=true;select.after(details);
+ const controller=new AbortController();
+ details.addEventListener('keydown',event=>{const buttons=[...menu.querySelectorAll('button')],i=buttons.indexOf(document.activeElement);if(event.key==='Escape'){event.preventDefault();details.open=false;summary.focus();}else if(['ArrowDown','ArrowUp','Home','End'].includes(event.key)){event.preventDefault();details.open=true;const next=event.key==='Home'?0:event.key==='End'?buttons.length-1:(i+(event.key==='ArrowDown'?1:-1)+buttons.length)%buttons.length;buttons[next].focus();}});
+ document.addEventListener('pointerdown',event=>{if(!details.contains(event.target))details.open=false;},{signal:controller.signal});
+ document.querySelector('#editor')?.addEventListener('close',()=>controller.abort(),{once:true});
 }
+
