@@ -19,7 +19,7 @@ function zenRichMarkdown(root){
    if(/text-decoration[^:]*:\s*[^;]*line-through/i.test(style))out='~~'+out+'~~';
   }
   if(/^h[1-3]$/.test(tag))return '#'.repeat(Number(tag[1]))+' '+out.trimEnd()+'\n';
-  if(tag==='li'){const parent=node.parentElement;const ordered=parent?.tagName==='OL';const i=parent?Array.from(parent.children).indexOf(node)+Number(parent.getAttribute('start')||1):1;const marker=parent?.classList?.contains('zen-list-circle')?'◦ ':parent?.classList?.contains('zen-list-square')?'▪ ':'- ';let depth=0;for(let p=parent?.parentElement;p&&p!==root;p=p.parentElement)if(p.tagName==='LI')depth++;const own=Array.from(node.childNodes).filter(n=>!['UL','OL'].includes(n.nodeName)).map(convert).join('').trimEnd();const nested=Array.from(node.children).filter(n=>['UL','OL'].includes(n.tagName)).map(convert).join('');return '  '.repeat(depth)+(ordered?i+'. ':marker)+own+'\n'+nested;}
+  if(tag==='li'){const parent=node.parentElement;const ordered=parent?.tagName==='OL';const i=parent?Array.from(parent.children).indexOf(node)+Number(parent.getAttribute('start')||1):1;const marker=parent?.classList?.contains('zen-list-circle')?'◦ ':parent?.classList?.contains('zen-list-square')?'▪ ':'- ';return (ordered?i+'. ':marker)+out.trimEnd()+'\n';}
   if(['p','div','blockquote'].includes(tag))return out.replace(/\n+$/,'')+'\n';
   return out;
  }
@@ -67,10 +67,11 @@ noteForm=function(n){
  // A new toolbar avoids the old textarea-oriented button handlers.
  const toolbar=document.createElement('div');toolbar.className='zen-format-tools zen-wysiwyg-toolbar';
  toolbar.setAttribute('role','toolbar');toolbar.setAttribute('aria-label','Định dạng trực tiếp nội dung');
- const commands=[['H1','h1','Tiêu đề lớn'],['H2','h2','Tiêu đề vừa'],['Aa','plain','Văn bản thường'],['B','bold','In đậm'],['I','italic','In nghiêng'],['U','underline','Gạch dưới'],['S̶','strike','Gạch ngang']];
+ const commands=[['H1','h1','Tiêu đề lớn'],['H2','h2','Tiêu đề vừa'],['Aa','plain','Văn bản thường'],['B','bold','In đậm'],['I','italic','In nghiêng'],['U','underline','Gạch dưới'],['<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 7h14M7 17h10M6 12h12"/></svg>','strike','Gạch ngang']];
  for(const [label,action,tip] of commands){
   const button=document.createElement('button');button.type='button';button.dataset.zenFormat=action;
-  button.setAttribute('aria-label',tip);button.title=tip;button.textContent=label;
+  button.setAttribute('aria-label',tip);button.title=tip;
+  if(action==='strike')button.innerHTML=label;else button.textContent=label;
   // Preserve the text selection when clicking a formatting action.
   button.addEventListener('mousedown',event=>event.preventDefault());
   toolbar.append(button);
@@ -96,7 +97,6 @@ noteForm=function(n){
  let debounce=0,pending=false;
  function syncText(){source.value=zenRichMarkdown(rich);}
  function commit(){
-  if(typeof _WF!=='undefined'&&_WF.note?.id===editor.dataset.noteId)return;
   if(!pending||!editor.open)return;
   syncText();
   if(source.value.length>10000){notify('Nội dung ghi chú tối đa 10.000 ký tự.');return;}
@@ -137,7 +137,6 @@ noteForm=function(n){
   if(zenApplyFormatting(rich,action)&&zenRichMarkdown(rich)!==was)queue();
   listPicker.value='';
  });
- zenListMenu(listPicker,rich);
  const title=composer.querySelector('input[name=title]');
  title?.addEventListener('input',()=>{
   pending=true;clearTimeout(debounce);debounce=setTimeout(commit,900);
@@ -145,36 +144,6 @@ noteForm=function(n){
  editor.addEventListener('close',()=>{
   clearTimeout(debounce);
   // Preserve typed content when closing while the debounce was pending.
-  if(pending&&!(typeof _WF!=='undefined'&&_WF.note?.id===editor.dataset.noteId)){syncText();if(source.value.length<=10000)editor.noteCommit?.();}
+  if(pending){syncText();if(source.value.length<=10000)editor.noteCommit?.();}
  },{once:true});
 };
-
-// Shared shortcuts for notes, tasks and projects.
-document.addEventListener?.('keydown',event=>{
- const rich=event.target.closest?.('.zen-wysiwyg');if(!rich||event.isComposing)return;
- const selection=window.getSelection(),node=selection?.anchorNode;
- const element=node?.nodeType===1?node:node?.parentElement;
- let action='';
- if((event.ctrlKey||event.metaKey)&&!event.altKey){action={b:'bold',i:'italic',u:'underline'}[event.key.toLowerCase()]||'';}
- else if(event.key==='Tab'&&element?.closest('li'))action=event.shiftKey?'outdent':'indent';
- else if(event.key==='*'&&!event.ctrlKey&&!event.metaKey&&!event.altKey&&selection?.isCollapsed){const block=element?.closest('p,div,li');if(block&&rich.contains(block)&&!block.textContent.trim())action='bullets';}
- if(!action)return;event.preventDefault();
- if(action==='indent'||action==='outdent')document.execCommand(action,false);else zenApplyFormatting(rich,action);
- rich.dispatchEvent(new Event('input',{bubbles:true}));
-});
-
-// The same accessible list menu is used by note, task and project editors.
-function zenListMenu(select,rich){
- const details=document.createElement('details');details.className='zen-list-menu';
- const summary=document.createElement('summary');summary.textContent='☷ Danh sách';summary.setAttribute('aria-label','Chọn kiểu danh sách');
- const menu=document.createElement('div');menu.className='zen-list-menu-options';menu.setAttribute('aria-label','Kiểu danh sách');
- let saved=null;
- const remember=()=>{const selection=window.getSelection();if(selection?.rangeCount&&rich.contains(selection.anchorNode))saved=selection.getRangeAt(0).cloneRange();};
- summary.addEventListener('pointerdown',remember);summary.addEventListener('focus',remember);
- for(const [value,label] of [['bullets','● Chấm tròn'],['numbers','1. Đánh số'],['circle','○ Vòng tròn'],['square','▪ Hình vuông'],['indent','→ Danh sách con'],['outdent','← Giảm cấp']]){
-  const button=document.createElement('button');button.type='button';button.textContent=label;
-  button.addEventListener('mousedown',e=>e.preventDefault());
-  button.addEventListener('click',()=>{if(saved){rich.focus();const selection=window.getSelection();selection.removeAllRanges();selection.addRange(saved);}if(value==='indent'||value==='outdent'){document.execCommand(value,false);rich.dispatchEvent(new Event('input',{bubbles:true}));}else{select.value=value;select.dispatchEvent(new Event('change',{bubbles:true}));}details.open=false;});menu.append(button);
- }
- details.append(summary,menu);select.hidden=true;select.after(details);
-}
