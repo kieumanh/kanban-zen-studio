@@ -825,7 +825,7 @@ function wfTaskListTools() {
   tools.querySelector('.wf-archive-selected').onclick=()=>{if(!wfSelectedTasks.size)return;const count=wfSelectedTasks.size;if(!confirm('Lưu trữ '+count+' công việc đã chọn?'))return;if(wfSave(()=>{data.projects.forEach(p=>p.tasks.forEach(t=>{if(wfSelectedTasks.has(t.id))t.archived=true;}));})){wfSelectedTasks.clear();render();notify('Đã lưu trữ các công việc đã chọn.');}};
   const filters=document.createElement("details");filters.className="wf-filter-panel";filters.open=!!_WF.filtersOpen;const summary=document.createElement("summary");summary.textContent="☷ Bộ lọc & sắp xếp";filters.append(summary);const filterBody=document.createElement("div");filterBody.className="wf-filter-body";filters.append(filterBody);
   const original=$("#main .filter-row");if(original)filterBody.append(original);
-  filterBody.append(key.closest('label'),tools.querySelector('.wf-sort').closest('label'),searchLabel);wfFilterChoices(filterBody);tools.before(filters);filters.ontoggle=()=>{_WF.filtersOpen=filters.open;};
+  filterBody.append(key.closest('label'),tools.querySelector('.wf-sort').closest('label'),searchLabel);wfFilterChoices(filterBody);tools.before(filters);filters.ontoggle=()=>{if(filters.isConnected)_WF.filtersOpen=filters.open;};
   tools.querySelector('.wf-select-all').textContent='Chọn tất cả kết quả';
  const clear=document.createElement('button');clear.type='button';clear.className='btn wf-clear-selection';clear.textContent='Bỏ chọn';clear.onclick=()=>{wfSelectedTasks.clear();rows.forEach(row=>row.querySelector('input').checked=false);update();visibility();};tools.append(clear);
   tools.classList.add('wf-bulk-tools');
@@ -836,6 +836,9 @@ function wfTaskListTools() {
 }
 const wfRenderBefore = render;
 render = function () {
+  // Capture native details state before replacing the DOM; toggle events are queued.
+  const filterPanel=document.querySelector('#main .wf-filter-panel');
+  if(filterPanel)_WF.filtersOpen=filterPanel.open;
   if(currentUser && _WF.navOwner!==currentUser.id){_WF.navOwner=currentUser.id;try{const last=JSON.parse(localStorage.getItem(KEY+'-navigation')||'null');if(last&&['projects','timeline','calendar','gantt'].includes(last.view)&&data.projects.some(p=>p.id===last.id&&!p.archived)){view=last.view;active=last.id;}}catch{}}
   wfRenderBefore();
   document.querySelector('#tabs')?.classList.toggle('has-current-project',!!active&&['projects','timeline','calendar','gantt'].includes(view));
