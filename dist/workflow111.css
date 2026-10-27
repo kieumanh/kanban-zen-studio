@@ -25,3 +25,5 @@
 }
 @media(prefers-reduced-motion:reduce){.work-arc{transition:none}}
 @media(max-width:700px){.month-event{display:block!important;-webkit-line-clamp:unset!important;text-overflow:clip!important}.month-event .matrix-chip,.month-event .calendar-progress,.month-event .progress-bar{display:none!important}}
+
+.wf-focus-header{align-items:flex-start;gap:16px}.wf-focus-header>div{min-width:0}.wf-focus-header h2{overflow-wrap:anywhere}.wf-focus-exit{display:inline-flex;align-items:center;justify-content:center;gap:8px;flex-shrink:0;border:1px solid #d8c6e6;border-radius:12px;color:#67418b;background:#fff;min-height:44px;padding:10px 15px;font-weight:700}.wf-focus-exit:hover,.wf-focus-exit:focus-visible{background:#f1e8f9;box-shadow:0 0 0 3px #d9c5ed}.wf-focus-exit:focus-visible{outline:2px solid #7950c8}@media(max-width:430px){.wf-focus-header{align-items:center}.wf-focus-exit{font-size:13px;padding:9px 10px}.wf-focus-header h2{font-size:clamp(18px,5vw,24px)}}
