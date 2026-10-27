@@ -61,3 +61,6 @@
  .wf-bulk-tools.has-selection label select{width:100%}
  .wf-bulk-tools.has-selection button{white-space:normal;min-height:44px}
 }
+
+/* Background music controls belong only to an active focus workspace. */
+body:not(.wf-is-focused) .zen-music{display:none!important}
