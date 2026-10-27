@@ -1374,7 +1374,7 @@ function wfKeywordWheels(root){
  });
 }
 const wfProjectRefineBefore=projectForm;
-projectForm=function(p){wfProjectRefineBefore(p);const form=$('#editor-form'),rows=form.querySelector('#keyword-rows');if(!rows)return;wfKeywordWheels(rows);const observer=new MutationObserver(()=>wfKeywordWheels(rows));observer.observe(rows,{childList:true});$('#editor').addEventListener('close',()=>observer.disconnect(),{once:true});form.addEventListener('submit',e=>{if(rows.children.length>5){e.preventDefault();e.stopImmediatePropagation();notify('Tối đa 5 từ khóa dự án. Hãy bỏ các từ khóa không cần thiết.');}},{capture:true});};
+projectForm=function(p){wfProjectRefineBefore(p);const form=$('#editor-form'),rows=form.querySelector('#keyword-rows');if(!rows)return;const del=form.querySelector('[data-action=delete-project]');if(del){del.classList.add('zen-project-delete');rows.closest('.keyword-editor')?.after(del);}wfKeywordWheels(rows);const observer=new MutationObserver(()=>wfKeywordWheels(rows));observer.observe(rows,{childList:true});$('#editor').addEventListener('close',()=>observer.disconnect(),{once:true});form.addEventListener('submit',e=>{if(rows.children.length>5){e.preventDefault();e.stopImmediatePropagation();notify('Tối đa 5 từ khóa dự án. Hãy bỏ các từ khóa không cần thiết.');}},{capture:true});};
 
 // Group task editing without changing the existing save handlers.
 const zenTaskDetailBefore=taskDetail;
@@ -1387,7 +1387,7 @@ function zenArrangeTaskForm(isNew=false){const body=$('#editor-body'),form=$('#e
  body.querySelectorAll(':scope>.help-copy').forEach(el=>{if(el.textContent.includes('Lịch theo giờ')||el.textContent.includes('Chỉnh trực tiếp'))el.remove();});
  for(const name of ['due','start','end']){const label=form.querySelector('[name='+name+']')?.closest('.field');if(label)schedule.append(label);}
  const info=document.createElement('p');info.className='help-copy';info.textContent='Bắt đầu và kết thúc là khoảng thực hiện. Hạn hoàn thành được đặt riêng. Giờ Việt Nam.';schedule.append(info);
- const controls=body.querySelector('.detail-actions'),tools=body.querySelector('.wf-task-tools');const col=form.querySelector('[name=col]')?.closest('.field');if(col)actions.append(col);if(controls)actions.append(controls);if(tools)actions.append(tools);
+ const controls=body.querySelector('.detail-actions'),tools=body.querySelector('.wf-task-tools');const col=form.querySelector('[name=col]')?.closest('.field');if(col){if(!isNew&&controls?.querySelector('.wf-state-choices'))col.classList.add('zen-state-select-secondary');actions.append(col);}if(controls)actions.append(controls);if(tools)actions.append(tools);
  const oldHeading=[...body.querySelectorAll(':scope>h3')].find(h=>h.textContent==='Checklist');if(oldHeading)oldHeading.remove();const list=body.querySelector('.wf-check-sort-list');if(list)checks.append(list);const extra=form.querySelector('[name=extra-checks],[name=checks]')?.closest('.field');if(extra)checks.append(extra);
  const anchor=heading||body.firstChild;if(anchor){anchor.after(main);main.after(schedule);schedule.after(actions);actions.after(checks);}else body.prepend(main,schedule,actions,checks);
  body.querySelectorAll('.fields-row').forEach(row=>{if(!row.children.length)row.remove();});
