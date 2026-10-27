@@ -137,6 +137,7 @@ noteForm=function(n){
   if(zenApplyFormatting(rich,action)&&zenRichMarkdown(rich)!==was)queue();
   listPicker.value='';
  });
+ zenListMenu(listPicker,rich);
  const title=composer.querySelector('input[name=title]');
  title?.addEventListener('input',()=>{
   pending=true;clearTimeout(debounce);debounce=setTimeout(commit,900);
@@ -161,3 +162,19 @@ document.addEventListener?.('keydown',event=>{
  if(action==='indent'||action==='outdent')document.execCommand(action,false);else zenApplyFormatting(rich,action);
  rich.dispatchEvent(new Event('input',{bubbles:true}));
 });
+
+// The same accessible list menu is used by note, task and project editors.
+function zenListMenu(select,rich){
+ const details=document.createElement('details');details.className='zen-list-menu';
+ const summary=document.createElement('summary');summary.textContent='☷ Danh sách';summary.setAttribute('aria-label','Chọn kiểu danh sách');
+ const menu=document.createElement('div');menu.className='zen-list-menu-options';menu.setAttribute('aria-label','Kiểu danh sách');
+ let saved=null;
+ const remember=()=>{const selection=window.getSelection();if(selection?.rangeCount&&rich.contains(selection.anchorNode))saved=selection.getRangeAt(0).cloneRange();};
+ summary.addEventListener('pointerdown',remember);summary.addEventListener('focus',remember);
+ for(const [value,label] of [['bullets','● Chấm tròn'],['numbers','1. Đánh số'],['circle','○ Vòng tròn'],['square','▪ Hình vuông'],['indent','→ Danh sách con'],['outdent','← Giảm cấp']]){
+  const button=document.createElement('button');button.type='button';button.textContent=label;
+  button.addEventListener('mousedown',e=>e.preventDefault());
+  button.addEventListener('click',()=>{if(saved){rich.focus();const selection=window.getSelection();selection.removeAllRanges();selection.addRange(saved);}if(value==='indent'||value==='outdent'){document.execCommand(value,false);rich.dispatchEvent(new Event('input',{bubbles:true}));}else{select.value=value;select.dispatchEvent(new Event('change',{bubbles:true}));}details.open=false;});menu.append(button);
+ }
+ details.append(summary,menu);select.hidden=true;select.after(details);
+}
