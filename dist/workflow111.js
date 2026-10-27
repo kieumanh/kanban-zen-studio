@@ -1371,7 +1371,7 @@ projectForm=function(p){wfProjectRefineBefore(p);const form=$('#editor-form'),ro
 const zenTaskDetailBefore=taskDetail;
 function zenArrangeTaskForm(isNew=false){const body=$('#editor-body'),form=$('#editor-form');
  const heading=body.querySelector('.wf-task-heading');if(heading)heading.textContent=isNew?'Công việc mới':'Chi tiết công việc';
- const sections={};const section=(key,title)=>{const s=document.createElement('section');s.className='zen-task-section';const h=document.createElement('h3');h.textContent=title;s.append(h);sections[key]=s;return s;};
+ const section=(key,title)=>{const s=document.createElement('section');s.className='zen-task-section';const h=document.createElement('h3');h.textContent=title;s.append(h);return s;};
  const main=section('main','Nội dung chính'),schedule=section('schedule','Lịch & thời hạn'),actions=section('actions','Trạng thái & tài liệu'),checks=section('checks','Checklist');
  const title=form.querySelector('[name=title]')?.closest('.field'),description=body.querySelector('.wf-description-field');if(title)main.append(title);if(description)main.append(description);
  for(const selector of ['.form-intro','.priority-choices','[name=priority]','.keyword-choices','[name=tag]']){const el=body.querySelector(selector);if(el)main.append(el.closest('.field')||el);}

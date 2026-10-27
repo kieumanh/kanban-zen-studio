@@ -35,6 +35,7 @@ assert.equal(evalJS("noteExtraValues({querySelector(){return {value:'false'}}},{
 assert.ok(read('dist/notes196.js').includes("requestAPI('resources?"),'searches real resource API');
 assert.ok(read('dist/notes196.js').includes('n.items'),'searches checklist data');
 assert.ok(read('dist/index.html').includes('src="/keep198.js"'));
-assert.ok(read('scripts/build.mjs').includes("'/keep198.js'"));
+assert.ok(JSON.parse(read('scripts/assets.json')).some(([route])=>route==='/keep198.js')); 
 for(const path of ['dist/app.js','server/api.mjs'])assert.ok(read(path).includes("typeof n.pinned!=='boolean'"),path+' pinned validator');
 console.log('PASS: illustrated motifs, formatted safe markup, PIN state, global resources search and JS syntax.');
+
