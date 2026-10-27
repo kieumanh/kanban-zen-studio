@@ -13,6 +13,8 @@ The browser loads ordered classic scripts from `dist/index.html`. They share wor
 - Required JSON request bodies to be non-null objects. Arrays and primitives now fail with HTTP 400 before route handlers; malformed and oversized bodies are also covered.
 - Removed an unused editor bookkeeping object. Earlier cleanup removed a dead schedule alias and temporary label reassignment.
 
+- Fixed a browser timing bug where queued native details toggle events could lose the filter panel state during a project-filter rerender. Capture the current panel state before replacing the DOM and ignore toggle events from detached panels. A browser regression opens the panel and triggers a rerender in the same event-loop turn.
+
 ## Validation
 
 The complete automated suite covers login/session expiry, CSRF and origin checks, account isolation, workspace validation, revision conflicts and three-way merges, note history, file metadata/upload isolation and quotas, reminder scheduling and retries, shared-report permissions and expiry, and UI data transformations. New boundary tests cover JSON null/arrays/primitives, malformed JSON and size limits. Browser workflows passed at 390, 820 and 1440 pixels, including task saves, drag operations, notes, filters, project links and reload/sync behavior.
