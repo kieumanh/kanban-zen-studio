@@ -39,7 +39,8 @@
    const badge=document.createElement('span');badge.className='zen-search-kind';badge.textContent=item.icon||icon;badge.setAttribute('aria-hidden','true');
    const body=document.createElement('span');body.className='zen-search-copy';
    const title=document.createElement('strong');title.textContent=item.title||'Không có tiêu đề';
-   const sub=document.createElement('small');sub.textContent=item.subtitle||label;
+   const q=norm(search.value);const value=title.textContent,index=norm(value).indexOf(q);if(q&&index>=0){title.replaceChildren(document.createTextNode(value.slice(0,index)));const mark=document.createElement('mark');mark.textContent=value.slice(index,index+q.length);title.append(mark,document.createTextNode(value.slice(index+q.length)));}
+   const sub=document.createElement('small');sub.textContent=label+' · '+(item.subtitle||label);
    body.append(title,sub);button.append(badge,body);
    button.onclick=()=>{close();onSelect(item);};section.append(button);
   }

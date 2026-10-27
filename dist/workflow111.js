@@ -430,17 +430,9 @@ taskDetail = function (p, t) {
     if (!save()) { data.taskTemplates.pop(); notify("Chưa lưu được mẫu."); return; }
     render(); taskDetail(project, task); notify("Đã lưu mẫu công việc.");
   });
-  const related = document.createElement("section");
-  related.className = "wf-related";
-  related.innerHTML = '<h3>Ghi chú liên quan</h3><div class="wf-related-list"></div><label class="field"><span>Liên kết ghi chú</span><select><option value="">Chọn ghi chú…</option></select></label><button type="button" class="btn">+ Liên kết</button>';
-  const relatedList = related.querySelector(".wf-related-list"), notePicker = related.querySelector("select");
-  (data.notes || []).filter(n => !(t.noteIds || []).includes(n.id)).forEach(n => { const option = document.createElement("option"); option.value=n.id; option.textContent=n.title; notePicker.append(option); });
-  (t.noteIds || []).forEach(id => { const note = data.notes?.find(n=>n.id===id), row=document.createElement("div"), open=document.createElement("button"), remove=document.createElement("button"); open.type=remove.type="button"; open.className=remove.className="btn";open.textContent=note?.title || "Ghi chú không còn khả dụng";open.disabled=!note; remove.textContent="Bỏ liên kết";open.onclick=()=>wfAfterTaskSave(()=>noteForm(data.notes.find(n=>n.id===id)));remove.onclick=()=>wfAfterTaskSave((project,task)=>{const old=task.noteIds;task.noteIds=old.filter(x=>x!==id);if(!save()){task.noteIds=old;return notify("Chưa lưu được liên kết.");}render();taskDetail(project,task);});row.append(open,remove);relatedList.append(row); });
-  related.querySelector(":scope > button").onclick=()=>{const id=notePicker.value;if(!id)return;wfAfterTaskSave((project,task)=>{task.noteIds ||= [];if(!task.noteIds.includes(id))task.noteIds.push(id);if(!save()){task.noteIds=task.noteIds.filter(x=>x!==id);return notify("Chưa lưu được liên kết.");}render();taskDetail(project,task);});};
-  body.append(related);
   const comments = document.createElement("section");
   comments.className = "wf-comments";
-  comments.innerHTML = '<h3>Ghi chú nhanh</h3><div class="wf-comment-list"></div><label class="field"><span>Thêm bình luận</span><textarea maxlength="2000" rows="2" placeholder="Ghi lại điều cần nhớ…"></textarea></label><button type="button" class="btn">+ Thêm bình luận</button>';
+  comments.innerHTML = '<h3>Bình luận</h3><div class="wf-comment-list"></div><label class="field"><span class="sr-only">Viết bình luận</span><textarea maxlength="2000" rows="5" placeholder="Ghi lại điều cần nhớ…"></textarea></label><button type="button" class="btn">+ Thêm bình luận</button>';
   const commentList = comments.querySelector(".wf-comment-list");
   (t.comments || []).forEach(comment => { const item = document.createElement("p"); const time = document.createElement("small"); time.textContent = new Date(comment.at).toLocaleString("vi-VN", {timeZone:"Asia/Ho_Chi_Minh"}); const text = document.createElement("span"); text.textContent = comment.text; item.append(time, text); commentList.append(item); });
   comments.querySelector("button").onclick = () => {
@@ -592,6 +584,13 @@ noteForm = function (n) {
       refresh();render();
     };choices.append(button);
   });
+  const taskLabel=document.createElement("h4");taskLabel.textContent="Liên kết với công việc";links.append(taskLabel);
+  const picker=document.createElement("select");picker.setAttribute("aria-label","Chọn công việc để liên kết");picker.innerHTML='<option value="">Chọn công việc…</option>';
+  data.projects.filter(p=>!p.archived).forEach(p=>{const group=document.createElement("optgroup");group.label=p.name;p.tasks.filter(t=>!t.archived).forEach(t=>{const option=document.createElement("option");option.value=t.id;option.textContent=t.title;option.selected=(t.noteIds||[]).includes(id);group.append(option);});picker.append(group);});picker.value="";
+  const linkTask=document.createElement("button");linkTask.type="button";linkTask.className="btn";linkTask.textContent="Liên kết / Bỏ liên kết";
+  const linked=document.createElement("p");linked.className="subtext";const refreshLinks=()=>{linked.replaceChildren();data.projects.forEach(p=>p.tasks.filter(t=>(t.noteIds||[]).includes(id)).forEach(t=>{const open=document.createElement('button');open.type='button';open.className='btn';open.textContent=p.name+' · '+t.title;open.onclick=()=>{if(state.pending&&!state.flush())return;taskDetail(p,t);};linked.append(open);}));if(!linked.childNodes.length)linked.textContent='Chưa liên kết công việc';};refreshLinks();
+  linkTask.onclick=()=>{const task=data.projects.flatMap(p=>p.tasks).find(t=>t.id===picker.value);if(!task)return;if((state.pending||!data.notes?.some(n=>n.id===id))&&!state.flush())return;if(wfSave(()=>{task.noteIds ||= [];if(task.noteIds.includes(id))task.noteIds=task.noteIds.filter(x=>x!==id);else {if(task.noteIds.length>=100)throw Error('Tối đa 100 liên kết.');task.noteIds.push(id);}})){refreshLinks();render();}};
+  links.append(picker,linkTask,linked);
   composer.append(links);
   const queue = () => {
     if ((currentUser?.id || KEY) !== owner) return;
@@ -824,18 +823,19 @@ function wfTaskListTools() {
   const bulkState=tools.querySelector('.wf-bulk-state');[...new Set(data.projects.flatMap(p=>p.columns))].forEach(col=>{const option=document.createElement('option');option.value=col;option.textContent=col;bulkState.append(option);});
   tools.querySelector('.wf-bulk-apply').onclick=()=>{const col=bulkState.value;if(!col||!wfSelectedTasks.size)return;const selected=data.projects.flatMap(p=>p.tasks.filter(t=>wfSelectedTasks.has(t.id)).map(t=>({p,t})));if(selected.some(({p})=>!p.columns.includes(col)))return notify('Một dự án không có trạng thái này. Hãy chọn lại các công việc phù hợp.');if(wfSave(()=>selected.forEach(({t})=>{t.col=col;if(col==='Done')t.checks.forEach(c=>c.done=true);else if(t.checks.length&&t.checks.every(c=>c.done))t.checks.at(-1).done=false;}))){wfSelectedTasks.clear();render();notify('Đã chuyển trạng thái các công việc đã chọn.');}};
   tools.querySelector('.wf-archive-selected').onclick=()=>{if(!wfSelectedTasks.size)return;const count=wfSelectedTasks.size;if(!confirm('Lưu trữ '+count+' công việc đã chọn?'))return;if(wfSave(()=>{data.projects.forEach(p=>p.tasks.forEach(t=>{if(wfSelectedTasks.has(t.id))t.archived=true;}));})){wfSelectedTasks.clear();render();notify('Đã lưu trữ các công việc đã chọn.');}};
+  const filters=document.createElement("details");filters.className="wf-filter-panel";filters.open=!!_WF.filtersOpen;const summary=document.createElement("summary");summary.textContent="☷ Bộ lọc & sắp xếp";filters.append(summary);const filterBody=document.createElement("div");filterBody.className="wf-filter-body";filters.append(filterBody);
+  const original=$("#main .filter-row");if(original)filterBody.append(original);
+  filterBody.append(key.closest('label'),tools.querySelector('.wf-sort').closest('label'));tools.before(filters);filters.ontoggle=()=>{_WF.filtersOpen=filters.open;};
+  tools.querySelector('.wf-select-all').textContent='Chọn tất cả kết quả';
+  tools.classList.add('wf-bulk-tools');
+  const visibility=()=>{tools.classList.toggle('has-selection',wfSelectedTasks.size>0);};tools.addEventListener('change',visibility);tools.addEventListener('click',()=>queueMicrotask(visibility));table.addEventListener('change',visibility);visibility();
   update();
 }
-const wfBoardWithNotes = board;
-board = function () {
-  const html=wfBoardWithNotes(), p=project();
-  if (!p?.noteIds?.length) return html;
-  return '<section class="wf-board-notes"><strong>Ghi chú dự án</strong><div>'+p.noteIds.map(id=>{const note=data.notes?.find(n=>n.id===id);return note?'<button class="btn" type="button" data-wf-open-note="'+esc(id)+'">'+esc(note.title)+'</button>':'<span class="subtext">Ghi chú không còn khả dụng</span>';}).join('')+'</div></section>'+html;
-};
-document.addEventListener("click", e=>{const button=e.target.closest("[data-wf-open-note]");if(!button)return;const note=data.notes?.find(n=>n.id===button.dataset.wfOpenNote);if(note)noteForm(note);});
 const wfRenderBefore = render;
 render = function () {
+  if(currentUser && _WF.navOwner!==currentUser.id){_WF.navOwner=currentUser.id;try{const last=JSON.parse(localStorage.getItem(KEY+'-navigation')||'null');if(last&&['projects','timeline','calendar','gantt'].includes(last.view)&&data.projects.some(p=>p.id===last.id&&!p.archived)){view=last.view;active=last.id;}}catch{}}
   wfRenderBefore();
+  document.querySelector('#tabs')?.classList.toggle('has-current-project',!!active&&['projects','timeline','calendar','gantt'].includes(view));
   if (view === "notes") wfApplyCards();
   wfLabels();
   if (view === "tasks") wfTaskListTools();
@@ -1289,3 +1289,5 @@ document.addEventListener("error", e => {
   const status=document.createElement("span");status.className="wf-file-unavailable";status.textContent="Ảnh không còn khả dụng hoặc không thể tải.";
   e.target.replaceWith(status);
 }, true);
+
+const wfGoBefore=go;go=function(v,id=null){wfGoBefore(v,id);if(['projects','timeline','calendar','gantt'].includes(view)&&active)try{localStorage.setItem(KEY+'-navigation',JSON.stringify({view,id:active}));}catch{}};

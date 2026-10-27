@@ -1,4 +1,4 @@
-# Kanban Zen Studio v1.12.0
+# Kanban Zen Studio v1.12.1
 
 
 Production: https://kanban.huongthiennature.com/
@@ -202,3 +202,7 @@ Chuẩn hóa định dạng module workflow và helper quản lý tệp. Gom cá
 ## v1.12.0 · Không gian làm việc liền mạch
 
 Bổ sung mẫu task, bình luận nhanh, liên kết ghi chú với task và dự án, chọn trạng thái bằng nhãn, lịch sử ghi chú trong trình soạn thảo và thao tác nhiều task. Cải thiện vị trí checklist, trạng thái đồng bộ và hiển thị tệp.
+
+## v1.12.1 · Gọn bộ lọc, rõ công việc
+
+Bộ lọc bật/tắt; thao tác hàng loạt xuất hiện khi chọn task. Liên kết chỉ thao tác trong ghi chú. Bình luận rộng hơn, nút canh phải. Mặc định checklist trên Kanban; ghi nhớ góc nhìn/dự án và làm nổi tab hiện tại. Từ khóa tìm kiếm có tô sáng và nhãn nguồn.
