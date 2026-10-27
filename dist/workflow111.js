@@ -235,7 +235,7 @@ function wfRichEditor(source) {
   const sync = () => {
     source.value = zenRichMarkdown(rich);
     source.setCustomValidity(
-      source.value.length > 5000 ? "Mô tả tối đa 5.000 ký tự." : "",
+      source.value.length > (source.maxLength > 0 ? source.maxLength : 5000) ? "Mô tả vượt giới hạn ký tự." : "",
     );
   };
   rich.addEventListener("input", sync);
@@ -591,7 +591,8 @@ noteForm = function (n) {
   const linked=document.createElement("p");linked.className="subtext";const refreshLinks=()=>{linked.replaceChildren();data.projects.forEach(p=>p.tasks.filter(t=>(t.noteIds||[]).includes(id)).forEach(t=>{const open=document.createElement('button');open.type='button';open.className='btn';open.textContent=p.name+' · '+t.title;open.onclick=()=>{if(state.pending&&!state.flush())return;taskDetail(p,t);};linked.append(open);}));if(!linked.childNodes.length)linked.textContent='Chưa liên kết công việc';};refreshLinks();
   linkTask.onclick=()=>{const task=data.projects.flatMap(p=>p.tasks).find(t=>t.id===picker.value);if(!task)return;if((state.pending||!data.notes?.some(n=>n.id===id))&&!state.flush())return;if(wfSave(()=>{task.noteIds ||= [];if(task.noteIds.includes(id))task.noteIds=task.noteIds.filter(x=>x!==id);else {if(task.noteIds.length>=100)throw Error('Tối đa 100 liên kết.');task.noteIds.push(id);}})){refreshLinks();render();}};
   links.append(picker,linkTask,linked);
-  composer.append(links);
+  const disclosure=document.createElement("details");disclosure.className="wf-link-picker";const summary=document.createElement("summary");summary.textContent="Liên kết dự án / công việc";disclosure.append(summary,links);
+  const actions=composer.querySelector(".note-editor-actions");if(actions)actions.before(disclosure);else composer.append(disclosure);
   const queue = () => {
     if ((currentUser?.id || KEY) !== owner) return;
     pending = state.pending = true;
@@ -839,6 +840,7 @@ render = function () {
   if (view === "notes") wfApplyCards();
   wfLabels();
   if (view === "tasks") wfTaskListTools();
+  wfPaintFocus();
 };
 function wfMove(kind, id, pid, target, after) {
   if (kind === "check") {
@@ -1291,3 +1293,28 @@ document.addEventListener("error", e => {
 }, true);
 
 const wfGoBefore=go;go=function(v,id=null){wfGoBefore(v,id);if(['projects','timeline','calendar','gantt'].includes(view)&&active)try{localStorage.setItem(KEY+'-navigation',JSON.stringify({view,id:active}));}catch{}};
+
+const wfProjectFormBefore=projectForm;
+projectForm=function(p){wfProjectFormBefore(p);wfRichEditor($('#editor-body [name=description]'));};
+const wfProjectBoardBefore=board;
+board=function(){const p=project();let html=wfProjectBoardBefore();if(p?.description)html=html.replace('<p class="subtext">'+esc(p.description)+'</p>','<div class="subtext wf-project-description">'+zenFormattedHTML(p.description)+'</div>');if(!p?.noteIds?.length)return html;return html+'<section class="wf-project-documents"><h2>Ghi chú đã liên kết</h2><div class="wf-project-note-grid">'+p.noteIds.map(id=>{const n=data.notes?.find(n=>n.id===id);return n?'<article class="panel"><h3>'+esc(n.title)+'</h3><div class="wf-note-excerpt">'+zenFormattedHTML(n.text||'')+'</div><button type="button" class="btn" data-wf-document="'+esc(id)+'">Mở ghi chú</button></article>':'<p class="subtext">Ghi chú không còn khả dụng.</p>';}).join('')+'</div></section>';};
+function wfFocusTasks(){return allTasks().filter(t=>!t.archived&&t.col!=='Done'&&!t.project.archived);}
+function wfFocusCard(t){return '<button type="button" class="wf-focus-card" data-wf-focus="'+esc(t.id)+'" data-pid="'+esc(t.project.id)+'"><small>'+esc(t.project.name)+'</small><strong>'+esc(t.title)+'</strong><span>'+(t.due?'Hạn '+dateLabel(t.due):'Chưa đặt hạn')+' · '+esc(PRIORITIES[t.priority]||'Chưa phân loại')+'</span></button>';}
+function wfPaintFocus(){
+ const anchor=document.querySelector('.sidebar [data-view="tasks"]');if(anchor&&!document.querySelector('[data-view="focus"]')){const button=document.createElement('button');button.type='button';button.className='nav';button.dataset.view='focus';button.textContent='◉ Chế độ tập trung';anchor.after(button);}
+ const selected=_WF.focus,projectData=selected&&project(selected.p),task=projectData?.tasks.find(t=>t.id===selected.t&&!t.archived);
+ const focused=view==='focus'&&!!task;document.body.classList.toggle('wf-is-focused',focused);
+ if(view!=='focus')return;
+ $('#crumb').textContent='Chế độ tập trung';document.querySelector('[data-view="focus"]')?.classList.add('active');
+ if(!task){_WF.focus=null;const tasks=wfFocusTasks(),day=today(),overdue=tasks.filter(t=>t.due&&t.due<day),due=tasks.filter(t=>t.due===day),rank={q1:0,q2:1,q3:2,q4:3};const suggested=[...tasks].sort((a,b)=>(rank[a.priority]??4)-(rank[b.priority]??4)||(a.due||'9999').localeCompare(b.due||'9999')).slice(0,3);$('#main').innerHTML=heading('MỘT VIỆC MỖI LÚC','Chọn điều cần tập trung','Gợi ý theo mức độ quan trọng và hạn công việc. Bạn chủ động chọn việc phù hợp.')+[ ['Gợi ý 3 việc quan trọng',suggested],['Đến hạn hôm nay',due],['Quá hạn',overdue] ].map(([title,list])=>'<section class="wf-focus-group"><h2>'+title+' <small>'+list.length+'</small></h2><div class="wf-focus-grid">'+(list.map(wfFocusCard).join('')||'<p class="subtext">Không có công việc trong nhóm này.</p>')+'</div></section>').join('');return;}
+ const ids=[...new Set([...(projectData.noteIds||[]),...(task.noteIds||[])])],notes=ids.map(id=>data.notes?.find(n=>n.id===id)).filter(Boolean);
+ $('#main').innerHTML='<div class="wf-focus-header"><div><small>DỰ ÁN ĐANG LÀM</small><h2>'+esc(projectData.name)+'</h2></div><button type="button" class="btn" data-wf-focus-exit>Thoát tập trung</button></div><div class="wf-focus-workspace"><article class="panel"><h1>'+esc(task.title)+'</h1><p class="subtext">'+esc(task.col)+(task.due?' · Hạn '+dateLabel(task.due):'')+'</p><div>'+zenFormattedHTML(task.description||'')+'</div>'+bar(taskPct(task),projectData.color)+'<h3>Checklist</h3>'+task.checks.map(c=>'<label class="check-row"><input type="checkbox" data-card-check="'+esc(c.id)+'" data-check-task="'+esc(task.id)+'" data-check-project="'+esc(projectData.id)+'" '+(c.done?'checked':'')+'><span>'+esc(c.text)+'</span></label>').join('')+'<button type="button" class="btn" data-task="'+esc(task.id)+'" data-pid="'+esc(projectData.id)+'">Chỉnh sửa công việc</button></article><aside class="panel"><h2>Ghi chú</h2>'+notes.map(n=>'<article class="wf-focus-note"><h3>'+esc(n.title)+'</h3><div>'+zenFormattedHTML(n.text||'')+'</div><button type="button" class="btn" data-wf-document="'+esc(n.id)+'">Mở ghi chú</button></article>').join('')+(!notes.length?'<p class="subtext">Chưa có ghi chú liên kết. Bạn có thể tạo ghi chú và liên kết với công việc này.</p>':'')+'<button type="button" class="btn" data-wf-focus-note>+ Viết ghi chú</button></aside></div>';
+}
+document.addEventListener('click',e=>{
+ const target=e.target.closest('[data-wf-focus],[data-wf-focus-exit],[data-wf-document],[data-wf-focus-note]');if(!target)return;
+ if(target.hasAttribute('data-wf-focus-exit')){_WF.focus=null;render();return;}
+ if(target.dataset.wfFocus){_WF.focus={p:target.dataset.pid,t:target.dataset.wfFocus};view='focus';render();window.scrollTo(0,0);return;}
+ if(target.dataset.wfDocument){const n=data.notes?.find(n=>n.id===target.dataset.wfDocument);if(n)noteForm(n);return;}
+ if(target.hasAttribute('data-wf-focus-note'))noteForm();
+});
+wfPaintFocus();

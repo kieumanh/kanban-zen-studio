@@ -1,4 +1,4 @@
-# Kanban Zen Studio v1.12.1
+# Kanban Zen Studio v1.13.0
 
 
 Production: https://kanban.huongthiennature.com/
@@ -206,3 +206,7 @@ Bổ sung mẫu task, bình luận nhanh, liên kết ghi chú với task và d�
 ## v1.12.1 · Gọn bộ lọc, rõ công việc
 
 Bộ lọc bật/tắt; thao tác hàng loạt xuất hiện khi chọn task. Liên kết chỉ thao tác trong ghi chú. Bình luận rộng hơn, nút canh phải. Mặc định checklist trên Kanban; ghi nhớ góc nhìn/dự án và làm nổi tab hiện tại. Từ khóa tìm kiếm có tô sáng và nhãn nguồn.
+
+## v1.13.0 · Một việc mỗi lúc
+
+Màn hình tập trung gom việc đến hạn, quá hạn và ba gợi ý theo mức ưu tiên. Khi chọn một việc chỉ giữ dự án, task/checklist và ghi chú liên quan. Hiển thị ghi chú liên kết trong dự án, hỗ trợ định dạng mô tả dự án và thu gọn lựa chọn liên kết trước nút Xong.
