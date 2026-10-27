@@ -826,7 +826,7 @@ function wfTaskListTools() {
   tools.querySelector('.wf-archive-selected').onclick=()=>{if(!wfSelectedTasks.size)return;const count=wfSelectedTasks.size;if(!confirm('Lưu trữ '+count+' công việc đã chọn?'))return;if(wfSave(()=>{data.projects.forEach(p=>p.tasks.forEach(t=>{if(wfSelectedTasks.has(t.id))t.archived=true;}));})){wfSelectedTasks.clear();render();notify('Đã lưu trữ các công việc đã chọn.');}};
   const filters=document.createElement("details");filters.className="wf-filter-panel";filters.open=!!_WF.filtersOpen;const summary=document.createElement("summary");summary.textContent="☷ Bộ lọc & sắp xếp";filters.append(summary);const filterBody=document.createElement("div");filterBody.className="wf-filter-body";filters.append(filterBody);
   const original=$("#main .filter-row");if(original)filterBody.append(original);
-  filterBody.append(key.closest('label'),tools.querySelector('.wf-sort').closest('label'));tools.before(filters);filters.ontoggle=()=>{_WF.filtersOpen=filters.open;};
+  filterBody.append(key.closest('label'),tools.querySelector('.wf-sort').closest('label'));wfFilterChoices(filterBody);tools.before(filters);filters.ontoggle=()=>{_WF.filtersOpen=filters.open;};
   tools.querySelector('.wf-select-all').textContent='Chọn tất cả kết quả';
   tools.classList.add('wf-bulk-tools');
   const visibility=()=>{tools.classList.toggle('has-selection',wfSelectedTasks.size>0);};tools.addEventListener('change',visibility);tools.addEventListener('click',()=>queueMicrotask(visibility));table.addEventListener('change',visibility);visibility();
@@ -1318,3 +1318,21 @@ document.addEventListener('click',e=>{
  if(target.hasAttribute('data-wf-focus-note'))noteForm();
 });
 wfPaintFocus();
+
+function wfFilterChoices(root){
+ root.querySelectorAll('select').forEach(select=>{
+  const picker=document.createElement('details');picker.className='wf-choice-picker';const summary=document.createElement('summary');const label=select.getAttribute('aria-label')||select.closest('label')?.firstChild?.textContent||'Lựa chọn';summary.textContent=label+' · '+(select.selectedOptions[0]?.textContent||'Tất cả');const choices=document.createElement('div');choices.className='wf-filter-chips';
+  [...select.options].forEach((option,index)=>{const b=document.createElement('button');b.type='button';b.textContent=option.textContent;b.setAttribute('aria-pressed',String(option.selected));const p=data.projects.find(p=>p.id===option.value),colors=['#7950c8','#aa5c87','#398365','#b57538'];const labelColor=data.projects.flatMap(p=>p.tasks.flatMap(t=>t.labels||[])).find(l=>l.name===option.value)?.color;b.style.setProperty('--chip-color',p?.color||labelColor||colors[index%colors.length]);b.onclick=()=>{select.value=option.value;select.dispatchEvent(new Event('change',{bubbles:true}));summary.textContent=label+' · '+option.textContent;choices.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));picker.open=false;};choices.append(b);});select.classList.add('wf-original-select');select.before(picker);picker.append(summary,choices);
+ });
+}
+const wfSettingsBefore=accountPanel;
+accountPanel=function(){wfSettingsBefore();const body=$('#editor-body');if(!body?.querySelector('.profile-card'))return;body.classList.add('wf-settings');const profile=body.querySelector('.profile-card');const groups=[];
+ const wrap=(title,nodes)=>{const d=document.createElement('details');d.className='wf-settings-group';const summary=document.createElement('summary');summary.textContent=title;d.append(summary);const content=document.createElement('div');content.className='wf-settings-content';nodes.forEach(n=>content.append(n));d.append(content);groups.push(d);return d;};
+ const profileGroup=wrap('Hồ sơ',[profile]);profileGroup.open=true;
+ body.querySelectorAll('.help-actions').forEach(row=>{if(row.querySelector('h3.settings-section')){while(row.firstChild)row.before(row.firstChild);row.remove();}});
+ const headings=[...body.querySelectorAll(':scope > h3.settings-section')];headings.forEach(h=>{const nodes=[];let n=h.nextSibling;while(n&&!(n.nodeType===1&&(n.matches('h3.settings-section,.settings-signout')))){const next=n.nextSibling;nodes.push(n);n=next;}const title=h.textContent.includes('Thông báo')?'Thông báo':h.textContent.includes('Dữ liệu')?'Dữ liệu & đồng bộ':'Tài khoản & bảo mật';h.remove();wrap(title,nodes);});
+ const sessions=body.querySelector('.settings-signout');if(sessions)wrap('Phiên đăng nhập',[sessions]);
+ const other=[...body.children].filter(n=>n.tagName!=='H2');if(other.length)wrap('Các tính năng khác',other);
+ groups.forEach(group=>body.append(group));
+ $('#editor').addEventListener('close',()=>body.classList.remove('wf-settings'),{once:true});
+};

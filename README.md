@@ -1,4 +1,4 @@
-# Kanban Zen Studio v1.13.0
+# Kanban Zen Studio v1.13.1
 
 
 Production: https://kanban.huongthiennature.com/
@@ -210,3 +210,7 @@ Bộ lọc bật/tắt; thao tác hàng loạt xuất hiện khi chọn task. Li
 ## v1.13.0 · Một việc mỗi lúc
 
 Màn hình tập trung gom việc đến hạn, quá hạn và ba gợi ý theo mức ưu tiên. Khi chọn một việc chỉ giữ dự án, task/checklist và ghi chú liên quan. Hiển thị ghi chú liên kết trong dự án, hỗ trợ định dạng mô tả dự án và thu gọn lựa chọn liên kết trước nút Xong.
+
+## v1.13.1 · Gọn lựa chọn, rõ trạng thái
+
+Bộ lọc dùng nhãn màu bo tròn; Cài đặt chia nhóm; nút thêm checklist canh phải. Dọn Thùng rác chờ đồng bộ đang chạy, chủ động thử lại bản bị chặn và trả kết quả; bảo vệ khi tài khoản đổi hoặc lưu cục bộ lỗi.
