@@ -577,14 +577,18 @@ noteForm = function (n) {
   const links = document.createElement("section");
   links.className = "wf-project-links";
   const title = document.createElement("h3"); title.textContent = "Liên kết với dự án"; links.append(title);
+  const search=document.createElement('input');search.type='search';search.placeholder='Tìm dự án…';search.setAttribute('aria-label','Tìm dự án để liên kết');links.append(search);
+  const linkStatus=document.createElement('p');linkStatus.className='subtext wf-link-status';linkStatus.setAttribute('role','status');links.append(linkStatus);
   const choices = document.createElement("div"); choices.className = "wf-project-choices"; links.append(choices);
+  const updateStatus=()=>{const linked=data.projects.filter(p=>(p.noteIds||[]).includes(id));linkStatus.textContent=linked.length?'Đã liên kết: '+linked.map(p=>p.name).join(', '):'Chưa liên kết. Chọn dự án để ghi chú xuất hiện tại dự án đó.';};updateStatus();
+  search.oninput=()=>{const q=search.value.trim().toLocaleLowerCase('vi');choices.querySelectorAll('button').forEach(b=>b.hidden=!b.textContent.toLocaleLowerCase('vi').includes(q));};
   data.projects.filter(p=>!p.archived).forEach(project=>{
     const button=document.createElement("button");button.type="button";button.className="wf-project-choice";button.style.setProperty("--project-color",project.color);button.textContent=project.name;
     const refresh=()=>button.setAttribute("aria-pressed",String((project.noteIds||[]).includes(id)));refresh();
     button.onclick=()=>{
       if ((state.pending || !data.notes?.some(n=>n.id===id)) && !state.flush()) return;
       if (!wfSave(()=>{project.noteIds ||= [];if(project.noteIds.includes(id))project.noteIds=project.noteIds.filter(x=>x!==id);else {if(project.noteIds.length>=100)throw Error("Tối đa 100 ghi chú liên kết mỗi dự án.");project.noteIds.push(id);}}))return;
-      refresh();render();
+      refresh();updateStatus();render();
     };choices.append(button);
   });
   const disclosure=document.createElement("details");disclosure.className="wf-link-picker";const summary=document.createElement("summary");summary.textContent="Liên kết với dự án";disclosure.append(summary,links);
@@ -847,6 +851,7 @@ render = function () {
   wfLabels();
   if (view === "tasks") wfTaskListTools();
   wfPaintFocus();
+  wfWorkspaceUsability();
 };
 function wfMove(kind, id, pid, target, after) {
   if (kind === "check") {
@@ -1348,6 +1353,7 @@ accountPanel=function(){wfSettingsBefore();const body=$('#editor-body');if(!body
  const help=document.createElement('button');help.type='button';help.className='btn';help.dataset.action='help';help.textContent='Hướng dẫn sử dụng';wrap('Hướng dẫn',[help]);
  const helpGroup=groups.pop();const sessionIndex=groups.findIndex(g=>g.querySelector('summary')?.textContent==='Phiên đăng nhập');groups.splice(sessionIndex<0?groups.length:sessionIndex,0,helpGroup);
  groups.forEach(group=>body.append(group));
+ const search=document.createElement('input');search.type='search';search.placeholder='Tìm cài đặt…';search.setAttribute('aria-label','Tìm cài đặt');search.className='wf-settings-search';body.prepend(search);search.oninput=()=>{const q=search.value.trim().toLocaleLowerCase('vi');groups.forEach(g=>{g.hidden=!!q&&!g.textContent.toLocaleLowerCase('vi').includes(q);if(q&&!g.hidden)g.open=true;});};
  $('#editor').addEventListener('close',()=>body.classList.remove('wf-settings'),{once:true});
 };
 
@@ -1401,3 +1407,26 @@ const zenCalendarBefore=workCalendar;
 workCalendar=function(){return zenCalendarBefore().replace('<p class="help-copy">Chạm vào công việc để xem chi tiết. Công việc chưa đặt ngày nằm trong Timeline.</p>','<p class="help-copy">Khoảng thực hiện: ngày bắt đầu → kết thúc. Mốc “Hạn” đánh dấu hạn hoàn thành riêng. Chạm task để xem đủ ba loại ngày.</p>')+zenUnscheduled();};
 workTimeline=function(){const tasks=dueTasks().filter(t=>t.start||t.end||t.due).sort((a,b)=>(a.start||a.end||a.due).localeCompare(b.start||b.end||b.due));return heading('LỊCH CÔNG VIỆC','Timeline','Bắt đầu, kết thúc và hạn hoàn thành · giờ Việt Nam','<button type="button" class="btn" data-zen-timeline-today>Hôm nay</button>')+(active&&project()?projectSummary(project()):'')+'<section class="panel zen-timeline">'+tasks.map(t=>'<article class="timeline-item" data-zen-day="'+esc((t.start||t.end||t.due).slice(0,10))+'">'+timelineTask(t)+zenDateDetails(t)+'</article>').join('')+'</section>'+zenUnscheduled();};
 document.addEventListener('click',e=>{if(e.target.closest('[data-zen-timeline-today]')){const items=[...document.querySelectorAll('[data-zen-day]')];const target=items.find(x=>x.dataset.zenDay>=today())||items.at(-1);target?.scrollIntoView({behavior:'smooth',block:'center'});target?.classList.add('zen-today-focus');}});
+
+// Shared view refinements run within the existing render lifecycle.
+function wfWorkspaceUsability(){
+ const tabs=document.querySelector('#tabs');
+ if(tabs&&!document.querySelector('.wf-project-finder')){
+  const button=document.createElement('button');button.type='button';button.className='btn wf-project-finder';button.textContent='Tìm dự án';button.onclick=wfFindProject;tabs.after(button);
+ }
+ if(view==='dashboard'&&!document.querySelector('.wf-today-plan')){
+  const tasks=allTasks().filter(t=>t.col!=='Done'&&!t.archived),day=today();
+  const lists=[['Hôm nay',tasks.filter(t=>t.due===day)],['Quá hạn',tasks.filter(t=>t.due&&t.due<day)],['Đang thực hiện',tasks.filter(t=>t.col==='Doing')]];
+  const section=document.createElement('section');section.className='wf-today-plan';section.setAttribute('aria-label','Kế hoạch hôm nay');
+  section.innerHTML=lists.map(([title,items])=>'<article class="panel"><h2>'+title+' <small>'+items.length+' việc</small></h2>'+(workTaskList(items,3)||'<p class="subtext">Không có công việc trong nhóm này.</p>')+'<button type="button" class="text-btn" data-view="tasks">Xem tất cả công việc →</button></article>').join('');
+  const stats=document.querySelector('#main .stats');if(stats)stats.before(section);else document.querySelector('#main').append(section);
+ }
+ const bulk=document.querySelector('.wf-bulk-tools');if(bulk&&!bulk.querySelector('.wf-bulk-title')){const title=document.createElement('strong');title.className='wf-bulk-title';title.textContent='Thao tác với mục đã chọn';bulk.prepend(title);}
+ const filters=document.querySelector('.wf-filter-panel');if(filters&&!filters.querySelector('.wf-filter-hint')){const hint=document.createElement('p');hint.className='subtext wf-filter-hint';hint.textContent='Lọc để tìm công việc. Chọn các mục trong kết quả để thao tác hàng loạt.';filters.querySelector('.wf-filter-body')?.prepend(hint);}
+}
+function wfFindProject(){
+ modal('<h2>Chọn dự án</h2><label class="field">Tìm dự án<input type="search" data-project-search placeholder="Tên dự án…"></label><div class="wf-project-results"></div>',null,true);
+ const results=document.querySelector('.wf-project-results'),projects=visibleProjects();
+ const paint=()=>{const q=document.querySelector('[data-project-search]').value.trim().toLocaleLowerCase('vi');results.replaceChildren();for(const pinned of [true,false]){const list=projects.filter(p=>!!p.pinned===pinned&&p.name.toLocaleLowerCase('vi').includes(q));if(!list.length)continue;const h=document.createElement('h3');h.textContent=pinned?'Đã ghim':'Các dự án';results.append(h);list.forEach(p=>{const b=document.createElement('button');b.type='button';b.className='btn';b.textContent=p.name+(p.id===active?' · Đang mở':'');b.onclick=()=>{document.querySelector('#editor').close();go('projects',p.id);};results.append(b);});}if(!results.children.length)results.textContent='Không tìm thấy dự án phù hợp.';};
+ document.querySelector('[data-project-search]').oninput=paint;paint();
+}
