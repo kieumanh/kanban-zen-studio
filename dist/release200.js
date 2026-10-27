@@ -52,18 +52,21 @@ noteForm=function(n){
  const group=row.querySelector('.note-group'),upload=row.querySelector('label.btn'),saveButton=row.querySelector('#note-save');const footer=document.createElement('div');footer.className='note-editor-actions';row.after(footer);for(const node of [kind,group,color,row.querySelector('.note-reminder-options'),motif,upload])if(node)row.append(node);if(history)footer.append(history);if(saveButton)footer.append(saveButton);
  history.onclick=async()=>{
   editor.querySelector('.zen-wysiwyg')?.dispatchEvent(new Event('blur'));
-  if(editor.noteCommit?.()!==true)return;
+  const noteId=editor.dataset.noteId;
+  if((typeof _WF!=='undefined'&&_WF.note?.pending)||!data.notes?.some(n=>n.id===noteId)){if(editor.noteCommit?.()!==true)return;}
   const id=editor.dataset.noteId;history.disabled=true;
   const owner=currentUser?.id;
   try{
-   await flushCloud(true);if(dirty||syncConflict)throw Error('Hãy hoàn tất đồng bộ trước khi xem lịch sử trên máy chủ.');
+   await flushCloud(true);
+   const hasUnsyncedChanges=dirty||syncConflict||syncing;
    const response=await requestAPI('note-history?id='+encodeURIComponent(id));if(owner!==currentUser?.id)return;
    composer.querySelector('.note-history-inline')?.remove();const d=document.createElement('section');d.className='note-history-inline';
    d.innerHTML='<header><h2>Phiên bản ghi chú · 7 ngày</h2><button type="button" aria-label="Đóng lịch sử">×</button></header><p>Khôi phục tạo một lần lưu mới; phiên bản hiện tại vẫn được giữ trong lịch sử. Lịch sử bắt đầu từ bản cập nhật này.</p><div class="note-history-list"></div>';
    d.querySelector('header button').onclick=()=>d.remove();
+   if(hasUnsyncedChanges){const warning=document.createElement('p');warning.className='subtext';warning.textContent='Đây là lịch sử trên máy chủ. Bản nháp hiện tại chưa đồng bộ; hãy đồng bộ trước khi khôi phục.';d.querySelector('header').after(warning);}
    const list=d.querySelector('.note-history-list');
    if(!response.versions.length)list.textContent='Chưa có phiên bản cũ. Mỗi lần lưu thay đổi được máy chủ chấp nhận sẽ giữ lại bản trước đó.';
-   for(const version of response.versions){const item=document.createElement('section');item.className='history-version';const h=document.createElement('h3');h.textContent=new Date(version.saved).toLocaleString('vi-VN',{timeZone:'Asia/Ho_Chi_Minh'})+' · #'+version.revision;const preview=document.createElement('pre');preview.textContent=version.data.title+'\n\n'+version.data.text+(version.data.type==='todo'?'\n'+(version.data.items||[]).map(x=>(x.done?'☑ ':'☐ ')+x.text).join('\n'):'');const restore=document.createElement('button');restore.type='button';restore.className='btn';restore.textContent='Khôi phục phiên bản này';restore.onclick=()=>{if(owner!==currentUser?.id)return;d.remove();editor.close();const target=data.notes?.find(x=>x.id===id);if(!target)return;const before=structuredClone(target);Object.keys(target).forEach(k=>delete target[k]);Object.assign(target,structuredClone(version.data),{id});if(!save()){Object.keys(target).forEach(k=>delete target[k]);Object.assign(target,before);return;}render();noteForm(target);notify('Đã khôi phục · đang đồng bộ và lưu lịch sử.');};item.append(h,preview,restore);list.append(item);}
+   for(const version of response.versions){const item=document.createElement('section');item.className='history-version';const h=document.createElement('h3');h.textContent=new Date(version.saved).toLocaleString('vi-VN',{timeZone:'Asia/Ho_Chi_Minh'})+' · #'+version.revision;const preview=document.createElement('pre');preview.textContent=version.data.title+'\n\n'+version.data.text+(version.data.type==='todo'?'\n'+(version.data.items||[]).map(x=>(x.done?'☑ ':'☐ ')+x.text).join('\n'):'');const restore=document.createElement('button');restore.type='button';restore.className='btn';restore.textContent='Khôi phục phiên bản này';restore.disabled=hasUnsyncedChanges;restore.onclick=()=>{if(owner!==currentUser?.id)return;if(dirty||syncing||syncConflict||(typeof _WF!=='undefined'&&_WF.note?.pending)){notify('Hãy đồng bộ bản nháp trước khi khôi phục.');return;}d.remove();editor.close();const target=data.notes?.find(x=>x.id===id);if(!target)return;const before=structuredClone(target);Object.keys(target).forEach(k=>delete target[k]);Object.assign(target,structuredClone(version.data),{id});if(!save()){Object.keys(target).forEach(k=>delete target[k]);Object.assign(target,before);return;}render();noteForm(target);notify('Đã khôi phục · đang đồng bộ và lưu lịch sử.');};item.append(h,preview,restore);list.append(item);}
    composer.append(d);d.scrollIntoView({block:'nearest'});
   }catch(e){notify(e.message);}finally{history.disabled=false;}
  };

@@ -1301,7 +1301,7 @@ board=function(){const p=project();let html=wfProjectBoardBefore();if(p?.descrip
 function wfFocusTasks(){return allTasks().filter(t=>!t.archived&&t.col!=='Done'&&!t.project.archived);}
 function wfFocusCard(t){return '<button type="button" class="wf-focus-card" data-wf-focus="'+esc(t.id)+'" data-pid="'+esc(t.project.id)+'"><small>'+esc(t.project.name)+'</small><strong>'+esc(t.title)+'</strong><span>'+(t.due?'Hạn '+dateLabel(t.due):'Chưa đặt hạn')+' · '+esc(PRIORITIES[t.priority]||'Chưa phân loại')+'</span></button>';}
 function wfPaintFocus(){
- const anchor=document.querySelector('.sidebar [data-view="tasks"]');if(anchor&&!document.querySelector('[data-view="focus"]')){const button=document.createElement('button');button.type='button';button.className='nav';button.dataset.view='focus';button.textContent='◉ Chế độ tập trung';anchor.after(button);}
+ const anchor=document.querySelector('.sidebar [data-view="tasks"]');if(anchor&&!document.querySelector('[data-view="focus"]')){const button=document.createElement('button');button.type='button';button.className='nav';button.dataset.view='focus';button.innerHTML=svgIcon('natureFocus')+'<span>Chế độ tập trung</span>';anchor.after(button);}
  const selected=_WF.focus,projectData=selected&&project(selected.p),task=projectData?.tasks.find(t=>t.id===selected.t&&!t.archived);
  const focused=view==='focus'&&!!task;document.body.classList.toggle('wf-is-focused',focused);
  if(view!=='focus')return;

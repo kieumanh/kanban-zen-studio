@@ -1,4 +1,4 @@
-# Kanban Zen Studio v1.13.1
+# Kanban Zen Studio v1.13.2
 
 
 Production: https://kanban.huongthiennature.com/
@@ -214,3 +214,7 @@ Màn hình tập trung gom việc đến hạn, quá hạn và ba gợi ý theo 
 ## v1.13.1 · Gọn lựa chọn, rõ trạng thái
 
 Bộ lọc dùng nhãn màu bo tròn; Cài đặt chia nhóm; nút thêm checklist canh phải. Dọn Thùng rác chờ đồng bộ đang chạy, chủ động thử lại bản bị chặn và trả kết quả; bảo vệ khi tài khoản đổi hoặc lưu cục bộ lỗi.
+
+## v1.13.2 · Bảo vệ bản nháp
+
+Giữ bản nháp không hợp lệ thay vì ghi đè khi đăng nhập lại, cung cấp bản sao JSON; phân biệt nguyên nhân báo đồng bộ và cho phép xem lịch sử máy chủ khi còn thay đổi chưa gửi. Hoàn thiện giao diện bộ lọc, tập trung và liên kết công việc.
