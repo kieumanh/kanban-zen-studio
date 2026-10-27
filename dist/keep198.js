@@ -86,14 +86,22 @@ function zenApplyNoteCards(){
 }
 function zenFormattedHTML(text){
  function inline(s){return esc(s).replace(/\*\*([^*\n]+)\*\*/g,'<strong>$1</strong>').replace(/__([^_\n]+)__/g,'<u>$1</u>').replace(/~~([^~\n]+)~~/g,'<s>$1</s>').replace(/(^|[^\*])\*([^*\n]+)\*(?!\*)/g,'$1<em>$2</em>');}
- const lines=String(text||'').split(/\r?\n/);let list='';const out=[];
- const close=()=>{if(list){out.push('</'+list+'>');list='';}};
+ const lines=String(text||'').split(/\r?\n/),out=[],stack=[];
+ const closeOne=()=>{const item=stack.pop();if(item)out.push('</li></'+item.type+'>');};
+ const closeAll=()=>{while(stack.length)closeOne();};
  for(const line of lines){
-  const li=line.match(/^\s*([-•◦▪]|\d+\.)\s+(.*)/);
-  if(li){const type=/\d/.test(li[1])?'ol':'ul';if(type!==list){close();out.push('<'+type+(type==='ol'?' start="'+parseInt(li[1],10)+'"':' class="zen-list-'+(li[1]==='◦'?'circle':li[1]==='▪'?'square':'disc')+'"')+'>');list=type;}out.push('<li>'+inline(li[2])+'</li>');continue;}
-  close();const h=line.match(/^(#{1,3})\s+(.+)/);out.push(h?'<h'+h[1].length+'>'+inline(h[2])+'</h'+h[1].length+'>':line.trim()?'<p>'+inline(line)+'</p>':'<div class="zen-blank-line"></div>');
+  const li=line.match(/^(\s*)([-•◦▪]|\d+\.)\s+(.*)/);
+  if(li){
+   const depth=Math.min(Math.floor(li[1].replace(/\t/g,'  ').length/2),stack.length),type=/\d/.test(li[2])?'ol':'ul';
+   while(stack.length>depth+1)closeOne();
+   if(stack.length===depth+1&&stack[depth].type!==type)closeOne();
+   if(stack.length===depth){out.push('<'+type+(type==='ol'?' start="'+parseInt(li[2],10)+'"':' class="zen-list-'+(li[2]==='◦'?'circle':li[2]==='▪'?'square':'disc')+'"')+'><li>');stack.push({type});}
+   else out.push('</li><li>');
+   out.push(inline(li[3]));continue;
+  }
+  closeAll();const h=line.match(/^(#{1,3})\s+(.+)/);out.push(h?'<h'+h[1].length+'>'+inline(h[2])+'</h'+h[1].length+'>':line.trim()?'<p>'+inline(line)+'</p>':'<div class="zen-blank-line"></div>');
  }
- close();return out.join('');
+ closeAll();return out.join('');
 }
 const zenOldContent=noteContent;
 noteContent=function(n){

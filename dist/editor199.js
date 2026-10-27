@@ -19,7 +19,7 @@ function zenRichMarkdown(root){
    if(/text-decoration[^:]*:\s*[^;]*line-through/i.test(style))out='~~'+out+'~~';
   }
   if(/^h[1-3]$/.test(tag))return '#'.repeat(Number(tag[1]))+' '+out.trimEnd()+'\n';
-  if(tag==='li'){const parent=node.parentElement;const ordered=parent?.tagName==='OL';const i=parent?Array.from(parent.children).indexOf(node)+Number(parent.getAttribute('start')||1):1;const marker=parent?.classList?.contains('zen-list-circle')?'◦ ':parent?.classList?.contains('zen-list-square')?'▪ ':'- ';return (ordered?i+'. ':marker)+out.trimEnd()+'\n';}
+  if(tag==='li'){const parent=node.parentElement;const ordered=parent?.tagName==='OL';const i=parent?Array.from(parent.children).indexOf(node)+Number(parent.getAttribute('start')||1):1;const marker=parent?.classList?.contains('zen-list-circle')?'◦ ':parent?.classList?.contains('zen-list-square')?'▪ ':'- ';let depth=0;for(let p=parent?.parentElement;p&&p!==root;p=p.parentElement)if(p.tagName==='LI')depth++;const own=Array.from(node.childNodes).filter(n=>!['UL','OL'].includes(n.nodeName)).map(convert).join('').trimEnd();const nested=Array.from(node.children).filter(n=>['UL','OL'].includes(n.tagName)).map(convert).join('');return '  '.repeat(depth)+(ordered?i+'. ':marker)+own+'\n'+nested;}
   if(['p','div','blockquote'].includes(tag))return out.replace(/\n+$/,'')+'\n';
   return out;
  }
@@ -147,3 +147,17 @@ noteForm=function(n){
   if(pending&&!(typeof _WF!=='undefined'&&_WF.note?.id===editor.dataset.noteId)){syncText();if(source.value.length<=10000)editor.noteCommit?.();}
  },{once:true});
 };
+
+// Shared shortcuts for notes, tasks and projects.
+document.addEventListener?.('keydown',event=>{
+ const rich=event.target.closest?.('.zen-wysiwyg');if(!rich||event.isComposing)return;
+ const selection=window.getSelection(),node=selection?.anchorNode;
+ const element=node?.nodeType===1?node:node?.parentElement;
+ let action='';
+ if((event.ctrlKey||event.metaKey)&&!event.altKey){action={b:'bold',i:'italic',u:'underline'}[event.key.toLowerCase()]||'';}
+ else if(event.key==='Tab'&&element?.closest('li'))action=event.shiftKey?'outdent':'indent';
+ else if(event.key==='*'&&!event.ctrlKey&&!event.metaKey&&!event.altKey&&selection?.isCollapsed){const block=element?.closest('p,div,li');if(block&&rich.contains(block)&&!block.textContent.trim())action='bullets';}
+ if(!action)return;event.preventDefault();
+ if(action==='indent'||action==='outdent')document.execCommand(action,false);else zenApplyFormatting(rich,action);
+ rich.dispatchEvent(new Event('input',{bubbles:true}));
+});

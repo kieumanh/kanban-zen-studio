@@ -1301,7 +1301,7 @@ board=function(){const p=project();let html=wfProjectBoardBefore();if(p?.descrip
 function wfFocusTasks(){return allTasks().filter(t=>!t.archived&&t.col!=='Done'&&!t.project.archived);}
 function wfFocusCard(t){return '<button type="button" class="wf-focus-card" data-wf-focus="'+esc(t.id)+'" data-pid="'+esc(t.project.id)+'"><small>'+esc(t.project.name)+'</small><strong>'+esc(t.title)+'</strong><span>'+(t.due?'Hạn '+dateLabel(t.due):'Chưa đặt hạn')+' · '+esc(PRIORITIES[t.priority]||'Chưa phân loại')+'</span></button>';}
 function wfPaintFocus(){
- const anchor=document.querySelector('.sidebar [data-view="tasks"]');if(anchor&&!document.querySelector('[data-view="focus"]')){const button=document.createElement('button');button.type='button';button.className='nav';button.dataset.view='focus';button.innerHTML=svgIcon('natureFocus')+'<span>Chế độ tập trung</span>';anchor.after(button);}
+ iconPaths.focus=iconPaths.natureFocus;const anchor=document.querySelector('.sidebar [data-view="tasks"]');if(anchor&&!document.querySelector('[data-view="focus"]')){const button=document.createElement('button');button.type='button';button.className='nav';button.dataset.view='focus';button.innerHTML='<span>'+svgIcon('natureFocus')+'</span>Chế độ tập trung';anchor.after(button);}
  const selected=_WF.focus,projectData=selected&&project(selected.p),task=projectData?.tasks.find(t=>t.id===selected.t&&!t.archived);
  const focused=view==='focus'&&!!task;document.body.classList.toggle('wf-is-focused',focused);
  if(view!=='focus')return;
@@ -1333,6 +1333,7 @@ accountPanel=function(){wfSettingsBefore();const body=$('#editor-body');if(!body
  const headings=[...body.querySelectorAll(':scope > h3.settings-section')];headings.forEach(h=>{const nodes=[];let n=h.nextSibling;while(n&&!(n.nodeType===1&&(n.matches('h3.settings-section,.settings-signout')))){const next=n.nextSibling;nodes.push(n);n=next;}const title=h.textContent.includes('Thông báo')?'Thông báo':h.textContent.includes('Dữ liệu')?'Dữ liệu & đồng bộ':'Tài khoản & bảo mật';h.remove();wrap(title,nodes);});
  const sessions=body.querySelector('.settings-signout');if(sessions)wrap('Phiên đăng nhập',[sessions]);
  const other=[...body.children].filter(n=>n.tagName!=='H2');if(other.length)wrap('Các tính năng khác',other);
+ const help=document.createElement('button');help.type='button';help.className='btn';help.dataset.action='help';help.textContent='Hướng dẫn sử dụng';wrap('Hướng dẫn',[help]);
  groups.forEach(group=>body.append(group));
  $('#editor').addEventListener('close',()=>body.classList.remove('wf-settings'),{once:true});
 };
