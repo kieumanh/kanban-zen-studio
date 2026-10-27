@@ -800,3 +800,19 @@ dialog .modal-head{position:sticky;top:0;z-index:5;background:var(--paper);paddi
 #editor.keep-editor .zen-link-live .zen-link-remove{flex:0 0 32px;width:32px;height:32px}
 @media(max-width:560px){#editor.keep-editor .note-attachment-image-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#editor.keep-editor .note-attachment-image-preview{height:96px}}
 @media(max-width:360px){#editor.keep-editor .note-attachment-image-grid{grid-template-columns:1fr}}
+
+/* Status controls remain visible and touchable on small screens. */
+@media(max-width:700px){#save-state span:first-child{display:inline-flex;align-items:center;justify-content:center}#save-state span:last-child{display:none}#save-state svg{display:block;width:20px;height:20px;min-width:20px}}
+.wf-state-choices{display:flex;flex-wrap:wrap;gap:6px;align-items:center}.wf-state-choice{border:1px solid #d9c6ed;border-radius:999px;padding:8px 12px;background:#f3ecfb;color:#60418a;font:inherit;cursor:pointer}.wf-state-choice[data-state-index="1"]{background:#fcecf4;color:#995478;border-color:#edc6da}.wf-state-choice[data-state-index="2"]{background:#fff2e7;color:#9e5a27;border-color:#efc5a4}.wf-state-choice[data-state-index="3"]{background:#eaf7ee;color:#29764b;border-color:#b3dfc2}.wf-state-choice[aria-pressed="true"]{box-shadow:0 0 0 2px currentColor inset;font-weight:700}
+
+.wf-comments{margin:24px 0;padding:18px;border:1px solid #e9e2ef;border-radius:18px;background:#fcfafd}.wf-comment-list p{display:grid;gap:4px;padding:10px 12px;background:#fff;border-radius:12px;white-space:pre-wrap;overflow-wrap:anywhere}.wf-comment-list small{color:#806f8e}
+
+.note-history-inline{margin:18px 0;padding:18px;border:1px solid #e8deef;border-radius:18px;background:#faf7fd}.note-history-inline header{display:flex;align-items:center;justify-content:space-between}.note-history-inline header button{border:0;background:transparent;font-size:24px;cursor:pointer}.note-history-inline .note-history-list{border-left:2px solid #d8c2ea;margin-left:8px;padding-left:16px}.note-history-inline .history-version{position:relative;margin:14px 0}.note-history-inline .history-version:before{content:"";position:absolute;left:-22px;top:9px;width:10px;height:10px;border-radius:50%;background:#9b74bc}.note-history-inline pre{white-space:pre-wrap;overflow-wrap:anywhere}
+
+.wf-related{margin:24px 0;padding:18px;border:1px solid #e9e2ef;border-radius:18px}.wf-related-list>div{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+
+.wf-list-tools{display:flex;gap:10px;flex-wrap:wrap;align-items:end;margin:12px 0}.wf-list-tools label{display:grid;gap:4px;font-size:12px}.wf-list-tools select{padding:8px;border:1px solid #e3d8ea;border-radius:10px;background:white}.task-table input[type=checkbox]{margin-right:10px}.task-table tr[hidden]{display:none}
+
+.wf-project-links,.wf-board-notes{padding:16px;margin:14px 0;border:1px solid #e8deef;border-radius:16px;background:#fff}.wf-project-choices,.wf-board-notes>div{display:flex;flex-wrap:wrap;gap:8px;margin-top:9px}.wf-project-choice{border:1px solid var(--project-color);color:var(--project-color);background:white;border-radius:999px;padding:7px 12px;cursor:pointer}.wf-project-choice[aria-pressed=true]{background:color-mix(in srgb,var(--project-color) 18%,white);box-shadow:0 0 0 1px var(--project-color) inset}
+
+.wf-file-unavailable{display:block;padding:12px;color:#8b5064;font-size:12px;line-height:1.4}.note-attachment-image figcaption small{color:#807588}

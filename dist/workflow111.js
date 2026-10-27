@@ -297,6 +297,28 @@ taskForm = function (p, t, col = "List") {
   body.querySelector("h2")?.classList.add("wf-task-heading");
   body.querySelector("[name=title]").classList.add("wf-task-title");
   wfRichEditor(body.querySelector("[name=description]"));
+  if (!t && data.taskTemplates?.length) {
+    const picker = document.createElement("label");
+    picker.className = "field";
+    picker.innerHTML = '<span>Dùng mẫu công việc</span><select aria-label="Chọn mẫu công việc"><option value="">Chọn mẫu…</option></select>';
+    const select = picker.querySelector("select");
+    data.taskTemplates.forEach(template => { const option = document.createElement("option"); option.value = template.id; option.textContent = template.title; select.append(option); });
+    select.onchange = () => {
+      const template = data.taskTemplates.find(item => item.id === select.value);
+      if (!template) return;
+      const form = $("#editor-form");
+      form.elements.title.value = template.title;
+      form.elements.description.value = template.description;
+      const rich = body.querySelector(".wf-task-description");
+      if (rich) rich.innerHTML = zenFormattedHTML(template.description);
+      form.elements.tag.value = template.tag;
+      form.elements.checks.value = template.checks.join("\n");
+    };
+    const removeTemplate = document.createElement("button"); removeTemplate.type="button"; removeTemplate.className="btn"; removeTemplate.textContent="Xóa mẫu đã chọn";
+    removeTemplate.onclick=()=>{const id=select.value;if(!id)return;if(!confirm("Xóa mẫu này?"))return;if(wfSave(()=>{data.taskTemplates=data.taskTemplates.filter(template=>template.id!==id);})){select.querySelector('option:checked')?.remove();select.value="";notify("Đã xóa mẫu.");}};
+    picker.append(removeTemplate);
+    body.prepend(picker);
+  }
   if (t) {
     const tools = document.createElement("div");
     tools.className = "wf-task-tools";
@@ -314,12 +336,16 @@ taskForm = function (p, t, col = "List") {
 function wfAfterTaskSave(fn) {
   const form = $("#editor-form"),
     dialog = $("#editor"),
-    ctx = { ...editing };
+    ctx = { ...editing },
+    scrollTop = dialog.scrollTop;
   if (!form.checkValidity()) return form.reportValidity();
   const after = () => {
     const p = project(ctx.p),
       t = p?.tasks.find((t) => t.id === ctx.t);
-    if (t) fn(p, t);
+    if (t) {
+      fn(p, t);
+      requestAnimationFrame(() => { if (dialog.open) dialog.scrollTop = scrollTop; });
+    }
   };
   dialog.addEventListener("close", after, { once: true });
   form.requestSubmit();
@@ -369,6 +395,65 @@ taskDetail = function (p, t) {
   wfBaseDetail(p, t);
   const form = $("#editor-form"),
     body = $("#editor-body");
+  const nextButton = body.querySelector("#detail-next");
+  if (body.querySelector(".detail-actions")) {
+    const states = document.createElement("div");
+    states.className = "wf-state-choices";
+    states.setAttribute("aria-label", "Chuyển trạng thái công việc");
+    p.columns.forEach((col, index) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "wf-state-choice";
+      button.dataset.stateIndex = String(index % 4);
+      button.textContent = p.columnNames?.[col] || col;
+      button.setAttribute("aria-pressed", String(t.col === col));
+      button.onclick = () => {
+        if (col === t.col && form.elements.col.value === col) return;
+        form.elements.col.value = col;
+        form.requestSubmit();
+      };
+      states.append(button);
+    });
+    if (nextButton) nextButton.replaceWith(states);
+    else body.querySelector(".detail-actions").prepend(states);
+  }
+  const templateButton = document.createElement("button");
+  templateButton.type = "button";
+  templateButton.className = "btn";
+  templateButton.textContent = "Lưu làm mẫu";
+  body.querySelector(".wf-task-tools")?.append(templateButton);
+  templateButton.onclick = () => wfAfterTaskSave((project, task) => {
+    if ((data.taskTemplates || []).length >= 100) { notify("Tối đa 100 mẫu công việc."); return; }
+    const template = {id: uid(), title: task.title, description: task.description, tag: task.tag, checks: task.checks.map(item => item.text)};
+    data.taskTemplates ||= [];
+    data.taskTemplates.push(template);
+    if (!save()) { data.taskTemplates.pop(); notify("Chưa lưu được mẫu."); return; }
+    render(); taskDetail(project, task); notify("Đã lưu mẫu công việc.");
+  });
+  const related = document.createElement("section");
+  related.className = "wf-related";
+  related.innerHTML = '<h3>Ghi chú liên quan</h3><div class="wf-related-list"></div><label class="field"><span>Liên kết ghi chú</span><select><option value="">Chọn ghi chú…</option></select></label><button type="button" class="btn">+ Liên kết</button>';
+  const relatedList = related.querySelector(".wf-related-list"), notePicker = related.querySelector("select");
+  (data.notes || []).filter(n => !(t.noteIds || []).includes(n.id)).forEach(n => { const option = document.createElement("option"); option.value=n.id; option.textContent=n.title; notePicker.append(option); });
+  (t.noteIds || []).forEach(id => { const note = data.notes?.find(n=>n.id===id), row=document.createElement("div"), open=document.createElement("button"), remove=document.createElement("button"); open.type=remove.type="button"; open.className=remove.className="btn";open.textContent=note?.title || "Ghi chú không còn khả dụng";open.disabled=!note; remove.textContent="Bỏ liên kết";open.onclick=()=>wfAfterTaskSave(()=>noteForm(data.notes.find(n=>n.id===id)));remove.onclick=()=>wfAfterTaskSave((project,task)=>{const old=task.noteIds;task.noteIds=old.filter(x=>x!==id);if(!save()){task.noteIds=old;return notify("Chưa lưu được liên kết.");}render();taskDetail(project,task);});row.append(open,remove);relatedList.append(row); });
+  related.querySelector(":scope > button").onclick=()=>{const id=notePicker.value;if(!id)return;wfAfterTaskSave((project,task)=>{task.noteIds ||= [];if(!task.noteIds.includes(id))task.noteIds.push(id);if(!save()){task.noteIds=task.noteIds.filter(x=>x!==id);return notify("Chưa lưu được liên kết.");}render();taskDetail(project,task);});};
+  body.append(related);
+  const comments = document.createElement("section");
+  comments.className = "wf-comments";
+  comments.innerHTML = '<h3>Ghi chú nhanh</h3><div class="wf-comment-list"></div><label class="field"><span>Thêm bình luận</span><textarea maxlength="2000" rows="2" placeholder="Ghi lại điều cần nhớ…"></textarea></label><button type="button" class="btn">+ Thêm bình luận</button>';
+  const commentList = comments.querySelector(".wf-comment-list");
+  (t.comments || []).forEach(comment => { const item = document.createElement("p"); const time = document.createElement("small"); time.textContent = new Date(comment.at).toLocaleString("vi-VN", {timeZone:"Asia/Ho_Chi_Minh"}); const text = document.createElement("span"); text.textContent = comment.text; item.append(time, text); commentList.append(item); });
+  comments.querySelector("button").onclick = () => {
+    const text = comments.querySelector("textarea").value.trim();
+    if (!text) return;
+    if ((t.comments || []).length >= 200) { notify("Tối đa 200 bình luận."); return; }
+    wfAfterTaskSave((project, task) => {
+      task.comments ||= []; task.comments.push({id:uid(), text, at:Date.now()});
+      if (!save()) { task.comments.pop(); notify("Chưa lưu được bình luận."); return; }
+      render(); taskDetail(project, task); notify("Đã thêm bình luận.");
+    });
+  };
+  body.append(comments);
   const rows = [...body.querySelectorAll(".compact-check")];
   if (rows.length) {
     const list = document.createElement("div");
@@ -494,6 +579,20 @@ noteForm = function (n) {
     },
   };
   _WF.note = state;
+  const links = document.createElement("section");
+  links.className = "wf-project-links";
+  const title = document.createElement("h3"); title.textContent = "Liên kết với dự án"; links.append(title);
+  const choices = document.createElement("div"); choices.className = "wf-project-choices"; links.append(choices);
+  data.projects.filter(p=>!p.archived).forEach(project=>{
+    const button=document.createElement("button");button.type="button";button.className="wf-project-choice";button.style.setProperty("--project-color",project.color);button.textContent=project.name;
+    const refresh=()=>button.setAttribute("aria-pressed",String((project.noteIds||[]).includes(id)));refresh();
+    button.onclick=()=>{
+      if ((state.pending || !data.notes?.some(n=>n.id===id)) && !state.flush()) return;
+      if (!wfSave(()=>{project.noteIds ||= [];if(project.noteIds.includes(id))project.noteIds=project.noteIds.filter(x=>x!==id);else {if(project.noteIds.length>=100)throw Error("Tối đa 100 ghi chú liên kết mỗi dự án.");project.noteIds.push(id);}}))return;
+      refresh();render();
+    };choices.append(button);
+  });
+  composer.append(links);
   const queue = () => {
     if ((currentUser?.id || KEY) !== owner) return;
     pending = state.pending = true;
@@ -706,11 +805,40 @@ function wfApplyCards() {
     }
   });
 }
+const wfSelectedTasks = new Set();
+function wfTaskListTools() {
+  const owner=currentUser?.id || KEY;if (_WF.selectedOwner !== owner) { wfSelectedTasks.clear(); _WF.selectedOwner=owner; }
+  const table = $("#main .task-table"), panel = table?.closest(".table-wrap");
+  if (!table || !panel || panel.querySelector(".wf-list-tools")) return;
+  const tools = document.createElement("div"); tools.className="wf-list-tools";
+  tools.innerHTML='<label>Từ khóa <select class="wf-keyword"><option value="">Tất cả</option></select></label><label>Sắp xếp <select class="wf-sort"><option value="default">Mặc định</option><option value="title">Tên A–Z</option><option value="due">Hạn gần nhất</option></select></label><button type="button" class="btn wf-select-all">Chọn kết quả</button><label>Chuyển trạng thái <select class="wf-bulk-state"><option value="">Chọn trạng thái…</option></select></label><button type="button" class="btn wf-bulk-apply">Áp dụng</button><button type="button" class="btn wf-archive-selected">Lưu trữ đã chọn</button><span class="wf-selected-count" aria-live="polite"></span>';
+  panel.before(tools);
+  const rows=[...table.querySelectorAll("tbody tr[data-task]")], key=tools.querySelector(".wf-keyword");
+  const find=row=>project(row.dataset.pid)?.tasks.find(t=>t.id===row.dataset.task);
+  [...new Set(rows.flatMap(row=>(find(row)?.labels||[]).map(label=>label.name)))].sort((a,b)=>a.localeCompare(b,'vi')).forEach(name=>{const option=document.createElement('option');option.value=name;option.textContent=name;key.append(option);});
+  const update=()=>{const value=key.value;for(const row of rows)row.hidden=!!value&&!(find(row)?.labels||[]).some(label=>label.name===value);tools.querySelector('.wf-selected-count').textContent=wfSelectedTasks.size+' đã chọn';};
+  key.onchange=update;
+  tools.querySelector('.wf-sort').onchange=e=>{const mode=e.target.value;const sorted=[...rows].sort((a,b)=>mode==='title'?(find(a)?.title||'').localeCompare(find(b)?.title||'','vi'):mode==='due'?(find(a)?.due||'9999').localeCompare(find(b)?.due||'9999'):rows.indexOf(a)-rows.indexOf(b));sorted.forEach(row=>table.tBodies[0].append(row));};
+  rows.forEach(row=>{const input=document.createElement('input');input.type='checkbox';input.checked=wfSelectedTasks.has(row.dataset.task);input.setAttribute('aria-label','Chọn '+(find(row)?.title||'công việc'));input.onclick=e=>e.stopPropagation();input.onchange=()=>{input.checked?wfSelectedTasks.add(row.dataset.task):wfSelectedTasks.delete(row.dataset.task);update();};row.cells[0].prepend(input);});
+  tools.querySelector('.wf-select-all').onclick=()=>{rows.filter(row=>!row.hidden).forEach(row=>{wfSelectedTasks.add(row.dataset.task);row.querySelector('input').checked=true;});update();};
+  const bulkState=tools.querySelector('.wf-bulk-state');[...new Set(data.projects.flatMap(p=>p.columns))].forEach(col=>{const option=document.createElement('option');option.value=col;option.textContent=col;bulkState.append(option);});
+  tools.querySelector('.wf-bulk-apply').onclick=()=>{const col=bulkState.value;if(!col||!wfSelectedTasks.size)return;const selected=data.projects.flatMap(p=>p.tasks.filter(t=>wfSelectedTasks.has(t.id)).map(t=>({p,t})));if(selected.some(({p})=>!p.columns.includes(col)))return notify('Một dự án không có trạng thái này. Hãy chọn lại các công việc phù hợp.');if(wfSave(()=>selected.forEach(({t})=>{t.col=col;if(col==='Done')t.checks.forEach(c=>c.done=true);else if(t.checks.length&&t.checks.every(c=>c.done))t.checks.at(-1).done=false;}))){wfSelectedTasks.clear();render();notify('Đã chuyển trạng thái các công việc đã chọn.');}};
+  tools.querySelector('.wf-archive-selected').onclick=()=>{if(!wfSelectedTasks.size)return;const count=wfSelectedTasks.size;if(!confirm('Lưu trữ '+count+' công việc đã chọn?'))return;if(wfSave(()=>{data.projects.forEach(p=>p.tasks.forEach(t=>{if(wfSelectedTasks.has(t.id))t.archived=true;}));})){wfSelectedTasks.clear();render();notify('Đã lưu trữ các công việc đã chọn.');}};
+  update();
+}
+const wfBoardWithNotes = board;
+board = function () {
+  const html=wfBoardWithNotes(), p=project();
+  if (!p?.noteIds?.length) return html;
+  return '<section class="wf-board-notes"><strong>Ghi chú dự án</strong><div>'+p.noteIds.map(id=>{const note=data.notes?.find(n=>n.id===id);return note?'<button class="btn" type="button" data-wf-open-note="'+esc(id)+'">'+esc(note.title)+'</button>':'<span class="subtext">Ghi chú không còn khả dụng</span>';}).join('')+'</div></section>'+html;
+};
+document.addEventListener("click", e=>{const button=e.target.closest("[data-wf-open-note]");if(!button)return;const note=data.notes?.find(n=>n.id===button.dataset.wfOpenNote);if(note)noteForm(note);});
 const wfRenderBefore = render;
 render = function () {
   wfRenderBefore();
   if (view === "notes") wfApplyCards();
   wfLabels();
+  if (view === "tasks") wfTaskListTools();
 };
 function wfMove(kind, id, pid, target, after) {
   if (kind === "check") {
@@ -1153,3 +1281,11 @@ document.addEventListener("click", (e) => {
 });
 
 render();
+
+document.addEventListener("error", e => {
+  if (!(e.target instanceof HTMLImageElement)) return;
+  const preview=e.target.closest(".note-attachment-image-preview,.resource-cover,.resource-preview");
+  if (!preview) return;
+  const status=document.createElement("span");status.className="wf-file-unavailable";status.textContent="Ảnh không còn khả dụng hoặc không thể tải.";
+  e.target.replaceWith(status);
+}, true);

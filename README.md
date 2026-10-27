@@ -1,4 +1,4 @@
-# Kanban Zen Studio v1.11.2
+# Kanban Zen Studio v1.12.0
 
 
 Production: https://kanban.huongthiennature.com/
@@ -198,3 +198,7 @@ Kiểm tra: `npm run build && npm test`. Kiểm tra tương tác bằng `node te
 ## v1.11.2 · Rà soát và dọn mã
 
 Chuẩn hóa định dạng module workflow và helper quản lý tệp. Gom các lớp render/noteForm trùng trong workflow; bỏ lần render trung gian. Hủy listener định dạng khi đóng form; xóa mục tiêu kéo cũ khi con trỏ rời vùng hợp lệ; bỏ lưu thừa khi thả vào chính thẻ đó. Kiểm tra columnNames ở cả client và server. Các lớp giao diện 1.x khác vẫn được giữ để tránh thay đổi hành vi ngoài phạm vi rà soát này.
+
+## v1.12.0 · Không gian làm việc liền mạch
+
+Bổ sung mẫu task, bình luận nhanh, liên kết ghi chú với task và dự án, chọn trạng thái bằng nhãn, lịch sử ghi chú trong trình soạn thảo và thao tác nhiều task. Cải thiện vị trí checklist, trạng thái đồng bộ và hiển thị tệp.

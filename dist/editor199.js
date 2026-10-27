@@ -144,6 +144,6 @@ noteForm=function(n){
  editor.addEventListener('close',()=>{
   clearTimeout(debounce);
   // Preserve typed content when closing while the debounce was pending.
-  if(pending){syncText();if(source.value.length<=10000)editor.noteCommit?.();}
+  if(pending&&!(typeof _WF!=='undefined'&&_WF.note?.id===editor.dataset.noteId)){syncText();if(source.value.length<=10000)editor.noteCommit?.();}
  },{once:true});
 };
