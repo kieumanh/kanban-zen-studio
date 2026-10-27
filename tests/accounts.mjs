@@ -7,6 +7,8 @@ const p='Test passphrase 2026!',h=await passwordHash(p);assert.ok(!h.includes(p)
 assert.equal((await req('me')).status,401);assert.equal((await req('register','POST',{email:'first@example.test',password:p})).status,200);assert.equal(mails.length,1);assert.ok(!sql.prepare('SELECT password_hash FROM users').get().password_hash.includes(p));assert.equal((await req('login','POST',{email:'first@example.test',password:p})).status,403);
 let token=mails.at(-1).text.match(/#verify=([a-f0-9]+)/)[1];assert.equal((await req('verify','POST',{token})).status,200);assert.equal((await req('verify','POST',{token})).status,400);
 let login=await req('login','POST',{email:'first@example.test',password:p});assert.equal(login.status,200);const cookie=login.headers.get('Set-Cookie').split(';')[0];assert.ok(login.headers.get('Set-Cookie').includes('HttpOnly'));assert.ok(login.headers.get('Set-Cookie').includes('Secure'));
+const revisionError=await req('workspace','PUT',{data:{schema:1,projects:[]},revision:'1'},cookie);assert.equal(revisionError.status,400);assert.equal((await revisionError.json()).code,'INVALID_REVISION');
+
 assert.equal((await req('me','GET',null,cookie)).status,200);const workspace={schema:1,projects:[]};assert.equal((await req('workspace','PUT',{data:workspace,revision:0},cookie)).status,200);assert.equal((await req('workspace','PUT',{data:workspace,revision:0},cookie)).status,409);assert.equal((await req('workspace','PUT',{data:{schema:1,projects:[{}]},revision:1},cookie)).status,400);assert.equal((await req('workspace','GET',null,cookie)).status,200);
 assert.equal((await(await req('workspace?revision=1','GET',null,cookie)).json()).unchanged,true);
 // A second verified account cannot read or overwrite the first account's workspace.
@@ -57,3 +59,4 @@ console.log('PASS: hashing, verification + one-use links, secure sessions, reset
 const validTask={id:"t",title:"Test",description:"",tag:"",due:"2026-02-30",col:"List",checks:[]};const badDate={schema:1,projects:[{id:"p",name:"Test",description:"",color:"#7950c8",icon:"x",columns:["Idea","List","Doing","Done"],tasks:[validTask]}]};assert.equal(validWorkspace(badDate),false);validTask.due="2024-02-29";assert.equal(validWorkspace(badDate),true);validTask.labels=[{name:"   ",color:"#7950c8"}];assert.equal(validWorkspace(badDate),false);console.log("PASS: real dates, leap days and blank labels.");
 
 assert.equal(validWorkspace({schema:1,projects:[{...fileProject,id:'bad\"id'}]}),false);
+

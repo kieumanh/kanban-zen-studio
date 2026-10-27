@@ -1,6 +1,7 @@
 'use strict';
 let currentUser=null,cloudRevision=0,dirty=false,syncing=false,syncConflict=false,syncTimer;
 let invalidDraftForRecovery=null;
+let lastSyncFailure=null;
 function offerInvalidDraftDownload(){if(!invalidDraftForRecovery)return;const message=document.querySelector("#auth-message");if(!message||document.querySelector("#recover-draft"))return;const button=document.createElement("button");button.id="recover-draft";button.type="button";button.className="btn";button.textContent="Tải bản nháp chưa đồng bộ (JSON)";button.onclick=()=>{const url=URL.createObjectURL(new Blob([invalidDraftForRecovery],{type:"application/json"}));const a=document.createElement("a");a.href=url;a.download="kanban-ban-nhap-chua-dong-bo.json";a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};message.after(button);}
 
 const legacyData=localStorage.getItem('zen-kanban-v1');
@@ -10,7 +11,7 @@ async function requestAPI(path,method='GET',body){
  try{
   const r=await fetch('/api/'+path,{method,credentials:'same-origin',signal:controller.signal,headers:body?{'Content-Type':'application/json'}:{},body:body?JSON.stringify(body):undefined});
   const result=await r.json().catch(()=>({error:'Máy chủ trả về phản hồi không hợp lệ.'}));
-  if(!r.ok)throw Object.assign(new Error(result.error||'Yêu cầu không thành công'),{status:r.status});
+  if(!r.ok)throw Object.assign(new Error(result.error||'Yêu cầu không thành công'),{status:r.status,code:result.code});
   return result;
  }catch(error){
   if(error.name==='AbortError')throw Object.assign(new Error('Kết nối quá thời gian chờ. Dữ liệu đã lưu tại thiết bị.'),{status:0});
@@ -44,9 +45,16 @@ async function flushCloud(manual=false){
  if(!navigator.onLine){syncStatus('⚠ Đã lưu trên máy · Chờ kết nối','offline');return;}
  syncing=true;clearTimeout(syncTimer);
  const accountId=currentUser.id;
- const snapshot=JSON.stringify(data);
+ let snapshot=JSON.stringify(data);
  let retry=false;
  try{
+  if(!Number.isSafeInteger(cloudRevision)||cloudRevision<0){
+   if(typeof rebaseWorkspace!=='function'||!await rebaseWorkspace(accountId)){
+    syncConflict=true;lastSyncFailure={status:409,code:'REVISION_RECOVERY_REQUIRED',message:'Mốc phiên bản trên thiết bị không hợp lệ. Cần hợp nhất bản nháp với máy chủ; chưa ghi đè dữ liệu.'};syncStatus('⚠ Cần hợp nhất phiên bản đồng bộ','error');return;
+   }
+   if(currentUser?.id!==accountId)return;
+   snapshot=JSON.stringify(data);if(!dirty){lastSyncFailure=null;return;}
+  }
   const payload=JSON.parse(snapshot);
   if(!valid(payload)){
    syncBlocked=true;syncStatus('⚠ Dữ liệu không hợp lệ · Chưa đồng bộ','error');
@@ -61,7 +69,8 @@ async function flushCloud(manual=false){
   syncStatus('● Đang đồng bộ…','pending');
   const response=await requestAPI('workspace','PUT',{data:payload,revision:cloudRevision});
   if(currentUser?.id!==accountId)return;
-  cloudRevision=response.revision;cloudBase=payload;try{localStorage.setItem(KEY+'-last-sync',String(Date.now()));}catch{}
+  if(!Number.isSafeInteger(response.revision)||response.revision<0)throw Error('Máy chủ trả về mốc phiên bản không hợp lệ. Bản nháp vẫn được giữ.');
+  lastSyncFailure=null;cloudRevision=response.revision;cloudBase=payload;try{localStorage.setItem(KEY+'-last-sync',String(Date.now()));}catch{}
   dirty=JSON.stringify(data)!==snapshot;
   cacheCloud();
   invalidSyncNotified=false;syncBlocked=false;
@@ -69,6 +78,7 @@ async function flushCloud(manual=false){
   retry=dirty;
  }catch(error){
   if(currentUser?.id!==accountId)return;
+  lastSyncFailure={status:error.status||0,code:error.code||'SYNC_REQUEST_FAILED',message:error.message||'Không thể gửi dữ liệu.'};
   if(error.status===409){
    if(typeof rebaseWorkspace==='function'&&await rebaseWorkspace(accountId)){retry=dirty;return;}
    syncConflict=true;
@@ -136,6 +146,7 @@ function renderManualSyncReport(outcome,options={}){
  const desc=document.createElement('p');desc.textContent=summary.detail;
  if(outcome==='invalid'){try{const bytes=new TextEncoder().encode(JSON.stringify({data,revision:cloudRevision})).length;if(bytes>1900000)desc.textContent='Bản nháp vượt giới hạn đồng bộ ('+Math.ceil(bytes/1024)+' KB / khoảng 1.855 KB). Hãy xuất bản sao JSON trước khi điều chỉnh dữ liệu.';else if(!valid(data))desc.textContent='Bản nháp không vượt giới hạn dung lượng nhưng có dữ liệu không hợp lệ. Hãy xuất bản sao JSON để kiểm tra; dữ liệu trên thiết bị được giữ lại.';else desc.textContent='Dữ liệu đã qua kiểm tra trên thiết bị nhưng máy chủ từ chối. Hãy xuất bản sao JSON và liên hệ hỗ trợ để xác định lỗi.';}catch{}}
  node.append(header,desc);
+ if(lastSyncFailure&&outcome!=='synced'){const diagnostic=document.createElement('p');diagnostic.className='sync-report-meta';diagnostic.textContent='Chi tiết: '+lastSyncFailure.message+' · HTTP '+lastSyncFailure.status+' · '+lastSyncFailure.code;node.append(diagnostic);}
  if(outcome==='conflict'){
   const action=document.createElement('button');action.type='button';action.id='merge-conflict-report';action.className='btn';
   action.textContent='Hợp nhất và đồng bộ, giữ cả hai bản';

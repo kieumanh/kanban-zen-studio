@@ -1,4 +1,4 @@
-# Kanban Zen Studio v1.13.2
+# Kanban Zen Studio v1.13.3
 
 
 Production: https://kanban.huongthiennature.com/
@@ -218,3 +218,7 @@ Bộ lọc dùng nhãn màu bo tròn; Cài đặt chia nhóm; nút thêm checkli
 ## v1.13.2 · Bảo vệ bản nháp
 
 Giữ bản nháp không hợp lệ thay vì ghi đè khi đăng nhập lại, cung cấp bản sao JSON; phân biệt nguyên nhân báo đồng bộ và cho phép xem lịch sử máy chủ khi còn thay đổi chưa gửi. Hoàn thiện giao diện bộ lọc, tập trung và liên kết công việc.
+
+## v1.13.3 · Khôi phục mốc đồng bộ
+
+Phân biệt INVALID_REVISION và INVALID_WORKSPACE. Mốc phiên bản cục bộ không hợp lệ được đối chiếu/hợp nhất qua bản gốc; khi không thể hợp nhất sẽ giữ bản nháp và báo xung đột. Báo cáo đồng bộ hiển thị mã HTTP, mã lỗi và thông báo cụ thể.

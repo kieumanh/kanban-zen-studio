@@ -22,7 +22,7 @@ async function caseRun(name,opts={}){
  const button=node(),panel=node(),events=[],requests=[];
  let mockData={schema:1,projects:[{id:'p1',tasks:[{id:'t1'}]}],notes:[{id:'n1',text:'a'}]};
  const context=vm.createContext({structuredClone,
-  currentUser:{id:'user1'},
+  currentUser:{id:'user1'},lastSyncFailure:null,
   dirty:!!opts.dirty, syncConflict:!!opts.conflict, syncBlocked:!!opts.blocked,
   syncing:false, cloudRevision:7,
   data:mockData,navigator:{onLine:opts.online!==false},
@@ -66,5 +66,5 @@ r=await caseRun('server down',{reject:503});
 assert.equal(r.state,'error');
 r=await caseRun('connection timed out',{reject:0});
 assert.equal(r.state,'offline');
-assert.ok(read('dist/index.html').includes('v1.9.11')||read('dist/index.html').includes('v1.13.2'),'valid release');
+assert.ok(read('dist/index.html').includes('v1.9.11')||read('dist/index.html').includes('v1.13.3'),'valid release');
 console.log('PASS: sync button icon + manual verified report across success/upload/download/offline/conflict/invalid/pending/error.');
