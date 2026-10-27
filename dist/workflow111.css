@@ -45,3 +45,19 @@
 #tabs .tab.active:has(.zen-active-tab-name){min-width:150px;max-width:300px;padding:10px 16px}.zen-active-tab-name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px}.tab.active .pinned-progress{font-size:11px}
 @media(hover:hover) and (prefers-reduced-motion:no-preference){#main:has(.wf-focus-card:hover) .wf-focus-card:not(:hover){opacity:.46;transform:scale(.95)}}
 .board-tools .wf-display-options{border:0!important;padding:0!important;background:transparent!important}.board-head .board-tools{max-width:600px}.wf-display-options>summary::-webkit-details-marker{display:none}
+
+/* Keep SVG arc rotation in the same coordinate system as its background ring. */
+.work-arc{transform-box:view-box}
+.wf-project-choices{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:8px}
+.wf-project-choice{min-width:0;min-height:44px;text-align:left;white-space:normal;overflow-wrap:anywhere;border-radius:12px}
+.wf-project-choice[aria-pressed=true]{font-weight:700}
+.wf-filter-body .wf-clear-filters{min-height:44px;justify-self:start}
+@media(max-width:700px){
+ #tabs .tab.active:has(.zen-active-tab-name){flex:0 0 auto;width:min(220px,62vw);min-width:150px;max-width:62vw;overflow:hidden}
+ #tabs .tab.active .zen-active-tab-name{display:block;min-width:0;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+ .wf-bulk-tools.has-selection{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:end}
+ .wf-bulk-tools.has-selection>*{min-width:0;width:100%;margin:0}
+ .wf-bulk-tools.has-selection .wf-selected-count{grid-column:1/-1;grid-row:1;text-align:left}
+ .wf-bulk-tools.has-selection label select{width:100%}
+ .wf-bulk-tools.has-selection button{white-space:normal;min-height:44px}
+}
