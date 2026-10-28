@@ -4,6 +4,7 @@ import vm from 'node:vm';
 const read=p=>readFileSync(new URL('../'+p,import.meta.url),'utf8');
 const quotes=JSON.parse(read('dist/wisdom.json')),teachers=JSON.parse(read('dist/teachers.json')),
   status=JSON.parse(read('dist/wisdom-status.json')),source=read('dist/welcome.js');
+assert.ok(quotes.filter(q=>q.author==='Marcus Aurelius').length<=80);
 const active=quotes.filter(q=>q.kind!=='reflection');
 assert.equal(new Set(quotes.map(q=>q.id)).size,quotes.length,'stable IDs must be unique');
 assert.equal(new Set(active.map(q=>q.vi.normalize('NFC').toLowerCase().replace(/\s+/g,' ').trim())).size,active.length,'Vietnamese duplicates');
