@@ -4,12 +4,25 @@
 const api='/api/zen-ai/', mascot='/zen-robot-girl.webp';
 const root=document.createElement('section');
 root.id='zen-ai-root';
-root.innerHTML='<button type="button" id="zen-ai-toggle" title="Zen AI Secretary" aria-label="Mở thư ký Zen AI" aria-expanded="false"><img src="'+mascot+'" width="30" height="30" alt=""><span>Zen AI</span><i id="zen-ai-dot" aria-hidden="true"></i></button><div id="zen-ai-scrim" hidden></div><aside id="zen-ai-drawer" role="dialog" aria-modal="true" aria-label="Thư ký Zen AI" hidden><header class="zen-ai-head"><img src="'+mascot+'" width="58" height="58" alt="Cô gái robot Zen AI năng động, vui tươi"><div><b>Zen AI Secretary</b><small>Trợ lý cá nhân · Free</small></div><button type="button" id="zen-ai-close" aria-label="Đóng thư ký">×</button></header><div class="zen-ai-body"><div id="zen-ai-message" role="status">Mở thư ký để xem tình hình công việc.</div><div id="zen-ai-content"></div></div><footer class="zen-ai-foot"><span>🌿 Nhẹ nhàng, đúng việc, đúng lúc.</span><button type="button" id="zen-ai-refresh">↻ Làm mới</button></footer></aside>';
+root.innerHTML='<button type="button" id="zen-ai-toggle" title="Zen AI Secretary" aria-label="Mở thư ký Zen AI" aria-expanded="false"><img src="'+mascot+'" width="30" height="30" alt=""><span>Zen AI</span><i id="zen-ai-dot" aria-hidden="true"></i></button><div id="zen-ai-scrim" hidden></div><aside id="zen-ai-drawer" role="dialog" aria-modal="true" aria-label="Thư ký Zen AI" hidden><header class="zen-ai-head"><img src="'+mascot+'" width="58" height="58" alt="Cô gái robot Zen AI năng động, vui tươi"><div><b>Zen AI Secretary</b><small>Trợ lý cá nhân · Free</small></div><span class="zen-ai-expression" aria-hidden="true">✨</span><button type="button" id="zen-ai-close" aria-label="Đóng thư ký">×</button></header><div class="zen-ai-body"><div id="zen-ai-message" role="status">Mở thư ký để xem tình hình công việc.</div><div id="zen-ai-content"></div></div><footer class="zen-ai-foot"><span>🌿 Nhẹ nhàng, đúng việc, đúng lúc.</span><button type="button" id="zen-ai-refresh">↻ Làm mới</button></footer></aside>';
 (document.querySelector('.top-actions')||document.body).append(root);
 const q=(s)=>root.querySelector(s), drawer=q('#zen-ai-drawer'), toggle=q('#zen-ai-toggle');
 let current=null, spoken=false;
 const escapeHtml=(s)=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const notify=(s)=>{q('#zen-ai-message').textContent=s;};
+const moods={
+ welcome:['welcome','👋','Mình đến rồi! Hôm nay chúng ta trồng thêm một ý tưởng nhé.'],
+ alert:['alert','⚡','Một việc cần chú ý! Mình cùng xử lý từng bước thôi.'],
+ plan:['plan','💡','Mình đã tìm được vài bước tiếp theo cho bạn.'],
+ celebrate:['celebrate','🎉','Chúc mừng! Cả khu vườn công việc đang xanh tốt!'],
+ calm:['calm','🌱','Mọi thứ đang ổn. Bạn cứ thong thả tiến lên nhé.']
+};
+function mood(type){
+ const [name,symbol,line]=moods[type]||moods.calm;
+ root.dataset.mood=name;
+ q('.zen-ai-expression').textContent=symbol;
+ q('.zen-ai-head small').textContent='Trợ lý cá nhân · Free · '+line;
+}
 async function request(path,method='GET',data){
  const r=await fetch(api+path,{method,credentials:'same-origin',headers:method==='GET'?{}:{'Content-Type':'application/json'},...(method==='GET'?{}:{body:JSON.stringify(data||{})})});
  const payload=await r.json().catch(()=>({error:'Không đọc được dữ liệu.'}));
@@ -53,8 +66,9 @@ function proposalMarkup(p,reportId,feedback){
  return '<article class="zen-ai-proposal"><div class="zen-ai-proposal-top"><span>'+escapeHtml(p.project)+'</span><strong>'+(p.rank<=2?'Ưu tiên cao':'Đề xuất')+'</strong></div><h4>'+escapeHtml(p.title)+'</h4><p>'+escapeHtml(p.detail)+'</p><small>'+escapeHtml(p.action)+'</small>'+(reportId?'<div class="zen-ai-actions"><button type="button" data-zen-vote="accepted" data-report="'+escapeHtml(reportId)+'" data-proposal="'+escapeHtml(p.id)+'" '+(prev?'disabled':'')+'>'+(prev==='accepted'?'✓ Đã ghi nhận':'✓ Ghi nhận')+'</button><button type="button" data-zen-vote="dismissed" data-report="'+escapeHtml(reportId)+'" data-proposal="'+escapeHtml(p.id)+'" '+(prev?'disabled':'')+'>'+(prev==='dismissed'?'Đã bỏ qua':'Bỏ qua')+'</button></div>':'')+'</article>';
 }
 function render(state){
- if(!state.available){notify('Thư ký đã có chủ sở hữu.');return;}
+ if(!state.available){mood('calm');notify('Thư ký đã có chủ sở hữu.');return;}
  if(!state.active){
+  mood('welcome');
   notify('Chưa kích hoạt cho tài khoản này.');
   q('#zen-ai-content').innerHTML='<div class="zen-ai-welcome"><p>Xin chào! Mình có thể nhìn lại tiến độ vào <b>08:00 và 20:00</b>, đưa ra gợi ý và nhắc bạn việc quan trọng.</p><p>Chỉ một tài khoản có thể kích hoạt. Mọi thay đổi task đều cần bạn tự xác nhận; mình không tự sửa dữ liệu.</p><button type="button" id="zen-ai-activate" class="zen-ai-primary">🌱 Kích hoạt miễn phí</button></div>';
   q('#zen-ai-activate').onclick=async()=>{try{await request('activate','POST',{});load();}catch(e){notify(e.message);}};
@@ -62,6 +76,8 @@ function render(state){
  }
  const r=state.report,rules=state.liveRules,proposals=r?.proposals?.length?r.proposals:(rules?.proposals||[]);
  const summary=r?.summary||rules?.summary||'Hãy thêm vài công việc để thư ký có dữ liệu phân tích.';
+ const currentMood=proposals.some(p=>p.rank<=2)?'alert':proposals.length?'plan':(rules?.statistics?.done>0&&rules?.statistics?.active===0?'celebrate':'calm');
+ mood(currentMood);
  const mode=r?(r.status==='ai'?'Đã phân tích với Workers AI':'Phân tích quy tắc'):'Xem nhanh theo quy tắc';
  const date=r?r.local_day+' · '+(r.slot===8?'08:00':'20:00'):'Chờ báo cáo theo lịch';
  const feedback=state.feedback||[];
@@ -77,4 +93,12 @@ function render(state){
 }
 if('speechSynthesis' in window){window.speechSynthesis.addEventListener?.('voiceschanged',()=>{if(current?.active&&!drawer.hidden)render(current);});}
 window.addEventListener('focus',()=>{if(!drawer.hidden)load();});
+function respectFocusAndAccount(){
+ const focus=document.body.classList.contains('wf-is-focused');
+ const signedOut=document.body.classList.contains('signed-out');
+ if((focus||signedOut)&&!drawer.hidden){open(false);}
+ if(focus||signedOut){window.speechSynthesis?.cancel();}
+}
+new MutationObserver(respectFocusAndAccount).observe(document.body,{attributes:true,attributeFilter:['class']});
+respectFocusAndAccount();
 })();
