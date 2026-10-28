@@ -1,10 +1,10 @@
 // Zen AI Secretary: private, opt-in and non-intrusive. Speech is browser TTS (no paid API).
 (()=>{
 'use strict';
-const api='/api/zen-ai/', mascot='/zen-mascot.svg';
+const api='/api/zen-ai/', mascot='/zen-robot-girl.webp';
 const root=document.createElement('section');
 root.id='zen-ai-root';
-root.innerHTML='<button type="button" id="zen-ai-toggle" title="Zen AI Secretary" aria-label="Mở thư ký Zen AI" aria-expanded="false"><img src="'+mascot+'" width="30" height="30" alt=""><span>Zen AI</span><i id="zen-ai-dot" aria-hidden="true"></i></button><div id="zen-ai-scrim" hidden></div><aside id="zen-ai-drawer" role="dialog" aria-modal="true" aria-label="Thư ký Zen AI" hidden><header class="zen-ai-head"><img src="'+mascot+'" width="58" height="58" alt="Nhân vật hoạt hình thư ký Zen AI"><div><b>Zen AI Secretary</b><small>Trợ lý cá nhân · Free</small></div><button type="button" id="zen-ai-close" aria-label="Đóng thư ký">×</button></header><div class="zen-ai-body"><div id="zen-ai-message" role="status">Mở thư ký để xem tình hình công việc.</div><div id="zen-ai-content"></div></div><footer class="zen-ai-foot"><span>🌿 Nhẹ nhàng, đúng việc, đúng lúc.</span><button type="button" id="zen-ai-refresh">↻ Làm mới</button></footer></aside>';
+root.innerHTML='<button type="button" id="zen-ai-toggle" title="Zen AI Secretary" aria-label="Mở thư ký Zen AI" aria-expanded="false"><img src="'+mascot+'" width="30" height="30" alt=""><span>Zen AI</span><i id="zen-ai-dot" aria-hidden="true"></i></button><div id="zen-ai-scrim" hidden></div><aside id="zen-ai-drawer" role="dialog" aria-modal="true" aria-label="Thư ký Zen AI" hidden><header class="zen-ai-head"><img src="'+mascot+'" width="58" height="58" alt="Cô gái robot Zen AI năng động, vui tươi"><div><b>Zen AI Secretary</b><small>Trợ lý cá nhân · Free</small></div><button type="button" id="zen-ai-close" aria-label="Đóng thư ký">×</button></header><div class="zen-ai-body"><div id="zen-ai-message" role="status">Mở thư ký để xem tình hình công việc.</div><div id="zen-ai-content"></div></div><footer class="zen-ai-foot"><span>🌿 Nhẹ nhàng, đúng việc, đúng lúc.</span><button type="button" id="zen-ai-refresh">↻ Làm mới</button></footer></aside>';
 (document.querySelector('.top-actions')||document.body).append(root);
 const q=(s)=>root.querySelector(s), drawer=q('#zen-ai-drawer'), toggle=q('#zen-ai-toggle');
 let current=null, spoken=false;
