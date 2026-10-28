@@ -12,7 +12,7 @@ const ZEN_PALETTE={
 };
 /* Delicate illustrated themes. Art remains self-contained and privacy-safe (no network images). */
 function zenPattern(id){
- const extra={creative:['#fff0e6','#b97870','#ecc2a1'],rest:['#e9e8f6','#807da8','#bbb9da'],travel:['#e5f1f3','#5f929e','#a7cfcd'],freelancer:['#eeebf5','#8573a3','#c4b6dc']};const palette=ZEN_PALETTE[id]||extra[id];if(!palette)return '';
+ const extra={creative:['#fff0e6','#b97870','#ecc2a1'],rest:['#e9e8f6','#807da8','#bbb9da'],travel:['#e5f1f3','#5f929e','#a7cfcd'],freelancer:['#eeebf5','#8573a3','#c4b6dc'],farm:['#edf3df','#668653','#c1d18c'],family:['#f8e9e2','#ae786b','#e8b6a2'],finance:['#e7f1ed','#4e8775','#b0d2bc']};const palette=ZEN_PALETTE[id]||extra[id];if(!palette)return '';
  const [paper,ink,accent]=palette;
  const line=(d,w=2,opacity=.35)=>'<path d="'+d+'" fill="none" stroke="'+ink+'" stroke-width="'+w+'" stroke-linecap="round" stroke-linejoin="round" opacity="'+opacity+'"/>';
  const leaf=(x,y,rotate,scale=1)=>'<g transform="translate('+x+' '+y+') rotate('+rotate+') scale('+scale+')"><path d="M0 0Q44-53 101-3Q46 46 0 0Z" fill="'+accent+'" opacity=".43"/>'+line('M2 0L96 -3M35 -2L57 -22M54 -2L78 16',1.7,.43)+'</g>';
@@ -184,3 +184,4 @@ document.addEventListener('click',e=>{
  const note=data.notes?.find(n=>n.id===b.dataset.zenPin);if(!note)return;
  note.pinned=!note.pinned;if(!save()){note.pinned=!note.pinned;return;}render();
 },true);
+

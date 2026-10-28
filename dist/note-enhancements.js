@@ -11,7 +11,8 @@ const NOTE_MOTIFS=Object.freeze({
   yoga:{label:'Yoga',icon:'☯'},
   awakening:{label:'Khai sáng',icon:'☀'},
   stream:{label:'Dòng suối',icon:'💧'},
-  creative:{label:'Sáng tạo',icon:'🎨'},rest:{label:'Nghỉ ngơi',icon:'🌙'},travel:{label:'Du lịch',icon:'🧳'},freelancer:{label:'Freelancer',icon:'💻'}
+  creative:{label:'Sáng tạo',icon:'🎨'},rest:{label:'Nghỉ ngơi',icon:'🌙'},travel:{label:'Du lịch',icon:'🧳'},freelancer:{label:'Freelancer',icon:'💻'},
+  farm:{label:'Nông trại',icon:'🌾'},family:{label:'Gia đình',icon:'🏡'},finance:{label:'Tài chính',icon:'📈'}
 });
 function noteMotif(n){return typeof n?.motif==='string'&&Object.hasOwn(NOTE_MOTIFS,n.motif)?n.motif:'none';}
 function noteChecklistStats(n){
@@ -156,3 +157,4 @@ noteForm=function(n){
   editor.addEventListener('close',()=>document.removeEventListener('click',onDelete),{once:true});
   paintNoteEditorProgress(checklist);
 };
+

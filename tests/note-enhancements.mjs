@@ -16,7 +16,7 @@ const context=vm.createContext({
 });
 vm.runInContext(asset,context,{filename:'note-enhancements.js'});
 const read=expression=>vm.runInContext(expression,context);
-assert.equal(read("Object.keys(NOTE_MOTIFS).length"),13);
+assert.equal(read("Object.keys(NOTE_MOTIFS).length"),16);
 assert.equal(read("noteMotif({motif:'lotus'})"),'lotus');
 assert.equal(read("noteMotif({motif:'../../oops'})"),'none');
 assert.equal(read("noteMotif({})"),'none');
@@ -37,3 +37,4 @@ assert.ok(server.includes("n.motif!==undefined"),'server validation');
 assert.ok(html.includes('src="/note-enhancements.js"'),'bundled enhancement loaded');
 assert.ok(css.includes('.note-motif-picker')&&css.includes('.note-progress-track'),'visual elements styled');
 console.log('PASS: motif allowlist, checklist progress, validated autosave hooks, script inclusion and client/server validation.');
+

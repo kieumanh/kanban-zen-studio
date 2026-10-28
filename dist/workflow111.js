@@ -690,6 +690,9 @@ zenPattern = function (id) {
       rest: ["#e9e8f6", "#807da8", "#bbb9da"],
       travel: ["#e5f1f3", "#5f929e", "#a7cfcd"],
       freelancer: ["#eeebf5", "#8573a3", "#c4b6dc"],
+      farm: ["#edf3df", "#668653", "#c1d18c"],
+      family: ["#f8e9e2", "#ae786b", "#e8b6a2"],
+      finance: ["#e7f1ed", "#4e8775", "#b0d2bc"],
     }[id];
   if (!palette) return wfPatternBefore(id);
   const [paper, ink, accent] = palette,
@@ -766,6 +769,18 @@ zenPattern = function (id) {
       art =
         '<rect x="225" y="190" width="230" height="155" rx="25"/><path d="M200 365Q340 390 480 365L455 345H225Z"/><path d="M275 235h130m-130 40h85" fill="none"/>';
       break;
+    case "farm":
+      art =
+        '<path d="M120 340Q235 276 340 330T560 312V410H120Z" opacity=".38"/><path d="M185 337V236L340 145L495 236V337Z"/><path d="M155 236L340 120L525 236M260 337V260H345V337M385 260H450V315H385Z" fill="none"/><path d="M220 353Q245 326 270 353T320 353M375 370Q400 342 425 370T475 370" fill="none"/>';
+      break;
+    case "family":
+      art =
+        '<path d="M160 245L340 115L520 245V370H160Z"/><path d="M130 250L340 95L550 250M270 370V260H410V370M190 268H250V320H190ZM430 268H490V320H430Z" fill="none"/><circle cx="340" cy="205" r="22"/><path d="M280 225Q340 190 400 225M246 389Q340 340 434 389" fill="none"/>';
+      break;
+    case "finance":
+      art =
+        '<path d="M170 355H500M205 340V285H275V340M305 340V230H375V340M405 340V165H475V340"/><path d="M195 245L290 190L345 207L470 125M420 125H470V175" fill="none"/><path d="M315 120Q350 70 392 90Q386 140 330 148Z"/><path d="M332 143L380 98" fill="none"/>';
+      break;
   }
   return (
     '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 680 450"><rect width="680" height="450" rx="48" fill="' +
@@ -811,7 +826,7 @@ function wfTaskListTools() {
   const table = $("#main .task-table"), panel = table?.closest(".table-wrap");
   if (!table || !panel || panel.querySelector(".wf-list-tools")) return;
   const tools = document.createElement("div"); tools.className="wf-list-tools";
-  tools.innerHTML='<label>Từ khóa <select class="wf-keyword"><option value="">Tất cả</option></select></label><label>Sắp xếp <select class="wf-sort"><option value="default">Mặc định</option><option value="title">Tên A–Z</option><option value="due">Hạn gần nhất</option></select></label><button type="button" class="btn wf-select-all">Chọn kết quả</button><label>Chuyển trạng thái <select class="wf-bulk-state"><option value="">Chọn trạng thái…</option></select></label><button type="button" class="btn wf-bulk-apply">Áp dụng</button><button type="button" class="btn wf-archive-selected">Lưu trữ đã chọn</button><span class="wf-selected-count" aria-live="polite"></span>';
+  tools.innerHTML='<label>Từ khóa <select class="wf-keyword"><option value="">Tất cả</option></select></label><label>Sắp xếp <select class="wf-sort"><option value="default">Mặc định</option><option value="title">Tên A–Z</option><option value="due">Hạn gần nhất</option></select></label><label>Chuyển trạng thái <select class="wf-bulk-state"><option value="">Chọn trạng thái…</option></select></label><button type="button" class="btn wf-bulk-apply">Áp dụng</button><button type="button" class="btn wf-archive-selected">Lưu trữ đã chọn</button><span class="wf-selected-count" aria-live="polite"></span>';
   panel.before(tools);
   const rows=[...table.querySelectorAll("tbody tr[data-task]")], key=tools.querySelector(".wf-keyword");
   const find=row=>project(row.dataset.pid)?.tasks.find(t=>t.id===row.dataset.task);
@@ -823,15 +838,12 @@ function wfTaskListTools() {
  
   tools.querySelector('.wf-sort').onchange=e=>{const mode=e.target.value;_WF.listSort=mode;const sorted=[...rows].sort((a,b)=>mode==='title'?(find(a)?.title||'').localeCompare(find(b)?.title||'','vi'):mode==='due'?(find(a)?.due||'9999').localeCompare(find(b)?.due||'9999'):rows.indexOf(a)-rows.indexOf(b));sorted.forEach(row=>table.tBodies[0].append(row));};
   rows.forEach(row=>{const input=document.createElement('input');input.type='checkbox';input.checked=wfSelectedTasks.has(row.dataset.task);input.setAttribute('aria-label','Chọn '+(find(row)?.title||'công việc'));input.onclick=e=>e.stopPropagation();input.onchange=()=>{input.checked?wfSelectedTasks.add(row.dataset.task):wfSelectedTasks.delete(row.dataset.task);update();};row.cells[0].prepend(input);});
-  tools.querySelector('.wf-select-all').onclick=()=>{rows.filter(row=>!row.hidden).forEach(row=>{wfSelectedTasks.add(row.dataset.task);row.querySelector('input').checked=true;});update();};
   const bulkState=tools.querySelector('.wf-bulk-state');[...new Set(data.projects.flatMap(p=>p.columns))].forEach(col=>{const option=document.createElement('option');option.value=col;option.textContent=col;bulkState.append(option);});
   tools.querySelector('.wf-bulk-apply').onclick=()=>{const col=bulkState.value;if(!col||!wfSelectedTasks.size)return;const selected=data.projects.flatMap(p=>p.tasks.filter(t=>wfSelectedTasks.has(t.id)).map(t=>({p,t})));if(selected.some(({p})=>!p.columns.includes(col)))return notify('Một dự án không có trạng thái này. Hãy chọn lại các công việc phù hợp.');if(wfSave(()=>selected.forEach(({t})=>{t.col=col;if(col==='Done')t.checks.forEach(c=>c.done=true);else if(t.checks.length&&t.checks.every(c=>c.done))t.checks.at(-1).done=false;}))){wfSelectedTasks.clear();render();notify('Đã chuyển trạng thái các công việc đã chọn.');}};
   tools.querySelector('.wf-archive-selected').onclick=()=>{if(!wfSelectedTasks.size)return;const count=wfSelectedTasks.size;if(!confirm('Lưu trữ '+count+' công việc đã chọn?'))return;if(wfSave(()=>{data.projects.forEach(p=>p.tasks.forEach(t=>{if(wfSelectedTasks.has(t.id))t.archived=true;}));})){wfSelectedTasks.clear();render();notify('Đã lưu trữ các công việc đã chọn.');}};
   const filters=document.createElement("details");filters.className="wf-filter-panel";filters.open=!!_WF.filtersOpen;const summary=document.createElement("summary");summary.textContent="☷ Bộ lọc & sắp xếp";filters.append(summary);const filterBody=document.createElement("div");filterBody.className="wf-filter-body";filters.append(filterBody);
   const original=$("#main .filter-row");if(original)filterBody.append(original);
   filterBody.append(key.closest('label'),tools.querySelector('.wf-sort').closest('label'),searchLabel);wfFilterChoices(filterBody);tools.before(filters);filters.ontoggle=()=>{if(filters.isConnected)_WF.filtersOpen=filters.open;};
-  tools.querySelector('.wf-select-all').textContent='Chọn tất cả kết quả';
- const clear=document.createElement('button');clear.type='button';clear.className='btn wf-clear-selection';clear.textContent='Bỏ chọn';clear.onclick=()=>{wfSelectedTasks.clear();rows.forEach(row=>row.querySelector('input').checked=false);update();visibility();};tools.append(clear);
   tools.classList.add('wf-bulk-tools');
   const visibility=()=>{tools.classList.toggle('has-selection',wfSelectedTasks.size>0);tools.querySelector('.wf-bulk-apply').disabled=!bulkState.value||!wfSelectedTasks.size;tools.querySelector('.wf-archive-selected').disabled=!wfSelectedTasks.size;};tools.addEventListener('change',visibility);tools.addEventListener('click',()=>queueMicrotask(visibility));table.addEventListener('change',visibility);visibility();
   const sort=filters.querySelector('.wf-sort');sort.value=_WF.listSort||'default';sort.onchange({target:sort});
@@ -1393,18 +1405,28 @@ function zenArrangeTaskForm(isNew=false){const body=$('#editor-body'),form=$('#e
  const status=document.createElement('p');status.className='zen-task-save-status';status.setAttribute('role','status');status.textContent=isNew?'Công việc mới chưa được lưu.':'Đã tải bản đã lưu. Chỉnh sửa rồi chọn Lưu.';body.prepend(status);form.addEventListener('input',()=>{status.dataset.dirty='true';status.textContent='Có thay đổi chưa lưu · Chọn Lưu để xác nhận.';},{signal:zenTaskSignal()});
 };
 taskDetail=function(p,t){zenTaskDetailBefore(p,t);zenArrangeTaskForm();};
-const zenTaskFormBefore=taskForm;taskForm=function(p,t,col='List'){zenTaskFormBefore(p,t,col);if(!t&&$('#editor-body [name=title]'))zenArrangeTaskForm(true);};
+const zenTaskFormBefore=taskForm;taskForm=function(p,t,col='List'){
+ zenTaskFormBefore(p,t,col);
+ if(!t&&$('#editor-body [name=title]'))zenArrangeTaskForm(true);
+ const host=$('#editor-body .wf-description-field');if(!host||typeof NOTE_MOTIFS==='undefined')return;
+ const selected=Object.hasOwn(NOTE_MOTIFS,t?.motif)?t.motif:'none',picker=document.createElement('details');picker.className='note-motif-picker task-motif-picker';
+ picker.innerHTML='<summary><span>✦ Họa tiết công việc</span><span class="note-motif-current"></span></summary><p>Chọn họa tiết nhẹ nhàng cho thẻ công việc.</p><div class="note-motif-options" role="group" aria-label="Chọn họa tiết cho công việc">'+Object.entries(NOTE_MOTIFS).map(([id,item])=>'<button type="button" class="note-motif-option" data-task-motif="'+id+'" aria-pressed="'+(id===selected)+'" title="'+item.label+'"><span aria-hidden="true">'+item.icon+'</span><small>'+item.label+'</small></button>').join('')+'</div><input type="hidden" name="motif" value="'+selected+'">';
+ host.append(picker);const input=picker.querySelector('[name=motif]'),current=picker.querySelector('.note-motif-current');
+ const paint=()=>{current.textContent=NOTE_MOTIFS[input.value].icon+' '+NOTE_MOTIFS[input.value].label;zenArt(picker,input.value);};
+ picker.querySelectorAll('[data-task-motif]').forEach(button=>{const svg=zenPattern(button.dataset.taskMotif),thumb=button.querySelector('span');if(svg&&button.dataset.taskMotif!=='none'){thumb.classList.add('zen-motif-thumb');thumb.style.backgroundImage='url("data:image/svg+xml,'+encodeURIComponent(svg)+'")';thumb.textContent='';}button.onclick=()=>{input.value=button.dataset.taskMotif;picker.querySelectorAll('[data-task-motif]').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));paint();};});paint();
+};
+const zenTaskCardBeforeMotif=taskCard;taskCard=function(t,p){const template=document.createElement('template');template.innerHTML=zenTaskCardBeforeMotif(t,p).trim();const card=template.content.firstElementChild;if(card&&t.motif&&typeof zenArt==='function')zenArt(card,t.motif);return template.innerHTML;};
 function zenTaskSignal(){const c=new AbortController();$('#editor').addEventListener('close',()=>c.abort(),{once:true});return c.signal;}
 const zenProjectFormBefore=projectForm;
-projectForm=function(p){zenProjectFormBefore(p);if(!p)return;const appearance=$('#editor-body .project-appearance');if(!appearance)return;const section=document.createElement('section');section.className='zen-project-links';appearance.after(section);
+projectForm=function(p){zenProjectFormBefore(p);$('#editor')?.classList.add('project-edit-dialog');if(!p)return;const appearance=$('#editor-body .project-appearance');if(!appearance)return;const section=document.createElement('section');section.className='zen-project-links';appearance.after(section);
  const paint=()=>{section.replaceChildren();const h=document.createElement('h3');h.textContent='Ghi chú liên kết';section.append(h);const notes=(p.noteIds||[]).map(id=>data.notes?.find(n=>n.id===id)).filter(Boolean);if(!notes.length){const empty=document.createElement('p');empty.className='subtext';empty.textContent='Chưa có ghi chú liên kết. Chọn dự án này trong trình sửa ghi chú để thêm.';section.append(empty);}
  notes.forEach(n=>{const row=document.createElement('div');row.className='zen-project-note';const open=document.createElement('button');open.type='button';open.className='zen-project-note-open';open.innerHTML=svgIcon('attach')+'<span>'+esc(n.title||'Ghi chú không tên')+'</span>';open.onclick=()=>{const preview=document.createElement('div');preview.className='zen-project-note-preview';preview.innerHTML=zenFormattedHTML(n.text||'');const old=row.querySelector('.zen-project-note-preview');if(old)old.remove();else row.append(preview);};const remove=document.createElement('button');remove.type='button';remove.className='zen-unlink-note';remove.textContent='×';remove.setAttribute('aria-label','Bỏ liên kết '+n.title);remove.title='Bỏ liên kết; giữ nguyên ghi chú';remove.onclick=()=>{if(wfSave(()=>{p.noteIds=p.noteIds.filter(id=>id!==n.id);})){paint();notify('Đã bỏ liên kết. Ghi chú vẫn được giữ.');}};row.append(open,remove);section.append(row);});};paint();const add=document.createElement('details');add.className='project-note-picker';add.innerHTML='<summary>+ Liên kết ghi chú có sẵn</summary>';const list=document.createElement('div');for(const n of data.notes||[]){const b=document.createElement('button');b.type='button';b.className='btn';b.textContent=n.title||'Ghi chú không tên';b.onclick=()=>{if(wfSave(()=>{p.noteIds||=[];if(!p.noteIds.includes(n.id))p.noteIds.push(n.id);})){paint();notify('Đã liên kết ghi chú.');}};list.append(b);}add.append(list);section.after(add);};
 scheduleEvents=function(){return dueTasks().flatMap(t=>{const events=[{...t,eventKind:t.start||t.end?'task':'deadline',eventStart:t.start||t.end||t.due,eventEnd:t.end||t.start||t.due}];if(t.due&&(t.start||t.end))events.push({...t,eventKind:'deadline',title:'Hạn: '+t.title,eventStart:t.due,eventEnd:t.due});for(const c of t.checks||[])if(c.start||c.end)events.push({...t,eventKind:'check',title:t.title+' / '+c.text,eventStart:c.start||c.end,eventEnd:c.end||c.start});return events;});};
-function zenDateDetails(t){const fmt=v=>esc(v?v.replace('T',' · '):'Chưa đặt'),end=t.end||t.due,distinct=t.end&&t.due&&t.end.slice(0,10)!==t.due.slice(0,10);return '<dl class="zen-date-details"><div><dt>Bắt đầu</dt><dd>'+fmt(t.start)+'</dd></div><div><dt>Kết thúc / Hạn hoàn thành</dt><dd>'+fmt(end)+'</dd>'+(distinct?'<dd>Hạn hoàn thành: '+fmt(t.due)+'</dd>':'')+'</div></dl>'; }
+function zenDateDetails(t){const fmt=v=>esc(v?v.replace('T',' · '):'Chưa đặt'),end=t.end||t.due,distinct=t.end&&t.due&&t.end.slice(0,10)!==t.due.slice(0,10);return '<dl class="zen-date-details"><div><dt>Bắt đầu</dt><dd>'+fmt(t.start)+'</dd></div><div><dt>Kết thúc</dt><dd>'+fmt(end)+'</dd>'+(distinct?'<dd class="zen-date-deadline">Hạn: '+fmt(t.due)+'</dd>':'')+'</div></dl>'; }
 function zenUnscheduled(){const tasks=dueTasks().filter(t=>!t.start&&!t.end&&!t.due);return '<section class="panel zen-unscheduled"><h2>Chưa lên lịch <small>'+tasks.length+'</small></h2>'+(tasks.map(t=>timelineTask(t)).join('')||'<p class="subtext">Mọi công việc đã có lịch hoặc hạn.</p>')+'</section>';}
 const zenCalendarBefore=workCalendar;
 workCalendar=function(){return zenCalendarBefore().replace('<p class="help-copy">Chạm vào công việc để xem chi tiết. Công việc chưa đặt ngày nằm trong Timeline.</p>','<p class="help-copy">Khoảng thực hiện: ngày bắt đầu → kết thúc. Mốc “Hạn” đánh dấu hạn hoàn thành riêng. Chạm task để xem đủ ba loại ngày.</p>')+zenUnscheduled();};
-workTimeline=function(){const tasks=dueTasks().filter(t=>t.start||t.end||t.due).sort((a,b)=>(a.start||a.end||a.due).localeCompare(b.start||b.end||b.due));return heading('LỊCH CÔNG VIỆC','Timeline','Bắt đầu và kết thúc / hạn hoàn thành · giờ Việt Nam','<button type="button" class="btn" data-zen-timeline-today>Hôm nay</button>')+(active&&project()?projectSummary(project()):'')+'<section class="panel zen-timeline">'+tasks.map(t=>'<article class="timeline-item" data-zen-day="'+esc((t.start||t.end||t.due).slice(0,10))+'">'+timelineTask(t)+zenDateDetails(t)+'</article>').join('')+'</section>'+zenUnscheduled();};
+workTimeline=function(){const tasks=dueTasks().filter(t=>t.start||t.end||t.due).sort((a,b)=>(a.start||a.end||a.due).localeCompare(b.start||b.end||b.due));return heading('LỊCH CÔNG VIỆC','Timeline','Bắt đầu và kết thúc · giờ Việt Nam','<button type="button" class="btn" data-zen-timeline-today>Hôm nay</button>')+(active&&project()?projectSummary(project()):'')+'<section class="panel zen-timeline">'+tasks.map(t=>'<article class="timeline-item" data-zen-day="'+esc((t.start||t.end||t.due).slice(0,10))+'">'+timelineTask(t)+zenDateDetails(t)+'</article>').join('')+'</section>'+zenUnscheduled();};
 document.addEventListener('click',e=>{if(e.target.closest('[data-zen-timeline-today]')){const items=[...document.querySelectorAll('[data-zen-day]')];const target=items.find(x=>x.dataset.zenDay>=today())||items.at(-1);target?.scrollIntoView({behavior:'smooth',block:'center'});target?.classList.add('zen-today-focus');}});
 
 // Shared view refinements run within the existing render lifecycle.
