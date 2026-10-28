@@ -135,3 +135,11 @@ body:not(.wf-is-focused) .zen-music{display:none!important}
 .focus-check-updates:hover{background:#f8f2fc!important;box-shadow:0 5px 16px #7950c822}
 @media(max-width:900px){.wf-focus-workspace{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:600px){#main:has(.wf-focus-workspace){padding:16px 14px 96px}.wf-focus-workspace>.panel{padding:18px;border-radius:15px}.wf-focus-task-heading{margin-bottom:15px;padding-bottom:14px}.wf-focus-task-description{padding:13px}.wf-focus-note-actions{flex-direction:row}.wf-focus-note-picker{width:auto;flex:1 1 100%}.wf-focus-header{gap:10px}.wf-focus-header h2{max-width:none}}
+
+/* Keep the task focus shortcut aligned with its heading and explain it on hover/focus. */
+.wf-task-heading-row{width:100%;min-width:0}
+.task-focus-shortcut{position:relative;width:44px;height:44px;flex:0 0 44px;display:grid;place-items:center;margin:0 0 0 auto;padding:10px;border-radius:13px!important;color:#72518a!important;background:#fbf8fd!important;border-color:#e6daef!important;transition:background .18s,border-color .18s,transform .18s}
+.task-focus-shortcut:hover,.task-focus-shortcut:focus-visible{background:#f1e8f8!important;border-color:#cdb5df!important;transform:translateY(-1px);outline:2px solid #d8c2e8;outline-offset:2px}
+.task-focus-shortcut::after{content:attr(data-tooltip);position:absolute;right:0;top:calc(100% + 8px);z-index:40;padding:7px 10px;border-radius:8px;background:#30283a;color:#fff;font:500 11px/1.35 var(--sans);white-space:nowrap;box-shadow:0 6px 18px #30204026;opacity:0;visibility:hidden;transform:translateY(-3px);transition:opacity .15s,transform .15s,visibility .15s;pointer-events:none}
+.task-focus-shortcut:hover::after,.task-focus-shortcut:focus-visible::after{opacity:1;visibility:visible;transform:translateY(0)}
+@media(max-width:600px){.task-focus-shortcut{width:42px;height:42px;flex-basis:42px}}

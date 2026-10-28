@@ -157,7 +157,14 @@ document.addEventListener?.('keydown',event=>{
  let action='';
  if((event.ctrlKey||event.metaKey)&&!event.altKey){action={b:'bold',i:'italic',u:'underline'}[event.key.toLowerCase()]||'';}
  else if(event.key==='Tab'&&element?.closest('li'))action=event.shiftKey?'outdent':'indent';
- else if(event.key==='*'&&!event.ctrlKey&&!event.metaKey&&!event.altKey&&selection?.isCollapsed){const block=element?.closest('p,div,li');if(block&&rich.contains(block)&&!block.textContent.trim())action='bullets';}
+ else if(event.key===' '&&!event.ctrlKey&&!event.metaKey&&!event.altKey&&selection?.isCollapsed){
+  const block=element?.closest('p,div,li'),marker=block?.textContent||'';
+  const expected=marker==='*'||marker==='-'?'bullets':/^\d+\.$/.test(marker)?'numbers':'';
+  const atEnd=node?.nodeType===3?selection.anchorOffset===node.nodeValue.length:selection.anchorOffset===node?.childNodes?.length;
+  if(expected&&block&&rich.contains(block)&&atEnd){
+   event.preventDefault();const range=document.createRange();range.selectNodeContents(block);range.deleteContents();const caret=document.createRange();caret.selectNodeContents(block);caret.collapse(true);selection.removeAllRanges();selection.addRange(caret);document.execCommand(expected==='numbers'?'insertOrderedList':'insertUnorderedList',false);rich.dispatchEvent(new Event('input',{bubbles:true}));return;
+  }
+ }
  if(!action)return;event.preventDefault();
  if(action==='indent'||action==='outdent')document.execCommand(action,false);else zenApplyFormatting(rich,action);
  rich.dispatchEvent(new Event('input',{bubbles:true}));
