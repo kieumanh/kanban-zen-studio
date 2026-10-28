@@ -8,9 +8,9 @@ root.innerHTML='<button type="button" id="zen-ai-toggle" title="Zen AI Secretary
 (document.querySelector('.top-actions')||document.body).append(root);
 const q=(s)=>root.querySelector(s), drawer=q('#zen-ai-drawer'), toggle=q('#zen-ai-toggle');
 let current=null, spoken=false;
-let mood='hello';
-const moods={hello:'Rất vui được đồng hành cùng bạn! 🌱',thinking:'Mình đang xem công việc đây, đừng lo nhé! 🔎',urgent:'Úi, có việc cần ưu tiên! Mình xử lý từng bước thôi nhé. ⚡',celebrate:'Tuyệt vời! Một bước tiến nữa rồi! 🎉',rest:'Nghỉ một chút cũng là tiến bộ đấy! 🍵'};
-function setMood(next){mood=moods[next]?next:'hello';root.dataset.zenMood=mood;const s=q('#zen-ai-mood');if(s)s.textContent=moods[mood];}
+let currentZenMood='hello';
+const zenMoodMessages={hello:'Rất vui được đồng hành cùng bạn! 🌱',thinking:'Mình đang xem công việc đây, đừng lo nhé! 🔎',urgent:'Úi, có việc cần ưu tiên! Mình xử lý từng bước thôi nhé. ⚡',celebrate:'Tuyệt vời! Một bước tiến nữa rồi! 🎉',rest:'Nghỉ một chút cũng là tiến bộ đấy! 🍵'};
+function setMood(next){currentZenMood=zenMoodMessages[next]?next:'hello';root.dataset.zenMood=currentZenMood;const s=q('#zen-ai-mood');if(s)s.textContent=zenMoodMessages[currentZenMood];}
 
 const escapeHtml=(s)=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const notify=(s)=>{q('#zen-ai-message').textContent=s;};
@@ -87,7 +87,7 @@ function render(state){
  const feedback=state.feedback||[];
  setMood(proposals.some(x=>x.rank<=2)?'urgent':(rules?.statistics?.active===0?'rest':'celebrate'));notify('Đã cập nhật · '+mode);
  q('#zen-ai-dot').style.display=proposals.some(x=>x.rank<=2)?'block':'none';
- q('#zen-ai-content').innerHTML='<p id="zen-ai-mood" class="zen-ai-mood" aria-live="polite">'+escapeHtml(moods[mood])+'</p><div class="zen-ai-status"><b>'+escapeHtml(mode)+'</b><small>'+escapeHtml(date)+'</small></div><p class="zen-ai-summary">'+escapeHtml(summary)+'</p>'+voiceButton()+'<div class="zen-ai-budget">AI dành riêng cho bạn · Đã dự phòng '+Number(state.reserved||0).toLocaleString('vi-VN')+' / '+Number(state.limit||5000).toLocaleString('vi-VN')+' Neurons hôm nay (ước tính nội bộ)</div><h3>Gợi ý tiếp theo</h3>'+(proposals.length?proposals.map(p=>proposalMarkup(p,r?.id,feedback)).join(''):'<p class="zen-ai-empty">Chưa có cảnh báo quan trọng. Hãy tiếp tục nhịp làm việc của bạn. 🌱</p>')+'<p class="zen-ai-help">Thư ký chỉ đề xuất. Bấm “Ghi nhận” không sửa task hoặc deadline. Dữ liệu AI có thể chưa chính xác; hãy kiểm tra trước khi thực hiện.</p>';
+ q('#zen-ai-content').innerHTML='<p id="zen-ai-mood" class="zen-ai-mood" aria-live="polite">'+escapeHtml(zenMoodMessages[currentZenMood])+'</p><div class="zen-ai-status"><b>'+escapeHtml(mode)+'</b><small>'+escapeHtml(date)+'</small></div><p class="zen-ai-summary">'+escapeHtml(summary)+'</p>'+voiceButton()+'<div class="zen-ai-budget">AI dành riêng cho bạn · Đã dự phòng '+Number(state.reserved||0).toLocaleString('vi-VN')+' / '+Number(state.limit||5000).toLocaleString('vi-VN')+' Neurons hôm nay (ước tính nội bộ)</div><h3>Gợi ý tiếp theo</h3>'+(proposals.length?proposals.map(p=>proposalMarkup(p,r?.id,feedback)).join(''):'<p class="zen-ai-empty">Chưa có cảnh báo quan trọng. Hãy tiếp tục nhịp làm việc của bạn. 🌱</p>')+'<p class="zen-ai-help">Thư ký chỉ đề xuất. Bấm “Ghi nhận” không sửa task hoặc deadline. Dữ liệu AI có thể chưa chính xác; hãy kiểm tra trước khi thực hiện.</p>';
  q('#zen-ai-speak')?.addEventListener('click',speak);
  q('#zen-ai-content').querySelectorAll('[data-zen-vote]').forEach(btn=>btn.addEventListener('click',async()=>{
   btn.disabled=true;
