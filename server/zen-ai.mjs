@@ -61,6 +61,9 @@ async function zenAiApi(request,env){
     }
     if(request.method!=='POST'||request.headers.get('Origin')!==ORIGIN||!request.headers.get('Content-Type')?.includes('application/json'))return json({error:'Yêu cầu không hợp lệ.'},403);
     if(path==='/api/zen-ai/activate'){
+      // One-user Personal Free: enable only after server-side owner email has been configured.
+      const expected=String(env.ZEN_AI_OWNER_EMAIL||'').trim().toLowerCase();
+      if(!expected||user.email.toLowerCase()!==expected)return json({error:'Chưa cấu hình tài khoản sở hữu Zen AI.'},403);
       // Single verified account only; prevents a newly registered account from taking ownership.
       const owners=await db.prepare('SELECT COUNT(*) AS count FROM users WHERE verified=1').first();
       if(Number(owners?.count)!==1)return json({error:'Chỉ được kích hoạt sau khi quản trị viên xác nhận tài khoản cá nhân.'},403);

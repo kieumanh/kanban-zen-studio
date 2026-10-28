@@ -65,3 +65,11 @@ body.wf-is-focused #zen-ai-root,body.wf-is-focused #zen-ai-drawer,body.wf-is-foc
  @keyframes zen-ai-party{0%{transform:scale(1) rotate(0)}35%{transform:scale(1.2) rotate(-12deg)}70%{transform:scale(1.12) rotate(12deg)}100%{transform:scale(1) rotate(0)}}
 }
 @media(max-width:580px){.zen-ai-head small{font-size:11px}.zen-ai-head .zen-ai-expression{height:27px;min-width:27px}}
+
+/* Cheerful moods with no constant movement during Focus Mode. */
+.zen-ai-mood{padding:9px 12px;border-radius:12px;background:#f8f0ff;color:#614184;font-size:13px;line-height:1.5;border:1px solid #eddefa}
+#zen-ai-root[data-zen-mood="urgent"] .zen-ai-mood{background:#fff5e9;color:#8c521b;border-color:#f8e2c6}
+#zen-ai-root[data-zen-mood="celebrate"] .zen-ai-mood{background:#edf9ef;color:#3d7653;border-color:#cde9d3}
+#zen-ai-root[data-zen-mood="rest"] .zen-ai-mood{background:#f4f3f6;color:#73677e}
+body.wf-is-focused #zen-ai-toggle{display:none!important}
+@media(prefers-reduced-motion:reduce){#zen-ai-root img{animation:none!important;transition:none!important}}
