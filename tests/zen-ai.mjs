@@ -28,3 +28,13 @@ assert.equal(mascotResponse.status,200);
 assert.match(mascotResponse.headers.get('Content-Type')||'',/image\/webp/);
 const imageBytes=new Uint8Array(await mascotResponse.arrayBuffer());
 assert.equal(new TextDecoder().decode(imageBytes.slice(0,4)),'RIFF');
+
+// Mascot states are present, Focus Mode suppresses the assistant, and no speech autoplays.
+import {readFileSync} from 'node:fs';
+const zenClient=readFileSync(new URL('../dist/zen-ai.js',import.meta.url),'utf8');
+const zenCSS=readFileSync(new URL('../dist/zen-ai.css',import.meta.url),'utf8');
+for(const state of ['welcome','alert','plan','celebrate','calm'])assert.match(zenClient,new RegExp(' '+state+':'));
+assert.match(zenClient,/new MutationObserver\(respectFocusAndAccount\)/);
+assert.match(zenCSS,/body\.wf-is-focused #zen-ai-root/);
+assert.match(zenCSS,/prefers-reduced-motion:no-preference/);
+assert.match(zenClient,/speechSynthesis\.speak\(u\)/);
