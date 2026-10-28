@@ -41,3 +41,7 @@ body.signed-out #zen-ai-toggle{display:none}
 #zen-ai-refresh{border:0;background:transparent;color:#6c4398;cursor:pointer;font-weight:600}
 @media(max-width:600px){#zen-ai-toggle{padding:4px 6px;font-size:11px}#zen-ai-toggle span{display:none}#zen-ai-drawer{width:100vw}.zen-ai-head{padding:14px 18px}.zen-ai-body{padding:14px 16px}}
 @media(prefers-reduced-motion:no-preference){#zen-ai-toggle img{animation:zen-ai-float 4s ease-in-out infinite}@keyframes zen-ai-float{50%{transform:translateY(-2px)}}}
+/* Robot-girl portrait, purposeful microinteractions; fully respects reduced motion. */
+#zen-ai-toggle img,.zen-ai-head img{object-fit:cover;border-radius:50%;border:2px solid #d7b9e8;background:#f4e8f6;box-shadow:0 2px 8px #6b4b8b26}
+#zen-ai-toggle:hover img{box-shadow:0 2px 10px #b077d15e}
+@media(prefers-reduced-motion:no-preference){#zen-ai-toggle:hover img{animation:zen-girl-hello .48s ease both}@keyframes zen-girl-hello{0%,100%{transform:rotate(0)}30%{transform:rotate(-8deg) scale(1.07)}70%{transform:rotate(7deg) scale(1.07)}}}

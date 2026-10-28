@@ -21,3 +21,10 @@ assert.equal(r.mode,'rules');
 assert.equal(zenAiRules({projects:[]},now).proposals.length,0);
 assert.equal(zenAiRules({projects:[{...project,archived:true}]},now).statistics.active,0);
 console.log('PASS: Zen AI 08:00/20:00 Vietnam, deadlines, progress, archiving, rule fallback.');
+
+const {default:zenWorker}=await import('../worker.mjs');
+const mascotResponse=await zenWorker.fetch(new Request('https://kanban.huongthiennature.com/zen-robot-girl.webp'));
+assert.equal(mascotResponse.status,200);
+assert.match(mascotResponse.headers.get('Content-Type')||'',/image\/webp/);
+const imageBytes=new Uint8Array(await mascotResponse.arrayBuffer());
+assert.equal(new TextDecoder().decode(imageBytes.slice(0,4)),'RIFF');
