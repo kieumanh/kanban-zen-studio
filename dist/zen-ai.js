@@ -42,10 +42,13 @@ q('#zen-ai-close').addEventListener('click',()=>open(false));
 q('#zen-ai-scrim').addEventListener('click',()=>open(false));
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!drawer.hidden)open(false);});
 q('#zen-ai-refresh').addEventListener('click',load);
+let loading=false;
 async function load(){
+ if(loading)return;loading=true;
  setMood('thinking');notify('Đang xem tình hình công việc…');
  try{current=await request('status');render(current);}
  catch(e){current=null;setMood('rest');notify(e.message);q('#zen-ai-content').replaceChildren();}
+ finally{loading=false;}
 }
 function voiceAvailable(){
  if(!('speechSynthesis' in window))return false;
@@ -54,15 +57,17 @@ function voiceAvailable(){
 function voiceButton(){
  if(!('speechSynthesis' in window))return '<p class="zen-ai-help">Trình duyệt chưa hỗ trợ đọc văn bản.</p>';
  const supported=voiceAvailable();
- return '<button type="button" id="zen-ai-speak" class="zen-ai-secondary" '+(supported?'':'disabled')+' aria-label="Đọc báo cáo tiếng Việt">🔊 Đọc tiếng Việt</button>'+(supported?'':'<p class="zen-ai-help">Chưa tìm thấy giọng Việt trên thiết bị. Hãy cài giọng vi-VN trong hệ điều hành hoặc thử trình duyệt khác.</p>');
+ return '<button type="button" id="zen-ai-speak" class="zen-ai-secondary" '+''+' aria-label="Đọc báo cáo tiếng Việt">🔊 Đọc tiếng Việt</button>'+(supported?'':'<p class="zen-ai-help">Chưa có giọng Việt trong danh sách. Bạn có thể thử đọc bằng vi-VN mặc định; nếu không nghe được, hãy cài giọng Việt trên thiết bị.</p>');
 }
 function speak(){
- if(!voiceAvailable()){notify('Chưa có giọng tiếng Việt trên thiết bị.');return;}
+ if(!('speechSynthesis' in window)){notify('Trình duyệt chưa hỗ trợ đọc văn bản.');return;}
  window.speechSynthesis.cancel();
  const voices=window.speechSynthesis.getVoices(),vi=voices.find(v=>/^vi[-_]VN$/i.test(v.lang))||voices.find(v=>/^vi/i.test(v.lang));
  const r=current?.report, rules=current?.liveRules;
  const content=(r?.summary||rules?.summary||'')+'. '+(r?.proposals||rules?.proposals||[]).slice(0,3).map(p=>p.title+'. '+p.detail).join('. ');
- const u=new SpeechSynthesisUtterance(content.slice(0,1600));u.lang='vi-VN';u.voice=vi;u.rate=0.92;u.pitch=1;u.volume=1;
+ const u=new SpeechSynthesisUtterance(content.slice(0,1600));u.lang='vi-VN';if(vi)u.voice=vi;u.rate=0.92;u.pitch=1;u.volume=1;
+ u.onerror=()=>{spoken=false;notify('Thiết bị chưa đọc được tiếng Việt. Vui lòng cài giọng vi-VN trong hệ điều hành. Nội dung vẫn hiển thị đầy đủ.');};
+ u.onend=()=>{spoken=false;};
  window.speechSynthesis.speak(u);spoken=true;
 }
 function proposalMarkup(p,reportId,feedback){
@@ -87,7 +92,7 @@ function render(state){
  const feedback=state.feedback||[];
  setMood(proposals.some(x=>x.rank<=2)?'urgent':(rules?.statistics?.active===0?'rest':'celebrate'));notify('Đã cập nhật · '+mode);
  q('#zen-ai-dot').style.display=proposals.some(x=>x.rank<=2)?'block':'none';
- q('#zen-ai-content').innerHTML='<p id="zen-ai-mood" class="zen-ai-mood" aria-live="polite">'+escapeHtml(zenMoodMessages[currentZenMood])+'</p><div class="zen-ai-status"><b>'+escapeHtml(mode)+'</b><small>'+escapeHtml(date)+'</small></div><p class="zen-ai-summary">'+escapeHtml(summary)+'</p>'+voiceButton()+'<div class="zen-ai-budget">AI dành riêng cho bạn · Đã dự phòng '+Number(state.reserved||0).toLocaleString('vi-VN')+' / '+Number(state.limit||5000).toLocaleString('vi-VN')+' Neurons hôm nay (ước tính nội bộ)</div><h3>Gợi ý tiếp theo</h3>'+(proposals.length?proposals.map(p=>proposalMarkup(p,r?.id,feedback)).join(''):'<p class="zen-ai-empty">Chưa có cảnh báo quan trọng. Hãy tiếp tục nhịp làm việc của bạn. 🌱</p>')+'<p class="zen-ai-help">Thư ký chỉ đề xuất. Bấm “Ghi nhận” không sửa task hoặc deadline. Dữ liệu AI có thể chưa chính xác; hãy kiểm tra trước khi thực hiện.</p>';
+ q('#zen-ai-content').innerHTML='<p id="zen-ai-mood" class="zen-ai-mood" aria-live="polite">'+escapeHtml(zenMoodMessages[currentZenMood])+'</p><div class="zen-ai-status"><b>'+escapeHtml(mode)+'</b><small>'+escapeHtml(date)+'</small></div><p class="zen-ai-summary">'+escapeHtml(summary)+'</p>'+voiceButton()+'<div class="zen-ai-budget">Sẵn sàng 24/7 · AI theo lịch 08:00 và 20:00 · Đã dự phòng '+Number(state.reserved||0).toLocaleString('vi-VN')+' / '+Number(state.limit||5000).toLocaleString('vi-VN')+' Neurons hôm nay (ước tính nội bộ)</div><h3>Gợi ý tiếp theo</h3>'+(proposals.length?proposals.map(p=>proposalMarkup(p,r?.id,feedback)).join(''):'<p class="zen-ai-empty">Chưa có cảnh báo quan trọng. Hãy tiếp tục nhịp làm việc của bạn. 🌱</p>')+'<p class="zen-ai-help">Thư ký chỉ đề xuất. Bấm “Ghi nhận” không sửa task hoặc deadline. Dữ liệu AI có thể chưa chính xác; hãy kiểm tra trước khi thực hiện.</p>';
  q('#zen-ai-speak')?.addEventListener('click',speak);
  q('#zen-ai-content').querySelectorAll('[data-zen-vote]').forEach(btn=>btn.addEventListener('click',async()=>{
   btn.disabled=true;
@@ -97,6 +102,9 @@ function render(state){
 }
 if('speechSynthesis' in window){window.speechSynthesis.addEventListener?.('voiceschanged',()=>{if(current?.active&&!drawer.hidden)render(current);});}
 window.addEventListener('focus',()=>{if(!drawer.hidden)load();});
+// Read-only status refresh, no inference endpoint and no background polling while hidden.
+setInterval(()=>{if(!drawer.hidden&&!document.hidden)load();},60000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&!drawer.hidden)load();});
 function respectFocusAndAccount(){
  const focus=document.body.classList.contains('wf-is-focused');
  const signedOut=document.body.classList.contains('signed-out');
