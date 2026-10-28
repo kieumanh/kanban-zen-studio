@@ -630,7 +630,7 @@ noteForm = function (n) {
     composer.querySelector("#note-save") || dialog.querySelector("#note-save");
   if (done) {
     done.type = "button";
-    done.textContent = "Xong";
+    done.innerHTML = svgIcon("check")+" Lưu";
     done.onclick = () => {
       if (state.flush()) dialog.close();
     };
@@ -847,7 +847,7 @@ function wfTaskListTools() {
   tools.classList.add('wf-bulk-tools');
   const visibility=()=>{tools.classList.toggle('has-selection',wfSelectedTasks.size>0);tools.querySelector('.wf-bulk-apply').disabled=!bulkState.value||!wfSelectedTasks.size;tools.querySelector('.wf-archive-selected').disabled=!wfSelectedTasks.size;};tools.addEventListener('change',visibility);tools.addEventListener('click',()=>queueMicrotask(visibility));table.addEventListener('change',visibility);visibility();
   const sort=filters.querySelector('.wf-sort');sort.value=_WF.listSort||'default';sort.onchange({target:sort});
-  const reset=document.createElement('button');reset.type='button';reset.className='btn wf-clear-filters';reset.textContent='Xóa bộ lọc';reset.onclick=()=>{filterProject='';filterPriority='';filterStatus='';query='';$('#search').value='';_WF.listKeyword='';_WF.listSearch='';_WF.listSort='default';render();};filterBody.append(reset);
+  const reset=document.createElement('button');reset.type='button';reset.className='btn wf-clear-filters';reset.textContent='Xóa bộ lọc';reset.onclick=()=>{filterProject='';filterPriority='';filterStatus='';query='';$('#search').value='';_WF.listKeyword='';_WF.listSearch='';_WF.listSort='default';filters.open=false;_WF.filtersOpen=false;render();};filterBody.append(reset);
   update();
 }
 const wfRenderBefore = render;
@@ -1427,7 +1427,7 @@ function zenDateDetails(t){const fmt=v=>esc(v?v.replace('T',' · '):'Chưa đặ
 function zenUnscheduled(){const tasks=dueTasks().filter(t=>!t.start&&!t.end&&!t.due);return '<section class="panel zen-unscheduled"><h2>Chưa lên lịch <small>'+tasks.length+'</small></h2>'+(tasks.map(t=>timelineTask(t)).join('')||'<p class="subtext">Mọi công việc đã có lịch hoặc hạn.</p>')+'</section>';}
 const zenCalendarBefore=workCalendar;
 workCalendar=function(){return zenCalendarBefore().replace('<p class="help-copy">Chạm vào công việc để xem chi tiết. Công việc chưa đặt ngày nằm trong Timeline.</p>','<p class="help-copy">Khoảng thực hiện: ngày bắt đầu → kết thúc. Mốc “Hạn” đánh dấu hạn hoàn thành riêng. Chạm task để xem đủ ba loại ngày.</p>')+zenUnscheduled();};
-workTimeline=function(){const tasks=dueTasks().filter(t=>t.start||t.end||t.due).sort((a,b)=>(a.start||a.end||a.due).localeCompare(b.start||b.end||b.due));return heading('LỊCH CÔNG VIỆC','Timeline','Bắt đầu và kết thúc · giờ Việt Nam','<button type="button" class="btn" data-zen-timeline-today>Hôm nay</button>')+(active&&project()?projectSummary(project()):'')+'<section class="panel zen-timeline">'+tasks.map(t=>'<article class="timeline-item" data-zen-day="'+esc((t.start||t.end||t.due).slice(0,10))+'">'+timelineTask(t)+zenDateDetails(t)+'</article>').join('')+'</section>'+zenUnscheduled();};
+workTimeline=function(){const tasks=dueTasks().filter(t=>t.start||t.end||t.due).sort((a,b)=>(a.start||a.end||a.due).localeCompare(b.start||b.end||b.due));return heading('LỊCH CÔNG VIỆC','Timeline','Bắt đầu và kết thúc · giờ Việt Nam','<button type="button" class="btn" data-zen-timeline-today>Hôm nay</button>')+(active&&project()?projectSummary(project()):'')+'<section class="panel zen-timeline">'+tasks.map(t=>'<article class="timeline-item" data-zen-day="'+esc((t.start||t.end||t.due).slice(0,10))+'">'+timelineTask(t).replace('</button>',zenDateDetails(t)+'</button>')+'</article>').join('')+'</section>'+zenUnscheduled();};
 document.addEventListener('click',e=>{if(e.target.closest('[data-zen-timeline-today]')){const items=[...document.querySelectorAll('[data-zen-day]')];const target=items.find(x=>x.dataset.zenDay>=today())||items.at(-1);target?.scrollIntoView({behavior:'smooth',block:'center'});target?.classList.add('zen-today-focus');}});
 
 // Shared view refinements run within the existing render lifecycle.
@@ -1448,3 +1448,13 @@ document.addEventListener('click',e=>{const unlink=e.target.closest('[data-focus
 
 const wfNoteRemindersBeforeReceipts=dueNoteReminders;
 dueNoteReminders=function(){return wfNoteRemindersBeforeReceipts().filter(n=>!(readReceiptOwner===currentUser?.id&&readReceiptKeys.has('notice:note-'+encodeURIComponent(noteReminderKey(n)))));};
+
+const uxProjectForm=projectForm;
+projectForm=function(p){uxProjectForm(p);const body=$('#editor-body'),appearance=body.querySelector('.project-appearance');if(!appearance)return;const dates=document.createElement('section');dates.className='project-dates fields-row';dates.innerHTML=field('Bắt đầu','project-start',p?.start||'','date')+field('Kết thúc','project-end',p?.end||'','date');appearance.before(dates);const motif=document.createElement('details');motif.className='note-motif-picker project-motif-picker';motif.innerHTML='<summary>✦ Họa tiết dự án</summary><input type="hidden" name="project-motif" value="'+esc(p?.motif||'none')+'"><div class="note-motif-options">'+Object.entries(NOTE_MOTIFS).map(([id,v])=>'<button type="button" class="note-motif-option" data-project-motif="'+id+'" aria-pressed="'+(id===(p?.motif||'none'))+'">'+v.icon+' '+v.label+'</button>').join('')+'</div>';appearance.after(motif);zenArt(motif,p?.motif||'none');motif.querySelectorAll('[data-project-motif]').forEach(b=>{if(b.dataset.projectMotif!=='none'){b.style.backgroundImage='linear-gradient(#ffffffa0,#ffffffa0),'+zenPattern(b.dataset.projectMotif);b.style.backgroundSize='cover';}});motif.querySelectorAll('button').forEach(b=>b.onclick=()=>{motif.querySelector('input').value=b.dataset.projectMotif;motif.querySelectorAll('button').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));zenArt(motif,b.dataset.projectMotif);});};
+const uxTaskDetail=taskDetail;
+taskDetail=function(p,t){uxTaskDetail(p,t);const button=document.createElement('button');button.type='button';button.className='btn task-focus-shortcut';button.title='Tập trung vào công việc này';button.setAttribute('aria-label',button.title);button.innerHTML=svgIcon('leaf');button.onclick=()=>wfAfterTaskSave(()=>{$('#editor').close();_WF.focus={p:p.id,t:t.id};go('focus');});($('#editor-body .wf-task-heading')||$('#editor-body .zen-task-save-status'))?.after(button);};
+const uxFocusPaint=wfPaintFocus;
+wfPaintFocus=function(){uxFocusPaint();if(view!=='focus')return;const button=document.createElement('button');button.type='button';button.className='btn focus-check-updates';button.title='Kiểm tra dữ liệu mới';button.setAttribute('aria-label',button.title);button.innerHTML=svgIcon('sync');button.onclick=async()=>{button.disabled=true;try{if(dirty)await flushCloud();await pollCloud();notify(dirty?'Đang chờ đồng bộ thay đổi trên máy.':'Đã kiểm tra dữ liệu mới.');}finally{button.disabled=false;}};$('#main .wf-focus-header, #main .page-heading, #main .heading')?.append(button);if(!button.isConnected)$('#main').prepend(button);};
+setInterval(()=>{if(view==='focus'&&!document.hidden)pollCloud();},5000);
+
+const uxProjectRender=render;render=function(){uxProjectRender();zenArt(document.querySelector('#main'),view==='projects'?(project()?.motif||'none'):'none');};
