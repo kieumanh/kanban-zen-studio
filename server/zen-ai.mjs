@@ -61,6 +61,9 @@ async function zenAiApi(request,env){
     }
     if(request.method!=='POST'||request.headers.get('Origin')!==ORIGIN||!request.headers.get('Content-Type')?.includes('application/json'))return json({error:'Yêu cầu không hợp lệ.'},403);
     if(path==='/api/zen-ai/activate'){
+      // Single verified account only; prevents a newly registered account from taking ownership.
+      const owners=await db.prepare('SELECT COUNT(*) AS count FROM users WHERE verified=1').first();
+      if(Number(owners?.count)!==1)return json({error:'Chỉ được kích hoạt sau khi quản trị viên xác nhận tài khoản cá nhân.'},403);
       await db.prepare('INSERT OR IGNORE INTO zen_ai_owner(id,user_id,created_at) VALUES(1,?,?)').bind(user.id,Date.now()).run();
       const claimed=await zenAiOwner(db);
       if(claimed.user_id!==user.id)return json({error:'Thư ký đã được kích hoạt cho người dùng khác.'},403);
