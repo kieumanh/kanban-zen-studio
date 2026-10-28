@@ -108,3 +108,30 @@ body:not(.wf-is-focused) .zen-music{display:none!important}
 .project-edit-dialog{width:min(960px,calc(100vw - 24px))!important}.project-edit-dialog .wf-rich-editor{overflow:visible}.project-edit-dialog .wf-task-description{min-height:180px!important}.zen-list-menu-options{z-index:30;max-width:min(310px,calc(100vw - 72px));max-height:230px;overflow:auto}.project-edit-dialog .zen-list-menu-options{position:static!important;margin-top:8px;width:100%}.project-edit-dialog .zen-list-menu[open]{flex:1 1 100%}.project-dates{gap:16px}.project-motif-picker{margin:0 0 16px}.project-motif-picker .note-motif-options{display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:8px}.zen-date-details{display:flex!important;flex-wrap:wrap;gap:8px!important;margin:10px 0 0!important}.zen-date-details>div{display:flex;gap:6px;padding:5px 9px!important;border-radius:20px!important;font-size:12px}.zen-date-details dd{margin:0!important}.zen-date-details dt{font-size:inherit!important}.wf-task-heading{display:flex!important;align-items:center;justify-content:space-between;gap:12px}.task-focus-shortcut,.focus-check-updates{width:44px;height:44px;padding:10px;flex:0 0 44px}.modal-foot{gap:12px!important}.wf-task-editor .modal-foot>.btn{min-width:110px;min-height:46px}.wf-comments>button,[data-wf-add-check]{min-width:150px;min-height:46px}.wf-focus-note-picker{min-width:0}.wf-focus-note-options{max-height:260px;overflow:auto;display:grid;gap:8px}.wf-focus-note-options button{white-space:normal;text-align:left;padding:12px;border:1px solid var(--line);border-radius:10px;background:white}.wf-focus-card{transition:opacity .18s,box-shadow .18s!important}@media(hover:hover){.wf-focus-grid:has(.wf-focus-card:hover) .wf-focus-card:not(:hover){opacity:.45}.wf-focus-card:hover{box-shadow:0 4px 16px #7950c81c!important;border-color:#9b7ac6}}@media(prefers-reduced-motion:reduce){.wf-focus-card{transition:none!important}}@media(max-width:600px){.project-dates{display:grid;grid-template-columns:1fr}.zen-list-menu-options{max-width:100%}.wf-task-editor .modal-foot>.btn{flex:1}.project-edit-dialog .wf-task-description{min-height:180px!important}}
 .task-focus-shortcut{display:flex;align-items:center;justify-content:center;margin:0 0 12px auto}.project-motif-picker .note-motif-option{min-height:76px}#main[data-zen-art]:not([data-zen-art=none]){background-image:linear-gradient(#faf7ffed,#faf7ffed),var(--zen-art);background-size:cover;background-attachment:fixed}
 @media(hover:hover){#main:has(.wf-focus-card:hover) .wf-focus-card:not(:hover){opacity:.45}}.modal-foot .ui-icon,.note-composer-actions .ui-icon{stroke-linecap:round;stroke-linejoin:round}
+
+/* Focus Mode: clearer task hierarchy and project motifs on dashboard cards. */
+.project-card[data-zen-art]:not([data-zen-art=none]){background-image:linear-gradient(110deg,#ffffffef,#ffffffdc 56%,#ffffffc9),var(--zen-art);background-size:cover;background-position:center}
+.project-card[data-zen-art]:not([data-zen-art=none]) .project-icon{box-shadow:0 1px 10px #ffffffa8}
+#main:has(.wf-focus-workspace){max-width:1500px;padding-top:28px}
+.wf-focus-workspace{align-items:start;grid-template-columns:minmax(0,1.35fr) minmax(280px,.85fr);gap:20px}
+.wf-focus-workspace>.panel{padding:26px;border-radius:18px}
+.wf-focus-workspace>.wf-focus-task{background:linear-gradient(145deg,#fffdfd,#fcf8ff);border-top-width:5px}
+.wf-focus-task-heading{display:grid;gap:6px;margin-bottom:20px;padding-bottom:18px;border-bottom:1px solid #eee7f3}
+.wf-focus-task-heading>small{font-size:10px;letter-spacing:.14em;color:#9167b1;font-weight:750}
+.wf-focus-task-heading h1{margin:0!important;line-height:1.25}
+.wf-focus-task-meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0!important;color:#776988!important}
+.wf-focus-task-description{padding:16px 18px;border:1px solid #eee5f4;border-radius:14px;background:#fffefa;line-height:1.8;overflow-wrap:anywhere}
+.wf-focus-task-description:empty{display:none}
+.wf-focus-task-description ul,.wf-focus-task-description ol{padding-left:1.5em}
+.wf-focus-task-progress{margin:18px 0 22px!important;height:8px!important}
+.wf-focus-checklist-heading{margin:22px 0 8px!important;padding-top:17px;border-top:1px solid #eee7f3}
+.wf-focus-task>.check-row{display:flex;gap:12px;padding:13px 4px!important;border-bottom:1px solid #f0eaf3;align-items:flex-start}
+.wf-focus-task>.check-row input{accent-color:#7950c8;flex:0 0 18px;width:18px;height:18px}
+.wf-focus-task>.check-row span{line-height:1.65;overflow-wrap:anywhere}
+.wf-focus-task>button[data-task]{margin-top:20px!important;min-height:44px}
+.wf-focus-note{padding:16px;margin:12px 0;border:1px solid #eee3f1;border-radius:14px;background:#fff}
+.wf-focus-note h3{overflow-wrap:anywhere}
+.focus-check-updates{margin-left:auto;flex:0 0 44px!important;border-radius:14px!important;color:#76509a!important;background:#fff!important;box-shadow:0 2px 10px #7950c810}
+.focus-check-updates:hover{background:#f8f2fc!important;box-shadow:0 5px 16px #7950c822}
+@media(max-width:900px){.wf-focus-workspace{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:600px){#main:has(.wf-focus-workspace){padding:16px 14px 96px}.wf-focus-workspace>.panel{padding:18px;border-radius:15px}.wf-focus-task-heading{margin-bottom:15px;padding-bottom:14px}.wf-focus-task-description{padding:13px}.wf-focus-note-actions{flex-direction:row}.wf-focus-note-picker{width:auto;flex:1 1 100%}.wf-focus-header{gap:10px}.wf-focus-header h2{max-width:none}}
