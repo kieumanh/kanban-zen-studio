@@ -34,5 +34,8 @@
       "binding": "FILES",
       "bucket_name": "kanban-zen-files"
     }
-  ]
+  ],
+  "ai": {
+    "binding": "AI"
+  }
 }
