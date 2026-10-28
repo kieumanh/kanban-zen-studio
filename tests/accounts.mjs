@@ -14,6 +14,18 @@ assert.equal((await(await req('workspace?revision=1','GET',null,cookie)).json())
 // A second verified account cannot read or overwrite the first account's workspace.
 const second='second-user',ph=await passwordHash(p);sql.prepare('INSERT INTO users(id,email,password_hash,verified,created) VALUES(?,?,?,1,?)').run(second,'second@example.test',ph,Date.now());const l2=await req('login','POST',{email:'second@example.test',password:p},'','192.0.2.2'),c2=l2.headers.get('Set-Cookie').split(';')[0];assert.equal((await(await req('workspace','GET',null,c2)).json()).revision,0);
 
+// Read receipts survive a fresh login and remain private to each account.
+assert.equal((await req('notification-receipts','PUT',{keys:['welcome','release:1.14.2','notice:task%7C2026-10-29']},cookie)).status,200);
+assert.equal((await req('notification-receipts','PUT',{keys:['welcome']},cookie)).status,200);
+const receiptLogin=await req('login','POST',{email:'first@example.test',password:p},'','192.0.2.9');
+const receiptCookie=receiptLogin.headers.get('Set-Cookie').split(';')[0];
+assert.deepEqual(new Set((await(await req('notification-receipts','GET',null,receiptCookie)).json()).keys),new Set(['welcome','release:1.14.2','notice:task%7C2026-10-29']));
+assert.deepEqual((await(await req('notification-receipts','GET',null,c2)).json()).keys,[]);
+assert.equal((await req('notification-receipts','PUT',{keys:['../bad']},cookie)).status,400);
+assert.equal((await req('notification-receipts','PUT',{keys:[]},cookie)).status,400);
+assert.equal((await req('notification-receipts','PUT',{keys:['welcome']})).status,401);
+console.log('PASS: cross-session read receipts, idempotency, account isolation and validation.');
+
 assert.equal((await req('profile','PUT',{name:'Kiều Mạnh',birthday:'1990-02-28',avatar:''},cookie)).status,200);assert.equal((await(await req('me','GET',null,cookie)).json()).user.name,'Kiều Mạnh');assert.equal((await(await req('me','GET',null,c2)).json()).user.name,undefined);assert.equal((await req('profile','PUT',{birthday:'2025-02-30'},cookie)).status,400);
 
 const fileProject={id:'file-project',name:'Files',description:'',color:'#7950c8',icon:'x',columns:['Idea','List','Doing','Done'],tasks:[],pinned:true,archived:false};assert.equal((await req('workspace','PUT',{data:{schema:1,projects:[fileProject],notes:[{id:'note',title:'Idea',text:'Sketch',group:'Board',url:'https://example.com',color:'#7950c8'}]},revision:1},cookie)).status,200);const upload=await req('files','POST',{project:'file-project',task:'',name:'hello.txt',content:btoa('hello')},cookie);assert.equal(upload.status,200);const fileId=(await upload.json()).id;assert.equal(await(await req('files/'+fileId,'GET',null,cookie)).text(),'hello');assert.equal((await req('files/'+fileId,'GET',null,c2)).status,404);assert.equal((await req('files','POST',{project:'unknown',name:'x',content:'eA=='},c2)).status,400);assert.equal(validWorkspace({schema:1,projects:[{...fileProject,tasks:[{id:'bad'}]}]}),false);

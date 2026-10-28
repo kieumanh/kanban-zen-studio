@@ -51,3 +51,6 @@ assert.doesNotMatch(vm.runInContext('taskCard(data.projects[0].tasks[0],data.pro
 assert.match(vm.runInContext('dashboard()',context),/overdue-total/);
 assert.match(vm.runInContext('timelineTask({...data.projects[0].tasks[0],project:data.projects[0]})',context),/role="progressbar"/);
 console.log('PASS: compact Kanban, priority chips, checklist and progress preferences, overdue overview and timeline bars.');
+
+assert.equal(vm.runInContext('completionMessages.length',context),35);
+assert.equal(vm.runInContext('new Set(completionMessages.map(m=>m.text)).size',context),35);

@@ -1202,7 +1202,8 @@ taskNotices = function () {
   const seen = new Set(seenNotices());
   return wfRawNotices().filter((t) => !seen.has(noticeSignature(t)));
 };
-markNoticesRead = function () {
+markNoticesRead = async function () {
+  await saveReadReceipts(["release:"+latestVersion,...wfRawNotices().map(noticeReceipt),...dueNoteReminders().map(n=>"notice:note-"+encodeURIComponent(noteReminderKey(n)))]);
   const seen = new Set(seenNotices());
   wfRawNotices().forEach((t) => seen.add(noticeSignature(t)));
   localWrite(
@@ -1444,3 +1445,6 @@ function wfWorkspaceUsability(){
 }
 
 document.addEventListener('click',e=>{const unlink=e.target.closest('[data-focus-unlink]');if(unlink){const f=_WF.focus,p=f&&project(f.p),t=p?.tasks.find(t=>t.id===f.t),id=unlink.dataset.focusUnlink;if(!p||!t)return;if(wfSave(()=>{t.noteIds=(t.noteIds||[]).filter(x=>x!==id);p.noteIds=(p.noteIds||[]).filter(x=>x!==id);})){render();notify('Đã bỏ liên kết; ghi chú vẫn được giữ.');}return;}if(e.target.closest('[data-project-note-add]')){const p=project();if(p)projectForm(p);}});
+
+const wfNoteRemindersBeforeReceipts=dueNoteReminders;
+dueNoteReminders=function(){return wfNoteRemindersBeforeReceipts().filter(n=>!(readReceiptOwner===currentUser?.id&&readReceiptKeys.has('notice:note-'+encodeURIComponent(noteReminderKey(n)))));};
