@@ -863,3 +863,28 @@ dialog .modal-head{position:sticky;top:0;z-index:5;background:var(--paper);paddi
 .task-card .task-footer>span:first-child{min-width:0;overflow-wrap:anywhere;text-align:left}
 .task-card .task-footer>span:last-child{flex:0 0 auto;text-align:right;color:#ae5266;font-weight:600}
 @media(max-width:600px){.task-card-top{gap:7px}.task-card-labels{gap:5px}.task-card-check-summary{padding:4px 7px;font-size:10px}.task-card .task-footer{align-items:flex-start;gap:8px}}
+
+/* Gantt: make every open date cell an inviting, keyboard-accessible task shortcut. */
+.gantt-create-slot{cursor:crosshair;transition:fill .14s ease}
+.gantt-create-slot:hover,.gantt-create-slot:focus-visible{fill:#8054b11a;outline:none}
+.gantt-create-slot:focus-visible{stroke:#8054b1;stroke-width:2;stroke-dasharray:4 3}
+.gantt-undated{padding:18px!important;border-radius:18px!important;background:linear-gradient(145deg,#fffdfd,#faf7fc)!important}
+.gantt-undated-head{display:flex;justify-content:space-between;align-items:flex-end;gap:18px;margin-bottom:14px}
+.gantt-undated-head>div{min-width:0}
+.gantt-undated-head>div>small{display:block;margin-bottom:4px;color:#9875ab;font-size:10px;font-weight:750;letter-spacing:.12em}
+.gantt-undated-head h3{display:flex;align-items:center;gap:9px;margin:0!important;font-size:18px}
+.gantt-undated-head h3 span{display:inline-grid;place-items:center;min-width:26px;height:26px;padding:0 7px;border-radius:999px;background:#f0e8f7;color:#7549a8;font-size:12px}
+.gantt-undated-head>p{max-width:540px;margin:0!important;text-align:right}
+.gantt-unscheduled-list{display:grid;gap:8px}
+.gantt-unscheduled{display:flex;justify-content:space-between;align-items:center;gap:16px;min-width:0;padding:11px 12px;border:1px solid #ece3f1;border-radius:13px;background:#fff;transition:border-color .16s,background .16s,transform .16s}
+.gantt-unscheduled:hover{border-color:#d7c4e4;background:#fdfbff;transform:translateY(-1px)}
+.gantt-unscheduled-title{display:grid;gap:3px;min-width:0;flex:1;text-align:left}
+.gantt-unscheduled-title strong{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;font-weight:650}
+.gantt-unscheduled-title small{color:#95859f;font-size:11px}
+.gantt-unscheduled>.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:38px;white-space:nowrap;font-size:11px}
+.gantt-unscheduled>.btn .ui-icon{width:15px;height:15px}
+.gantt-empty{display:grid;justify-items:center;gap:5px;padding:22px;border:1px dashed #ded2e7;border-radius:14px;background:#fff;text-align:center}
+.gantt-empty>span{color:#8d67ad;font-size:20px}
+.gantt-empty strong{font-size:13px}
+.gantt-empty small{color:#8d7d98;font-size:11px}
+@media(max-width:700px){.gantt-undated{padding:14px!important}.gantt-undated-head{align-items:flex-start;flex-direction:column;gap:6px}.gantt-undated-head>p{text-align:left}.gantt-unscheduled{align-items:stretch;flex-direction:row;padding:10px;gap:8px}.gantt-unscheduled-title strong{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}.gantt-unscheduled>.btn{padding:8px 10px;font-size:10px}.gantt-empty{padding:18px 12px}}
