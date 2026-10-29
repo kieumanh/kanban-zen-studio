@@ -27,13 +27,13 @@ async function preserveConflictCopies(){
  const button=document.querySelector('#merge-conflict,#merge-conflict-report');if(button)button.disabled=true;
  try{
   const remote=await requestAPI('workspace');if(currentUser?.id!==owner)return;
-  const local=structuredClone(data),merged=structuredClone(remote.data);localStorage.setItem(KEY+'-conflict-'+Date.now(),JSON.stringify(local));
+  const local=structuredClone(data),merged=structuredClone(remote.data);await(await persistenceReady).set(KEY+'-conflict-'+Date.now(),local);
   merged.notes||=[];
   // Missing/different local records are recovered as copies; server deletions are not reversed silently.
   for(const p of local.projects){const rp=merged.projects.find(x=>x.id===p.id);if(JSON.stringify(p)===JSON.stringify(rp))continue;const copy=structuredClone(p);copy.id=uid();copy.name=(copy.name+' · Bản thiết bị').slice(0,100);const ids=new Map();for(const t of copy.tasks){const old=t.id;t.id=uid();ids.set(old,t.id);for(const c of t.checks)c.id=uid();}for(const e of copy.dependencies||[]){e.from=ids.get(e.from);e.to=ids.get(e.to);}merged.projects.push(copy);}
   const remap=new Map();for(const n of local.notes||[]){const rn=merged.notes.find(x=>x.id===n.id);if(JSON.stringify(n)!==JSON.stringify(rn))remap.set(n.id,uid());}
   for(const n of local.notes||[])if(remap.has(n.id)){const copy=structuredClone(n);copy.id=remap.get(n.id);copy.title=(copy.title+' · Bản thiết bị').slice(0,150);for(const k of ['boardId','from','to'])if(remap.has(copy[k]))copy[k]=remap.get(copy[k]);merged.notes.push(copy);}
-  if(!valid(merged)||new TextEncoder().encode(JSON.stringify(merged)).length>1850000)throw Error('Bản hợp nhất vượt giới hạn. Hãy xuất JSON và xử lý từng dự án; các bản gốc vẫn được giữ.');
+  if(!valid(merged)||new TextEncoder().encode(JSON.stringify(merged)).length>20000000)throw Error('Bản hợp nhất vượt giới hạn. Hãy xuất JSON và xử lý từng dự án; các bản gốc vẫn được giữ.');
   data=merged;cloudBase=structuredClone(remote.data);cloudRevision=remote.revision;dirty=true;syncConflict=false;syncBlocked=false;cacheCloud();await flushCloud(true);
   if(dirty||syncConflict)throw Error('Còn dữ liệu chờ. Bản hợp nhất đã lưu trên thiết bị để tiếp tục.');
   render();accountPanel();renderManualSyncReport('synced',{revision:cloudRevision,uploaded:true});notify('Đã hợp nhất. Các nội dung khác nhau được giữ thành bản sao để bạn đối chiếu.');

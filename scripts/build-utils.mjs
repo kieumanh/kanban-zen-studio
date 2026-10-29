@@ -24,8 +24,9 @@ export function validateAssets(assets) {
     }
     if (
       typeof file !== 'string' ||
-      !/^[\w.-]+$/.test(file) ||
-      file.includes('..')
+      !/^[\w./-]+$/.test(file) ||
+      file.includes('..') ||
+      file.startsWith('/')
     ) {
       throw Error('Asset must be a file inside dist: ' + file);
     }

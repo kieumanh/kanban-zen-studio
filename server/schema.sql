@@ -1,6 +1,6 @@
 -- Passwords use salted PBKDF2-SHA256; sessions and one-use email tokens store only SHA-256 digests.
 CREATE TABLE IF NOT EXISTS users(id TEXT PRIMARY KEY,email TEXT UNIQUE NOT NULL,password_hash TEXT NOT NULL,verified INTEGER DEFAULT 0,email_reminders INTEGER DEFAULT 0,created INTEGER NOT NULL);
-CREATE TABLE IF NOT EXISTS sessions(token_hash TEXT PRIMARY KEY,user_id TEXT NOT NULL,expires INTEGER NOT NULL);
+CREATE TABLE IF NOT EXISTS sessions(token_hash TEXT PRIMARY KEY,user_id TEXT NOT NULL,expires INTEGER NOT NULL,remembered INTEGER NOT NULL DEFAULT 0,reauth_at INTEGER NOT NULL DEFAULT 0);
 CREATE TABLE IF NOT EXISTS tokens(token_hash TEXT PRIMARY KEY,user_id TEXT NOT NULL,kind TEXT NOT NULL,expires INTEGER NOT NULL);
 CREATE TABLE IF NOT EXISTS workspaces(user_id TEXT PRIMARY KEY,data TEXT NOT NULL,revision INTEGER DEFAULT 0);
 CREATE TABLE IF NOT EXISTS rate_limits(key TEXT PRIMARY KEY,count INTEGER NOT NULL,expires INTEGER NOT NULL);
@@ -49,3 +49,9 @@ INSERT INTO note_reminder_schedule SELECT NEW.user_id,json_extract(n.value,'$.id
 CREATE TRIGGER IF NOT EXISTS note_schedule_update AFTER UPDATE OF data ON workspaces BEGIN DELETE FROM note_reminder_schedule WHERE user_id=NEW.user_id AND note_id NOT IN(SELECT json_extract(n.value,'$.id') FROM json_each(NEW.data,'$.notes') n WHERE json_extract(n.value,'$.remindEmail')=1 AND length(COALESCE(json_extract(n.value,'$.remindAt'),''))=16 AND NOT(COALESCE(json_extract(n.value,'$.type'),'note')='todo' AND json_array_length(n.value,'$.items')>0 AND NOT EXISTS(SELECT 1 FROM json_each(n.value,'$.items') i WHERE json_extract(i.value,'$.done')=0)));
 INSERT INTO note_reminder_schedule SELECT NEW.user_id,json_extract(n.value,'$.id'),unixepoch(json_extract(n.value,'$.remindAt')||'+07:00')*1000-COALESCE(json_extract(n.value,'$.remindBefore'),60)*60000,unixepoch(json_extract(n.value,'$.remindAt')||'+07:00')*1000+86400000,json_extract(n.value,'$.remindAt')||'|'||COALESCE(json_extract(n.value,'$.remindBefore'),60),n.value,0 FROM json_each(NEW.data,'$.notes') n WHERE json_extract(n.value,'$.remindEmail')=1 AND length(COALESCE(json_extract(n.value,'$.remindAt'),''))=16 AND NOT(COALESCE(json_extract(n.value,'$.type'),'note')='todo' AND json_array_length(n.value,'$.items')>0 AND NOT EXISTS(SELECT 1 FROM json_each(n.value,'$.items') i WHERE json_extract(i.value,'$.done')=0)) ON CONFLICT(user_id,note_id) DO UPDATE SET fire_at=excluded.fire_at,expires=excluded.expires,payload=excluded.payload,queued=CASE WHEN note_reminder_schedule.schedule_key=excluded.schedule_key THEN note_reminder_schedule.queued ELSE 0 END,schedule_key=excluded.schedule_key; END;
 CREATE TRIGGER IF NOT EXISTS note_schedule_delete AFTER DELETE ON workspaces BEGIN DELETE FROM note_reminder_schedule WHERE user_id=OLD.user_id; END;
+
+CREATE TABLE IF NOT EXISTS workspace_state(user_id TEXT PRIMARY KEY,revision INTEGER NOT NULL,nonce TEXT NOT NULL,total_bytes INTEGER NOT NULL DEFAULT 0);
+CREATE TABLE IF NOT EXISTS workspace_entities(user_id TEXT NOT NULL,entity_key TEXT NOT NULL,data TEXT NOT NULL,PRIMARY KEY(user_id,entity_key));
+
+CREATE TABLE IF NOT EXISTS workspace_transfers(user_id TEXT PRIMARY KEY,upload_id TEXT NOT NULL,revision INTEGER NOT NULL,expected INTEGER NOT NULL,expires INTEGER NOT NULL);
+CREATE TABLE IF NOT EXISTS workspace_pending(user_id TEXT NOT NULL,upload_id TEXT NOT NULL,entity_key TEXT NOT NULL,data TEXT NOT NULL,PRIMARY KEY(user_id,upload_id,entity_key));

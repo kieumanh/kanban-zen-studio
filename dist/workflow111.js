@@ -97,7 +97,7 @@ function wfSave(change) {
     if (contentReadOnly) throw Error("Bản chia sẻ chỉ có quyền xem.");
     change();
     if (!valid(data)) throw Error("Dữ liệu vượt giới hạn hoặc không hợp lệ.");
-    if (new TextEncoder().encode(JSON.stringify(data)).length > 1850000)
+    if (new TextEncoder().encode(JSON.stringify(data)).length > 20000000)
       throw Error(
         "Dữ liệu vượt dung lượng đồng bộ. Hãy xuất bản sao và giảm nội dung.",
       );

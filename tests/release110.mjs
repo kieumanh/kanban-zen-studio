@@ -33,7 +33,7 @@ const env={DB:{prepare:s=>new Statement(s),async batch(ss){db.exec('BEGIN');try{
 const token='a'.repeat(64),otherToken='b'.repeat(64);
 for(const [id,t] of [['owner',token],['other',otherToken]]){
  db.prepare('INSERT INTO users(id,email,password_hash,verified,created) VALUES(?,?,?,1,?)').run(id,id+'@example.test','none',Date.now());
- db.prepare('INSERT INTO sessions VALUES(?,?,?)').run(createHash('sha256').update(t).digest('hex'),id,Date.now()+600000);
+ db.prepare('INSERT INTO sessions(token_hash,user_id,expires) VALUES(?,?,?)').run(createHash('sha256').update(t).digest('hex'),id,Date.now()+600000);
 }
 async function req(path,method='GET',body,t=token){return api(new Request('https://kanban.huongthiennature.com/api/'+path,{method,headers:{Cookie:'zen_session='+t,Origin:'https://kanban.huongthiennature.com','Content-Type':'application/json'},body:body?JSON.stringify(body):undefined}),env);}
 const note={id:'n',type:'note',title:'One',text:'First',group:'',url:'',color:'#7950c8'};

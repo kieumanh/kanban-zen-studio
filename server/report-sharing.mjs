@@ -1,3 +1,4 @@
+import { workspaceRow } from './workspace-store.mjs';
 import {
   json,
   fail,
@@ -109,10 +110,7 @@ export async function reportShareOwner(request, env, u) {
     .first();
   if (active.total >= 30)
     fail('Tối đa 30 link đang hoạt động. Thu hồi link cũ để tạo thêm.');
-  const w = await db
-      .prepare('SELECT data FROM workspaces WHERE user_id=?')
-      .bind(u.id)
-      .first(),
+  const w = await workspaceRow(db, u.id),
     previous = await db
       .prepare(
         'SELECT data FROM report_snapshots WHERE user_id=? ORDER BY day DESC LIMIT 1',

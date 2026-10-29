@@ -7,3 +7,5 @@ qa/
 
 public/
 worker-api.mjs
+
+worker.mjs

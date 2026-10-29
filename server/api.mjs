@@ -1,3 +1,12 @@
+import { authAPI, session } from './auth.mjs';
+import {
+  workspaceV2,
+  workspaceStage,
+  readWorkspace,
+  workspaceRow,
+} from './workspace-store.mjs';
+import { sketchAPI } from './sketches.mjs';
+import { notificationDaily } from './notifications.mjs';
 import { taskAssetStatements } from './task-workflow.mjs';
 function validDependencies(p) {
   if (!p) return false;
@@ -49,7 +58,7 @@ import {
   reminderReport,
   weeklyReport,
 } from './reports.mjs';
-const ORIGIN = 'https://kanban.huongthiennature.com',
+export const ORIGIN = 'https://kanban.huongthiennature.com',
   enc = new TextEncoder();
 const hex = (b) =>
   Array.from(new Uint8Array(b), (v) => v.toString(16).padStart(2, '0')).join(
@@ -57,8 +66,8 @@ const hex = (b) =>
   );
 const bytes = (h) =>
   Uint8Array.from(h.match(/../g) || [], (s) => parseInt(s, 16));
-const random = () => hex(crypto.getRandomValues(new Uint8Array(32)));
-const hash = async (s) =>
+export const random = () => hex(crypto.getRandomValues(new Uint8Array(32)));
+export const hash = async (s) =>
   hex(await crypto.subtle.digest('SHA-256', enc.encode(s)));
 export async function passwordHash(
   password,
@@ -114,7 +123,7 @@ export async function limited(db, key, max = 12) {
   if (r.count > max)
     fail('Bạn thao tác quá nhiều. Vui lòng thử lại sau 15 phút.', 429);
 }
-async function mail(env, to, subject, text, key, html) {
+export async function mail(env, to, subject, text, key, html) {
   const response = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {
@@ -133,55 +142,6 @@ async function mail(env, to, subject, text, key, html) {
   });
   if (!response.ok)
     throw new Error('Không gửi được email. Vui lòng thử lại sau.');
-}
-async function tokenMail(env, user, kind) {
-  const token = random(),
-    digest = await hash(token),
-    now = Date.now();
-  await env.DB.prepare(
-    'INSERT INTO tokens(token_hash,user_id,kind,expires) VALUES(?,?,?,?)',
-  )
-    .bind(digest, user.id, kind, now + (kind === 'reset' ? 1800000 : 86400000))
-    .run();
-  const link = ORIGIN + '/#' + kind + '=' + token;
-  await mail(
-    env,
-    user.email,
-    kind === 'reset'
-      ? 'Đặt lại mật khẩu Zen Studio'
-      : 'Xác minh email Zen Studio',
-    (kind === 'reset'
-      ? 'Liên kết đặt lại mật khẩu có hiệu lực 30 phút: '
-      : 'Xác minh email trong 24 giờ: ') +
-      link +
-      '\nNếu bạn không yêu cầu, hãy bỏ qua email này.',
-    digest,
-  );
-}
-async function session(request, env) {
-  const token = request.headers
-    .get('Cookie')
-    ?.match(/(?:^|; )zen_session=([a-f0-9]{64})/)?.[1];
-  if (!token) fail('Vui lòng đăng nhập.', 401);
-  const digest = await hash(token),
-    detailed = ['/api/me', '/api/preferences'].includes(
-      new URL(request.url).pathname,
-    );
-  const u = await env.DB.prepare(
-    detailed
-      ? 'SELECT u.id,u.email,s.expires AS session_expires,u.email_reminders,COALESCE(r.hour,8) AS reminder_hour,COALESCE(r.interval_days,1) AS reminder_days,COALESCE(n.weekly_reports,0) AS weekly_reports,COALESCE(n.weekly_hour,8) AS weekly_hour,COALESCE(n.weekly_day,0) AS weekly_day,COALESCE(n.repeat_alerts,1) AS repeat_alerts FROM users u LEFT JOIN reminder_settings r ON r.user_id=u.id LEFT JOIN notification_preferences n ON n.user_id=u.id JOIN sessions s ON s.user_id=u.id WHERE s.token_hash=? AND s.expires>?'
-      : 'SELECT u.id,u.email,s.expires AS session_expires FROM sessions s JOIN users u ON u.id=s.user_id WHERE s.token_hash=? AND s.expires>?',
-  )
-    .bind(digest, Date.now())
-    .first();
-  if (!u) fail('Phiên đăng nhập đã hết hạn.', 401);
-  if (u.session_expires > Date.now() + 600000) {
-    u.session_expires = Date.now() + 600000;
-    await env.DB.prepare('UPDATE sessions SET expires=? WHERE token_hash=?')
-      .bind(u.session_expires, digest)
-      .run();
-  }
-  return u;
 }
 function validDate(value) {
   if (value === '') return true;
@@ -478,7 +438,9 @@ function validExtras(d) {
             str(n.text, 10000) &&
             (!n.sketch ||
               (str(n.sketch, 150000) &&
-                /^data:image\/png;base64,[A-Za-z0-9+/=]+$/.test(n.sketch))) &&
+                /^(?:data:image\/png;base64,[A-Za-z0-9+/=]+|\/api\/assets\/[a-f0-9-]{36}\?preview=1)$/.test(
+                  n.sketch,
+                ))) &&
             str(n.group, 80) &&
             str(n.url, 2000) &&
             (!n.url || /^https?:\/\//i.test(n.url)) &&
@@ -627,7 +589,7 @@ export async function body(request) {
     fail('Dữ liệu không hợp lệ.');
   }
 }
-function pushHost(endpoint) {
+export function pushHost(endpoint) {
   try {
     const u = new URL(endpoint);
     return (
@@ -684,6 +646,7 @@ export async function api(request, env) {
     }
     if (path === '/api/me') {
       const u = await session(request, env);
+
       const profile = await db
         .prepare('SELECT name,birthday,avatar FROM profiles WHERE user_id=?')
         .bind(u.id)
@@ -703,140 +666,52 @@ export async function api(request, env) {
         '/api/verify',
         '/api/resend',
       ].includes(path)
-    ) {
-      if (request.method !== 'POST') fail('Method not allowed', 405);
-      await limited(db, 'auth:' + (await hash(ip)), 35);
-      const b = await body(request),
-        email = String(b.email || '')
-          .trim()
-          .toLowerCase(),
-        password = String(b.password || '');
-      if (
-        ['register', 'login', 'forgot', 'resend'].some(
-          (x) => path === '/api/' + x,
-        ) &&
-        (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 254)
-      )
-        fail('Email không hợp lệ.');
-      if (path === '/api/register') {
-        if (password.length < 10 || password.length > 128)
-          fail('Mật khẩu cần từ 10 đến 128 ký tự.');
-        await limited(db, 'mail:' + (await hash(email)), 4);
-        let u = await db
-          .prepare('SELECT id,email,verified FROM users WHERE email=?')
-          .bind(email)
-          .first();
-        if (!u) {
-          u = { id: crypto.randomUUID(), email };
-          await db
-            .prepare(
-              'INSERT OR IGNORE INTO users(id,email,password_hash,created) VALUES(?,?,?,?)',
-            )
-            .bind(u.id, email, await passwordHash(password), Date.now())
-            .run();
-          u = await db
-            .prepare('SELECT id,email,verified FROM users WHERE email=?')
-            .bind(email)
-            .first();
-        }
-        if (!u.verified) await tokenMail(env, u, 'verify');
-        return json({
-          message:
-            'Yêu cầu đăng ký đã được tiếp nhận. Hãy kiểm tra hộp thư đến và Thư rác để tìm email “Xác minh email Zen Studio”, rồi mở liên kết và bấm “Xác minh email” để hoàn tất. Nếu email đã có tài khoản, hãy đăng nhập hoặc dùng Quên mật khẩu.',
-        });
-      }
-      if (path === '/api/login') {
-        if (password.length > 128) fail('Email hoặc mật khẩu chưa đúng.', 401);
-        await limited(db, 'login:' + (await hash(email)), 10);
-        const u = await db
-          .prepare('SELECT * FROM users WHERE email=?')
-          .bind(email)
-          .first();
-        if (!u) {
-          await passwordHash(password);
-          fail('Email hoặc mật khẩu chưa đúng.', 401);
-        }
-        if (!(await passwordMatches(password, u.password_hash)))
-          fail('Email hoặc mật khẩu chưa đúng.', 401);
-        if (!u.verified)
-          fail(
-            'Vui lòng xác minh email trước khi đăng nhập. Bạn có thể gửi lại email xác minh.',
-            403,
-          );
-        const token = random();
-        await db
-          .prepare(
-            'INSERT INTO sessions(token_hash,user_id,expires) VALUES(?,?,?)',
-          )
-          .bind(await hash(token), u.id, Date.now() + 600000)
-          .run();
-        return json({ ok: true }, 200, {
-          'Set-Cookie':
-            'zen_session=' +
-            token +
-            '; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=604800',
-        });
-      }
-      if (path === '/api/forgot' || path === '/api/resend') {
-        await limited(db, 'mail:' + (await hash(email)), 4);
-        const u = await db
-          .prepare('SELECT id,email,verified FROM users WHERE email=?')
-          .bind(email)
-          .first();
-        if (u && (path === '/api/forgot' || !u.verified))
-          await tokenMail(env, u, path === '/api/forgot' ? 'reset' : 'verify');
-        return json({
-          message:
-            'Nếu email phù hợp, liên kết đã được gửi. Hãy kiểm tra cả thư rác.',
-        });
-      }
-      if (path === '/api/verify' || path === '/api/reset') {
-        const digest = await hash(String(b.token || '')),
-          kind = path === '/api/reset' ? 'reset' : 'verify';
-        if (kind === 'reset' && (password.length < 10 || password.length > 128))
-          fail('Mật khẩu cần từ 10 đến 128 ký tự.');
-        const t = await db
-          .prepare(
-            'SELECT * FROM tokens WHERE token_hash=? AND kind=? AND expires>?',
-          )
-          .bind(digest, kind, Date.now())
-          .first();
-        if (!t) fail('Liên kết hết hạn hoặc đã được sử dụng.');
-        const newHash = kind === 'reset' ? await passwordHash(password) : null;
-        const mutation =
-          kind === 'reset'
-            ? db
-                .prepare(
-                  'UPDATE users SET password_hash=? WHERE id=? AND EXISTS(SELECT 1 FROM tokens WHERE token_hash=?)',
-                )
-                .bind(newHash, t.user_id, digest)
-            : db
-                .prepare(
-                  'UPDATE users SET verified=1 WHERE id=? AND EXISTS(SELECT 1 FROM tokens WHERE token_hash=?)',
-                )
-                .bind(t.user_id, digest);
-        await db.batch([
-          mutation,
-          db
-            .prepare('DELETE FROM tokens WHERE user_id=? AND kind=?')
-            .bind(t.user_id, kind),
-          ...(kind === 'reset'
-            ? [
-                db
-                  .prepare('DELETE FROM sessions WHERE user_id=?')
-                  .bind(t.user_id),
-              ]
-            : []),
-        ]);
-        return json({
-          message:
-            kind === 'reset'
-              ? 'Đã đặt lại mật khẩu. Vui lòng đăng nhập.'
-              : 'Email đã được xác minh. Bạn có thể đăng nhập.',
-        });
-      }
-    }
+    )
+      return await authAPI(request, env, path, ip);
     const u = await session(request, env);
+    if (path === '/api/reauth' && request.method === 'POST') {
+      await limited(db, 'reauth:' + u.id, 8);
+      const b = await body(request),
+        row = await db
+          .prepare('SELECT password_hash FROM users WHERE id=?')
+          .bind(u.id)
+          .first();
+      if (
+        typeof b.password !== 'string' ||
+        b.password.length > 128 ||
+        !(await passwordMatches(b.password, row.password_hash))
+      )
+        fail('Mật khẩu chưa đúng.', 401);
+      const token = request.headers
+        .get('Cookie')
+        ?.match(/(?:^|; )zen_session=([a-f0-9]{64})/)?.[1];
+      await db
+        .prepare('UPDATE sessions SET reauth_at=? WHERE token_hash=?')
+        .bind(Date.now(), await hash(token))
+        .run();
+      return json({ ok: true });
+    }
+    if (
+      u.remembered &&
+      u.reauth_at < Date.now() - 600000 &&
+      ['/api/board-share', '/api/report-shares', '/api/assets/purge'].includes(
+        path,
+      ) &&
+      request.method !== 'GET'
+    )
+      return json(
+        {
+          error: 'Nhập lại mật khẩu để xác nhận thao tác này.',
+          code: 'REAUTH_REQUIRED',
+        },
+        403,
+      );
+    if (path === '/api/workspace-stage')
+      return await workspaceStage(request, env, u);
+    if (path === '/api/workspace-v2') return await workspaceV2(request, env, u);
+    if (path === '/api/sketches' && request.method === 'POST')
+      return await sketchAPI(request, env, u);
+
     if (path === '/api/notification-receipts') {
       if (request.method === 'GET') {
         const rows = await db
@@ -881,7 +756,7 @@ export async function api(request, env) {
       const token = request.headers
         .get('Cookie')
         ?.match(/(?:^|; )zen_session=([a-f0-9]{64})/)?.[1];
-      const expires = Date.now() + 600000;
+      const expires = u.remembered ? u.session_expires : Date.now() + 600000;
       const updated = await db
         .prepare(
           'UPDATE sessions SET expires=? WHERE token_hash=? AND expires>?',
@@ -902,10 +777,7 @@ export async function api(request, env) {
           .run();
         return json({ ok: true });
       }
-      const row = await db
-        .prepare('SELECT data FROM workspaces WHERE user_id=?')
-        .bind(u.id)
-        .first();
+      const row = await workspaceRow(db, u.id);
       if (!row) fail('Bảng chưa đồng bộ.');
       const source = JSON.parse(row.data);
       if (
@@ -935,6 +807,8 @@ export async function api(request, env) {
           boardId: n.boardId === b.boardId ? '' : n.boardId,
           fileId: '',
         }));
+      if (new TextEncoder().encode(JSON.stringify(notes)).length > 1500000)
+        fail('Bảng chia sẻ quá lớn. Hãy chia sẻ một bảng con.', 413);
       const token = random();
       await db
         .prepare(
@@ -1065,10 +939,7 @@ export async function api(request, env) {
         fail('Tệp không hợp lệ hoặc vượt 1 MB.');
       const size = atob(b.content).length;
       if (size > 1048576) fail('Tối đa 1 MB.');
-      const w = await db
-          .prepare('SELECT data FROM workspaces WHERE user_id=?')
-          .bind(u.id)
-          .first(),
+      const w = await workspaceRow(db, u.id),
         p = w && JSON.parse(w.data).projects.find((p) => p.id === b.project);
       if (!p || (b.task && !p.tasks.some((t) => t.id === b.task)))
         fail('Hãy đồng bộ dự án trước khi tải tệp.');
@@ -1110,6 +981,24 @@ export async function api(request, env) {
       });
     }
     if (path === '/api/workspace') {
+      const normalized = await readWorkspace(db, u.id);
+      if (normalized) {
+        if (request.method !== 'GET')
+          return json(
+            {
+              error: 'Hãy tải lại ứng dụng để dùng đồng bộ mới.',
+              code: 'UPGRADE_REQUIRED',
+            },
+            409,
+          );
+        const rev = new URL(request.url).searchParams.get('revision');
+        return json(
+          rev !== null && String(normalized.revision) === rev
+            ? { unchanged: true, revision: normalized.revision }
+            : normalized,
+        );
+      }
+
       if (request.method === 'GET') {
         const since = new URL(request.url).searchParams.get('revision');
         if (since !== null && /^\d+$/.test(since)) {
@@ -1161,7 +1050,7 @@ export async function api(request, env) {
             .bind(Date.now(), u.id, b.revision, raw),
           db
             .prepare(
-              'UPDATE workspaces SET data=?,revision=revision+1 WHERE user_id=? AND revision=? RETURNING revision',
+              'UPDATE workspaces SET data=?,revision=revision+1 WHERE user_id=? AND revision=? AND NOT EXISTS(SELECT 1 FROM workspace_state WHERE user_id=workspaces.user_id) RETURNING revision',
             )
             .bind(raw, u.id, b.revision),
           ...taskAssetStatements(db, u.id, raw, b.revision + 1),
@@ -1206,10 +1095,7 @@ export async function api(request, env) {
       return json({ name, birthday, avatar });
     }
     if (path === '/api/weekly-report' && request.method === 'GET') {
-      const w = await db
-          .prepare('SELECT data FROM workspaces WHERE user_id=?')
-          .bind(u.id)
-          .first(),
+      const w = await workspaceRow(db, u.id),
         previous = await db
           .prepare(
             'SELECT data FROM report_snapshots WHERE user_id=? ORDER BY day DESC LIMIT 1',
@@ -1319,331 +1205,16 @@ export async function api(request, env) {
     );
   }
 }
-const b64 = (b) =>
-  btoa(String.fromCharCode(...new Uint8Array(b)))
-    .replace(/=/g, '')
-    .replace(/\+/g, '-')
-    .replace(/\//g, '_');
-async function sendPush(env, endpoint) {
-  if (!pushHost(endpoint)) return;
-  const header = b64(enc.encode(JSON.stringify({ typ: 'JWT', alg: 'ES256' }))),
-    payload = b64(
-      enc.encode(
-        JSON.stringify({
-          aud: new URL(endpoint).origin,
-          exp: Math.floor(Date.now() / 1000) + 3600,
-          sub: 'mailto:no-reply@huongthiennature.com',
-        }),
-      ),
-    ),
-    input = header + '.' + payload;
-  const key = await crypto.subtle.importKey(
-    'jwk',
-    JSON.parse(env.VAPID_PRIVATE),
-    { name: 'ECDSA', namedCurve: 'P-256' },
-    false,
-    ['sign'],
-  );
-  const signature = await crypto.subtle.sign(
-    { name: 'ECDSA', hash: 'SHA-256' },
-    key,
-    enc.encode(input),
-  );
-  const response = await fetch(endpoint, {
-    method: 'POST',
-    headers: {
-      TTL: '86400',
-      Authorization:
-        'vapid t=' + input + '.' + b64(signature) + ', k=' + env.VAPID_PUBLIC,
-    },
-    signal: AbortSignal.timeout(15000),
-  });
-  if ([404, 410].includes(response.status)) {
-    await env.DB.prepare('DELETE FROM subscriptions WHERE endpoint=?')
-      .bind(endpoint)
-      .run();
-    return;
-  }
-  if (!response.ok) throw Error('Push rejected');
+export async function daily(...args) {
+  return notificationDaily(...args);
 }
-export async function daily(env, now = new Date()) {
-  const db = env.DB,
-    maintenance = now.getUTCMinutes() < 5;
-  if (maintenance) {
-    await purgeStorage(env);
-    await db
-      .prepare('DELETE FROM note_versions WHERE saved<?')
-      .bind(now.getTime() - 7 * 86400000)
-      .run();
-  }
-  const day = reportDate(now),
-    hour = Number(
-      new Intl.DateTimeFormat('en-GB', {
-        timeZone: 'Asia/Ho_Chi_Minh',
-        hour: '2-digit',
-        hourCycle: 'h23',
-      }).format(now),
-    ),
-    weekday = new Date(day + 'T12:00:00Z').getUTCDay();
-  if (maintenance)
-    await db.batch([
-      db
-        .prepare('DELETE FROM board_shares WHERE expires<?')
-        .bind(now.getTime()),
-      db
-        .prepare('DELETE FROM report_shares WHERE expires<?')
-        .bind(now.getTime()),
-    ]);
-  const dueNotes = (
-    await db
-      .prepare(
-        'SELECT s.* FROM note_reminder_schedule s JOIN users u ON u.id=s.user_id WHERE s.queued=0 AND s.fire_at<=? AND s.expires>? AND u.verified=1 ORDER BY s.fire_at LIMIT 100',
-      )
-      .bind(now.getTime(), now.getTime())
-      .all()
-  ).results;
-  for (const row of dueNotes) {
-    const note = JSON.parse(row.payload);
-    await queueNotification(
-      db,
-      row.user_id,
-      note.remindAt.slice(0, 10),
-      await noteChannel(note),
-      {
-        subject: 'Nhắc ghi chú · ' + note.title,
-        text:
-          'Ghi chú: ' +
-          note.title +
-          '\nThời gian: ' +
-          note.remindAt.replace('T', ' ') +
-          ' (giờ Việt Nam)\n' +
-          (note.type === 'todo'
-            ? (note.items || [])
-                .filter((i) => !i.done)
-                .map((i) => '□ ' + i.text)
-                .join('\n')
-            : note.text),
-      },
-    );
-    await db
-      .prepare(
-        'UPDATE note_reminder_schedule SET queued=1 WHERE user_id=? AND note_id=? AND schedule_key=?',
-      )
-      .bind(row.user_id, row.note_id, row.schedule_key)
-      .run();
-  }
-  const users = (
-    await db
-      .prepare(
-        'SELECT u.id,u.email,u.email_reminders,COALESCE(r.hour,8) AS reminder_hour,COALESCE(n.weekly_reports,0) AS weekly_reports,COALESCE(n.weekly_hour,8) AS weekly_hour,COALESCE(n.weekly_day,0) AS weekly_day,w.data FROM users u LEFT JOIN reminder_settings r ON r.user_id=u.id LEFT JOIN notification_preferences n ON n.user_id=u.id JOIN workspaces w ON w.user_id=u.id WHERE u.verified=1 AND ((COALESCE(r.hour,8)=? AND (u.email_reminders=1 OR EXISTS(SELECT 1 FROM subscriptions s WHERE s.user_id=u.id))) OR (n.weekly_reports=1 AND n.weekly_hour=? AND COALESCE(n.weekly_day,0)=?))',
-      )
-      .bind(hour, hour, weekday)
-      .all()
-  ).results;
-  for (const u of users) {
-    try {
-      const workspace = JSON.parse(u.data);
-      if (hour === u.reminder_hour) {
-        const report = reminderReport(workspace, day);
-        if (report) {
-          if (u.email_reminders)
-            await queueNotification(db, u.id, day, 'email', report);
-          const previous = await db
-            .prepare(
-              'SELECT status FROM deliveries WHERE user_id=? AND day=? AND channel=?',
-            )
-            .bind(u.id, day, 'push')
-            .first();
-          if (previous?.status !== 'sent') {
-            const subs = (
-              await db
-                .prepare('SELECT endpoint FROM subscriptions WHERE user_id=?')
-                .bind(u.id)
-                .all()
-            ).results;
-            for (const sub of subs) await sendPush(env, sub.endpoint);
-            await db
-              .prepare(
-                "INSERT INTO deliveries(user_id,day,channel,status) VALUES(?,?,?,'sent') ON CONFLICT(user_id,day,channel) DO UPDATE SET status='sent'",
-              )
-              .bind(u.id, day, 'push')
-              .run();
-          }
-        }
-      }
-      if (
-        weekday === u.weekly_day &&
-        u.weekly_reports &&
-        hour === u.weekly_hour
-      ) {
-        const previous = await db
-          .prepare(
-            'SELECT data FROM report_snapshots WHERE user_id=? AND day<? ORDER BY day DESC LIMIT 1',
-          )
-          .bind(u.id, day)
-          .first();
-        await queueNotification(
-          db,
-          u.id,
-          day,
-          'weekly',
-          weeklyReport(
-            workspace,
-            day,
-            previous ? JSON.parse(previous.data) : null,
-          ),
-        );
-      }
-    } catch (e) {
-      console.log(
-        JSON.stringify({
-          event: 'report_prepare_failed',
-          message: String(e.message).slice(0, 150),
-        }),
-      );
-    }
-  }
-  const jobs = (
-    await db
-      .prepare(
-        "SELECT j.*,u.email FROM notification_jobs j JOIN users u ON u.id=j.user_id LEFT JOIN notification_preferences n ON n.user_id=u.id WHERE (j.day=? OR (j.channel LIKE 'note:%' AND j.day>=?)) AND j.status='pending' AND j.lease_until<? AND j.attempts<4 AND u.verified=1 AND ((j.channel='email' AND u.email_reminders=1) OR (j.channel='weekly' AND n.weekly_reports=1) OR j.channel LIKE 'note:%') LIMIT 20",
-      )
-      .bind(day, shiftDay(day, -2), now.getTime())
-      .all()
-  ).results;
-  for (const job of jobs) {
-    if (job.channel.startsWith('note:')) {
-      const row = await db
-        .prepare(
-          'SELECT payload FROM note_reminder_schedule WHERE user_id=? AND note_id=? AND expires>?',
-        )
-        .bind(job.user_id, job.channel.split(':')[1], now.getTime())
-        .first();
-      const note = row ? JSON.parse(row.payload) : null;
-      const enabled = !!note && (await noteChannel(note)) === job.channel;
-      if (!enabled) {
-        await db
-          .prepare(
-            "UPDATE notification_jobs SET status='cancelled' WHERE user_id=? AND day=? AND channel=?",
-          )
-          .bind(job.user_id, job.day, job.channel)
-          .run();
-        continue;
-      }
-    }
-    const claimed = await db
-      .prepare(
-        "UPDATE notification_jobs SET lease_until=?,attempts=attempts+1 WHERE user_id=? AND day=? AND channel=? AND status='pending' AND lease_until<? RETURNING user_id",
-      )
-      .bind(
-        now.getTime() + 10 * 60000,
-        job.user_id,
-        job.day,
-        job.channel,
-        now.getTime(),
-      )
-      .first();
-    if (!claimed) continue;
-    try {
-      await mail(
-        env,
-        job.email,
-        job.subject,
-        job.body,
-        'zen-' + job.channel + '-' + job.user_id + '-' + job.day,
-        job.html || undefined,
-      );
-      const statements = [
-        db
-          .prepare(
-            "UPDATE notification_jobs SET status='sent',last_error='' WHERE user_id=? AND day=? AND channel=?",
-          )
-          .bind(job.user_id, job.day, job.channel),
-        db
-          .prepare(
-            "INSERT INTO deliveries(user_id,day,channel,status) VALUES(?,?,?,'sent') ON CONFLICT(user_id,day,channel) DO UPDATE SET status='sent'",
-          )
-          .bind(job.user_id, job.day, job.channel),
-      ];
-      if (job.channel === 'weekly')
-        statements.push(
-          db
-            .prepare(
-              'INSERT OR REPLACE INTO report_snapshots(user_id,day,data) VALUES(?,?,?)',
-            )
-            .bind(job.user_id, day, job.snapshot),
-        );
-      await db.batch(statements);
-    } catch (e) {
-      await db
-        .prepare(
-          'UPDATE notification_jobs SET last_error=? WHERE user_id=? AND day=? AND channel=?',
-        )
-        .bind(
-          String(e.message).slice(0, 200),
-          job.user_id,
-          job.day,
-          job.channel,
-        )
-        .run();
-      console.log(
-        JSON.stringify({ event: 'report_send_failed', channel: job.channel }),
-      );
-    }
-  }
-  if (maintenance)
-    await db.batch([
-      db.prepare('DELETE FROM sessions WHERE expires<?').bind(now.getTime()),
-      db.prepare('DELETE FROM tokens WHERE expires<?').bind(now.getTime()),
-      db.prepare('DELETE FROM rate_limits WHERE expires<?').bind(now.getTime()),
-      db.prepare('DELETE FROM deliveries WHERE day<?').bind(shiftDay(day, -30)),
-      db
-        .prepare('DELETE FROM notification_jobs WHERE day<?')
-        .bind(shiftDay(day, -30)),
-      db
-        .prepare('DELETE FROM report_snapshots WHERE day<?')
-        .bind(shiftDay(day, -100)),
-    ]);
-}
-async function queueNotification(db, userId, day, channel, report) {
-  const text =
-    report.text +
-    '\n\nMở ' +
-    ORIGIN +
-    ' để xem và cập nhật.' +
-    (channel.startsWith('note:')
-      ? ''
-      : '\nTắt hoặc đổi giờ gửi trong Settings → Thông báo.');
-  await db
-    .prepare(
-      'INSERT OR IGNORE INTO notification_jobs(user_id,day,channel,subject,body,snapshot,html) VALUES(?,?,?,?,?,?,?)',
-    )
-    .bind(
-      userId,
-      day,
-      channel,
-      report.subject,
-      text,
-      report.snapshot ? JSON.stringify(report.snapshot) : '',
-      report.html || '',
-    )
-    .run();
-  if (channel.startsWith('note:'))
-    await db
-      .prepare(
-        "UPDATE notification_jobs SET status='pending',lease_until=0,attempts=0,last_error='',subject=?,body=? WHERE user_id=? AND day=? AND channel=? AND status='cancelled'",
-      )
-      .bind(report.subject, text, userId, day, channel)
-      .run();
-}
-
 export function activeNoteReminder(n) {
   return (
     !!n.remindAt &&
     !(n.type === 'todo' && n.items?.length && n.items.every((i) => i.done))
   );
 }
-async function noteChannel(n) {
+export async function noteChannel(n) {
   return (
     'note:' +
     n.id +

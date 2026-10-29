@@ -18,7 +18,8 @@
     {
       "binding": "DB",
       "database_name": "kanban-zen-studio",
-      "database_id": "d8ebf96e-eb66-4e8b-9668-a3d6da1ec455"
+      "database_id": "d8ebf96e-eb66-4e8b-9668-a3d6da1ec455",
+      "migrations_dir": "migrations"
     }
   ],
   "triggers": {

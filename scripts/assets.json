@@ -183,5 +183,25 @@
     "/pwa-icon.svg",
     "pwa-icon.svg",
     "image/svg+xml"
+  ],
+  [
+    "/modules/delta.mjs",
+    "modules/delta.mjs",
+    "text/javascript; charset=utf-8"
+  ],
+  [
+    "/modules/persistence.mjs",
+    "modules/persistence.mjs",
+    "text/javascript; charset=utf-8"
+  ],
+  [
+    "/modules/settings-capacity.mjs",
+    "modules/settings-capacity.mjs",
+    "text/javascript; charset=utf-8"
+  ],
+  [
+    "/tokens.css",
+    "tokens.css",
+    "text/css; charset=utf-8"
   ]
 ]

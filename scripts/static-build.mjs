@@ -4,6 +4,7 @@ export function buildStaticAssets(files, root, version, source) {
   const out = root + 'public/';
   rmSync(out, { recursive: true, force: true });
   mkdirSync(out + 'static', { recursive: true });
+  mkdirSync(out + 'modules', { recursive: true });
   const mapping = {};
   for (const [url, file] of Object.entries(files)) {
     if (!/\.(js|css)$/.test(url) || url === '/sw.js') continue;

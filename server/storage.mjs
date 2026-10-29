@@ -1,3 +1,4 @@
+import { workspaceRow } from './workspace-store.mjs';
 import { json, fail, body, limited } from './api.mjs';
 const FILE_CHUNK = 8 * 1024 * 1024,
   FILE_MAX = 25000000,
@@ -124,10 +125,7 @@ export async function assetAPI(request, env, u) {
       b.scope.length > 200
     )
       fail('Thông tin tệp không hợp lệ.');
-    const workspace = await db
-        .prepare('SELECT data FROM workspaces WHERE user_id=?')
-        .bind(u.id)
-        .first(),
+    const workspace = await workspaceRow(db, u.id),
       workspaceData = workspace ? JSON.parse(workspace.data) : null;
     const scope = b.scope.split(':');
     if (scope[0] === 'note') {
@@ -344,7 +342,7 @@ export async function purgeStorage(env) {
   const rows = (
     await db
       .prepare(
-        "SELECT user_id,data,revision FROM workspaces WHERE json_array_length(json_extract(data,'$.trash'))>0",
+        "SELECT user_id,data,revision FROM workspaces WHERE json_array_length(json_extract(data,'$.trash'))>0 AND NOT EXISTS(SELECT 1 FROM workspace_state WHERE workspace_state.user_id=workspaces.user_id)",
       )
       .all()
   ).results;

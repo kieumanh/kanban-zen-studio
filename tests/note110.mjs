@@ -32,5 +32,5 @@ assert.ok(css.includes('background-image:linear-gradient(98deg'), 'editor artwor
 assert.ok(css.includes('.zen-motif-thumb'),'picker artwork styled');
 assert.ok(css.includes('@media(max-width:700px)'),'responsive size');
 const html=read('dist/index.html'),welcome=read('dist/welcome.js'),app=read('dist/app.js');
-assert.ok(html.includes('v'+version)&&welcome.includes("APP_VERSION='"+version+"'")&&app.includes('Phiên bản '+version));
+assert.ok(html.includes('v__APP_VERSION__')&&welcome.includes("APP_VERSION='__APP_VERSION__'")&&app.includes('Phiên bản __APP_VERSION__'));assert.ok(read('worker.mjs').includes("APP_VERSION='"+version+"'"));
 console.log('PASS: eight detailed local SVG paintings, pin separated from title, preview thumbnails, responsive contrast and v1.9.10 metadata.');

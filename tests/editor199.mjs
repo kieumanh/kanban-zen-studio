@@ -1,3 +1,4 @@
+import {changesBetween} from '../dist/modules/delta.mjs';
 import vm from 'node:vm';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
@@ -30,7 +31,7 @@ const start=sync.indexOf('let syncAgain=false'),end=sync.indexOf('async function
 assert.ok(start>0&&end>start,'new sync implementation found');
 async function runSync(testcase){
  const status=[],calls=[];
- const context=vm.createContext({structuredClone,
+ const context=vm.createContext({structuredClone,localGeneration:0,pendingLocalSave:Promise.resolve(),deltaReady:Promise.resolve({changesBetween}),
   TextEncoder,
   currentUser:{id:'user-1'},dirty:true,syncing:false,syncConflict:false,cloudRevision:4,
   data:{schema:1,projects:[],notes:[]},syncTimer:0,save:null,KEY:'test',
@@ -38,8 +39,8 @@ async function runSync(testcase){
   cacheCloud:()=>{},valid:()=>testcase!=='invalid',
   setTimeout:(fn,ms)=>{calls.push(ms);return 5;},clearTimeout:()=>{},
   requestAPI:async(path,method,body)=>{
-   assert.equal(path,'workspace');assert.equal(method,'PUT');
-   if(testcase==='pending'){context.data.notes.push({id:'other-change'});await context.flushCloud();}
+   assert.equal(path,'workspace-v2');assert.equal(method,'POST');
+   if(testcase==='pending'){context.data.notes.push({id:'other-change'});context.localGeneration++;await context.flushCloud();}
    if(testcase==='conflict')throw {status:409};
    return {revision:5};
   }

@@ -1,17 +1,17 @@
 {
   "name": "kanban-zen-studio",
-  "version": "1.14.8",
+  "version": "1.15.0",
   "private": true,
   "type": "module",
   "scripts": {
     "build": "node scripts/build.mjs",
-    "test": "node tests/static-assets.mjs && node tests/backend-security.mjs && node tests/build.mjs && node tests/request-body.mjs && node tests/core.mjs && node tests/accounts.mjs && node tests/sync.mjs && node tests/content.mjs && node tests/reports.mjs && node tests/projectux.mjs && node tests/resources.mjs && node tests/note-reminders.mjs && node tests/report-sharing.mjs && node tests/wisdom.mjs && node tests/note-enhancements.mjs && node tests/keep198.mjs && node tests/editor199.mjs && node tests/note110.mjs && node tests/manual-sync.mjs && node tests/release110.mjs && node tests/workflow111.mjs",
+    "test": "node tests/workspace-v2.mjs && node tests/static-assets.mjs && node tests/backend-security.mjs && node tests/build.mjs && node tests/request-body.mjs && node tests/core.mjs && node tests/accounts.mjs && node tests/sync.mjs && node tests/content.mjs && node tests/reports.mjs && node tests/projectux.mjs && node tests/resources.mjs && node tests/note-reminders.mjs && node tests/report-sharing.mjs && node tests/wisdom.mjs && node tests/note-enhancements.mjs && node tests/keep198.mjs && node tests/editor199.mjs && node tests/note110.mjs && node tests/manual-sync.mjs && node tests/release110.mjs && node tests/workflow111.mjs",
     "format": "prettier --write \"server/**/*.mjs\" \"scripts/**/*.mjs\"",
     "format:check": "prettier --check \"server/**/*.mjs\" \"scripts/**/*.mjs\"",
     "lint": "eslint server scripts"
   },
   "devDependencies": {
-    "eslint": "9.39.1",
-    "prettier": "3.6.2"
+    "eslint": "10.13.0",
+    "prettier": "3.9.10"
   }
 }
