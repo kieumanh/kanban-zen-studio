@@ -168,5 +168,20 @@
     "/sw.js",
     "sw.js",
     "text/javascript; charset=utf-8"
+  ],
+  [
+    "/manifest.webmanifest",
+    "manifest.webmanifest",
+    "application/manifest+json"
+  ],
+  [
+    "/pwa.js",
+    "pwa.js",
+    "text/javascript; charset=utf-8"
+  ],
+  [
+    "/pwa-icon.svg",
+    "pwa-icon.svg",
+    "image/svg+xml"
   ]
 ]
