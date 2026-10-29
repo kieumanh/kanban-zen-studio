@@ -1,0 +1,1 @@
+export default [{ignores:['worker*.mjs','public/**','dist/**','node_modules/**','tests/**']},{files:['server/**/*.mjs','scripts/**/*.mjs'],languageOptions:{ecmaVersion:'latest',sourceType:'module'},rules:{'no-unreachable':'error','no-constant-condition':['error',{checkLoops:false}],'no-dupe-args':'error','no-dupe-keys':'error','valid-typeof':'error'}}];

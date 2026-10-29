@@ -1,0 +1,6 @@
+worker.mjs
+worker-api.mjs
+public
+node_modules
+dist
+package-lock.json
