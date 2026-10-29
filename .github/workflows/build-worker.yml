@@ -1,20 +1,25 @@
-name: Verify and bundle Kanban Worker
+name: Verify and deploy Kanban Production
 on:
   push:
     branches: [main]
     paths:
       - 'dist/**'
       - 'server/**'
-      - 'scripts/build.mjs'
+      - 'scripts/**'
+      - 'wrangler.jsonc'
       - 'package.json'
       - 'tests/**'
       - '.github/workflows/build-worker.yml'
   workflow_dispatch:
+concurrency:
+  group: kanban-production
+  cancel-in-progress: false
 permissions:
   contents: write
 jobs:
   build:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -41,3 +46,39 @@ jobs:
             git commit -m "build: sync Worker after source update [skip ci]"
             git push
           fi
+      - name: Check Cloudflare deployment credentials
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+        run: |
+          if [ -z "$CLOUDFLARE_API_TOKEN" ]; then
+            echo "::error::Add CLOUDFLARE_API_TOKEN in repository Settings > Secrets and variables > Actions. It must allow deployment to kanban-zen-studio."
+            exit 1
+          fi
+      - name: Record recovery point
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: 53ab746eeba03687cf19d683fab74b36
+        run: |
+          mkdir -p deployment-recovery
+          curl --fail-with-body --silent --show-error \
+            -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+            "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/workers/scripts/kanban-zen-studio/deployments" \
+            -o deployment-recovery/deployments.json
+          node -e "const r=require('./deployment-recovery/deployments.json');if(!r.success||!r.result.deployments.length)process.exit(1)"
+          git rev-parse HEAD > deployment-recovery/source-commit.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: production-recovery-${{ github.run_id }}
+          path: deployment-recovery/
+          retention-days: 30
+      - name: Deploy verified Worker to Cloudflare
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: 53ab746eeba03687cf19d683fab74b36
+        run: npx --yes wrangler@4 deploy --keep-vars --message "GitHub Actions ${{ github.sha }}"
+      - name: Verify active deployment and production health
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: 53ab746eeba03687cf19d683fab74b36
+          EXPECTED_COMMIT: ${{ github.sha }}
+        run: node scripts/verify-production.mjs
