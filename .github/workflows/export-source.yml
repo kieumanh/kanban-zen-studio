@@ -1,0 +1,22 @@
+name: Export Kanban source archive
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/export-source.yml'
+jobs:
+  archive:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Create source archive
+        run: |
+          git archive --format=zip --prefix=Kanban-Zen-Studio/ HEAD -o Kanban-Zen-Studio-source.zip
+          sha256sum Kanban-Zen-Studio-source.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Kanban-Zen-Studio-source
+          path: Kanban-Zen-Studio-source.zip
+          retention-days: 7
