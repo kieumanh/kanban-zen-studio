@@ -894,3 +894,9 @@ dialog .modal-head{position:sticky;top:0;z-index:5;background:var(--paper);paddi
 
 
 .auth-forgot{display:block;margin:8px 0 16px auto;min-height:44px}.auth-mini{flex-wrap:wrap}.auth-card [hidden]{display:none!important}
+
+/* Mobile: keep weekly schedule labels and select values fully readable. */
+.weekly-settings .report-setting-controls{min-width:0}
+.weekly-settings .report-hour{display:grid;grid-template-columns:minmax(72px,auto) minmax(160px,1fr);align-items:center;gap:10px}
+.weekly-settings .report-hour select{box-sizing:border-box;width:100%;min-width:0;max-width:100%;}
+@media(max-width:700px){.weekly-settings .report-hour{grid-template-columns:78px minmax(0,1fr)}.weekly-settings .report-hour select{min-width:0;width:100%;font-size:16px;padding-inline:12px}.month-event{display:block;white-space:normal!important;overflow:hidden;overflow-wrap:anywhere;line-height:1.25}.month-event .zen-event-kind{display:none!important}.month-event>small:not(.zen-event-kind){display:block;font-size:9px;line-height:1.15;white-space:nowrap}.month-event{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical}.month-event>small:not(.zen-event-kind){-webkit-line-clamp:1}.month-cell{overflow:hidden}}
