@@ -903,3 +903,23 @@ dialog .modal-head{position:sticky;top:0;z-index:5;background:var(--paper);paddi
 
 @media(max-width:700px){.account-dialog .weekly-settings .report-hour{display:grid!important;grid-template-columns:78px minmax(0,1fr)!important;width:100%;}.account-dialog .weekly-settings .report-hour select{width:100%!important;min-width:0!important;max-width:100%;box-sizing:border-box;padding-inline:10px!important;font-size:16px!important}.month-event .zen-event-time{font-weight:700;font-variant-numeric:tabular-nums}.month-event .zen-event-kind{display:none!important}}
 @media(max-width:700px){.account-dialog .weekly-settings label.report-hour{display:grid!important;grid-template-columns:78px minmax(0,1fr)!important;align-items:center;width:100%;gap:8px}.account-dialog .weekly-settings label.report-hour select{display:block!important;width:100%!important;min-width:0!important;max-width:100%!important;box-sizing:border-box;padding-inline:10px!important;font-size:16px!important}}
+
+/* Consistent refresh controls and compact editor groups. */
+button[data-resources-refresh],button.focus-check-updates{display:inline-flex!important;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:10px 16px!important;border:1px solid var(--line);border-radius:12px!important;background:var(--paper);color:var(--ink);font:500 14px/1.4 var(--sans);width:auto!important;height:auto!important;flex-shrink:0}
+button[data-resources-refresh] .ui-icon,button.focus-check-updates .ui-icon{width:18px;height:18px;flex:0 0 18px;margin:0}
+button.focus-check-updates::after{content:'Làm mới'}
+button[data-resources-refresh]:disabled,button.focus-check-updates:disabled{opacity:.6;cursor:wait}
+@media(max-width:700px){
+.note-composer .note-unified-options{display:grid!important;grid-template-columns:minmax(0,1fr);gap:10px!important;padding:12px!important;align-items:stretch}
+.note-composer .note-unified-options>*{width:100%!important;min-width:0!important;max-width:100%;margin:0!important;box-sizing:border-box}
+.note-composer .note-unified-options .note-group{padding:12px!important;display:grid;gap:8px}
+.note-composer .note-unified-options .note-group input{width:100%;min-width:0;margin:0}
+.note-composer .note-unified-options .note-wheel-picker,.note-composer .note-unified-options .note-type-field{padding:12px!important;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.note-composer .note-unified-options .note-motif-picker>summary,.note-composer .note-unified-options .note-reminder-options>summary{padding:12px!important;min-height:48px;box-sizing:border-box;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.note-composer .note-unified-options>label.btn{display:flex;align-items:center;justify-content:center;min-height:48px;padding:12px!important}
+.zen-task-section .detail-actions{display:flex!important;flex-wrap:wrap;align-items:center;justify-content:flex-start;gap:10px!important}
+.zen-task-section .wf-state-choices{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));width:100%;gap:8px!important;order:1}
+.zen-task-section .wf-state-choice{width:100%;min-width:0;padding:10px 8px!important;min-height:44px;text-align:center;white-space:normal;line-height:1.4}
+.zen-task-section .wf-task-tools{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px!important;margin-top:14px;padding-top:14px}
+.zen-task-section .wf-task-tools .btn{width:100%;min-width:0;min-height:44px;margin:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:10px!important;white-space:normal}
+}
