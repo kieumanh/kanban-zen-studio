@@ -54,5 +54,5 @@ assert.equal(versions[0].data.text,'Second','restore retains the replaced curren
 db.prepare('UPDATE note_versions SET saved=? WHERE revision=1').run(Date.now()-8*86400000);
 assert.equal((await(await req('note-history?id=n')).json()).versions.length,1,'7-day retention');
 db.prepare('UPDATE note_versions SET saved=?').run(Date.now()-8*86400000);
-await daily(env);assert.equal(db.prepare('SELECT count(*) AS n FROM note_versions').get().n,0,'scheduled cleanup covers inactive accounts');
+await daily(env,new Date(Math.floor(Date.now()/3600000)*3600000));assert.equal(db.prepare('SELECT count(*) AS n FROM note_versions').get().n,0,'scheduled cleanup covers inactive accounts');
 console.log('PASS: three-way merge, competing edits/deletions, account-private 7-day history, stale CAS rejection, restore and scheduled expiry.');
