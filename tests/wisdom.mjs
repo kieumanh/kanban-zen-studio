@@ -69,3 +69,5 @@ assert.ok(worker.includes('"/wisdom-status.json"'));
 assert.match(worker, /version:["']1\.14\.4["']/);
 console.log('Wisdom: '+active.length+' sourced excerpts; full-cycle, timezone, deduplication and idempotency checks passed.');
 
+
+assert.equal(evaluate('welcomeDeck([{author:"Marcus Aurelius",vi:"stale cache"},{author:"Seneca",vi:"old"},{author:"Other",school:"Stoicism",vi:"old"},{author:"Lão Tử",vi:"Đạo"}],[]).length'),1);

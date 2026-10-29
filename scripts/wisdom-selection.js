@@ -1,8 +1,11 @@
 // Pure selection functions are embedded into welcome.js at build-authoring time.
 // Every excerpt occurs exactly once in a complete cycle, including authors
 // without a profile. Entries for each author are spread across the cycle.
+function welcomeAllowed(entry) {
+  return !/marcus\s+aurelius|stoic|khắc\s*kỷ|khac\s*ky|epictetus|seneca/i.test([entry.author,entry.name,entry.id,entry.school,entry.theme,entry.source].filter(Boolean).join(' '));
+}
 function welcomeProfile(author, profiles) {
-  return profiles.filter(p => author === p.name || author.startsWith(p.name + ' ·'))
+  return profiles.filter(p => welcomeAllowed(p) && (author === p.name || author.startsWith(p.name + ' ·')))
     .sort((a,b) => b.name.length - a.name.length)[0];
 }
 function welcomeHash(s) {
@@ -13,7 +16,7 @@ function welcomeHash(s) {
 function welcomeDeck(quotes, profiles) {
   const groups = new Map();
   for (const quote of quotes) {
-    if (typeof quote.vi !== 'string' || !quote.vi.trim()) continue;
+    if (!welcomeAllowed(quote) || typeof quote.vi !== 'string' || !quote.vi.trim()) continue;
     const profile = welcomeProfile(quote.author, profiles);
     const key = profile?.id || quote.author;
     if (!groups.has(key)) groups.set(key, []);
