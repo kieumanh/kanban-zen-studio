@@ -923,3 +923,16 @@ button[data-resources-refresh]:disabled,button.focus-check-updates:disabled{opac
 .zen-task-section .wf-task-tools{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px!important;margin-top:14px;padding-top:14px}
 .zen-task-section .wf-task-tools .btn{width:100%;min-width:0;min-height:44px;margin:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:10px!important;white-space:normal}
 }
+
+
+/* Clear project scope for schedule views without adding another fixed nav layer. */
+.workspace-scope{display:flex;align-items:center;gap:10px;margin:-10px 0 20px;padding:10px 12px;border:1px solid #e8def0;border-radius:14px;background:linear-gradient(110deg,#fffdfd,#faf6fd);}
+.workspace-scope label{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-width:0;color:#766482;font-size:12px;font-weight:650;}
+.workspace-scope select{min-width:0;max-width:min(360px,70%);padding:9px 34px 9px 12px;border:1px solid #dfd2e9;border-radius:10px;background:#fff;color:#382a48;font:600 13px/1.4 var(--sans);}
+.workspace-scope select:focus-visible{outline:3px solid #ad84cf;outline-offset:2px;}
+.scope-gantt-all{display:grid;gap:22px;}
+.scope-gantt-project{display:contents;}
+.scope-gantt-project>h2{padding:15px 18px;margin-top:8px;border-left:4px solid #9b6dc0;border-radius:0 12px 12px 0;background:#f0e8f7;font-size:20px;}
+.scope-gantt-project>.project-view-summary{margin-top:-14px;}
+.scope-gantt-all>.scope-gantt-project:not(:first-child) .gantt-controls{display:none;}
+@media(max-width:700px){.workspace-scope{margin:-8px 0 16px;padding:9px 10px;}.workspace-scope label{gap:8px;font-size:11px;}.workspace-scope select{max-width:68%;min-height:40px;font-size:14px;}.scope-gantt-all{gap:16px;}.scope-gantt-project>h2{padding:12px 14px;font-size:18px;}}
