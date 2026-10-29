@@ -1,5 +1,64 @@
-import {json,fail,limited} from './api.mjs';
-export async function resourceList(request,env,u){const url=new URL(request.url),offset=Number(url.searchParams.get('offset')||0),limit=60,q=(url.searchParams.get('q')||'').trim(),kind=url.searchParams.get('kind')||'all',scope=url.searchParams.get('scope')||'';if(!Number.isSafeInteger(offset)||offset<0||offset>100000||q.length>200||!['all','image','video','audio','document'].includes(kind)||scope&&!/^(note|project:[A-Za-z0-9_-]{1,100})$/.test(scope))fail('Bộ lọc tài nguyên không hợp lệ.');await limited(env.DB,'resources:'+u.id,120);
-const union="SELECT id,name,size,mime,scope,created,'r2' AS source FROM object_files WHERE user_id=? AND state='ready' AND deleted=0 UNION ALL SELECT id,name,size,'application/octet-stream' AS mime,'project:'||project_id||CASE WHEN task_id<>'' THEN ':task:'||task_id ELSE '' END AS scope,created,'legacy' AS source FROM attachments WHERE user_id=? AND deleted=0",type="CASE WHEN mime LIKE 'image/%' OR lower(name) GLOB '*.png' OR lower(name) GLOB '*.jpg' OR lower(name) GLOB '*.jpeg' OR lower(name) GLOB '*.webp' OR lower(name) GLOB '*.gif' THEN 'image' WHEN mime LIKE 'video/%' OR lower(name) GLOB '*.mp4' OR lower(name) GLOB '*.webm' OR lower(name) GLOB '*.mov' THEN 'video' WHEN mime LIKE 'audio/%' OR lower(name) GLOB '*.mp3' OR lower(name) GLOB '*.wav' OR lower(name) GLOB '*.m4a' OR lower(name) GLOB '*.ogg' THEN 'audio' ELSE 'document' END",base=`SELECT *,${type} AS kind FROM (${union})`,escapeLike=v=>v.replace(/[\\%_]/g,'\\$&'),where=[],params=[];
-if(q){where.push("name LIKE ? ESCAPE '\\'");params.push('%'+escapeLike(q)+'%');}if(kind!=='all'){where.push('kind=?');params.push(kind);}if(scope==='note')where.push("scope LIKE 'note:%'");else if(scope){where.push("(scope=? OR scope LIKE ? ESCAPE '\\')");params.push(scope,escapeLike(scope)+':task:%');}const filter=where.length?' WHERE '+where.join(' AND '):'';
-const files=await env.DB.prepare(`SELECT * FROM (${base})${filter} ORDER BY created DESC,id DESC,source DESC LIMIT ? OFFSET ?`).bind(u.id,u.id,...params,limit,offset).all(),count=await env.DB.prepare(`SELECT COUNT(*) AS total FROM (${base})${filter}`).bind(u.id,u.id,...params).first(),usage=await env.DB.prepare('SELECT (SELECT COALESCE(SUM(size),0) FROM object_files WHERE user_id=?)+(SELECT COALESCE(SUM(size),0) FROM attachments WHERE user_id=?) AS used').bind(u.id,u.id).first();return json({files:files.results,total:count.total,used:usage.used,offset,limit,hasMore:offset+files.results.length<count.total});}
+import { json, fail, limited } from './api.mjs';
+export async function resourceList(request, env, u) {
+  const url = new URL(request.url),
+    offset = Number(url.searchParams.get('offset') || 0),
+    limit = 60,
+    q = (url.searchParams.get('q') || '').trim(),
+    kind = url.searchParams.get('kind') || 'all',
+    scope = url.searchParams.get('scope') || '';
+  if (
+    !Number.isSafeInteger(offset) ||
+    offset < 0 ||
+    offset > 100000 ||
+    q.length > 200 ||
+    !['all', 'image', 'video', 'audio', 'document'].includes(kind) ||
+    (scope && !/^(note|project:[A-Za-z0-9_-]{1,100})$/.test(scope))
+  )
+    fail('Bộ lọc tài nguyên không hợp lệ.');
+  await limited(env.DB, 'resources:' + u.id, 120);
+  const union =
+      "SELECT id,name,size,mime,scope,created,'r2' AS source FROM object_files WHERE user_id=? AND state='ready' AND deleted=0 UNION ALL SELECT id,name,size,'application/octet-stream' AS mime,'project:'||project_id||CASE WHEN task_id<>'' THEN ':task:'||task_id ELSE '' END AS scope,created,'legacy' AS source FROM attachments WHERE user_id=? AND deleted=0",
+    type =
+      "CASE WHEN mime LIKE 'image/%' OR lower(name) GLOB '*.png' OR lower(name) GLOB '*.jpg' OR lower(name) GLOB '*.jpeg' OR lower(name) GLOB '*.webp' OR lower(name) GLOB '*.gif' THEN 'image' WHEN mime LIKE 'video/%' OR lower(name) GLOB '*.mp4' OR lower(name) GLOB '*.webm' OR lower(name) GLOB '*.mov' THEN 'video' WHEN mime LIKE 'audio/%' OR lower(name) GLOB '*.mp3' OR lower(name) GLOB '*.wav' OR lower(name) GLOB '*.m4a' OR lower(name) GLOB '*.ogg' THEN 'audio' ELSE 'document' END",
+    base = `SELECT *,${type} AS kind FROM (${union})`,
+    escapeLike = (v) => v.replace(/[\\%_]/g, '\\$&'),
+    where = [],
+    params = [];
+  if (q) {
+    where.push("name LIKE ? ESCAPE '\\'");
+    params.push('%' + escapeLike(q) + '%');
+  }
+  if (kind !== 'all') {
+    where.push('kind=?');
+    params.push(kind);
+  }
+  if (scope === 'note') where.push("scope LIKE 'note:%'");
+  else if (scope) {
+    where.push("(scope=? OR scope LIKE ? ESCAPE '\\')");
+    params.push(scope, escapeLike(scope) + ':task:%');
+  }
+  const filter = where.length ? ' WHERE ' + where.join(' AND ') : '';
+  const files = await env.DB.prepare(
+      `SELECT * FROM (${base})${filter} ORDER BY created DESC,id DESC,source DESC LIMIT ? OFFSET ?`,
+    )
+      .bind(u.id, u.id, ...params, limit, offset)
+      .all(),
+    count = await env.DB.prepare(
+      `SELECT COUNT(*) AS total FROM (${base})${filter}`,
+    )
+      .bind(u.id, u.id, ...params)
+      .first(),
+    usage = await env.DB.prepare(
+      'SELECT (SELECT COALESCE(SUM(size),0) FROM object_files WHERE user_id=?)+(SELECT COALESCE(SUM(size),0) FROM attachments WHERE user_id=?) AS used',
+    )
+      .bind(u.id, u.id)
+      .first();
+  return json({
+    files: files.results,
+    total: count.total,
+    used: usage.used,
+    offset,
+    limit,
+    hasMore: offset + files.results.length < count.total,
+  });
+}

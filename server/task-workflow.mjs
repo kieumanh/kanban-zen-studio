@@ -1,7 +1,7 @@
 /* Reparent task attachments within the same successful workspace CAS transaction. */
 export function taskAssetStatements(db, userId, raw, revision) {
   const guard =
-    "EXISTS(SELECT 1 FROM workspaces w WHERE w.user_id=? AND w.revision=? AND w.data=?)";
+    'EXISTS(SELECT 1 FROM workspaces w WHERE w.user_id=? AND w.revision=? AND w.data=?)';
   return [
     db
       .prepare(
