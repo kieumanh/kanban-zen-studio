@@ -36,9 +36,10 @@
 .task-card .task-card-deadline{color:#78618b;font-size:11px;font-weight:650}
 .task-card .task-card-deadline.is-overdue{color:#b54357}
 .task-card .task-card-deadline.is-empty{color:#9b92a0;font-weight:450}
-.task-card .task-card-labels-secondary{display:flex;gap:5px;min-width:0;overflow:hidden}
-.task-card .task-card-labels-secondary .label-chip{max-width:calc(50% - 4px);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin:0;font-size:10px;padding:2px 7px}
-.task-card .task-card-labels-secondary .label-overflow{flex:0 0 auto;border-color:#ded1e8;color:#76519b;background:#f8f4fb}
+.task-card .wf-card-keywords{display:flex;align-items:center;gap:5px;min-width:0;overflow:hidden;padding:0;margin:0;border:0}
+.task-card .wf-card-keywords .matrix-chip{flex:0 1 auto;min-width:0;max-width:46%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin:0;padding:3px 7px;font-size:9px}
+.task-card .wf-card-keywords .label-chip{max-width:calc(50% - 4px);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin:0;font-size:10px;padding:2px 7px}
+.task-card .wf-card-keywords .label-overflow{flex:0 0 auto;border-color:#ded1e8;color:#76519b;background:#f8f4fb}
 .task-card .task-next-step{display:grid;gap:2px;min-width:0;margin:0;padding:8px 10px;border-left:2px solid #c59bd7;border-radius:0 8px 8px 0;background:#faf7fc;color:#554563;font-size:11px;line-height:1.45}
 .task-card .task-next-step>span{color:#917ba0;font-size:9px;font-weight:750;letter-spacing:.04em;text-transform:uppercase}
 .task-card .task-card-progress-meta{margin:2px 0 0;font-size:10px}

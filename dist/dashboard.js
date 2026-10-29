@@ -48,16 +48,16 @@ const dashboardTaskDetailBefore=taskDetail;
 taskDetail=function(p,t){dashboardTaskDetailBefore(p,t);const state=$('#task-state');if(state){state.setAttribute('aria-label','Chuyển trạng thái công việc');state.title='Chọn trạng thái công việc';const label=document.createElement('label');label.className='task-state-control';label.innerHTML='<span>Trạng thái</span>';state.before(label);label.append(state);}};
 const dashboardTaskCardBefore=taskCard;
 taskCard=function(t,p){
- const pct=taskPct(t),checked=t.checks.filter(c=>c.done).length,total=t.checks.length,deadline=dashboardDeadline(t),priority=t.priority?PRIORITIES[t.priority]:'';
+ const pct=taskPct(t),checked=t.checks.filter(c=>c.done).length,total=t.checks.length,deadline=dashboardDeadline(t);
  const labels=(t.labels||[]).slice(0,2).map(label=>'<span class="label-chip" style="--label:'+(/^#[a-f0-9]{6}$/i.test(label.color)?label.color:'#7950c8')+'">'+esc(label.name)+'</span>').join('');
  const extra=(t.labels||[]).length>2?'<span class="label-chip label-overflow">+'+((t.labels||[]).length-2)+'</span>':'';
  const next=t.checks.find(c=>!c.done);
  const nextColumn=p.columns[p.columns.indexOf(t.col)+1];
  return '<article class="task-card wf-task-card" draggable="true" data-task="'+esc(t.id)+'" data-pid="'+esc(p.id)+'" role="button" tabindex="0" aria-label="'+esc(t.title)+', '+pct+'%">'+
-  '<header class="task-card-top"><div class="task-card-labels"><span class="tag">'+esc(t.tag||'Công việc')+'</span>'+(priority?'<span class="task-priority">'+esc(priority)+'</span>':'')+'</div>'+wfGrip('task',t.id,p.id)+'</header>'+
+  '<header class="task-card-top"><div class="task-card-labels"><span class="tag">'+esc(t.tag||'Công việc')+'</span></div>'+wfGrip('task',t.id,p.id)+'</header>'+
   '<h3>'+esc(t.title)+'</h3>'+
   '<div class="task-card-decision">'+(deadline?'<span class="task-card-deadline '+(deadline<today()&&t.col!=='Done'?'is-overdue':'')+'">'+(deadline<today()&&t.col!=='Done'?'Quá hạn · ':'Hạn · ')+esc(dateLabel(deadline))+'</span>':'<span class="task-card-deadline is-empty">Chưa đặt hạn</span>')+'</div>'+
-  (labels||extra?'<div class="task-card-labels-secondary">'+labels+extra+'</div>':'')+
+  '<div class="wf-card-keywords">'+matrixChip(t)+(labels||extra)+'</div>'+
   (next?'<p class="task-next-step"><span>Bước tiếp theo</span>'+esc(next.text)+'</p>':'')+
   '<div class="progress-meta task-card-progress-meta"><span>'+(total?checked+'/'+total+' mục checklist':'Chưa có checklist')+'</span><strong>'+pct+'%</strong></div>'+bar(pct,p.color).replace('aria-label="Tiến độ"','aria-label="'+(total?'Tiến độ checklist':'Tiến độ công việc')+'" title="'+(total?checked+' trên '+total+' mục checklist đã hoàn thành':'Chưa có checklist; tiến độ dựa trên trạng thái công việc')+'"')+
   (nextColumn?'<button type="button" class="btn task-next" data-next-task="'+esc(t.id)+'" data-next-project="'+esc(p.id)+'">Chuyển sang '+esc(columnDisplayName(p,nextColumn))+' →</button>':'')+'</article>';
