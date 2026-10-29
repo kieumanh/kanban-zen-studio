@@ -1,0 +1,9 @@
+{
+  "databaseId": "d8ebf96e-eb66-4e8b-9668-a3d6da1ec455",
+  "appliedOn": "2026-10-29",
+  "method": "Connected Cloudflare API; migration names read back from d1_migrations",
+  "files": {
+    "0002_remember_device.sql": "5d7930f2ef9abe1b2d76fe973095613df1e0d75ecb7ae86fb9a5fb89cafc89b1",
+    "0001_workspace_entities.sql": "fbc7d30f2be554aa4c028d49a2b5bd25f88ed13d1871999e33139c306008ebe5"
+  }
+}

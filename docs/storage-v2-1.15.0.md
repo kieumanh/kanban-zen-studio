@@ -29,3 +29,7 @@ After migration, do not force a legacy write or delete the normalized tables to 
 ## Validation scope
 
 Tests cover a workspace larger than 2 MB, a one-note delta smaller than 1 KB, stale revisions, account isolation, history, staged transfers larger than 2 MB, retry-safe R2 sketches, long sessions and sensitive-action confirmation. Browser tests cover desktop/tablet/mobile, Settings capacity and reopening a large IndexedDB draft offline. Automated checks do not constitute an independent penetration or load test at the 20 MB application ceiling.
+
+## Current migration credentials
+
+The existing Worker deployment token received D1 error 7403. The connected Cloudflare API applied both migrations successfully and migration names/session columns were read back. `migrations/production-receipt.json` records their SHA-256 checksums. In the absence of `CLOUDFLARE_D1_API_TOKEN`, CI requires an exact receipt match and blocks any new/modified SQL. To enable automatic Wrangler execution, add that separate Actions secret with D1 Edit access for the existing account/database. The Worker deployment token remains sufficient for deployment.
