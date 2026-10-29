@@ -8,6 +8,13 @@ assert.equal((await req('me')).status,401);assert.equal((await req('register','P
 let token=mails.at(-1).text.match(/#verify=([a-f0-9]+)/)[1];assert.equal((await req('verify','POST',{token})).status,200);assert.equal((await req('verify','POST',{token})).status,400);
 let login=await req('login','POST',{email:'first@example.test',password:p});assert.equal(login.status,200);const cookie=login.headers.get('Set-Cookie').split(';')[0];assert.ok(login.headers.get('Set-Cookie').includes('HttpOnly'));assert.ok(login.headers.get('Set-Cookie').includes('Secure'));
 for(const notes of [true,42,{},[null],[false]]){const response=await req('workspace','PUT',{data:{schema:1,projects:[],notes},revision:0},cookie);assert.equal(response.status,400,'Malformed notes must be a validation error');assert.equal((await response.json()).code,'INVALID_WORKSPACE');}
+const ownerId=sql.prepare('SELECT id FROM users WHERE email=?').get('first@example.test').id;
+sql.prepare('INSERT INTO note_versions VALUES(?,?,?,?,?)').run(ownerId,'history-test',0,1,'{"title":"expired"}');
+sql.prepare('INSERT INTO note_versions VALUES(?,?,?,?,?)').run(ownerId,'history-test',1,Date.now(),'{"title":"recent"}');
+const history=await req('note-history?id=history-test','GET',null,cookie);
+assert.equal(history.status,200);
+assert.equal((await history.json()).versions.length,1);
+assert.equal(sql.prepare('SELECT COUNT(*) AS n FROM note_versions WHERE user_id=?').get(ownerId).n,2,'GET must not delete historical rows');
 const revisionError=await req('workspace','PUT',{data:{schema:1,projects:[]},revision:'1'},cookie);assert.equal(revisionError.status,400);assert.equal((await revisionError.json()).code,'INVALID_REVISION');
 
 assert.equal((await req('me','GET',null,cookie)).status,200);const workspace={schema:1,projects:[]};assert.equal((await req('workspace','PUT',{data:workspace,revision:0},cookie)).status,200);assert.equal((await req('workspace','PUT',{data:workspace,revision:0},cookie)).status,409);assert.equal((await req('workspace','PUT',{data:{schema:1,projects:[{}]},revision:1},cookie)).status,400);assert.equal((await req('workspace','GET',null,cookie)).status,200);
