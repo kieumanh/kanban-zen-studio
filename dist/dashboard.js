@@ -21,8 +21,9 @@ taskForm=function(p,t,col='List'){
   if(intro)intro.textContent='Bắt đầu bằng tên việc. Bạn có thể bổ sung thông tin sau.';
   const options=document.createElement('details');options.className='task-create-options';options.innerHTML='<summary>Thông tin khác (không bắt buộc)</summary><div class="task-create-option-fields"></div>';
   const holder=options.querySelector('.task-create-option-fields');
-  [...body.children].forEach(node=>{if(node!==body.querySelector('h2')&&node!==intro&&node!==titleField&&node!==options)holder.append(node);});
-  titleField.after(options);
+  const sections=[...body.querySelectorAll(':scope>.zen-task-section')],titleSection=sections.find(section=>section.contains(titleField));
+  if(titleSection){if(intro){intro.remove();titleSection.before(intro);}titleField.after(options);for(const section of sections){if(section===titleSection){for(const node of [...section.children])if(node!==titleField&&node!==options&&node.tagName!=='H3')holder.append(node);}else holder.append(section);}}
+  else{let titleRoot=titleField;while(titleRoot.parentElement&&titleRoot.parentElement!==body)titleRoot=titleRoot.parentElement;[...body.children].forEach(node=>{if(node!==body.querySelector('h2')&&node!==intro&&node!==titleRoot)holder.append(node);});titleRoot.after(options);}
   if(view==='gantt')options.open=true;
  }
  const dateFields=body.querySelector('.schedule-date-fields');
