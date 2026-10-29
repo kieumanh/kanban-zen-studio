@@ -366,7 +366,9 @@ export async function purgeStorage(env) {
       if (item.kind === 'project' && !d.projects.some((p) => p.id === v.id))
         scopes = [
           'project:' + v.id,
-          ...(v.tasks || []).map((t) => 'project:' + v.id + ':task:' + t.id),
+          ...(Array.isArray(v.tasks) ? v.tasks : [])
+            .filter((t) => t && typeof t.id === 'string')
+            .map((t) => 'project:' + v.id + ':task:' + t.id),
         ];
       if (
         item.kind === 'task' &&

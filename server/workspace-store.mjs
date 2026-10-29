@@ -327,7 +327,11 @@ export async function purgeWorkspaceV2(env) {
       } catch {
         continue;
       }
-      if (!value?.id) continue;
+      if (
+        typeof value?.id !== 'string' ||
+        !/^[A-Za-z0-9_-]{1,100}$/.test(value.id)
+      )
+        continue;
       let scopes = [];
       if (item.kind === 'note' && !next.notes?.some((n) => n.id === value.id))
         scopes = ['note:' + value.id];
@@ -337,9 +341,9 @@ export async function purgeWorkspaceV2(env) {
       )
         scopes = [
           'project:' + value.id,
-          ...(value.tasks || []).map(
-            (t) => 'project:' + value.id + ':task:' + t.id,
-          ),
+          ...(Array.isArray(value.tasks) ? value.tasks : [])
+            .filter((t) => t && typeof t.id === 'string')
+            .map((t) => 'project:' + value.id + ':task:' + t.id),
         ];
       if (
         item.kind === 'task' &&
