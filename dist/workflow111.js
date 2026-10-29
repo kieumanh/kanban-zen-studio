@@ -1427,18 +1427,14 @@ scheduleEvents=function(){return dueTasks().flatMap(t=>{const events=[{...t,even
 function zenDateDetails(t){const fmt=v=>esc(v?v.replace('T',' · '):'Chưa đặt');return '<dl class="zen-date-details"><div><dt>Bắt đầu</dt><dd>'+fmt(t.start)+'</dd></div><div><dt>Kết thúc</dt><dd>'+fmt(t.end||t.due)+'</dd></div></dl>'; }
 function zenUnscheduled(){const tasks=dueTasks().filter(t=>!t.start&&!t.end&&!t.due);return '<section class="panel zen-unscheduled"><h2>Chưa lên lịch <small>'+tasks.length+'</small></h2>'+(tasks.map(t=>timelineTask(t)).join('')||'<p class="subtext">Mọi công việc đã có lịch hoặc hạn.</p>')+'</section>';}
 const zenCalendarBefore=workCalendar;
-workCalendar=function(){return zenCalendarBefore().replace('<p class="help-copy">Ngày kết thúc là hạn hoàn thành. Công việc chưa đặt ngày nằm trong Timeline.</p>','<p class="help-copy">Khoảng thực hiện: ngày bắt đầu → kết thúc. Mốc “Hạn” đánh dấu hạn hoàn thành riêng. Chạm task để xem đủ ba loại ngày.</p>')+zenUnscheduled();};
+workCalendar=function(){return zenCalendarBefore().replace('<p class="help-copy">Ngày kết thúc là hạn hoàn thành. Công việc chưa đặt ngày nằm trong Timeline.</p>','<p class="help-copy">Khoảng thực hiện từ ngày bắt đầu đến ngày kết thúc; ngày kết thúc cũng là hạn hoàn thành. Công việc chưa đặt lịch nằm trong Timeline.</p>')+zenUnscheduled();};
 workTimeline=function(){const tasks=dueTasks().filter(t=>t.start||t.end||t.due).sort((a,b)=>(a.start||a.end||a.due).localeCompare(b.start||b.end||b.due));return heading('LỊCH CÔNG VIỆC','Timeline','Bắt đầu và kết thúc · giờ Việt Nam','<button type="button" class="btn" data-zen-timeline-today>Hôm nay</button>')+(active&&project()?projectSummary(project()):'')+'<section class="panel zen-timeline">'+tasks.map(t=>'<article class="timeline-item" data-zen-day="'+esc((t.start||t.end||t.due).slice(0,10))+'">'+timelineTask(t).replace('</button>',zenDateDetails(t)+'</button>')+'</article>').join('')+'</section>'+zenUnscheduled();};
 document.addEventListener('click',e=>{if(e.target.closest('[data-zen-timeline-today]')){const items=[...document.querySelectorAll('[data-zen-day]')];const target=items.find(x=>x.dataset.zenDay>=today())||items.at(-1);target?.scrollIntoView({behavior:'smooth',block:'center'});target?.classList.add('zen-today-focus');}});
 
 // Shared view refinements run within the existing render lifecycle.
 function wfWorkspaceUsability(){
  if(view==='dashboard'&&!document.querySelector('.wf-today-plan')){
-  const tasks=allTasks().filter(t=>t.col!=='Done'&&!t.archived),day=today();
-  const lists=[['Hôm nay',tasks.filter(t=>t.due===day)],['Quá hạn',tasks.filter(t=>t.due&&t.due<day)],['Đang thực hiện',tasks.filter(t=>t.col==='Doing')]];
-  const section=document.createElement('section');section.className='wf-today-plan';section.setAttribute('aria-label','Kế hoạch hôm nay');
-  section.innerHTML=lists.map(([title,items])=>'<article class="panel"><h2>'+title+' <small>'+items.length+' việc</small></h2>'+(workTaskList(items,3)||'<p class="subtext">Không có công việc trong nhóm này.</p>')+'<button type="button" class="text-btn" data-view="tasks">Xem tất cả công việc →</button></article>').join('');
-  section.querySelectorAll('[data-task]').forEach(b=>{const t=tasks.find(t=>t.id===b.dataset.task&&t.project.id===b.dataset.pid);if(t)b.title=[t.title,t.project.name,PRIORITIES[t.priority]||'Chưa phân loại',t.description||'Chưa có mô tả'].join(' · ');});
+  const section=document.createElement('section');section.className='wf-today-plan';section.setAttribute('aria-label','Việc cần ưu tiên');
   const stats=document.querySelector('#main .stats');if(stats)stats.before(section);else document.querySelector('#main').append(section);
  }
  const bulk=document.querySelector('.wf-bulk-tools');if(bulk&&!bulk.querySelector('.wf-bulk-title')){const title=document.createElement('strong');title.className='wf-bulk-title';title.textContent='Thao tác với mục đã chọn';bulk.prepend(title);}

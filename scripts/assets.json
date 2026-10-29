@@ -10,6 +10,16 @@
     "text/javascript; charset=utf-8"
   ],
   [
+    "/dashboard.js",
+    "dashboard.js",
+    "text/javascript; charset=utf-8"
+  ],
+  [
+    "/dashboard.css",
+    "dashboard.css",
+    "text/css; charset=utf-8"
+  ],
+  [
     "/workflow111.css",
     "workflow111.css",
     "text/css; charset=utf-8"

@@ -1,6 +1,6 @@
 'use strict';
 const WORK_GROUPS={done:{label:'Đã hoàn thành',color:'#3b8b61'},doing:{label:'Đang xây dựng',color:'#8054bf'},todo:{label:'Chưa làm',color:'#df8c40'},overdue:{label:'Quá hạn',color:'#cd4c58'}};
-function workDeadline(t){return t.due||t.end?.slice(0,10)||'';}
+function workDeadline(t){return t.end?.slice(0,10)||t.due||'';}
 function workCategory(t){return t.col==='Done'?'done':workDeadline(t)&&workDeadline(t)<today()?'overdue':t.col==='Doing'?'doing':'todo';}
 function workGroupTasks(key){return allTasks().filter(t=>workCategory(t)===key);}
 function workTaskList(tasks,limit=8){return tasks.slice(0,limit).map(t=>`<button type="button" class="work-task-row" data-task="${esc(t.id)}" data-pid="${esc(t.project.id)}"><strong>${esc(t.title)}</strong><small>${esc(t.project.name)} · ${taskPct(t)}%${workDeadline(t)?' · Hạn '+dateLabel(workDeadline(t)):' · Chưa đặt hạn'}</small></button>`).join('');}
