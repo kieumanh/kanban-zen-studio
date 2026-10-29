@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import vm from 'node:vm';
 import {readFileSync} from 'node:fs';
 import {execFileSync} from 'node:child_process';
+const {version}=JSON.parse(readFileSync(new URL('../package.json',import.meta.url),'utf8'));
 const read=p=>readFileSync(new URL('../'+p,import.meta.url),'utf8');
 execFileSync(process.execPath,['--check',new URL('../dist/keep198.js',import.meta.url).pathname]);
 const source=read('dist/keep198.js'),css=read('dist/style.css');
@@ -31,5 +32,5 @@ assert.ok(css.includes('background-image:linear-gradient(98deg'), 'editor artwor
 assert.ok(css.includes('.zen-motif-thumb'),'picker artwork styled');
 assert.ok(css.includes('@media(max-width:700px)'),'responsive size');
 const html=read('dist/index.html'),welcome=read('dist/welcome.js'),app=read('dist/app.js');
-assert.ok(html.includes('v1.14.7')&&welcome.includes("APP_VERSION='1.14.7'")&&app.includes("Phiên bản 1.14.7"));
+assert.ok(html.includes('v'+version)&&welcome.includes("APP_VERSION='"+version+"'")&&app.includes('Phiên bản '+version));
 console.log('PASS: eight detailed local SVG paintings, pin separated from title, preview thumbnails, responsive contrast and v1.9.10 metadata.');

@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import vm from 'node:vm';
 import {readFileSync} from 'node:fs';
+const {version}=JSON.parse(readFileSync(new URL('../package.json',import.meta.url),'utf8'));
 const read=p=>readFileSync(new URL('../'+p,import.meta.url),'utf8');
 const source=read('dist/account.js'),start=source.indexOf('function manualSyncSummary('),end=source.indexOf('function accountPanel()',start);
 assert.ok(start>0&&end>start,'manual-sync report function available');
@@ -66,5 +67,5 @@ r=await caseRun('server down',{reject:503});
 assert.equal(r.state,'error');
 r=await caseRun('connection timed out',{reject:0});
 assert.equal(r.state,'offline');
-assert.ok(read('dist/index.html').includes('v1.9.11')||read('dist/index.html').includes('v1.14.7'),'valid release');
+assert.ok(read('dist/index.html').includes('v'+version),'valid release');
 console.log('PASS: sync button icon + manual verified report across success/upload/download/offline/conflict/invalid/pending/error.');
