@@ -168,20 +168,5 @@
     "/sw.js",
     "sw.js",
     "text/javascript; charset=utf-8"
-  ],
-  [
-    "/zen-ai.js",
-    "zen-ai.js",
-    "text/javascript; charset=utf-8"
-  ],
-  [
-    "/zen-ai.css",
-    "zen-ai.css",
-    "text/css; charset=utf-8"
-  ],
-  [
-    "/zen-mascot.svg",
-    "zen-mascot.svg",
-    "image/svg+xml"
   ]
 ]

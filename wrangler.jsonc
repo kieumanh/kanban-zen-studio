@@ -27,16 +27,12 @@
     ]
   },
   "vars": {
-    "VAPID_PUBLIC": "BKbJzhTBKChNcGUQzGruhrQiATAx2R71XEpPCE-1ip8uhJviT0cqvvBPrxsH1P3juOIVPXJIMGbJ5JAwemzKujY",
-    "ZEN_AI_OWNER_EMAIL": "kieumanh2211@gmail.com"
+    "VAPID_PUBLIC": "BKbJzhTBKChNcGUQzGruhrQiATAx2R71XEpPCE-1ip8uhJviT0cqvvBPrxsH1P3juOIVPXJIMGbJ5JAwemzKujY"
   },
   "r2_buckets": [
     {
       "binding": "FILES",
       "bucket_name": "kanban-zen-files"
     }
-  ],
-  "ai": {
-    "binding": "AI"
-  }
+  ]
 }
