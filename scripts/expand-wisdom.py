@@ -94,10 +94,8 @@ for row in q:
         row["id"] = identity(row)
     if row.get("kind") == "reflection":
         row["attribution"] = "Zen Studio · lời chiêm nghiệm biên soạn"
-# Keep a small, evenly sampled selection; Eastern source collections remain dominant.
-marcus = [x for x in q if x["author"] == "Marcus Aurelius"]
-keep = {x["id"] for x in marcus} if len(marcus) <= 80 else {marcus[round(i*(len(marcus)-1)/79)]["id"] for i in range(80)}
-q = [x for x in q if x["author"] != "Marcus Aurelius" or x["id"] in keep]
+# Exclude Stoic material from the welcome corpus.
+q = [x for x in q if x["author"] != "Marcus Aurelius"]
 write("dist/wisdom.json", q)
 active = [x for x in q if x.get("kind") != "reflection"]
 stats = dict(target=3333, totalEntries=len(q), sourcedExcerpts=len(active),

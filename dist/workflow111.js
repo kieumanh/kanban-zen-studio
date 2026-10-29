@@ -855,7 +855,7 @@ render = function () {
   // Capture native details state before replacing the DOM; toggle events are queued.
   const filterPanel=document.querySelector('#main .wf-filter-panel');
   if(filterPanel)_WF.filtersOpen=filterPanel.open;
-  if(currentUser && _WF.navOwner!==currentUser.id){_WF.navOwner=currentUser.id;try{const last=JSON.parse(localStorage.getItem(KEY+'-navigation')||'null');if(last&&['projects','timeline','calendar','gantt'].includes(last.view)&&data.projects.some(p=>p.id===last.id&&!p.archived)){view=last.view;active=last.id;}}catch{}}
+  if(currentUser && _WF.navOwner!==currentUser.id){_WF.navOwner=currentUser.id;view='dashboard';active=null;}
   wfRenderBefore();
   document.querySelector('#tabs')?.classList.toggle('has-current-project',!!active&&['projects','timeline','calendar','gantt'].includes(view));
   const currentTab=document.querySelector('#tabs .tab.active .tab-initial');if(currentTab&&project()){const name=document.createElement('span');name.className='zen-active-tab-name';name.textContent=project().name;currentTab.replaceWith(name);}
@@ -1318,7 +1318,7 @@ document.addEventListener("error", e => {
   e.target.replaceWith(status);
 }, true);
 
-const wfGoBefore=go;go=function(v,id=null){wfGoBefore(v,id);if(['projects','timeline','calendar','gantt'].includes(view)&&active)try{localStorage.setItem(KEY+'-navigation',JSON.stringify({view,id:active}));}catch{}};
+const wfGoBefore=go;go=function(v,id=null){wfGoBefore(v,id);};
 
 const wfProjectFormBefore=projectForm;
 projectForm=function(p){wfProjectFormBefore(p);wfRichEditor($('#editor-body [name=description]'));};
@@ -1360,7 +1360,7 @@ accountPanel=function(){wfSettingsBefore();const body=$('#editor-body');if(!body
  const wrap=(title,nodes)=>{const d=document.createElement('details');d.className='wf-settings-group';const summary=document.createElement('summary');summary.textContent=title;d.append(summary);const content=document.createElement('div');content.className='wf-settings-content';nodes.forEach(n=>content.append(n));d.append(content);groups.push(d);return d;};
  const profileGroup=wrap('Hồ sơ',[profile]);profileGroup.open=true;
  body.querySelectorAll('.help-actions').forEach(row=>{if(row.querySelector('h3.settings-section')){while(row.firstChild)row.before(row.firstChild);row.remove();}});
- const headings=[...body.querySelectorAll(':scope > h3.settings-section')];headings.forEach(h=>{const nodes=[];let n=h.nextSibling;while(n&&!(n.nodeType===1&&(n.matches('h3.settings-section,.settings-signout')))){const next=n.nextSibling;nodes.push(n);n=next;}const title=h.textContent.includes('Thông báo')?'Thông báo':h.textContent.includes('Dữ liệu')?'Dữ liệu & đồng bộ':'Tài khoản & bảo mật';h.remove();wrap(title,nodes);});
+ const headings=[...body.querySelectorAll(':scope > h3.settings-section')];headings.forEach(h=>{const nodes=[];let n=h.nextSibling;while(n&&!(n.nodeType===1&&(n.matches('h3.settings-section,.settings-signout')))){const next=n.nextSibling;nodes.push(n);n=next;}const title=h.textContent.includes('Thông báo')?'Thông báo':h.textContent.includes('Tổng kết tuần')?'Tổng kết tuần':h.textContent.includes('Dữ liệu')?'Dữ liệu & đồng bộ':'Tài khoản & bảo mật';h.remove();wrap(title,nodes);});
  const sessions=body.querySelector('.settings-signout');if(sessions)wrap('Phiên đăng nhập',[sessions]);
  const other=[...body.children].filter(n=>n.tagName!=='H2');if(other.length)wrap('Các tính năng khác',other);
  const help=document.createElement('button');help.type='button';help.className='btn';help.dataset.action='help';help.textContent='Hướng dẫn sử dụng';wrap('Hướng dẫn',[help]);
