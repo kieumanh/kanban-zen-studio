@@ -1050,12 +1050,14 @@ document.addEventListener(
 );
 document.addEventListener(
   "pointerup",
-  () => {
+  (e) => {
     const move = _WF.pointer;
     _WF.pointer = null;
     wfDragClear();
-    if (move?.moved && move.target)
-      wfMove(move.kind, move.id, move.pid, move.target, move.after);
+    const target = move?.target ||
+      (move?.moved && wfDropTarget(move.kind, document.elementFromPoint(e.clientX, e.clientY)));
+    if (move?.moved && target)
+      wfMove(move.kind, move.id, move.pid, target, move.target ? move.after : e.clientY > target.getBoundingClientRect().top + target.getBoundingClientRect().height / 2);
   },
   true,
 );
