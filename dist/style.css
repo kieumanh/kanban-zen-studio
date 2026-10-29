@@ -892,3 +892,5 @@ dialog .modal-head{position:sticky;top:0;z-index:5;background:var(--paper);paddi
 /* v1.14.8 · Welcome confirmation stays compact and matches the project gradient */
 .welcome-dialog .welcome-actions{display:grid;justify-items:center;gap:8px;width:min(100%,540px);margin:16px auto 0;padding-top:16px;border-top:1px solid #e6d8ef;text-align:center}.welcome-dialog #welcome-read{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:min(230px,100%);min-height:40px;padding:8px 15px;border:0;border-radius:10px;background:linear-gradient(110deg,#cf3d72,#e65069 58%,#ee786e);color:#fff;font-size:12px;font-weight:700;box-shadow:0 6px 16px #d94b6b30}.welcome-dialog #welcome-read:hover{filter:brightness(1.05);transform:translateY(-1px)}.welcome-dialog .welcome-actions small{max-width:48ch;color:#806b8b;font-size:11px;line-height:1.5}
 
+
+.auth-forgot{display:block;margin:8px 0 16px auto;min-height:44px}.auth-mini{flex-wrap:wrap}.auth-card [hidden]{display:none!important}

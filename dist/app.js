@@ -153,3 +153,5 @@ document.addEventListener('click',e=>{if(e.target.closest('[data-add-keyword]'))
 
 Object.assign(iconPaths,{notes:'M5 3h14v18H5z M8 7h8 M8 11h8 M8 15h5',archive:'M3 3h18v5H3z M5 8v13h14V8 M9 12h6',trash:'M3 6h18 M9 6V3h6v3 M5 6l1 15h12l1-15 M10 10v7 M14 10v7',attach:'m9 12 6-6a3 3 0 0 1 4 4l-8 8a5 5 0 0 1-7-7l8-8 M7 14l8-8',edit:'m15 4 5 5 M4 20l5-1L21 7l-5-5L4 14z',sync:'M20 7a8 8 0 0 0-14-2L3 8 M3 3v5h5 M4 17a8 8 0 0 0 14 2l3-3 M21 21v-5h-5',cloudCheck:'M7 18H6a4 4 0 1 1 1-8 6 6 0 0 1 12-1 4 4 0 0 1 0 8 M10 16l3 3 7-7',cloudOff:'M3 3l18 18 M7 18H6a4 4 0 0 1-2-7 M10 5a6 6 0 0 1 9 4 4 4 0 0 1 2 7'});
 
+
+function columnDisplayName(p,key){return p?.columnNames?.[key]||({Idea:'Ý tưởng',List:'Cần làm',Doing:'Đang làm',Done:'Hoàn thành'}[key])||key;}

@@ -406,7 +406,7 @@ taskDetail = function (p, t) {
       button.type = "button";
       button.className = "wf-state-choice";
       button.dataset.stateIndex = String(index % 4);
-      button.textContent = p.columnNames?.[col] || col;
+      button.textContent = columnDisplayName(p,col);
       button.setAttribute("aria-pressed", String(t.col === col));
       button.onclick = () => {
         if (col === t.col && form.elements.col.value === col) return;
@@ -1248,7 +1248,7 @@ function wfLabels() {
           b.className = "wf-column-name";
           b.dataset.wfColumn = col.dataset.column;
           b.textContent =
-            p.columnNames?.[col.dataset.column] || col.dataset.column;
+            columnDisplayName(p,col.dataset.column);
           b.title = "Đổi tên cột";
           node.replaceWith(b);
           break;
@@ -1277,7 +1277,7 @@ document.addEventListener("click", (e) => {
       field(
         "Tên hiển thị",
         "name",
-        p.columnNames?.[key] || key,
+        columnDisplayName(p,key),
         "text",
         true,
         40,
@@ -1290,7 +1290,7 @@ document.addEventListener("click", (e) => {
         p.columns.some(
           (c) =>
             c !== key &&
-            (p.columnNames?.[c] || c).toLocaleLowerCase("vi") ===
+            columnDisplayName(p,c).toLocaleLowerCase("vi") ===
               name.toLocaleLowerCase("vi"),
         )
       )
