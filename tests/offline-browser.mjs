@@ -1,8 +1,10 @@
 import {createServer} from 'node:http';
 import assert from 'node:assert/strict';
-import worker from '../worker.mjs';
+import worker from '../worker-api.mjs';
+import {readFileSync,existsSync} from 'node:fs';
+const ASSETS={async fetch(request){const path=new URL(request.url).pathname;const file=new URL('../public/'+(path==='/'?'index.html':path.slice(1)),import.meta.url);if(!existsSync(file))return new Response('Not found',{status:404});const type=path==='/'?'text/html':path.endsWith('.js')?'text/javascript':path.endsWith('.css')?'text/css':path.endsWith('.webmanifest')?'application/manifest+json':path.endsWith('.svg')?'image/svg+xml':'application/json';return new Response(readFileSync(file),{headers:{'Content-Type':type}});}};
 const {chromium}=await import(process.env.PLAYWRIGHT_MODULE||'playwright');
-const server=createServer(async(req,res)=>{const r=await worker.fetch(new Request('http://localhost'+req.url));res.writeHead(r.status,Object.fromEntries(r.headers));res.end(Buffer.from(await r.arrayBuffer()));});
+const server=createServer(async(req,res)=>{const r=await worker.fetch(new Request('http://localhost'+req.url),{ASSETS});res.writeHead(r.status,Object.fromEntries(r.headers));res.end(Buffer.from(await r.arrayBuffer()));});
 await new Promise(r=>server.listen(0,'127.0.0.1',r));
 const browser=await chromium.launch({headless:true,args:['--no-sandbox']});
 try{

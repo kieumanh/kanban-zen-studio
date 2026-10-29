@@ -1,3 +1,4 @@
+import {buildStaticAssets} from './static-build.mjs';
 import {readFileSync,writeFileSync} from 'node:fs';
 import {fileURLToPath} from 'node:url';
 import {stripModuleSyntax, validateAssets} from './build-utils.mjs';
@@ -19,3 +20,5 @@ writeFileSync(root+'worker.mjs',source);
 console.log('Built Worker v'+version+': '+Buffer.byteLength(source)+' bytes');
 
 
+
+buildStaticAssets(files,root,version,source);

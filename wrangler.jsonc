@@ -1,6 +1,6 @@
 {
   "name": "kanban-zen-studio",
-  "main": "worker.mjs",
+  "main": "worker-api.mjs",
   "compatibility_date": "2026-10-24",
   "compatibility_flags": [
     "nodejs_compat"
@@ -34,5 +34,14 @@
       "binding": "FILES",
       "bucket_name": "kanban-zen-files"
     }
-  ]
+  ],
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "html_handling": "none",
+    "run_worker_first": [
+      "/api/*",
+      "/health"
+    ]
+  }
 }
