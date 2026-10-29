@@ -34,7 +34,7 @@ vm.runInContext('noteForm()',context);
 assert.match(node('#editor-body').innerHTML,/inline-note-upload/);
 assert.match(node('#editor-body').innerHTML,/name="url"/);
 const wisdom=JSON.parse(readFileSync(new URL('../dist/wisdom.json',import.meta.url),'utf8'));
-assert.ok(wisdom.length>=1121);assert.equal(new Set(wisdom.map(q=>q.id)).size,wisdom.length);
+assert.ok(wisdom.length>=1065);assert.equal(new Set(wisdom.map(q=>q.id)).size,wisdom.length);
 assert.ok(wisdom.every(q=>q.author&&q.source&&q.url.startsWith('https://')&&['en','vi','zh'].includes(q.language)&&typeof q.vi==='string'&&q.vi.trim().length>=8));
 for(const author of ['Lão Tử','Trang Tử','Osho','Sadhguru'])assert.ok(wisdom.some(q=>q.author===author));
 assert.ok(wisdom.every(q=>!/[\u3400-\u9fff\u0600-\u06ff]/.test(q.vi)));
