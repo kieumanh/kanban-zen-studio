@@ -1,42 +1,61 @@
 # Bách Đại Thủ Quan — Trung Hoa Anh Hùng Truyện
-Phiên bản thiết kế 0.2 · 31/10/2026 · Nền Kanban Zen Studio 1.15.26
-Nhánh: experiment/game-mode. Đây là đặc tả nội dung và dữ liệu, chưa có combat runtime.
+Phiên bản thiết kế 0.3 · Nền Kanban Zen Studio 1.15.26
+Nhánh experiment/game-mode · Đặc tả, chưa tích hợp runtime.
 
-## Quyết định sản phẩm cập nhật
-Yêu cầu mới thay thế mô hình boss chỉ là nhóm task ở mục 5 của PRODUCT-DIRECTION.vi.md: boss nay là trận chiến 2D theo lượt có lựa chọn kỹ năng. Hoàn thành công việc tạo tu vi; vượt cửa ải cần chiến thắng trận đấu. Hai điều kiện bổ sung cho nhau.
-100 boss = 10 đỉnh × 10 cửa ải, xuất hiện ở cấp địa phương 10,20,...,100. Cấp toàn hành trình lần lượt 10,20,...,1000. Đỉnh 2 cấp 10 tương ứng toàn hành trình cấp 110, không phải boss thứ hai ở cấp 20.
+## Luật vượt cấp hiện hành — cuộc thi hoàn thành công việc
+Cập nhật theo yêu cầu chủ dự án ngày 31/10/2026. Luật này thay thế toàn bộ đề xuất chiến đấu theo lượt, HP, sát thương và kỹ năng đánh boss trước đây.
 
-## Mở ải và đột phá
-Đạt cấp 10 mở boss 001, vẫn được tích lũy tu vi nhưng chưa lên cấp 11 trước khi thắng. Quy tắc tương tự tại 20,30,...,90. Thắng không tự tặng đủ XP lên cấp tiếp; chỉ tháo khóa, cấp thực tế tính từ tu vi hiện có. Tu vi dư tự áp dụng đến cửa ải chưa thắng kế tiếp; không bỏ qua boss.
-Cấp 100 cần thắng boss trấn đỉnh để mở đỉnh kế tiếp ở cấp 1. Boss 100 tại Quy Nguyên trao kết thúc chương chính và chế độ tái đấu; chưa tự mở đỉnh 11.
-Không bắt buộc mở game mỗi ngày. Người chỉ dùng Kanban tiếp tục làm việc và tích tu vi bình thường, có thể để cửa ải chờ.
-UI tách ba dòng: “Cấp hiện tại”, “Tu vi tích trữ”, “Cửa ải đang chờ”. Không hiển thị một thanh XP vượt 100%.
-Chưa thắng: không mất tu vi, không mất cấp, không mất đồ. Thử lại miễn phí. Thưởng và skill chỉ khi chiến thắng lần đầu; tái đấu luyện tập không tạo tiền hay XP.
+### Vòng thi
+1. Đạt mốc cấp 10,20,...,100 của mỗi đỉnh: boss tương ứng xuất hiện như thủ quan và người ra đề.
+2. Người chơi chọn “Ứng chiến”. Hệ thống bốc ngẫu nhiên 1–3 task hợp lệ, hiển thị đầy đủ tên, dự án, checklist và thời lượng ước tính.
+3. Đưa ra thời hạn gợi ý. Người chơi được chỉnh thời gian cho hợp lý trước khi xác nhận bắt đầu; đây là thi đua tự nguyện với chính mình.
+4. Trong hạn, hoàn thành toàn bộ task đã chốt. Mỗi task chỉ tính xong khi ở Done và toàn bộ checklist trong phạm vi đề thi hoàn tất.
+5. Hoàn thành đúng hạn: xác nhận vượt ải, đột phá cấp, nhận ngân lượng và mở quyền vào kho của cửa ải để mua vật phẩm hoặc sách kỹ năng.
+6. Hết hạn mà chưa hoàn tất: chưa vượt ải; giữ dữ liệu việc đã làm, tu vi và vật phẩm. Có thể lập thử thách mới với thời gian phù hợp hơn.
 
-## Luật chiến đấu đề xuất
-- Trận đấu theo lượt, không có đồng hồ ép bấm. Mục tiêu 2–4 phút ở boss đầu, 4–7 phút ở boss cao; cần kiểm chứng qua playtest.
-- Mỗi lượt chọn công thường, thủ, một trong ba kỹ năng chủ động, hoặc khôi phục nội lực. Công thường hồi 1 nội lực; thủ giảm 40% sát thương lượt đó và hồi 2; khôi phục hồi 4 nhưng không giảm sát thương. Nội lực tối đa 10, bắt đầu 6. Thủ không cộng dồn với hộ thể: lấy mức giảm cao hơn.
-- Hồi chiêu giảm sau mỗi vòng gồm lượt người chơi và lượt boss; chiêu vừa dùng giữ nguyên số hồi chiêu ghi trong bảng tới đầu vòng sau. Không giảm lượt debuff ngay khi vừa áp dụng.
-- Có 1 ô nội công bị động, 3 ô chủ động. Đổi bộ chiêu miễn phí ngoài trận. Tất cả kỹ năng đầu trận và hướng dẫn cơ chế cần thiết luôn có từ bộ cơ bản; skill thưởng không phải chìa khóa duy nhất để thắng chính boss trao nó.
-- Bộ cơ bản: kiếm thường, thủ, khôi phục lực; Thanh Tâm (xóa 1 debuff, tốn 2, hồi 3), Phá Thế (90% công lực, giảm giáp 30% hai lượt, tốn 2, hồi 3), Đoạn Chiêu (70% công lực, ngắt tụ lực, tốn 3, hồi 4). Đánh dấu/chọn bộ phận/phù quang là tương tác riêng của trận, không cần mua skill.
-- HP cơ sở nhân vật = 100 + 8 × (cấp địa phương−1); công lực A = 12 + 2 × (cấp địa phương−1). Thang tham chiếu theo địa phương giúp đỉnh sau không tạo số phình vô hạn. Đỉnh cao tăng độ phức tạp chiến thuật, không tăng HP gấp bội.
-- HP boss = round(A × [5 + 0.6×đỉnh + 0.4×số cửa trong đỉnh]); boss trấn đỉnh nhân 1.2. Sát thương boss thường = 8% HP cơ sở nhân vật; chiêu nặng = 20%, báo trước 1 lượt. Giáp cơ bản 10%, giảm giáp áp dụng theo tỷ lệ, không cho sát thương âm. Đây là số cân bằng khởi điểm, chưa xác nhận nhịp trận.
-- Kỹ năng nhân theo A, không nhân theo HP boss. Mỗi hiệu ứng có biểu tượng và diễn giải. Chỉ tối đa ba debuff khác loại đồng thời; cùng loại làm mới thời gian, không chồng vô hạn.
-- Giai đoạn boss định nghĩa trong dữ liệu là ngân sách sản xuất; chuyển pha tại các phần HP bằng nhau. Tên/chiêu của từng pha sẽ mở rộng khi dựng từng trận. Không coi catalog là encounter script hoàn chỉnh.
-- Thắng khi các pha đều kết thúc với HP boss bằng 0 và nhân vật còn HP. Nếu hai bên cùng gục, tính chưa vượt ải, cho thử lại. Không dùng phần trăm may rủi bí mật để quyết định thắng.
-- Thua có giải thích cơ chế chưa xử lý và gợi ý bộ chiêu; sau ba lần thua gợi ý bật Trợ chiến (HP boss ×0.8, sát thương boss ×0.8, có báo đòn đầy đủ). Thắng trợ chiến vẫn nhận đầy đủ thưởng; tùy chọn có thể bật sớm trong thiết lập.
-- Offline cho đánh và lưu trận chờ xác nhận; thưởng chính thức chỉ chốt sau đồng bộ. Không mở UI game thì boss không tự chiến đấu.
+### Chọn ngẫu nhiên nhưng khả thi
+- Chỉ task đang hoạt động, chưa Done, chưa lưu trữ/thùng rác; loại demo, mẫu, task đang thuộc vòng thi khác và task phụ thuộc chưa được giải quyết.
+- Cho chọn phạm vi tất cả dự án hoặc một số dự án trước khi bốc thăm. Không thay đổi tên/nội dung task.
+- Với N task hợp lệ, bốc K đều trong 1..min(3,N), rồi lấy mẫu không hoàn lại. Nếu N=0, hướng dẫn chọn/tạo việc thật; chưa bắt đầu đồng hồ và chưa cho qua ải.
+- Tránh chọn hai task có quan hệ phụ thuộc với nhau trong cùng đề thi để tránh ước lượng sai; nếu lọc không còn đủ K, giảm K và thông báo.
+- Trước khi bắt đầu có thể đổi đề hoặc thay task không khả thi, hiển thị rõ lựa chọn. Không tự thêm việc vào Kanban.
+- Sau khi bắt đầu chốt ID task, checklist và deadline trong snapshot. Xóa/lưu trữ task không được tính hoàn thành; không âm thầm thay task mới.
 
-## Skill và phần thưởng
-100 tên kỹ năng là 100 biến thể thuộc 10 nhóm cơ chế. Công dụng định lượng theo nhóm được lưu trong JSON; ngoại hình, hoạt ảnh và tên riêng theo đỉnh. Biến thể không cộng dồn, không tăng sát thương tuyến tính theo số boss đã giết; tránh 100 skill khiến người dùng quá tải.
-Ngân lượng = 50×đỉnh + 25×cửa. Linh ngọc = 1 mỗi boss thường, 3 mỗi trấn đỉnh. Mỗi boss có huy hiệu riêng; boss trấn đỉnh thêm ấn và áo choàng đỉnh.
-Tổng lần đầu toàn bộ 100 boss: 41.250 ngân lượng, 120 linh ngọc, 100 biến thể skill, 100 huy hiệu; 10 ấn và 10 áo choàng. Tất cả mua bằng tiền trong game, chưa có thanh toán.
-Không thưởng XP từ trận boss để tránh vòng lặp cày game thay cho công việc. Thắng trận vừa mở cửa tiến cấp vừa mở skill và rương thưởng.
-Nhận skill nghĩa là mở khóa, không tự đổi bộ chiêu đang trang bị. Có nút “Thử chiêu” trong sân tập.
+### Thời hạn và điều chỉnh
+- Gợi ý thời lượng = tổng ước tính phần việc còn lại ×1,25, làm tròn lên phút. Nếu thiếu ước tính, hỏi người chơi nhập thay vì đoán từ số checklist.
+- Có thể nhập phút/giờ/ngày hoặc chọn ngày giờ kết thúc, hiển thị giờ địa phương và đồng hồ đếm ngược.
+- Deadline chỉ được lập khi bấm “Khai cuộc”, không chạy trong lúc xem đề.
+- Trong vòng thi vẫn cho “Điều chỉnh thời hạn”: hiển thị hạn cũ/mới, xác nhận và lưu lịch sử; không trừ thưởng vì điều chỉnh. Thay đổi được xác nhận khi vòng thi còn hoạt động, không hồi tố sửa vòng đã hết hạn thành thắng.
+- Thời gian trôi theo đồng hồ thực, đóng ứng dụng không dừng đồng hồ. Không có giới hạn bí mật hoặc yêu cầu duy trì ứng dụng mở.
+- Rời vòng thi bằng “Dừng thử thách” không sửa task. Khi bắt đầu lại tạo attempt mới, chỉ chọn task chưa hoàn tất.
 
-## Mỹ thuật chung
-Boss gốc phong cách kiếm hiệp chibi, hình khối tròn, dễ đọc ở mobile, không máu me. Sơ cấp 1–2 màu chính và silhouette đơn giản; trung cấp thêm trang phục/vũ khí; cao cấp thêm vòng ấn và chuyển pha; đỉnh cấp hoành tráng bằng bố cục, không nhấp nháy dồn dập.
-Mỗi boss cần concept front/3⁄4, palette, silhouette, biểu cảm; animation idle, báo đòn, công thường, tuyệt chiêu, trúng đòn, choáng, thua, chuyển pha. Boss thua tan thành mây hoặc cúi chào. Có bản giảm chuyển động. Catalog này mô tả tạo hình, chưa phải 100 bộ ảnh/sprite đã sản xuất.
+### Xác định thắng và tiến cấp
+- Phải hoàn tất tất cả task đã chọn tại hoặc trước deadline (completedAt <= deadline); không cần mở Game Mode vào đúng thời điểm đó.
+- Tiến độ trận = số task hoàn tất / tổng task, checklist là tiến độ phụ trong từng task. Boss chuyển biểu cảm theo tiến độ, animation chỉ minh họa kết quả công việc.
+- Khi đến mốc L, đủ XP để đạt L là điều kiện mở ải. Thắng boss mở đột phá lên L+1 kể cả chưa đủ XP tự nhiên cho L+1: cấp mới tối thiểu L+1, sổ tu vi cộng bù đúng phần thiếu tới ngưỡng L+1 bằng một sự kiện gate-topup duy nhất. Nếu đã đủ XP không cộng bù. Đây là thưởng cột mốc, không phải nguồn cày lặp.
+- XP dư được giữ và áp dụng đến cửa ải chưa vượt tiếp theo; không tự bỏ qua boss. Tại cấp 100 thắng trấn đỉnh mở đỉnh kế tiếp cấp 1; boss cuối đỉnh 10 mở kết thúc chương chính.
+- Hoàn thành từng task vẫn nhận XP công việc theo sổ thưởng thông thường. Thua không thu hồi XP task hợp lệ. Nếu mở lại task trước khi chốt thắng, task đó chưa đạt; sau khi chốt thắng không thưởng cửa ải lần hai.
+- Checklist mới thêm sau khai cuộc không tăng phạm vi đề thi, nhưng task Done vẫn phải hợp lệ theo quy tắc Kanban. Cần cảnh báo người dùng khi sửa phạm vi việc; không dùng xóa checklist trong snapshot để tự đạt điều kiện.
+
+### Kho vật phẩm và bí kíp
+- Thắng mở quyền vào kho theo cửa ải đã vượt, quyền này giữ lại về sau; không ép mua ngay hoặc đếm ngược mua hàng.
+- Ngân lượng = 50×đỉnh +25×số cửa. Linh ngọc =1, riêng trấn đỉnh =3; giữ huy hiệu, ấn và áo choàng đã thiết kế.
+- Skill trong danh mục boss là sách được mở bán, không tự động học miễn phí khi thắng. Người chơi mua sách rồi chọn “Lĩnh ngộ”, sau đó trang bị nếu muốn.
+- Giá đề xuất: sách boss thường =50% ngân lượng boss (làm tròn lên), sách trấn đỉnh =75%. Vật phẩm ngoại trang, phụ kiện và hiệu ứng hiển thị có giá niêm yết. Chưa có thanh toán tiền thật.
+- Kỹ năng giai đoạn này là sưu tầm, hiệu ứng và danh hiệu tu luyện; không thay thế hoàn thành task, không tự đánh dấu Done hoặc làm sai dữ liệu công việc. Chỉ số chiến đấu trong JSON cũ không còn áp dụng.
+- Phần thưởng vượt ải và sách mỗi cửa có ID cố định; mua sách sở hữu rồi không trừ tiền lại. Mua hàng trừ tiền và cấp vật phẩm trong cùng transaction.
+
+### Đồng bộ và tính đúng đắn
+Một vòng thi hoạt động/tài khoản. Trạng thái: draft → active → pending_validation → won hoặc expired; active có thể chuyển cancelled. Hết hạn nhưng có log hoàn thành offline trong hạn thì chờ xác minh trước khi kết luận cuối.
+Lưu challenge ID, boss ID, seed chọn task, snapshot nguồn, startAt, deadline, lịch sử điều chỉnh, completedAt, ruleVersion và revision. Server xác thực trạng thái công việc, cấp thưởng/mở kho/cộng bù cấp một lần trong transaction. Khóa UNIQUE(user,boss,rewardKind); không tin cờ thắng từ client.
+Offline lưu task và event trong transaction cục bộ; hiển thị “Kết quả chờ hợp nhất”. Không thể chứng minh tuyệt đối thời điểm hoàn thành offline bằng đồng hồ máy: đây là công cụ tự quản, chấp nhận dấu thời gian cục bộ có đối chiếu đồng hồ server gần nhất; lệch bất thường yêu cầu người dùng rà soát, không tự kết luận gian lận. Không quảng bá cơ chế chống gian lận tuyệt đối.
+Xung đột hai máy: CAS vòng thi; chọn phiên bản hợp lệ trước khi chốt. Retry không cộng thưởng, ngân lượng hoặc gate-topup hai lần. Không xóa công việc vì thua.
+
+### Nghiệm thu
+Ngẫu nhiên 1–3 task duy nhất và đúng phạm vi; N=0/1/2; loại task bị khóa phụ thuộc; thời hạn chưa chạy trong draft; sửa hạn active có lịch sử; task hoàn tất đúng deadline được tính; hết hạn không thắng hồi tố; hoàn tất offline trong hạn chờ xác minh; đóng/mở app giữ deadline; xóa task không thắng; snapshot checklist không bị lách bằng xóa; mở lại task trước khi thắng; đồng bộ trùng và hai tài khoản; đủ XP/thiếu XP đều chỉ đột phá một lần; mua sách trùng không trừ tiền; kho đã mở giữ quyền truy cập.
+
+## Mỹ thuật và 100 thủ quan
+Giữ tên, tạo hình và thứ tự 100 boss bên dưới. Cột cơ chế là ý tưởng biểu cảm/animation theo chủ đề, không còn là điều kiện thắng. Cột skill là sách mở bán sau khi vượt cửa. Mỗi boss vẫn có tạo hình chibi, báo khai cuộc, chờ đợi, cổ vũ, ghi nhận tiến độ và chúc mừng khi vượt ải.
 
 ## Danh mục 100 boss
 Cột cấp ghi “địa phương / toàn hành trình”. Mỗi dòng ghi kỹ năng riêng và ngân lượng; tất cả kèm huy hiệu và linh ngọc theo quy tắc trên.
@@ -191,17 +210,6 @@ Cột cấp ghi “địa phương / toàn hành trình”. Mỗi dòng ghi kỹ
 | 99 | 90 / 990 | **Vọng Ngã Thiên Ảnh** — Bản sao phát sáng của chính hiệp khách | Sao chép bộ chiêu đã chọn; đọc đòn và đổi chiến thuật | Minh Tâm Kiến Tính | 725 |
 | 100 | 100 / 1000 | **Quy Nguyên Chân Long** — Rồng ngọc tròn ôm mười viên minh châu | Năm pha tổng kết; giữ checkpoint mỗi pha, thắng bằng phối hợp | Vạn Pháp Quy Nguyên | 750 |
 
-## Độ sâu sản xuất và nghiệm thu
-Danh sách 100 boss là phạm vi nội dung dài hạn. Dựng trước boss 001, 005, 010 để kiểm chứng học cơ chế, gián đoạn và trận trấn đỉnh; sau đó hoàn thành 10 boss Thanh Trúc trước khi mở rộng.
-Dữ liệu hiện gồm tên, tạo hình, luật cơ chế bằng văn bản, skill và thưởng. Bước triển khai cần schema encounter: trigger, target, cooldown, duration, telegraph, phase transition, win condition; không thực thi câu văn tự do trong JSON.
 
-Lưu riêng gate_clear(user,boss,rule_version), battle_attempt(id,user,boss,seed,state_version,actions), reward_grant(user,boss,reward_kind).
-Máy chủ kiểm tra mở ải, bộ chiêu sở hữu và diễn tiến trận. Cấp thưởng, mở skill và đánh dấu qua ải trong một transaction, khóa UNIQUE theo user+boss+reward_kind. Không tin biến victory từ client. Hai máy thắng cùng boss chỉ nhận một lần; replay offline cần bộ luật có version và log hành động để xác thực.
-Sau khi bắt đầu trận, khóa phiên bản luật và seed. Reload phục hồi lượt cuối, không reset ngẫu nhiên để cày kết quả. Log có giới hạn và checkpoint, không ghi vô tận. Trận không cập nhật đồng thời từ hai máy: dùng battle version/CAS; cho chọn phiên tiếp tục khi xung đột.
-Checkpoint boss nhiều pha chỉ áp dụng boss 097 và 100 trong bản đầu: lưu sau pha đã vượt, quay lại phục hồi HP/nội lực đầu pha theo snapshot cố định. Không mang phần thưởng checkpoint sang tái đấu.
-Kiểm tra: mốc 9→10→11; 99→100→đỉnh mới; XP dư nhiều cửa; thua/thoát/reload; skill chưa sở hữu; thắng offline rồi đồng bộ hai máy; undo task làm thay đổi XP; đổi account; nhận thưởng trùng; khóa luật khi cập nhật; trợ chiến có thưởng bình đẳng. Nếu điều chỉnh XP làm tụt mốc, không xóa thành tích boss đã chốt nhưng áp dụng yêu cầu XP hiện tại cho tiến cấp; không cấp thưởng boss lại.
-
-## Trích thoại
-Trúc Diệp Tiểu Yêu: “Đợi chút! Ta còn chưa buộc xong dây giày... à, ta có chân đâu?”
-Bạch Vân Kiếm Tôn: “Một chiêu dùng mãi, kiếm cũng ngáp.”
-Quy Nguyên Chân Long: “Ngươi đã vượt trăm cửa. Giờ nhớ trở về làm nốt việc đang dang dở.”
+## Triển khai trước
+Dựng vòng thi task cho boss 001 trước, kiểm chứng snapshot, deadline, offline và thưởng; sau đó mở rộng đủ 10 cửa Thanh Trúc. Catalog không đồng nghĩa đã có đủ sprite hay mã chạy.
