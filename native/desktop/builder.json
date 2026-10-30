@@ -31,7 +31,8 @@
     "allowToChangeInstallationDirectory": true,
     "deleteAppDataOnUninstall": false,
     "script": "native/desktop/installer.nsi",
-    "differentialPackage": false
+    "differentialPackage": false,
+    "packElevateHelper": false
   },
   "publish": [
     {
@@ -40,5 +41,6 @@
       "repo": "kanban-zen-studio"
     }
   ],
-  "afterPack": "native/desktop/after-pack.cjs"
+  "afterPack": "native/desktop/after-pack.cjs",
+  "compression": "store"
 }

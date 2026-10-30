@@ -42,22 +42,36 @@ jobs:
       - uses: actions/setup-java@v4
         with: {distribution: temurin, java-version: '17'}
       - uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools platforms;android-35 build-tools;35.0.0
+          log-accepted-android-sdk-licenses: false
       - uses: gradle/actions/setup-gradle@v4
         with: {gradle-version: '8.11.1'}
       - run: npm ci && npm run build
       - name: Restore stable signing key
+        id: signing
         env:
           KEY_BASE64: ${{ secrets.ZEN_ANDROID_KEYSTORE_BASE64 }}
         run: |
-          test -n "$KEY_BASE64" || { echo 'Configure stable Android signing secrets before a release build'; exit 1; }
-          printf '%s' "$KEY_BASE64" | base64 --decode > "$RUNNER_TEMP/zen-release.jks"
-      - run: gradle --no-daemon -p native/android assembleRelease
+          if test -n "$KEY_BASE64"; then
+            printf '%s' "$KEY_BASE64" | base64 --decode > "$RUNNER_TEMP/zen-release.jks"
+            echo 'ready=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'ready=false' >> "$GITHUB_OUTPUT"
+            echo 'No signing secret: compile an unsigned validation artifact only.'
+          fi
+      - name: Build signed release
+        if: steps.signing.outputs.ready == 'true'
+        run: gradle --no-daemon -p native/android assembleRelease
         env:
           ZEN_ANDROID_KEYSTORE: ${{ runner.temp }}/zen-release.jks
           ZEN_ANDROID_STORE_PASSWORD: ${{ secrets.ZEN_ANDROID_STORE_PASSWORD }}
           ZEN_ANDROID_KEY_ALIAS: zen-release
           ZEN_ANDROID_KEY_PASSWORD: ${{ secrets.ZEN_ANDROID_KEY_PASSWORD }}
+      - name: Validate unsigned release when signing is not configured
+        if: steps.signing.outputs.ready != 'true'
+        run: gradle --no-daemon -p native/android assembleRelease
       - uses: actions/upload-artifact@v4
         with:
-          name: android-preview
+          name: android-preview-${{ steps.signing.outputs.ready == 'true' && 'signed' || 'unsigned' }}
           path: native/android/app/build/outputs/apk/release/*.apk

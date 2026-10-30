@@ -53,7 +53,7 @@ Android: JDK 17, Gradle 8.11.1, Android SDK platform 35 và build-tools 35.0.0. 
 
 Khóa ký được bàn giao riêng, không nằm trong source hoặc GitHub. Giữ bản sao ở nơi riêng tư và sao lưu bằng password manager. Không đưa tệp keystore, credentials hoặc bản backup lên repo/public release.
 
-Workflow `.github/workflows/native-preview.yml` tạo artifacts Windows và APK sau khi kiểm thử source. Android yêu cầu thiết lập secrets khóa ký cố định; workflow cố ý thất bại nếu thiếu khóa. Build không tự phát hành public và không triển khai Worker.
+Workflow `.github/workflows/native-preview.yml` tạo artifacts Windows và APK sau khi kiểm thử source. Android yêu cầu thiết lập secrets khóa ký cố định; nếu thiếu khóa, workflow chỉ biên dịch artifact unsigned để kiểm tra, không tạo APK cài đặt đã ký. Build không tự phát hành public và không triển khai Worker.
 
 ## Cập nhật phần mềm: trạng thái thực tế
 
@@ -67,7 +67,7 @@ Android Preview chưa có trình tự phát hiện/tải/cài APK cập nhật. 
 
 Đã chạy toàn bộ `npm test` trên Node 24, gồm API/auth, CAS, account isolation, resources/R2 mock, báo cáo và các kiểm thử source hiện có. Đã chạy `npm run test:offline` với merge và IndexedDB giả lập: 100 bản ghi, baseline/dirty/revision, chỉnh độc lập/cùng trường, xóa/sửa, đổi thứ tự, tệp nhị phân, hash hỏng, chống trùng đồng thời và cô lập tài khoản.
 
-Đã tạo APK ký release và kiểm tra chữ ký bằng apksigner. Bộ cài Windows được build bởi NSIS; đây không phải xác nhận đã cài/chạy trên máy Windows.
+Đã tạo APK ký release và kiểm tra chữ ký APK Signature Scheme v2 bằng apksigner; đối chiếu các module offline, account và persistence trong APK khớp mã nguồn. Bộ cài Windows được build bởi NSIS; đây không phải xác nhận đã cài/chạy trên máy Windows.
 
 Kiểm thử trình duyệt E2E đã viết trong `tests/offline-native-browser.mjs`, nhưng Chromium không khởi chạy được trong môi trường kiểm thử trước vì socket bị hạn chế. Chưa đạt E2E và chưa thể công nhận kiểm thử 100 task qua khởi động lại thiết bị thật.
 
