@@ -177,7 +177,15 @@ noteForm=function(note){
  }
 };
 const zenOldRender=render;
-render=function(){zenOldRender();zenApplyNoteCards();};
+function zenPaintSidebarPins(){
+ const section=document.querySelector('#side-pinned-notes');if(!section)return;
+ const pinned=(data.notes||[]).filter(note=>note.pinned&&!note.deleted).slice(0,12);
+ section.hidden=contentReadOnly||!pinned.length;
+ if(section.hidden){section.replaceChildren();return;}
+ section.innerHTML='<div class="navlabel"><span>'+svgIcon('pin')+'Ghim nhanh</span></div><div class="side-pinned-list">'+pinned.map(note=>'<button type="button" class="side-pinned-note" data-zen-note-shortcut="'+esc(note.id)+'" title="Mở ghi chú: '+esc(note.title||'Ghi chú')+'"><span class="side-pinned-mark" aria-hidden="true">'+svgIcon('notes')+'</span><span class="side-pinned-title">'+esc(note.title||'Ghi chú không tên')+'</span></button>').join('')+'</div>'+((data.notes||[]).filter(note=>note.pinned&&!note.deleted).length>12?'<button type="button" class="side-pinned-more" data-view="notes">Xem tất cả ghi chú ghim →</button>':'');
+}
+render=function(){zenOldRender();zenApplyNoteCards();zenPaintSidebarPins();};
+document.addEventListener('click',event=>{const button=event.target.closest('[data-zen-note-shortcut]');if(!button)return;const note=data.notes?.find(item=>item.id===button.dataset.zenNoteShortcut);if(!note)return;event.preventDefault();if(document.querySelector('.nav-open'))document.body.classList.remove('nav-open');noteForm(note);});
 document.addEventListener('click',e=>{
  const b=e.target.closest('[data-zen-pin]');if(!b||b.classList.contains('zen-editor-pin'))return;
  e.preventDefault();e.stopImmediatePropagation();if(contentReadOnly)return;
