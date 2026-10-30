@@ -40,6 +40,7 @@ async function openOfflineAccount(){if(navigator.onLine)return false;try{const u
 async function reauthenticate(){return new Promise((resolve,reject)=>{modal('<h2>Xác nhận thao tác</h2><p>Nhập mật khẩu để tiếp tục chia sẻ hoặc xóa vĩnh viễn.</p>'+passwordField(false),async fd=>{try{await requestAPI('reauth','POST',{password:fd.get('password')});$('#editor').close();resolve();}catch(error){notify(error.message);}});$('#editor').addEventListener('close',()=>reject(Object.assign(Error('Đã hủy xác nhận.'),{status:403,code:'REAUTH_CANCELLED'})),{once:true});});}
 async function openAccount(){const me=await requestAPI('me');currentUser=me.user;startIdleSession(me.user.session_expires);KEY='zen-account-'+currentUser.id;const remote=await requestAPI('workspace');cloudRevision=remote.revision;dirty=false;syncConflict=false;syncBlocked=false;const localRecord=await(await persistenceReady).loadAccount(KEY),cached=localRecord?(localRecord.raw??JSON.stringify(localRecord.data)):null,meta=localRecord?.meta||{};cloudBase=meta.dirty?meta.base||null:structuredClone(remote.data);if(meta.dirty&&cached){let pending;try{pending=JSON.parse(cached);}catch{}if(pending&&valid(pending)){data=pending;cloudRevision=meta.revision;dirty=true;}else{invalidDraftForRecovery=cached;throw Error('Bản nháp chưa đồng bộ cần được kiểm tra. Hãy tải bản sao JSON để bảo toàn dữ liệu.');}}invalidDraftForRecovery=null;if(!dirty)data=remote.data;if((data.notes||[]).some(n=>n.sketch?.startsWith('data:image/png')))dirty=true;await cacheCloud();document.body.classList.remove('signed-out');$('#auth-screen')?.remove();active=null;query='';view='dashboard';render();syncStatus(dirty?'● Đang đồng bộ…':'● Đã đồng bộ');renderAccountAvatar();if(dirty)await flushCloud();view='dashboard';active=null;query='';render();}
 let syncAgain=false,invalidSyncNotified=false,syncBlocked=false;
+let syncRetryAttempts=0;
 let cloudBase=null;
 async function flushCloud(manual=false){
  if(!currentUser||!dirty)return;
@@ -72,9 +73,9 @@ async function flushCloud(manual=false){
   let response;const bytes=new TextEncoder().encode(JSON.stringify(changes)).length;if(bytes>1500000){const uploadId=crypto.randomUUID(),chunks=[];let chunk=[],size=0;for(const c of changes){const length=new TextEncoder().encode(JSON.stringify(c)).length;if(size+length>800000&&chunk.length){chunks.push(chunk);chunk=[];size=0;}chunk.push(c);size+=length;}if(chunk.length)chunks.push(chunk);for(let i=0;i<chunks.length;i++)await requestAPI('workspace-stage','POST',{uploadId,revision:cloudRevision,expected:changes.length,begin:i===0,changes:chunks[i]});response=await requestAPI('workspace-v2','POST',{uploadId,changes:[],revision:cloudRevision});}else response=await requestAPI('workspace-v2','POST',{changes,revision:cloudRevision});
   if(currentUser?.id!==accountId)return;
   if(!Number.isSafeInteger(response.revision)||response.revision<0)throw Error('Máy chủ trả về mốc phiên bản không hợp lệ. Bản nháp vẫn được giữ.');
-  lastSyncFailure=null;cloudRevision=response.revision;cloudBase=payload;try{localStorage.setItem(KEY+'-last-sync',String(Date.now()));}catch{}
+  lastSyncFailure=null;syncRetryAttempts=0;cloudRevision=response.revision;cloudBase=payload;try{localStorage.setItem(KEY+'-last-sync',String(Date.now()));}catch{}
   dirty=localGeneration!==generation;
-  cacheCloud();
+  await cacheCloud();
   invalidSyncNotified=false;syncBlocked=false;
   syncStatus(dirty?'● Đã lưu trên máy · Tiếp tục đồng bộ':'● Đã đồng bộ',dirty?'pending':'saved');
   retry=dirty;
@@ -98,7 +99,7 @@ async function flushCloud(manual=false){
  }finally{
   syncing=false;
   if(dirty&&!syncConflict&&!syncBlocked&&retry&&navigator.onLine&&currentUser?.id===accountId){
-   clearTimeout(syncTimer);syncTimer=setTimeout(()=>flushCloud(),syncAgain?800:6000);
+   clearTimeout(syncTimer);syncTimer=setTimeout(()=>flushCloud(),syncAgain?800:Math.min(60000,1000*2**Math.min(++syncRetryAttempts,6)));
   }
   syncAgain=false;
  }
@@ -107,11 +108,12 @@ save=function(){
  if(!currentUser)return false;
  try{
   dirty=true;localGeneration++;
-  cacheCloud();
+  const saved=cacheCloud(),generation=localGeneration;
   invalidSyncNotified=false;
   if(syncConflict){syncStatus('⚠ Xung đột dữ liệu · Chưa ghi đè','error');return true;}
   if(syncBlocked){syncStatus('⚠ Bản nháp đã lưu · Chưa đồng bộ','error');return true;}
-  syncStatus(navigator.onLine?'● Đã lưu trên máy · Đang đồng bộ':'⚠ Đã lưu trên máy · Chờ kết nối',navigator.onLine?'pending':'offline');
+  syncStatus('Đang lưu trên thiết bị…','pending');
+  saved.then(()=>{if(generation===localGeneration)syncStatus(navigator.onLine?'Đã lưu trên máy · Chờ đồng bộ':'Đã lưu trên máy · Chờ kết nối',navigator.onLine?'pending':'offline');}).catch(()=>{});
   clearTimeout(syncTimer);
   syncTimer=setTimeout(()=>flushCloud(),750);
   return true;
@@ -244,10 +246,10 @@ window.addEventListener('online',()=>flushCloud());document.addEventListener('vi
 let idleTimer,activityInFlight=false,lastActivitySent=0,sessionDeadline=0;
 function startIdleSession(deadline){sessionDeadline=Number(deadline)||Date.now()+600000;clearTimeout(idleTimer);idleTimer=setTimeout(()=>{if(Date.now()<sessionDeadline)startIdleSession(sessionDeadline);else signOutAccount(true);},Math.min(86400000,Math.max(0,sessionDeadline-Date.now())));}
 async function touchSession(){if(!currentUser||document.hidden||activityInFlight)return;if(Date.now()>=sessionDeadline)return signOutAccount(true);if(Date.now()-lastActivitySent<30000)return;activityInFlight=true;lastActivitySent=Date.now();try{const result=await requestAPI('activity','POST',{});startIdleSession(result.expires);}catch(e){if(e.status===401)signOutAccount(true);}finally{activityInFlight=false;}}
-async function signOutAccount(automatic=false){if(!currentUser)return;try{if(automatic){try{const me=await requestAPI('me');if(me.user.id===currentUser.id&&me.user.session_expires>Date.now()){startIdleSession(me.user.session_expires);return;}}catch{}}if(!automatic){await flushCloud();if(dirty){notify('Còn dữ liệu chưa đồng bộ. Hãy xuất JSON hoặc chờ đồng bộ trước khi đăng xuất.');return;}await requestAPI('logout','POST',{});}else{if(dirty)cacheCloud();requestAPI('logout','POST',{}).catch(()=>{});}clearTimeout(idleTimer);clearTimeout(syncTimer);localStorage.removeItem('zen-offline-account');currentUser=null;data={schema:1,projects:[],notes:[]};document.querySelectorAll('dialog[open]').forEach(d=>d.close());$('#main').innerHTML='';$('#side-projects').innerHTML='';$('#tabs').innerHTML='';authScreen('login',automatic?'Đã khóa sau 10 phút không thao tác. Đăng nhập để tiếp tục; bản thay đổi chưa gửi được giữ trên thiết bị.':'Đã đăng xuất tài khoản.');}catch(e){notify(e.message);}}
+async function signOutAccount(automatic=false){if(!currentUser)return;try{if(automatic){try{const me=await requestAPI('me');if(me.user.id===currentUser.id&&me.user.session_expires>Date.now()){startIdleSession(me.user.session_expires);return;}}catch{}}if(!automatic){await flushCloud();if(dirty){notify('Còn dữ liệu chưa đồng bộ. Hãy xuất JSON hoặc chờ đồng bộ trước khi đăng xuất.');return;}await requestAPI('logout','POST',{});}else{if(dirty)cacheCloud();requestAPI('logout','POST',{}).catch(()=>{});}clearTimeout(idleTimer);clearTimeout(syncTimer);if(!automatic)localStorage.removeItem('zen-offline-account');currentUser=null;data={schema:1,projects:[],notes:[]};document.querySelectorAll('dialog[open]').forEach(d=>d.close());$('#main').innerHTML='';$('#side-projects').innerHTML='';$('#tabs').innerHTML='';authScreen('login',automatic?'Đã khóa sau 10 phút không thao tác. Đăng nhập để tiếp tục; bản thay đổi chưa gửi được giữ trên thiết bị.':'Đã đăng xuất tài khoản.');}catch(e){notify(e.message);}}
 for(const event of ['pointerdown','keydown','input','wheel','touchstart'])document.addEventListener(event,()=>touchSession(),{passive:true});
 document.addEventListener('visibilitychange',()=>{if(!document.hidden&&currentUser&&Date.now()>=sessionDeadline)signOutAccount(true);});
-(async()=>{const shared=new URLSearchParams(location.search).get('boardshare');if(shared){try{const r=await requestAPI('shared/'+shared);data=r.data;contentReadOnly=true;document.body.classList.remove('signed-out');noteBoard='';view='notes';render();}catch(e){authScreen('login',e.message);}return;}if('serviceWorker'in navigator)navigator.serviceWorker.register('/sw.js').catch(()=>{});const mode=location.hash.startsWith('#reset=')?'reset':location.hash.startsWith('#verify=')?'verify':null;if(mode)return authScreen(mode);try{await openAccount();}catch(error){if(await openOfflineAccount())return;currentUser=null;authScreen('login',error.status===401?'':error.message+' · Phiên đăng nhập vẫn được giữ.');offerInvalidDraftDownload();}})();
+(async()=>{const shared=new URLSearchParams(location.search).get('boardshare');if(shared){try{const r=await requestAPI('shared/'+shared);data=r.data;contentReadOnly=true;document.body.classList.remove('signed-out');noteBoard='';view='notes';render();}catch(e){authScreen('login',e.message);}return;}if('serviceWorker'in navigator)navigator.serviceWorker.register('/sw.js').catch(()=>{});const mode=location.hash.startsWith('#reset=')?'reset':location.hash.startsWith('#verify=')?'verify':null;if(mode)return authScreen(mode);try{await openAccount();}catch(error){if(await openOfflineAccount(!error.status))return;currentUser=null;authScreen('login',error.status===401?'':error.message+' · Phiên đăng nhập vẫn được giữ.');offerInvalidDraftDownload();}})();
 
 function passwordEye(visible=false){return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/>'+(visible?'<path d="m3 3 18 18"/>':'')+'</svg>';}
 function passwordField(isNew){return '<label class="field" for="account-password">Mật khẩu</label><div class="password-wrap"><input id="account-password" name="password" type="password" minlength="'+(isNew?'10':'1')+'" maxlength="128" autocomplete="'+(isNew?'new-password':'current-password')+'" required><button type="button" class="password-eye" aria-label="Hiện mật khẩu" aria-pressed="false" aria-controls="account-password">'+passwordEye()+'</button></div>';}

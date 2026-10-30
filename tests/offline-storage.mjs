@@ -1,0 +1,17 @@
+import 'fake-indexeddb/auto';
+import assert from 'node:assert/strict';
+globalThis.localStorage={getItem(){return null;},removeItem(){}};
+const files=await import('../dist/modules/offline-files.mjs');
+const persistence=await import('../dist/modules/persistence.mjs');
+const data={schema:1,projects:[{id:'p',tasks:Array.from({length:100},(_,i)=>({id:'t'+i,title:'Offline '+i}))}],notes:[]};
+await persistence.saveAccount('account:a',{data,meta:{dirty:true,revision:3,base:{schema:1,projects:[],notes:[]}}});
+let read=await persistence.loadAccount('account:a');assert.equal(read.data.projects[0].tasks.length,100);assert.equal(read.meta.dirty,true);assert.equal(read.meta.revision,3);
+read.data.projects[0].tasks[0].title='Edited offline';await persistence.saveAccount('account:a',read);read=await persistence.loadAccount('account:a');assert.equal(read.data.projects[0].tasks[0].title,'Edited offline');assert.equal(await persistence.loadAccount('account:b'),null);
+const file=new File(['Offline binary'],'garden.txt',{type:'text/plain'});
+await Promise.all([files.enqueue('a','project:p',file),files.enqueue('a','project:p',file)]);
+const records=await files.list('a');assert.equal(records.length,1);assert.equal(await records[0].blob.text(),'Offline binary');assert.ok(await files.verify(records[0]));assert.equal((await files.list('b')).length,0);
+const damaged={...records[0],blob:new Blob(['damaged'])};assert.equal(await files.verify(damaged),false);
+await assert.rejects(()=>files.enqueue('a','project:p',new File([''],'empty.txt')));
+const uploaded={...records[0],status:'uploaded',serverId:'server-file-id'};await files.put(uploaded);assert.equal((await files.list('a'))[0].status,'uploaded');
+await files.remove(uploaded.key);assert.equal((await files.list('a')).length,0);
+console.log('PASS: IndexedDB save/read, 100 records, dirty baseline retention, binary integrity, concurrent deduplication, owner isolation, empty-file rejection and upload acknowledgement.');

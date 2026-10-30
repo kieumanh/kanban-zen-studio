@@ -1,6 +1,6 @@
 {
   "name": "kanban-zen-studio",
-  "version": "1.15.21",
+  "version": "1.16.0-preview.1",
   "private": true,
   "type": "module",
   "scripts": {
@@ -8,10 +8,24 @@
     "test": "node tests/workspace-v2.mjs && node tests/static-assets.mjs && node tests/backend-security.mjs && node tests/build.mjs && node tests/request-body.mjs && node tests/core.mjs && node tests/accounts.mjs && node tests/sync.mjs && node tests/content.mjs && node tests/reports.mjs && node tests/projectux.mjs && node tests/resources.mjs && node tests/note-reminders.mjs && node tests/report-sharing.mjs && node tests/wisdom.mjs && node tests/note-enhancements.mjs && node tests/keep198.mjs && node tests/editor199.mjs && node tests/note110.mjs && node tests/manual-sync.mjs && node tests/release110.mjs && node tests/workflow111.mjs",
     "format": "prettier --write \"server/**/*.mjs\" \"scripts/**/*.mjs\"",
     "format:check": "prettier --check \"server/**/*.mjs\" \"scripts/**/*.mjs\"",
-    "lint": "eslint server scripts"
+    "lint": "eslint server scripts",
+    "desktop": "npm run build && electron .",
+    "build:windows": "npm run build && electron-builder --config native/desktop/builder.json --win --x64",
+    "test:offline": "node tests/offline-merge.mjs && node tests/offline-storage.mjs && node tests/offline-sync-integration.mjs",
+    "test:offline:browser": "node tests/offline-native-browser.mjs"
   },
   "devDependencies": {
+    "electron": "45.1.0",
+    "electron-builder": "26.18.0",
     "eslint": "10.13.0",
+    "fake-indexeddb": "6.2.7",
+    "playwright": "1.64.1",
     "prettier": "3.9.10"
-  }
+  },
+  "dependencies": {
+    "electron-updater": "6.8.11"
+  },
+  "description": "Kanban Zen Studio offline-first desktop and Android preview",
+  "author": "Huong Thien Nature",
+  "main": "native/desktop/main.cjs"
 }

@@ -1,0 +1,24 @@
+plugins { id 'com.android.application' }
+android {
+ namespace 'com.huongthiennature.kanban'
+ compileSdk 35
+ defaultConfig {
+  applicationId 'com.huongthiennature.kanban'
+  minSdk 26
+  targetSdk 35
+  versionCode 1160001
+  versionName '1.16.0-preview.1'
+ }
+ signingConfigs {
+  release {
+   if (System.getenv('ZEN_ANDROID_KEYSTORE')) {
+    storeFile file(System.getenv('ZEN_ANDROID_KEYSTORE'))
+    storePassword System.getenv('ZEN_ANDROID_STORE_PASSWORD')
+    keyAlias System.getenv('ZEN_ANDROID_KEY_ALIAS')
+    keyPassword System.getenv('ZEN_ANDROID_KEY_PASSWORD')
+   }
+  }
+ }
+ buildTypes { release { signingConfig signingConfigs.release; minifyEnabled false } }
+ sourceSets { main { assets.srcDirs = ['../../../public'] } }
+}

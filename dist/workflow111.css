@@ -308,6 +308,14 @@ body:not(.wf-is-focused) .zen-music{display:none!important}
 #editor .note-composer[data-zen-art]:not([data-zen-art=none])::before{height:80px!important;min-height:80px;margin-top:10px!important}
 @media(max-width:600px){#editor .icon-library-results{max-height:230px!important}#editor .icon-library-tools input,#editor .icon-library-tools select{font-size:16px}[data-zen-art]:not([data-zen-art=none])::before{height:56px!important;min-height:56px;flex-basis:56px}}
 
+/* Keep project artwork in a calm, full-width banner instead of exposing the card's color stripe through it. */
+.project-card[data-zen-art]:not([data-zen-art=none])::before{background-color:transparent!important;background-size:100% 100%!important;background-position:center!important;opacity:.38!important}
+#main[data-zen-art]:not([data-zen-art=none])::before{background-size:100% 100%!important;background-position:center!important;opacity:.24!important;border-radius:12px;border-bottom:0;margin-bottom:14px!important}
+/* The current project stays identifiable without the oversized, heavy outline. */
+#tabs.has-current-project .tab.active{opacity:1;transform:none;min-height:56px;font-weight:600;box-shadow:0 2px 8px #7950c814;border:1px solid color-mix(in srgb,var(--color,#7950c8) 48%,white);border-bottom:3px solid var(--color,#7950c8)}
+#tabs.has-current-project .tab.active:has(.zen-active-tab-name){padding:8px 12px!important}
+#tabs.has-current-project .tab.active .zen-active-tab-name{font-weight:600}
+
 .zen-task-delete{justify-content:center;text-align:center}.zen-task-delete>.btn{min-width:min(240px,100%)}
 .wf-comments{padding:20px;background:linear-gradient(145deg,#fcf9ff,#fffdfd);border-color:#e5d9ed}
 .wf-comment-list{display:grid;gap:10px;margin:0 0 16px}

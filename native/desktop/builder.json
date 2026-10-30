@@ -1,0 +1,44 @@
+{
+  "appId": "com.huongthiennature.kanban",
+  "productName": "Kanban Zen Studio",
+  "directories": {
+    "output": "release/windows"
+  },
+  "files": [
+    "native/desktop/main.cjs",
+    "public/**/*",
+    "package.json"
+  ],
+  "extraMetadata": {
+    "main": "native/desktop/main.cjs"
+  },
+  "win": {
+    "target": [
+      {
+        "target": "nsis",
+        "arch": [
+          "x64"
+        ]
+      }
+    ],
+    "artifactName": "Kanban-Zen-Studio-${version}-Setup.${ext}",
+    "icon": "native/desktop/icon.ico",
+    "signAndEditExecutable": false
+  },
+  "nsis": {
+    "oneClick": false,
+    "perMachine": false,
+    "allowToChangeInstallationDirectory": true,
+    "deleteAppDataOnUninstall": false,
+    "script": "native/desktop/installer.nsi",
+    "differentialPackage": false
+  },
+  "publish": [
+    {
+      "provider": "github",
+      "owner": "kieumanh",
+      "repo": "kanban-zen-studio"
+    }
+  ],
+  "afterPack": "native/desktop/after-pack.cjs"
+}

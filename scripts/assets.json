@@ -248,5 +248,20 @@
     "/experience.css",
     "experience.css",
     "text/css; charset=utf-8"
+  ],
+  [
+    "/modules/merge.mjs",
+    "modules/merge.mjs",
+    "text/javascript; charset=utf-8"
+  ],
+  [
+    "/offline.js",
+    "offline.js",
+    "text/javascript; charset=utf-8"
+  ],
+  [
+    "/modules/offline-files.mjs",
+    "modules/offline-files.mjs",
+    "text/javascript; charset=utf-8"
   ]
 ]

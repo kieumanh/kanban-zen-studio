@@ -1,0 +1,15 @@
+import assert from 'node:assert/strict';
+import {mergeThreeWay} from '../dist/modules/merge.mjs';
+const base={projects:[{id:'p',name:'Vườn',tasks:[{id:'t',title:'Tưới cây',done:false}]}],notes:[]};
+const l=structuredClone(base),r=structuredClone(base);l.projects[0].tasks[0].title='Tưới rau';r.projects[0].tasks[0].done=true;
+let result=mergeThreeWay(base,l,r);assert.equal(result.conflicts.length,0);assert.deepEqual(result.value.projects[0].tasks[0],{id:'t',title:'Tưới rau',done:true});
+r.projects[0].tasks[0].title='Tưới hoa';result=mergeThreeWay(base,l,r);assert.equal(result.conflicts.length,1);
+const decision=result.conflicts[0].key;result=mergeThreeWay(base,l,r,{[decision]:'remote'});assert.equal(result.conflicts.length,0);assert.equal(result.value.projects[0].tasks[0].title,'Tưới hoa');assert.equal(result.value.projects[0].tasks[0].done,true);
+const deleted=structuredClone(base);deleted.projects[0].tasks=[];result=mergeThreeWay(base,deleted,r);assert.equal(result.conflicts.length,1);assert.equal(result.conflicts[0].local,undefined);
+result=mergeThreeWay(base,deleted,r,{[result.conflicts[0].key]:'local'});assert.deepEqual(result.value.projects[0].tasks,[]);
+const a={items:[{id:'a'},{id:'b'},{id:'c'}]},b={items:[{id:'b'},{id:'a'},{id:'c'}]},c={items:[{id:'a'},{id:'c'},{id:'b'}]};
+result=mergeThreeWay(a,b,c);assert.equal(result.conflicts.length,1);assert.equal(result.conflicts[0].path.at(-1),'$order');result=mergeThreeWay(a,b,c,{[result.conflicts[0].key]:'remote'});assert.deepEqual(result.value,c);
+result=mergeThreeWay({items:[]},{items:[{id:'a',text:'A'}]},{items:[{id:'b',text:'B'}]});assert.equal(result.conflicts.length,0);assert.equal(result.value.items.length,2);
+const many={tasks:Array.from({length:100},(_,i)=>({id:'t'+i,title:'task '+i,done:false}))};const ml=structuredClone(many),mr=structuredClone(many);for(let i=0;i<50;i++)ml.tasks[i].done=true;for(let i=50;i<100;i++)mr.tasks[i].done=true;result=mergeThreeWay(many,ml,mr);assert.equal(result.conflicts.length,0);assert.ok(result.value.tasks.every(t=>t.done));
+assert.equal(many.tasks[0].done,false,'does not mutate acknowledged baseline');
+console.log('PASS: independent fields, competing fields, deletion/edit, conflicting order, concurrent creation, 100 records and immutable baseline.');
