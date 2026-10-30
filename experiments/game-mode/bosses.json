@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "status": "design-only",
   "bosses": [
     {
@@ -11,11 +11,12 @@
       "globalLevel": 10,
       "name": "Trúc Diệp Tiểu Yêu",
       "visual": "Mầm trúc tròn, lá che một mắt",
-      "mechanic": "Báo trước một đòn lá, chặn đúng lượt",
       "skill": {
         "name": "Trúc Diệp Thủ",
         "family": 1,
-        "effect": "Đòn chính xác: 120% công lực, không bị né; tốn 2 nội lực, hồi 2 lượt."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 38,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 75,
@@ -23,7 +24,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Trúc Diệp Tiểu Yêu"
       },
-      "phases": 1
+      "presentationTheme": "Báo trước một đòn lá, chặn đúng lượt"
     },
     {
       "id": "boss-002",
@@ -34,11 +35,12 @@
       "globalLevel": 20,
       "name": "Đoản Vĩ Sơn Thử",
       "visual": "Chuột núi ôm hạt dẻ, đuôi ngắn",
-      "mechanic": "Giấu hạt hồi máu; đánh túi hạt trước",
       "skill": {
         "name": "Điểm Huyệt Chỉ",
         "family": 2,
-        "effect": "Đòn phá giáp: 90% công lực, giảm 30% giáp trong 2 lượt; tốn 2, hồi 3."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 50,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 100,
@@ -46,7 +48,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Đoản Vĩ Sơn Thử"
       },
-      "phases": 1
+      "presentationTheme": "Giấu hạt hồi máu; đánh túi hạt trước"
     },
     {
       "id": "boss-003",
@@ -57,11 +59,12 @@
       "globalLevel": 30,
       "name": "Thanh Đằng Mộc Ngẫu",
       "visual": "Rối gỗ quấn dây leo, chân ngắn",
-      "mechanic": "Trói chân hai lượt; thanh tẩy rồi xuất chiêu",
       "skill": {
         "name": "Giải Đằng Quyết",
         "family": 3,
-        "effect": "Thanh tẩy: xóa 1 bất lợi; tốn 2, hồi 3."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 63,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 125,
@@ -69,7 +72,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Thanh Đằng Mộc Ngẫu"
       },
-      "phases": 1
+      "presentationTheme": "Trói chân hai lượt; thanh tẩy rồi xuất chiêu"
     },
     {
       "id": "boss-004",
@@ -80,11 +83,12 @@
       "globalLevel": 40,
       "name": "Cổ Chung Thiềm",
       "visual": "Có chũm chọe nhỏ trên lưng",
-      "mechanic": "Tiếng chuông làm gián đoạn; giữ thế thủ khi chuông sáng",
       "skill": {
         "name": "Tĩnh Tâm Quyết",
         "family": 4,
-        "effect": "Hộ thể: giảm 50% sát thương nhận trong 1 lượt; tốn 2, hồi 3."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 75,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 150,
@@ -92,7 +96,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Cổ Chung Thiềm"
       },
-      "phases": 1
+      "presentationTheme": "Tiếng chuông làm gián đoạn; giữ thế thủ khi chuông sáng"
     },
     {
       "id": "boss-005",
@@ -103,11 +107,12 @@
       "globalLevel": 50,
       "name": "Hắc Vũ Nha Tướng",
       "visual": "Quạ áo choàng, lông như bút mực",
-      "mechanic": "Bay né kiếm; dùng chiêu chính xác khi hạ cánh",
       "skill": {
         "name": "Phi Diệp Tiêu",
         "family": 5,
-        "effect": "Gián đoạn: 70% công lực và hủy 1 chiêu đang tụ lực; tốn 3, hồi 4."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 88,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 175,
@@ -115,7 +120,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Hắc Vũ Nha Tướng"
       },
-      "phases": 1
+      "presentationTheme": "Bay né kiếm; dùng chiêu chính xác khi hạ cánh"
     },
     {
       "id": "boss-006",
@@ -126,11 +131,12 @@
       "globalLevel": 60,
       "name": "Thạch Bì Sơn Trư",
       "visual": "Lợn rừng giáp đá, nanh tù",
-      "mechanic": "Giáp cứng khi đứng; dụ húc rồi phá giáp",
       "skill": {
         "name": "Phá Thạch Kình",
         "family": 6,
-        "effect": "Phản kích: giảm 35% sát thương 1 lượt, trả 80% công lực khi trúng đòn; tốn 2, hồi 3."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 100,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 200,
@@ -138,7 +144,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Thạch Bì Sơn Trư"
       },
-      "phases": 1
+      "presentationTheme": "Giáp cứng khi đứng; dụ húc rồi phá giáp"
     },
     {
       "id": "boss-007",
@@ -149,11 +155,12 @@
       "globalLevel": 70,
       "name": "Mê Tung Hồ",
       "visual": "Cáo đội nón lá, ba đuôi khói",
-      "mechanic": "Một bóng thật có chuông; đánh đúng bóng để dừng phân thân",
       "skill": {
         "name": "Minh Mục Thuật",
         "family": 7,
-        "effect": "Trị liệu: hồi 20% sinh lực tối đa; tốn 3, hồi 4."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 113,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 225,
@@ -161,7 +168,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Mê Tung Hồ"
       },
-      "phases": 1
+      "presentationTheme": "Một bóng thật có chuông; đánh đúng bóng để dừng phân thân"
     },
     {
       "id": "boss-008",
@@ -172,11 +179,12 @@
       "globalLevel": 80,
       "name": "Phong Linh Hạc",
       "visual": "Hạc nhỏ đeo dải lụa xanh",
-      "mechanic": "Tích gió ba lượt; làm gián đoạn trước cơn lốc",
       "skill": {
         "name": "Định Phong Bộ",
         "family": 8,
-        "effect": "Liên kích: hai đòn 65% công lực; tốn 3, hồi 3."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 125,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 250,
@@ -184,7 +192,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Phong Linh Hạc"
       },
-      "phases": 1
+      "presentationTheme": "Tích gió ba lượt; làm gián đoạn trước cơn lốc"
     },
     {
       "id": "boss-009",
@@ -195,11 +203,12 @@
       "globalLevel": 90,
       "name": "Trúc Lâm Kiếm Khách",
       "visual": "Hiệp khách gấu trúc cầm kiếm gỗ",
-      "mechanic": "Phản kích đòn liên tiếp; xen kẽ công và thủ",
       "skill": {
         "name": "Hồi Phong Kiếm",
         "family": 9,
-        "effect": "Phong ấn: ngăn hồi phục hoặc triệu hồi 1 lượt; tốn 3, hồi 4."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 138,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 275,
@@ -207,7 +216,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Trúc Lâm Kiếm Khách"
       },
-      "phases": 1
+      "presentationTheme": "Phản kích đòn liên tiếp; xen kẽ công và thủ"
     },
     {
       "id": "boss-010",
@@ -218,11 +227,12 @@
       "globalLevel": 100,
       "name": "Thanh Trúc Sơn Quân",
       "visual": "Hổ ngọc mang giáp trúc",
-      "mechanic": "Hai pha lá chắn và hổ kích; phối hợp phá giáp với thủ",
       "skill": {
         "name": "Thanh Trúc Hộ Thể",
         "family": 10,
-        "effect": "Tuyệt kỹ: 180% công lực và hộ thể 25% một lượt; tốn 5, hồi 5."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 225,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 300,
@@ -230,7 +240,7 @@
         "firstClearOnly": true,
         "cosmetic": "Ấn Thanh Trúc và áo choàng Thanh Trúc"
       },
-      "phases": 2
+      "presentationTheme": "Hai pha lá chắn và hổ kích; phối hợp phá giáp với thủ"
     },
     {
       "id": "boss-011",
@@ -241,11 +251,12 @@
       "globalLevel": 110,
       "name": "Ngọc Bào Thủy Quái",
       "visual": "Bọt nước tròn có mắt ngọc",
-      "mechanic": "Bọt vỡ hồi sinh một lần; giữ chiêu kết liễu",
       "skill": {
         "name": "Ngọc Tuyền Chỉ",
         "family": 1,
-        "effect": "Đòn chính xác: 120% công lực, không bị né; tốn 2 nội lực, hồi 2 lượt."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 63,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 125,
@@ -253,7 +264,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Ngọc Bào Thủy Quái"
       },
-      "phases": 1
+      "presentationTheme": "Bọt vỡ hồi sinh một lần; giữ chiêu kết liễu"
     },
     {
       "id": "boss-012",
@@ -264,11 +275,12 @@
       "globalLevel": 120,
       "name": "Hà Sa Giải Tướng",
       "visual": "Cua giáp cát có càng lệch",
-      "mechanic": "Càng lớn chặn trước mặt; chờ đổi thế để đánh",
       "skill": {
         "name": "Lưu Thủy Bộ",
         "family": 2,
-        "effect": "Đòn phá giáp: 90% công lực, giảm 30% giáp trong 2 lượt; tốn 2, hồi 3."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 75,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 150,
@@ -276,7 +288,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Hà Sa Giải Tướng"
       },
-      "phases": 1
+      "presentationTheme": "Càng lớn chặn trước mặt; chờ đổi thế để đánh"
     },
     {
       "id": "boss-013",
@@ -287,11 +299,12 @@
       "globalLevel": 130,
       "name": "Bích Lân Ngư Vệ",
       "visual": "Cá giáp xanh cầm thương sen",
-      "mechanic": "Khiên vảy giảm kiếm; dùng đòn phá thế",
       "skill": {
         "name": "Xuyên Lân Thức",
         "family": 3,
-        "effect": "Thanh tẩy: xóa 1 bất lợi; tốn 2, hồi 3."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 88,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 175,
@@ -299,7 +312,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Bích Lân Ngư Vệ"
       },
-      "phases": 1
+      "presentationTheme": "Khiên vảy giảm kiếm; dùng đòn phá thế"
     },
     {
       "id": "boss-014",
@@ -310,11 +323,12 @@
       "globalLevel": 140,
       "name": "Thủy Tiên Đăng Yêu",
       "visual": "Đèn sen nổi có tua nước",
-      "mechanic": "Đèn tích sáng hồi máu; dập sáng bằng gián đoạn",
       "skill": {
         "name": "Tắt Sóng Quyết",
         "family": 4,
-        "effect": "Hộ thể: giảm 50% sát thương nhận trong 1 lượt; tốn 2, hồi 3."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 100,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 200,
@@ -322,7 +336,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Thủy Tiên Đăng Yêu"
       },
-      "phases": 1
+      "presentationTheme": "Đèn tích sáng hồi máu; dập sáng bằng gián đoạn"
     },
     {
       "id": "boss-015",
@@ -333,11 +347,12 @@
       "globalLevel": 150,
       "name": "Hàn Vụ Thủy Xà",
       "visual": "Rắn sương cuộn thành bánh tròn",
-      "mechanic": "Sương làm giảm chính xác; giải sương trước khi tấn công",
       "skill": {
         "name": "Thanh Vụ Chú",
         "family": 5,
-        "effect": "Gián đoạn: 70% công lực và hủy 1 chiêu đang tụ lực; tốn 3, hồi 4."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 113,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 225,
@@ -345,7 +360,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Hàn Vụ Thủy Xà"
       },
-      "phases": 1
+      "presentationTheme": "Sương làm giảm chính xác; giải sương trước khi tấn công"
     },
     {
       "id": "boss-016",
@@ -356,11 +371,12 @@
       "globalLevel": 160,
       "name": "Song Kiều Thủy Lại",
       "visual": "Cặp rái cá mặc áo lính",
-      "mechanic": "Một con hồi máu một con đánh; ưu tiên con mang bình",
       "skill": {
         "name": "Song Lưu Trảm",
         "family": 6,
-        "effect": "Phản kích: giảm 35% sát thương 1 lượt, trả 80% công lực khi trúng đòn; tốn 2, hồi 3."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 125,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 250,
@@ -368,7 +384,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Song Kiều Thủy Lại"
       },
-      "phases": 1
+      "presentationTheme": "Một con hồi máu một con đánh; ưu tiên con mang bình"
     },
     {
       "id": "boss-017",
@@ -379,11 +395,12 @@
       "globalLevel": 170,
       "name": "Trầm Chu Mộc Linh",
       "visual": "Thuyền gỗ nhỏ có mặt và mái chèo",
-      "mechanic": "Dâng nước tăng sát thương; đánh mái chèo để hạ thủy triều",
       "skill": {
         "name": "Trấn Ba Chưởng",
         "family": 7,
-        "effect": "Trị liệu: hồi 20% sinh lực tối đa; tốn 3, hồi 4."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 138,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 275,
@@ -391,7 +408,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Trầm Chu Mộc Linh"
       },
-      "phases": 1
+      "presentationTheme": "Dâng nước tăng sát thương; đánh mái chèo để hạ thủy triều"
     },
     {
       "id": "boss-018",
@@ -402,11 +419,12 @@
       "globalLevel": 180,
       "name": "Bạch Lãng Kiếm Ngư",
       "visual": "Cá kiếm trắng có khăn đỏ",
-      "mechanic": "Đâm theo nhịp hai nhanh một chậm; phòng thủ ở nhịp chậm",
       "skill": {
         "name": "Bạch Lãng Kiếm",
         "family": 8,
-        "effect": "Liên kích: hai đòn 65% công lực; tốn 3, hồi 3."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 150,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 300,
@@ -414,7 +432,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Bạch Lãng Kiếm Ngư"
       },
-      "phases": 1
+      "presentationTheme": "Đâm theo nhịp hai nhanh một chậm; phòng thủ ở nhịp chậm"
     },
     {
       "id": "boss-019",
@@ -425,11 +443,12 @@
       "globalLevel": 190,
       "name": "Bích Khê Giao Nữ",
       "visual": "Giao nhân chibi ôm đàn nước",
-      "mechanic": "Tiếng đàn khiến ngủ; giữ một lượt thanh tẩy",
       "skill": {
         "name": "Tỉnh Mộng Âm",
         "family": 9,
-        "effect": "Phong ấn: ngăn hồi phục hoặc triệu hồi 1 lượt; tốn 3, hồi 4."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 163,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 325,
@@ -437,7 +456,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Bích Khê Giao Nữ"
       },
-      "phases": 1
+      "presentationTheme": "Tiếng đàn khiến ngủ; giữ một lượt thanh tẩy"
     },
     {
       "id": "boss-020",
@@ -448,11 +467,12 @@
       "globalLevel": 200,
       "name": "Bích Khê Giao Vương",
       "visual": "Giao long xanh, sừng tròn như ngọc",
-      "mechanic": "Ba đợt triều lên; phá ngọc triều rồi đánh thân chính",
       "skill": {
         "name": "Giao Long Xuất Thủy",
         "family": 10,
-        "effect": "Tuyệt kỹ: 180% công lực và hộ thể 25% một lượt; tốn 5, hồi 5."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 263,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 350,
@@ -460,7 +480,7 @@
         "firstClearOnly": true,
         "cosmetic": "Ấn Bích Khê và áo choàng Bích Khê"
       },
-      "phases": 2
+      "presentationTheme": "Ba đợt triều lên; phá ngọc triều rồi đánh thân chính"
     },
     {
       "id": "boss-021",
@@ -471,11 +491,12 @@
       "globalLevel": 210,
       "name": "Tùng Quả Sơn Tinh",
       "visual": "Quả thông có giáp vảy gỗ",
-      "mechanic": "Khép vảy khi thủ; đánh ở lượt mở nón",
       "skill": {
         "name": "Tùng Châm Quyết",
         "family": 1,
-        "effect": "Đòn chính xác: 120% công lực, không bị né; tốn 2 nội lực, hồi 2 lượt."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 88,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 175,
@@ -483,7 +504,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Tùng Quả Sơn Tinh"
       },
-      "phases": 1
+      "presentationTheme": "Khép vảy khi thủ; đánh ở lượt mở nón"
     },
     {
       "id": "boss-022",
@@ -494,11 +515,12 @@
       "globalLevel": 220,
       "name": "Hôi Bào Mi Hầu",
       "visual": "Khỉ áo xám mang gậy ngắn",
-      "mechanic": "Trộm một đơn vị nội lực; đánh dấu để đòi lại",
       "skill": {
         "name": "Truy Ảnh Bộ",
         "family": 2,
-        "effect": "Đòn phá giáp: 90% công lực, giảm 30% giáp trong 2 lượt; tốn 2, hồi 3."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 100,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 200,
@@ -506,7 +528,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Hôi Bào Mi Hầu"
       },
-      "phases": 1
+      "presentationTheme": "Trộm một đơn vị nội lực; đánh dấu để đòi lại"
     },
     {
       "id": "boss-023",
@@ -517,11 +539,12 @@
       "globalLevel": 230,
       "name": "Vân Ti Bạch Chu",
       "visual": "Nhện bông trắng có tám chân tròn",
-      "mechanic": "Tơ chắn hai ô kỹ năng; gỡ tơ theo thứ tự",
       "skill": {
         "name": "Đoạn Ti Kiếm",
         "family": 3,
-        "effect": "Thanh tẩy: xóa 1 bất lợi; tốn 2, hồi 3."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 113,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 225,
@@ -529,7 +552,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Vân Ti Bạch Chu"
       },
-      "phases": 1
+      "presentationTheme": "Tơ chắn hai ô kỹ năng; gỡ tơ theo thứ tự"
     },
     {
       "id": "boss-024",
@@ -540,11 +563,12 @@
       "globalLevel": 240,
       "name": "Cổ Mộc Dược Ông",
       "visual": "Ông cây râu rễ mang hồ lô",
-      "mechanic": "Hạt giống mọc thành bình thuốc; dọn mầm trước pha hồi",
       "skill": {
         "name": "Khô Mộc Hồi Xuân",
         "family": 4,
-        "effect": "Hộ thể: giảm 50% sát thương nhận trong 1 lượt; tốn 2, hồi 3."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 125,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 250,
@@ -552,7 +576,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Cổ Mộc Dược Ông"
       },
-      "phases": 1
+      "presentationTheme": "Hạt giống mọc thành bình thuốc; dọn mầm trước pha hồi"
     },
     {
       "id": "boss-025",
@@ -563,11 +587,12 @@
       "globalLevel": 250,
       "name": "Ngân Vĩ Điêu",
       "visual": "Chồn bạc cầm quạt lá thông",
-      "mechanic": "Né rồi phản đòn mạnh; dùng đòn nhử tốn ít lực",
       "skill": {
         "name": "Hư Thực Thủ",
         "family": 5,
-        "effect": "Gián đoạn: 70% công lực và hủy 1 chiêu đang tụ lực; tốn 3, hồi 4."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 138,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 275,
@@ -575,7 +600,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Ngân Vĩ Điêu"
       },
-      "phases": 1
+      "presentationTheme": "Né rồi phản đòn mạnh; dùng đòn nhử tốn ít lực"
     },
     {
       "id": "boss-026",
@@ -586,11 +611,12 @@
       "globalLevel": 260,
       "name": "Mặc Diện Sơn Tiêu",
       "visual": "Yêu núi mặt nạ mực, thân mềm",
-      "mechanic": "Đổi mặt nạ công và thủ; quan sát biểu tượng mặt nạ",
       "skill": {
         "name": "Quan Tượng Pháp",
         "family": 6,
-        "effect": "Phản kích: giảm 35% sát thương 1 lượt, trả 80% công lực khi trúng đòn; tốn 2, hồi 3."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 150,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 300,
@@ -598,7 +624,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Mặc Diện Sơn Tiêu"
       },
-      "phases": 1
+      "presentationTheme": "Đổi mặt nạ công và thủ; quan sát biểu tượng mặt nạ"
     },
     {
       "id": "boss-027",
@@ -609,11 +635,12 @@
       "globalLevel": 270,
       "name": "Tùng Phong Đạo Sĩ",
       "visual": "Đạo sĩ rối gỗ cưỡi mây",
-      "mechanic": "Luân phiên gió và độc; đổi kỹ năng giải tương ứng",
       "skill": {
         "name": "Tùng Phong Tịnh Khí",
         "family": 7,
-        "effect": "Trị liệu: hồi 20% sinh lực tối đa; tốn 3, hồi 4."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 163,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 325,
@@ -621,7 +648,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Tùng Phong Đạo Sĩ"
       },
-      "phases": 1
+      "presentationTheme": "Luân phiên gió và độc; đổi kỹ năng giải tương ứng"
     },
     {
       "id": "boss-028",
@@ -632,11 +659,12 @@
       "globalLevel": 280,
       "name": "Bạch Vân Kiếm Hồn",
       "visual": "Hồn kiếm trắng quấn mây",
-      "mechanic": "Bắt chước chiêu vừa dùng; tránh lặp cùng kỹ năng",
       "skill": {
         "name": "Biến Chiêu Quyết",
         "family": 8,
-        "effect": "Liên kích: hai đòn 65% công lực; tốn 3, hồi 3."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 175,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 350,
@@ -644,7 +672,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Bạch Vân Kiếm Hồn"
       },
-      "phases": 1
+      "presentationTheme": "Bắt chước chiêu vừa dùng; tránh lặp cùng kỹ năng"
     },
     {
       "id": "boss-029",
@@ -655,11 +683,12 @@
       "globalLevel": 290,
       "name": "Thiên Chi Mộc Vệ",
       "visual": "Vệ binh cây mang khiên tổ chim",
-      "mechanic": "Ba rễ nối giáp; cắt hai rễ rồi phá lõi",
       "skill": {
         "name": "Đoạn Căn Kình",
         "family": 9,
-        "effect": "Phong ấn: ngăn hồi phục hoặc triệu hồi 1 lượt; tốn 3, hồi 4."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 188,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 375,
@@ -667,7 +696,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Thiên Chi Mộc Vệ"
       },
-      "phases": 1
+      "presentationTheme": "Ba rễ nối giáp; cắt hai rễ rồi phá lõi"
     },
     {
       "id": "boss-030",
@@ -678,11 +707,12 @@
       "globalLevel": 300,
       "name": "Vân Tùng Lão Tổ",
       "visual": "Cổ thụ chibi đội tán thông",
-      "mechanic": "Ba pha mầm, rễ, tán; giữ nội lực cho pha cuối",
       "skill": {
         "name": "Vạn Tùng Kiếm Trận",
         "family": 10,
-        "effect": "Tuyệt kỹ: 180% công lực và hộ thể 25% một lượt; tốn 5, hồi 5."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 300,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 400,
@@ -690,7 +720,7 @@
         "firstClearOnly": true,
         "cosmetic": "Ấn Vân Tùng và áo choàng Vân Tùng"
       },
-      "phases": 2
+      "presentationTheme": "Ba pha mầm, rễ, tán; giữ nội lực cho pha cuối"
     },
     {
       "id": "boss-031",
@@ -701,11 +731,12 @@
       "globalLevel": 310,
       "name": "Nguyệt Quang Thố",
       "visual": "Thỏ ngọc ôm chày tròn",
-      "mechanic": "Tích trăng hồi giáp; ngắt lúc giơ chày",
       "skill": {
         "name": "Nguyệt Nha Trảm",
         "family": 1,
-        "effect": "Đòn chính xác: 120% công lực, không bị né; tốn 2 nội lực, hồi 2 lượt."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 113,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 225,
@@ -713,7 +744,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Nguyệt Quang Thố"
       },
-      "phases": 2
+      "presentationTheme": "Tích trăng hồi giáp; ngắt lúc giơ chày"
     },
     {
       "id": "boss-032",
@@ -724,11 +755,12 @@
       "globalLevel": 320,
       "name": "Ngân Hồ Đăng Sứ",
       "visual": "Cáo bạc cầm đèn trăng",
-      "mechanic": "Đèn soi làm lộ điểm yếu cả hai bên; thủ lúc bị soi",
       "skill": {
         "name": "Ngân Quang Thuẫn",
         "family": 2,
-        "effect": "Đòn phá giáp: 90% công lực, giảm 30% giáp trong 2 lượt; tốn 2, hồi 3."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 125,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 250,
@@ -736,7 +768,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Ngân Hồ Đăng Sứ"
       },
-      "phases": 2
+      "presentationTheme": "Đèn soi làm lộ điểm yếu cả hai bên; thủ lúc bị soi"
     },
     {
       "id": "boss-033",
@@ -747,11 +779,12 @@
       "globalLevel": 330,
       "name": "Ảnh Diện Miêu",
       "visual": "Mèo đeo mặt nạ bán nguyệt",
-      "mechanic": "Bóng che máu thật; đánh dấu đúng thân",
       "skill": {
         "name": "Chiếu Ảnh Thuật",
         "family": 3,
-        "effect": "Thanh tẩy: xóa 1 bất lợi; tốn 2, hồi 3."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 138,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 275,
@@ -759,7 +792,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Ảnh Diện Miêu"
       },
-      "phases": 2
+      "presentationTheme": "Bóng che máu thật; đánh dấu đúng thân"
     },
     {
       "id": "boss-034",
@@ -770,11 +803,12 @@
       "globalLevel": 340,
       "name": "Tàn Nguyệt Song Đao",
       "visual": "Kiếm khách sóc dùng song đao cong",
-      "mechanic": "Hai đòn ngắn rồi nghỉ; phản kích trong khoảng nghỉ",
       "skill": {
         "name": "Tàn Nguyệt Liên Hoàn",
         "family": 4,
-        "effect": "Hộ thể: giảm 50% sát thương nhận trong 1 lượt; tốn 2, hồi 3."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 150,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 300,
@@ -782,7 +816,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Tàn Nguyệt Song Đao"
       },
-      "phases": 2
+      "presentationTheme": "Hai đòn ngắn rồi nghỉ; phản kích trong khoảng nghỉ"
     },
     {
       "id": "boss-035",
@@ -793,11 +827,12 @@
       "globalLevel": 350,
       "name": "Mộng Điệp Tiên",
       "visual": "Bướm lụa tím có trượng hoa",
-      "mechanic": "Mộng đổi vị trí nút; lựa chọn bằng nhãn rõ ràng, không đổi UI thật",
       "skill": {
         "name": "Định Mộng Quyết",
         "family": 5,
-        "effect": "Gián đoạn: 70% công lực và hủy 1 chiêu đang tụ lực; tốn 3, hồi 4."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 163,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 325,
@@ -805,7 +840,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Mộng Điệp Tiên"
       },
-      "phases": 2
+      "presentationTheme": "Mộng đổi vị trí nút; lựa chọn bằng nhãn rõ ràng, không đổi UI thật"
     },
     {
       "id": "boss-036",
@@ -816,11 +851,12 @@
       "globalLevel": 360,
       "name": "Tinh Sa Cầm Sư",
       "visual": "Nhạc sư hươu cầm đàn sao",
-      "mechanic": "Hợp âm tích ba nốt; gián đoạn nốt cuối",
       "skill": {
         "name": "Tinh Sa Tịnh Âm",
         "family": 6,
-        "effect": "Phản kích: giảm 35% sát thương 1 lượt, trả 80% công lực khi trúng đòn; tốn 2, hồi 3."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 175,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 350,
@@ -828,7 +864,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Tinh Sa Cầm Sư"
       },
-      "phases": 2
+      "presentationTheme": "Hợp âm tích ba nốt; gián đoạn nốt cuối"
     },
     {
       "id": "boss-037",
@@ -839,11 +875,12 @@
       "globalLevel": 370,
       "name": "Nguyệt Thực Lang",
       "visual": "Sói tròn với bờm vòng nguyệt thực",
-      "mechanic": "Tối dần làm mạnh cắn; thắp ba phù quang trong trận",
       "skill": {
         "name": "Phá Ám Chưởng",
         "family": 7,
-        "effect": "Trị liệu: hồi 20% sinh lực tối đa; tốn 3, hồi 4."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 188,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 375,
@@ -851,7 +888,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Nguyệt Thực Lang"
       },
-      "phases": 2
+      "presentationTheme": "Tối dần làm mạnh cắn; thắp ba phù quang trong trận"
     },
     {
       "id": "boss-038",
@@ -862,11 +899,12 @@
       "globalLevel": 380,
       "name": "Kính Hồ Kiếm Ảnh",
       "visual": "Hiệp khách phản chiếu trong gương nước",
-      "mechanic": "Gương phản sát thương; thủ để gương mờ rồi đánh",
       "skill": {
         "name": "Kính Tâm Minh",
         "family": 8,
-        "effect": "Liên kích: hai đòn 65% công lực; tốn 3, hồi 3."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 200,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 400,
@@ -874,7 +912,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Kính Hồ Kiếm Ảnh"
       },
-      "phases": 2
+      "presentationTheme": "Gương phản sát thương; thủ để gương mờ rồi đánh"
     },
     {
       "id": "boss-039",
@@ -885,11 +923,12 @@
       "globalLevel": 390,
       "name": "Vọng Nguyệt Tế Sư",
       "visual": "Tế sư cú mèo mang vòng bạc",
-      "mechanic": "Đổi ba ấn trăng; giải ấn trước khi đánh trúng tâm",
       "skill": {
         "name": "Tam Nguyệt Ấn",
         "family": 9,
-        "effect": "Phong ấn: ngăn hồi phục hoặc triệu hồi 1 lượt; tốn 3, hồi 4."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 213,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 425,
@@ -897,7 +936,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Vọng Nguyệt Tế Sư"
       },
-      "phases": 2
+      "presentationTheme": "Đổi ba ấn trăng; giải ấn trước khi đánh trúng tâm"
     },
     {
       "id": "boss-040",
@@ -908,11 +947,12 @@
       "globalLevel": 400,
       "name": "Minh Nguyệt Cung Chủ",
       "visual": "Nữ kiếm sư thỏ ngọc, áo ánh trăng",
-      "mechanic": "Bốn tuần trăng đổi thế; chọn chiêu theo pha hiển thị",
       "skill": {
         "name": "Minh Nguyệt Vô Trần",
         "family": 10,
-        "effect": "Tuyệt kỹ: 180% công lực và hộ thể 25% một lượt; tốn 5, hồi 5."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 338,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 450,
@@ -920,7 +960,7 @@
         "firstClearOnly": true,
         "cosmetic": "Ấn Minh Nguyệt và áo choàng Minh Nguyệt"
       },
-      "phases": 3
+      "presentationTheme": "Bốn tuần trăng đổi thế; chọn chiêu theo pha hiển thị"
     },
     {
       "id": "boss-041",
@@ -931,11 +971,12 @@
       "globalLevel": 410,
       "name": "Hỏa Tinh Tiểu Quỷ",
       "visual": "Cục than cam má phồng",
-      "mechanic": "Giận tăng khi bị đánh liên tục; nghỉ thủ để hạ nhiệt",
       "skill": {
         "name": "Hỏa Tinh Chưởng",
         "family": 1,
-        "effect": "Đòn chính xác: 120% công lực, không bị né; tốn 2 nội lực, hồi 2 lượt."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 138,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 275,
@@ -943,7 +984,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Hỏa Tinh Tiểu Quỷ"
       },
-      "phases": 2
+      "presentationTheme": "Giận tăng khi bị đánh liên tục; nghỉ thủ để hạ nhiệt"
     },
     {
       "id": "boss-042",
@@ -954,11 +995,12 @@
       "globalLevel": 420,
       "name": "Xích Giáp Hạt",
       "visual": "Bọ cạp giáp gốm đỏ, đuôi tù",
-      "mechanic": "Đuôi tích độc lửa; phá giáp đuôi trước",
       "skill": {
         "name": "Xích Sa Giải Độc",
         "family": 2,
-        "effect": "Đòn phá giáp: 90% công lực, giảm 30% giáp trong 2 lượt; tốn 2, hồi 3."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 150,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 300,
@@ -966,7 +1008,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Xích Giáp Hạt"
       },
-      "phases": 2
+      "presentationTheme": "Đuôi tích độc lửa; phá giáp đuôi trước"
     },
     {
       "id": "boss-043",
@@ -977,11 +1019,12 @@
       "globalLevel": 430,
       "name": "Dung Nham Quy",
       "visual": "Rùa nham thạch đeo ấm trà",
-      "mechanic": "Mai nóng phản sát thương; làm nguội bằng thủ",
       "skill": {
         "name": "Huyền Quy Tức",
         "family": 3,
-        "effect": "Thanh tẩy: xóa 1 bất lợi; tốn 2, hồi 3."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 163,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 325,
@@ -989,7 +1032,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Dung Nham Quy"
       },
-      "phases": 2
+      "presentationTheme": "Mai nóng phản sát thương; làm nguội bằng thủ"
     },
     {
       "id": "boss-044",
@@ -1000,11 +1043,12 @@
       "globalLevel": 440,
       "name": "Hồng Liên Hỏa Đồng",
       "visual": "Đồng tử lửa ngồi sen đỏ",
-      "mechanic": "Sen nở hồi sinh; phong ấn nụ rồi kết thúc",
       "skill": {
         "name": "Hồng Liên Phong Ấn",
         "family": 4,
-        "effect": "Hộ thể: giảm 50% sát thương nhận trong 1 lượt; tốn 2, hồi 3."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 175,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 350,
@@ -1012,7 +1056,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Hồng Liên Hỏa Đồng"
       },
-      "phases": 2
+      "presentationTheme": "Sen nở hồi sinh; phong ấn nụ rồi kết thúc"
     },
     {
       "id": "boss-045",
@@ -1023,11 +1067,12 @@
       "globalLevel": 450,
       "name": "Lưu Hỏa Ưng",
       "visual": "Đại bàng nhỏ có cánh than hồng",
-      "mechanic": "Lượn hai lượt rồi bổ; đặt thế phản công trước khi đáp",
       "skill": {
         "name": "Liệt Phong Phản Kích",
         "family": 5,
-        "effect": "Gián đoạn: 70% công lực và hủy 1 chiêu đang tụ lực; tốn 3, hồi 4."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 188,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 375,
@@ -1035,7 +1080,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Lưu Hỏa Ưng"
       },
-      "phases": 2
+      "presentationTheme": "Lượn hai lượt rồi bổ; đặt thế phản công trước khi đáp"
     },
     {
       "id": "boss-046",
@@ -1046,11 +1091,12 @@
       "globalLevel": 460,
       "name": "Xích Hà Đao Khách",
       "visual": "Đao khách tê tê mặc giáp đỏ",
-      "mechanic": "Nạp đao bỏ phòng ngự; đánh mạnh trước khi thế đầy",
       "skill": {
         "name": "Xích Hà Nhất Đao",
         "family": 6,
-        "effect": "Phản kích: giảm 35% sát thương 1 lượt, trả 80% công lực khi trúng đòn; tốn 2, hồi 3."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 200,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 400,
@@ -1058,7 +1104,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Xích Hà Đao Khách"
       },
-      "phases": 2
+      "presentationTheme": "Nạp đao bỏ phòng ngự; đánh mạnh trước khi thế đầy"
     },
     {
       "id": "boss-047",
@@ -1069,11 +1115,12 @@
       "globalLevel": 470,
       "name": "Cửu Đăng Hỏa Sứ",
       "visual": "Linh thể cầm vòng chín đèn",
-      "mechanic": "Ba cụm đèn buff luân phiên; tắt cụm đang hoạt động",
       "skill": {
         "name": "Cửu Đăng Tịnh Hỏa",
         "family": 7,
-        "effect": "Trị liệu: hồi 20% sinh lực tối đa; tốn 3, hồi 4."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 213,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 425,
@@ -1081,7 +1128,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Cửu Đăng Hỏa Sứ"
       },
-      "phases": 2
+      "presentationTheme": "Ba cụm đèn buff luân phiên; tắt cụm đang hoạt động"
     },
     {
       "id": "boss-048",
@@ -1092,11 +1139,12 @@
       "globalLevel": 480,
       "name": "Hỏa Vân Kỳ Lân",
       "visual": "Kỳ lân con bờm mây đỏ",
-      "mechanic": "Lửa lan thành hai làn; dựng hộ thể để chặn làn thứ hai",
       "skill": {
         "name": "Kỳ Lân Hộ Mạch",
         "family": 8,
-        "effect": "Liên kích: hai đòn 65% công lực; tốn 3, hồi 3."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 225,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 450,
@@ -1104,7 +1152,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Hỏa Vân Kỳ Lân"
       },
-      "phases": 2
+      "presentationTheme": "Lửa lan thành hai làn; dựng hộ thể để chặn làn thứ hai"
     },
     {
       "id": "boss-049",
@@ -1115,11 +1163,12 @@
       "globalLevel": 490,
       "name": "Phần Thiên Lô Chủ",
       "visual": "Thợ rèn gấu ôm lò tròn",
-      "mechanic": "Lò quá nhiệt theo mỗi chiêu lớn; xen chiêu nhẹ",
       "skill": {
         "name": "Luyện Hỏa Quy Nguyên",
         "family": 9,
-        "effect": "Phong ấn: ngăn hồi phục hoặc triệu hồi 1 lượt; tốn 3, hồi 4."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 238,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 475,
@@ -1127,7 +1176,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Phần Thiên Lô Chủ"
       },
-      "phases": 2
+      "presentationTheme": "Lò quá nhiệt theo mỗi chiêu lớn; xen chiêu nhẹ"
     },
     {
       "id": "boss-050",
@@ -1138,11 +1187,12 @@
       "globalLevel": 500,
       "name": "Xích Hà Viêm Quân",
       "visual": "Phượng hoàng chibi áo giáp bình minh",
-      "mechanic": "Ba lần đổi lửa; giữ phong ấn cho pha tái sinh",
       "skill": {
         "name": "Phượng Vũ Cửu Thiên",
         "family": 10,
-        "effect": "Tuyệt kỹ: 180% công lực và hộ thể 25% một lượt; tốn 5, hồi 5."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 375,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 500,
@@ -1150,7 +1200,7 @@
         "firstClearOnly": true,
         "cosmetic": "Ấn Xích Hà và áo choàng Xích Hà"
       },
-      "phases": 3
+      "presentationTheme": "Ba lần đổi lửa; giữ phong ấn cho pha tái sinh"
     },
     {
       "id": "boss-051",
@@ -1161,11 +1211,12 @@
       "globalLevel": 510,
       "name": "Vân Đoàn Ngủ Gật",
       "visual": "Mây tròn đội mũ ngủ",
-      "mechanic": "Ngủ tích giáp rồi tỉnh đánh lớn; đánh thức đúng nhịp",
       "skill": {
         "name": "Tỉnh Vân Chỉ",
         "family": 1,
-        "effect": "Đòn chính xác: 120% công lực, không bị né; tốn 2 nội lực, hồi 2 lượt."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 163,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 325,
@@ -1173,7 +1224,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Vân Đoàn Ngủ Gật"
       },
-      "phases": 2
+      "presentationTheme": "Ngủ tích giáp rồi tỉnh đánh lớn; đánh thức đúng nhịp"
     },
     {
       "id": "boss-052",
@@ -1184,11 +1235,12 @@
       "globalLevel": 520,
       "name": "Phi Vũ Thiên Cẩu",
       "visual": "Chó mây mang cánh lông trắng",
-      "mechanic": "Đánh dấu rồi lao; dùng né lượt kế tiếp",
       "skill": {
         "name": "Phi Vân Bộ",
         "family": 2,
-        "effect": "Đòn phá giáp: 90% công lực, giảm 30% giáp trong 2 lượt; tốn 2, hồi 3."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 175,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 350,
@@ -1196,7 +1248,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Phi Vũ Thiên Cẩu"
       },
-      "phases": 2
+      "presentationTheme": "Đánh dấu rồi lao; dùng né lượt kế tiếp"
     },
     {
       "id": "boss-053",
@@ -1207,11 +1259,12 @@
       "globalLevel": 530,
       "name": "Bạch Bào Phù Sư",
       "visual": "Chồn trắng mang túi phù",
-      "mechanic": "Phù im lặng khóa chiêu; thanh tẩy trước chuỗi công",
       "skill": {
         "name": "Giải Phù Chân Ngôn",
         "family": 3,
-        "effect": "Thanh tẩy: xóa 1 bất lợi; tốn 2, hồi 3."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 188,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 375,
@@ -1219,7 +1272,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Bạch Bào Phù Sư"
       },
-      "phases": 2
+      "presentationTheme": "Phù im lặng khóa chiêu; thanh tẩy trước chuỗi công"
     },
     {
       "id": "boss-054",
@@ -1230,11 +1283,12 @@
       "globalLevel": 540,
       "name": "Lưu Vân Khôi Lỗi",
       "visual": "Rối lụa khớp tròn lơ lửng",
-      "mechanic": "Năm sợi điều khiển; chọn sợi đang sáng để gián đoạn",
       "skill": {
         "name": "Tiệt Vân Thủ",
         "family": 4,
-        "effect": "Hộ thể: giảm 50% sát thương nhận trong 1 lượt; tốn 2, hồi 3."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 200,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 400,
@@ -1242,7 +1296,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Lưu Vân Khôi Lỗi"
       },
-      "phases": 2
+      "presentationTheme": "Năm sợi điều khiển; chọn sợi đang sáng để gián đoạn"
     },
     {
       "id": "boss-055",
@@ -1253,11 +1307,12 @@
       "globalLevel": 550,
       "name": "Tán Vũ Hoa Linh",
       "visual": "Linh hoa mang ô trong suốt",
-      "mechanic": "Mưa hồi boss hoặc hồi ta theo mặt ô; xoay ô đúng lượt",
       "skill": {
         "name": "Cam Lộ Quyết",
         "family": 5,
-        "effect": "Gián đoạn: 70% công lực và hủy 1 chiêu đang tụ lực; tốn 3, hồi 4."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 213,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 425,
@@ -1265,7 +1320,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Tán Vũ Hoa Linh"
       },
-      "phases": 2
+      "presentationTheme": "Mưa hồi boss hoặc hồi ta theo mặt ô; xoay ô đúng lượt"
     },
     {
       "id": "boss-056",
@@ -1276,11 +1331,12 @@
       "globalLevel": 560,
       "name": "Bạch Hạc Song Sứ",
       "visual": "Hai hạc áo trắng đen",
-      "mechanic": "Một giữ công một giữ thủ; đổi mục tiêu theo dấu ấn",
       "skill": {
         "name": "Lưỡng Nghi Bộ",
         "family": 6,
-        "effect": "Phản kích: giảm 35% sát thương 1 lượt, trả 80% công lực khi trúng đòn; tốn 2, hồi 3."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 225,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 450,
@@ -1288,7 +1344,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Bạch Hạc Song Sứ"
       },
-      "phases": 2
+      "presentationTheme": "Một giữ công một giữ thủ; đổi mục tiêu theo dấu ấn"
     },
     {
       "id": "boss-057",
@@ -1299,11 +1355,12 @@
       "globalLevel": 570,
       "name": "Thiên Phong Chấp Sự",
       "visual": "Dê núi đeo chuông gió",
-      "mechanic": "Gió đổi hồi chiêu; tính lại thứ tự ba chiêu",
       "skill": {
         "name": "Thuận Phong Kiếm",
         "family": 7,
-        "effect": "Trị liệu: hồi 20% sinh lực tối đa; tốn 3, hồi 4."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 238,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 475,
@@ -1311,7 +1368,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Thiên Phong Chấp Sự"
       },
-      "phases": 2
+      "presentationTheme": "Gió đổi hồi chiêu; tính lại thứ tự ba chiêu"
     },
     {
       "id": "boss-058",
@@ -1322,11 +1379,12 @@
       "globalLevel": 580,
       "name": "Vân Hải Cự Kình",
       "visual": "Cá voi mây mắt hiền có giáp",
-      "mechanic": "Nổi ba điểm lõi; chọn lõi theo tín hiệu trước lượt",
       "skill": {
         "name": "Vân Hải Hồi Nguyên",
         "family": 8,
-        "effect": "Liên kích: hai đòn 65% công lực; tốn 3, hồi 3."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 250,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 500,
@@ -1334,7 +1392,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Vân Hải Cự Kình"
       },
-      "phases": 2
+      "presentationTheme": "Nổi ba điểm lõi; chọn lõi theo tín hiệu trước lượt"
     },
     {
       "id": "boss-059",
@@ -1345,11 +1403,12 @@
       "globalLevel": 590,
       "name": "Bạch Vân Kiếm Tôn",
       "visual": "Kiếm sư cáo mặc áo mây",
-      "mechanic": "Học ba chiêu gần nhất; đổi nhịp khi kiếm ý đầy",
       "skill": {
         "name": "Vô Định Kiếm Ý",
         "family": 9,
-        "effect": "Phong ấn: ngăn hồi phục hoặc triệu hồi 1 lượt; tốn 3, hồi 4."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 263,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 525,
@@ -1357,7 +1416,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Bạch Vân Kiếm Tôn"
       },
-      "phases": 2
+      "presentationTheme": "Học ba chiêu gần nhất; đổi nhịp khi kiếm ý đầy"
     },
     {
       "id": "boss-060",
@@ -1368,11 +1427,12 @@
       "globalLevel": 600,
       "name": "Bạch Vân Thiên Quân",
       "visual": "Thần tướng chim hạc cưỡi đài mây",
-      "mechanic": "Ba tầng mây giáp; công, giải, thủ theo tầng",
       "skill": {
         "name": "Bạch Vân Thiên Trận",
         "family": 10,
-        "effect": "Tuyệt kỹ: 180% công lực và hộ thể 25% một lượt; tốn 5, hồi 5."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 413,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 550,
@@ -1380,7 +1440,7 @@
         "firstClearOnly": true,
         "cosmetic": "Ấn Bạch Vân và áo choàng Bạch Vân"
       },
-      "phases": 3
+      "presentationTheme": "Ba tầng mây giáp; công, giải, thủ theo tầng"
     },
     {
       "id": "boss-061",
@@ -1391,11 +1451,12 @@
       "globalLevel": 610,
       "name": "Tuyết Cầu Sơn Yêu",
       "visual": "Cầu tuyết quấn khăn đỏ",
-      "mechanic": "Lăn tăng kích thước; phá đà trước khi thành đại cầu",
       "skill": {
         "name": "Toái Tuyết Chưởng",
         "family": 1,
-        "effect": "Đòn chính xác: 120% công lực, không bị né; tốn 2 nội lực, hồi 2 lượt."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 188,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 375,
@@ -1403,7 +1464,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Tuyết Cầu Sơn Yêu"
       },
-      "phases": 3
+      "presentationTheme": "Lăn tăng kích thước; phá đà trước khi thành đại cầu"
     },
     {
       "id": "boss-062",
@@ -1414,11 +1475,12 @@
       "globalLevel": 620,
       "name": "Băng Nha Sơn Miêu",
       "visual": "Linh miêu giáp băng răng ngắn",
-      "mechanic": "Băng tích làm chậm hồi chiêu; giải ở hai cộng dồn",
       "skill": {
         "name": "Ôn Mạch Quyết",
         "family": 2,
-        "effect": "Đòn phá giáp: 90% công lực, giảm 30% giáp trong 2 lượt; tốn 2, hồi 3."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 200,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 400,
@@ -1426,7 +1488,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Băng Nha Sơn Miêu"
       },
-      "phases": 3
+      "presentationTheme": "Băng tích làm chậm hồi chiêu; giải ở hai cộng dồn"
     },
     {
       "id": "boss-063",
@@ -1437,11 +1499,12 @@
       "globalLevel": 630,
       "name": "Hàn Ngọc Băng Chu",
       "visual": "Nhện ngọc chân như giọt băng",
-      "mechanic": "Tơ đông hai kỹ năng; phá kén ưu tiên chiêu giải",
       "skill": {
         "name": "Phá Băng Chỉ",
         "family": 3,
-        "effect": "Thanh tẩy: xóa 1 bất lợi; tốn 2, hồi 3."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 213,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 425,
@@ -1449,7 +1512,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Hàn Ngọc Băng Chu"
       },
-      "phases": 3
+      "presentationTheme": "Tơ đông hai kỹ năng; phá kén ưu tiên chiêu giải"
     },
     {
       "id": "boss-064",
@@ -1460,11 +1523,12 @@
       "globalLevel": 640,
       "name": "Tuyết Liên Thủ Vệ",
       "visual": "Người tuyết ôm khiên sen",
-      "mechanic": "Khiên sen hấp thu đòn lớn; dùng đòn nhỏ phá cánh",
       "skill": {
         "name": "Tuyết Liên Hộ Tâm",
         "family": 4,
-        "effect": "Hộ thể: giảm 50% sát thương nhận trong 1 lượt; tốn 2, hồi 3."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 225,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 450,
@@ -1472,7 +1536,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Tuyết Liên Thủ Vệ"
       },
-      "phases": 3
+      "presentationTheme": "Khiên sen hấp thu đòn lớn; dùng đòn nhỏ phá cánh"
     },
     {
       "id": "boss-065",
@@ -1483,11 +1547,12 @@
       "globalLevel": 650,
       "name": "Bạch Giác Sơn Dương",
       "visual": "Dê núi sừng ngọc cuộn tròn",
-      "mechanic": "Húc theo ba nhịp; né nhịp cuối để làm choáng",
       "skill": {
         "name": "Đạp Tuyết Vô Ngân",
         "family": 5,
-        "effect": "Gián đoạn: 70% công lực và hủy 1 chiêu đang tụ lực; tốn 3, hồi 4."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 238,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 475,
@@ -1495,7 +1560,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Bạch Giác Sơn Dương"
       },
-      "phases": 3
+      "presentationTheme": "Húc theo ba nhịp; né nhịp cuối để làm choáng"
     },
     {
       "id": "boss-066",
@@ -1506,11 +1571,12 @@
       "globalLevel": 660,
       "name": "Hàn Phong Đao Sứ",
       "visual": "Đao khách cáo tuyết quấn khăn",
-      "mechanic": "Gió lạnh phản nội lực đã dùng; tích lực rồi phản",
       "skill": {
         "name": "Hàn Phong Nghịch Chuyển",
         "family": 6,
-        "effect": "Phản kích: giảm 35% sát thương 1 lượt, trả 80% công lực khi trúng đòn; tốn 2, hồi 3."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 250,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 500,
@@ -1518,7 +1584,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Hàn Phong Đao Sứ"
       },
-      "phases": 3
+      "presentationTheme": "Gió lạnh phản nội lực đã dùng; tích lực rồi phản"
     },
     {
       "id": "boss-067",
@@ -1529,11 +1595,12 @@
       "globalLevel": 670,
       "name": "Băng Kính Linh",
       "visual": "Tinh thể gương hình chim cánh cụt",
-      "mechanic": "Đổi yếu điểm theo chiêu trước; luân phiên hai hệ",
       "skill": {
         "name": "Băng Tâm Chiếu Ảnh",
         "family": 7,
-        "effect": "Trị liệu: hồi 20% sinh lực tối đa; tốn 3, hồi 4."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 263,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 525,
@@ -1541,7 +1608,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Băng Kính Linh"
       },
-      "phases": 3
+      "presentationTheme": "Đổi yếu điểm theo chiêu trước; luân phiên hai hệ"
     },
     {
       "id": "boss-068",
@@ -1552,11 +1619,12 @@
       "globalLevel": 680,
       "name": "Thiên Sơn Tuyết Viên",
       "visual": "Vượn tuyết tròn đeo chuông cổ",
-      "mechanic": "Gầm gây run; thủ vững rồi phá thế mất thăng bằng",
       "skill": {
         "name": "Bất Động Sơn Thức",
         "family": 8,
-        "effect": "Liên kích: hai đòn 65% công lực; tốn 3, hồi 3."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 275,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 550,
@@ -1564,7 +1632,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Thiên Sơn Tuyết Viên"
       },
-      "phases": 3
+      "presentationTheme": "Gầm gây run; thủ vững rồi phá thế mất thăng bằng"
     },
     {
       "id": "boss-069",
@@ -1575,11 +1643,12 @@
       "globalLevel": 690,
       "name": "Cửu Phong Kiếm Sứ",
       "visual": "Kiếm khách đeo chín phiến băng",
-      "mechanic": "Chín phiến thành ba cụm; phá đúng thứ tự hiển thị",
       "skill": {
         "name": "Cửu Phong Quy Nhất",
         "family": 9,
-        "effect": "Phong ấn: ngăn hồi phục hoặc triệu hồi 1 lượt; tốn 3, hồi 4."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 288,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 575,
@@ -1587,7 +1656,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Cửu Phong Kiếm Sứ"
       },
-      "phases": 3
+      "presentationTheme": "Chín phiến thành ba cụm; phá đúng thứ tự hiển thị"
     },
     {
       "id": "boss-070",
@@ -1598,11 +1667,12 @@
       "globalLevel": 700,
       "name": "Thiên Sơn Băng Hậu",
       "visual": "Nữ vương tuyết áo choàng sen băng",
-      "mechanic": "Bão, băng kính, băng tâm; giữ chiêu ôn mạch cho cuối",
       "skill": {
         "name": "Thiên Sơn Tịnh Tuyết",
         "family": 10,
-        "effect": "Tuyệt kỹ: 180% công lực và hộ thể 25% một lượt; tốn 5, hồi 5."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 450,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 600,
@@ -1610,7 +1680,7 @@
         "firstClearOnly": true,
         "cosmetic": "Ấn Thiên Sơn và áo choàng Thiên Sơn"
       },
-      "phases": 4
+      "presentationTheme": "Bão, băng kính, băng tâm; giữ chiêu ôn mạch cho cuối"
     },
     {
       "id": "boss-071",
@@ -1621,11 +1691,12 @@
       "globalLevel": 710,
       "name": "Hư Không Đăng Linh",
       "visual": "Đèn lồng tím có tai thỏ",
-      "mechanic": "Ẩn một lượt sau khi phát sáng; đánh dấu trước khi ẩn",
       "skill": {
         "name": "Dẫn Hồn Đăng",
         "family": 1,
-        "effect": "Đòn chính xác: 120% công lực, không bị né; tốn 2 nội lực, hồi 2 lượt."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 213,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 425,
@@ -1633,7 +1704,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Hư Không Đăng Linh"
       },
-      "phases": 3
+      "presentationTheme": "Ẩn một lượt sau khi phát sáng; đánh dấu trước khi ẩn"
     },
     {
       "id": "boss-072",
@@ -1644,11 +1715,12 @@
       "globalLevel": 720,
       "name": "Tử Vụ Dạ Bức",
       "visual": "Dơi tím choàng khăn tròn",
-      "mechanic": "Sóng âm đảo thứ tự hành động có báo trước",
       "skill": {
         "name": "Định Âm Quyết",
         "family": 2,
-        "effect": "Đòn phá giáp: 90% công lực, giảm 30% giáp trong 2 lượt; tốn 2, hồi 3."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 225,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 450,
@@ -1656,7 +1728,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Tử Vụ Dạ Bức"
       },
-      "phases": 3
+      "presentationTheme": "Sóng âm đảo thứ tự hành động có báo trước"
     },
     {
       "id": "boss-073",
@@ -1667,11 +1739,12 @@
       "globalLevel": 730,
       "name": "Tinh Bàn Cơ Ngẫu",
       "visual": "Rối đồng ôm la bàn sao",
-      "mechanic": "Xoay ba cung buff; khóa cung trước khi kích hoạt",
       "skill": {
         "name": "Định Tinh Chỉ",
         "family": 3,
-        "effect": "Thanh tẩy: xóa 1 bất lợi; tốn 2, hồi 3."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 238,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 475,
@@ -1679,7 +1752,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Tinh Bàn Cơ Ngẫu"
       },
-      "phases": 3
+      "presentationTheme": "Xoay ba cung buff; khóa cung trước khi kích hoạt"
     },
     {
       "id": "boss-074",
@@ -1690,11 +1763,12 @@
       "globalLevel": 740,
       "name": "Huyền Môn Thủ Sứ",
       "visual": "Rùa cửa đá mang hai chìa",
-      "mechanic": "Cổng công và thủ đổi chỗ; đọc biểu tượng để chọn chiêu",
       "skill": {
         "name": "Khai Huyền Quyết",
         "family": 4,
-        "effect": "Hộ thể: giảm 50% sát thương nhận trong 1 lượt; tốn 2, hồi 3."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 250,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 500,
@@ -1702,7 +1776,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Huyền Môn Thủ Sứ"
       },
-      "phases": 3
+      "presentationTheme": "Cổng công và thủ đổi chỗ; đọc biểu tượng để chọn chiêu"
     },
     {
       "id": "boss-075",
@@ -1713,11 +1787,12 @@
       "globalLevel": 750,
       "name": "Toái Ảnh Vũ Cơ",
       "visual": "Vũ công hươu đeo dải sao",
-      "mechanic": "Bốn ảnh chia sẻ giáp; phá ảnh mang nơ sáng",
       "skill": {
         "name": "Toái Ảnh Liên Hoa",
         "family": 5,
-        "effect": "Gián đoạn: 70% công lực và hủy 1 chiêu đang tụ lực; tốn 3, hồi 4."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 263,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 525,
@@ -1725,7 +1800,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Toái Ảnh Vũ Cơ"
       },
-      "phases": 3
+      "presentationTheme": "Bốn ảnh chia sẻ giáp; phá ảnh mang nơ sáng"
     },
     {
       "id": "boss-076",
@@ -1736,11 +1811,12 @@
       "globalLevel": 760,
       "name": "Dạ Không Cầm Ma",
       "visual": "Cú đêm mang đàn tím",
-      "mechanic": "Nốt trầm khóa hồi phục, nốt cao khóa công; giải đúng nốt",
       "skill": {
         "name": "Tĩnh Dạ Hồi Âm",
         "family": 6,
-        "effect": "Phản kích: giảm 35% sát thương 1 lượt, trả 80% công lực khi trúng đòn; tốn 2, hồi 3."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 275,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 550,
@@ -1748,7 +1824,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Dạ Không Cầm Ma"
       },
-      "phases": 3
+      "presentationTheme": "Nốt trầm khóa hồi phục, nốt cao khóa công; giải đúng nốt"
     },
     {
       "id": "boss-077",
@@ -1759,11 +1835,12 @@
       "globalLevel": 770,
       "name": "Phù Không Cự Tượng",
       "visual": "Voi đá nhỏ nổi trên đảo bay",
-      "mechanic": "Mỗi đòn đẩy cân bằng; giữ thanh cân bằng giữa khoảng an toàn",
       "skill": {
         "name": "Trấn Không Kình",
         "family": 7,
-        "effect": "Trị liệu: hồi 20% sinh lực tối đa; tốn 3, hồi 4."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 288,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 575,
@@ -1771,7 +1848,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Phù Không Cự Tượng"
       },
-      "phases": 3
+      "presentationTheme": "Mỗi đòn đẩy cân bằng; giữ thanh cân bằng giữa khoảng an toàn"
     },
     {
       "id": "boss-078",
@@ -1782,11 +1859,12 @@
       "globalLevel": 780,
       "name": "Huyền Tinh Kiếm Khôi",
       "visual": "Khôi giáp sao có kiếm lơ lửng",
-      "mechanic": "Hấp thu hệ công lặp lại; đổi chiêu trước ba tầng",
       "skill": {
         "name": "Tinh Kiếm Biến Thức",
         "family": 8,
-        "effect": "Liên kích: hai đòn 65% công lực; tốn 3, hồi 3."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 300,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 600,
@@ -1794,7 +1872,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Huyền Tinh Kiếm Khôi"
       },
-      "phases": 3
+      "presentationTheme": "Hấp thu hệ công lặp lại; đổi chiêu trước ba tầng"
     },
     {
       "id": "boss-079",
@@ -1805,11 +1883,12 @@
       "globalLevel": 790,
       "name": "Vô Thanh Hành Giả",
       "visual": "Hiệp khách mèo áo đen điểm sao",
-      "mechanic": "Không có âm báo; đọc vệt sáng và nhật ký đòn",
       "skill": {
         "name": "Thính Tâm Minh Giác",
         "family": 9,
-        "effect": "Phong ấn: ngăn hồi phục hoặc triệu hồi 1 lượt; tốn 3, hồi 4."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 313,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 625,
@@ -1817,7 +1896,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Vô Thanh Hành Giả"
       },
-      "phases": 3
+      "presentationTheme": "Không có âm báo; đọc vệt sáng và nhật ký đòn"
     },
     {
       "id": "boss-080",
@@ -1828,11 +1907,12 @@
       "globalLevel": 800,
       "name": "Huyền Không Đạo Chủ",
       "visual": "Đạo sư trên vòng thiên thể tím",
-      "mechanic": "Ba cổng đổi luật lượt; chọn ấn giữ một luật ổn định",
       "skill": {
         "name": "Huyền Không Quy Tâm",
         "family": 10,
-        "effect": "Tuyệt kỹ: 180% công lực và hộ thể 25% một lượt; tốn 5, hồi 5."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 488,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 650,
@@ -1840,7 +1920,7 @@
         "firstClearOnly": true,
         "cosmetic": "Ấn Huyền Không và áo choàng Huyền Không"
       },
-      "phases": 4
+      "presentationTheme": "Ba cổng đổi luật lượt; chọn ấn giữ một luật ổn định"
     },
     {
       "id": "boss-081",
@@ -1851,11 +1931,12 @@
       "globalLevel": 810,
       "name": "Âm Dương Song Ngư",
       "visual": "Đôi cá ngọc trắng đen",
-      "mechanic": "Hai thanh sinh lực cân bằng; lệch quá xa sẽ hồi",
       "skill": {
         "name": "Âm Dương Điều Tức",
         "family": 1,
-        "effect": "Đòn chính xác: 120% công lực, không bị né; tốn 2 nội lực, hồi 2 lượt."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 238,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 475,
@@ -1863,7 +1944,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Âm Dương Song Ngư"
       },
-      "phases": 3
+      "presentationTheme": "Hai thanh sinh lực cân bằng; lệch quá xa sẽ hồi"
     },
     {
       "id": "boss-082",
@@ -1874,11 +1955,12 @@
       "globalLevel": 820,
       "name": "Ngũ Hành Linh Sứ",
       "visual": "Tê tê mang năm phiến màu",
-      "mechanic": "Chuyển hệ theo vòng rõ ràng; chọn khắc hệ đang hiện",
       "skill": {
         "name": "Ngũ Hành Chuyển Hóa",
         "family": 2,
-        "effect": "Đòn phá giáp: 90% công lực, giảm 30% giáp trong 2 lượt; tốn 2, hồi 3."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 250,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 500,
@@ -1886,7 +1968,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Ngũ Hành Linh Sứ"
       },
-      "phases": 3
+      "presentationTheme": "Chuyển hệ theo vòng rõ ràng; chọn khắc hệ đang hiện"
     },
     {
       "id": "boss-083",
@@ -1897,11 +1979,12 @@
       "globalLevel": 830,
       "name": "Luân Chuyển Cơ Quan",
       "visual": "Bánh xe gỗ có mặt cười",
-      "mechanic": "Ba bánh răng tăng tốc; khóa từng bánh bằng nhịp công thủ",
       "skill": {
         "name": "Luân Chuyển Bộ",
         "family": 3,
-        "effect": "Thanh tẩy: xóa 1 bất lợi; tốn 2, hồi 3."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 263,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 525,
@@ -1909,7 +1992,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Luân Chuyển Cơ Quan"
       },
-      "phases": 3
+      "presentationTheme": "Ba bánh răng tăng tốc; khóa từng bánh bằng nhịp công thủ"
     },
     {
       "id": "boss-084",
@@ -1920,11 +2003,12 @@
       "globalLevel": 840,
       "name": "Thái Hư Kính Chủ",
       "visual": "Hồ ly mang gương hai mặt",
-      "mechanic": "Một mặt sao chép chiêu một mặt chép buff; đổi kế hoạch",
       "skill": {
         "name": "Thái Hư Phản Chiếu",
         "family": 4,
-        "effect": "Hộ thể: giảm 50% sát thương nhận trong 1 lượt; tốn 2, hồi 3."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 275,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 550,
@@ -1932,7 +2016,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Thái Hư Kính Chủ"
       },
-      "phases": 3
+      "presentationTheme": "Một mặt sao chép chiêu một mặt chép buff; đổi kế hoạch"
     },
     {
       "id": "boss-085",
@@ -1943,11 +2027,12 @@
       "globalLevel": 850,
       "name": "Càn Khôn Kỳ Sĩ",
       "visual": "Gấu nhỏ đánh cờ trên mây",
-      "mechanic": "Đặt ba quân trận; phá liên kết trước khi thành hàng",
       "skill": {
         "name": "Phá Cục Chân Quyết",
         "family": 5,
-        "effect": "Gián đoạn: 70% công lực và hủy 1 chiêu đang tụ lực; tốn 3, hồi 4."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 288,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 575,
@@ -1955,7 +2040,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Càn Khôn Kỳ Sĩ"
       },
-      "phases": 3
+      "presentationTheme": "Đặt ba quân trận; phá liên kết trước khi thành hàng"
     },
     {
       "id": "boss-086",
@@ -1966,11 +2051,12 @@
       "globalLevel": 860,
       "name": "Nhật Nguyệt Song Tôn",
       "visual": "Hai kiếm sư chim vàng và bạc",
-      "mechanic": "Hai pha đổi ngày đêm; tích nội lực trong đêm",
       "skill": {
         "name": "Nhật Nguyệt Đồng Huy",
         "family": 6,
-        "effect": "Phản kích: giảm 35% sát thương 1 lượt, trả 80% công lực khi trúng đòn; tốn 2, hồi 3."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 300,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 600,
@@ -1978,7 +2064,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Nhật Nguyệt Song Tôn"
       },
-      "phases": 3
+      "presentationTheme": "Hai pha đổi ngày đêm; tích nội lực trong đêm"
     },
     {
       "id": "boss-087",
@@ -1989,11 +2075,12 @@
       "globalLevel": 870,
       "name": "Vạn Tượng Linh Quân",
       "visual": "Kỳ lân mang mặt nạ bốn mùa",
-      "mechanic": "Bốn hình thái có quy luật; dùng bộ chiêu cân bằng",
       "skill": {
         "name": "Vạn Tượng Hợp Nhất",
         "family": 7,
-        "effect": "Trị liệu: hồi 20% sinh lực tối đa; tốn 3, hồi 4."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 313,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 625,
@@ -2001,7 +2088,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Vạn Tượng Linh Quân"
       },
-      "phases": 3
+      "presentationTheme": "Bốn hình thái có quy luật; dùng bộ chiêu cân bằng"
     },
     {
       "id": "boss-088",
@@ -2012,11 +2099,12 @@
       "globalLevel": 880,
       "name": "Vô Tướng Kiếm Hồn",
       "visual": "Hồn kiếm lụa đổi hình thú",
-      "mechanic": "Sao chép phong cách người chơi; dùng chiêu dự bị để phá",
       "skill": {
         "name": "Vô Tướng Kiếm Tâm",
         "family": 8,
-        "effect": "Liên kích: hai đòn 65% công lực; tốn 3, hồi 3."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 325,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 650,
@@ -2024,7 +2112,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Vô Tướng Kiếm Hồn"
       },
-      "phases": 3
+      "presentationTheme": "Sao chép phong cách người chơi; dùng chiêu dự bị để phá"
     },
     {
       "id": "boss-089",
@@ -2035,11 +2123,12 @@
       "globalLevel": 890,
       "name": "Thái Cực Thủ Quan",
       "visual": "Lão gấu trúc áo đạo hai màu",
-      "mechanic": "Mượn lực đòn lớn; dùng nhu công và phản đúng nhịp",
       "skill": {
         "name": "Thái Cực Nhu Kình",
         "family": 9,
-        "effect": "Phong ấn: ngăn hồi phục hoặc triệu hồi 1 lượt; tốn 3, hồi 4."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 338,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 675,
@@ -2047,7 +2136,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Thái Cực Thủ Quan"
       },
-      "phases": 3
+      "presentationTheme": "Mượn lực đòn lớn; dùng nhu công và phản đúng nhịp"
     },
     {
       "id": "boss-090",
@@ -2058,11 +2147,12 @@
       "globalLevel": 900,
       "name": "Vô Cực Thiên Tôn",
       "visual": "Linh long trắng đen cuộn vòng",
-      "mechanic": "Hợp nhất cân bằng, chuyển hệ và phản chiếu qua ba pha",
       "skill": {
         "name": "Vô Cực Quy Nhất",
         "family": 10,
-        "effect": "Tuyệt kỹ: 180% công lực và hộ thể 25% một lượt; tốn 5, hồi 5."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 525,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 700,
@@ -2070,7 +2160,7 @@
         "firstClearOnly": true,
         "cosmetic": "Ấn Vô Cực và áo choàng Vô Cực"
       },
-      "phases": 4
+      "presentationTheme": "Hợp nhất cân bằng, chuyển hệ và phản chiếu qua ba pha"
     },
     {
       "id": "boss-091",
@@ -2081,11 +2171,12 @@
       "globalLevel": 910,
       "name": "Cựu Ảnh Đồng Hành",
       "visual": "Bóng nhân vật cấp đầu cầm kiếm gỗ",
-      "mechanic": "Dùng lại bài học boss đầu, có nhịp biến đổi",
       "skill": {
         "name": "Sơ Tâm Bất Diệt",
         "family": 1,
-        "effect": "Đòn chính xác: 120% công lực, không bị né; tốn 2 nội lực, hồi 2 lượt."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 263,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 525,
@@ -2093,7 +2184,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Cựu Ảnh Đồng Hành"
       },
-      "phases": 4
+      "presentationTheme": "Dùng lại bài học boss đầu, có nhịp biến đổi"
     },
     {
       "id": "boss-092",
@@ -2104,11 +2195,12 @@
       "globalLevel": 920,
       "name": "Vạn Niệm Thư Linh",
       "visual": "Sách tròn bay có trang mây",
-      "mechanic": "Ba trang gây phân tâm; chọn trang nhiệm vụ chính",
       "skill": {
         "name": "Nhất Niệm Chuyên Tâm",
         "family": 2,
-        "effect": "Đòn phá giáp: 90% công lực, giảm 30% giáp trong 2 lượt; tốn 2, hồi 3."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 275,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 550,
@@ -2116,7 +2208,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Vạn Niệm Thư Linh"
       },
-      "phases": 4
+      "presentationTheme": "Ba trang gây phân tâm; chọn trang nhiệm vụ chính"
     },
     {
       "id": "boss-093",
@@ -2127,11 +2219,12 @@
       "globalLevel": 930,
       "name": "Trường Hà Thủ Hộ",
       "visual": "Rồng sông quấn đồng hồ nước",
-      "mechanic": "Dòng thời gian đổi hồi chiêu; dự trù hai lượt",
       "skill": {
         "name": "Trường Hà Định Lưu",
         "family": 3,
-        "effect": "Thanh tẩy: xóa 1 bất lợi; tốn 2, hồi 3."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 288,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 575,
@@ -2139,7 +2232,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Trường Hà Thủ Hộ"
       },
-      "phases": 4
+      "presentationTheme": "Dòng thời gian đổi hồi chiêu; dự trù hai lượt"
     },
     {
       "id": "boss-094",
@@ -2150,11 +2243,12 @@
       "globalLevel": 940,
       "name": "Tứ Tượng Trấn Sơn",
       "visual": "Bốn tượng thú ngọc trên một đài",
-      "mechanic": "Bốn hộ vệ chia vai; phá hồi phục trước khi phá giáp",
       "skill": {
         "name": "Tứ Tượng Hộ Nguyên",
         "family": 4,
-        "effect": "Hộ thể: giảm 50% sát thương nhận trong 1 lượt; tốn 2, hồi 3."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 300,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 600,
@@ -2162,7 +2256,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Tứ Tượng Trấn Sơn"
       },
-      "phases": 4
+      "presentationTheme": "Bốn hộ vệ chia vai; phá hồi phục trước khi phá giáp"
     },
     {
       "id": "boss-095",
@@ -2173,11 +2267,12 @@
       "globalLevel": 950,
       "name": "Thiên Cơ Kỳ Chủ",
       "visual": "Cú bạc chơi cờ thiên thể",
-      "mechanic": "Báo trước hai chuỗi rồi đổi một nhịp; giữ chiêu dự phòng",
       "skill": {
         "name": "Thiên Cơ Ứng Biến",
         "family": 5,
-        "effect": "Gián đoạn: 70% công lực và hủy 1 chiêu đang tụ lực; tốn 3, hồi 4."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 313,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 625,
@@ -2185,7 +2280,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Thiên Cơ Kỳ Chủ"
       },
-      "phases": 4
+      "presentationTheme": "Báo trước hai chuỗi rồi đổi một nhịp; giữ chiêu dự phòng"
     },
     {
       "id": "boss-096",
@@ -2196,11 +2291,12 @@
       "globalLevel": 960,
       "name": "Vô Tận Huyễn Long",
       "visual": "Long lụa nhiều vòng mây",
-      "mechanic": "Ảo ảnh tái sinh nếu lõi còn; đánh dấu rồi phong lõi",
       "skill": {
         "name": "Chân Long Phá Huyễn",
         "family": 6,
-        "effect": "Phản kích: giảm 35% sát thương 1 lượt, trả 80% công lực khi trúng đòn; tốn 2, hồi 3."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 325,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 650,
@@ -2208,7 +2304,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Vô Tận Huyễn Long"
       },
-      "phases": 4
+      "presentationTheme": "Ảo ảnh tái sinh nếu lõi còn; đánh dấu rồi phong lõi"
     },
     {
       "id": "boss-097",
@@ -2219,11 +2315,12 @@
       "globalLevel": 970,
       "name": "Cửu Đỉnh Linh Vệ",
       "visual": "Tượng tròn mang chín ấn núi",
-      "mechanic": "Ba cụm ấn tái hiện chín đỉnh; vượt từng cụm không cần đánh lại",
       "skill": {
         "name": "Cửu Đỉnh Liên Tâm",
         "family": 7,
-        "effect": "Trị liệu: hồi 20% sinh lực tối đa; tốn 3, hồi 4."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 338,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 675,
@@ -2231,7 +2328,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Cửu Đỉnh Linh Vệ"
       },
-      "phases": 4
+      "presentationTheme": "Ba cụm ấn tái hiện chín đỉnh; vượt từng cụm không cần đánh lại"
     },
     {
       "id": "boss-098",
@@ -2242,11 +2339,12 @@
       "globalLevel": 980,
       "name": "Vô Danh Kiếm Thánh",
       "visual": "Kiếm sư già áo vải, kiếm trúc",
-      "mechanic": "Không có yếu điểm hệ; thắng bằng quản lý lực và phản đòn",
       "skill": {
         "name": "Vô Danh Nhất Kiếm",
         "family": 8,
-        "effect": "Liên kích: hai đòn 65% công lực; tốn 3, hồi 3."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 350,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 700,
@@ -2254,7 +2352,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Vô Danh Kiếm Thánh"
       },
-      "phases": 4
+      "presentationTheme": "Không có yếu điểm hệ; thắng bằng quản lý lực và phản đòn"
     },
     {
       "id": "boss-099",
@@ -2265,11 +2363,12 @@
       "globalLevel": 990,
       "name": "Vọng Ngã Thiên Ảnh",
       "visual": "Bản sao phát sáng của chính hiệp khách",
-      "mechanic": "Sao chép bộ chiêu đã chọn; đọc đòn và đổi chiến thuật",
       "skill": {
         "name": "Minh Tâm Kiến Tính",
         "family": 9,
-        "effect": "Phong ấn: ngăn hồi phục hoặc triệu hồi 1 lượt; tốn 3, hồi 4."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 363,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 725,
@@ -2277,7 +2376,7 @@
         "firstClearOnly": true,
         "cosmetic": "Huy hiệu Vọng Ngã Thiên Ảnh"
       },
-      "phases": 4
+      "presentationTheme": "Sao chép bộ chiêu đã chọn; đọc đòn và đổi chiến thuật"
     },
     {
       "id": "boss-100",
@@ -2288,11 +2387,12 @@
       "globalLevel": 1000,
       "name": "Quy Nguyên Chân Long",
       "visual": "Rồng ngọc tròn ôm mười viên minh châu",
-      "mechanic": "Năm pha tổng kết; giữ checkpoint mỗi pha, thắng bằng phối hợp",
       "skill": {
         "name": "Vạn Pháp Quy Nguyên",
         "family": 10,
-        "effect": "Tuyệt kỹ: 180% công lực và hộ thể 25% một lượt; tốn 5, hồi 5."
+        "acquisition": "purchase-after-clear",
+        "priceSilver": 563,
+        "status": "collectible-design"
       },
       "reward": {
         "silver": 750,
@@ -2300,7 +2400,15 @@
         "firstClearOnly": true,
         "cosmetic": "Ấn Quy Nguyên và áo choàng Quy Nguyên"
       },
-      "phases": 5
+      "presentationTheme": "Năm pha tổng kết; giữ checkpoint mỗi pha, thắng bằng phối hợp"
     }
-  ]
+  ],
+  "mode": "timed-task-contest",
+  "rules": {
+    "taskCountMin": 1,
+    "taskCountMax": 3,
+    "editableDeadline": true,
+    "firstClearOnly": true,
+    "skillsPurchasedAfterClear": true
+  }
 }
