@@ -1,4 +1,6 @@
 # Nội lực và Cửu trụ tu dưỡng — luật 0.4
+
+> CẬP NHẬT 0.5: [Chín trục, tiêu dùng và độ khó boss](AXES-SPENDING-AND-BOSS-DIFFICULTY.vi.md) là đặc tả bổ sung hiện hành: dùng điểm khả dụng từng trục, giữ tổng nội lực xét cấp; boss khó hơn baseline 20–30%; tên mới Tu Đức. Chưa tích hợp runtime.
 Ngày 31/10/2026 · Nhánh experiment/game-mode · Đặc tả, chưa tích hợp runtime.
 Luật này ưu tiên hơn công thức 1.06, phần thưởng skill/vật phẩm tự tạo và gate-topup trong các tài liệu cũ.
 
@@ -19,7 +21,7 @@ Kho chưa có nội dung hiển thị “Chờ chủ nhân bổ sung vật phẩ
 | Ngộ Tính | Trí tuệ | Học, đọc, nghiên cứu, luyện kỹ năng |
 | Định Tâm | Cảm xúc | Nhận diện cảm xúc, viết nhật ký, phản hồi bình tĩnh |
 | Gia Nghiệp | Vật chất/không gian sống | Chăm vườn, bảo dưỡng, sắp xếp đồ dùng |
-| Tỉnh Nghiệp | Phần nghiệp báo trong ghi chú | Nhận lỗi, sửa thói quen, chịu trách nhiệm |
+| Tu Đức | Phần nghiệp báo trong ghi chú | Nhận lỗi, sửa thói quen, chịu trách nhiệm |
 | Thiện Duyên | Phần phước báo trong ghi chú | Giúp người, thiện nguyện, chăm sóc cộng đồng |
 
 Tâm Lực ghi hoạt động nuôi dưỡng tinh thần; Định Tâm ghi hoạt động nhận diện/điều hòa cảm xúc để giảm trùng. Tài Lược ghi quản trị dòng tiền; Gia Nghiệp ghi chăm sóc tài sản và môi trường sống.
