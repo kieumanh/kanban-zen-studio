@@ -190,6 +190,6 @@ body:not(.wf-is-focused) .zen-music{display:none!important}
 @media(max-width:700px){#tabs .tab[data-project]:not(.pinned){flex-basis:144px;width:144px;min-width:120px;max-width:184px;min-height:50px;padding:8px 11px}.task-table td[data-label="Trạng thái"]{text-align:left}.task-table td[data-label="Ưu tiên"] select{margin-left:0;text-align:left;text-align-last:left}.zen-date-popover{padding:10px}}
 
 /* v1.15.13 · Completed Kanban cards recede until they need attention. */
-.column[data-column="Done"] .task-card{opacity:.68;filter:saturate(.72);background:#fbf9fc;border-color:#e8e2ec;box-shadow:0 1px 4px #392a4808;transition:opacity .18s ease,filter .18s ease,transform .18s ease,box-shadow .18s ease,border-color .18s ease}
+.column[data-column="Done"] .task-card{opacity:.54;filter:saturate(.58);background:#f8f6fa;border-color:#e8e2ec;box-shadow:0 1px 4px #392a4808;transition:opacity .18s ease,filter .18s ease,transform .18s ease,box-shadow .18s ease,border-color .18s ease}
 .column[data-column="Done"] .task-card:hover,.column[data-column="Done"] .task-card:focus-visible,.column[data-column="Done"] .task-card:focus-within{opacity:1;filter:none;transform:translateY(-2px);border-color:#cbb8d8;box-shadow:0 8px 22px #392a4818}
 @media(prefers-reduced-motion:reduce){.column[data-column="Done"] .task-card{transition:none}}

@@ -135,4 +135,11 @@ button.add-task[data-action="new-task"]:hover{background:#eee6f7!important;color
 #welcome-read{display:inline-flex!important;align-items:center;justify-content:center;gap:8px;margin-inline:auto!important;max-width:100%;width:auto!important}
 @media(max-width:600px){#editor,#editor.task-editor{width:calc(100vw - 20px)!important;max-height:calc(100dvh - 24px)}}
 
-/* v1.15.10 */
+
+/* v1.15.14: center the reminder action in the note editor's shared-device controls. */
+#editor.keep-editor .note-quick-options>.note-reminder-options>summary{justify-content:center!important;text-align:center}
+#editor.keep-editor .note-quick-options>.note-reminder-options>summary svg{flex:none}
+#editor.keep-editor .note-quick-options>.note-reminder-options[open]>summary{justify-content:center!important}
+/* Keep task state control aligned and balanced within the task detail action row. */
+#editor .detail-actions #task-state{box-sizing:border-box;min-width:150px;min-height:42px;padding:8px 34px 8px 14px;text-align:center;text-align-last:center;border-radius:12px;background-color:#fff}
+@media(max-width:600px){#editor .detail-actions #task-state{min-width:0;flex:1 1 150px;max-width:100%}}

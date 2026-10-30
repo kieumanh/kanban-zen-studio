@@ -100,3 +100,4 @@ function refreshDashboardPlan(){
 }
 const dashboardPlanRenderBefore=render;
 render=function(){dashboardPlanRenderBefore();if(view==='dashboard')refreshDashboardPlan();};
+
