@@ -218,5 +218,15 @@
     "/tokens.css",
     "tokens.css",
     "text/css; charset=utf-8"
+  ],
+  [
+    "/usability.js",
+    "usability.js",
+    "text/javascript; charset=utf-8"
+  ],
+  [
+    "/usability.css",
+    "usability.css",
+    "text/css; charset=utf-8"
   ]
 ]
