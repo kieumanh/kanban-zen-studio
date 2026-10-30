@@ -1,3 +1,4 @@
+import { validGameWorkspace } from './game-validation.mjs';
 import { authAPI, session } from './auth.mjs';
 import {
   workspaceV2,
@@ -518,6 +519,7 @@ export function validWorkspace(d) {
     str = (x, n) => typeof x === 'string' && x.length <= n;
   return (
     validExtras(d) &&
+    validGameWorkspace(d.game) &&
     d.projects.every(
       (p) =>
         id(p.id) &&

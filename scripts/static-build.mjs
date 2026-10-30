@@ -1,5 +1,6 @@
 import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
+import { dirname } from 'node:path';
 export function buildStaticAssets(files, root, version, source) {
   const out = root + 'public/';
   rmSync(out, { recursive: true, force: true });
@@ -15,8 +16,11 @@ export function buildStaticAssets(files, root, version, source) {
     mapping[url] =
       '/static/' + url.slice(1).replace(/(\.[^.]+)$/, '.' + digest + '$1');
   }
-  const write = (url, body) =>
-    writeFileSync(out + (url === '/' ? 'index.html' : url.slice(1)), body);
+  const write = (url, body) => {
+    const target = out + (url === '/' ? 'index.html' : url.slice(1));
+    mkdirSync(dirname(target), { recursive: true });
+    writeFileSync(target, body);
+  };
   for (const [url, file] of Object.entries(files)) {
     if (url === '/sw.js') continue;
     let body = file.binary ? Buffer.from(file.body, 'base64') : file.body;
@@ -28,7 +32,10 @@ export function buildStaticAssets(files, root, version, source) {
   }
   const shell = Object.keys(files)
     .filter(
-      (u) => u !== '/sw.js' && !u.startsWith('/report') && !files[u].binary,
+      (u) =>
+        u !== '/sw.js' &&
+        !u.startsWith('/report') &&
+        (!files[u].binary || u === '/game-heroes.png'),
     )
     .concat(Object.values(mapping).filter((u) => !u.includes('/report.')));
   const swSource = files['/sw.js'].body

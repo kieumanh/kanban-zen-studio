@@ -9,7 +9,7 @@ function mergeWorkspaceValue(base,local,remote){
   for(const id of ids){const b=base.find(x=>x.id===id),l=local.find(x=>x.id===id),r=remote.find(x=>x.id===id);const v=mergeWorkspaceValue(b,l,r);if(v!==undefined)result.push(v);}return result;
  }
  if([base,local,remote].every(v=>v&&typeof v==='object'&&!Array.isArray(v))){
-  const out={};for(const k of new Set([...Object.keys(local),...Object.keys(remote)])){const v=mergeWorkspaceValue(base[k],local[k],remote[k]);if(v!==undefined)out[k]=v;}return out;
+  const out={};for(const k of new Set([...Object.keys(local),...Object.keys(remote)])){if(k==='game'&&!equal(local[k],remote[k])&&!equal(base[k],local[k])&&!equal(base[k],remote[k]))throw Error('Hai hành trình game cùng thay đổi. Chọn phiên bản trước khi hợp nhất giao dịch.');const v=mergeWorkspaceValue(base[k],local[k],remote[k]);if(v!==undefined)out[k]=v;}return out;
  }
  throw Error('Chỉnh sửa cùng nội dung');
 }

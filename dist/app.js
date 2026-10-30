@@ -156,3 +156,4 @@ Object.assign(iconPaths,{notes:'M5 3h14v18H5z M8 7h8 M8 11h8 M8 15h5',archive:'M
 
 
 function columnDisplayName(p,key){return p?.columnNames?.[key]||({Idea:'Ý tưởng',List:'Cần làm',Doing:'Đang làm',Done:'Hoàn thành'}[key])||key;}
+

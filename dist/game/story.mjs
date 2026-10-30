@@ -1,0 +1,14 @@
+export const AXES = ['Căn Cốt','Tâm Lực','Tài Lược','Nhân Duyên','Ngộ Tính','Định Tâm','Gia Nghiệp','Tu Đức','Thiện Duyên'];
+export const AXIS_ICONS = ['◈','❀','◉','♡','✧','☯','⌂','◇','❋'];
+export const CHAPTERS = [
+ ['Thanh Trúc','Phàm tâm thức tỉnh','Một vết nứt xuất hiện trên Thiên Thư. Những trang sách chỉ sáng lại khi có người hoàn thành một việc thật. Bạn rời Trúc Xá với một lời nguyện: tu luyện từ việc nhỏ, giữ lòng ngay giữa giang hồ.','Trúc Linh dẫn đường','Ta vốn định cứu thiên hạ sau bữa trưa. May mà ngươi đã bắt đầu trước.','Trúc Tâm Thần'],
+ ['Bích Khê','Thủy giới khai môn','Sau lễ phong Thần, bạn bước vào Bích Khê. Dòng sông ký ức đang đứt đoạn. Từng việc được làm đến nơi đến chốn nối lại một nhịp cầu giữa người với người.','Lão lái đò','Nước chảy không vội, nhưng cũng chẳng quên đường.','Bích Thủy Thần'],
+ ['Vân Tùng','Ngàn rễ một lòng','Mây mù che rừng cổ. Những lời hứa bỏ quên hóa thành dây leo. Bạn học giữ lời, vun rễ và cùng các thủ quan tìm lại lối đi.','Mộc lão','Cây lớn không nhờ đứng ngắm hạt giống.','Vân Mộc Thần'],
+ ['Minh Nguyệt','Soi lòng dưới nguyệt','Nguyệt kính phản chiếu vô số phiên bản của bạn. Chọn một việc có ý nghĩa và bước qua chiếc bóng luôn muốn mình hoàn hảo.','Nguyệt sứ','Gương sáng rồi. Giờ đến lượt bàn làm việc.','Minh Nguyệt Thần'],
+ ['Xích Hà','Lửa thử chân tâm','Lò trời đỏ rực, nung nóng những ý định chưa thành. Bạn học dùng nhiệt huyết mà không tự đốt mình, đi qua mười cửa của Xích Hà.','Người giữ lò','Lửa lớn cần người trông, người giỏi cũng cần nghỉ.','Xích Hà Thần'],
+ ['Bạch Vân','Nhẹ bước giữa trời','Đường lên mây không chịu nổi hành trang quá nặng. Bạn chọn điều cần giữ, điều cần làm và điều có thể đặt xuống.','Bạch Hạc','Bay cao không đồng nghĩa mang hết mọi thứ.','Bạch Vân Thần'],
+ ['Thiên Sơn','Bền lòng qua tuyết','Gió tuyết phủ kín dấu chân. Không có tiếng reo hò, chỉ có những bước nhỏ vẫn tiếp tục. Bạn thắp lại ngọn đèn ở đỉnh Thiên Sơn.','Tuyết khách','Hôm nay đi một đoạn. Núi không chạy mất đâu.','Thiên Sơn Thần'],
+ ['Huyền Không','Giữ hướng trong hư ảnh','Những cánh cửa xoay quanh khoảng không. Không cần mở tất cả: bạn học nhận ra con đường phù hợp và hoàn thành điều đã chọn.','Người giữ sao','Một cửa mở đúng lúc hơn trăm cửa mở cho vui.','Huyền Không Thần'],
+ ['Vô Cực','Muôn đường cùng hội','Chín dòng linh lực gặp nhau, không dòng nào phải giống dòng nào. Bạn kết nối học hỏi, đời sống và phụng sự để khôi phục Thiên Thư.','Kỳ sĩ','Cân bằng không phải chia đều từng hạt cơm.','Vô Cực Thần'],
+ ['Quy Nguyên','Trở về giữa đời thường','Trang cuối Thiên Thư vẫn trắng. Bạn nhận ra hành trình chưa từng ở ngoài đời sống: chăm người thân, sửa một lỗi nhỏ, hoàn thành một lời hứa. Sau đỉnh cuối, giang hồ mở ra một chu kỳ mới.','Chân Long','Thành Thần rồi, vẫn nhớ tưới cây nhé.','Quy Nguyên Thần']
+].map(([name,title,opening,guide,quote,godTitle],i)=>({id:i+1,name,title,opening,guide,quote,godTitle}));

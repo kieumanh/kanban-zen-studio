@@ -67,3 +67,4 @@ try{for(const width of (process.env.QA_WIDTHS?process.env.QA_WIDTHS.split(',').m
  assert.deepEqual(errors,[],`No runtime errors ${width}`);if(width===390){const broken='{"schema":1,"projects":"invalid","draft":"keep-me"}';await page.evaluate(raw=>{localStorage.setItem('zen-account-qa',raw);localStorage.setItem('zen-account-qa-sync',JSON.stringify({dirty:true,revision:1}));},broken);await page.reload();await page.waitForSelector('#recover-draft');assert.equal(await page.evaluate(()=>localStorage.getItem('zen-account-qa')),broken);assert.equal(await page.locator('#recover-draft').isVisible(),true);}await context.close();console.log('PASS responsive workflows at '+width+'px');
 }}finally{await browser.close();await new Promise(r=>server.close(r));}
 
+
