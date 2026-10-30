@@ -305,6 +305,20 @@ function validNoteLinks(x) {
       ))
   );
 }
+function validWipLimits(p) {
+  const w = p.wipLimits;
+  return (
+    w === undefined ||
+    (!!w &&
+      typeof w === 'object' &&
+      !Array.isArray(w) &&
+      Object.keys(w).length <= 20 &&
+      Object.entries(w).every(
+        ([k, v]) =>
+          p.columns?.includes(k) && Number.isInteger(v) && v >= 0 && v <= 2000,
+      ))
+  );
+}
 function validColumnNames(p) {
   const names = p.columnNames;
   if (names === undefined) return true;
@@ -377,6 +391,7 @@ function validExtras(d) {
       (p) =>
         validNoteLinks(p.noteIds) &&
         validColumnNames(p) &&
+        validWipLimits(p) &&
         p.tasks.every(
           (t) =>
             validNoteLinks(t.noteIds) &&

@@ -248,5 +248,15 @@
     "/experience.css",
     "experience.css",
     "text/css; charset=utf-8"
+  ],
+  [
+    "/studio-zen.js",
+    "studio-zen.js",
+    "text/javascript; charset=utf-8"
+  ],
+  [
+    "/studio-zen.css",
+    "studio-zen.css",
+    "text/css; charset=utf-8"
   ]
 ]
