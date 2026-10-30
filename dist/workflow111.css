@@ -308,6 +308,15 @@ body:not(.wf-is-focused) .zen-music{display:none!important}
 #editor .note-composer[data-zen-art]:not([data-zen-art=none])::before{height:80px!important;min-height:80px;margin-top:10px!important}
 @media(max-width:600px){#editor .icon-library-results{max-height:230px!important}#editor .icon-library-tools input,#editor .icon-library-tools select{font-size:16px}[data-zen-art]:not([data-zen-art=none])::before{height:56px!important;min-height:56px;flex-basis:56px}}
 
+/* Keep project artwork in a calm, full-width banner instead of exposing the card's color stripe through it. */
+.project-card[data-zen-art]:not([data-zen-art=none])::before{background-color:transparent!important;background-size:100% 100%!important;background-position:center!important;opacity:.38!important}
+#main[data-zen-art]:not([data-zen-art=none])::before{background-size:100% 100%!important;background-position:center!important;opacity:.24!important;border-radius:12px;border-bottom:0;margin-bottom:14px!important}
+/* The current project stays identifiable without the oversized, heavy outline. */
+#tabs.has-current-project .tab.active{opacity:1;transform:none;min-height:56px;font-weight:600;box-shadow:0 2px 8px #7950c814;border:1px solid color-mix(in srgb,var(--color,#7950c8) 48%,white);border-bottom:3px solid var(--color,#7950c8)}
+#tabs.has-current-project .tab.active:has(.zen-active-tab-name){padding:8px 12px!important}
+#tabs.has-current-project .tab.active .zen-active-tab-name{font-weight:600}
+.compact-check textarea{min-width:0;max-height:none!important;overflow:hidden!important;overflow-wrap:anywhere;white-space:pre-wrap;scrollbar-width:none}
+
 .zen-task-delete{justify-content:center;text-align:center}.zen-task-delete>.btn{min-width:min(240px,100%)}
 .wf-comments{padding:20px;background:linear-gradient(145deg,#fcf9ff,#fffdfd);border-color:#e5d9ed}
 .wf-comment-list{display:grid;gap:10px;margin:0 0 16px}
@@ -326,3 +335,8 @@ body:not(.wf-is-focused) .zen-music{display:none!important}
 .task-table td.zen-quick-priority-cell .zen-priority-picker{width:min(100%,250px);margin:0 auto}.task-table td.zen-quick-priority-cell .zen-priority-picker>summary{min-height:44px;display:flex;align-items:center;justify-content:space-between}
 .unified-note-hit{display:grid;grid-template-columns:34px minmax(0,1fr);align-items:center;gap:10px}.zen-search-copy{min-width:0}.zen-search-copy small{line-height:1.45;overflow-wrap:anywhere}
 @media(max-width:700px){.wf-comments{padding:16px}.wf-comment{padding:12px}.wf-comments textarea{min-height:100px}.zen-task-delete{padding:12px}.zen-due-trigger{width:100%;min-width:0}.zen-quick-due label{width:100%;min-height:0}.task-table td.zen-quick-priority-cell .zen-priority-picker{width:100%;margin:0}.task-table td[data-label="Hạn chót"],.task-table td[data-label="Ưu tiên"]{align-items:center}}
+
+/* Decorations fill the note surface without reserving a corner thumbnail. */
+.keep-card[data-zen-art]:not([data-zen-art=none]),.content-card[data-zen-art]:not([data-zen-art=none]){background-image:linear-gradient(#ffffffc9,#ffffffdc),var(--zen-art)!important;background-size:cover!important;background-position:center!important}
+.keep-card[data-zen-art]:not([data-zen-art=none])::before,.content-card[data-zen-art]:not([data-zen-art=none])::before{content:none!important;display:none!important}
+@media(max-width:700px){.month-cell{min-height:120px!important;height:auto!important}.month-event{display:block!important;width:100%;white-space:normal;max-height:none!important}.month-grid{align-items:stretch}.zen-calendar-date{max-width:100%;font-size:11px}}

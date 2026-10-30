@@ -1429,7 +1429,7 @@ const zenTaskFormBefore=taskForm;taskForm=function(p,t,col='List'){
  zenTaskFormBefore(p,t,col);
  if(!t&&$('#editor-body [name=title]'))zenArrangeTaskForm(true);
  const host=$('#editor-body .wf-description-field');if(!host||typeof NOTE_MOTIFS==='undefined')return;
- const selected=Object.hasOwn(NOTE_MOTIFS,t?.motif)?t.motif:'none',picker=document.createElement('details');picker.className='note-motif-picker task-motif-picker';
+ const selected=Object.hasOwn(NOTE_MOTIFS,t?.motif)?t.motif:(!t&&Object.hasOwn(NOTE_MOTIFS,p.motif)?p.motif:'none'),picker=document.createElement('details');picker.className='note-motif-picker task-motif-picker';
  picker.innerHTML='<summary><span>✦ Họa tiết công việc</span><span class="note-motif-current"></span></summary><p>Chọn họa tiết nhẹ nhàng cho thẻ công việc.</p><div class="note-motif-options" role="group" aria-label="Chọn họa tiết cho công việc">'+Object.entries(NOTE_MOTIFS).map(([id,item])=>'<button type="button" class="note-motif-option" data-task-motif="'+id+'" aria-pressed="'+(id===selected)+'" title="'+item.label+'"><span aria-hidden="true">'+item.icon+'</span><small>'+item.label+'</small></button>').join('')+'</div><input type="hidden" name="motif" value="'+selected+'">';
  host.append(picker);const input=picker.querySelector('[name=motif]'),current=picker.querySelector('.note-motif-current');
  const paint=()=>{current.textContent=NOTE_MOTIFS[input.value].icon+' '+NOTE_MOTIFS[input.value].label;zenArt(picker,input.value);};

@@ -1,5 +1,5 @@
 'use strict';
-function fitCheckText(input){input.style.height='auto';input.style.height=Math.max(36,input.scrollHeight)+'px';}
+function fitCheckText(input){input.style.height='auto';input.style.height=Math.max(38,input.scrollHeight+2)+'px';input.scrollTop=0;}
 const taskDetailBeforeCompact=taskDetail;taskDetail=function(p,t){taskDetailBeforeCompact(p,t);document.querySelectorAll('.compact-check textarea').forEach(fitCheckText);};
 document.addEventListener('input',e=>{if(e.target.matches('.compact-check textarea'))fitCheckText(e.target);});
 document.addEventListener('change',e=>{if(e.target.matches('.compact-check input[name^="check-done-"]'))e.target.closest('.compact-check').classList.toggle('is-complete',e.target.checked);});
