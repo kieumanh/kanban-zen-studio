@@ -207,7 +207,7 @@ function zenPaintTaskPinButtons(){
  document.querySelectorAll('#main .task-card[data-task][data-pid]').forEach(card=>{
   if(card.querySelector(':scope > .zen-task-pin'))return;
   const task=project(card.dataset.pid)?.tasks.find(item=>item.id===card.dataset.task);if(!task)return;
-  const button=document.createElement('button');button.type='button';button.className='zen-task-pin';button.dataset.zenTaskPin=card.dataset.pid+'|'+card.dataset.task;button.setAttribute('aria-pressed',String(!!task.pinned));button.setAttribute('aria-label',task.pinned?'Bỏ ghim công việc':'Ghim công việc');button.title=button.getAttribute('aria-label');button.innerHTML=svgIcon('pin');card.prepend(button);
+  const button=document.createElement('button');button.type='button';button.className='zen-task-pin';button.dataset.zenTaskPin=card.dataset.pid+'|'+card.dataset.task;button.setAttribute('aria-pressed',String(!!task.pinned));button.setAttribute('aria-label',task.pinned?'Bỏ ghim công việc':'Ghim công việc');button.title=button.getAttribute('aria-label');button.innerHTML=svgIcon('pin');const header=card.querySelector('.wf-card-head');if(header){header.insertBefore(button,header.firstChild);header.classList.add('wf-card-head-pinned');}else card.prepend(button);
  });
 }
 function zenPaintPins(){zenPaintQuickNoteTabs();zenPaintPinnedTasks();zenPaintTaskPinButtons();}
