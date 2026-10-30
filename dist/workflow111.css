@@ -203,3 +203,10 @@ body:not(.wf-is-focused) .zen-music{display:none!important}
 .wf-focus-grid>.wf-focus-card:hover,.wf-focus-grid>.wf-focus-card:focus-visible{z-index:1;border-color:#c9b4d8!important;background:#fff!important;box-shadow:0 5px 13px #33241110;outline:none}
 @media(max-width:700px){.wf-focus-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr))!important;gap:12px}.wf-focus-grid>.wf-focus-card{min-height:128px;padding:14px}}
 @media(prefers-reduced-motion:reduce){.wf-focus-grid>.wf-focus-card{transition:none}}
+
+/* Align every project tab on the same row, including the active tab. */
+#tabs{align-items:center!important}
+#tabs .tab[data-project]:not(.pinned){display:flex!important;align-items:center!important;align-self:center!important;margin-block:0!important;min-height:52px;flex-shrink:0;gap:8px}
+#tabs .tab[data-project]:not(.pinned)>span{flex:1;min-width:0;text-align:center}
+#tabs .tab[data-project]:not(.pinned) .dot,#tabs .tab[data-project]:not(.pinned)>small{flex:none}
+#tabs .tab[data-project]:not(.pinned)>small{margin:0;line-height:1.4}
