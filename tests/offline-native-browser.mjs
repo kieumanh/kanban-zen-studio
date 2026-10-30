@@ -26,6 +26,7 @@ try{
  await page.evaluate(()=>navigator.serviceWorker.ready);await page.reload();await page.waitForSelector('#auth-screen');
  await context.setOffline(true);await page.reload();await page.waitForSelector('input[name=unlockPassword]');
  await page.fill('input[name=unlockPassword]','wrong');await page.locator('#editor-form button[type=submit]').click();
+ await page.waitForFunction(()=>document.querySelector('#toast')?.textContent.includes('Mật khẩu chưa đúng'));
  assert.equal(await page.evaluate(()=>currentUser),null);
  await page.evaluate(async()=>{const store=await persistenceReady;const u=await store.get('unlock:offline-test');u.retryAfter=0;await store.set('unlock:offline-test',u);});
  await page.fill('input[name=unlockPassword]','offline-password');await page.locator('#editor-form button[type=submit]').click();

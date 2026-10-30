@@ -32,7 +32,10 @@
     "deleteAppDataOnUninstall": false,
     "script": "native/desktop/installer.nsi",
     "differentialPackage": false,
-    "packElevateHelper": false
+    "packElevateHelper": false,
+    "installerLanguages": [
+      "en_US"
+    ]
   },
   "publish": [
     {

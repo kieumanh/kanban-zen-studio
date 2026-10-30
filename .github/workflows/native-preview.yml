@@ -14,6 +14,8 @@ jobs:
         with: {node-version: '24', cache: npm}
       - run: npm ci
       - run: npm run build && npm test && npm run test:offline
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:offline:browser
   windows:
     needs: verify
     runs-on: windows-latest
@@ -25,6 +27,20 @@ jobs:
       - run: npm run build:windows -- --publish never
         env:
           CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+      - name: Test install and uninstall in a Unicode path
+        shell: pwsh
+        run: |
+          $target = Join-Path $env:RUNNER_TEMP 'Kanban-Thử-nghiệm'
+          $setup = Get-ChildItem release/windows/*Setup.exe | Select-Object -First 1
+          $installed = Start-Process -FilePath $setup.FullName -ArgumentList '/S',"/D=$target" -Wait -PassThru
+          if ($installed.ExitCode -ne 0) { throw 'Installer failed' }
+          if (!(Test-Path (Join-Path $target 'Kanban Zen Studio.exe'))) { throw 'Application executable missing' }
+          $sentinel = Join-Path $target 'user-file-to-preserve.txt'
+          Set-Content -Path $sentinel -Value 'User-owned files must survive uninstall'
+          $removed = Start-Process -FilePath (Join-Path $target 'Uninstall.exe') -ArgumentList '/S' -Wait -PassThru
+          if ($removed.ExitCode -ne 0) { throw 'Uninstaller failed' }
+          if (!(Test-Path $sentinel)) { throw 'Uninstaller removed a user-owned file' }
+          Remove-Item -Recurse -Force $target
       - uses: actions/upload-artifact@v4
         with:
           name: windows-preview
