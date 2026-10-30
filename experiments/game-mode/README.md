@@ -1,4 +1,4 @@
-# Trung Hoa Anh Hùng Truyện — Game Mode 0.6
+# Trung Hoa Anh Hùng Truyện — Game Mode 0.7
 
 Nền Kanban Zen Studio 1.15.26, nhánh `experiment/game-mode`. Không triển khai production.
 
@@ -26,7 +26,7 @@ Mở `http://localhost:8080/game-preview.html` để dùng bản minh họa đ�
 
 ## Còn giới hạn
 
-100 boss có dữ liệu và cửa ải, chưa có đủ 100 bộ hình/animation riêng. Bản đồ dùng giao diện thẻ, chưa phải cảnh tự do điều khiển. Không tự sinh kỹ năng/vật phẩm/linh thú. Vòng thi và XP là dữ liệu tự quản; chưa xác thực timestamp offline bằng máy chủ. Cần môi trường preview riêng để xác minh sync hai thiết bị thật trước production.
+Đã có 100 boss SVG riêng với tám trạng thái mỗi bộ, dùng bộ rig chuyển động chung. Xem docs/game-bosses-and-sync-verification.vi.md. Bản đồ dùng giao diện thẻ, chưa phải cảnh tự do điều khiển. Không tự sinh kỹ năng/vật phẩm/linh thú. Vòng thi và XP là dữ liệu tự quản; chưa xác thực timestamp offline bằng máy chủ. Đã xác minh hai BrowserContext desktop/mobile với Worker API và SQLite kiểm thử; chưa thử trên hai máy vật lý trước production.
 
 `progression.mjs` trong thư mục experiments là thí nghiệm cân bằng cũ, **không được runtime sử dụng**. Mã hiện hành ở `dist/game/core.mjs`.
 

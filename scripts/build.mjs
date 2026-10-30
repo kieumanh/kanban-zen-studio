@@ -1,3 +1,4 @@
+import './build-boss-art.mjs';
 import { buildStaticAssets } from './static-build.mjs';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';

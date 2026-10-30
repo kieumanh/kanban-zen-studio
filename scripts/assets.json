@@ -278,5 +278,520 @@
     "/game-preview.html",
     "game-preview.html",
     "text/html; charset=utf-8"
+  ],
+  [
+    "/game/boss-art.mjs",
+    "game/boss-art.mjs",
+    "text/javascript; charset=utf-8"
+  ],
+  [
+    "/game/boss-definitions.mjs",
+    "game/boss-definitions.mjs",
+    "text/javascript; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-001.svg",
+    "game/boss-art/boss-001.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-002.svg",
+    "game/boss-art/boss-002.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-003.svg",
+    "game/boss-art/boss-003.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-004.svg",
+    "game/boss-art/boss-004.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-005.svg",
+    "game/boss-art/boss-005.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-006.svg",
+    "game/boss-art/boss-006.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-007.svg",
+    "game/boss-art/boss-007.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-008.svg",
+    "game/boss-art/boss-008.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-009.svg",
+    "game/boss-art/boss-009.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-010.svg",
+    "game/boss-art/boss-010.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-011.svg",
+    "game/boss-art/boss-011.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-012.svg",
+    "game/boss-art/boss-012.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-013.svg",
+    "game/boss-art/boss-013.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-014.svg",
+    "game/boss-art/boss-014.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-015.svg",
+    "game/boss-art/boss-015.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-016.svg",
+    "game/boss-art/boss-016.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-017.svg",
+    "game/boss-art/boss-017.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-018.svg",
+    "game/boss-art/boss-018.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-019.svg",
+    "game/boss-art/boss-019.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-020.svg",
+    "game/boss-art/boss-020.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-021.svg",
+    "game/boss-art/boss-021.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-022.svg",
+    "game/boss-art/boss-022.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-023.svg",
+    "game/boss-art/boss-023.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-024.svg",
+    "game/boss-art/boss-024.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-025.svg",
+    "game/boss-art/boss-025.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-026.svg",
+    "game/boss-art/boss-026.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-027.svg",
+    "game/boss-art/boss-027.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-028.svg",
+    "game/boss-art/boss-028.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-029.svg",
+    "game/boss-art/boss-029.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-030.svg",
+    "game/boss-art/boss-030.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-031.svg",
+    "game/boss-art/boss-031.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-032.svg",
+    "game/boss-art/boss-032.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-033.svg",
+    "game/boss-art/boss-033.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-034.svg",
+    "game/boss-art/boss-034.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-035.svg",
+    "game/boss-art/boss-035.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-036.svg",
+    "game/boss-art/boss-036.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-037.svg",
+    "game/boss-art/boss-037.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-038.svg",
+    "game/boss-art/boss-038.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-039.svg",
+    "game/boss-art/boss-039.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-040.svg",
+    "game/boss-art/boss-040.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-041.svg",
+    "game/boss-art/boss-041.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-042.svg",
+    "game/boss-art/boss-042.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-043.svg",
+    "game/boss-art/boss-043.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-044.svg",
+    "game/boss-art/boss-044.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-045.svg",
+    "game/boss-art/boss-045.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-046.svg",
+    "game/boss-art/boss-046.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-047.svg",
+    "game/boss-art/boss-047.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-048.svg",
+    "game/boss-art/boss-048.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-049.svg",
+    "game/boss-art/boss-049.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-050.svg",
+    "game/boss-art/boss-050.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-051.svg",
+    "game/boss-art/boss-051.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-052.svg",
+    "game/boss-art/boss-052.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-053.svg",
+    "game/boss-art/boss-053.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-054.svg",
+    "game/boss-art/boss-054.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-055.svg",
+    "game/boss-art/boss-055.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-056.svg",
+    "game/boss-art/boss-056.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-057.svg",
+    "game/boss-art/boss-057.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-058.svg",
+    "game/boss-art/boss-058.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-059.svg",
+    "game/boss-art/boss-059.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-060.svg",
+    "game/boss-art/boss-060.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-061.svg",
+    "game/boss-art/boss-061.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-062.svg",
+    "game/boss-art/boss-062.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-063.svg",
+    "game/boss-art/boss-063.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-064.svg",
+    "game/boss-art/boss-064.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-065.svg",
+    "game/boss-art/boss-065.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-066.svg",
+    "game/boss-art/boss-066.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-067.svg",
+    "game/boss-art/boss-067.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-068.svg",
+    "game/boss-art/boss-068.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-069.svg",
+    "game/boss-art/boss-069.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-070.svg",
+    "game/boss-art/boss-070.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-071.svg",
+    "game/boss-art/boss-071.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-072.svg",
+    "game/boss-art/boss-072.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-073.svg",
+    "game/boss-art/boss-073.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-074.svg",
+    "game/boss-art/boss-074.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-075.svg",
+    "game/boss-art/boss-075.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-076.svg",
+    "game/boss-art/boss-076.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-077.svg",
+    "game/boss-art/boss-077.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-078.svg",
+    "game/boss-art/boss-078.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-079.svg",
+    "game/boss-art/boss-079.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-080.svg",
+    "game/boss-art/boss-080.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-081.svg",
+    "game/boss-art/boss-081.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-082.svg",
+    "game/boss-art/boss-082.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-083.svg",
+    "game/boss-art/boss-083.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-084.svg",
+    "game/boss-art/boss-084.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-085.svg",
+    "game/boss-art/boss-085.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-086.svg",
+    "game/boss-art/boss-086.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-087.svg",
+    "game/boss-art/boss-087.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-088.svg",
+    "game/boss-art/boss-088.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-089.svg",
+    "game/boss-art/boss-089.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-090.svg",
+    "game/boss-art/boss-090.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-091.svg",
+    "game/boss-art/boss-091.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-092.svg",
+    "game/boss-art/boss-092.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-093.svg",
+    "game/boss-art/boss-093.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-094.svg",
+    "game/boss-art/boss-094.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-095.svg",
+    "game/boss-art/boss-095.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-096.svg",
+    "game/boss-art/boss-096.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-097.svg",
+    "game/boss-art/boss-097.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-098.svg",
+    "game/boss-art/boss-098.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-099.svg",
+    "game/boss-art/boss-099.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/boss-100.svg",
+    "game/boss-art/boss-100.svg",
+    "image/svg+xml; charset=utf-8"
+  ],
+  [
+    "/game/boss-art/manifest.json",
+    "game/boss-art/manifest.json",
+    "application/json; charset=utf-8"
   ]
 ]

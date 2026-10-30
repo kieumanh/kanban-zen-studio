@@ -1,0 +1,1516 @@
+{
+  "version": 1,
+  "format": "animated-svg-rig",
+  "states": [
+    "idle",
+    "appear",
+    "challenge",
+    "progress",
+    "encourage",
+    "timeout",
+    "celebrate",
+    "ascend"
+  ],
+  "bosses": [
+    {
+      "id": "boss-001",
+      "name": "Trúc Diệp Tiểu Yêu",
+      "url": "/game/boss-art/boss-001.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-002",
+      "name": "Đoản Vĩ Sơn Thử",
+      "url": "/game/boss-art/boss-002.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-003",
+      "name": "Thanh Đằng Mộc Ngẫu",
+      "url": "/game/boss-art/boss-003.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-004",
+      "name": "Cổ Chung Thiềm",
+      "url": "/game/boss-art/boss-004.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-005",
+      "name": "Hắc Vũ Nha Tướng",
+      "url": "/game/boss-art/boss-005.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-006",
+      "name": "Thạch Bì Sơn Trư",
+      "url": "/game/boss-art/boss-006.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-007",
+      "name": "Mê Tung Hồ",
+      "url": "/game/boss-art/boss-007.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-008",
+      "name": "Phong Linh Hạc",
+      "url": "/game/boss-art/boss-008.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-009",
+      "name": "Trúc Lâm Kiếm Khách",
+      "url": "/game/boss-art/boss-009.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-010",
+      "name": "Thanh Trúc Sơn Quân",
+      "url": "/game/boss-art/boss-010.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-011",
+      "name": "Ngọc Bào Thủy Quái",
+      "url": "/game/boss-art/boss-011.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-012",
+      "name": "Hà Sa Giải Tướng",
+      "url": "/game/boss-art/boss-012.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-013",
+      "name": "Bích Lân Ngư Vệ",
+      "url": "/game/boss-art/boss-013.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-014",
+      "name": "Thủy Tiên Đăng Yêu",
+      "url": "/game/boss-art/boss-014.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-015",
+      "name": "Hàn Vụ Thủy Xà",
+      "url": "/game/boss-art/boss-015.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-016",
+      "name": "Song Kiều Thủy Lại",
+      "url": "/game/boss-art/boss-016.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-017",
+      "name": "Trầm Chu Mộc Linh",
+      "url": "/game/boss-art/boss-017.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-018",
+      "name": "Bạch Lãng Kiếm Ngư",
+      "url": "/game/boss-art/boss-018.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-019",
+      "name": "Bích Khê Giao Nữ",
+      "url": "/game/boss-art/boss-019.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-020",
+      "name": "Bích Khê Giao Vương",
+      "url": "/game/boss-art/boss-020.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-021",
+      "name": "Tùng Quả Sơn Tinh",
+      "url": "/game/boss-art/boss-021.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-022",
+      "name": "Hôi Bào Mi Hầu",
+      "url": "/game/boss-art/boss-022.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-023",
+      "name": "Vân Ti Bạch Chu",
+      "url": "/game/boss-art/boss-023.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-024",
+      "name": "Cổ Mộc Dược Ông",
+      "url": "/game/boss-art/boss-024.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-025",
+      "name": "Ngân Vĩ Điêu",
+      "url": "/game/boss-art/boss-025.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-026",
+      "name": "Mặc Diện Sơn Tiêu",
+      "url": "/game/boss-art/boss-026.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-027",
+      "name": "Tùng Phong Đạo Sĩ",
+      "url": "/game/boss-art/boss-027.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-028",
+      "name": "Bạch Vân Kiếm Hồn",
+      "url": "/game/boss-art/boss-028.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-029",
+      "name": "Thiên Chi Mộc Vệ",
+      "url": "/game/boss-art/boss-029.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-030",
+      "name": "Vân Tùng Lão Tổ",
+      "url": "/game/boss-art/boss-030.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-031",
+      "name": "Nguyệt Quang Thố",
+      "url": "/game/boss-art/boss-031.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-032",
+      "name": "Ngân Hồ Đăng Sứ",
+      "url": "/game/boss-art/boss-032.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-033",
+      "name": "Ảnh Diện Miêu",
+      "url": "/game/boss-art/boss-033.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-034",
+      "name": "Tàn Nguyệt Song Đao",
+      "url": "/game/boss-art/boss-034.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-035",
+      "name": "Mộng Điệp Tiên",
+      "url": "/game/boss-art/boss-035.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-036",
+      "name": "Tinh Sa Cầm Sư",
+      "url": "/game/boss-art/boss-036.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-037",
+      "name": "Nguyệt Thực Lang",
+      "url": "/game/boss-art/boss-037.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-038",
+      "name": "Kính Hồ Kiếm Ảnh",
+      "url": "/game/boss-art/boss-038.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-039",
+      "name": "Vọng Nguyệt Tế Sư",
+      "url": "/game/boss-art/boss-039.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-040",
+      "name": "Minh Nguyệt Cung Chủ",
+      "url": "/game/boss-art/boss-040.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-041",
+      "name": "Hỏa Tinh Tiểu Quỷ",
+      "url": "/game/boss-art/boss-041.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-042",
+      "name": "Xích Giáp Hạt",
+      "url": "/game/boss-art/boss-042.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-043",
+      "name": "Dung Nham Quy",
+      "url": "/game/boss-art/boss-043.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-044",
+      "name": "Hồng Liên Hỏa Đồng",
+      "url": "/game/boss-art/boss-044.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-045",
+      "name": "Lưu Hỏa Ưng",
+      "url": "/game/boss-art/boss-045.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-046",
+      "name": "Xích Hà Đao Khách",
+      "url": "/game/boss-art/boss-046.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-047",
+      "name": "Cửu Đăng Hỏa Sứ",
+      "url": "/game/boss-art/boss-047.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-048",
+      "name": "Hỏa Vân Kỳ Lân",
+      "url": "/game/boss-art/boss-048.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-049",
+      "name": "Phần Thiên Lô Chủ",
+      "url": "/game/boss-art/boss-049.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-050",
+      "name": "Xích Hà Viêm Quân",
+      "url": "/game/boss-art/boss-050.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-051",
+      "name": "Vân Đoàn Ngủ Gật",
+      "url": "/game/boss-art/boss-051.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-052",
+      "name": "Phi Vũ Thiên Cẩu",
+      "url": "/game/boss-art/boss-052.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-053",
+      "name": "Bạch Bào Phù Sư",
+      "url": "/game/boss-art/boss-053.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-054",
+      "name": "Lưu Vân Khôi Lỗi",
+      "url": "/game/boss-art/boss-054.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-055",
+      "name": "Tán Vũ Hoa Linh",
+      "url": "/game/boss-art/boss-055.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-056",
+      "name": "Bạch Hạc Song Sứ",
+      "url": "/game/boss-art/boss-056.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-057",
+      "name": "Thiên Phong Chấp Sự",
+      "url": "/game/boss-art/boss-057.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-058",
+      "name": "Vân Hải Cự Kình",
+      "url": "/game/boss-art/boss-058.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-059",
+      "name": "Bạch Vân Kiếm Tôn",
+      "url": "/game/boss-art/boss-059.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-060",
+      "name": "Bạch Vân Thiên Quân",
+      "url": "/game/boss-art/boss-060.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-061",
+      "name": "Tuyết Cầu Sơn Yêu",
+      "url": "/game/boss-art/boss-061.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-062",
+      "name": "Băng Nha Sơn Miêu",
+      "url": "/game/boss-art/boss-062.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-063",
+      "name": "Hàn Ngọc Băng Chu",
+      "url": "/game/boss-art/boss-063.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-064",
+      "name": "Tuyết Liên Thủ Vệ",
+      "url": "/game/boss-art/boss-064.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-065",
+      "name": "Bạch Giác Sơn Dương",
+      "url": "/game/boss-art/boss-065.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-066",
+      "name": "Hàn Phong Đao Sứ",
+      "url": "/game/boss-art/boss-066.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-067",
+      "name": "Băng Kính Linh",
+      "url": "/game/boss-art/boss-067.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-068",
+      "name": "Thiên Sơn Tuyết Viên",
+      "url": "/game/boss-art/boss-068.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-069",
+      "name": "Cửu Phong Kiếm Sứ",
+      "url": "/game/boss-art/boss-069.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-070",
+      "name": "Thiên Sơn Băng Hậu",
+      "url": "/game/boss-art/boss-070.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-071",
+      "name": "Hư Không Đăng Linh",
+      "url": "/game/boss-art/boss-071.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-072",
+      "name": "Tử Vụ Dạ Bức",
+      "url": "/game/boss-art/boss-072.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-073",
+      "name": "Tinh Bàn Cơ Ngẫu",
+      "url": "/game/boss-art/boss-073.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-074",
+      "name": "Huyền Môn Thủ Sứ",
+      "url": "/game/boss-art/boss-074.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-075",
+      "name": "Toái Ảnh Vũ Cơ",
+      "url": "/game/boss-art/boss-075.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-076",
+      "name": "Dạ Không Cầm Ma",
+      "url": "/game/boss-art/boss-076.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-077",
+      "name": "Phù Không Cự Tượng",
+      "url": "/game/boss-art/boss-077.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-078",
+      "name": "Huyền Tinh Kiếm Khôi",
+      "url": "/game/boss-art/boss-078.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-079",
+      "name": "Vô Thanh Hành Giả",
+      "url": "/game/boss-art/boss-079.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-080",
+      "name": "Huyền Không Đạo Chủ",
+      "url": "/game/boss-art/boss-080.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-081",
+      "name": "Âm Dương Song Ngư",
+      "url": "/game/boss-art/boss-081.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-082",
+      "name": "Ngũ Hành Linh Sứ",
+      "url": "/game/boss-art/boss-082.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-083",
+      "name": "Luân Chuyển Cơ Quan",
+      "url": "/game/boss-art/boss-083.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-084",
+      "name": "Thái Hư Kính Chủ",
+      "url": "/game/boss-art/boss-084.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-085",
+      "name": "Càn Khôn Kỳ Sĩ",
+      "url": "/game/boss-art/boss-085.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-086",
+      "name": "Nhật Nguyệt Song Tôn",
+      "url": "/game/boss-art/boss-086.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-087",
+      "name": "Vạn Tượng Linh Quân",
+      "url": "/game/boss-art/boss-087.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-088",
+      "name": "Vô Tướng Kiếm Hồn",
+      "url": "/game/boss-art/boss-088.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-089",
+      "name": "Thái Cực Thủ Quan",
+      "url": "/game/boss-art/boss-089.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-090",
+      "name": "Vô Cực Thiên Tôn",
+      "url": "/game/boss-art/boss-090.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-091",
+      "name": "Cựu Ảnh Đồng Hành",
+      "url": "/game/boss-art/boss-091.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-092",
+      "name": "Vạn Niệm Thư Linh",
+      "url": "/game/boss-art/boss-092.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-093",
+      "name": "Trường Hà Thủ Hộ",
+      "url": "/game/boss-art/boss-093.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-094",
+      "name": "Tứ Tượng Trấn Sơn",
+      "url": "/game/boss-art/boss-094.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-095",
+      "name": "Thiên Cơ Kỳ Chủ",
+      "url": "/game/boss-art/boss-095.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-096",
+      "name": "Vô Tận Huyễn Long",
+      "url": "/game/boss-art/boss-096.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-097",
+      "name": "Cửu Đỉnh Linh Vệ",
+      "url": "/game/boss-art/boss-097.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-098",
+      "name": "Vô Danh Kiếm Thánh",
+      "url": "/game/boss-art/boss-098.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-099",
+      "name": "Vọng Ngã Thiên Ảnh",
+      "url": "/game/boss-art/boss-099.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    },
+    {
+      "id": "boss-100",
+      "name": "Quy Nguyên Chân Long",
+      "url": "/game/boss-art/boss-100.svg",
+      "states": [
+        "idle",
+        "appear",
+        "challenge",
+        "progress",
+        "encourage",
+        "timeout",
+        "celebrate",
+        "ascend"
+      ]
+    }
+  ]
+}

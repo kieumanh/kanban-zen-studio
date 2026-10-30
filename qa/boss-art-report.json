@@ -1,0 +1,8 @@
+{
+  "bosses": 100,
+  "uniqueVisualHashes": 100,
+  "statesPerBoss": 8,
+  "browserStateChecks": 800,
+  "reducedMotion": "pass",
+  "errors": []
+}
