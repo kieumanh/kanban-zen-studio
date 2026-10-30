@@ -238,5 +238,15 @@
     "/task-list.css",
     "task-list.css",
     "text/css; charset=utf-8"
+  ],
+  [
+    "/experience.js",
+    "experience.js",
+    "text/javascript; charset=utf-8"
+  ],
+  [
+    "/experience.css",
+    "experience.css",
+    "text/css; charset=utf-8"
   ]
 ]

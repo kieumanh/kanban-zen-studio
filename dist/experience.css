@@ -1,0 +1,90 @@
+/* Consistent Zen Studio color for primary save and creation actions. */
+.btn.primary,
+button.primary,
+#note-save,
+#save-profile,
+#save-reminders,
+#save-weekly-settings,
+.wf-comments > button,
+.wf-add-check,
+[data-action="new-project"],
+[data-action="new-task"],
+[data-note-new] {
+  background: linear-gradient(110deg, #7950c8, #cf5f9b 62%, #e77962) !important;
+  border-color: transparent !important;
+  color: #fff !important;
+}
+
+.btn.primary:hover,
+button.primary:hover,
+#note-save:hover,
+.wf-comments > button:hover,
+.wf-add-check:hover,
+[data-action="new-project"]:hover,
+[data-action="new-task"]:hover,
+[data-note-new]:hover {
+  filter: brightness(1.04) saturate(1.05);
+}
+
+.wf-comments > button {
+  box-shadow: 0 5px 16px #7950c826;
+}
+
+/* Align note color and reminder controls to the same mobile card grid. */
+#editor.keep-editor .note-quick-options > .note-wheel-picker,
+#editor.keep-editor .note-quick-options > .note-reminder-options {
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  margin: 0;
+}
+
+#editor.keep-editor .note-quick-options > .note-wheel-picker > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 72px;
+  padding: 14px 16px;
+}
+
+#editor.keep-editor .note-quick-options > .note-reminder-options > summary {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  min-height: 72px;
+  padding: 14px 16px !important;
+  text-align: left;
+}
+
+#editor.keep-editor .note-quick-options > .note-reminder-options[open] {
+  grid-column: 1 / -1 !important;
+  padding: 0 16px 16px;
+}
+
+#editor.keep-editor .note-quick-options > .note-reminder-options[open] > label,
+#editor.keep-editor .note-quick-options > .note-reminder-options[open] > small {
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.wf-is-focused .wf-focus-task-description:empty {
+  display: none !important;
+}
+
+@media (max-width: 600px) {
+  #editor.keep-editor .note-quick-options {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+    align-items: stretch;
+  }
+
+  #editor.keep-editor .note-quick-options > .note-wheel-picker,
+  #editor.keep-editor .note-quick-options > .note-reminder-options {
+    grid-column: 1 / -1 !important;
+  }
+}
