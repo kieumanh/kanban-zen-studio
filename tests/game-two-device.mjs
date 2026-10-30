@@ -26,6 +26,7 @@ const report={environment:'Two isolated Chromium contexts, desktop + mobile; act
 const check=(name)=>{report.checks.push({name,result:'pass'});console.log('PASS '+name);};
 try{
  const contexts=[await browser.newContext({viewport:{width:1440,height:1000}}),await browser.newContext({viewport:{width:390,height:900},isMobile:true})];
+ for(const ctx of contexts)await ctx.addInitScript(()=>{const day=new Date().toLocaleDateString('en-CA',{timeZone:'Asia/Ho_Chi_Minh'});for(let slot=0;slot<4;slot++)localStorage.setItem('zen-welcome:game-owner:'+day+':'+slot,'seen');});
  for(let i=0;i<2;i++)await contexts[i].addCookies([{name:'zen_session',value:[tokenA,tokenB][i],url:origin,httpOnly:true,secure:false}]);
  const [a,b]=await Promise.all(contexts.map(c=>c.newPage()));
  for(const page of [a,b]){await page.addLocatorHandler(page.locator('.welcome-dialog[open]'),async()=>{await page.locator('.welcome-close').click();});await page.goto(origin);await page.waitForFunction(()=>typeof currentUser!=='undefined'&&currentUser?.id==='game-owner'&&typeof data!=='undefined'&&data.game);await page.waitForFunction(()=>!document.body.classList.contains('signed-out'));if(!await page.locator('#g-entry').isVisible())await page.locator('#menu').click();await page.locator('#g-entry').click();await page.locator('[data-tab=axes]').first().click();}
