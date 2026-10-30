@@ -42,7 +42,7 @@ Không gỡ ứng dụng hoặc Xóa dữ liệu ứng dụng Android để nân
 
 Node 24. `npm ci`, `npm run build`, `npm test`, `npm run test:offline`.
 
-Windows: `npm run build:windows -- --publish never`. NSIS script riêng tạo bộ cài và trình gỡ, giữ dữ liệu người dùng. Cài per-user, không cần Microsoft Store. Chưa kiểm thử cài/nâng cấp/gỡ trên Windows thật.
+Windows: `npm run build:windows -- --publish never`. NSIS script riêng tạo bộ cài và trình gỡ, giữ dữ liệu người dùng. Cài per-user, không cần Microsoft Store. Đã kiểm tra cài/gỡ im lặng trong đường dẫn có dấu tiếng Việt trên Windows Server 2025 của GitHub Actions, gồm kiểm tra tệp do người dùng tự thêm vẫn còn sau khi gỡ. Chưa kiểm tra nâng cấp hoặc thao tác UI trên máy Windows cá nhân.
 
 Android: JDK 17, Gradle 8.11.1, Android SDK platform 35 và build-tools 35.0.0. Chạy `gradle --no-daemon -p native/android assembleRelease` với các biến:
 
@@ -69,9 +69,11 @@ Android Preview chưa có trình tự phát hiện/tải/cài APK cập nhật. 
 
 Đã tạo APK ký release và kiểm tra chữ ký APK Signature Scheme v2 bằng apksigner; đối chiếu các module offline, account và persistence trong APK khớp mã nguồn. Bộ cài Windows được build bởi NSIS; đây không phải xác nhận đã cài/chạy trên máy Windows.
 
-Kiểm thử trình duyệt E2E đã viết trong `tests/offline-native-browser.mjs`, nhưng Chromium không khởi chạy được trong môi trường kiểm thử trước vì socket bị hạn chế. Chưa đạt E2E và chưa thể công nhận kiểm thử 100 task qua khởi động lại thiết bị thật.
+Kiểm thử trình duyệt E2E trong `tests/offline-native-browser.mjs` đã chạy thành công trên Chromium tại GitHub Actions: 100 task, mở khóa và từ chối mật khẩu sai, nhiều lần tải lại khi offline, giữ bản chỉnh sửa, tệp nhị phân, chống trùng và cô lập tài khoản. Lỗi chạy Chromium do socket bị hạn chế ở môi trường cục bộ được giải quyết bằng cách chạy kiểm thử trên CI. Đây là kiểm thử tải lại trình duyệt, không phải chứng nhận reboot thiết bị thật.
 
-Chưa kiểm thử thực trên Windows/Android: cài, mở UI, chạm/kéo, mất mạng giữa upload, hai thiết bị kết nối đồng thời, kill tiến trình, reboot, nâng cấp giữ dữ liệu, quota thật R2 và lỗi Cloudflare thật. Các unit/integration tests không thay thế các kiểm tra này.
+Toàn bộ workflow verify, Windows và Android đã xanh tại commit mã nguồn `c4d1219611ecc5069ae4addc4614fdcf8ac4bc78`: https://github.com/kieumanh/kanban-zen-studio/actions/runs/41090585483 . Job Android trên CI tạo artifact unsigned khi không có secrets; APK cài đặt bàn giao được ký riêng bằng khóa cố định và đã qua apksigner.
+
+Chưa kiểm thử trên thiết bị Windows/Android của người dùng: mở UI native, chạm/kéo, mất mạng giữa upload, hai thiết bị kết nối đồng thời, kill tiến trình, reboot, nâng cấp giữ dữ liệu, quota thật R2 và lỗi Cloudflare thật. Cài/gỡ Windows đã kiểm tra trên CI như trên; chưa cài APK trên điện thoại/tablet thật. Các unit/integration tests không thay thế các kiểm tra này.
 
 Xung đột hiện phân biệt “thiết bị này” và “bản máy chủ”; chưa có registry tên thiết bị và lịch sử thay đổi theo từng máy. Bản máy chủ có thể gồm thay đổi của nhiều thiết bị. Không gán nhầm tên Laptop/Android khi backend chưa cung cấp thông tin.
 
