@@ -52,8 +52,8 @@ accountPanel = function (...args) {
         summary.dataset.alwaysOpen = 'true';
         summary.addEventListener('click', (event) => event.preventDefault());
       }
+      if (body.lastElementChild !== session) body.append(session);
     }
-    if (session && body.lastElementChild !== session) body.append(session);
   };
   moveSessionToEnd();
   const observer = new MutationObserver(moveSessionToEnd);
