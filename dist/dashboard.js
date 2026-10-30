@@ -15,7 +15,7 @@ taskForm=function(p,t,col='List'){
  dashboardBaseTaskForm(p,t,col);
  const body=$('#editor-body'),form=$('#editor-form');
  if(!body.querySelector('[name=title]'))return;
- const quick=!t,titleField=body.querySelector('[name=title]')?.closest('.field');
+ const quick=false,titleField=body.querySelector('[name=title]')?.closest('.field');
  const intro=body.querySelector('.form-intro');
  if(quick&&titleField){
   if(intro)intro.textContent='Bắt đầu bằng tên việc. Bạn có thể bổ sung thông tin sau.';
