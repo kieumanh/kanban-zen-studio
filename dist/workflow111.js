@@ -435,8 +435,21 @@ taskDetail = function (p, t) {
   comments.className = "wf-comments";
   comments.innerHTML = '<h3>Bình luận</h3><div class="wf-comment-list"></div><label class="field"><span class="sr-only">Viết bình luận</span><textarea maxlength="2000" rows="5" placeholder="Ghi lại điều cần nhớ…"></textarea></label><button type="button" class="btn">+ Thêm bình luận</button>';
   const commentList = comments.querySelector(".wf-comment-list");
-  (t.comments || []).forEach(comment => { const item = document.createElement("p"); const time = document.createElement("small"); time.textContent = new Date(comment.at).toLocaleString("vi-VN", {timeZone:"Asia/Ho_Chi_Minh"}); const text = document.createElement("span"); text.textContent = comment.text; item.append(time, text); commentList.append(item); });
-  comments.querySelector("button").onclick = () => {
+  (t.comments || []).forEach(comment => {
+    const item = document.createElement("article"); item.className = "wf-comment";
+    const head = document.createElement("header"), time = document.createElement("time");
+    time.dateTime = new Date(comment.at).toISOString();
+    time.textContent = new Date(comment.at).toLocaleString("vi-VN", {timeZone:"Asia/Ho_Chi_Minh", dateStyle:"medium", timeStyle:"short"});
+    const remove = document.createElement("button"); remove.type = "button"; remove.className = "wf-comment-delete"; remove.dataset.commentDelete = comment.id;
+    remove.setAttribute("aria-label", "Xóa bình luận"); remove.title = "Xóa bình luận"; remove.textContent = "×";
+    const text = document.createElement("p"); text.textContent = comment.text;
+    head.append(time, remove); item.append(head, text); commentList.append(item);
+    remove.onclick = () => confirmDelete("bình luận này", () => {
+      const task = project(p.id)?.tasks.find(item => item.id === t.id);
+      if (task) task.comments = (task.comments || []).filter(item => item.id !== comment.id);
+    });
+  });
+  comments.querySelector(":scope > button").onclick = () => {
     const text = comments.querySelector("textarea").value.trim();
     if (!text) return;
     if ((t.comments || []).length >= 200) { notify("Tối đa 200 bình luận."); return; }
@@ -1408,7 +1421,7 @@ function zenArrangeTaskForm(isNew=false){const body=$('#editor-body'),form=$('#e
  const anchor=heading||body.firstChild;if(anchor){anchor.after(main);main.after(schedule);schedule.after(actions);actions.after(checks);}else body.prepend(main,schedule,actions,checks);
  body.querySelectorAll('.fields-row').forEach(row=>{if(!row.children.length)row.remove();});
  body.querySelectorAll(':scope>.help-copy').forEach(el=>{if(/Chọn ngày bắt đầu|Ngày kết thúc/.test(el.textContent))schedule.append(el);});
- if(!isNew){const remove=body.querySelector('[data-action="delete-task"]')||document.createElement('button');remove.type='button';remove.className='btn danger';remove.dataset.action='delete-task';remove.textContent='Xóa công việc';const area=document.createElement('section');area.className='zen-task-delete';area.append(remove);checks.after(area);}
+ if(!isNew){const remove=body.querySelector('[data-action="delete-task"]')||document.createElement('button');remove.type='button';remove.className='btn danger';remove.dataset.action='delete-task';remove.textContent='Xóa công việc';const area=document.createElement('section');area.className='zen-task-delete';area.append(remove);const comments=body.querySelector('.wf-comments');(comments||checks).after(area);}
  const status=document.createElement('p');status.className='zen-task-save-status';status.setAttribute('role','status');status.textContent=isNew?'Công việc mới chưa được lưu.':'Đã tải bản đã lưu. Chỉnh sửa rồi chọn Lưu.';body.prepend(status);form.addEventListener('input',()=>{status.dataset.dirty='true';status.textContent='Có thay đổi chưa lưu · Chọn Lưu để xác nhận.';},{signal:zenTaskSignal()});
 };
 taskDetail=function(p,t){zenTaskDetailBefore(p,t);zenArrangeTaskForm();};

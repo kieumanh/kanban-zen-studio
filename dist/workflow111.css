@@ -307,3 +307,22 @@ body:not(.wf-is-focused) .zen-music{display:none!important}
 .keep-card[data-zen-art]:not([data-zen-art=none])::before,.content-card[data-zen-art]:not([data-zen-art=none])::before{display:block!important;max-width:calc(100% - 44px)}
 #editor .note-composer[data-zen-art]:not([data-zen-art=none])::before{height:80px!important;min-height:80px;margin-top:10px!important}
 @media(max-width:600px){#editor .icon-library-results{max-height:230px!important}#editor .icon-library-tools input,#editor .icon-library-tools select{font-size:16px}[data-zen-art]:not([data-zen-art=none])::before{height:56px!important;min-height:56px;flex-basis:56px}}
+
+.zen-task-delete{justify-content:center;text-align:center}.zen-task-delete>.btn{min-width:min(240px,100%)}
+.wf-comments{padding:20px;background:linear-gradient(145deg,#fcf9ff,#fffdfd);border-color:#e5d9ed}
+.wf-comment-list{display:grid;gap:10px;margin:0 0 16px}
+.wf-comment{min-width:0;padding:14px 16px;border:1px solid #eee5f2;border-radius:14px;background:#fff;box-shadow:0 3px 12px #352a4408}
+.wf-comment>header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:8px}
+.wf-comment time{font-size:12px;color:#887995;font-variant-numeric:tabular-nums}
+.wf-comment>p{margin:0;color:#493a55;white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.7}
+.wf-comment-delete{display:grid;place-items:center;flex:0 0 36px;width:36px;height:36px;border:1px solid #efd5dc;border-radius:10px;background:#fff8f9;color:#b3475b;font-size:22px;line-height:1}
+.wf-comment-delete:hover,.wf-comment-delete:focus-visible{background:#fae9ee;border-color:#dba8b5}
+.wf-comments textarea{min-height:112px;padding:13px 14px;border-radius:13px}.wf-comments>button{min-width:170px}
+.task-table td[data-label="Hạn chót"],.task-table td[data-label="Ưu tiên"]{vertical-align:middle}
+.zen-quick-due label{display:grid;justify-items:start;align-content:center;gap:4px;min-height:64px}
+.zen-due-trigger{display:flex;align-items:center;justify-content:space-between;gap:10px;width:min(100%,190px);min-width:150px;min-height:44px;padding:9px 12px;border:1px solid #d9cbe4;border-radius:10px;background:#fff;color:#49305e;text-align:left;font-variant-numeric:tabular-nums}
+.zen-due-trigger::after{content:'▦';color:#8c69aa;font-size:16px}.zen-due-trigger:hover{border-color:#b89acc;background:#faf5ff}
+.zen-quick-due input[data-zen-quick-due]{position:absolute;width:1px!important;height:1px!important;opacity:0;pointer-events:none}
+.task-table td.zen-quick-priority-cell .zen-priority-picker{width:min(100%,250px);margin:0 auto}.task-table td.zen-quick-priority-cell .zen-priority-picker>summary{min-height:44px;display:flex;align-items:center;justify-content:space-between}
+.unified-note-hit{display:grid;grid-template-columns:34px minmax(0,1fr);align-items:center;gap:10px}.zen-search-copy{min-width:0}.zen-search-copy small{line-height:1.45;overflow-wrap:anywhere}
+@media(max-width:700px){.wf-comments{padding:16px}.wf-comment{padding:12px}.wf-comments textarea{min-height:100px}.zen-task-delete{padding:12px}.zen-due-trigger{width:100%;min-width:0}.zen-quick-due label{width:100%;min-height:0}.task-table td.zen-quick-priority-cell .zen-priority-picker{width:100%;margin:0}.task-table td[data-label="Hạn chót"],.task-table td[data-label="Ưu tiên"]{align-items:center}}
