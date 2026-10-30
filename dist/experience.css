@@ -110,3 +110,10 @@ button[aria-busy="true"] .ui-icon{animation:zen-refresh-spin .8s linear infinite
 .task-card .matrix-chip,.task-card .label-chip,.wf-card-keywords{max-width:100%!important;min-width:0;box-sizing:border-box;white-space:normal!important;overflow:visible!important;text-overflow:clip!important;height:auto!important;overflow-wrap:anywhere;line-height:1.5}
 .wf-card-keywords{display:flex;flex-wrap:wrap;gap:6px}
 .task-detail-header .matrix-chip{white-space:normal;max-width:100%;height:auto;line-height:1.5}
+.task-context{display:flex!important;flex-wrap:wrap;align-items:center;gap:10px!important;margin:12px 0!important;min-width:0}
+.task-context .task-project-badge,.task-context .matrix-chip{max-width:100%;white-space:normal;overflow-wrap:anywhere;height:auto;line-height:1.5}
+@media(max-width:700px){
+ .project-edit-dialog #editor-body{grid-template-columns:minmax(0,1fr)}
+ .project-edit-dialog #editor-body>*{min-width:0;max-width:100%}
+ .project-edit-dialog .wf-format-toolbar{display:flex;flex-wrap:wrap;gap:6px;min-width:0;max-width:100%}
+}

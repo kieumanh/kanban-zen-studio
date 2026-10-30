@@ -106,3 +106,16 @@ document.addEventListener('click',event=>{
   event.preventDefault();event.stopImmediatePropagation();
   experienceRefresh(button,button.hasAttribute('data-resources-refresh'));
 },true);
+
+// Keep project and priority together; show the task detail title once.
+const experienceTaskDetail = taskDetail;
+taskDetail = function (...args) {
+  const result = experienceTaskDetail.apply(this,args);
+  const body=document.querySelector('#editor-body'),context=body?.querySelector('.task-context');
+  if(context){
+    context.querySelectorAll(':scope > span:not(.task-project-badge)').forEach(label=>label.remove());
+    const priority=body.querySelector(':scope > .matrix-chip');
+    if(priority) context.append(priority);
+  }
+  return result;
+};
