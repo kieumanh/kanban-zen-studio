@@ -228,5 +228,15 @@
     "/usability.css",
     "usability.css",
     "text/css; charset=utf-8"
+  ],
+  [
+    "/task-list.js",
+    "task-list.js",
+    "text/javascript; charset=utf-8"
+  ],
+  [
+    "/task-list.css",
+    "task-list.css",
+    "text/css; charset=utf-8"
   ]
 ]
