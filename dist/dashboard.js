@@ -56,7 +56,7 @@ taskCard=function(t,p){
  const pct=taskPct(t),checked=t.checks.filter(c=>c.done).length,total=t.checks.length,deadline=dashboardDeadline(t);
  const keywords=card.querySelector('.wf-card-keywords');
  if(keywords){const labels=[...keywords.querySelectorAll('.label-chip')];labels.slice(2).forEach(label=>label.remove());if(labels.length>2){const more=document.createElement('span');more.className='label-chip label-overflow';more.textContent='+'+(labels.length-2);keywords.append(more);}}
- card.querySelector('.wf-card-description')?.remove();card.querySelector('.card-checks')?.remove();
+ card.querySelector('.wf-card-description')?.remove();
  const title=card.querySelector('h3');if(title){const due=document.createElement('div');due.className='task-card-decision';due.innerHTML=deadline?'<span class="task-card-deadline '+(deadline<today()&&t.col!=='Done'?'is-overdue':'')+'">'+(deadline<today()&&t.col!=='Done'?'Quá hạn · ':'Hạn · ')+esc(dateLabel(deadline))+'</span>':'<span class="task-card-deadline is-empty">Chưa đặt hạn</span>';title.after(due);}
  const next=t.checks.find(c=>!c.done);if(next){const step=document.createElement('p');step.className='task-next-step';step.innerHTML='<span>Bước tiếp theo</span>'+esc(next.text);title?.after(step);}
  const meta=card.querySelector('.progress-meta');if(meta){meta.classList.add('task-card-progress-meta');meta.innerHTML='<span>'+(total?checked+'/'+total+' mục checklist':'Chưa có checklist')+'</span><strong>'+pct+'%</strong>';}

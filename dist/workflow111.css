@@ -281,3 +281,29 @@ body:not(.wf-is-focused) .zen-music{display:none!important}
 .picker-error{padding:10px 12px;border-radius:10px;background:#fff1f4;color:#b23752;font-size:12px;margin-top:10px}
 .project-dates{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
 @media(max-width:480px){.time-picker-dialog{padding:16px;border-radius:18px}.project-dates{grid-template-columns:1fr}}
+
+/* Keep icon filters outside the scrolling results rather than overlaying them. */
+#editor .icon-picker-panel{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;min-width:0;max-height:none!important;overflow:visible!important;padding:14px!important}
+#editor .icon-library-tools{position:static!important;inset:auto!important;z-index:auto;display:grid;gap:10px;padding:0;background:#fff}
+#editor .icon-library-tools input,#editor .icon-library-tools select{box-sizing:border-box;width:100%;min-width:0;min-height:44px;border:1px solid #e1d5eb;border-radius:10px;padding:9px 11px}
+#editor .icon-library-tools label{display:grid;grid-template-columns:42px minmax(0,1fr);gap:8px;align-items:center;margin:0}
+#editor .icon-result-count{margin:0!important;padding:0;font-size:11px}
+#editor .icon-library-results{max-height:280px!important;overflow-y:auto!important;overflow-x:hidden;overscroll-behavior:contain;scrollbar-width:thin;margin:0;padding:5px;gap:6px;grid-template-columns:repeat(auto-fill,minmax(42px,1fr));border:1px solid #eee7f2;border-radius:12px;background:#fcfaff}
+#editor .icon-library-results button{min-width:0;min-height:44px;padding:5px;font-size:25px;line-height:1.3}
+#editor .icon-library-footnote{margin:0;font-size:10px;line-height:1.5}
+/* Checklist visibility follows the explicit display preference. */
+.task-card .card-checks{display:grid;gap:0;width:100%;max-height:280px;min-width:0;margin:10px 0;padding:4px 0;border-top:1px solid #eee7f2;border-bottom:1px solid #eee7f2;list-style:none;overflow:auto;overscroll-behavior:contain}
+.task-card .card-checks:empty{display:none}
+.task-card .card-checks li{margin:0;padding:0;border-bottom:1px solid #f1ecf5}
+.task-card .card-checks li:last-child{border-bottom:0}
+.task-card .card-check-control{display:flex;align-items:flex-start;gap:10px;padding:8px 2px;min-height:40px;cursor:pointer}
+.task-card .card-check-control input{width:17px;height:17px;flex:0 0 17px;margin:2px 0 0;accent-color:#8055aa}
+.task-card .card-check-control span{line-height:1.6;overflow-wrap:anywhere;white-space:normal;font-size:12px}
+/* A separate ornament band leaves all content on a plain background. */
+[data-zen-art]:not([data-zen-art=none]){background-image:none!important;background-color:var(--paper,#fffdfd)!important}
+[data-zen-art]:not([data-zen-art=none])::before{content:''!important;display:block!important;position:static!important;inset:auto!important;box-sizing:border-box;width:100%!important;height:68px!important;min-height:68px;flex:0 0 68px;grid-column:1/-1;order:-1;margin:0 0 16px!important;padding:0!important;background-image:var(--zen-art)!important;background-size:contain!important;background-repeat:no-repeat!important;background-position:right center!important;border:0;border-bottom:1px solid #ece5f0;border-radius:10px;opacity:.7!important;transform:none!important;pointer-events:none}
+#main[data-zen-art]:not([data-zen-art=none]){background-color:var(--bg,#f7f3fc)!important}
+#main[data-zen-art]:not([data-zen-art=none])::before{height:80px!important;min-height:80px;margin-bottom:22px!important}
+.keep-card[data-zen-art]:not([data-zen-art=none])::before,.content-card[data-zen-art]:not([data-zen-art=none])::before{display:block!important;max-width:calc(100% - 44px)}
+#editor .note-composer[data-zen-art]:not([data-zen-art=none])::before{height:80px!important;min-height:80px;margin-top:10px!important}
+@media(max-width:600px){#editor .icon-library-results{max-height:230px!important}#editor .icon-library-tools input,#editor .icon-library-tools select{font-size:16px}[data-zen-art]:not([data-zen-art=none])::before{height:56px!important;min-height:56px;flex-basis:56px}}
