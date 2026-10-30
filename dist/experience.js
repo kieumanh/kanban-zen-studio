@@ -44,6 +44,15 @@ accountPanel = function (...args) {
     const session = [...body.querySelectorAll('.wf-settings-group')].find((group) =>
       group.querySelector(':scope > summary')?.textContent.trim() === 'Phiên đăng nhập'
     );
+    if (session) {
+      session.open = true;
+      session.classList.add('wf-settings-session');
+      const summary = session.querySelector(':scope > summary');
+      if (summary && !summary.dataset.alwaysOpen) {
+        summary.dataset.alwaysOpen = 'true';
+        summary.addEventListener('click', (event) => event.preventDefault());
+      }
+    }
     if (session && body.lastElementChild !== session) body.append(session);
   };
   moveSessionToEnd();
