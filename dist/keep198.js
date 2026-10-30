@@ -177,16 +177,7 @@ noteForm=function(note){
  }
 };
 const zenOldRender=render;
-function zenRenderQuickNotes(){
- const sidebar=document.querySelector('.sidebar'),nav=sidebar?.querySelector('nav');if(!nav)return;
- let section=sidebar.querySelector('.zen-quick-notes');
- const notes=(data.notes||[]).filter(note=>note.pinned).slice(0,12);
- if(!notes.length){section?.remove();return;}
- if(!section){section=document.createElement('section');section.className='zen-quick-notes';section.setAttribute('aria-label','Truy cập nhanh ghi chú');nav.after(section);}
- section.innerHTML='<h2><span aria-hidden="true">⌖</span> Truy cập nhanh</h2><div class="zen-quick-note-list">'+notes.map(note=>'<button type="button" class="zen-quick-note" data-zen-quick-note="'+esc(note.id)+'" title="Mở ghi chú: '+esc(note.title||'Ghi chú chưa có tiêu đề')+'"><span aria-hidden="true">▤</span><span>'+esc(note.title||'Ghi chú chưa có tiêu đề')+'</span></button>').join('')+'</div>';
-}
-render=function(){zenOldRender();zenApplyNoteCards();zenRenderQuickNotes();};
-document.addEventListener('click',event=>{const button=event.target.closest('[data-zen-quick-note]');if(!button)return;event.preventDefault();event.stopImmediatePropagation();const note=data.notes?.find(item=>item.id===button.dataset.zenQuickNote);if(note)noteForm(note);},true);
+render=function(){zenOldRender();zenApplyNoteCards();};
 document.addEventListener('click',e=>{
  const b=e.target.closest('[data-zen-pin]');if(!b||b.classList.contains('zen-editor-pin'))return;
  e.preventDefault();e.stopImmediatePropagation();if(contentReadOnly)return;
