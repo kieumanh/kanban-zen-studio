@@ -248,5 +248,35 @@
     "/experience.css",
     "experience.css",
     "text/css; charset=utf-8"
+  ],
+  [
+    "/game/core.mjs",
+    "game/core.mjs",
+    "text/javascript; charset=utf-8"
+  ],
+  [
+    "/game/ui.mjs",
+    "game/ui.mjs",
+    "text/javascript; charset=utf-8"
+  ],
+  [
+    "/game/story.mjs",
+    "game/story.mjs",
+    "text/javascript; charset=utf-8"
+  ],
+  [
+    "/game/style.css",
+    "game/style.css",
+    "text/css; charset=utf-8"
+  ],
+  [
+    "/game/bosses.json",
+    "game/bosses.json",
+    "application/json; charset=utf-8"
+  ],
+  [
+    "/game-preview.html",
+    "game-preview.html",
+    "text/html; charset=utf-8"
   ]
 ]
