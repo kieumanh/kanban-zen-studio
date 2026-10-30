@@ -155,3 +155,10 @@ body:not(.wf-is-focused) .zen-music{display:none!important}
 
 /* Focus Mode: show the checklist completion percentage beside its progress bar. */
 .wf-focus-progress-meta{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:18px 0 6px;color:#756583;font-size:12px;line-height:1.5}.wf-focus-progress-meta strong{color:#7f43b8;font-size:13px;font-variant-numeric:tabular-nums}.wf-focus-task-progress{margin:0 0 22px!important}
+
+/* Zen focus task cards use the same hover rhythm as the focus recommendations. */
+.zen-unscheduled .calendar-task{box-sizing:border-box;position:relative;padding:16px!important;border:1px solid #e2d6eb!important;border-radius:16px!important;background:#fcfaff!important;transition:transform .22s,opacity .22s,box-shadow .22s,border-color .22s!important}
+.zen-unscheduled:has(.calendar-task:hover) .calendar-task:not(:hover),.zen-unscheduled:has(.calendar-task:focus-visible) .calendar-task:not(:focus-visible){transform:scale(.985);opacity:.58}
+.zen-unscheduled .calendar-task:hover,.zen-unscheduled .calendar-task:focus-visible{transform:translateY(-3px);border-color:#bd9bd0!important;box-shadow:0 12px 30px #7950c829!important;z-index:1}
+.zen-unscheduled .calendar-task strong{font-size:15px!important;line-height:1.5}
+.zen-unscheduled .calendar-task small{line-height:1.5}

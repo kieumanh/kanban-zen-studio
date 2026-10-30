@@ -134,3 +134,5 @@ button.add-task[data-action="new-task"]:hover{background:#eee6f7!important;color
 .welcome-actions{display:flex!important;flex-direction:column;align-items:center!important;text-align:center}
 #welcome-read{display:inline-flex!important;align-items:center;justify-content:center;gap:8px;margin-inline:auto!important;max-width:100%;width:auto!important}
 @media(max-width:600px){#editor,#editor.task-editor{width:calc(100vw - 20px)!important;max-height:calc(100dvh - 24px)}}
+
+/* v1.15.10 */
