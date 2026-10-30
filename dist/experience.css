@@ -124,9 +124,9 @@ button[aria-busy="true"] .ui-icon{animation:zen-refresh-spin .8s linear infinite
 button[data-action="new-project"],button[data-action="edit-project"],.project-tab,.project-actions button,.tabs button,.project-tabs button{border-radius:14px!important}
 button.add-task[data-action="new-task"]{background:transparent!important;box-shadow:none!important;color:#715e83!important;border:1px dashed #d9cce6!important;border-radius:12px!important;min-height:42px;text-align:left;padding:10px 12px}
 button.add-task[data-action="new-task"]:hover{background:#eee6f7!important;color:#674298!important}
-.task-card .wf-card-head{display:flex!important;flex-wrap:wrap;align-items:center!important;gap:8px}
+.task-card .wf-card-head{align-items:center!important}
 .task-card .wf-card-head .tag{flex:0 0 auto!important;max-width:100%!important;width:auto!important;white-space:normal!important;word-break:normal!important;overflow-wrap:normal!important;padding:5px 9px;line-height:1.5}
-.task-card .wf-card-head .task-next{margin-left:auto}
+
 .zen-focus-notes .wf-focus-note{padding:16px!important;border-radius:14px;background:#fcfaff;border:1px solid var(--line);display:flex;flex-direction:column;gap:10px}
 .zen-focus-notes .wf-focus-note h3{font-size:17px;line-height:1.5}
 .zen-focus-notes .wf-focus-note>div{font-size:14px;max-height:240px;overflow:auto;overflow-wrap:anywhere}
