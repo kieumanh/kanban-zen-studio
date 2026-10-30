@@ -220,3 +220,34 @@ body:not(.wf-is-focused) .zen-music{display:none!important}
 .zen-task-delete{display:flex;justify-content:flex-end;margin:16px 0;padding:12px 18px;border:1px solid #eee0e5;border-radius:14px;background:#fffafb}
 .zen-task-delete>.btn{min-height:44px;display:inline-flex;align-items:center;justify-content:center}
 #editor .task-unsaved-confirm{box-sizing:border-box;width:100%;max-width:100%;position:relative!important;top:auto!important;margin:12px 0 18px}
+
+/* Compact focus cards keep a clear action and progress in every group. */
+.wf-focus-grid{grid-template-columns:repeat(auto-fill,minmax(min(100%,270px),1fr))!important}
+.wf-focus-grid>.wf-focus-card{min-height:190px;gap:8px;padding:18px;grid-template-rows:auto auto auto auto 1fr auto;position:relative}
+.wf-focus-grid>.wf-focus-card strong{font-size:16px;line-height:1.5}
+.wf-focus-grid>.wf-focus-card .focus-card-meta{font-size:12px}
+.wf-focus-grid>.wf-focus-card .is-overdue{color:#b43c58;font-weight:650}
+.wf-focus-grid>.wf-focus-card .focus-card-priority{font-size:11px;color:#81718e}
+.wf-focus-grid>.wf-focus-card .focus-card-footer{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:8px;font-size:11px}
+.wf-focus-grid>.wf-focus-card .focus-card-action{color:#7950a2;font-weight:700;font-size:12px}
+.wf-focus-grid>.wf-focus-card [role=progressbar]{height:5px!important;margin:0!important;width:100%}
+.wf-focus-grid>.wf-focus-card:focus-visible{outline:3px solid #b99bd2;outline-offset:3px}
+.project-note-picker{padding:0;overflow:hidden;border-radius:16px;border-color:#e5d9ed;background:#fff}
+.project-note-picker>summary{padding:15px 18px;min-height:50px;color:#69458c;background:#faf7fd;transition:background .15s}
+.project-note-picker>summary:hover{background:#f2eafa}
+.project-note-picker>summary:focus-visible{outline:2px solid #b99bd2;outline-offset:-3px;border-radius:14px}
+.project-note-picker>input{display:block;width:calc(100% - 32px);margin:16px 16px 0;min-height:44px}
+.project-note-picker>.project-note-empty{font-size:12px;color:#81718e;padding:10px 18px 0;margin:0}
+.project-note-picker>.project-note-options{margin:10px 0 0;padding:0 16px 16px;gap:8px;max-height:300px;scrollbar-width:thin;overscroll-behavior:contain}
+.project-note-picker>.project-note-options>.project-note-option{display:flex;align-items:center;gap:10px;min-height:50px;padding:10px 12px;border-radius:12px;background:#fff;transition:background .15s,border-color .15s}
+.project-note-option>span:nth-child(2){flex:1;min-width:0;overflow-wrap:anywhere}
+.project-note-option-icon{display:grid;place-items:center;width:28px;height:28px;flex:none;border-radius:8px;background:#f1e9f8;color:#7950a2}
+.project-note-option>small{flex:none;font-size:10px;color:#7950a2}
+.project-note-picker>.project-note-options>.project-note-option:hover:enabled{background:#faf6ff;border-color:#bea4d1}
+.project-note-picker>.project-note-options>.project-note-option:disabled{opacity:1;color:#818576;background:#f7faf5;border-color:#dfebd8;cursor:default}
+.project-note-option:disabled .project-note-option-icon{background:#e8f0e3;color:#588143}
+.project-note-picker:not([open])>.project-note-empty{display:none}
+.private-files-dialog #editor-body>h2{font-size:23px;margin:0 0 12px}
+.private-files-dialog #editor-body>p{font-size:12px;line-height:1.7;color:#81718e}
+.private-files-dialog #upload-dropzone{margin:18px 0;padding:24px 18px;border-radius:16px}
+@media(max-width:600px){.wf-focus-grid>.wf-focus-card{min-height:180px;padding:16px}.project-note-option>small{display:none}.project-note-picker>.project-note-options{max-height:240px}}
