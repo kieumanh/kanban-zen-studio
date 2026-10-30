@@ -1,0 +1,11 @@
+import assert from 'node:assert/strict';
+import {readFileSync} from 'node:fs';
+import vm from 'node:vm';
+const code=readFileSync('dist/experience.js','utf8');
+const base={id:'t1',title:'Việc A',description:'',col:'List',due:'2026-10-30',priority:'q1',checks:[{text:'Bước A',done:false}],project:{id:'p1',name:'Vườn'}};
+let tasks=[base,{...base,id:'t2',project:{id:'p2',name:'Vườn · Bản thiết bị'}},{...base,id:'t3',title:'Việc khác',project:{id:'p2',name:'Vườn · Bản thiết bị'}},{...base,id:'t4',project:{id:'p3',name:'Vườn'}},{...base,id:'done',checks:[{text:'Xong',done:true}]}];
+const context={syncChecks(){},taskNotices:()=>[],dueAlerts:()=>[],wfPaintFocus(){},accountPanel(){},wfFocusTasks:()=>tasks,document:{addEventListener(){}},Set};
+vm.createContext(context);vm.runInContext(code,context);
+assert.deepEqual(Array.from(context.wfFocusTasks(),t=>t.id),['t1','t4','t3']);
+assert.equal(tasks.length,5,'source records must remain intact');
+console.log('PASS Focus hides identical conflict copies, retains edits/independent projects, excludes completed checklist work.');

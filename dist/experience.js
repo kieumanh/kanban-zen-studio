@@ -52,3 +52,57 @@ accountPanel = function (...args) {
   document.querySelector('#editor')?.addEventListener('close', () => observer.disconnect(), { once: true });
   return result;
 };
+
+// Collapse identical conflict backups only in Focus; keep all source records intact.
+const experienceFocusTasks = wfFocusTasks;
+wfFocusTasks = function () {
+  const seen = new Set();
+  const tasks = experienceFocusTasks().filter(t => !(t.checks?.length && t.checks.every(c => c.done)));
+  tasks.sort((a,b) => Number(a.project.name.includes(' · Bản thiết bị')) - Number(b.project.name.includes(' · Bản thiết bị')));
+  return tasks.filter(t => {
+    const projectName = t.project.name.replace(/(?: · Bản thiết bị)+$/, '');
+    const key = JSON.stringify([projectName,t.title,t.description||'',t.col,t.due||'',t.start||'',t.end||'',t.priority,(t.checks||[]).map(c=>[c.text,c.done])]);
+    // Different projects with the same name are still independent unless one is a conflict backup.
+    const original = tasks.find(x => x.project.name === projectName && x.project.id !== t.project.id);
+    const identity = (t.project.name !== projectName && original ? original.project.id : t.project.id) + ':' + key;
+    if (seen.has(identity)) return false;
+    seen.add(identity); return true;
+  });
+};
+let experienceRefreshing = false;
+async function experienceRefresh(button, resources) {
+  if (experienceRefreshing) return;
+  experienceRefreshing = true;
+  button.disabled = true; button.setAttribute('aria-busy','true');
+  try {
+    if (!navigator.onLine) throw Error('Đang ngoại tuyến. Dữ liệu trên thiết bị vẫn được giữ.');
+    if (resources) {
+      resourceState.key=''; await loadResources(true);
+      if(resourceState.error) throw Error(resourceState.error);
+    } else {
+      const owner=currentUser?.id;
+      if (!owner) throw Error('Vui lòng đăng nhập lại.');
+      if(syncing) throw Error('Đang đồng bộ. Vui lòng thử lại sau.');
+      if(dirty) await flushCloud(true);
+      if(dirty||syncConflict||syncing) throw Error('Còn thay đổi chưa đồng bộ. Kiểm tra trong Cài đặt → Đồng bộ ngay.');
+      const snapshot=JSON.stringify(data), revision=cloudRevision;
+      const remote=await requestAPI('workspace?revision='+encodeURIComponent(revision));
+      if(currentUser?.id!==owner) return;
+      if(dirty||syncing||snapshot!==JSON.stringify(data)||revision!==cloudRevision) throw Error('Dữ liệu vừa thay đổi. Vui lòng làm mới lại.');
+      if(!remote.unchanged){
+        if(!Number.isInteger(remote.revision)||!valid(remote.data)) throw Error('Dữ liệu máy chủ chưa hợp lệ.');
+        data=remote.data;cloudBase=structuredClone(remote.data);cloudRevision=remote.revision;cacheCloud();
+      }
+      if(view==='focus') render();
+      syncStatus('● Đã đồng bộ','saved');
+    }
+    notify('Đã cập nhật dữ liệu mới nhất.');
+  } catch(error) { notify('Chưa làm mới: '+error.message); }
+  finally { experienceRefreshing=false;button.disabled=false;button.removeAttribute('aria-busy'); }
+}
+document.addEventListener('click',event=>{
+  const button=event.target.closest('.focus-check-updates,[data-resources-refresh]');
+  if(!button)return;
+  event.preventDefault();event.stopImmediatePropagation();
+  experienceRefresh(button,button.hasAttribute('data-resources-refresh'));
+},true);

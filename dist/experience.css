@@ -88,3 +88,25 @@ button.primary:hover,
     grid-column: 1 / -1 !important;
   }
 }
+
+/* Shared refresh feedback and resilient form widths. */
+button.focus-check-updates,button[data-resources-refresh]{background:linear-gradient(110deg,#7950c8,#cf5f9b 62%,#e77962)!important;color:#fff!important;border-color:transparent!important;box-shadow:0 4px 14px #7950c826}
+button[aria-busy="true"] .ui-icon{animation:zen-refresh-spin .8s linear infinite}
+@keyframes zen-refresh-spin{to{transform:rotate(360deg)}}
+#editor progress[hidden]{display:none!important}
+.task-card .task-priority,.task-card .tag,.task-card .task-tags{max-width:100%;height:auto!important;white-space:normal!important;overflow:visible!important;text-overflow:clip!important;overflow-wrap:anywhere;box-sizing:border-box;line-height:1.5}
+#editor,#editor-body,#editor-form{box-sizing:border-box;min-width:0;max-width:100%}
+#editor-body input,#editor-body textarea,#editor-body select,#editor-body .wf-rich-editor{box-sizing:border-box;min-width:0;max-width:100%}
+.task-detail-header,.calm-task-header{display:flex;flex-wrap:wrap;align-items:center;gap:10px;min-width:0}
+.wf-task-heading-row{display:flex!important;align-items:center;gap:12px;margin:12px 0!important;min-width:0}
+.wf-task-heading-row .task-focus-shortcut{margin-left:auto;flex-shrink:0}
+@media(max-width:700px){
+ #editor.project-edit-dialog{width:calc(100vw - 24px)!important;max-width:calc(100vw - 24px)!important;margin-inline:auto!important;padding:16px!important}
+ .project-edit-dialog #editor-body,.project-edit-dialog #editor-form,.project-edit-dialog label,.project-edit-dialog .project-dates{width:100%;min-width:0;max-width:100%;box-sizing:border-box}
+ .project-edit-dialog .wf-rich-toolbar{display:flex;flex-wrap:wrap;gap:6px}
+ .project-edit-dialog input,.project-edit-dialog textarea{width:100%}
+}
+@media(prefers-reduced-motion:reduce){button[aria-busy="true"] .ui-icon{animation:none}}
+.task-card .matrix-chip,.task-card .label-chip,.wf-card-keywords{max-width:100%!important;min-width:0;box-sizing:border-box;white-space:normal!important;overflow:visible!important;text-overflow:clip!important;height:auto!important;overflow-wrap:anywhere;line-height:1.5}
+.wf-card-keywords{display:flex;flex-wrap:wrap;gap:6px}
+.task-detail-header .matrix-chip{white-space:normal;max-width:100%;height:auto;line-height:1.5}
