@@ -1,4 +1,6 @@
 # Bách Đại Thủ Quan — Trung Hoa Anh Hùng Truyện
+
+> LUẬT HIỆN HÀNH 0.4: Xem [Nội lực và Cửu trụ tu dưỡng](PROGRESSION-AND-NINE-AXES.vi.md). Kỹ năng/vật phẩm chỉ do người dùng cung cấp, danh mục để trống; không tự thưởng skill/đồ đã đề xuất. Đủ nội lực là điều kiện bắt buộc lên cấp; boss không cộng bù điểm. Nội dung cũ mâu thuẫn với luật 0.4 không còn áp dụng.
 Phiên bản thiết kế 0.3 · Nền Kanban Zen Studio 1.15.26
 Nhánh experiment/game-mode · Đặc tả, chưa tích hợp runtime.
 
