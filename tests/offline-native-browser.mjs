@@ -43,4 +43,4 @@ try{
  assert.equal(await page.evaluate(async()=>(await(await offlineFilesReady).list('offline-test')).length),1);
  assert.deepEqual(errors,[]);
  console.log('PASS: offline shell, password lock/rejection, 100 tasks, repeated reload, persistent offline edit, durable binary, duplicate prevention and account isolation.');
-}finally{await context.close();await browser.close();await new Promise(r=>server.close(r));}
+}catch(error){console.error('Offline browser diagnostics',JSON.stringify({errors,state:await page.evaluate(()=>({online:navigator.onLine,bodyClass:document.body.className,owner:typeof currentUser==='undefined'?'not initialized':currentUser?.id,dialog:document.querySelector('#editor')?.open,editor:document.querySelector('#editor-body')?.textContent,auth:document.querySelector('#auth-message')?.textContent,offlineFunction:typeof openOfflineAccount==='function'?openOfflineAccount.toString().slice(0,180):'missing',marker:localStorage.getItem('zen-offline-account')})).catch(()=>null)}));throw error;}finally{await context.close();await browser.close();await new Promise(r=>server.close(r));}
