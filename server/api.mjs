@@ -234,6 +234,8 @@ function validContent(d) {
     )
       return false;
     if (n.pinned !== undefined && typeof n.pinned !== 'boolean') return false;
+    if (n.quickPinned !== undefined && typeof n.quickPinned !== 'boolean')
+      return false;
     for (const k of ['boardId', 'from', 'to', 'fileId'])
       if (
         n[k] !== undefined &&
@@ -411,6 +413,7 @@ function validExtras(d) {
                 'finance',
               ].includes(t.motif)) &&
             (t.archived === undefined || typeof t.archived === 'boolean') &&
+            (t.pinned === undefined || typeof t.pinned === 'boolean') &&
             (t.sortOrder === undefined ||
               (Number.isFinite(t.sortOrder) &&
                 t.sortOrder >= 0 &&

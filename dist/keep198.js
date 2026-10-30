@@ -114,7 +114,8 @@ const zenOldExtra=noteExtraValues;
 noteExtraValues=function(form,n){
  const obj=zenOldExtra(form,n);if(obj===false)return false;
  const p=form.querySelector('[name=zen-pinned]');
- return {...obj,pinned:p?p.value==='true':!!n?.pinned};
+ const q=form.querySelector('[name=zen-quick-pinned]');
+ return {...obj,pinned:p?p.value==='true':!!n?.pinned,quickPinned:q?q.value==='true':!!n?.quickPinned};
 };
 const zenOldForm=noteForm;
 noteForm=function(note){
@@ -123,19 +124,26 @@ noteForm=function(note){
  const title=composer.querySelector('[name=title]'),text=composer.querySelector('textarea[name=text]');
  if(title){
   const p=document.createElement('input');p.type='hidden';p.name='zen-pinned';p.value=String(!!note?.pinned);title.after(p);
+  const q=document.createElement('input');q.type='hidden';q.name='zen-quick-pinned';q.value=String(!!note?.quickPinned);p.after(q);
   const pinRow=document.createElement('div');
    pinRow.className='zen-editor-pin-row';
    pinRow.setAttribute('role','group');pinRow.setAttribute('aria-label','Ghim ghi chú');
    const pinHint=document.createElement('span');pinHint.className='zen-editor-pin-hint';
-   pinHint.textContent=note?.pinned?'Ghi chú đã ghim':'Giữ ghi chú quan trọng ở đầu';
+   pinHint.textContent=note?.pinned?'Đang ghim trong thẻ Ghi chú':'Ghim để nổi bật trong danh sách Ghi chú';
    const b=zenPinButton(note||{},true);
-   b.textContent=note?.pinned?'Bỏ ghim':'Ghim';
+   b.textContent=note?.pinned?'Bỏ ghim ghi chú':'Ghim ghi chú';
    pinRow.append(pinHint,b);
    composer.insertBefore(pinRow,title);
+  b.classList.add('zen-note-pin-label');
   b.onclick=()=>{const prev=p.value;p.value=String(prev!=='true');
    if(editor.noteCommit?.()!==true){p.value=prev;return;}
-   b.setAttribute('aria-pressed',p.value);b.title=p.value==='true'?'Bỏ ghim':'Ghim ghi chú';b.setAttribute('aria-label',b.title);b.textContent=p.value==='true'?'Bỏ ghim':'Ghim';pinHint.textContent=p.value==='true'?'Ghi chú đã ghim':'Giữ ghi chú quan trọng ở đầu';render();
+   b.setAttribute('aria-pressed',p.value);b.title=p.value==='true'?'Bỏ ghim ghi chú':'Ghim ghi chú';b.setAttribute('aria-label',b.title);b.textContent=b.title;pinHint.textContent=p.value==='true'?'Đang ghim trong thẻ Ghi chú':'Ghim để nổi bật trong danh sách Ghi chú';render();
   };
+  const quickRow=document.createElement('div');quickRow.className='zen-editor-pin-row zen-editor-quick-pin-row';quickRow.setAttribute('role','group');quickRow.setAttribute('aria-label','Ghim nhanh ghi chú');
+  const quickHint=document.createElement('span');quickHint.className='zen-editor-pin-hint';quickHint.textContent=q.value==='true'?'Ghi chú đang ở thanh tab nhanh':'Tối đa 3 ghi chú trên thanh tab nhanh';
+  const quickButton=document.createElement('button');quickButton.type='button';quickButton.className='zen-editor-pin zen-editor-quick-pin';quickButton.dataset.zenQuickNote=note?.id||'';quickButton.setAttribute('aria-pressed',q.value);quickButton.textContent=q.value==='true'?'Bỏ ghim nhanh':'Ghim nhanh';
+  quickRow.append(quickHint,quickButton);pinRow.after(quickRow);
+  quickButton.onclick=()=>{const previous=q.value,next=previous!=='true';const count=(data.notes||[]).filter(item=>item.quickPinned&&item.id!==note?.id).length;if(next&&count>=3){notify('Thanh tab nhanh chỉ ghim tối đa 3 ghi chú.');return;}q.value=String(next);if(editor.noteCommit?.()!==true){q.value=previous;return;}quickButton.setAttribute('aria-pressed',q.value);quickButton.textContent=next?'Bỏ ghim nhanh':'Ghim nhanh';quickHint.textContent=next?'Ghi chú đang ở thanh tab nhanh':'Tối đa 3 ghi chú trên thanh tab nhanh';render();};
  }
  const draw=()=>zenArt(composer,composer.querySelector('[name=note-motif]')?.value||'none');
  draw();
@@ -177,15 +185,36 @@ noteForm=function(note){
  }
 };
 const zenOldRender=render;
-function zenPaintSidebarPins(){
- const section=document.querySelector('#side-pinned-notes');if(!section)return;
- const pinned=(data.notes||[]).filter(note=>note.pinned&&!note.deleted).slice(0,12);
- section.hidden=contentReadOnly||!pinned.length;
- if(section.hidden){section.replaceChildren();return;}
- section.innerHTML='<div class="navlabel"><span>'+svgIcon('pin')+'Ghim nhanh</span></div><div class="side-pinned-list">'+pinned.map(note=>'<button type="button" class="side-pinned-note" data-zen-note-shortcut="'+esc(note.id)+'" title="Mở ghi chú: '+esc(note.title||'Ghi chú')+'"><span class="side-pinned-mark" aria-hidden="true">'+svgIcon('notes')+'</span><span class="side-pinned-title">'+esc(note.title||'Ghi chú không tên')+'</span></button>').join('')+'</div>'+((data.notes||[]).filter(note=>note.pinned&&!note.deleted).length>12?'<button type="button" class="side-pinned-more" data-view="notes">Xem tất cả ghi chú ghim →</button>':'');
+function zenPaintQuickNoteTabs(){
+ const tabs=document.querySelector('#tabs');if(!tabs)return;
+ tabs.querySelector('.zen-quick-note-tabs')?.remove();
+ const notes=(data.notes||[]).filter(note=>note.quickPinned&&!note.deleted).slice(0,3);if(!notes.length)return;
+ const group=document.createElement('div');group.className='zen-quick-note-tabs';group.setAttribute('role','group');group.setAttribute('aria-label','Ghi chú ghim nhanh');
+ group.innerHTML=notes.map(note=>'<span class="zen-quick-note-tab"><button type="button" data-zen-quick-open="'+esc(note.id)+'" title="Mở ghi chú '+esc(note.title||'Ghi chú')+'">'+svgIcon('notes')+'<span>'+esc(note.title||'Ghi chú không tên')+'</span></button><button type="button" data-zen-quick-remove="'+esc(note.id)+'" aria-label="Bỏ ghim nhanh '+esc(note.title||'Ghi chú')+'" title="Bỏ ghim nhanh">×</button></span>').join('');
+ const add=tabs.querySelector('.tab-add');tabs.insertBefore(group,add||null);
 }
-render=function(){zenOldRender();zenApplyNoteCards();zenPaintSidebarPins();};
-document.addEventListener('click',event=>{const button=event.target.closest('[data-zen-note-shortcut]');if(!button)return;const note=data.notes?.find(item=>item.id===button.dataset.zenNoteShortcut);if(!note)return;event.preventDefault();if(document.querySelector('.nav-open'))document.body.classList.remove('nav-open');noteForm(note);});
+function zenPaintPinnedTasks(){
+ const section=document.querySelector('#side-pinned-tasks');if(!section)return;
+ const items=(data.projects||[]).filter(p=>!p.archived).flatMap(p=>(p.tasks||[]).filter(t=>t.pinned&&!t.archived).map(t=>({p,t}))).slice(0,100);
+ section.hidden=contentReadOnly||!items.length;if(section.hidden){section.replaceChildren();return;}
+ section.innerHTML='<div class="navlabel"><span>'+svgIcon('pin')+'Pin</span></div><div class="side-pinned-task-list">'+items.map(({p,t})=>'<div class="side-pinned-task"><button type="button" data-zen-task-shortcut="'+esc(p.id)+'|'+esc(t.id)+'" title="Mở task '+esc(t.title)+'"><span class="side-pinned-task-title">'+esc(t.title)+'</span><small>'+esc(p.name)+'</small></button><button type="button" data-zen-task-unpin="'+esc(p.id)+'|'+esc(t.id)+'" aria-label="Bỏ ghim '+esc(t.title)+'" title="Bỏ ghim">×</button></div>').join('')+'</div>';
+}
+function zenPaintTaskPinButtons(){
+ if(contentReadOnly||view!=='projects')return;
+ document.querySelectorAll('#main .task-card[data-task][data-pid]').forEach(card=>{
+  if(card.querySelector(':scope > .zen-task-pin'))return;
+  const task=project(card.dataset.pid)?.tasks.find(item=>item.id===card.dataset.task);if(!task)return;
+  const button=document.createElement('button');button.type='button';button.className='zen-task-pin';button.dataset.zenTaskPin=card.dataset.pid+'|'+card.dataset.task;button.setAttribute('aria-pressed',String(!!task.pinned));button.setAttribute('aria-label',task.pinned?'Bỏ ghim công việc':'Ghim công việc');button.title=button.getAttribute('aria-label');button.innerHTML=svgIcon('pin');card.prepend(button);
+ });
+}
+function zenPaintPins(){zenPaintQuickNoteTabs();zenPaintPinnedTasks();zenPaintTaskPinButtons();}
+render=function(){zenOldRender();zenApplyNoteCards();zenPaintPins();};
+document.addEventListener('click',event=>{
+ const quickOpen=event.target.closest('[data-zen-quick-open]');if(quickOpen){const note=data.notes?.find(item=>item.id===quickOpen.dataset.zenQuickOpen);if(note){event.preventDefault();noteForm(note);}return;}
+ const quickRemove=event.target.closest('[data-zen-quick-remove]');if(quickRemove){const note=data.notes?.find(item=>item.id===quickRemove.dataset.zenQuickRemove);if(note){event.preventDefault();event.stopImmediatePropagation();note.quickPinned=false;if(!save()){note.quickPinned=true;return;}render();notify('Đã bỏ ghi chú khỏi thanh tab nhanh.');}return;}
+ const taskButton=event.target.closest('[data-zen-task-pin],[data-zen-task-unpin]');if(taskButton){event.preventDefault();event.stopImmediatePropagation();const key=taskButton.dataset.zenTaskPin||taskButton.dataset.zenTaskUnpin,[pid,tid]=key.split('|'),p=project(pid),task=p?.tasks.find(item=>item.id===tid);if(!task)return;task.pinned=!task.pinned;if(!save()){task.pinned=!task.pinned;return;}render();return;}
+ const taskOpen=event.target.closest('[data-zen-task-shortcut]');if(taskOpen){const [pid,tid]=taskOpen.dataset.zenTaskShortcut.split('|'),p=project(pid),task=p?.tasks.find(item=>item.id===tid);if(p&&task){event.preventDefault();event.stopImmediatePropagation();active=pid;view='projects';render();taskDetail(project(pid),project(pid).tasks.find(item=>item.id===tid));}return;}
+},true);
 document.addEventListener('click',e=>{
  const b=e.target.closest('[data-zen-pin]');if(!b||b.classList.contains('zen-editor-pin'))return;
  e.preventDefault();e.stopImmediatePropagation();if(contentReadOnly)return;
