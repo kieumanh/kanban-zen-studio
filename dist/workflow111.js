@@ -1406,6 +1406,8 @@ function zenArrangeTaskForm(isNew=false){const body=$('#editor-body'),form=$('#e
  const oldHeading=[...body.querySelectorAll(':scope>h3')].find(h=>h.textContent==='Checklist');if(oldHeading)oldHeading.remove();const list=body.querySelector('.wf-check-sort-list');if(list)checks.append(list);const extra=form.querySelector('[name=extra-checks],[name=checks]')?.closest('.field');if(extra)checks.append(extra);
  const anchor=heading||body.firstChild;if(anchor){anchor.after(main);main.after(schedule);schedule.after(actions);actions.after(checks);}else body.prepend(main,schedule,actions,checks);
  body.querySelectorAll('.fields-row').forEach(row=>{if(!row.children.length)row.remove();});
+ body.querySelectorAll(':scope>.help-copy').forEach(el=>{if(/Chọn ngày bắt đầu|Ngày kết thúc/.test(el.textContent))schedule.append(el);});
+ if(!isNew){const remove=body.querySelector('[data-action="delete-task"]')||document.createElement('button');remove.type='button';remove.className='btn danger';remove.dataset.action='delete-task';remove.textContent='Xóa công việc';const area=document.createElement('section');area.className='zen-task-delete';area.append(remove);checks.after(area);}
  const status=document.createElement('p');status.className='zen-task-save-status';status.setAttribute('role','status');status.textContent=isNew?'Công việc mới chưa được lưu.':'Đã tải bản đã lưu. Chỉnh sửa rồi chọn Lưu.';body.prepend(status);form.addEventListener('input',()=>{status.dataset.dirty='true';status.textContent='Có thay đổi chưa lưu · Chọn Lưu để xác nhận.';},{signal:zenTaskSignal()});
 };
 taskDetail=function(p,t){zenTaskDetailBefore(p,t);zenArrangeTaskForm();};
