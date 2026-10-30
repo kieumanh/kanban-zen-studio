@@ -164,3 +164,27 @@ body:not(.wf-is-focused) .zen-music{display:none!important}
 .zen-unscheduled .calendar-task small{line-height:1.5}
 
 .zen-focus-exit-dialog{width:min(440px,calc(100vw - 32px));max-width:440px;padding:0;border:1px solid #e7d9ee;border-radius:24px;background:linear-gradient(145deg,#fffdfd,#fbf5ff);box-shadow:0 24px 80px #38234735}.zen-focus-exit-dialog #editor-form{padding:30px}.zen-focus-exit-dialog .modal-head,.zen-focus-exit-dialog .modal-foot{display:none!important}.zen-focus-exit-confirm{text-align:center}.zen-focus-exit-mark{display:grid;place-items:center;width:48px;height:48px;margin:0 auto 12px;border-radius:50%;background:#f0e5fa;color:#8455b8;font-size:25px}.zen-focus-exit-confirm h2{font-size:24px;color:#382a49}.zen-focus-exit-confirm p{max-width:330px;margin:10px auto 24px;color:#766a83}.zen-focus-exit-actions{display:flex;justify-content:center;gap:12px}.zen-focus-exit-actions .btn{min-width:130px;min-height:46px;border-radius:999px;font-weight:700}.zen-focus-exit-actions .btn span{margin-right:6px}.wf-settings-session{border-color:#d8c2e7;background:#fcf9ff}.wf-settings-session>summary{color:#57357e}.wf-settings-session>summary::-webkit-details-marker{display:none}.wf-settings-session>summary::after{content:'• Đang mở';float:right;font-size:11px;color:#8055a8;font-weight:500}@media(max-width:520px){.zen-focus-exit-dialog #editor-form{padding:24px 18px}.zen-focus-exit-actions{flex-direction:column-reverse}.zen-focus-exit-actions .btn{width:100%}}
+/* v1.15.12 · Better task controls, wrapping project labels and a compact date picker. */
+#tabs .tab[data-project]:not(.pinned){box-sizing:border-box;flex:0 1 168px;width:168px;min-width:124px;max-width:228px;min-height:52px;height:auto;padding:9px 13px;white-space:normal;overflow:hidden;text-overflow:clip;overflow-wrap:anywhere;line-height:1.4;text-align:center;justify-content:center}
+#tabs .tab[data-project]:not(.pinned)>span{min-width:0;white-space:normal;overflow-wrap:anywhere;line-height:1.3}
+#tabs .tab[data-project]:not(.pinned) .zen-active-tab-name{display:block;min-width:0;max-width:100%;white-space:normal;text-overflow:clip;overflow-wrap:anywhere;line-height:1.4}
+.task-table td[data-label="Trạng thái"],.task-table td[data-label="Ưu tiên"]{vertical-align:middle}
+.task-table td[data-label="Trạng thái"]{text-align:center}
+.task-table .status{display:inline-flex;align-items:center;justify-content:center;min-height:26px;padding:4px 9px;line-height:1.35;text-align:center;white-space:normal;overflow-wrap:anywhere}
+.task-table td[data-label="Ưu tiên"] select{display:block;width:min(100%,240px);min-width:0;margin:0 auto;box-sizing:border-box;text-align:center;text-align-last:center}
+.task-table input[data-zen-quick-due]{cursor:pointer}
+.zen-date-popover{position:fixed;z-index:1000;width:min(280px,calc(100vw - 24px));padding:12px;border:1px solid #e3d7eb;border-radius:16px;background:#fffdfd;color:#43344f;box-shadow:0 14px 38px #3924472e;font:13px/1.4 var(--sans)}
+.zen-date-head{display:grid;grid-template-columns:36px minmax(0,1fr) 36px;align-items:center;gap:6px;margin-bottom:10px}
+.zen-date-head strong{text-align:center;font-size:14px;text-transform:capitalize}
+.zen-date-head button,.zen-date-popover footer button{display:grid;place-items:center;min-width:34px;min-height:34px;border:1px solid #eadff0;border-radius:10px;background:#faf6fc;color:#704a8e;font-size:20px;line-height:1}
+.zen-date-week,.zen-date-days{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px;text-align:center}
+.zen-date-week{margin-bottom:4px;color:#8a7b92;font-size:11px;font-weight:650}
+.zen-date-week span{padding:5px 0}
+.zen-date-days button,.zen-date-days .is-empty{display:grid;place-items:center;width:100%;aspect-ratio:1;border:0;border-radius:10px;background:transparent;color:#493c53;font-size:12px}
+.zen-date-days button:hover{background:#f1e8f8;color:#7040aa}
+.zen-date-days button.is-today{box-shadow:inset 0 0 0 1px #a981c5;color:#7040aa;font-weight:700}
+.zen-date-days button.is-selected{background:#8052bf;color:white;font-weight:700}
+.zen-date-days button:focus-visible{outline:2px solid #a26ac9;outline-offset:1px}
+.zen-date-popover footer{display:flex;justify-content:space-between;gap:8px;margin-top:10px;padding-top:9px;border-top:1px solid #eee6f2}
+.zen-date-popover footer button{min-height:32px;padding:0 10px;font-size:11px;line-height:1}
+@media(max-width:700px){#tabs .tab[data-project]:not(.pinned){flex-basis:144px;width:144px;min-width:120px;max-width:184px;min-height:50px;padding:8px 11px}.task-table td[data-label="Trạng thái"]{text-align:left}.task-table td[data-label="Ưu tiên"] select{margin-left:0;text-align:left;text-align-last:left}.zen-date-popover{padding:10px}}
