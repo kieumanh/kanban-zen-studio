@@ -1,5 +1,7 @@
 # Trung Hoa Anh Hùng Truyện — Định hướng sản phẩm thử nghiệm
 
+> LUẬT HIỆN HÀNH 0.4: Xem [Nội lực và Cửu trụ tu dưỡng](PROGRESSION-AND-NINE-AXES.vi.md). Kỹ năng/vật phẩm chỉ do người dùng cung cấp, danh mục để trống; không tự thưởng skill/đồ đã đề xuất. Đủ nội lực là điều kiện bắt buộc lên cấp; boss không cộng bù điểm. Nội dung cũ mâu thuẫn với luật 0.4 không còn áp dụng.
+
 > CẬP NHẬT LUẬT 0.3: Vượt ải là cuộc thi hoàn thành ngẫu nhiên 1–3 task trong thời hạn người chơi được điều chỉnh. Thắng đột phá cấp và mở kho mua vật phẩm/sách, không tự nhận skill miễn phí. Quy tắc hiện hành tại [BOSS-CATALOG.vi.md](BOSS-CATALOG.vi.md), ưu tiên hơn các mô tả sơ bộ bên dưới. Chưa tích hợp runtime.
 Ngày: 31/10/2026 · Nền: Kanban Zen Studio 1.15.26 · Nhánh: experiment/game-mode
 Trạng thái: thiết kế sản phẩm và tiền kỳ nhân vật; chưa tích hợp trò chơi vào Kanban.
