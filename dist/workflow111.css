@@ -251,3 +251,33 @@ body:not(.wf-is-focused) .zen-music{display:none!important}
 .private-files-dialog #editor-body>p{font-size:12px;line-height:1.7;color:#81718e}
 .private-files-dialog #upload-dropzone{margin:18px 0;padding:24px 18px;border-radius:16px}
 @media(max-width:600px){.wf-focus-grid>.wf-focus-card{min-height:180px;padding:16px}.project-note-option>small{display:none}.project-note-picker>.project-note-options{max-height:240px}}
+
+/* Shared, touch-friendly schedule controls in task and project forms. */
+.date-field-trigger{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:48px;margin-top:6px;padding:12px 14px;border:1px solid #ded2e8;border-radius:12px;background:#fffdff;color:#49365e;font:600 14px/1.5 var(--sans);text-align:left;transition:border-color .15s,background .15s}
+.date-field-trigger::after{content:'▦';float:none;flex:none;color:#9774b3;font-size:20px;line-height:1}
+.date-field-trigger[data-empty=true]{font-weight:400;color:#8b7d97}
+.date-field-trigger:hover{background:#faf5ff;border-color:#b89acc}
+.date-field-trigger:focus-visible{outline:3px solid #cfb8e1;outline-offset:2px}
+.time-picker-dialog{box-sizing:border-box;width:min(390px,calc(100vw - 24px));max-width:390px;max-height:calc(100dvh - 24px);padding:22px;border:1px solid #e3d7ec;border-radius:22px;overflow:auto;background:#fffdfd;color:#49365e;box-shadow:0 22px 70px #35234438}
+.time-picker-dialog::backdrop{background:#35234466;backdrop-filter:blur(3px)}
+.time-picker-dialog .picker-head{align-items:center;gap:12px}
+.time-picker-dialog .picker-head small{font-size:9px;letter-spacing:.07em;margin-bottom:5px}
+.time-picker-dialog .picker-head h3{font-size:20px;font-weight:700}
+.time-picker-dialog .picker-head>.icon-btn{width:40px;height:40px;flex:none;display:grid;place-items:center;border:1px solid #eadfec;border-radius:12px;font-size:24px}
+.picker-selected{padding:10px 12px;margin:16px 0 4px;background:#f5eefb;color:#76518f;border-radius:10px;font-size:12px}
+.time-picker-dialog .picker-month{margin:14px 0 8px}
+.time-picker-dialog .picker-month button{width:40px;height:40px;border-radius:12px;background:#f5f0f9;font-size:24px}
+.time-picker-dialog .picker-days{gap:4px}
+.time-picker-dialog .picker-days small{padding:6px 0;font-size:11px}
+.time-picker-dialog .picker-days button{min-height:38px;padding:4px;aspect-ratio:1;border-radius:11px;font-size:13px;transition:background .15s}
+.time-picker-dialog .picker-days button.selected{background:#8055aa;color:white;font-weight:700}
+.time-picker-dialog .picker-days .is-today{box-shadow:inset 0 0 0 1px #ae93c6}
+.time-picker-dialog .picker-days button:focus-visible{outline:2px solid #b99bd2;outline-offset:1px}
+.time-picker-dialog .picker-clock{margin:16px 0 8px;padding:12px;border-radius:12px;background:#faf7fc;align-items:center;gap:14px}
+.time-picker-dialog .picker-clock select{min-height:44px;font-size:16px;width:82px}
+.time-picker-dialog .picker-actions{gap:8px;display:flex;margin-top:16px;padding-top:14px}
+.time-picker-dialog .picker-actions button{min-height:44px;padding:9px 12px;font-size:12px}
+.time-picker-dialog .picker-actions [data-picker-apply]{margin-left:auto}
+.picker-error{padding:10px 12px;border-radius:10px;background:#fff1f4;color:#b23752;font-size:12px;margin-top:10px}
+.project-dates{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+@media(max-width:480px){.time-picker-dialog{padding:16px;border-radius:18px}.project-dates{grid-template-columns:1fr}}
