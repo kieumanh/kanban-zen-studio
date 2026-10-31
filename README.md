@@ -1,5 +1,6 @@
-# Kanban Zen Studio v1.13.3
+# Kanban Zen Studio
 
+Số phiên bản hiện tại nằm trong `package.json`; production báo cùng số tại `/health`. Các mục 1.1.1–1.13.3 bên dưới là lịch sử gốc và không còn đầy đủ. Từ 1.15.30, ghi chú từng bản nằm ở `docs/release-notes/`, và danh sách hiển thị trong ứng dụng nằm ở mục Nhật ký phát triển (`dist/welcome.js`).
 
 Production: https://kanban.huongthiennature.com/
 Private source: https://github.com/kieumanh/kanban-zen-studio
@@ -18,16 +19,23 @@ Opt-in email and Web Push send at 08:00 Asia/Ho_Chi_Minh for due/overdue incompl
 
 ## Development and deployment
 
-Requires Node 24 for tests (node:sqlite); no npm dependencies.
+Requires Node 24 (node:sqlite). The application has no runtime npm dependencies; ESLint and Prettier are development tools installed with `npm ci`.
 
 ```
+npm ci
+npm run lint
+npm run format:check
 npm run build
 npm test
 ```
 
 Edit assets in dist/ and backend in server/api.mjs; scripts/build.mjs bundles the Worker without dependencies. server/schema.sql is idempotent schema setup. Tests use an isolated in-memory SQLite database and a mock email provider: they send no real email.
 
-Cloudflare config declares D1 and cron. Set server-only RESEND_API_KEY (sending access restricted to the verified domain) and VAPID_PRIVATE (P-256 JWK) secrets. Set VAPID_PUBLIC as the corresponding uncompressed public key in base64url in Worker variables. Never commit private keys or email credentials. Production secrets and bindings were configured through the Cloudflare API. Preserve VAPID keys across deploys so existing subscriptions continue working. GitHub is source storage; commits do not automatically deploy.
+wrangler.jsonc declares the Worker, D1 (DB), R2 (FILES), static assets and a five-minute cron. Set server-only RESEND_API_KEY (sending access restricted to the verified domain) and VAPID_PRIVATE (P-256 JWK) secrets. Set VAPID_PUBLIC as the corresponding uncompressed public key in base64url in Worker variables. Never commit private keys or email credentials. Production secrets and bindings were configured through the Cloudflare API. Preserve VAPID keys across deploys so existing subscriptions continue working. Pushing to `main` runs the GitHub Actions workflow "Verify and deploy Kanban Production" (lint, build, tests, responsive browser checks, then `wrangler deploy --keep-vars`); see `docs/production-deployment.md`.
+
+## Migration (cập nhật 1.15.30)
+
+`migrations/` là hệ thống migration có phiên bản (hiện có 0001 và 0002), đã áp dụng cho production ngày 2026-10-29; mã băm SHA-256 nằm trong `migrations/production-receipt.json`. Không sửa các tệp đã áp dụng hay biên nhận; schema mới là tệp SQL mới và chờ Mạnh xác nhận trước khi áp dụng. Các tệp `server/migration-*.sql` là bước chạy một lần từ trước khi có hệ thống `migrations/`, không phải đường migration hiện hành. Khi workflow thiếu secret `CLOUDFLARE_D1_API_TOKEN`, nó chỉ đối chiếu mã băm với biên nhận và chặn mọi tệp SQL mới hoặc đã sửa; khi có secret, nó chạy `wrangler d1 migrations apply`.
 
 ## Validation
 
