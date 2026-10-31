@@ -225,4 +225,3 @@ document.addEventListener('click',e=>{
  note.pinned=!note.pinned;if(!save()){note.pinned=!note.pinned;return;}render();
 },true);
 
-
