@@ -43,6 +43,7 @@ jobs:
           node tests/report-layout-browser.mjs
           node tests/offline-browser.mjs
           node tests/tablet-layout-browser.mjs
+          node tests/nav-frame-browser.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:

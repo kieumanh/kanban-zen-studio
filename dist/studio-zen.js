@@ -78,3 +78,14 @@
   });
   paint();
 })();
+/* v1.15.34: dòng đường dẫn trên thanh trên không bao giờ để trống (Lưu trữ, Thùng rác... trước đây hiện rỗng). */
+(() => {
+  const names = { archive: 'Lưu trữ', trash: 'Thùng rác', notes: 'Ghi chú', resources: 'Tài nguyên', focus: 'Chế độ tập trung', versions: 'Phiên bản' };
+  const before = render;
+  render = function (...args) {
+    const result = before.apply(this, args);
+    const crumb = $('#crumb');
+    if (crumb && !crumb.textContent.trim()) crumb.textContent = names[view] || $('#main h1')?.textContent.trim() || '';
+    return result;
+  };
+})();

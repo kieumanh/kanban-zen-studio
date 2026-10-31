@@ -42,3 +42,11 @@
 .top-actions .search input{min-width:0;width:100%}
 .top-actions #save-state{flex:0 3 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 }
+/* v1.15.34: khung điều hướng ổn định từ 701px. Thanh trên và dải tab dự án dính ở đầu màn hình (trước đây trôi mất sau mỗi lần chuyển màn hình); dải tab là cách chọn dự án duy nhất nên danh sách dự án ở thanh bên chỉ còn trên điện thoại. */
+@media(min-width:701px){
+.topbar{position:sticky;top:0;z-index:30}
+#tabs{position:sticky;top:73px;z-index:29}
+html{scroll-padding-top:170px}
+.sidebar>.side-projects{display:none}
+.side-bottom{margin-top:auto}
+}
