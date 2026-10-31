@@ -1,0 +1,124 @@
+# Kiểm tra mọi Pull Request vào main (P0-1, v1.17.1).
+#
+# Quy tắc của workflow này:
+# - Chỉ đọc mã nguồn: quyền contents: read, KHÔNG dùng secrets, KHÔNG deploy.
+# - KHÔNG dùng bộ lọc đường dẫn (paths): check bắt buộc mà bị bỏ qua sẽ chặn
+#   luôn cả những PR chỉ sửa tài liệu.
+# - Ba job chạy song song và độc lập, không dùng "needs": job bị bỏ qua sẽ
+#   được GitHub coi là đạt, làm check bắt buộc mất tác dụng.
+#
+# Tên ba job bên dưới chính là tên check bắt buộc trong Settings > Rules của
+# GitHub (xem docs/bao-ve-nhanh-main.md). Đổi tên job thì phải đổi cả luật.
+name: Kiểm tra Pull Request
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pr-check-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  kiem-tra-ma-nguon:
+    name: Kiểm tra mã nguồn
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Cài công cụ phát triển
+        run: npm ci
+      - name: Lint và kiểm tra định dạng
+        run: npm run lint && npm run format:check
+      - name: Build Worker
+        run: node scripts/build.mjs
+      - name: Chạy toàn bộ test
+        run: npm test
+
+  giao-dien-responsive:
+    name: Giao diện 390-820-1440px
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Cài công cụ phát triển
+        run: npm ci
+      - name: Build Worker
+        run: node scripts/build.mjs
+      - name: Cài trình duyệt kiểm tra
+        run: |
+          npm install --no-save --package-lock=false playwright
+          npx playwright install --with-deps chromium
+      - name: Kiểm tra giao diện trên điện thoại, máy tính bảng, máy tính
+        run: |
+          node tests/workflow111-browser.mjs
+          node tests/report-layout-browser.mjs
+          node tests/offline-browser.mjs
+      - name: Lưu ảnh chụp giao diện
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ui-regression-pr-${{ github.event.pull_request.number }}-${{ github.run_id }}
+          path: qa/
+          retention-days: 7
+          if-no-files-found: ignore
+
+  chot-chan-migration:
+    name: Chốt chặn migration
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Đối chiếu thay đổi trong migrations/
+        env:
+          BASE_REF: ${{ github.base_ref }}
+        run: |
+          set -euo pipefail
+          git fetch --no-tags origin "$BASE_REF"
+          changes="$(git diff --no-renames --name-status "origin/$BASE_REF...HEAD" -- migrations/)"
+          errors=0
+          lines=""
+          while IFS=$'\t' read -r status path; do
+            [ -n "$status" ] || continue
+            case "$status:$path" in
+              A:migrations/*.sql)
+                echo "::warning file=$path::File SQL mới. Chỉ merge khi Mạnh đã xác nhận schema này."
+                lines+="- ⚠️ File SQL mới \`$path\`: chờ Mạnh xác nhận"$'\n'
+                ;;
+              A:*)
+                echo "::warning file=$path::File mới không phải .sql trong migrations/. Hãy kiểm tra lại có đúng chỗ không."
+                lines+="- ⚠️ File mới \`$path\` không phải .sql"$'\n'
+                ;;
+              M:migrations/production-receipt.json)
+                echo "::warning file=$path::production-receipt.json bị đổi. Chỉ merge khi Mạnh đã xác nhận migration thật sự đã áp dụng trên production."
+                lines+="- ⚠️ \`$path\` bị đổi: chờ Mạnh xác nhận"$'\n'
+                ;;
+              *)
+                echo "::error file=$path::Không được sửa hoặc xóa file đã có trong migrations/ (trạng thái $status). Schema mới phải là một file SQL mới."
+                lines+="- ❌ \`$path\` bị sửa hoặc xóa (trạng thái $status)"$'\n'
+                errors=$((errors + 1))
+                ;;
+            esac
+          done <<< "$changes"
+          {
+            echo "## Chốt chặn migration"
+            if [ -z "$lines" ]; then
+              echo "Không có thay đổi nào trong \`migrations/\`."
+            else
+              printf '%s' "$lines"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+          if [ "$errors" -gt 0 ]; then
+            exit 1
+          fi
