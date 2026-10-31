@@ -1,0 +1,11 @@
+{
+  "name": "kanban-zen-gamemode",
+  "main": "worker-gamemode.mjs",
+  "compatibility_date": "2026-10-24",
+  "compatibility_flags": ["nodejs_compat"],
+  "workers_dev": false,
+  "routes": [{"pattern":"kanban.gamemode.huongthiennature.com","custom_domain":true}],
+  "services": [{"binding":"BACKEND","service":"kanban-zen-studio"}],
+  "assets": {"directory":"./public","binding":"ASSETS","html_handling":"auto-trailing-slash","run_worker_first":["/api/*","/health"]},
+  "observability": {"enabled":true}
+}

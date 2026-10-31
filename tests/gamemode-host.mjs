@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+import worker from '../worker-gamemode.mjs';
+const host='https://kanban.gamemode.huongthiennature.com';
+let forwarded=null;
+const env={BACKEND:{fetch:async r=>{forwarded=r;return Response.json({ok:true},{headers:{'Set-Cookie':'zen_session=test; Secure; HttpOnly; SameSite=Strict; Path=/'}});}},ASSETS:{fetch:async()=>new Response('game assets')}};
+assert.equal((await worker.fetch(new Request(host+'/health'),env)).status,200);
+assert.equal((await worker.fetch(new Request(host+'/'),env)).status,200);
+assert.equal((await worker.fetch(new Request(host+'/api/login',{method:'POST',headers:{Origin:'https://untrusted.example'}}),env)).status,403);assert.equal(forwarded,null);
+assert.equal((await worker.fetch(new Request(host+'/api/login',{method:'POST'}),env)).status,403);
+const response=await worker.fetch(new Request(host+'/api/login',{method:'POST',headers:{Origin:host,'Content-Type':'application/json'},body:'{"email":"test@example.test"}'}),env);
+assert.equal(response.status,200);assert.equal(new URL(forwarded.url).origin,'https://kanban.huongthiennature.com');assert.equal(forwarded.headers.get('Origin'),'https://kanban.huongthiennature.com');assert.equal(await forwarded.text(),'{"email":"test@example.test"}');assert.match(response.headers.get('Set-Cookie'),/HttpOnly/);assert.doesNotMatch(response.headers.get('Set-Cookie'),/Domain=/i);
+console.log('PASS dedicated hostname: fixed backend, origin checks, request body, host-only sessions and separate asset serving.');

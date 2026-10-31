@@ -1,0 +1,37 @@
+name: Deploy dedicated Kanban Game Mode
+on:
+  push:
+    branches: [experiment/game-mode]
+    paths:
+      - 'dist/**'
+      - 'worker-gamemode.mjs'
+      - 'wrangler.gamemode.jsonc'
+      - 'scripts/**'
+      - '.github/workflows/deploy-gamemode.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: kanban-gamemode-deploy
+  cancel-in-progress: false
+jobs:
+  deploy:
+    if: github.ref == 'refs/heads/experiment/game-mode'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: npm ci
+      - run: npm run lint && npm run format:check
+      - run: node scripts/build-gamemode.mjs && npm test && node tests/gamemode-host.mjs
+      - name: Guard isolated deployment target
+        run: |
+          node -e 'const c=JSON.parse(require("fs").readFileSync("wrangler.gamemode.jsonc"));if(c.name!=="kanban-zen-gamemode"||c.routes[0].pattern!=="kanban.gamemode.huongthiennature.com"||c.d1_databases)process.exit(1)'
+      - name: Deploy dedicated game frontend
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: 53ab746eeba03687cf19d683fab74b36
+        run: npx --yes wrangler@4 deploy --config wrangler.gamemode.jsonc --keep-vars

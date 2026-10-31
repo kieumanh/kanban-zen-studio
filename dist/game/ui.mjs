@@ -2,7 +2,7 @@ import {renderBoss,STATES} from './boss-art.mjs';
 import * as C from './core.mjs';
 import { AXES,AXIS_ICONS,CHAPTERS } from './story.mjs';
 const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const preview=location.pathname==='/game-preview.html';
+const preview=/^\/game-preview(?:\.html)?\/?$/.test(location.pathname);
 let lastRenderedGame=null;
 let page='home',draft=null,bosses=[],busy=false,lastFocus=null,storeError='';
 let demo={schema:1,projects:[{id:'garden',name:'Vườn Thanh Trúc · Minh họa',description:'',tasks:[{id:'seed',title:'Chuẩn bị đất cho vườn',col:'List',checks:[{id:'seed-1',text:'Chọn khu đất',done:false}]},{id:'water',title:'Lập lịch chăm vườn',col:'List',checks:[]},{id:'read',title:'Đọc và ghi lại một điều đã học',col:'List',checks:[]}]}]};
