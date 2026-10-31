@@ -50,3 +50,17 @@ html{scroll-padding-top:170px}
 .sidebar>.side-projects{display:none}
 .side-bottom{margin-top:auto}
 }
+/* v1.15.35: thẻ Kanban gọn. Nút chuyển nhanh thu thành mũi tên cạnh hạn (không còn một hàng riêng ở mọi thẻ); việc chưa có checklist không hiện "0%" và thanh tiến độ trống; khoảng cách trong thẻ chặt hơn. */
+.task-card .task-card-decision{justify-content:space-between;gap:8px;min-height:28px}
+.task-card .task-card-decision>.task-next{flex:0 0 auto;display:grid;place-items:center;width:28px;min-width:28px;height:28px;min-height:28px;margin:0;padding:0;border-radius:999px;font-size:15px;line-height:1}
+.task-card.task-card-no-checks .progress-meta,.task-card.task-card-no-checks .progress{display:none}
+#main .column .task-card{padding:16px;margin-bottom:12px}
+#main .studio-compact .task-card{padding:12px;margin-bottom:10px}
+@media(pointer:coarse){.task-card .task-card-decision{min-height:44px}.task-card .task-card-decision>.task-next{width:44px;min-width:44px;height:44px;min-height:44px}}
+@media(hover:hover) and (pointer:fine){.task-card .card-check-control{min-height:28px;padding:4px 2px}.task-card .card-checks li{padding:2px 0}}
+.task-card.wf-task-card{gap:6px}
+.task-card .wf-card-head{margin-bottom:0}
+.task-card.wf-task-card h3{margin:2px 0 0!important}
+.task-card .card-checks{margin:2px 0!important}
+/* v1.15.35: điện thoại (≤700px) cũng chừa chỗ cho thanh trên + dải chế độ xem dính khi trình duyệt cuộn tới một phần tử (kéo thả, Tab). Thẻ ngắn hơn làm trang ngắn lại, tay kéo của thẻ đầu có thể rơi dưới thanh trên. */
+@media(max-width:700px){html{scroll-padding-top:120px}}

@@ -61,7 +61,8 @@ taskCard=function(t,p){
  const next=t.checks.find(c=>!c.done);if(next){const step=document.createElement('p');step.className='task-next-step';step.innerHTML='<span>Bước tiếp theo</span>'+esc(next.text);title?.after(step);}
  const meta=card.querySelector('.progress-meta');if(meta){meta.classList.add('task-card-progress-meta');meta.innerHTML='<span>'+(total?checked+'/'+total+' mục checklist':'Chưa có checklist')+'</span><strong>'+pct+'%</strong>';}
  const progressBar=card.querySelector('[role="progressbar"]');if(progressBar){progressBar.setAttribute('aria-label',total?'Tiến độ checklist':'Tiến độ công việc');progressBar.setAttribute('title',total?checked+' trên '+total+' mục checklist đã hoàn thành':'Chưa có checklist; tiến độ dựa trên trạng thái công việc');}
- const nextColumn=p.columns[p.columns.indexOf(t.col)+1];if(nextColumn)card.querySelector('.wf-card-head')?.insertAdjacentHTML('beforeend','<button type="button" class="btn task-next" data-next-task="'+esc(t.id)+'" data-next-project="'+esc(p.id)+'">→ '+esc(columnDisplayName(p,nextColumn))+'</button>');
+ const nextColumn=p.columns[p.columns.indexOf(t.col)+1];if(nextColumn){const nextName=columnDisplayName(p,nextColumn);(card.querySelector('.task-card-decision')||card.querySelector('.wf-card-head'))?.insertAdjacentHTML('beforeend','<button type="button" class="btn task-next" data-next-task="'+esc(t.id)+'" data-next-project="'+esc(p.id)+'" aria-label="Chuyển sang '+esc(nextName)+'" title="Chuyển sang '+esc(nextName)+'">→</button>');}
+ if(!total)card.classList.add('task-card-no-checks');
  const footer=card.querySelector('.task-footer');if(footer)footer.remove();
  return card.outerHTML;
 };

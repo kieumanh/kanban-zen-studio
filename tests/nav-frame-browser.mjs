@@ -147,6 +147,12 @@ try {
     await page.evaluate(() => scrollTo(0, 600));
     const g = await frame(page);
     assert.ok(g.topbar.position === 'sticky' && g.topbar.top === 0, 'thanh trên ở 390px phải dính ở đầu màn hình');
+    // v1.15.35: phần tử được cuộn tới (kéo thả, Tab, scrollIntoView) không được nằm dưới thanh trên + dải chế độ xem dính.
+    const chrome = await page.evaluate(() => ({
+      bottom: Math.round(document.querySelector('.mobile-viewbar').getBoundingClientRect().bottom),
+      padding: parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0,
+    }));
+    assert.ok(chrome.padding >= chrome.bottom, `scroll-padding-top ở 390px (${chrome.padding}px) phải không nhỏ hơn khung dính (${chrome.bottom}px)`);
     await page.locator('#menu').click();
     await page.waitForSelector('.sidebar.open');
     const names = await page.locator('.sidebar.open .side-project').allInnerTexts();
