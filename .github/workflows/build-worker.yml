@@ -42,6 +42,7 @@ jobs:
           node tests/workflow111-browser.mjs
           node tests/report-layout-browser.mjs
           node tests/offline-browser.mjs
+          node tests/tablet-layout-browser.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:

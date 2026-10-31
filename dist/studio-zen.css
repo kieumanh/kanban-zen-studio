@@ -28,3 +28,17 @@
 .month-bar.bar-open-left{--bl:0px;border-left-width:0;border-top-left-radius:0;border-bottom-left-radius:0}
 .month-bar.bar-open-right{--br:-1px;border-top-right-radius:0;border-bottom-right-radius:0}
 @media(max-width:700px){.month-grid{--cell-pad:2px;--lane-h:22px}.month-bar{padding:0 4px;font-size:10px;border-radius:5px}.month-bar .zen-event-time{display:none}}
+/* v1.15.33: tiêu đề trang và tab dự án không còn bị bóp ở độ rộng tablet (701–1000px). Hàng nút xuống dòng thay vì chiếm hết chỗ của tên dự án. */
+@media(min-width:701px){
+.board-head,.page-heading{flex-wrap:wrap;row-gap:12px}
+.board-head>div:first-child,.page-heading>div:first-child{flex:1 1 260px;min-width:min(100%,260px)}
+.board-head .board-tools{flex:0 1 auto;max-width:min(100%,600px);justify-content:flex-start}
+}
+#tabs .tab[data-project]:not(.pinned)>span{flex:0 0 auto;min-width:max-content;white-space:nowrap;overflow-wrap:normal;word-break:keep-all}
+@media(min-width:701px) and (max-width:900px){
+.topbar .breadcrumb{flex:0 1 auto;min-width:0;max-width:26%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.top-actions{min-width:0;gap:10px}
+.top-actions .search{flex:0 1 200px;min-width:96px}
+.top-actions .search input{min-width:0;width:100%}
+.top-actions #save-state{flex:0 3 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+}
