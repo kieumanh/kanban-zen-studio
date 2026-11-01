@@ -2,7 +2,7 @@
 const navigationBaseRender=render;
 const navigationBaseGantt=ganttPage;
 const navigationViews=new Set(['timeline','calendar','gantt']);
-const navigationViewNames={timeline:'Timeline',calendar:'Lịch',gantt:'Gantt'};
+const navigationViewNames={timeline:'Dòng thời gian',calendar:'Lịch',gantt:'Gantt'};
 function navigationScopeMarkup(){
  const selected=filterProject||'';
  return '<div class="workspace-scope"><label for="navigation-scope"><span>Phạm vi dự án</span><select id="navigation-scope" aria-label="Phạm vi dự án"><option value="" '+(!selected?'selected':'')+'>Tất cả dự án</option>'+visibleProjects().map(p=>'<option value="'+esc(p.id)+'" '+(selected===p.id?'selected':'')+'>'+esc(p.name)+'</option>').join('')+'</select></label></div>';

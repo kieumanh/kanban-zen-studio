@@ -141,7 +141,7 @@ try {
         return { t: el.textContent.replace(/\s+/g, ' ').replace(/Ctrl \/ ⌘ K/, '').trim(), h: Math.round(r.height) };
       }),
     );
-    assert.deepEqual(rows.map((r) => r.t), ['Thanh tiến độ', 'Hiện checklist trên thẻ', 'Thẻ gọn', 'Giới hạn WIP', 'Lệnh nhanh'], `các mục trong Hiển thị (${width}px): ${JSON.stringify(rows)}`);
+    assert.deepEqual(rows.map((r) => r.t), ['Thanh tiến độ', 'Hiện checklist trên thẻ', 'Thẻ gọn', 'Giới hạn việc mỗi cột', 'Lệnh nhanh'], `các mục trong Hiển thị (${width}px): ${JSON.stringify(rows)}`);
     for (const r of rows.slice(2)) assert.ok(r.h >= (touch ? 44 : 30), `mục "${r.t}" cao ${r.h}px ở ${width}px, phải từ ${touch ? 44 : 30}px`);
     await assertInside(page, '#main .kanban-options', '#main .kanban-options input, #main .kanban-options .btn', `bảng Hiển thị (${width}px)`);
     assert.ok((await cardGeometry(page)).scrollW <= g.vw, `mở Hiển thị làm trang tràn ngang ở ${width}px`);

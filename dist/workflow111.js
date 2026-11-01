@@ -324,12 +324,12 @@ taskForm = function (p, t, col = "List") {
     const tools = document.createElement("div");
     tools.className = "wf-task-tools";
     tools.innerHTML =
-      '<button type="button" class="btn" data-wf-transfer="move">Chuyển dự án</button><button type="button" class="btn" data-wf-transfer="copy">Copy sang dự án</button><button type="button" class="btn" data-wf-archive="' +
+      '<button type="button" class="btn" data-wf-transfer="move">Chuyển dự án</button><button type="button" class="btn" data-wf-transfer="copy">Sao chép sang dự án</button><button type="button" class="btn" data-wf-archive="' +
       esc(t.id) +
       '" data-pid="' +
       p.id +
       '">' +
-      (t.archived ? "Khôi phục task" : "Lưu trữ task") +
+      (t.archived ? "Khôi phục việc" : "Lưu trữ việc") +
       "</button>";
     body.append(tools);
   }
@@ -355,7 +355,7 @@ function wfAfterTaskSave(fn) {
 function wfTransferDialog(p, t, copy) {
   modal(
     "<h2>" +
-      (copy ? "Copy công việc" : "Chuyển công việc") +
+      (copy ? "Sao chép công việc" : "Chuyển công việc") +
       '</h2><p class="help-copy">' +
       esc(t.title) +
       '</p><label class="field">Dự án đích<select name="destination" required>' +
@@ -365,8 +365,8 @@ function wfTransferDialog(p, t, copy) {
         .join("") +
       "</select></label>" +
       (copy
-        ? '<label class="check-row"><input type="checkbox" name="reset" checked><span>Bắt đầu lại checklist và đưa task vào List</span></label><p class="help-copy">Copy nội dung, định dạng, từ khóa và lịch. Tệp đính kèm ở lại task gốc.</p>'
-        : '<p class="help-copy">Giữ nội dung, checklist và tệp đính kèm. Các liên kết phụ thuộc Gantt của task trong dự án cũ sẽ được gỡ.</p>'),
+        ? '<label class="check-row"><input type="checkbox" name="reset" checked><span>Bắt đầu lại checklist và đưa việc vào cột Việc cần làm</span></label><p class="help-copy">Sao chép nội dung, định dạng, từ khóa và lịch. Tệp đính kèm ở lại việc gốc.</p>'
+        : '<p class="help-copy">Giữ nội dung, checklist và tệp đính kèm. Các liên kết phụ thuộc Gantt của việc trong dự án cũ sẽ được gỡ.</p>'),
     (fd) => {
       let result;
       if (
@@ -512,7 +512,7 @@ archivePage = function () {
     wfArchiveBefore() +
     '<section class="panel wf-task-archive"><h2>Công việc đã lưu trữ <small>' +
     tasks.length +
-    '</small></h2><p class="help-copy">Task giữ nguyên dữ liệu và được tạm ẩn khỏi các góc nhìn đang làm.</p>' +
+    '</small></h2><p class="help-copy">Việc giữ nguyên dữ liệu và được tạm ẩn khỏi các góc nhìn đang làm.</p>' +
     tasks
       .map(
         (t) =>
@@ -1151,7 +1151,7 @@ document.addEventListener("click", (e) => {
       if (wfSave(() => (t.archived = !t.archived))) {
         $("#editor").close();
         render();
-        notify(t.archived ? "Đã lưu trữ task." : "Đã khôi phục task.");
+        notify(t.archived ? "Đã lưu trữ việc." : "Đã khôi phục việc.");
       }
     };
     if ($("#editor").open && editing?.t === t.id) wfAfterTaskSave(run);
@@ -1168,12 +1168,12 @@ help = function () {
     [
       "projects",
       "Sắp xếp theo cách của bạn",
-      "Kéo tay nắm để đổi thứ tự task, checklist và ghi chú. Điện thoại dùng cùng tay nắm; bàn phím dùng Alt + ↑/↓. Kéo task sang cột khác để đổi trạng thái.",
+      "Kéo tay nắm để đổi thứ tự việc, checklist và ghi chú. Điện thoại dùng cùng tay nắm; bàn phím dùng Alt + ↑/↓. Kéo việc sang cột khác để đổi trạng thái.",
     ],
     [
       "check",
       "Viết rõ, làm gọn",
-      "Tên task nói lên kết quả cần đạt. Dùng định dạng trong mô tả để chia ý; checklist giữ từng bước cụ thể. Nút Thêm lưu nội dung đang chỉnh và mở tiếp danh sách.",
+      "Tên việc nói lên kết quả cần đạt. Dùng định dạng trong mô tả để chia ý; checklist giữ từng bước cụ thể. Nút Thêm lưu nội dung đang chỉnh và mở tiếp danh sách.",
     ],
     [
       "notes",
@@ -1183,12 +1183,12 @@ help = function () {
     [
       "archive",
       "Giữ lại, rồi nhẹ nhàng bước tiếp",
-      "Lưu trữ dự án hoặc task để tạm ẩn và có thể mở lại. Chuyển task khi đổi dự án; Copy khi muốn tạo việc tương tự. Thùng rác giữ mục đã xóa 30 ngày.",
+      "Lưu trữ dự án hoặc việc để tạm ẩn và có thể mở lại. Chuyển khi đổi dự án; Sao chép khi muốn tạo việc tương tự. Thùng rác giữ mục đã xóa 30 ngày.",
     ],
     [
       "cloudCheck",
       "Để công việc được tiếp nối",
-      "Icon đồng bộ cho biết bản trên thiết bị đã gửi lên hay đang chờ. Khi mất mạng, tiếp tục ghi chép; nếu báo lỗi, giữ bản nháp và mở Settings để kiểm tra. Xuất JSON định kỳ cho những điều quan trọng.",
+      "Biểu tượng đồng bộ cho biết bản trên thiết bị đã gửi lên hay đang chờ. Khi mất mạng, tiếp tục ghi chép; nếu báo lỗi, giữ bản nháp và mở Cài đặt để kiểm tra. Xuất JSON định kỳ cho những điều quan trọng.",
     ],
   ];
   modal(
@@ -1350,7 +1350,7 @@ function wfPaintFocus(){
  $('#crumb').textContent='Chế độ tập trung';document.querySelector('[data-view="focus"]')?.classList.add('active');
  if(!task){_WF.focus=null;const tasks=wfFocusTasks(),day=today(),overdue=tasks.filter(t=>t.due&&t.due<day),due=tasks.filter(t=>t.due===day),rank={q1:0,q2:1,q3:2,q4:3};const suggested=[...tasks].sort((a,b)=>(rank[a.priority]??4)-(rank[b.priority]??4)||(a.due||'9999').localeCompare(b.due||'9999')).slice(0,3);$('#main').innerHTML=heading('MỘT VIỆC MỖI LÚC','Chọn điều cần tập trung','Gợi ý theo mức độ quan trọng và hạn công việc. Bạn chủ động chọn việc phù hợp.')+[ ['Gợi ý 3 việc quan trọng',suggested],['Đến hạn hôm nay',due],['Quá hạn',overdue] ].map(([title,list])=>'<section class="wf-focus-group"><h2>'+title+' <small>'+list.length+'</small></h2><div class="wf-focus-grid">'+(list.map(wfFocusCard).join('')||'<p class="subtext">Không có công việc trong nhóm này.</p>')+'</div></section>').join('');return;}
  const ids=[...new Set([...(projectData.noteIds||[]),...(task.noteIds||[])])],notes=ids.map(id=>data.notes?.find(n=>n.id===id)).filter(Boolean);
- $('#main').innerHTML='<div class="wf-focus-header"><div><small>DỰ ÁN ĐANG LÀM</small><h2>'+esc(projectData.name)+'</h2></div><button type="button" class="btn wf-focus-exit" data-wf-focus-exit aria-label="Thoát chế độ tập trung">← <span>Thoát tập trung</span></button></div><div class="wf-focus-workspace"><article class="panel"><h1>'+esc(task.title)+'</h1><p class="subtext">'+esc(task.col)+(task.due?' · Hạn '+dateLabel(task.due):'')+'</p><div>'+zenFormattedHTML(task.description||'')+'</div><div class="wf-focus-progress-meta"><span>'+task.checks.filter(c=>c.done).length+'/'+task.checks.length+' mục hoàn thành</span><strong>'+taskPct(task)+'%</strong></div>'+bar(taskPct(task),projectData.color)+'<h3>Checklist</h3>'+task.checks.map(c=>'<label class="check-row"><input type="checkbox" data-card-check="'+esc(c.id)+'" data-check-task="'+esc(task.id)+'" data-check-project="'+esc(projectData.id)+'" '+(c.done?'checked':'')+'><span>'+esc(c.text)+'</span></label>').join('')+'<button type="button" class="btn" data-task="'+esc(task.id)+'" data-pid="'+esc(projectData.id)+'">Chỉnh sửa công việc</button></article><aside class="panel"><h2>Ghi chú</h2>'+notes.map(n=>'<article class="wf-focus-note"><h3>'+esc(n.title)+'</h3><div>'+zenFormattedHTML(n.text||'')+'</div><button type="button" class="btn" data-wf-document="'+esc(n.id)+'">Mở ghi chú</button><button type="button" class="btn danger" data-focus-unlink="'+esc(n.id)+'">'+((projectData.noteIds||[]).includes(n.id)?'Bỏ liên kết dự án':'Bỏ liên kết task')+'</button></article>').join('')+(!notes.length?'<p class="subtext">Chưa có ghi chú liên kết. Bạn có thể tạo ghi chú và liên kết với công việc này.</p>':'')+'<div class="wf-focus-note-actions"><button type="button" class="btn primary" data-wf-focus-note>+ Viết ghi chú</button><details class="wf-focus-note-picker"><summary>Liên kết ghi chú có sẵn</summary><div><label>Tìm ghi chú<input type="search" data-wf-focus-search placeholder="Nhập tên ghi chú…"></label><div class="wf-focus-note-options">'+(data.notes||[]).filter(n=>!ids.includes(n.id)).map(n=>'<button type="button" data-wf-focus-link="'+esc(n.id)+'">'+esc(n.title||'Ghi chú không tên')+'</button>').join('')+'</div></div></details></div></aside></div>';
+ $('#main').innerHTML='<div class="wf-focus-header"><div><small>DỰ ÁN ĐANG LÀM</small><h2>'+esc(projectData.name)+'</h2></div><button type="button" class="btn wf-focus-exit" data-wf-focus-exit aria-label="Thoát chế độ tập trung">← <span>Thoát tập trung</span></button></div><div class="wf-focus-workspace"><article class="panel"><h1>'+esc(task.title)+'</h1><p class="subtext">'+esc(task.col)+(task.due?' · Hạn '+dateLabel(task.due):'')+'</p><div>'+zenFormattedHTML(task.description||'')+'</div><div class="wf-focus-progress-meta"><span>'+task.checks.filter(c=>c.done).length+'/'+task.checks.length+' mục hoàn thành</span><strong>'+taskPct(task)+'%</strong></div>'+bar(taskPct(task),projectData.color)+'<h3>Checklist</h3>'+task.checks.map(c=>'<label class="check-row"><input type="checkbox" data-card-check="'+esc(c.id)+'" data-check-task="'+esc(task.id)+'" data-check-project="'+esc(projectData.id)+'" '+(c.done?'checked':'')+'><span>'+esc(c.text)+'</span></label>').join('')+'<button type="button" class="btn" data-task="'+esc(task.id)+'" data-pid="'+esc(projectData.id)+'">Chỉnh sửa công việc</button></article><aside class="panel"><h2>Ghi chú</h2>'+notes.map(n=>'<article class="wf-focus-note"><h3>'+esc(n.title)+'</h3><div>'+zenFormattedHTML(n.text||'')+'</div><button type="button" class="btn" data-wf-document="'+esc(n.id)+'">Mở ghi chú</button><button type="button" class="btn danger" data-focus-unlink="'+esc(n.id)+'">'+((projectData.noteIds||[]).includes(n.id)?'Bỏ liên kết dự án':'Bỏ liên kết việc')+'</button></article>').join('')+(!notes.length?'<p class="subtext">Chưa có ghi chú liên kết. Bạn có thể tạo ghi chú và liên kết với công việc này.</p>':'')+'<div class="wf-focus-note-actions"><button type="button" class="btn primary" data-wf-focus-note>+ Viết ghi chú</button><details class="wf-focus-note-picker"><summary>Liên kết ghi chú có sẵn</summary><div><label>Tìm ghi chú<input type="search" data-wf-focus-search placeholder="Nhập tên ghi chú…"></label><div class="wf-focus-note-options">'+(data.notes||[]).filter(n=>!ids.includes(n.id)).map(n=>'<button type="button" data-wf-focus-link="'+esc(n.id)+'">'+esc(n.title||'Ghi chú không tên')+'</button>').join('')+'</div></div></details></div></aside></div>';
 }
 document.addEventListener('click',e=>{
  const target=e.target.closest('[data-wf-focus],[data-wf-focus-exit],[data-wf-document],[data-wf-focus-note],[data-wf-focus-link]');if(!target)return;
@@ -1446,8 +1446,8 @@ function zenDateDetails(t){const fmt=v=>esc(v?v.replace('T',' · '):'Chưa đặ
 function zenIsCompletedTask(t){return String(t.col||'').toLowerCase()==='done'||t.done===true||t.completed===true;}
 function zenUnscheduled(){const tasks=dueTasks().filter(t=>!zenIsCompletedTask(t)&&!t.start&&!t.end&&!t.due);return '<section class="panel zen-unscheduled"><h2>Chưa lên lịch <small>'+tasks.length+'</small></h2>'+(tasks.map(t=>timelineTask(t)).join('')||'<p class="subtext">Mọi công việc đã có lịch hoặc hạn.</p>')+'</section>';}
 const zenCalendarBefore=workCalendar;
-workCalendar=function(){return zenCalendarBefore().replace('<p class="help-copy">Ngày kết thúc là hạn hoàn thành. Công việc chưa đặt ngày nằm trong Timeline.</p>','<p class="help-copy">Khoảng thực hiện từ ngày bắt đầu đến ngày kết thúc; ngày kết thúc cũng là hạn hoàn thành. Công việc chưa đặt lịch nằm trong Timeline.</p>')+zenUnscheduled();};
-workTimeline=function(){const tasks=dueTasks().filter(t=>t.start||t.end||t.due).sort((a,b)=>(a.start||a.end||a.due).localeCompare(b.start||b.end||b.due));return heading('LỊCH CÔNG VIỆC','Timeline','Bắt đầu và kết thúc · giờ Việt Nam','<button type="button" class="btn" data-zen-timeline-today>Hôm nay</button>')+(active&&project()?projectSummary(project()):'')+'<section class="panel zen-timeline">'+tasks.map(t=>'<article class="timeline-item" data-zen-day="'+esc((t.start||t.end||t.due).slice(0,10))+'">'+timelineTask(t).replace('</button>',zenDateDetails(t)+'</button>')+'</article>').join('')+'</section>'+zenUnscheduled();};
+workCalendar=function(){return zenCalendarBefore().replace('<p class="help-copy">Ngày kết thúc là hạn hoàn thành. Công việc chưa đặt ngày nằm trong Dòng thời gian.</p>','<p class="help-copy">Khoảng thực hiện từ ngày bắt đầu đến ngày kết thúc; ngày kết thúc cũng là hạn hoàn thành. Công việc chưa đặt lịch nằm trong Dòng thời gian.</p>')+zenUnscheduled();};
+workTimeline=function(){const tasks=dueTasks().filter(t=>t.start||t.end||t.due).sort((a,b)=>(a.start||a.end||a.due).localeCompare(b.start||b.end||b.due));return heading('LỊCH CÔNG VIỆC','Dòng thời gian','Bắt đầu và kết thúc · giờ Việt Nam','<button type="button" class="btn" data-zen-timeline-today>Hôm nay</button>')+(active&&project()?projectSummary(project()):'')+'<section class="panel zen-timeline">'+tasks.map(t=>'<article class="timeline-item" data-zen-day="'+esc((t.start||t.end||t.due).slice(0,10))+'">'+timelineTask(t).replace('</button>',zenDateDetails(t)+'</button>')+'</article>').join('')+'</section>'+zenUnscheduled();};
 document.addEventListener('click',e=>{if(e.target.closest('[data-zen-timeline-today]')){const items=[...document.querySelectorAll('[data-zen-day]')];const target=items.find(x=>x.dataset.zenDay>=today())||items.at(-1);target?.scrollIntoView({behavior:'smooth',block:'center'});target?.classList.add('zen-today-focus');}});
 
 // Shared view refinements run within the existing render lifecycle.

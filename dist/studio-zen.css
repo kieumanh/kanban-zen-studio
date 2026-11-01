@@ -107,3 +107,10 @@ html{scroll-padding-top:170px}
 @media(pointer:coarse){.kanban-options .wf-display-actions .btn{min-height:44px}.kanban-options .wf-display-compact{min-height:44px}}
 @media(max-width:700px){.kanban-options .wf-display-actions kbd{display:none}}
 #main .board-tools .wf-display-options .kanban-options{grid-template-columns:minmax(0,1fr)}
+/* v1.15.39: thống nhất từ ngữ. Thanh chế độ xem trên điện thoại dùng đủ tên tiếng Việt ("Bảng Kanban", "Dòng thời gian", "Lịch", "Gantt"). Biểu tượng nằm trên nhãn để nhãn dài vẫn gọn một dòng. */
+@media(max-width:700px){
+.mobile-viewbar .view-mode{flex-direction:column!important;justify-content:center;gap:2px!important;padding:5px 2px!important}
+.mobile-viewbar .view-mode span{display:block;max-width:100%;white-space:nowrap;line-height:1.25}
+/* Thanh cao 54px (trước 49px): cuộn tới một thẻ vẫn để đủ khoảng trống dưới khung dính. */
+html{scroll-padding-top:126px}
+}

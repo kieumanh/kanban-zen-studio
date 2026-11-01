@@ -50,21 +50,21 @@
       const panel = document.querySelector('#main .board-head .kanban-options');
       let toolbar = null;
       if (panel && !panel.querySelector('[data-studio]')) {
-        panel.insertAdjacentHTML('beforeend', '<label class="wf-display-compact"><input type="checkbox" data-studio="compact"'+(compact()?' checked':'')+'> Thẻ gọn</label><div class="wf-display-actions" role="group" aria-label="Công cụ bảng"><button type="button" class="btn" data-studio="wip">Giới hạn WIP</button><button type="button" class="btn" data-studio="commands">Lệnh nhanh <kbd>Ctrl / ⌘ K</kbd></button></div>');
+        panel.insertAdjacentHTML('beforeend', '<label class="wf-display-compact"><input type="checkbox" data-studio="compact"'+(compact()?' checked':'')+'> Thẻ gọn</label><div class="wf-display-actions" role="group" aria-label="Công cụ bảng"><button type="button" class="btn" data-studio="wip">Giới hạn việc mỗi cột</button><button type="button" class="btn" data-studio="commands">Lệnh nhanh <kbd>Ctrl / ⌘ K</kbd></button></div>');
       } else if (!panel) {
         toolbar = document.createElement('div'); toolbar.className = 'studio-board-tools';
-        toolbar.innerHTML = '<span>Mỗi việc một khoảng thở</span><button type="button" class="btn" data-studio="compact" aria-pressed="'+compact()+'">'+(compact()?'Thẻ đầy đủ':'Thẻ gọn')+'</button><button type="button" class="btn" data-studio="wip">Giới hạn WIP</button><button type="button" class="btn" data-studio="commands">Lệnh nhanh <kbd>Ctrl / ⌘ K</kbd></button>';
+        toolbar.innerHTML = '<span>Mỗi việc một khoảng thở</span><button type="button" class="btn" data-studio="compact" aria-pressed="'+compact()+'">'+(compact()?'Thẻ đầy đủ':'Thẻ gọn')+'</button><button type="button" class="btn" data-studio="wip">Giới hạn việc mỗi cột</button><button type="button" class="btn" data-studio="commands">Lệnh nhanh <kbd>Ctrl / ⌘ K</kbd></button>';
         board.before(toolbar);
       }
       tidyHeader();
       tidySummary(p);
-      const nav = document.createElement('nav'); nav.className = 'studio-column-tabs'; nav.setAttribute('aria-label','Chuyển cột Kanban');
+      const nav = document.createElement('nav'); nav.className = 'studio-column-tabs'; nav.setAttribute('aria-label','Chuyển giữa các cột');
       const columns = [...board.querySelectorAll('.column')];
       columns.forEach((column, i) => {
         const key = column.dataset.column, count = p.tasks.filter(t=>!t.archived&&t.col===key).length, limit = p.wipLimits?.[key] || 0;
         const badge = document.createElement('span'); badge.className = 'studio-wip'+(limit&&count>limit?' is-over':'');
         badge.textContent = limit ? count+'/'+limit : count+' việc';
-        badge.title = limit ? 'Giới hạn WIP: '+limit+(count>limit?' · Vượt '+(count-limit)+' việc. Hãy hoàn tất một việc trước khi bắt đầu thêm.':'') : 'Chưa đặt giới hạn WIP';
+        badge.title = limit ? 'Giới hạn việc mỗi cột: '+limit+(count>limit?' · Vượt '+(count-limit)+' việc. Hãy hoàn tất một việc trước khi bắt đầu thêm.':'') : 'Chưa đặt giới hạn việc mỗi cột';
         column.querySelector('.column-title')?.after(badge);
         if (!count) { const empty = document.createElement('p'); empty.className='studio-empty'; empty.textContent=key==='Done'?'Một việc hoàn thành, một khoảng nhẹ lòng.':'Bắt đầu từ một việc nhỏ. Dùng nút “Thêm công việc” bên dưới.'; badge.after(empty); }
         const tab=document.createElement('button'); tab.type='button'; tab.textContent=columnDisplayName(p,key)+' · '+count;tab.dataset.studioColumn=String(i);tab.setAttribute('aria-pressed',String((prefs.get(p.id)||0)===i));nav.append(tab);
@@ -84,10 +84,10 @@
   const before=render;render=function(...args){const result=before.apply(this,args);paint();return result;};
   function wipForm(){
     const p=project();if(!p||!editable())return notify('Không thể chỉnh sửa trong chế độ chỉ xem.');
-    modal('<h2>Giới hạn công việc mỗi cột</h2><p>Cảnh báo mềm để giữ nhịp làm việc. Đặt 0 để không giới hạn.</p>'+p.columns.map((key,i)=>'<label class="studio-limit">'+esc(columnDisplayName(p,key))+'<input type="number" name="limit'+i+'" min="0" max="2000" step="1" required value="'+(p.wipLimits?.[key]||0)+'"></label>').join(''),fd=>{
+    modal('<h2>Giới hạn việc mỗi cột</h2><p>Cảnh báo mềm để giữ nhịp làm việc. Đặt 0 để không giới hạn.</p>'+p.columns.map((key,i)=>'<label class="studio-limit">'+esc(columnDisplayName(p,key))+'<input type="number" name="limit'+i+'" min="0" max="2000" step="1" required value="'+(p.wipLimits?.[key]||0)+'"></label>').join(''),fd=>{
       const current=project(p.id);if(!current)return;const limits=Object.fromEntries(p.columns.map((key,i)=>[key,Number(fd.get('limit'+i))]));
       if(!Object.values(limits).every(v=>Number.isInteger(v)&&v>=0&&v<=2000))return notify('Giới hạn phải là số nguyên từ 0 đến 2000.');
-      current.wipLimits=limits;if(save()===false)return;document.querySelector('#editor').close();render();notify('Đã lưu giới hạn WIP.');
+      current.wipLimits=limits;if(save()===false)return;document.querySelector('#editor').close();render();notify('Đã lưu giới hạn việc mỗi cột.');
     });
   }
   function actions(){

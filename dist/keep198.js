@@ -200,7 +200,7 @@ function zenPaintPinnedTasks(){
  const section=document.querySelector('#side-pinned-tasks');if(!section)return;
  const items=(data.projects||[]).filter(p=>!p.archived).flatMap(p=>(p.tasks||[]).filter(t=>t.pinned&&!t.archived).map(t=>({p,t}))).slice(0,100);
  section.hidden=contentReadOnly||!items.length;if(section.hidden){section.replaceChildren();return;}
- section.innerHTML='<div class="navlabel"><span>'+svgIcon('pin')+'Pin</span></div><div class="side-pinned-task-list">'+items.map(({p,t})=>'<div class="side-pinned-task"><button type="button" data-zen-task-shortcut="'+esc(p.id)+'|'+esc(t.id)+'" title="Mở task '+esc(t.title)+'"><span class="side-pinned-task-title">'+esc(t.title)+'</span><small>'+esc(p.name)+'</small></button><button type="button" data-zen-task-unpin="'+esc(p.id)+'|'+esc(t.id)+'" aria-label="Bỏ ghim '+esc(t.title)+'" title="Bỏ ghim">×</button></div>').join('')+'</div>';
+ section.innerHTML='<div class="navlabel"><span>'+svgIcon('pin')+'Pin</span></div><div class="side-pinned-task-list">'+items.map(({p,t})=>'<div class="side-pinned-task"><button type="button" data-zen-task-shortcut="'+esc(p.id)+'|'+esc(t.id)+'" title="Mở việc '+esc(t.title)+'"><span class="side-pinned-task-title">'+esc(t.title)+'</span><small>'+esc(p.name)+'</small></button><button type="button" data-zen-task-unpin="'+esc(p.id)+'|'+esc(t.id)+'" aria-label="Bỏ ghim '+esc(t.title)+'" title="Bỏ ghim">×</button></div>').join('')+'</div>';
 }
 function zenPaintTaskPinButtons(){
  if(contentReadOnly||view!=='projects')return;
