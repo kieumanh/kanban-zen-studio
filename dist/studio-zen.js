@@ -286,3 +286,108 @@
   };
   refreshBell();
 })();
+
+// v1.15.44: một thành phần trạng thái lưu / đồng bộ. Trước đây ba lớp syncStatus chồng nhau (account.js gốc, usability.js, release200.js; experience.js chỉ là nơi gọi) và hai chỗ tự viết chữ riêng (hộp thoại việc, chân thanh bên) cùng nói về một việc bằng
+// nhiều bộ chữ: nhãn lỗi lặp "Chưa đồng bộ" hai lần, máy chủ lỗi bị gọi là "Ngoại tuyến", viên thuốc ở thanh trên và khung lỗi dưới nó nói cùng một câu. Ở đây thông điệp thô của account.js được phân loại đúng một lần
+// thành một trạng thái (nhãn đầy đủ + nhãn ngắn), rồi viên thuốc, khung lỗi và dòng trạng thái của hộp thoại việc đều dựng từ trạng thái đó. Chỉ đổi cách hiển thị: không đổi lúc nào lưu, lúc nào đồng bộ, hay dữ liệu.
+(() => {
+  const SAVED_ICON =
+    '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 18a5 5 0 1 1 0-10 6 6 0 0 1 11-1 4.5 4.5 0 0 1 0 9"/><path d="m8 15 3 3 6-6"/></svg>';
+  const PENDING_ICON =
+    '<svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 12a8 8 0 0 1 14-5l2 2M20 4v5h-5M20 12a8 8 0 0 1-14 5l-2-2M4 20v-5h5"/></svg>';
+  const fmt = { timeZone: 'Asia/Ho_Chi_Minh' };
+  let current = null;
+
+  // ui: saved | pending | offline | error (cùng bộ giá trị data-sync cũ, CSS và test cũ dựa vào đó).
+  const classify = (message, kind) => {
+    const raw = String(message || '').replace(/^[●•⚠]\s*/, '').trim();
+    const online = navigator.onLine;
+    if (/xung đột|hợp nhất/i.test(raw)) return { ui: 'error', action: 'conflict', short: 'Xung đột', full: 'Xung đột · Xem và chọn bản cần giữ' };
+    if (/không thể lưu bản nháp trên máy/i.test(raw)) return { ui: 'error', action: 'retry', short: 'Không lưu được', full: 'Không lưu được trên thiết bị' };
+    if (kind === 'offline' || !online) {
+      return online
+        ? { ui: 'offline', short: 'Chưa kết nối được', full: 'Chưa kết nối được máy chủ · Đã lưu trên thiết bị' }
+        : { ui: 'offline', short: 'Ngoại tuyến', full: 'Ngoại tuyến · Bạn vẫn có thể chỉnh sửa' };
+    }
+    if (kind === 'error') {
+      let why;
+      if (/không hợp lệ/i.test(raw)) why = 'Dữ liệu không hợp lệ';
+      else if (/từ chối/i.test(raw)) why = 'Máy chủ từ chối dữ liệu';
+      else if (/bản nháp đã lưu/i.test(raw)) why = 'Bản nháp đã lưu trên thiết bị';
+      else if (/kiểm tra dữ liệu/i.test(raw)) why = 'Cần kiểm tra dữ liệu';
+      else why = raw.replace(/chưa đồng bộ( được)?/gi, '').replace(/^[\s·]+|[\s·]+$/g, '').replace(/\s*·\s*·\s*/g, ' · ');
+      return { ui: 'error', action: 'retry', short: 'Chưa đồng bộ được', full: 'Chưa đồng bộ được' + (why ? ' · ' + why : '') };
+    }
+    if (/đang đồng bộ/i.test(raw)) return { ui: 'pending', short: 'Đang đồng bộ…', full: 'Đang đồng bộ…' };
+    if (/đã lưu trên máy|tiếp tục đồng bộ/i.test(raw)) return { ui: 'pending', short: 'Chờ đồng bộ', full: 'Đã lưu trên thiết bị · Chờ đồng bộ' };
+    if (/đã đồng bộ|đã cập nhật từ/i.test(raw)) {
+      const text = 'Đã đồng bộ lúc ' + new Date().toLocaleTimeString('vi-VN', { ...fmt, hour: '2-digit', minute: '2-digit' });
+      return { ui: 'saved', short: text, full: text };
+    }
+    return { ui: kind === 'pending' ? 'pending' : 'saved', short: raw, full: raw };
+  };
+
+  // Dòng trạng thái trong hộp thoại việc nói đúng như viên thuốc khi chưa có chỉnh sửa; khi đã gõ thì là "có thay đổi chưa lưu" (workflow111.js đặt data-dirty).
+  const mirror = () => {
+    const line = document.querySelector('#editor .zen-task-save-status:not([data-dirty="true"])');
+    if (line && current && line.textContent !== current.full) line.textContent = current.full;
+  };
+
+  const paint = () => {
+    if (!current) return;
+    const el = document.querySelector('#save-state');
+    if (el) {
+      const icon = document.createElement('span');
+      icon.className = 'sync-icon';
+      icon.innerHTML = current.ui === 'saved' ? SAVED_ICON : current.ui === 'pending' ? PENDING_ICON : svgIcon('warning');
+      const label = document.createElement('span');
+      label.textContent = current.short;
+      el.replaceChildren(icon, label);
+      el.setAttribute('role', 'status');
+      el.dataset.sync = current.ui;
+      el.setAttribute('aria-label', 'Trạng thái đồng bộ: ' + current.full);
+      let last = 0;
+      try {
+        last = Number(localStorage.getItem(KEY + '-last-sync') || 0);
+      } catch {}
+      const lastText = last ? new Date(last).toLocaleString('vi-VN', fmt) : '';
+      const detail = document.querySelector('#sync-last-time');
+      if (detail) detail.textContent = last ? 'Lần đồng bộ thành công gần nhất: ' + lastText : 'Chưa ghi nhận lần đồng bộ thành công trên thiết bị này.';
+      el.title =
+        (current.ui === 'pending' ? 'Đang gửi dữ liệu lên máy chủ' : current.ui === 'saved' ? 'Dữ liệu đã được máy chủ xác nhận' : 'Dữ liệu hiện vẫn được giữ trên thiết bị') +
+        (last ? ' · Lần thành công gần nhất: ' + lastText : ' · Chưa ghi nhận lần đồng bộ thành công trên thiết bị này');
+    }
+    // Khung dưới thanh trên chỉ có khi trạng thái là lỗi hoặc xung đột (cần một nút làm gì đó); các trạng thái khác chỉ ở viên thuốc.
+    let bar = document.querySelector('#zen-sync-feedback');
+    if (current.ui === 'error') {
+      if (!bar) {
+        bar = document.createElement('aside');
+        bar.id = 'zen-sync-feedback';
+        bar.setAttribute('role', 'status');
+        document.querySelector('.topbar')?.after(bar);
+      }
+      const text = document.createElement('span');
+      text.textContent = current.full;
+      const action = document.createElement('button');
+      action.type = 'button';
+      action.className = 'btn';
+      action.textContent = current.action === 'conflict' ? 'Xem các bản dữ liệu' : 'Thử lại';
+      action.onclick = () => (current.action === 'conflict' ? accountPanel() : flushCloud(true));
+      bar.replaceChildren(text, action);
+    } else bar?.remove();
+    mirror();
+  };
+
+  syncStatus = function (message, kind) {
+    current = classify(message, kind);
+    paint();
+  };
+  const editor = document.querySelector('#editor');
+  if (editor) new MutationObserver(mirror).observe(editor, { childList: true, subtree: true });
+  // studio-zen.js là script nạp cuối; đăng nhập chạy bất đồng bộ nên trạng thái đầu tiên đôi khi đã được các lớp cũ vẽ trước khi tới đây. Nhận lấy trạng thái đó để viên thuốc, khung lỗi và hộp thoại không lệch nhau cho tới lần báo kế tiếp.
+  const drawn = document.querySelector('#save-state');
+  if (drawn?.dataset.sync) {
+    current = classify(drawn.textContent, drawn.dataset.sync);
+    paint();
+  }
+})();
