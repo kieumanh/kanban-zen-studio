@@ -114,3 +114,267 @@ html{scroll-padding-top:170px}
 /* Thanh cao 54px (trước 49px): cuộn tới một thẻ vẫn để đủ khoảng trống dưới khung dính. */
 html{scroll-padding-top:126px}
 }
+
+/* v1.15.40: truy cập I — chữ đủ lớn và đủ tương phản. Token màu chữ dùng chung; cỡ chữ tối thiểu 12px; nút gradient sẫm hơn để chữ trắng đạt 4,5:1; viền ô nhập đạt 3:1.
+   Cỡ chữ: danh sách dưới đây là các thành phần đã đo nhỏ hơn 12px (tests/a11y-contrast-browser.mjs quét lại ở 390/820/1440px). Dùng !important một lần ở đây vì nhiều quy tắc cũ đặt cỡ chữ nhỏ bằng bộ chọn cụ thể. */
+:root{--zen-text-muted:#5f5070;--zen-text-accent:#6e3fa0;--zen-field-border:#8f7da0;--zen-placeholder:#6f6080;--zen-primary-gradient:linear-gradient(110deg,#6a40b8,#a8468a 62%,#b9503f);--zen-min-font:12px}
+#crumb,
+#modal-eyebrow,
+#project-color-value,
+#work-group-detail small,
+.gantt-svg text,
+.gantt-task text,
+.mobile-viewbar .view-mode span,
+.view-mode span,
+button.btn kbd,
+button.calendar-task small,
+button.dashboard-progress-row small,
+button.label-chip,
+button.month-event,
+button.note-motif-option small,
+button.stat small,
+button.tab,
+button.tab span,
+button.tab.active,
+button.tab.active span,
+button.work-task-row small,
+details.progress-explanation p,
+div.color-picker-panel label,
+div.column-title b,
+div.dashboard-plan-part small,
+div.gantt-labels small,
+div.gantt-undated-head small,
+div.grow p,
+div.progress-meta span,
+div.progress-meta strong,
+div.progress-meta.task-card-progress-meta span,
+div.progress-meta.task-card-progress-meta strong,
+div.project-bottom span,
+div.resource-filters label,
+div.resource-filters small,
+div.rgb-inputs label,
+div.view-group-label,
+div.work-chart-total span,
+div.work-legend span,
+div.work-legend strong,
+div.workspace-scope span,
+footer,
+footer span,
+footer strong,
+p.gantt-empty small,
+p.task-next-step,
+p.task-next-step span,
+section.board-summary.project-view-summary p,
+section.recycle-overview span,
+small.icon-library-footnote,
+small.icon-result-count,
+small.sidebar-version,
+small.sidebar-version span,
+small.zen-event-kind,
+span.appearance-value,
+span.brand-sub,
+span.calendar-progress,
+span.eyebrow,
+span.focus-card-priority,
+span.home-project-total small,
+span.label-chip,
+span.matrix-chip.q1,
+span.matrix-chip.q2,
+span.matrix-chip.q3,
+span.matrix-chip.q4,
+span.matrix-chip.unclassified,
+span.notification-count,
+span.pill,
+span.stat-detail-hint,
+span.status.Doing,
+span.status.Done,
+span.status.Idea,
+span.status.List,
+span.tag,
+span.task-card-deadline,
+span.task-card-deadline.is-overdue,
+span.task-project-choice-copy small,
+span.wf-keyword-count{font-size:12px!important}
+.help-copy,
+thead th,
+.recycle-toolbar .btn,
+.wf-task-tools .btn,
+.work-legend strong{font-size:12px!important}
+
+/* Chữ phụ: dùng chung hai màu token thay cho các màu tím nhạt rải rác (đạt từ 4,5:1 trên mọi nền chữ đang dùng; nền sẫm nhất là #ddcfeb ≈ 4,9:1). */
+.task-card-deadline:not(.is-overdue),
+.view-mode:not([aria-pressed="true"]),
+.view-mode:not([aria-pressed="true"]) span,
+.column-title b,
+.focus-card-priority,
+.home-project-total small,
+.view-group-label,
+.task-next-step,
+.task-next-step span,
+.task-card-progress-meta span,
+.task-card-progress-meta strong,
+.card-check-control span,
+.task-project-choice-copy small,
+.form-intro,
+.icon-library-footnote,
+.gantt-undated-head > div > small,
+.gantt-empty,
+.gantt-empty small,
+.wf-task-heading,
+.breadcrumb > span,
+.stat small,
+.note-motif-current,
+.note-motif-option small,
+.gantt-labels small,
+.calendar-task small,
+.work-task-row small,
+.project-bottom span,
+.date-field-trigger,
+.sidebar-version,
+.sidebar-version span,
+.other-month time {
+  color: var(--zen-text-muted) !important;
+}
+.tag,
+.brand-sub,
+.eyebrow,
+.stat-detail-hint {
+  color: var(--zen-text-accent) !important;
+}
+footer,
+footer span {
+  color: #6b6552 !important;
+}
+.avatar {
+  color: #5a4d36 !important;
+}
+.pill {
+  color: #5f5430 !important;
+}
+.status.Idea {
+  color: #94406d !important;
+}
+.wf-keyword-count {
+  color: #5c4470 !important;
+}
+.compact-check-remove {
+  color: #8a4455 !important;
+}
+.work-legend strong {
+  color: color-mix(in srgb, var(--group-color) 45%, #2a1f35) !important;
+}
+
+/* Thay độ mờ bằng màu: chữ giữ nguyên độ tương phản, thứ bậc nhìn vẫn còn (tab không chọn nhỏ hơn, thẻ Hoàn thành xám và nhạt nền, ngày ngoài tháng nền nhạt). */
+#tabs.has-current-project .tab:not(.active) {
+  opacity: 1 !important;
+}
+#tabs.has-current-project .tab:not(.active):not(.tab-home),
+#tabs.has-current-project .tab:not(.active):not(.tab-home) span {
+  color: var(--zen-text-muted) !important;
+}
+.column[data-column="Done"] .task-card {
+  opacity: 1 !important;
+}
+.column[data-column="Done"] .task-card h3 {
+  color: var(--zen-text-muted) !important;
+}
+.other-month time,
+.stat-detail-hint {
+  opacity: 1 !important;
+}
+
+/* Nút gradient: sẫm hơn để chữ trắng đạt 4,5:1 ở điểm sáng nhất của gradient (#b9503f: 4,9:1). */
+.btn.primary,
+button.primary,
+.primary:not(.danger),
+#note-save,
+#save-profile,
+#save-reminders,
+#save-weekly-settings,
+.wf-comments > button,
+.wf-add-check,
+[data-action="new-project"],
+[data-action="new-task"],
+[data-note-new],
+button.focus-check-updates,
+button.focus-check-updates:hover,
+button[data-resources-refresh],
+button[data-resources-refresh]:hover,
+.welcome-actions .btn {
+  background: var(--zen-primary-gradient) !important;
+  color: #fff !important;
+}
+#editor-form button[type="submit"].primary.danger {
+  background: linear-gradient(110deg, #a8305c, #b13a50 64%, #b4452f) !important;
+}
+.wf-is-focused .zen-music .music-toggle,
+.wf-is-focused .zen-music {
+  background: linear-gradient(110deg, #6a40b8, #a8468a) !important;
+}
+
+/* Ô nhập: viền đạt 3:1 trên nền trắng và nền tím nhạt; chữ gợi ý (placeholder) đạt 4,5:1. */
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not([type="hidden"]):not([type="button"]):not([type="submit"]),
+select,
+textarea {
+  border-color: var(--zen-field-border) !important;
+}
+.compact-check textarea {
+  border-color: var(--zen-field-border) !important;
+}
+::placeholder {
+  color: var(--zen-placeholder) !important;
+  opacity: 1 !important;
+}
+
+/* Huy hiệu số thông báo: chữ 12px trong huy hiệu rộng hơn một chút, nền sẫm hơn để chữ trắng đạt 4,5:1. */
+.notification-count {
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  background: #a8325a;
+  font-size: 12px !important;
+  line-height: 18px;
+}
+
+/* Tiêu đề bảng "Tất cả việc" 12px: giảm giãn chữ, và ở 701–900px bớt khoảng đệm ngang để bảng vẫn vừa khung (ở 701px bảng rộng 709px khi chưa chỉnh). */
+.task-table th {
+  letter-spacing: 0.3px;
+}
+@media (min-width: 701px) and (max-width: 900px) {
+  .task-table th {
+    letter-spacing: 0.2px;
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+}
+
+/* Thanh chế độ xem trên điện thoại: nhãn 12px, bớt khoảng đệm hai bên để "Dòng thời gian" vẫn nằm trên một dòng. */
+@media (max-width: 700px) {
+  .mobile-viewbar .view-mode {
+    padding: 5px 1px !important;
+  }
+  .mobile-viewbar .view-mode span {
+    font-size: 12px !important;
+    letter-spacing: -0.01em;
+  }
+}
+/* Điện thoại hẹp: ≤380px thu khoảng đệm và giãn chữ để "Dòng thời gian" vẫn một dòng (đo ở 360px); ≤349px (hiếm) cho nhãn xuống dòng thay vì bị cắt, thanh cao hơn một chút. */
+@media (max-width: 380px) {
+  .mobile-viewbar {
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+  .mobile-viewbar .view-mode {
+    padding: 5px 0 !important;
+  }
+  .mobile-viewbar .view-mode span {
+    letter-spacing: -0.03em;
+  }
+}
+@media (max-width: 349px) {
+  .mobile-viewbar .view-mode span {
+    white-space: normal;
+    text-align: center;
+    line-height: 1.15;
+  }
+}
