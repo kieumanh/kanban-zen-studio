@@ -1,4 +1,4 @@
-// Hồi quy v1.15.36: đầu trang dự án gọn. Một nút chính "Thêm việc"; Ghim / Lưu trữ / Tệp / Sửa dự án nằm trong menu "Tùy chọn"; "x/y việc xong" là số chính; thẻ đầu tiên hiện trong màn hình đầu ở 390px.
+// Hồi quy v1.15.36 (cập nhật v1.15.37: ba nút phụ vào menu Hiển thị): đầu trang dự án gọn. Một nút chính "Thêm việc"; Ghim / Lưu trữ / Tệp / Sửa dự án nằm trong menu "Tùy chọn"; "x/y việc xong" là số chính; thẻ đầu tiên hiện trong màn hình đầu ở 390px.
 import { createServer } from 'node:http';
 import assert from 'node:assert/strict';
 import { flatten, inflate } from '../dist/modules/delta.mjs';
@@ -153,9 +153,9 @@ try {
     const cardLimit = width <= 701 ? 700 : 620;
     assert.ok(g.cardTop <= cardLimit, `thẻ đầu tiên bắt đầu ở ${g.cardTop}px, phải từ ${cardLimit}px trở lên ở ${width}px`);
     assert.ok(g.scrollW <= g.vw, `trang tràn ngang ${g.scrollW}px trong khung ${g.vw}px ở ${width}px`);
-    // 4. Hai nút phụ cũ vẫn bấm được ngay (chưa vào menu): Thẻ gọn, Giới hạn WIP, Lệnh nhanh.
+    // 4. v1.15.37: Thẻ gọn, Giới hạn WIP, Lệnh nhanh đã vào menu Hiển thị (chi tiết ở display-menu-browser); v1.15.36 để chúng hiện sẵn dưới khối tiến độ.
     for (const name of ['compact', 'wip', 'commands'])
-      assert.ok(await page.locator('[data-studio=' + name + ']').isVisible(), `nút [data-studio=${name}] phải còn hiện ở ${width}px`);
+      assert.equal(await page.locator('[data-studio=' + name + ']').isVisible(), false, `nút [data-studio=${name}] phải nằm trong menu Hiển thị, không hiện sẵn ở ${width}px`);
 
     // 5. Menu Tùy chọn: mở, bốn mục đủ lớn để bấm, nằm trong khung nhìn, không làm trang tràn.
     const menu = page.locator('#main .wf-project-menu');

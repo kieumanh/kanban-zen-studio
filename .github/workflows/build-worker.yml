@@ -46,6 +46,7 @@ jobs:
           node tests/nav-frame-browser.mjs
           node tests/kanban-card-browser.mjs
           node tests/project-header-browser.mjs
+          node tests/display-menu-browser.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:

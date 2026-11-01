@@ -98,3 +98,12 @@ html{scroll-padding-top:170px}
 .studio-board-tools{margin:2px 0 8px;gap:4px}
 .studio-board-tools>span,.studio-board-tools kbd{display:none}
 }
+/* v1.15.37: Thẻ gọn, Giới hạn WIP và Lệnh nhanh gom vào menu "Hiển thị" (không còn thanh công cụ riêng dưới khối tiến độ). */
+.kanban-options .wf-display-compact{display:flex;gap:10px;align-items:center;min-height:30px}
+.kanban-options .wf-display-actions{display:grid;gap:2px;margin:2px -8px -8px;padding:8px;border-top:1px solid #eadff3}
+.kanban-options .wf-display-actions .btn{display:flex;align-items:center;justify-content:flex-start;gap:10px;width:100%;min-height:40px;margin:0;border-color:transparent;background:transparent;box-shadow:none;font-size:13px;color:#674688;text-align:left}
+.kanban-options .wf-display-actions .btn:hover{background:#f4eefa}
+.kanban-options .wf-display-actions kbd{margin-left:auto;font:11px var(--sans);color:#685974}
+@media(pointer:coarse){.kanban-options .wf-display-actions .btn{min-height:44px}.kanban-options .wf-display-compact{min-height:44px}}
+@media(max-width:700px){.kanban-options .wf-display-actions kbd{display:none}}
+#main .board-tools .wf-display-options .kanban-options{grid-template-columns:minmax(0,1fr)}

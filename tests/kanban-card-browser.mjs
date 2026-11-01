@@ -142,10 +142,12 @@ try {
 
     // "Thẻ gọn" làm thẻ thấp hơn thẻ thường.
     const before = (await cards(page)).find((c) => c.id === 'p1t8')?.h;
+    await page.locator('#main .wf-display-options > summary').click();
     await page.locator('[data-studio=compact]').click();
     await page.waitForFunction(() => document.querySelector('.board')?.classList.contains('studio-compact'));
     const after = (await cards(page)).find((c) => c.id === 'p1t8')?.h;
     assert.ok(before && after && after < before, `Thẻ gọn phải thấp hơn thẻ thường (${after}px so với ${before}px) ở ${width}px`);
+    await page.locator('#main .wf-display-options > summary').click();
     await page.locator('[data-studio=compact]').click();
     await page.waitForFunction(() => !document.querySelector('.board')?.classList.contains('studio-compact'));
 

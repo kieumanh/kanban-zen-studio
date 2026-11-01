@@ -42,9 +42,16 @@
     const board = document.querySelector('#main .board'), p = project();
     if (board && p && view === 'projects') {
       board.classList.toggle('studio-compact', compact());
-      const toolbar = document.createElement('div'); toolbar.className = 'studio-board-tools';
-      toolbar.innerHTML = '<span>Mỗi việc một khoảng thở</span><button type="button" class="btn" data-studio="compact" aria-pressed="'+compact()+'">'+(compact()?'Thẻ đầy đủ':'Thẻ gọn')+'</button><button type="button" class="btn" data-studio="wip">Giới hạn WIP</button><button type="button" class="btn" data-studio="commands">Lệnh nhanh <kbd>Ctrl / ⌘ K</kbd></button>';
-      board.before(toolbar);
+      // v1.15.37: Thẻ gọn, Giới hạn WIP và Lệnh nhanh nằm trong menu "Hiển thị"; chỉ khi menu không có (lỗi dựng) mới quay về thanh công cụ riêng.
+      const panel = document.querySelector('#main .board-head .kanban-options');
+      let toolbar = null;
+      if (panel && !panel.querySelector('[data-studio]')) {
+        panel.insertAdjacentHTML('beforeend', '<label class="wf-display-compact"><input type="checkbox" data-studio="compact"'+(compact()?' checked':'')+'> Thẻ gọn</label><div class="wf-display-actions" role="group" aria-label="Công cụ bảng"><button type="button" class="btn" data-studio="wip">Giới hạn WIP</button><button type="button" class="btn" data-studio="commands">Lệnh nhanh <kbd>Ctrl / ⌘ K</kbd></button></div>');
+      } else if (!panel) {
+        toolbar = document.createElement('div'); toolbar.className = 'studio-board-tools';
+        toolbar.innerHTML = '<span>Mỗi việc một khoảng thở</span><button type="button" class="btn" data-studio="compact" aria-pressed="'+compact()+'">'+(compact()?'Thẻ đầy đủ':'Thẻ gọn')+'</button><button type="button" class="btn" data-studio="wip">Giới hạn WIP</button><button type="button" class="btn" data-studio="commands">Lệnh nhanh <kbd>Ctrl / ⌘ K</kbd></button>';
+        board.before(toolbar);
+      }
       tidyHeader();
       tidySummary(p);
       const nav = document.createElement('nav'); nav.className = 'studio-column-tabs'; nav.setAttribute('aria-label','Chuyển cột Kanban');
@@ -58,7 +65,7 @@
         if (!count) { const empty = document.createElement('p'); empty.className='studio-empty'; empty.textContent=key==='Done'?'Một việc hoàn thành, một khoảng nhẹ lòng.':'Bắt đầu từ một việc nhỏ. Dùng nút “Thêm công việc” bên dưới.'; badge.after(empty); }
         const tab=document.createElement('button'); tab.type='button'; tab.textContent=columnDisplayName(p,key)+' · '+count;tab.dataset.studioColumn=String(i);tab.setAttribute('aria-pressed',String((prefs.get(p.id)||0)===i));nav.append(tab);
       });
-      toolbar.after(nav);
+      toolbar ? toolbar.after(nav) : board.before(nav);
       const mobile = matchMedia('(max-width:700px)').matches;
       if(mobile) requestAnimationFrame(()=>{board.scrollLeft=(columns[prefs.get(p.id)||0]?.offsetLeft||0)-(columns[0]?.offsetLeft||0);});
       let scrollFrame;
