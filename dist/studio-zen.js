@@ -242,3 +242,47 @@
     return template.innerHTML;
   };
 })();
+
+// v1.15.43: một kênh nhắc việc đến hạn. Thanh nhắc hạn (dist/projectux.js) là nguồn chính; con số trên chuông là đúng số việc thanh nhắc nêu (quá hạn + đến hạn trong 3 ngày), cùng lọc qua taskNotices() nên cùng
+// ngữ nghĩa "đã xem": "Xác nhận đã đọc tất cả" (workflow111.js) ẩn các việc đó khỏi thanh nhắc, chuông và hộp thoại đến hết ngày, việc mới thì hiện lại ở cả ba. Các mục còn lại (phiên bản mới, tệp mới, nhắc
+// ghi chú) báo bằng một chấm nhỏ cạnh chuông, không cộng vào số, và được nêu tên ở dòng tóm tắt đầu hộp thoại Thông báo. Việc "quan trọng" chưa tới hạn vẫn được liệt kê trong hộp thoại nhưng không tính vào số.
+// Ghi đè hoàn toàn refreshBell (ux.js, welcome.js, keepplus.js đã bọc nhau nhiều lớp).
+(() => {
+  const bellParts = () => {
+    if (!currentUser) return { late: 0, soon: 0, due: 0, important: 0, release: 0, files: 0, notes: 0, extra: 0 };
+    const tasks = taskNotices();
+    const late = tasks.filter((t) => t.notice === 'Quá hạn').length;
+    const soon = tasks.filter((t) => t.notice === 'Sắp đến hạn').length;
+    const important = tasks.filter((t) => t.notice === 'Quan trọng').length;
+    const release = releaseUnread() ? 1 : 0;
+    const files = fileAlerts.length;
+    const notes = dueNoteReminders().filter((n) => !localRead('zen-note-seen:' + currentUser.id + ':' + noteReminderKey(n))).length;
+    return { late, soon, due: late + soon, important, release, files, notes, extra: release + files + notes };
+  };
+  const dueText = (p) => [p.late && p.late + ' quá hạn', p.soon && p.soon + ' đến hạn trong 3 ngày'].filter(Boolean).join(', ');
+  const extraText = (p) => [p.release && 'có phiên bản mới', p.files && p.files + ' tệp mới', p.notes && p.notes + ' nhắc ghi chú'].filter(Boolean).join(', ');
+  refreshBell = function () {
+    const p = bellParts();
+    bell.innerHTML =
+      svgIcon('bell') +
+      (p.due ? '<span class="notification-count">' + (p.due > 99 ? '99+' : p.due) + '</span>' : '') +
+      (p.extra ? '<span class="notification-extra" aria-hidden="true"></span>' : '');
+    bell.setAttribute(
+      'aria-label',
+      'Thông báo' + (p.due ? ' · ' + p.due + ' việc cần chú ý (' + dueText(p) + ')' : ' · không có việc quá hạn hay đến hạn') + (p.extra ? '; ngoài ra ' + extraText(p) : ''),
+    );
+  };
+  const clickBefore = bell.onclick;
+  bell.onclick = () => {
+    clickBefore();
+    const list = document.querySelector('#editor-body .notice-list');
+    if (!list || document.querySelector('#editor-body .notice-summary')) return;
+    const p = bellParts();
+    const text =
+      (p.due ? p.due + ' việc cần chú ý: ' + dueText(p).replace(/, /g, ' · ') + '.' : 'Không có việc quá hạn hay đến hạn.') +
+      (p.extra ? ' Ngoài ra: ' + extraText(p).replace(/, /g, ' · ') + '.' : '') +
+      (p.important ? ' Còn ' + p.important + ' việc quan trọng chưa tới hạn (liệt kê bên dưới, không tính vào số trên chuông).' : '');
+    list.insertAdjacentHTML('beforebegin', '<p class="notice-summary" role="status">' + text + '</p>');
+  };
+  refreshBell();
+})();

@@ -52,6 +52,7 @@ jobs:
           node tests/a11y-contrast-browser.mjs
           node tests/a11y-interaction-browser.mjs
           node tests/task-list-browser.mjs
+          node tests/notice-browser.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
