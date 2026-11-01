@@ -1,6 +1,6 @@
 {
   "name": "kanban-zen-studio",
-  "version": "1.15.35",
+  "version": "1.15.36",
   "private": true,
   "type": "module",
   "scripts": {

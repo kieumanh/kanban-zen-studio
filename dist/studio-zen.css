@@ -64,3 +64,37 @@ html{scroll-padding-top:170px}
 .task-card .card-checks{margin:2px 0!important}
 /* v1.15.35: điện thoại (≤700px) cũng chừa chỗ cho thanh trên + dải chế độ xem dính khi trình duyệt cuộn tới một phần tử (kéo thả, Tab). Thẻ ngắn hơn làm trang ngắn lại, tay kéo của thẻ đầu có thể rơi dưới thanh trên. */
 @media(max-width:700px){html{scroll-padding-top:120px}}
+/* v1.15.36: đầu trang dự án gọn. Một nút chính "Thêm việc"; Ghim / Lưu trữ / Tệp / Sửa dự án nằm trong menu "Tùy chọn"; "x/y việc xong" là số chính của khối tiến độ; các nút phụ (Thẻ gọn, Giới hạn WIP, Lệnh nhanh) dịu đi. */
+.board-head .board-tools{align-items:center;gap:8px}
+.wf-project-menu{position:relative}
+.wf-project-menu>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:8px;min-height:40px;padding:8px 14px;border:1px solid #e0d3eb;border-radius:12px;background:#fff;font-size:12px;font-weight:650;color:#674688}
+.wf-project-menu>summary::-webkit-details-marker{display:none}
+.wf-project-menu>summary:before{content:'⋯';font-size:18px;line-height:1}
+.wf-project-menu[open]>.wf-project-menu-list{position:absolute;z-index:20;right:0;top:100%;width:210px;margin:6px 0 0;padding:8px;display:grid;gap:2px;border:1px solid #e0d3eb;border-radius:14px;background:#fff;box-shadow:0 12px 30px #43235c22}
+.wf-project-menu-list .btn{display:flex;align-items:center;gap:10px;justify-content:flex-start;width:100%;min-height:40px;margin:0;border-color:transparent;background:transparent;box-shadow:none;text-align:left}
+.wf-project-menu-list .btn:hover{background:#f4eefa}
+.board-summary .summary-main{display:flex;align-items:baseline;gap:8px;white-space:nowrap}
+.board-summary .summary-main strong{font-size:26px;line-height:1.2}
+.board-summary .summary-main span{font-size:14px;font-weight:650;color:#554566}
+.board-summary .grow p{margin:6px 0 0}
+.studio-board-tools{margin:14px 0 12px}
+.studio-board-tools .btn{min-height:40px;border-color:transparent;background:transparent;box-shadow:none;font-size:13px;color:#674688}
+.studio-board-tools .btn:hover{background:#f4eefa}
+@media(pointer:coarse){.wf-project-menu>summary,.wf-project-menu-list .btn,.studio-board-tools .btn{min-height:44px}}
+/* Hai bảng (Hiển thị, Tùy chọn) neo vào mép phải của thanh nút, không neo vào từng nút, để luôn nằm trong vùng nội dung và không đè lên thanh bên. */
+#main .board-head .board-tools{position:relative}
+#main .board-head .board-tools .wf-display-options,#main .board-head .board-tools .wf-project-menu{position:static}
+#main .board-tools .wf-display-options[open] .kanban-options,#main .wf-project-menu[open]>.wf-project-menu-list{left:auto;right:0;top:100%}
+@media(max-width:700px){
+#main .board-head{gap:8px;margin-bottom:12px}
+#main .board-head h1{margin:4px 0}
+#main .board-head .board-tools{display:flex;flex-wrap:nowrap;align-items:center;gap:8px;width:100%;max-width:none}
+#main .board-head .board-tools>[data-action=new-task]{order:-1;flex:1 1 auto;min-width:0;justify-content:center;min-height:44px}
+#main .board-head .board-tools .wf-display-options,#main .board-head .board-tools .wf-project-menu{flex:0 0 auto;margin:0}
+#main .board-tools .wf-display-options>summary,#main .wf-project-menu>summary{min-height:44px}
+#main .board-tools .wf-display-options[open] .kanban-options,#main .wf-project-menu[open]>.wf-project-menu-list{left:0;right:0;width:auto;top:100%}
+#main .board-summary{flex-wrap:wrap;align-items:center;gap:6px 14px;padding:10px 14px;margin-bottom:10px}
+#main .board-summary>.grow{flex:1 1 130px}
+.studio-board-tools{margin:2px 0 8px;gap:4px}
+.studio-board-tools>span,.studio-board-tools kbd{display:none}
+}

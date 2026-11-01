@@ -5,6 +5,39 @@
   let palette, returnFocus, commands = [], chosen = 0;
   const compact = () => localRead('zen-compact') === 'true';
   const editable = () => !contentReadOnly;
+  // v1.15.36: đầu trang dự án chỉ giữ một nút chính; Ghim / Lưu trữ / Tệp / Sửa dự án vào menu "Tùy chọn".
+  function tidyHeader() {
+    const tools = document.querySelector('#main .board-head .board-tools');
+    if (!tools || tools.querySelector('.wf-project-menu')) return;
+    const items = ['[data-project-pin]', '[data-project-archive]', '[data-files]', '[data-action="edit-project"]'].map((selector) => tools.querySelector(selector)).filter(Boolean);
+    if (!items.length) return;
+    const edit = tools.querySelector('[data-action="edit-project"]');
+    if (edit) [...edit.childNodes].filter((node) => node.nodeType === 3).forEach((node) => { node.textContent = 'Sửa dự án'; });
+    const menu = document.createElement('details'), summary = document.createElement('summary'), list = document.createElement('div');
+    menu.className = 'wf-project-menu'; summary.textContent = 'Tùy chọn'; list.className = 'wf-project-menu-list';
+    list.append(...items); menu.append(summary, list);
+    tools.insertBefore(menu, tools.querySelector('[data-action="new-task"]'));
+  }
+  // v1.15.36: "x/y việc xong" là số chính; phần trăm (tính cả mục checklist) là chú thích nhỏ.
+  function tidySummary(p) {
+    const box = document.querySelector('#main .board-summary');
+    if (!box || box.dataset.summary === 'v1.15.36' || typeof progress !== 'function' || typeof bar !== 'function') return;
+    const tasks = p.tasks.filter((t) => !t.archived), done = tasks.filter((t) => t.col === 'Done').length, pr = progress(tasks);
+    const note = !tasks.length ? 'Chưa có việc nào' : pr.pct + '% tiến độ' + (pr.total !== tasks.length ? ' · tính cả mục checklist (' + pr.done + '/' + pr.total + ')' : '');
+    box.dataset.summary = 'v1.15.36';
+    box.innerHTML = '<div class="summary-main"><strong style="color:' + esc(p.color) + '">' + (tasks.length ? done + '/' + tasks.length : '0') + '</strong><span>' + (tasks.length ? 'việc xong' : 'việc') + '</span></div><div class="grow">' + bar(pr.pct, p.color) + '<p>' + esc(note) + '</p></div>';
+  }
+  document.addEventListener('click', (e) => {
+    const inMenu = e.target.closest('.wf-project-menu');
+    document.querySelectorAll('.wf-project-menu[open]').forEach((menu) => { if (menu !== inMenu || e.target.closest('.wf-project-menu-list button')) menu.open = false; });
+    if (e.target.closest('.wf-project-menu > summary')) document.querySelectorAll('.wf-display-options[open]').forEach((d) => { d.open = false; });
+    if (e.target.closest('.wf-display-options > summary')) document.querySelectorAll('.wf-project-menu[open]').forEach((d) => { d.open = false; });
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Escape') return;
+    const menu = document.querySelector('.wf-project-menu[open]');
+    if (menu) { menu.open = false; menu.querySelector('summary')?.focus(); }
+  });
   function paint() {
     const board = document.querySelector('#main .board'), p = project();
     if (board && p && view === 'projects') {
@@ -12,6 +45,8 @@
       const toolbar = document.createElement('div'); toolbar.className = 'studio-board-tools';
       toolbar.innerHTML = '<span>Mỗi việc một khoảng thở</span><button type="button" class="btn" data-studio="compact" aria-pressed="'+compact()+'">'+(compact()?'Thẻ đầy đủ':'Thẻ gọn')+'</button><button type="button" class="btn" data-studio="wip">Giới hạn WIP</button><button type="button" class="btn" data-studio="commands">Lệnh nhanh <kbd>Ctrl / ⌘ K</kbd></button>';
       board.before(toolbar);
+      tidyHeader();
+      tidySummary(p);
       const nav = document.createElement('nav'); nav.className = 'studio-column-tabs'; nav.setAttribute('aria-label','Chuyển cột Kanban');
       const columns = [...board.querySelectorAll('.column')];
       columns.forEach((column, i) => {
