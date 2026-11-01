@@ -183,3 +183,62 @@
     return result;
   };
 })();
+
+// v1.15.42: danh sách việc gọn. Bọc table() (đã bị task-list.js bọc một lần): tên dự án nằm dưới tên việc thay cho cột riêng, bỏ nhãn "Hạn chót" lặp ở từng hàng (quá hạn ghi một lần cạnh tên dự án),
+// việc đã xong xuống cuối, nhãn đọc-được của ngày và ưu tiên có kèm giá trị hiện tại. Sắp xếp theo mục "Sắp xếp" cũng giữ việc đã xong ở cuối (dist/workflow111.js).
+(() => {
+  const base = table;
+  table = function (tasks) {
+    const template = document.createElement('template');
+    template.innerHTML = base(tasks);
+    for (const th of template.content.querySelectorAll('thead th')) {
+      const label = th.textContent.trim();
+      if (label === 'DỰ ÁN') th.remove();
+      else if (label === 'CHECKLIST') th.textContent = 'TIẾN ĐỘ';
+    }
+    template.content.querySelector('td[colspan]')?.setAttribute('colspan', '5');
+    const body = template.content.querySelector('tbody');
+    const rows = [...template.content.querySelectorAll('tbody tr[data-task]')];
+    const finished = [];
+    for (const row of rows) {
+      const t = project(row.dataset.pid)?.tasks.find((x) => x.id === row.dataset.task);
+      const nameCell = row.querySelector('td.task-name');
+      const projectCell = row.querySelector('td[data-label="Dự án"]');
+      if (nameCell && projectCell) {
+        const title = document.createElement('span');
+        title.className = 'zen-row-title';
+        title.append(...nameCell.childNodes);
+        title.title = title.textContent;
+        const sub = document.createElement('small');
+        sub.className = 'zen-row-project';
+        const name = document.createElement('span');
+        name.className = 'zen-row-project-name';
+        for (const node of [...projectCell.childNodes]) (node.nodeType === 1 ? sub : name).append(node);
+        sub.append(name);
+        if (row.classList.contains('zen-row-overdue')) {
+          const late = document.createElement('b');
+          late.className = 'zen-row-late';
+          late.textContent = 'Quá hạn';
+          sub.append(late);
+        }
+        projectCell.remove();
+        nameCell.append(title, sub);
+      }
+      row.querySelector('.zen-due-label')?.remove();
+      const due = row.querySelector('.zen-due-trigger');
+      if (due && /^\d{2}\/\d{2}\/\d{4}$/.test(due.textContent.trim())) due.setAttribute('aria-label', `Hạn chót ${due.textContent.trim()}${row.classList.contains('zen-row-overdue') ? ', quá hạn' : ''}. Bấm để đổi: ${t?.title || ''}`);
+      const summary = row.querySelector('.zen-priority-picker>summary');
+      const current = row.querySelector('.zen-priority-current')?.textContent.trim();
+      if (summary && current) {
+        summary.setAttribute('aria-label', `Ưu tiên ${current}. Bấm để đổi: ${t?.title || ''}`);
+        summary.title = current;
+      }
+      if (t?.col === 'Done') {
+        row.classList.add('zen-row-done');
+        finished.push(row);
+      }
+    }
+    if (body && finished.length) body.append(...finished);
+    return template.innerHTML;
+  };
+})();
