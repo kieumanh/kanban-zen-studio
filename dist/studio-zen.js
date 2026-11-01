@@ -135,3 +135,51 @@
     return result;
   };
 })();
+/* v1.15.41: hộp thoại có tên đọc được và tiêu điểm đầu hợp lý. Mọi <dialog> gọi showModal() đều qua đây (hộp thoại dùng chung #editor, báo cáo, chia sẻ...). */
+(() => {
+  const nativeShow = HTMLDialogElement.prototype.showModal;
+  let serial = 0;
+  const shown = (el) => el && el.checkVisibility({ contentVisibilityAuto: true, visibilityProperty: true }) && el.getBoundingClientRect().width > 2;
+  // Tên: tiêu đề đầu tiên đang hiển thị; không có thì dùng nhãn nhỏ phía trên (eyebrow). Dùng chung #editor nên tính lại mỗi khi nội dung đổi.
+  const name = (dialog) => {
+    if (dialog.hasAttribute('aria-label')) return;
+    const heading = [...dialog.querySelectorAll('h1,h2,h3,[role="heading"]')].find(shown) || dialog.querySelector('#modal-eyebrow');
+    if (!heading) return;
+    if (!heading.id) heading.id = 'dialog-title-' + ++serial;
+    if (dialog.getAttribute('aria-labelledby') !== heading.id) dialog.setAttribute('aria-labelledby', heading.id);
+  };
+  const nameField = (dialog) => [...dialog.querySelectorAll('#editor-body input,#editor-body textarea')].find((e) => shown(e) && !e.disabled && !e.readOnly && (e.tagName === 'TEXTAREA' || ['text', 'search', 'email', 'url', 'tel', 'number'].includes(e.type)));
+  const settle = (dialog) => {
+    name(dialog);
+    if (dialog.id !== 'editor' || !dialog.open) return;
+    const field = nameField(dialog);
+    const coarse = matchMedia('(pointer:coarse)').matches;
+    // Biểu mẫu tạo mới (ô tên còn trống) và máy có chuột: vào thẳng ô tên. Sửa một mục đã có trên cảm ứng: không bật bàn phím, đặt tiêu điểm ở tiêu đề.
+    if (field && (!coarse || !field.value)) field.focus({ preventScroll: true });
+    else if (document.activeElement?.matches('.modal-close-pin,[data-action="close-modal"]')) {
+      const heading = dialog.querySelector('#editor-body h2,#editor-body h1');
+      if (heading) {
+        heading.tabIndex = -1;
+        heading.focus({ preventScroll: true });
+      }
+    }
+  };
+  HTMLDialogElement.prototype.showModal = function (...args) {
+    const was = this.open;
+    const result = nativeShow.apply(this, args);
+    if (!was) queueMicrotask(() => settle(this));
+    if (!this.__zenNamed) {
+      this.__zenNamed = true;
+      let queued = false;
+      new MutationObserver(() => {
+        if (queued) return;
+        queued = true;
+        requestAnimationFrame(() => {
+          queued = false;
+          name(this);
+        });
+      }).observe(this, { childList: true, subtree: true });
+    }
+    return result;
+  };
+})();

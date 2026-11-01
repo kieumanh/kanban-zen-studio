@@ -378,3 +378,138 @@ textarea {
     line-height: 1.15;
   }
 }
+
+/* v1.15.41: truy cập II — hộp thoại, vùng chạm, thứ tự Tab. */
+/* Bổ sung sau khi test hộp thoại Thông báo và Ghi chú mới thật sự mở được (bản v1.15.40 chưa quét hai hộp thoại này). */
+.zen-editor-pin-hint,
+.note-reminder-options small,
+.note-keywords-field small,
+.zen-rich-save-state,
+.note-motif-current,
+.note-composer > small,
+.notice-detail-link {
+  font-size: 12px !important;
+}
+.zen-editor-pin-hint,
+.note-composer > small {
+  color: var(--zen-text-muted) !important;
+}
+.notice-detail-link {
+  color: var(--zen-text-accent) !important;
+}
+.notice-item strong {
+  color: #84521a !important;
+}
+.wf-project-choice {
+  color: color-mix(in srgb, var(--project-color) 45%, #2a1f35);
+}
+/* Tiêu đề hộp thoại nhận tiêu điểm bằng mã (tabindex -1): không vẽ viền tiêu điểm quanh tiêu đề. */
+#editor-body h2[tabindex="-1"]:focus {
+  outline: none;
+}
+
+/* Vùng chạm tối thiểu 24×24px ở mọi thiết bị. */
+.task-name input[type="checkbox"],
+.compact-check > input[type="checkbox"] {
+  width: 24px !important;
+  height: 24px !important;
+  margin: 0 !important;
+}
+.wf-check-sort-list .compact-check {
+  grid-template-columns: 30px 26px minmax(0, 1fr) 30px !important;
+}
+input[type="range"] {
+  height: 24px;
+}
+.text-btn,
+.settings-toggle {
+  min-height: 24px;
+}
+.progress-explanation > summary {
+  min-height: 24px;
+  box-sizing: border-box;
+  padding-block: 2px;
+}
+/* Thứ tự Tab = thứ tự nhìn: trên điện thoại, nút "Tệp đính kèm" đứng sau các nút trạng thái trong DOM nên cũng nằm dưới chúng. */
+@media (max-width: 700px) {
+  #editor-body .detail-actions .wf-state-choices {
+    order: 0 !important;
+  }
+  #editor-body .detail-actions > .btn {
+    order: 1 !important;
+  }
+}
+
+/* Màn hình cảm ứng (pointer: coarse, gồm cả máy tính bảng): điều khiển chính tối thiểu 44×44px. Nhãn từ khóa, ô chọn, thanh trượt, thanh định dạng và tay nắm Gantt giữ mức 24px (xem ghi chú phát hành).
+   !important vì nhiều quy tắc cũ đặt min-height / height riêng cho từng khối. */
+@media (pointer: coarse) {
+  .btn,
+  .icon-btn,
+  .tab-add,
+  .add-task,
+  .nav,
+  .wf-column-name,
+  .text-btn,
+  .month-event,
+  .work-legend button,
+  .zen-priority-menu button,
+  .compact-check-remove,
+  .task-focus-shortcut,
+  .modal-close-pin,
+  .avatar,
+  .workspace-home,
+  select,
+  summary:not(.zen-list-menu > summary),
+  input:not([type]),
+  input[type="text"],
+  input[type="search"],
+  input[type="email"],
+  input[type="number"],
+  input[type="tel"],
+  input[type="url"],
+  input[type="date"],
+  .compact-check textarea {
+    min-height: 44px !important;
+  }
+  .icon-btn,
+  .tab-add,
+  .avatar,
+  .workspace-home,
+  .compact-check-remove,
+  .task-focus-shortcut,
+  .modal-close-pin {
+    min-width: 44px !important;
+  }
+  /* Tay nắm và nút ghim nhỏ trong thẻ / dòng: hit area 44px, bù bằng lề âm để dòng không cao thêm. */
+  .zen-task-pin {
+    min-width: 44px !important;
+    min-height: 44px !important;
+    margin: -3px !important;
+  }
+  .wf-grip {
+    min-width: 44px !important;
+    min-height: 44px !important;
+    margin: -6px !important;
+  }
+  .kanban-options label {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+  #editor.keep-editor .note-unified-options summary,
+  #editor .note-more-settings > summary {
+    min-height: 44px !important;
+  }
+  #editor .modal-close-pin {
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+  }
+}
+/* Thanh bên ở máy tính bảng cảm ứng: bốn nút chế độ xem xếp hai cột để mỗi nút rộng ≥44px. */
+@media (pointer: coarse) and (min-width: 701px) {
+  .view-options {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}

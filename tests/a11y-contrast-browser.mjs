@@ -229,11 +229,14 @@ try {
       'chi tiết việc': () => page.evaluate(() => taskDetail(project('p1'), project('p1').tasks[3])),
       'hướng dẫn': () => page.evaluate(() => document.querySelector('[data-action=help]')?.click()),
       'tài khoản': () => page.evaluate(() => accountPanel()),
-      chuông: () => page.evaluate(() => document.querySelector('#bell')?.click()),
+      chuông: () => page.evaluate(() => document.querySelector('#notifications-button')?.click()),
+      'ghi chú mới': () => page.evaluate(() => document.querySelector('[data-note-new]')?.click()),
     };
     for (const [name, openDialog] of Object.entries(dialogs)) {
+      if (name === 'ghi chú mới') await show(page, 'notes');
       await openDialog();
       await page.waitForTimeout(350);
+      assert.ok(await page.evaluate(() => !!document.querySelector('dialog[open]')), `hộp thoại "${name}" không mở được ở ${width}px, nên không có gì để quét`);
       await scan(page, tag('hộp thoại ' + name));
       await closeDialogs();
     }
