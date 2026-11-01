@@ -87,6 +87,13 @@ async function show(page, name) {
   });
 }
 
+// Từ v1.15.38 Thẻ gọn mặc định bật trên điện thoại; test này đo thẻ đầy đủ nên chọn "Thẻ đầy đủ" rõ ràng trước (mặc định được kiểm ở compact-default-browser).
+const fullCards = (page) =>
+  page.evaluate(() => {
+    localStorage.setItem('zen-compact', 'false');
+    render();
+  });
+
 const cards = (page) =>
   page.evaluate(() => {
     const rect = (el) => {
@@ -117,7 +124,9 @@ const cards = (page) =>
 try {
   for (const width of [390, 820, 1440]) {
     const { context, page } = await open(width);
+    await fullCards(page);
     await show(page, 'projects');
+    await page.waitForSelector('#main .task-card');
     const overflow = await page.evaluate(() => ({ scrollW: document.documentElement.scrollWidth, vw: innerWidth }));
     assert.ok(overflow.scrollW <= overflow.vw, `trang tràn ngang ${overflow.scrollW}px trong khung ${overflow.vw}px ở ${width}px (bảng Kanban)`);
     const list = await cards(page);
@@ -161,7 +170,9 @@ try {
   // Màn hình cảm ứng: mũi tên đủ lớn để chạm (44px).
   {
     const { context, page } = await open(390, true);
+    await fullCards(page);
     await show(page, 'projects');
+    await page.waitForSelector('#main .task-card');
     const plain = (await cards(page)).find((c) => c.id === 'p1t0');
     assert.ok(plain.nextSize.w >= 44 && plain.nextSize.h >= 44, `ở màn hình cảm ứng nút chuyển nhanh ${plain.nextSize.w}x${plain.nextSize.h}px, phải từ 44px`);
     assert.ok(plain.h <= 240, `ở màn hình cảm ứng thẻ chưa có checklist cao ${plain.h}px, phải từ 240px trở xuống`);

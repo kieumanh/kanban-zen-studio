@@ -1,4 +1,4 @@
-// Hồi quy v1.15.37: Thẻ gọn, Giới hạn WIP và Lệnh nhanh nằm trong menu "Hiển thị" (không còn thanh công cụ riêng dưới khối tiến độ); các nút vẫn hoạt động như cũ, menu nằm trong vùng nội dung và không bị che.
+// Hồi quy v1.15.37 (cập nhật v1.15.38: Thẻ gọn mặc định bật trên điện thoại): Thẻ gọn, Giới hạn WIP và Lệnh nhanh nằm trong menu "Hiển thị" (không còn thanh công cụ riêng dưới khối tiến độ); các nút vẫn hoạt động như cũ, menu nằm trong vùng nội dung và không bị che.
 import { createServer } from 'node:http';
 import assert from 'node:assert/strict';
 import { flatten, inflate } from '../dist/modules/delta.mjs';
@@ -147,16 +147,17 @@ try {
     assert.ok((await cardGeometry(page)).scrollW <= g.vw, `mở Hiển thị làm trang tràn ngang ở ${width}px`);
     assert.equal(await page.locator('#main .kanban-options kbd').isVisible(), width > 700, `gợi ý phím Ctrl / ⌘ K phải ${width > 700 ? 'hiện' : 'ẩn'} ở ${width}px`);
 
-    // 4. Thẻ gọn: bật/tắt đúng, nhớ lựa chọn, ô đánh dấu phản ánh trạng thái sau khi bảng vẽ lại.
+    // 4. Thẻ gọn: bật/tắt đúng, nhớ lựa chọn, ô đánh dấu phản ánh trạng thái sau khi bảng vẽ lại. Từ v1.15.38 mặc định bật trên điện thoại (≤700px), tắt ở màn hình rộng.
+    const phone = width <= 700;
     const compactBox = page.locator('#main [data-studio=compact]');
-    assert.equal(await compactBox.isChecked(), false, `Thẻ gọn mặc định phải tắt (${width}px)`);
+    assert.equal(await compactBox.isChecked(), phone, `Thẻ gọn mặc định phải ${phone ? 'bật' : 'tắt'} (${width}px)`);
     await compactBox.click();
-    await page.waitForFunction(() => document.querySelector('#main .board')?.classList.contains('studio-compact'));
-    assert.equal(await page.evaluate(() => localStorage.getItem('zen-compact')), 'true', 'lựa chọn Thẻ gọn phải được nhớ trên thiết bị');
+    await page.waitForFunction((on) => document.querySelector('#main .board')?.classList.contains('studio-compact') === on, !phone);
+    assert.equal(await page.evaluate(() => localStorage.getItem('zen-compact')), String(!phone), 'lựa chọn Thẻ gọn phải được nhớ trên thiết bị');
     await openMenu(page);
-    assert.equal(await page.locator('#main [data-studio=compact]').isChecked(), true, 'ô Thẻ gọn phải đánh dấu sau khi bật');
+    assert.equal(await page.locator('#main [data-studio=compact]').isChecked(), !phone, 'ô Thẻ gọn phải phản ánh lựa chọn vừa đổi');
     await page.locator('#main [data-studio=compact]').click();
-    await page.waitForFunction(() => !document.querySelector('#main .board')?.classList.contains('studio-compact'));
+    await page.waitForFunction((on) => document.querySelector('#main .board')?.classList.contains('studio-compact') === on, phone);
 
     // 5. Giới hạn WIP: mở biểu mẫu, lưu, huy hiệu cột đổi thành "x/1".
     await openMenu(page);

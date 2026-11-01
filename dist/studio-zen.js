@@ -3,7 +3,11 @@
   const prefs = new Map();
   const timers = new Map();
   let palette, returnFocus, commands = [], chosen = 0;
-  const compact = () => localRead('zen-compact') === 'true';
+  // v1.15.38: chưa từng chọn thì Thẻ gọn mặc định bật trên điện thoại (≤700px) và tắt ở màn hình rộng; đã chọn thì giữ đúng lựa chọn của người dùng.
+  const compact = () => {
+    const saved = localRead('zen-compact');
+    return saved === null ? matchMedia('(max-width:700px)').matches : saved === 'true';
+  };
   const editable = () => !contentReadOnly;
   // v1.15.36: đầu trang dự án chỉ giữ một nút chính; Ghim / Lưu trữ / Tệp / Sửa dự án vào menu "Tùy chọn".
   function tidyHeader() {
