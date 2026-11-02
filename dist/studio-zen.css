@@ -904,3 +904,52 @@ input[type="range"] {
     transform: none;
   }
 }
+
+/* v1.15.52: việc đã hoàn thành "chìm" xuống để mắt không phải chú ý tới nữa.
+   Không dùng `opacity` (làm chữ mờ, hỏng độ tương phản): rút màu (grayscale), nền xám nhạt, bỏ bóng, chữ tiêu đề gạch ngang,
+   nhãn và thanh tiến độ chuyển xám. Đưa chuột / bàn phím tới thẻ thì thẻ hiện lại đầy đủ để vẫn đọc và kéo thả được.
+   Màu khai báo bằng biến để chế độ tối (v1.16.0) chỉ cần đổi biến. Mọi chữ giữ độ tương phản >= 4,5:1. */
+:root {
+  --zen-done-bg: #f3f0f6;
+  --zen-done-border: #e4dee9;
+  --zen-done-ink: #5f5070;
+  --zen-done-strike: #a99bb6;
+  --zen-done-chip: #ebe8ee;
+  --zen-done-fill: #9b92a6;
+}
+#main .column[data-column='Done'] .task-card {
+  background: var(--zen-done-bg);
+  border-color: var(--zen-done-border);
+  box-shadow: none;
+  filter: grayscale(0.7);
+  transition: filter 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+}
+#main .column[data-column='Done'] .task-card h3 {
+  text-decoration: line-through;
+  text-decoration-color: var(--zen-done-strike);
+  text-decoration-thickness: 1px;
+}
+#main .column[data-column='Done'] .task-card :is(.tag, .matrix-chip, .label-chips > *, .wf-card-keywords > *) {
+  background: var(--zen-done-chip);
+  color: var(--zen-done-ink);
+  border-color: transparent;
+}
+#main .column[data-column='Done'] .task-card .progress > span {
+  background: var(--zen-done-fill);
+}
+#main .column[data-column='Done'] .task-card :is(.task-card-deadline, .task-card-progress-meta, .task-card-progress-meta *) {
+  color: var(--zen-done-ink);
+}
+#main .column[data-column='Done'] .task-card:is(:hover, :focus-visible, :focus-within) {
+  filter: none;
+  background: var(--paper);
+  box-shadow: 0 8px 22px #392a4818;
+}
+#main .column[data-column='Done'] .task-card:is(:hover, :focus-visible, :focus-within) h3 {
+  text-decoration: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  #main .column[data-column='Done'] .task-card {
+    transition: none;
+  }
+}
