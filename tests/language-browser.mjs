@@ -138,7 +138,7 @@ try {
     };
 
     // 1. Mọi màn hình chính (trừ nhật ký phát triển, xem ghi chú đầu tệp).
-    for (const v of ['dashboard', 'projects', 'tasks', 'timeline', 'calendar', 'gantt', 'notes', 'resources', 'archive', 'trash', 'focus']) {
+    for (const v of ['dashboard', 'projects', 'tasks', 'calendar', 'gantt', 'notes', 'resources', 'archive', 'trash', 'focus']) {
       await show(page, v);
       await scan(page, tag('màn hình ' + v));
     }
@@ -149,13 +149,9 @@ try {
       sidebar: [...document.querySelectorAll('.sidebar .view-options .view-mode')].map((b) => b.textContent.trim()),
       phone: [...document.querySelectorAll('.mobile-viewbar .view-mode')].map((b) => b.textContent.trim()),
     }));
-    const expected = ['Bảng Kanban', 'Dòng thời gian', 'Lịch', 'Gantt'];
+    const expected = ['Bảng Kanban', 'Lịch', 'Gantt'];
     assert.deepEqual(names.sidebar, expected, `tên chế độ xem ở thanh bên (${width}px): ${JSON.stringify(names.sidebar)}`);
     assert.deepEqual(names.phone, expected, `tên chế độ xem ở thanh trên điện thoại (${width}px): ${JSON.stringify(names.phone)}`);
-    await show(page, 'timeline');
-    const timelineHead = await page.evaluate(() => ({ h1: document.querySelector('#main h1').textContent.trim(), crumb: document.querySelector('#crumb').textContent.trim() }));
-    assert.equal(timelineHead.h1, 'Dòng thời gian', `tiêu đề màn Dòng thời gian (${width}px): ${timelineHead.h1}`);
-    assert.ok(timelineHead.crumb.startsWith('Dòng thời gian'), `đường dẫn màn Dòng thời gian (${width}px): ${timelineHead.crumb}`);
     await show(page, 'calendar');
     const calendarHead = await page.evaluate(() => ({ h1: document.querySelector('#main h1').textContent.trim(), crumb: document.querySelector('#crumb').textContent.trim() }));
     assert.equal(calendarHead.h1, 'Lịch', `tiêu đề màn Lịch (${width}px): ${calendarHead.h1}`);

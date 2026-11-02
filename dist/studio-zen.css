@@ -507,11 +507,11 @@ input[type="range"] {
     min-width: 44px !important;
   }
 }
-/* Thanh bên ở máy tính bảng cảm ứng: bốn nút chế độ xem xếp hai cột để mỗi nút rộng ≥44px. */
+/* Thanh bên ở máy tính bảng cảm ứng: ba nút chế độ xem (Kanban, Lịch, Gantt) xếp ba cột, mỗi nút rộng ≥44px (v1.16.6: bỏ Dòng thời gian). */
 @media (pointer: coarse) and (min-width: 701px) {
   .view-options {
     display: grid !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
   }
 }
 

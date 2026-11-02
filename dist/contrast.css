@@ -2057,16 +2057,6 @@
 :root[data-contrast=high] .wf-focus-group>h2 small {
     background: #ffffff
 }
-:root[data-contrast=high] .zen-date-details>div {
-    border: 1px solid #171518;
-    background: #ffffff
-}
-:root[data-contrast=high] .zen-date-details dt {
-    color: #060606
-}
-:root[data-contrast=high] .zen-today-focus {
-    outline: 2px solid #1a1222
-}
 :root[data-contrast=high] .zen-list-menu-options button:hover, :root[data-contrast=high] .zen-list-menu-options button:focus-visible {
     background: #ffffff;
     outline: 2px solid #1a1220
@@ -5048,16 +5038,6 @@
 }
 :root[data-theme=dark][data-contrast=high] .wf-focus-group>h2 small {
     background: #030303
-}
-:root[data-theme=dark][data-contrast=high] .zen-date-details>div {
-    border: 1px solid #cecece;
-    background: #030303
-}
-:root[data-theme=dark][data-contrast=high] .zen-date-details dt {
-    color: #f5f5f5
-}
-:root[data-theme=dark][data-contrast=high] .zen-today-focus {
-    outline: 2px solid #cecece
 }
 :root[data-theme=dark][data-contrast=high] .zen-list-menu-options button:hover, :root[data-theme=dark][data-contrast=high] .zen-list-menu-options button:focus-visible {
     background: #030303;

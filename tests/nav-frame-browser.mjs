@@ -112,7 +112,7 @@ try {
   // Từ 701px: thanh trên và dải tab dự án dính ở đầu màn hình; 1024px là tablet ngang.
   for (const width of [701, 820, 1000, 1024, 1440]) {
     const { context, page } = await open(width);
-    for (const name of ['dashboard', 'projects', 'timeline', 'calendar', 'tasks', 'archive', 'trash']) {
+    for (const name of ['dashboard', 'projects', 'calendar', 'tasks', 'archive', 'trash']) {
       const at = `${width}px, màn hình ${name}`;
       // Đang cuộn xuống giữa trang rồi mới chuyển màn hình (trước đây trang bị đẩy xuống 162px và khung biến mất).
       await page.evaluate(() => scrollTo(0, 400));

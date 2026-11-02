@@ -2,7 +2,7 @@
 let dashboardDueFilter='';
 const dashboardRecentKey=()=>`zen-recent-projects:${currentUser?.id||'local'}`;
 function dashboardRecentIds(){try{return JSON.parse(localStorage.getItem(dashboardRecentKey())||'[]').filter(x=>typeof x==='string');}catch{return [];}}
-function rememberDashboardProject(){if(!['projects','timeline','calendar','gantt'].includes(view)||!active)return;const ids=dashboardRecentIds().filter(id=>id!==active);ids.unshift(active);try{localStorage.setItem(dashboardRecentKey(),JSON.stringify(ids.slice(0,12)));}catch{}}
+function rememberDashboardProject(){if(!['projects','calendar','gantt'].includes(view)||!active)return;const ids=dashboardRecentIds().filter(id=>id!==active);ids.unshift(active);try{localStorage.setItem(dashboardRecentKey(),JSON.stringify(ids.slice(0,12)));}catch{}}
 function dashboardDeadline(t){return t.end?.slice(0,10)||t.due||'';}
 function dashboardDateMatches(t,key){const due=dashboardDeadline(t),day=today(),open=t.col!=='Done';if(key==='today')return open&&(due===day||!!t.start&&t.start.slice(0,10)<=day&&(!t.end||t.end.slice(0,10)>=day));if(key==='overdue')return open&&!!due&&due<day;if(key==='upcoming'){const end=new Date(day+'T12:00:00');end.setDate(end.getDate()+7);return open&&!!due&&due>day&&due<=end.toLocaleDateString('en-CA',{timeZone:'Asia/Ho_Chi_Minh'});}if(key==='doing')return t.col==='Doing';if(key==='attention')return dashboardDateMatches(t,'overdue')||dashboardDateMatches(t,'upcoming');return true;}
 const dashboardFoundBefore=found;

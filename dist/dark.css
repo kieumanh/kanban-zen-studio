@@ -2057,16 +2057,6 @@
 :root[data-theme=dark] .wf-focus-group>h2 small {
     background: #1b181f
 }
-:root[data-theme=dark] .zen-date-details>div {
-    border: 1px solid #3d3843;
-    background: #18141c
-}
-:root[data-theme=dark] .zen-date-details dt {
-    color: #ccbdd7
-}
-:root[data-theme=dark] .zen-today-focus {
-    outline: 2px solid #ad86d2
-}
 :root[data-theme=dark] .zen-list-menu-options button:hover, :root[data-theme=dark] .zen-list-menu-options button:focus-visible {
     background: #1f1925;
     outline: 2px solid #c19ddb
