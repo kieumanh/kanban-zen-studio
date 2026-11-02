@@ -59,6 +59,7 @@ jobs:
           node tests/a11y-dialogs-browser.mjs
           node tests/gantt-touch-browser.mjs
           node tests/calendar-agenda-browser.mjs
+          node tests/motif-removed-browser.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:

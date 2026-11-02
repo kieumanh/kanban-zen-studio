@@ -506,3 +506,39 @@
     if (!saved()) redraw();
   });
 })();
+
+// v1.15.50: dự án và việc không còn lựa chọn họa tiết và không còn vẽ họa tiết lên thẻ/trang (đọc rối mắt).
+// Dữ liệu KHÔNG bị đổi: họa tiết đã lưu (`motif`) vẫn nằm trong bản ghi; biểu mẫu giữ nguyên giá trị bằng ô ẩn cùng tên
+// để các hàm lưu cũ (`fd.get('motif')`, `fd.get('project-motif')`) không ghi đè thành 'none'. Họa tiết của ghi chú không đổi.
+(() => {
+  const known = (value) => typeof NOTE_MOTIFS !== 'undefined' && typeof value === 'string' && Object.hasOwn(NOTE_MOTIFS, value);
+  const hidden = (name, value) => {
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = name;
+    input.value = value;
+    return input;
+  };
+
+  // Việc: chi tiết việc cũng dựng qua taskForm. Việc mới không thừa hưởng họa tiết của dự án nữa.
+  const baseTaskForm = taskForm;
+  taskForm = function (p, t) {
+    baseTaskForm.apply(this, arguments);
+    const picker = document.querySelector('#editor-body .task-motif-picker');
+    if (picker) picker.replaceWith(hidden('motif', known(t?.motif) ? t.motif : 'none'));
+  };
+
+  // Dự án: giữ họa tiết đã lưu, dự án mới là 'none'.
+  const baseProjectForm = projectForm;
+  projectForm = function (p) {
+    baseProjectForm.apply(this, arguments);
+    const picker = document.querySelector('#editor-body .project-motif-picker');
+    if (picker) picker.replaceWith(hidden('project-motif', known(p?.motif) ? p.motif : 'none'));
+  };
+
+  // Không vẽ họa tiết lên thẻ việc, thẻ dự án và trang dự án; ghi chú (thẻ, khung soạn) vẫn dùng zenArt như cũ.
+  const baseArt = zenArt;
+  zenArt = function (element, motif) {
+    return baseArt(element, element?.matches?.('#main, .task-card, .project-card') ? 'none' : motif);
+  };
+})();
