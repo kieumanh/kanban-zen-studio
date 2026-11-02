@@ -712,9 +712,7 @@ export async function api(request, env) {
     if (
       u.remembered &&
       u.reauth_at < Date.now() - 600000 &&
-      ['/api/board-share', '/api/report-shares', '/api/assets/purge'].includes(
-        path,
-      ) &&
+      ['/api/board-share', '/api/report-shares'].includes(path) &&
       request.method !== 'GET'
     )
       return json(

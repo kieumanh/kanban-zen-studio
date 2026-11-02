@@ -94,20 +94,8 @@ function destructiveChange(before, next) {
       : kind === 'project'
         ? w.projects.some((p) => p.id === id)
         : w.projects.some((p) => p.tasks.some((t) => t.id === id));
-  for (const old of before.trash || [])
-    if (!(next.trash || []).some((n) => n.id === old.id)) {
-      let value;
-      try {
-        value = JSON.parse(old.payload);
-      } catch {
-        return true;
-      }
-      if (
-        ['note', 'project', 'task'].includes(old.kind) &&
-        !present(next, old.kind, value?.id)
-      )
-        return true;
-    }
+  // v1.16.4: xóa vĩnh viễn mục đã nằm sẵn trong Thùng rác (trước đây đòi nhập lại mật khẩu) nay không cần xác nhận mật khẩu;
+  // vẫn chặn việc dữ liệu đang dùng biến mất mà không vào Thùng rác (ví dụ ghi đè nguyên bộ dữ liệu).
   for (const [kind, items] of [
     ['note', before.notes || []],
     ['project', before.projects],
