@@ -415,3 +415,94 @@
     paint();
   }
 })();
+
+// v1.15.49: Lịch dạng danh sách (Agenda). Ở màn hình vừa (701–1023px, ví dụ máy tính bảng 820px) lưới 7 cột chỉ còn ~80px mỗi ngày nên chữ bị bẻ
+// từng từ; mặc định chuyển sang danh sách theo ngày. Người dùng đổi qua lại được bằng nút "Danh sách | Lưới tháng"; lựa chọn nhớ trên thiết bị.
+// Điện thoại (≤700px) giữ nguyên bố cục riêng (lưới + danh sách của ngày đang chọn). Dữ liệu không đổi: chỉ cách hiển thị.
+(() => {
+  if (typeof matchMedia !== 'function') return;
+  const KEY = 'zen-calendar-mode';
+  const phone = matchMedia('(max-width:700px)');
+  const medium = matchMedia('(min-width:701px) and (max-width:1023px)');
+  const WEEKDAY = ['CN', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'];
+  const saved = () => {
+    const value = localRead(KEY);
+    return value === 'list' || value === 'grid' ? value : null;
+  };
+  const mode = () => saved() || (medium.matches ? 'list' : 'grid');
+  const pad = (n) => String(n).padStart(2, '0');
+  const short = (day) => `${Number(day.slice(8, 10))}/${Number(day.slice(5, 7))}`;
+
+  // Một ngày chỉ liệt kê việc có sự kiện thật vào ngày đó (hạn, bắt đầu, kết thúc, checklist); các ngày giữa của việc nhiều ngày không lặp lại.
+  const itemsOf = (events, day) =>
+    zenCalendarDayEvents(events, day)
+      .filter((t) => (t.eventKind === 'check' ? t.eventStart?.slice(0, 10) === day || t.eventEnd?.slice(0, 10) === day : !(t.eventLabels?.length === 1 && t.eventLabels[0] === 'Đang thực hiện')))
+      .sort((a, b) => Number(!!zenCalendarEventTime(a, day)) - Number(!!zenCalendarEventTime(b, day)) || zenCalendarEventTime(a, day).localeCompare(zenCalendarEventTime(b, day)) || String(a.title).localeCompare(String(b.title), 'vi'));
+
+  const kind = (t) => (t.eventLabels?.includes('Hạn hoàn thành') ? 'Hạn' : t.eventLabels?.join(' · ') || (t.eventKind === 'deadline' ? 'Hạn' : t.eventKind === 'check' ? 'Checklist' : 'Đang thực hiện'));
+
+  const row = (t, day) => {
+    const from = t.eventStart?.slice(0, 10),
+      to = t.eventEnd?.slice(0, 10),
+      range = from && to && from !== to ? ` · ${short(from)} → ${short(to)}` : '',
+      where = active ? '' : ` · ${esc(t.project.name)}`;
+    return `<li><button type="button" class="zen-ma-item" data-task="${esc(t.id)}" data-pid="${esc(t.project.id)}" style="--event-color:${esc(t.project.color)}"><span class="zen-ma-when">${esc(zenCalendarEventTime(t, day) || 'Cả ngày')}</span><span class="zen-ma-body"><strong>${esc(t.title)}</strong><small>${esc(kind(t))}${range}${where}</small></span><span class="zen-ma-pct">${taskPct(t)}%</span></button></li>`;
+  };
+
+  const agenda = () => {
+    const events = scheduleEvents(),
+      month = `${calendarYear}-${pad(calendarMonth + 1)}`,
+      count = new Date(calendarYear, calendarMonth + 1, 0).getDate(),
+      label = `Lịch tháng ${calendarMonth + 1}/${calendarYear} dạng danh sách`;
+    const days = Array.from({ length: count }, (_, i) => {
+      const day = `${month}-${pad(i + 1)}`;
+      return [day, itemsOf(events, day)];
+    }).filter(([, items]) => items.length);
+    const body = days.length
+      ? days
+          .map(([day, items]) => `<section class="zen-ma-day${day === today() ? ' today' : ''}"><h3 class="zen-ma-date"><time datetime="${day}">${WEEKDAY[new Date(`${day}T12:00:00`).getDay()]}, ${short(day)}</time>${day === today() ? '<em>Hôm nay</em>' : ''}</h3><ul>${items.map((t) => row(t, day)).join('')}</ul></section>`)
+          .join('')
+      : '<p class="zen-ma-empty">Tháng này chưa có công việc nào được đặt lịch. Dùng mũi tên để xem tháng khác.</p>';
+    return `<div class="zen-month-agenda" role="region" aria-label="${label}">${body}</div>`;
+  };
+
+  const toggle = (current) =>
+    `<div class="zen-cal-mode" role="group" aria-label="Kiểu hiển thị lịch">${[
+      ['list', 'Danh sách'],
+      ['grid', 'Lưới tháng'],
+    ]
+      .map(([value, text]) => `<button type="button" data-zen-cal-mode="${value}" aria-pressed="${current === value}">${text}</button>`)
+      .join('')}</div>`;
+
+  const base = workCalendar;
+  workCalendar = function () {
+    const html = base();
+    if (phone.matches) return html;
+    const box = document.createElement('template');
+    box.innerHTML = html;
+    const controls = box.content.querySelector('.month-controls'),
+      grid = box.content.querySelector('.month-scroll');
+    if (!controls || !grid) return html;
+    const current = mode();
+    controls.insertAdjacentHTML('beforeend', toggle(current));
+    if (current === 'list') grid.outerHTML = agenda();
+    return box.innerHTML;
+  };
+
+  document.addEventListener('click', (e) => {
+    const button = e.target.closest?.('[data-zen-cal-mode]');
+    if (!button) return;
+    localWrite(KEY, button.dataset.zenCalMode);
+    render();
+    document.querySelector(`[data-zen-cal-mode="${button.dataset.zenCalMode}"]`)?.focus();
+  });
+
+  // Xoay máy hoặc đổi cỡ cửa sổ qua ngưỡng 700px / 1023px: vẽ lại bố cục lịch cho khớp (nếu người dùng chưa tự chọn kiểu).
+  const redraw = () => {
+    if (view === 'calendar') render();
+  };
+  phone.addEventListener('change', redraw);
+  medium.addEventListener('change', () => {
+    if (!saved()) redraw();
+  });
+})();
