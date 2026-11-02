@@ -32,6 +32,10 @@
     else root.removeAttribute('data-contrast');
     var meta = document.querySelector('meta[name=theme-color]');
     if (meta) meta.setAttribute('content', s.dark ? '#151219' : '#f7f3fc');
+    // v1.17.0: báo cho nút chuyển sáng/tối trên thanh trên cùng cập nhật biểu tượng (đổi từ Cài đặt, từ nút hoặc theo hệ thống).
+    try {
+      document.dispatchEvent(new CustomEvent('zen-theme', { detail: s }));
+    } catch (e) {}
     return s;
   }
   function set(key, value) {

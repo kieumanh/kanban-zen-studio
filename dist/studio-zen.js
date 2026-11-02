@@ -689,3 +689,29 @@
     else body.append(section);
   };
 })();
+
+// v1.17.0: nút chuyển nhanh chế độ sáng / tối ngay cạnh biểu tượng thông báo (máy tính, máy tính bảng và điện thoại).
+// Bấm để đổi giữa Sáng và Tối (lưu như lựa chọn tại Cài đặt → Giao diện); biểu tượng mặt trăng khi đang sáng, mặt trời khi đang tối.
+(() => {
+  const bell = document.querySelector('#notifications-button');
+  if (!bell || !window.zenTheme || document.querySelector('#theme-toggle')) return;
+  Object.assign(iconPaths, {
+    moon: 'M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z',
+    sun: 'M12 8.2a3.8 3.8 0 1 0 0 7.6 3.8 3.8 0 0 0 0-7.6z M12 2.5v2 M12 19.5v2 M4.6 4.6 6 6 M18 18l1.4 1.4 M2.5 12h2 M19.5 12h2 M4.6 19.4 6 18 M18 6l1.4-1.4',
+  });
+  const button = document.createElement('button');
+  button.id = 'theme-toggle';
+  button.type = 'button';
+  button.className = 'icon-btn notification-bell theme-toggle';
+  const paint = () => {
+    const dark = window.zenTheme.state().dark;
+    button.innerHTML = svgIcon(dark ? 'sun' : 'moon');
+    const label = dark ? 'Chuyển sang giao diện sáng' : 'Chuyển sang giao diện tối';
+    button.setAttribute('aria-label', label);
+    button.title = label;
+  };
+  button.onclick = () => window.zenTheme.setTheme(window.zenTheme.state().dark ? 'light' : 'dark');
+  bell.before(button);
+  paint();
+  document.addEventListener('zen-theme', paint);
+})();

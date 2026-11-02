@@ -89,11 +89,11 @@ body{font-size:14px}.app{width:100%;min-width:0}.topbar{position:sticky;top:0;z-
 .welcome-bottom{width:min(100%,540px);margin:18px auto 0;padding-top:14px;text-align:center}
 @media(max-width:700px){.welcome-dialog{width:calc(100vw - 24px);max-height:calc(100dvh - 24px);padding:26px 18px calc(20px + env(safe-area-inset-bottom));border-radius:22px}.welcome-content .welcome-lotus{font-size:36px}.welcome-content h2{font-size:21px;margin:8px 0 13px}.wisdom-teacher{min-height:84px;margin:13px auto;padding:8px 12px;gap:12px}.wisdom-teacher img,.wisdom-initial{width:66px;height:66px;flex-basis:66px}.wisdom-teacher strong{font-size:16px}.wisdom-teacher small{font-size:11px}.welcome-content blockquote{padding:14px 16px;font-size:17px;line-height:1.7}.wisdom-kind{font-size:11px}.wisdom-directory{margin-top:13px}.welcome-bottom{margin-top:14px;padding-top:12px}}
 .task-next{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;margin-top:12px;font-size:12px;padding:8px}.task-next svg{width:16px;height:16px}
-/* 1.3.5 — center mobile search on the viewport */
+/* 1.3.5 — mobile search; v1.17.0: nằm sau nút menu (không còn căn giữa) để chừa chỗ cho nút sáng/tối cạnh chuông */
 @media(max-width:700px){
  .topbar{position:sticky;isolation:isolate;padding:0 10px;gap:0}
  .topbar .top-actions{position:static;flex:1;justify-content:flex-end!important;gap:4px}
- .topbar .search{position:absolute;left:50%;transform:translateX(-50%);width:calc(100% - 164px)!important;max-width:320px!important;min-width:0!important;margin:0!important;flex:none!important;height:38px;padding:0 10px}
+ .topbar .search{position:absolute;left:58px;transform:none;width:calc(100% - 194px)!important;max-width:320px!important;min-width:0!important;margin:0!important;flex:none!important;height:38px;padding:0 10px}
  .topbar .search input{width:100%;min-width:0;font-size:16px}
  .topbar .search input::placeholder{font-size:12px}
  .topbar #save-state{width:24px;flex:0 0 24px;justify-content:center}
