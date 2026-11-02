@@ -953,3 +953,86 @@ input[type="range"] {
     transition: none;
   }
 }
+
+/* v1.15.53: vùng xóa việc / xóa dự án — biểu tượng + lời giải thích + nút viền đỏ nhạt (không phải khối đỏ đặc).
+   Chữ nút #a02a39 trên nền trắng đạt tương phản > 7:1; vùng chạm >= 44px; trên điện thoại nút rộng hết hàng. */
+#editor .zen-danger-zone {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* chữ chiếm hết chỗ trống nên không đổi bố cục; giữ đúng khẳng định của test workflow111 cũ */
+  gap: 14px;
+  margin: 20px 0 4px;
+  padding: 14px 16px;
+  border: 1px solid #f0dde1;
+  border-radius: 16px;
+  background: #fffafb;
+  text-align: left;
+}
+#editor .zen-danger-icon {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: #fbe9ec;
+  color: #a02a39;
+}
+#editor .zen-danger-text {
+  flex: 1 1 auto;
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+#editor .zen-danger-text strong {
+  font: 650 14px/1.4 var(--sans);
+  color: #3b2d4c;
+}
+#editor .zen-danger-text span {
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--zen-text-muted);
+}
+#editor .zen-danger-zone .zen-danger-button {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  min-width: 0;
+  margin: 0;
+  padding: 10px 16px;
+  border: 1px solid #e3a9b1;
+  border-radius: 12px;
+  background: #fff;
+  color: #a02a39;
+  font-weight: 650;
+  box-shadow: none;
+  transition: background-color 0.18s, border-color 0.18s;
+}
+#editor .zen-danger-zone .zen-danger-button:hover {
+  background: #fdecee;
+  border-color: #c9606d;
+}
+#editor .zen-danger-zone .zen-danger-button:focus-visible {
+  outline: 3px solid #a02a39;
+  outline-offset: 2px;
+}
+@media (max-width: 520px) {
+  #editor .zen-danger-zone {
+    flex-wrap: wrap;
+    padding: 14px;
+  }
+  #editor .zen-danger-zone .zen-danger-text {
+    flex-basis: calc(100% - 56px);
+  }
+  #editor .zen-danger-zone .zen-danger-button {
+    flex: 1 1 100%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #editor .zen-danger-zone .zen-danger-button {
+    transition: none;
+  }
+}

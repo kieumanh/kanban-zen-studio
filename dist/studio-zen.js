@@ -583,3 +583,50 @@
     }
   };
 })();
+
+// v1.15.53: khu vực xóa việc và xóa dự án thành "vùng nguy hiểm" rõ ràng: biểu tượng thùng rác, tiêu đề, mô tả hậu quả thật
+// (vào Thùng rác, khôi phục trong 30 ngày), nút viền đỏ nhạt thay vì khối đỏ nặng. Chỉ trang trí DOM: nút giữ nguyên
+// `data-action` và chữ, nên hộp thoại xác nhận (`confirmDelete`) và việc chuyển vào Thùng rác không đổi.
+(() => {
+  const TRASH =
+    '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 12.5h9L17.5 7M10 11v5M14 11v5"/></svg>';
+  const zone = (section, button, title, text) => {
+    if (!section || !button || section.dataset.zenDanger) return;
+    section.dataset.zenDanger = '1';
+    section.classList.add('zen-danger-zone');
+    const icon = document.createElement('span');
+    icon.className = 'zen-danger-icon';
+    icon.setAttribute('aria-hidden', 'true');
+    icon.innerHTML = TRASH;
+    const heading = document.createElement('strong');
+    heading.textContent = title;
+    const note = document.createElement('span');
+    note.textContent = text;
+    const copy = document.createElement('div');
+    copy.className = 'zen-danger-text';
+    copy.append(heading, note);
+    button.classList.add('zen-danger-button');
+    button.insertAdjacentHTML('afterbegin', TRASH);
+    section.prepend(icon, copy);
+  };
+  const TRASH_NOTE = 'Chuyển vào Thùng rác, khôi phục được trong 30 ngày.';
+
+  const baseTaskDetail = taskDetail;
+  taskDetail = function () {
+    baseTaskDetail.apply(this, arguments);
+    const section = document.querySelector('#editor-body .zen-task-delete');
+    zone(section, section?.querySelector('[data-action="delete-task"]'), 'Xóa công việc này', TRASH_NOTE);
+  };
+
+  const baseProjectForm = projectForm;
+  projectForm = function () {
+    baseProjectForm.apply(this, arguments);
+    const button = document.querySelector('#editor-form [data-action=delete-project]');
+    if (!button || button.closest('.zen-danger-zone')) return;
+    const section = document.createElement('section');
+    section.className = 'zen-project-danger';
+    button.replaceWith(section);
+    section.append(button);
+    zone(section, button, 'Xóa dự án này', 'Dự án và các việc bên trong chuyển vào Thùng rác, khôi phục được trong 30 ngày.');
+  };
+})();
