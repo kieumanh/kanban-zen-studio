@@ -1089,3 +1089,81 @@ input[type="range"] {
   margin: 0;
   accent-color: var(--zen-text-accent);
 }
+
+/* v1.17.1: thông báo gọn, dễ quét. Hộp thoại Thông báo gom việc theo nhóm (Quá hạn / Sắp đến hạn / Quan trọng / Khác), mỗi việc một hàng; thanh nhắc hạn và hộp "Công việc cần chú ý" cùng bảng màu theo mức độ.
+   Màu mức độ: quá hạn (hồng đỏ), sắp đến hạn (hổ phách), quan trọng (tím), khác (xanh lá). Không dùng !important; chọn theo #editor để thắng các luật cũ của .notice-item. */
+#editor .notice-stats { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 10px; }
+#editor .notice-stats span { display: inline-flex; align-items: baseline; gap: 5px; padding: 5px 12px; border-radius: 999px; font-size: 13px; border: 1px solid transparent; }
+#editor .notice-stats b { font-size: 16px; }
+#editor .notice-stats [data-kind="late"] { color: #a8244b; background: #fff0f4; border-color: #f2c4d1; }
+#editor .notice-stats [data-kind="soon"] { color: #8a5200; background: #fff6e3; border-color: #efd7a0; }
+#editor .notice-stats [data-kind="important"] { color: #5f3a93; background: #f4edfb; border-color: #dccbef; }
+#editor .notice-list { display: grid; gap: 8px; margin: 10px 0 16px; }
+#editor .notice-group { display: flex; align-items: center; gap: 8px; margin: 14px 0 2px; font-size: 13px; letter-spacing: 0.02em; color: var(--zen-text-muted); }
+#editor .notice-group small { font-size: 12px; padding: 1px 8px; border-radius: 999px; background: #f1ebf6; color: #6a5a78; }
+#editor .notice-group .notice-dot,
+#editor .notice-item .notice-dot { flex: none; width: 9px; height: 9px; border-radius: 50%; background: #7a6a88; }
+#editor .notice-group[data-kind="late"] .notice-dot, #editor .notice-item[data-kind="late"]::before { background: #c0345c; }
+#editor .notice-group[data-kind="soon"] .notice-dot, #editor .notice-item[data-kind="soon"]::before { background: #d98a1d; }
+#editor .notice-group[data-kind="important"] .notice-dot, #editor .notice-item[data-kind="important"]::before { background: #7c4fb3; }
+#editor .notice-group[data-kind="other"] .notice-dot, #editor .notice-item[data-kind="other"]::before { background: #3f9a72; }
+#editor .notice-list .notice-item { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "title tag" "meta tag"; align-items: center; gap: 2px 12px; padding: 11px 38px 11px 22px; border-radius: 14px; border: 1px solid var(--line); background: #fff; text-align: left; text-decoration: none; transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease; }
+#editor .notice-list .notice-item::before { content: ""; position: absolute; left: 9px; top: 50%; width: 6px; height: 28px; border-radius: 6px; transform: translateY(-50%); }
+#editor .notice-list .notice-item::after { content: "›"; position: absolute; right: 14px; top: 50%; transform: translateY(-50%); font-size: 22px; line-height: 1; color: #9a8aa8; }
+#editor .notice-list .notice-item:hover { transform: translateY(-1px); border-color: #cdbadf; box-shadow: 0 6px 18px #70538814; }
+#editor .notice-list .notice-item:focus-visible { outline: 2px solid #7950c8; outline-offset: 2px; }
+#editor .notice-list .notice-item .notice-title { grid-area: title; font-size: 15px; font-weight: 650; line-height: 1.4; color: var(--ink); }
+#editor .notice-list .notice-item small { grid-area: meta; font-size: 12px; line-height: 1.45; color: var(--zen-text-muted); }
+#editor .notice-list .notice-item .notice-tag { grid-area: tag; justify-self: end; align-self: start; padding: 2px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; white-space: nowrap; color: #6a5a78; background: #f4eff8; }
+#editor .notice-list .notice-item[data-kind="late"] .notice-tag { color: #a8244b; background: #fff0f4; }
+#editor .notice-list .notice-item[data-kind="soon"] .notice-tag { color: #8a5200; background: #fff6e3; }
+#editor .notice-list .notice-item[data-kind="important"] .notice-tag { color: #5f3a93; background: #f4edfb; }
+#editor .notice-list .notice-item.release-notice { grid-template-areas: "title title" "meta meta" "action action"; padding-right: 22px; background: #f6faf7; border-color: #cfe5d8; }
+#editor .notice-list .notice-item.release-notice::after { content: none; }
+#editor .notice-list .notice-item.release-notice .btn { grid-area: action; justify-self: start; margin-top: 8px; }
+#editor .notice-list .notice-item .notice-tag svg { width: 14px; height: 14px; vertical-align: -2px; margin-right: 3px; }
+#editor .notice-list .notice-item[hidden] { display: none; }
+#editor .notice-more { justify-self: center; min-height: 44px; min-width: 44px; padding: 8px 18px; border: 1px dashed #cdbadf; border-radius: 999px; background: transparent; color: var(--zen-text-accent); font: inherit; font-size: 13px; cursor: pointer; }
+#editor .notice-more:hover { background: #f6f0fb; }
+#editor .notice-empty { display: grid; justify-items: center; gap: 4px; margin: 10px 0; padding: 28px 16px; border: 1px dashed #d9cce6; border-radius: 16px; text-align: center; color: var(--zen-text-muted); }
+#editor .notice-empty svg { width: 34px; height: 34px; color: #3f9a72; }
+#editor .notice-empty strong { color: var(--ink); font-size: 15px; }
+#editor .notice-summary { padding: 10px 12px; border-radius: 12px; background: #faf7fd; border: 1px solid #eee5f4; }
+#editor .notice-read-toolbar .btn { min-height: 44px; padding: 8px 16px; border-radius: 999px; font-size: 13px; }
+@media (max-width: 600px) {
+  #editor .notice-list .notice-item { grid-template-columns: minmax(0, 1fr); grid-template-areas: "title" "meta" "tag"; padding: 11px 34px 11px 22px; }
+  #editor .notice-list .notice-item .notice-tag { justify-self: start; margin-top: 4px; }
+  #editor .notice-read-toolbar .btn { width: 100%; }
+}
+
+/* Hộp "Công việc cần chú ý": thẻ chuyển nhóm có số lượng rõ, hàng việc có vạch màu theo nhóm. */
+.due-work-tabs { display: flex; gap: 8px; margin: 6px 0 14px; padding: 4px; border-radius: 999px; background: #f4eff8; width: fit-content; max-width: 100%; }
+.due-work-tabs .btn { min-height: 44px; padding: 8px 16px; border: 0; border-radius: 999px; background: transparent; box-shadow: none; font-size: 13px; font-weight: 600; color: #6a5a78; }
+.due-work-tabs .btn[data-due-list="late"] { color: #a8244b; }
+.due-work-tabs .btn[data-due-list="soon"] { color: #8a5200; }
+.due-work-tabs .btn.primary { color: #fff; background: #7950c8; }
+.due-work-tabs .btn.primary[data-due-list="late"] { background: #c0345c; }
+.due-work-tabs .btn.primary[data-due-list="soon"] { background: #c47a12; }
+.due-work-list { display: grid; gap: 8px; }
+.due-work-list .work-task-row { position: relative; display: grid; gap: 3px; width: 100%; padding: 11px 14px 11px 22px; border: 1px solid var(--line); border-radius: 14px; background: #fff; text-align: left; transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease; }
+.due-work-list .work-task-row::before { content: ""; position: absolute; left: 9px; top: 50%; width: 6px; height: 26px; border-radius: 6px; transform: translateY(-50%); background: #7a6a88; }
+.due-work-list[data-tone="late"] .work-task-row::before { background: #c0345c; }
+.due-work-list[data-tone="soon"] .work-task-row::before { background: #d98a1d; }
+.due-work-list .work-task-row:hover { transform: translateY(-1px); border-color: #cdbadf; box-shadow: 0 6px 18px #70538814; }
+.due-work-list .work-task-row strong { font-size: 15px; line-height: 1.4; }
+.due-work-list .work-task-row small { font-size: 12px; color: var(--zen-text-muted); }
+
+/* Thanh nhắc hạn: biểu tượng trong vòng tròn tô màu theo mức độ, nút chính rõ hơn nút phụ. */
+.due-alert-strip[data-tone] svg { flex: none; }
+.due-alert-strip[data-tone="late"] { border-color: #f0c2cf; background: #fff6f8; }
+.due-alert-strip[data-tone="late"] > span > svg { color: #b4234e; }
+.due-alert-strip[data-tone="soon"] { border-color: #efd9a8; background: #fffaf0; }
+.due-alert-strip[data-tone="soon"] > span > svg { color: #96600a; }
+.due-alert-strip > span { display: flex; align-items: center; gap: 10px; }
+.due-alert-strip > span > svg { width: 34px; height: 34px; padding: 7px; border-radius: 50%; background: #ffffffb3; }
+.due-alert-strip strong { font-size: 14px; line-height: 1.4; }
+.due-alert-strip [data-open-due] { font-weight: 650; }
+@media (prefers-reduced-motion: reduce) {
+  #editor .notice-list .notice-item, .due-work-list .work-task-row { transition: none; }
+  #editor .notice-list .notice-item:hover, .due-work-list .work-task-row:hover { transform: none; }
+}

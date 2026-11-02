@@ -2981,6 +2981,111 @@
 :root[data-theme=dark] #editor .zen-danger-zone .zen-danger-button:focus-visible {
     outline: 3px solid #f49b9d
 }
+:root[data-theme=dark] #editor .notice-stats [data-kind="late"] {
+    color: #feb0bc;
+    background: #151219;
+    border-color: #543a42
+}
+:root[data-theme=dark] #editor .notice-stats [data-kind="soon"] {
+    color: #eebe90;
+    background: #16131a;
+    border-color: #4b3d1c
+}
+:root[data-theme=dark] #editor .notice-stats [data-kind="important"] {
+    color: #d5c1fe;
+    background: #120f16;
+    border-color: #473d52
+}
+:root[data-theme=dark] #editor .notice-group small {
+    background: #1b171f;
+    color: #d0c2dc
+}
+:root[data-theme=dark] #editor .notice-list .notice-item {
+    background: #1b181f
+}
+:root[data-theme=dark] #editor .notice-list .notice-item::after {
+    color: #c2b5cd
+}
+:root[data-theme=dark] #editor .notice-list .notice-item:hover {
+    border-color: #50455b
+}
+:root[data-theme=dark] #editor .notice-list .notice-item:focus-visible {
+    outline: 2px solid #845cd6
+}
+:root[data-theme=dark] #editor .notice-list .notice-item .notice-tag {
+    color: #d0c2dc;
+    background: #131017
+}
+:root[data-theme=dark] #editor .notice-list .notice-item[data-kind="late"] .notice-tag {
+    color: #feb0bc;
+    background: #151219
+}
+:root[data-theme=dark] #editor .notice-list .notice-item[data-kind="soon"] .notice-tag {
+    color: #eebe90;
+    background: #16131a
+}
+:root[data-theme=dark] #editor .notice-list .notice-item[data-kind="important"] .notice-tag {
+    color: #d5c1fe;
+    background: #120f16
+}
+:root[data-theme=dark] #editor .notice-list .notice-item.release-notice {
+    background: #18151c;
+    border-color: #344039
+}
+:root[data-theme=dark] #editor .notice-more {
+    border: 1px dashed #50455b
+}
+:root[data-theme=dark] #editor .notice-more:hover {
+    background: #141118
+}
+:root[data-theme=dark] #editor .notice-empty {
+    border: 1px dashed #473f4e
+}
+:root[data-theme=dark] #editor .notice-empty svg {
+    color: #8fcfae
+}
+:root[data-theme=dark] #editor .notice-summary {
+    background: #18141c;
+    border: 1px solid #3a3540
+}
+:root[data-theme=dark] .due-work-tabs {
+    background: #131017
+}
+:root[data-theme=dark] .due-work-tabs .btn {
+    color: #d0c2dc
+}
+:root[data-theme=dark] .due-work-tabs .btn[data-due-list="late"] {
+    color: #feb0bc
+}
+:root[data-theme=dark] .due-work-tabs .btn[data-due-list="soon"] {
+    color: #eebe90
+}
+:root[data-theme=dark] .due-work-tabs .btn.primary {
+    color: #ffffff
+}
+:root[data-theme=dark] .due-work-list .work-task-row {
+    background: #1b181f
+}
+:root[data-theme=dark] .due-work-list .work-task-row:hover {
+    border-color: #50455b
+}
+:root[data-theme=dark] .due-alert-strip[data-tone="late"] {
+    border-color: #553b43;
+    background: #18151c
+}
+:root[data-theme=dark] .due-alert-strip[data-tone="late"] > span > svg {
+    color: #fbb0ba
+}
+:root[data-theme=dark] .due-alert-strip[data-tone="soon"] {
+    border-color: #493d20;
+    background: #1b181f
+}
+:root[data-theme=dark] .due-alert-strip[data-tone="soon"] > span > svg {
+    color: #e9bc89
+}
+:root[data-theme=dark] .due-alert-strip > span > svg {
+    background: rgba(27,24,31,0.702)
+}
 
 :root[data-theme=dark] {
   color-scheme: dark;

@@ -715,3 +715,125 @@
   paint();
   document.addEventListener('zen-theme', paint);
 })();
+
+// v1.17.1: hộp thoại Thông báo gọn và dễ quét hơn. Việc được gom theo nhóm (Quá hạn · Sắp đến hạn · Quan trọng · Khác) với tiêu đề nhóm có số lượng,
+// mỗi việc một hàng gọn (chấm màu theo mức độ, tên việc, dự án · ngày hạn · "quá hạn 2 ngày"/"còn 2 ngày"), nhóm dài chỉ hiện 5 hàng đầu kèm nút "Hiện thêm".
+// Dòng tóm tắt .notice-summary (v1.15.43) và nút "Xác nhận đã đọc tất cả" giữ nguyên; chỉ đổi cách trình bày, không đổi dữ liệu hay cách tính số trên chuông.
+(() => {
+  const GROUPS = [
+    ['late', 'Quá hạn'],
+    ['soon', 'Sắp đến hạn'],
+    ['important', 'Quan trọng'],
+    ['other', 'Khác'],
+  ];
+  const VISIBLE = 5;
+  const kindOf = (el) => {
+    if (el.matches('[data-task]')) {
+      const label = el.querySelector('strong, .notice-tag')?.textContent || '';
+      return label.startsWith('Quá hạn') ? 'late' : label.startsWith('Sắp đến hạn') ? 'soon' : 'important';
+    }
+    return 'other';
+  };
+  const relative = (due) => {
+    if (!due) return '';
+    const days = Math.round((Date.parse(due + 'T00:00:00Z') - Date.parse(today() + 'T00:00:00Z')) / 86400000);
+    return days < 0 ? 'quá hạn ' + -days + ' ngày' : days === 0 ? 'hôm nay' : days === 1 ? 'ngày mai' : 'còn ' + days + ' ngày';
+  };
+  const decorate = () => {
+    const list = document.querySelector('#editor-body .notice-list');
+    if (!list || list.dataset.grouped) return;
+    list.dataset.grouped = '1';
+    const tasks = taskNotices();
+    const rows = [...list.children].filter((el) => el.classList.contains('notice-item'));
+    for (const el of rows) {
+      const kind = kindOf(el);
+      el.dataset.kind = kind;
+      const tag = el.querySelector('strong');
+      if (tag) {
+        // Việc đã nằm dưới tiêu đề nhóm (Quá hạn / Sắp đến hạn / Quan trọng): nhãn chỉ giữ phần bổ sung ("Quan trọng" ở việc quá hạn), không lặp lại tên nhóm.
+        const extra = el.matches('[data-task]') ? tag.textContent.replace(/^(Quá hạn|Sắp đến hạn|Quan trọng)( · )?/, '').trim() : tag.innerHTML;
+        if (extra) {
+          const span = document.createElement('span');
+          span.className = 'notice-tag';
+          span.innerHTML = extra;
+          tag.replaceWith(span);
+        } else tag.remove();
+      }
+      el.querySelector('.notice-detail-link')?.remove();
+      el.querySelectorAll(':scope > span:not(.notice-tag)').forEach((node, i) => i === 0 && node.classList.add('notice-title'));
+      if (el.matches('[data-task]')) {
+        const task = tasks.find((t) => t.id === el.dataset.task && t.project.id === el.dataset.pid);
+        const rel = relative(task?.due);
+        const small = el.querySelector('small');
+        if (small && rel) small.textContent += ' · ' + rel;
+      }
+    }
+    const empty = [...list.children].find((el) => el.tagName === 'P');
+    if (!rows.length && empty) {
+      empty.className = 'notice-empty';
+      empty.innerHTML = svgIcon('check') + '<strong>Bạn đã xem hết thông báo</strong><span>Việc mới đến hạn sẽ hiện ở đây.</span>';
+      return;
+    }
+    const counts = { late: 0, soon: 0, important: 0 };
+    rows.forEach((el) => counts[el.dataset.kind] !== undefined && counts[el.dataset.kind]++);
+    for (const [key, title] of GROUPS) {
+      const group = rows.filter((el) => el.dataset.kind === key);
+      if (!group.length) continue;
+      const heading = document.createElement('h3');
+      heading.className = 'notice-group';
+      heading.dataset.kind = key;
+      heading.innerHTML = '<span class="notice-dot" aria-hidden="true"></span>' + title + ' <small>' + group.length + '</small>';
+      list.append(heading);
+      group.forEach((el, i) => {
+        if (i >= VISIBLE) el.hidden = true;
+        list.append(el);
+      });
+      if (group.length > VISIBLE) {
+        const more = document.createElement('button');
+        more.type = 'button';
+        more.className = 'notice-more';
+        more.dataset.kind = key;
+        more.textContent = 'Hiện thêm ' + (group.length - VISIBLE) + ' việc';
+        more.setAttribute('aria-expanded', 'false');
+        more.onclick = () => {
+          group.forEach((el) => (el.hidden = false));
+          more.remove();
+        };
+        list.append(more);
+      }
+    }
+    if (counts.late + counts.soon + counts.important) {
+      const stats = document.createElement('div');
+      stats.className = 'notice-stats';
+      stats.setAttribute('aria-hidden', 'true');
+      stats.innerHTML = [['late', 'quá hạn'], ['soon', 'sắp đến hạn'], ['important', 'quan trọng']]
+        .filter(([key]) => counts[key])
+        .map(([key, label]) => '<span data-kind="' + key + '"><b>' + counts[key] + '</b> ' + label + '</span>')
+        .join('');
+      (document.querySelector('#editor-body .notice-summary') || list).before(stats);
+    }
+  };
+  const before = bell.onclick;
+  bell.onclick = () => {
+    before();
+    decorate();
+  };
+
+  // "Công việc cần chú ý": đánh dấu nhóm đang xem (quá hạn / sắp đến hạn) để tô màu thẻ chuyển nhóm và hàng việc.
+  const openBefore = openDueWork;
+  openDueWork = function (group) {
+    openBefore(group);
+    const key = document.querySelector('.due-work-tabs .primary')?.dataset.dueList;
+    const list = document.querySelector('.due-work-list');
+    if (list && key) list.dataset.tone = key;
+  };
+
+  // Thanh nhắc hạn: đánh dấu mức độ (quá hạn / sắp đến hạn) cho CSS.
+  const stripBefore = refreshDueAlerts;
+  refreshDueAlerts = function () {
+    stripBefore();
+    const strip = document.querySelector('#due-alert-strip');
+    if (strip) strip.dataset.tone = dueAlerts().some((t) => t.notice === 'Quá hạn') ? 'late' : 'soon';
+  };
+})();
+
