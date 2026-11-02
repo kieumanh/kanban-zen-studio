@@ -10,9 +10,7 @@ button.primary,
 [data-action="new-project"],
 [data-action="new-task"],
 [data-note-new] {
-  background: linear-gradient(110deg, #7950c8, #cf5f9b 62%, #e77962) !important;
   border-color: transparent !important;
-  color: #fff !important;
 }
 
 .btn.primary:hover,
@@ -90,7 +88,7 @@ button.primary:hover,
 }
 
 /* Shared refresh feedback and resilient form widths. */
-button.focus-check-updates,button.focus-check-updates:hover,button[data-resources-refresh],button[data-resources-refresh]:hover{background:linear-gradient(110deg,#7950c8,#cf5f9b 62%,#e77962)!important;color:#fff!important;border-color:transparent!important;box-shadow:0 4px 14px #7950c826}
+button.focus-check-updates,button.focus-check-updates:hover,button[data-resources-refresh],button[data-resources-refresh]:hover{border-color:transparent!important;box-shadow:0 4px 14px #7950c826}
 button[aria-busy="true"] .ui-icon{animation:zen-refresh-spin .8s linear infinite}
 @keyframes zen-refresh-spin{to{transform:rotate(360deg)}}
 #editor progress[hidden]{display:none!important}
