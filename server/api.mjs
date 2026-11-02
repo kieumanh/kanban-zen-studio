@@ -749,12 +749,19 @@ export async function api(request, env) {
           (key) =>
             typeof key === 'string' &&
             key.length <= 2000 &&
-            /^(welcome|release:[0-9.]+|notice:[A-Za-z0-9%_.!~*'():-]+)$/.test(
+            /^(welcome|welcome:\d{4}-\d{2}-\d{2}:[0-3]|release:[0-9.]+|notice:[A-Za-z0-9%_.!~*'():-]+)$/.test(
               key,
             ),
         )
       )
         fail('Thông báo không hợp lệ.');
+      if (b.keys.some((key) => key.startsWith('welcome:')))
+        await db
+          .prepare(
+            "DELETE FROM notification_receipts WHERE user_id=? AND receipt_key LIKE 'welcome:%' AND read_at<?",
+          )
+          .bind(u.id, Date.now() - 14 * 86400000)
+          .run();
       await db.batch(
         [...new Set(b.keys)].map((key) =>
           db

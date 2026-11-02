@@ -29,6 +29,12 @@ const receiptLogin=await req('login','POST',{email:'first@example.test',password
 const receiptCookie=receiptLogin.headers.get('Set-Cookie').split(';')[0];
 assert.deepEqual(new Set((await(await req('notification-receipts','GET',null,receiptCookie)).json()).keys),new Set(['welcome','release:1.14.2','notice:task%7C2026-10-29']));
 assert.deepEqual((await(await req('notification-receipts','GET',null,c2)).json()).keys,[]);
+// v1.16.5: dấu đọc lời chào theo từng ngày + buổi (0-3); định dạng sai bị từ chối.
+const wDay=new Date().toISOString().slice(0,10);
+assert.equal((await req('notification-receipts','PUT',{keys:['welcome:2020-01-01:1']},cookie)).status,200);
+assert.equal((await req('notification-receipts','PUT',{keys:['welcome:'+wDay+':2']},cookie)).status,200);
+assert.ok((await(await req('notification-receipts','GET',null,cookie)).json()).keys.includes('welcome:'+wDay+':2'));
+for(const bad of ['welcome:'+wDay+':4','welcome:'+wDay,'welcome:x:1'])assert.equal((await req('notification-receipts','PUT',{keys:[bad]},cookie)).status,400,bad);
 assert.equal((await req('notification-receipts','PUT',{keys:['../bad']},cookie)).status,400);
 assert.equal((await req('notification-receipts','PUT',{keys:[]},cookie)).status,400);
 assert.equal((await req('notification-receipts','PUT',{keys:['welcome']})).status,401);
