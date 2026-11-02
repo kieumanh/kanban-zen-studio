@@ -5984,6 +5984,14 @@
 :root[data-theme=dark][data-contrast=high] #editor .zen-danger-zone .zen-danger-button:focus-visible {
     outline: 3px solid #cecece
 }
+/* v1.16.2 — nút "Làm mới" ở Chế độ tập trung: quy tắc cũ (.focus-check-updates, nền trắng, chữ tím) đã bị quy tắc nút chính ghi đè ở chế độ thường, nhưng bản sao có tiền tố chủ đề lại nặng hơn nên thắng và làm nút trắng chữ trắng. Đặt lại nền nút chính. */
+:root[data-contrast=high] button.focus-check-updates,
+:root[data-contrast=high] button.focus-check-updates:hover,
+:root[data-theme=dark][data-contrast=high] button.focus-check-updates,
+:root[data-theme=dark][data-contrast=high] button.focus-check-updates:hover {
+  background: var(--zen-primary-gradient) !important;
+  color: #fff !important;
+}
 /* Dấu focus dày, rõ ở cả hai nền. */
 :root[data-contrast=high] :focus-visible {
   outline: 3px solid #000;

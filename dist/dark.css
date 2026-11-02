@@ -3001,3 +3001,34 @@
 :root[data-theme=dark] .task-project-choice-icon {
   color: color-mix(in srgb, var(--project-choice-color, #7950c8) 50%, white);
 }
+/* v1.16.2 — Gantt: lưới, nhãn thứ, đường kẻ và mũi tên là thuộc tính SVG viết cứng màu sáng trong gantt.js; gắn lớp để đổi sang nền tối. */
+:root[data-theme=dark] .work-chart-track {
+  stroke: #2e2835;
+}
+:root[data-theme=dark] .gantt-svg > text {
+  fill: #ece3f4;
+}
+:root[data-theme=dark] .gantt-svg .gantt-day {
+  fill: #1b181f;
+}
+:root[data-theme=dark] .gantt-svg .gantt-day-off {
+  fill: #25202b;
+}
+:root[data-theme=dark] .gantt-svg .gantt-dow {
+  fill: #b5a8c2;
+}
+:root[data-theme=dark] .gantt-svg .gantt-col-line {
+  stroke: #332c3b;
+}
+:root[data-theme=dark] .gantt-svg .gantt-row-line {
+  stroke: #2b2531;
+}
+:root[data-theme=dark] .gantt-svg .gantt-arrow-head {
+  fill: #c3a6e3;
+}
+:root[data-theme=dark] .gantt-svg .gantt-edge {
+  stroke: #c3a6e3;
+}
+:root[data-theme=dark] .gantt-svg .gantt-today-line {
+  stroke: #e58fb3;
+}

@@ -186,6 +186,29 @@ const measure = (page) =>
       const border = parse(cs.borderTopColor), worst = Math.round(Math.min(...list.map((bg) => ratio(over(border, bg), bg))) * 100) / 100;
       if (worst < 3) out.push({ problems: ['viền ô nhập ' + worst + ' < 3'], text: (el.name || el.id || el.type || el.tagName) + '', where: describe(el), fg: cs.borderTopColor, op: 1, fs: parseFloat(cs.fontSize) });
     }
+    // v1.16.2 — thành phần giao diện không phải chữ (WCAG 1.4.11, >= 3:1): viền ô chọn / nút chọn, và biểu tượng của nút chỉ có hình (không có chữ).
+    for (const el of document.querySelectorAll('input[type=checkbox],input[type=radio]')) {
+      const cs = getComputedStyle(el);
+      if (!visible(el, cs) || skip(el) || el.disabled || parseFloat(cs.borderTopWidth) < 1 || cs.borderTopStyle === 'none') continue;
+      const { list } = backgrounds(el);
+      const border = parse(cs.borderTopColor), worst = Math.round(Math.min(...list.map((bg) => ratio(over(border, bg), bg))) * 100) / 100;
+      if (worst < 3) out.push({ problems: ['viền ô chọn ' + worst + ' < 3'], text: el.type + ' ' + (el.name || el.id || ''), where: describe(el), fg: cs.borderTopColor, op: 1, fs: 0 });
+    }
+    for (const el of document.querySelectorAll('button,[role=button],a[href]')) {
+      const cs = getComputedStyle(el);
+      if (!visible(el, cs) || skip(el) || el.disabled || el.getAttribute('aria-disabled') === 'true' || el.textContent.trim()) continue;
+      const svg = el.querySelector('svg');
+      if (!svg) continue;
+      const sc = getComputedStyle(svg), shape = svg.querySelector('path,circle,rect,line,polyline,polygon') || svg;
+      const shs = getComputedStyle(shape);
+      const paint = shs.stroke && shs.stroke !== 'none' ? shs.stroke : shs.fill && shs.fill !== 'none' ? shs.fill : sc.color;
+      const { op, list } = backgrounds(el);
+      const fg = parse(paint);
+      let worst = Infinity;
+      for (const bg of list) worst = Math.min(worst, ratio(over({ ...fg, a: fg.a * op }, bg), bg));
+      worst = Math.round(worst * 100) / 100;
+      if (op >= 0.05 && worst < 3) out.push({ problems: ['biểu tượng nút ' + worst + ' < 3'], text: el.getAttribute('aria-label') || el.title || el.className || el.tagName, where: describe(el), fg: paint, op, fs: 0 });
+    }
     return out;
   });
 

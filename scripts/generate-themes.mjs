@@ -299,6 +299,37 @@ const DARK_EXTRA = `
 :root[data-theme=dark] .task-project-choice-icon {
   color: color-mix(in srgb, var(--project-choice-color, #7950c8) 50%, white);
 }
+/* v1.16.2 — Gantt: lưới, nhãn thứ, đường kẻ và mũi tên là thuộc tính SVG viết cứng màu sáng trong gantt.js; gắn lớp để đổi sang nền tối. */
+:root[data-theme=dark] .work-chart-track {
+  stroke: #2e2835;
+}
+:root[data-theme=dark] .gantt-svg > text {
+  fill: #ece3f4;
+}
+:root[data-theme=dark] .gantt-svg .gantt-day {
+  fill: #1b181f;
+}
+:root[data-theme=dark] .gantt-svg .gantt-day-off {
+  fill: #25202b;
+}
+:root[data-theme=dark] .gantt-svg .gantt-dow {
+  fill: #b5a8c2;
+}
+:root[data-theme=dark] .gantt-svg .gantt-col-line {
+  stroke: #332c3b;
+}
+:root[data-theme=dark] .gantt-svg .gantt-row-line {
+  stroke: #2b2531;
+}
+:root[data-theme=dark] .gantt-svg .gantt-arrow-head {
+  fill: #c3a6e3;
+}
+:root[data-theme=dark] .gantt-svg .gantt-edge {
+  stroke: #c3a6e3;
+}
+:root[data-theme=dark] .gantt-svg .gantt-today-line {
+  stroke: #e58fb3;
+}
 `;
 
 export function generate() {
@@ -322,6 +353,7 @@ export function generate() {
     '/* v1.16.0 — tương phản cao (chọn bằng data-contrast="high" trên <html>, đặt bởi theme.js; tự bật khi hệ điều hành yêu cầu prefers-contrast: more).\n   Sinh tự động bằng scripts/generate-themes.mjs. KHÔNG sửa tay. */\n' +
     strip(hcLight.css) +
     strip(hcDark.css) +
+    `/* v1.16.2 — nút "Làm mới" ở Chế độ tập trung: quy tắc cũ (.focus-check-updates, nền trắng, chữ tím) đã bị quy tắc nút chính ghi đè ở chế độ thường, nhưng bản sao có tiền tố chủ đề lại nặng hơn nên thắng và làm nút trắng chữ trắng. Đặt lại nền nút chính. */\n:root[data-contrast=high] button.focus-check-updates,\n:root[data-contrast=high] button.focus-check-updates:hover,\n:root[data-theme=dark][data-contrast=high] button.focus-check-updates,\n:root[data-theme=dark][data-contrast=high] button.focus-check-updates:hover {\n  background: var(--zen-primary-gradient) !important;\n  color: #fff !important;\n}\n` +
     `/* Dấu focus dày, rõ ở cả hai nền. */\n:root[data-contrast=high] :focus-visible {\n  outline: 3px solid #000;\n  outline-offset: 2px;\n}\n:root[data-theme=dark][data-contrast=high] :focus-visible {\n  outline-color: #fff;\n}\n`;
   return {
     'dist/dark.css':
