@@ -3118,6 +3118,63 @@
 :root[data-theme=dark] #side-quick-notes button:focus-visible {
     outline: 2px solid #845cd6
 }
+:root[data-theme=dark] #main .zen-task-chip {
+    background: #1b181f;
+    color: #d4c6e4
+}
+:root[data-theme=dark] #main .zen-task-chip b {
+    background: #1b171f;
+    color: #d4c6e4
+}
+:root[data-theme=dark] #main .zen-task-chip:hover {
+    border-color: #50455b;
+    background: #151219
+}
+:root[data-theme=dark] #main .zen-task-chip:focus-visible {
+    outline: 2px solid #845cd6
+}
+:root[data-theme=dark] #main .zen-task-chip[aria-pressed="true"] {
+    border-color: #845cd6;
+    background: #1d1823;
+    color: #d8cdfe
+}
+:root[data-theme=dark] #main .zen-task-chip[aria-pressed="true"] b {
+    background: #2e233d;
+    color: #d8cdfe
+}
+:root[data-theme=dark] #main .zen-task-chip[data-kind="overdue"]:not([aria-pressed="true"]) {
+    color: #feb0bc
+}
+:root[data-theme=dark] #main .zen-task-chip[data-kind="overdue"]:not([aria-pressed="true"]) b {
+    background: #151219;
+    color: #feb0bc
+}
+:root[data-theme=dark] #main .zen-task-chip[data-kind="overdue"][aria-pressed="true"] {
+    border-color: #ce4267;
+    background: #241519;
+    color: #fdb9c4
+}
+:root[data-theme=dark] #main .zen-task-chip[data-kind="overdue"][aria-pressed="true"] b {
+    background: #391c25;
+    color: #fdb9c4
+}
+:root[data-theme=dark] #main .task-table tbody tr:hover, :root[data-theme=dark] #main .task-table tbody tr:focus-visible {
+    background: #17141b
+}
+:root[data-theme=dark] #main .task-table tbody tr.zen-row-overdue {
+    background: linear-gradient(90deg, #17141b, transparent 45%)
+}
+:root[data-theme=dark] #main .task-table tbody tr.zen-row-overdue:hover {
+    background: linear-gradient(90deg, #120f16, #17141b 55%)
+}
+:root[data-theme=dark] #main .task-table tbody tr:focus-visible {
+    outline: 2px solid #845cd6
+}
+@media (max-width: 1180px) {
+    :root[data-theme=dark] #main .task-table tbody tr.zen-row-overdue {
+        background: #18151c
+    }
+}
 
 :root[data-theme=dark] {
   color-scheme: dark;

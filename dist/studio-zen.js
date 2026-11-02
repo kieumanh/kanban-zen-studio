@@ -837,3 +837,51 @@
   };
 })();
 
+// v1.17.3: "Tất cả công việc" — hàng chip lọc nhanh theo thời hạn/trạng thái (Tất cả · Hôm nay · Quá hạn · Sắp đến hạn · Đang thực hiện) có số lượng,
+// dùng chính bộ lọc "Thời hạn" sẵn có (dashboardDueFilter) nên kết quả và ô chọn luôn khớp nhau. Bảng chỉ đổi cách trình bày (trạng thái, ưu tiên, hàng quá hạn).
+(() => {
+  const CHIPS = [
+    ['', 'Tất cả'],
+    ['today', 'Hôm nay'],
+    ['overdue', 'Quá hạn'],
+    ['upcoming', 'Sắp đến hạn'],
+    ['doing', 'Đang thực hiện'],
+  ];
+  const paint = () => {
+    if (view !== 'tasks') return;
+    const main = document.querySelector('#main');
+    const anchor = main?.querySelector('details.wf-filter-panel');
+    if (!anchor || main.querySelector('.zen-task-chips')) return;
+    const saved = dashboardDueFilter;
+    dashboardDueFilter = '';
+    let pool;
+    try {
+      pool = allTasks().filter(found);
+    } finally {
+      dashboardDueFilter = saved;
+    }
+    const nav = document.createElement('div');
+    nav.className = 'zen-task-chips';
+    nav.setAttribute('role', 'group');
+    nav.setAttribute('aria-label', 'Lọc nhanh công việc');
+    nav.innerHTML = CHIPS.map(([key, label]) => {
+      const count = key ? pool.filter((t) => dashboardDateMatches(t, key)).length : pool.length;
+      return '<button type="button" class="zen-task-chip" data-zen-chip="' + key + '" data-kind="' + (key || 'all') + '" aria-pressed="' + (dashboardDueFilter === key) + '"' + (key === 'upcoming' ? ' title="Hạn trong 7 ngày tới"' : '') + '>' + label + ' <b>' + count + '</b></button>';
+    }).join('');
+    anchor.before(nav);
+  };
+  const before = render;
+  render = function () {
+    before();
+    paint();
+  };
+  document.addEventListener('click', (event) => {
+    const chip = event.target.closest('[data-zen-chip]');
+    if (!chip) return;
+    event.preventDefault();
+    dashboardDueFilter = chip.dataset.zenChip;
+    render();
+    document.querySelector('.zen-task-chip[aria-pressed="true"]')?.focus();
+  });
+})();
+

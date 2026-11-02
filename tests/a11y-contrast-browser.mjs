@@ -242,6 +242,8 @@ try {
     }
     await page.keyboard.press('Control+k');
     await page.waitForFunction(() => document.querySelector('.studio-palette')?.open === true);
+    // Đợi hiệu ứng mở bảng lệnh kết thúc: quét giữa chừng (độ mờ 0.17–0.59) cho tương phản sai khi máy bận.
+    await page.waitForFunction(() => document.querySelector('.studio-palette').getAnimations({ subtree: true }).length === 0);
     await scan(page, tag('bảng lệnh'));
     await page.keyboard.press('Escape');
     await context.close();
