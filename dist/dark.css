@@ -3086,6 +3086,38 @@
 :root[data-theme=dark] .due-alert-strip > span > svg {
     background: rgba(27,24,31,0.702)
 }
+:root[data-theme=dark] #side-quick-notes {
+    background: #18151c
+}
+:root[data-theme=dark] #side-quick-notes .navlabel .ui-icon {
+    color: #cfb4eb
+}
+:root[data-theme=dark] #side-quick-notes .navlabel small {
+    background: #1c1821;
+    color: #d5c3ea
+}
+:root[data-theme=dark] #side-quick-notes .zen-quick-note-item:hover, :root[data-theme=dark] #side-quick-notes .zen-quick-note-item:focus-within {
+    background: #1b181f;
+    border-color: #423b49
+}
+:root[data-theme=dark] #side-quick-notes .zen-quick-note-badge {
+    color: var(--note-color, #cab8fe);
+    background: color-mix(in srgb, var(--note-color, #7950c8) 14%, #1b181f);
+    border: 1px solid color-mix(in srgb, var(--note-color, #845cd6) 28%, #302b36)
+}
+:root[data-theme=dark] #side-quick-notes .zen-quick-note-item > button:last-child {
+    color: #cbbdda
+}
+:root[data-theme=dark] #side-quick-notes .zen-quick-note-item > button:last-child:hover {
+    color: #f5b6c9;
+    background: #110e15
+}
+:root[data-theme=dark] #side-quick-notes .zen-quick-note-all:hover {
+    background: #1b1720
+}
+:root[data-theme=dark] #side-quick-notes button:focus-visible {
+    outline: 2px solid #845cd6
+}
 
 :root[data-theme=dark] {
   color-scheme: dark;

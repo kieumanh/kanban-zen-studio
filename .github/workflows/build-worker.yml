@@ -73,6 +73,7 @@ jobs:
           node tests/timeline-removed-browser.mjs
           node tests/theme-toggle-browser.mjs
           node tests/notifications-ui-browser.mjs
+          node tests/quick-notes-browser.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
