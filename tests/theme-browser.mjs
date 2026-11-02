@@ -19,7 +19,7 @@ const luminance = (css) => {
 };
 const reopen = async (page) => {
   await page.reload();
-  await page.waitForFunction(() => typeof _WF !== 'undefined' && currentUser?.id === 'qa');
+  await page.waitForFunction(() => typeof _WF !== 'undefined' && currentUser?.id === 'qa' && document.documentElement.dataset.zenReady === '1');
 };
 
 try {

@@ -73,7 +73,7 @@ async function open(width, touch = false) {
   await page.route('https://fonts.googleapis.com/**', (r) => r.abort());
   await page.route('https://fonts.gstatic.com/**', (r) => r.abort());
   await page.goto('http://127.0.0.1:' + server.address().port);
-  await page.waitForFunction(() => typeof _WF !== 'undefined' && currentUser?.id === 'qa');
+  await page.waitForFunction(() => typeof _WF !== 'undefined' && currentUser?.id === 'qa' && document.documentElement.dataset.zenReady === '1');
   return { context, page };
 }
 
@@ -106,7 +106,7 @@ async function assertInside(page, panelSelector, itemSelector, label) {
 
 const reload = async (page) => {
   await page.reload();
-  await page.waitForFunction(() => typeof _WF !== 'undefined' && currentUser?.id === 'qa');
+  await page.waitForFunction(() => typeof _WF !== 'undefined' && currentUser?.id === 'qa' && document.documentElement.dataset.zenReady === '1');
 };
 
 const state = (page) =>

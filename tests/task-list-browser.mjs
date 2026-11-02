@@ -165,7 +165,7 @@ async function open(width, touch = false) {
   await page.route('https://fonts.gstatic.com/**', (r) => r.abort());
   await page.goto('http://127.0.0.1:' + server.address().port);
   await page.waitForFunction(
-    () => typeof _WF !== 'undefined' && currentUser?.id === 'qa',
+    () => typeof _WF !== 'undefined' && currentUser?.id === 'qa' && document.documentElement.dataset.zenReady === '1',
   );
   return { context, page };
 }

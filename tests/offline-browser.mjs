@@ -13,7 +13,7 @@ try{
  await page.goto(origin);await page.evaluate(()=>navigator.serviceWorker.ready);
  await page.reload();await page.waitForFunction(()=>!!navigator.serviceWorker.controller);
  await page.evaluate(async()=>{currentUser={id:'offline-test',email:'offline@example.test',session_expires:Date.now()+600000};KEY='zen-account-offline-test';data={schema:1,projects:[],notes:Array.from({length:500},(_,i)=>({id:'n'+i,title:'Offline '+i,text:'x'.repeat(10000),group:'',url:'',color:'#7950c8'}))};cloudRevision=2;dirty=true;cloudBase=structuredClone(data);await cacheCloud();});
- await context.setOffline(true);await page.reload();await page.waitForFunction(()=>currentUser?.id==='offline-test');
+ await context.setOffline(true);await page.reload();await page.waitForFunction(()=>currentUser?.id==='offline-test' && document.documentElement.dataset.zenReady === '1');
  assert.equal(await page.evaluate(()=>document.body.classList.contains('signed-out')),false);
  assert.equal(await page.evaluate(()=>dirty),true);assert.equal(await page.evaluate(()=>data.notes.length),500);assert.equal(await page.evaluate(()=>localStorage.getItem(KEY)),null,'Large data is stored in IndexedDB');
  assert.equal(await page.evaluate(async()=>{try{await fetch('/api/me');return false;}catch{return true;}}),true,'API must never be cached');

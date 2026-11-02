@@ -70,7 +70,7 @@ try {
     const { context, page } = await h.open(1440);
     await page.evaluate(() => localStorage.setItem('kanban-checks', 'off'));
     await page.reload();
-    await page.waitForFunction(() => typeof _WF !== 'undefined' && currentUser?.id === 'qa');
+    await page.waitForFunction(() => typeof _WF !== 'undefined' && currentUser?.id === 'qa' && document.documentElement.dataset.zenReady === '1');
     await ready(page);
     let st = await read(page);
     assert.equal(st.compact, false);

@@ -129,7 +129,7 @@ async function medium(cfg) {
   const focused = await page.evaluate(() => document.activeElement?.dataset.zenCalMode || document.activeElement?.tagName);
   if (focused !== 'grid') fail(cfg, 'tiêu điểm', `sau khi đổi kiểu tiêu điểm ở "${focused}", cần ở nút "grid"`);
   await page.reload();
-  await page.waitForFunction(() => typeof _WF !== 'undefined' && currentUser?.id === 'qa');
+  await page.waitForFunction(() => typeof _WF !== 'undefined' && currentUser?.id === 'qa' && document.documentElement.dataset.zenReady === '1');
   await gotoOctober(page);
   s = await read(page);
   if (!s.grid || s.agenda) fail(cfg, 'nhớ lựa chọn', `sau khi tải lại: agenda=${s.agenda}, lưới=${s.grid}`);
