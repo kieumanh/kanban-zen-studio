@@ -762,3 +762,9 @@ input[type="range"] {
 /* v1.15.46: khung báo lỗi đồng bộ có dòng phụ trấn an dưới nhãn chính. */
 #zen-sync-feedback .zen-sync-text { display: grid; gap: 2px; flex: 1 1 220px; min-width: 0; }
 #zen-sync-feedback .zen-sync-text small { font-size: 12px; line-height: 1.4; color: var(--zen-text-muted); }
+
+/* v1.15.47: các hộp thoại còn lại đạt vùng chạm 44px trên cảm ứng (nút đóng lời chào; nút tháng trước/sau của bảng chọn ngày). */
+@media (pointer: coarse) {
+  .welcome-dialog .welcome-close { width: 44px !important; height: 44px !important; min-width: 44px !important; min-height: 44px !important; flex-basis: 44px !important; }
+  .time-picker-dialog .picker-month button { width: 44px; height: 44px; min-width: 44px; min-height: 44px; }
+}
