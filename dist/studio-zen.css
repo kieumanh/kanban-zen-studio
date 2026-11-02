@@ -754,3 +754,7 @@ input[type="range"] {
   border-radius: 50%;
   background: #2e7d5b;
 }
+
+/* v1.15.45: ô "Hiện checklist trên thẻ" bị khóa khi Thẻ gọn đang ẩn checklist; chú thích đi kèm. */
+.kanban-options .wf-option-hint { display: block; margin: -2px 0 4px 28px; font-size: 12px; line-height: 1.4; color: var(--zen-text-muted); }
+.kanban-options label:has(> input:disabled) { color: var(--zen-text-muted); cursor: not-allowed; }

@@ -42,6 +42,21 @@
     const menu = document.querySelector('.wf-project-menu[open]');
     if (menu) { menu.open = false; menu.querySelector('summary')?.focus(); }
   });
+  // v1.15.45: Thẻ gọn ẩn checklist trên thẻ, nên ô "Hiện checklist trên thẻ" không được đánh dấu như đang hiện. Khi Thẻ gọn bật, ô chỉ phản ánh thực tế (bỏ dấu, khóa, có chú thích); lựa chọn đã lưu của người dùng không bị đổi và quay lại khi Thẻ gọn tắt.
+  function tidyChecksOption(panel) {
+    const input = panel?.querySelector('[data-kanban-option="checks"]');
+    if (!input) return;
+    const label = input.closest('label');
+    let hint = panel.querySelector('.wf-option-hint');
+    if (!compact()) { hint?.remove(); input.removeAttribute('aria-describedby'); label?.removeAttribute('title'); return; }
+    input.checked = false; input.disabled = true;
+    if (!hint) {
+      hint = document.createElement('small'); hint.className = 'wf-option-hint'; hint.id = 'wf-checks-hint';
+      hint.textContent = 'Đang ẩn vì Thẻ gọn. Tắt Thẻ gọn để hiện checklist.';
+      label?.after(hint);
+    }
+    input.setAttribute('aria-describedby', 'wf-checks-hint'); label?.setAttribute('title', hint.textContent);
+  }
   function paint() {
     const board = document.querySelector('#main .board'), p = project();
     if (board && p && view === 'projects') {
@@ -57,6 +72,7 @@
         board.before(toolbar);
       }
       tidyHeader();
+      tidyChecksOption(panel);
       tidySummary(p);
       const nav = document.createElement('nav'); nav.className = 'studio-column-tabs'; nav.setAttribute('aria-label','Chuyển giữa các cột');
       const columns = [...board.querySelectorAll('.column')];
