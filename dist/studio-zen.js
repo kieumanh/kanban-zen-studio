@@ -542,3 +542,44 @@
     return baseArt(element, element?.matches?.('#main, .task-card, .project-card') ? 'none' : motif);
   };
 })();
+
+// v1.15.51: khu vực ghim ghi chú có biểu tượng minh họa và bố cục tinh tế hơn. Chỉ trang trí lại DOM của keep198:
+// nút, ô ẩn `zen-pinned`/`zen-quick-pinned`, chữ mô tả và trình xử lý bấm giữ nguyên nên việc ghim/bỏ ghim không đổi.
+(() => {
+  const svg = (paths) =>
+    '<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">' + paths + '</svg>';
+  // Ghim đầu danh sách: chiếc ghim bấm. Ghim nhanh: dấu trang (truy cập từ menu).
+  const ICONS = {
+    pin: svg('<path d="M9 4h6l-1 5 3 3v1.5H7V12l3-3z"/><path d="M12 13.5V20"/>'),
+    quick: svg('<path d="M7 4h10a1 1 0 0 1 1 1v15l-6-3.8L6 20V5a1 1 0 0 1 1-1z"/><path d="M12 8v4M10 10h4"/>'),
+  };
+  const baseNoteForm = noteForm;
+  noteForm = function () {
+    baseNoteForm.apply(this, arguments);
+    const panel = document.querySelector('#editor .zen-note-pin-panel');
+    if (!panel || panel.dataset.zenPinStyled) return;
+    panel.dataset.zenPinStyled = '1';
+    const rows = [
+      { row: panel.querySelector('.zen-editor-pin-row:not(.zen-editor-quick-pin-row)'), key: 'pin', title: 'Ghim lên đầu danh sách' },
+      { row: panel.querySelector('.zen-editor-quick-pin-row'), key: 'quick', title: 'Ghim nhanh ở menu' },
+    ];
+    for (const { row, key, title } of rows) {
+      const hint = row?.querySelector('.zen-editor-pin-hint');
+      if (!hint) continue;
+      const icon = document.createElement('span');
+      icon.className = 'zen-pin-icon';
+      icon.setAttribute('aria-hidden', 'true');
+      icon.innerHTML = ICONS[key];
+      const heading = document.createElement('strong');
+      heading.className = 'zen-pin-title';
+      heading.textContent = title;
+      const text = document.createElement('span');
+      text.className = 'zen-pin-text';
+      const head = document.createElement('div');
+      head.className = 'zen-pin-head';
+      hint.before(head);
+      text.append(heading, hint);
+      head.append(icon, text);
+    }
+  };
+})();
