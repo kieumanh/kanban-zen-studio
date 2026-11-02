@@ -8,7 +8,9 @@ const BUDGET = 845;
 const dist = path.join(import.meta.dirname, '..', 'dist');
 let total = 0;
 const perFile = {};
-for (const file of fs.readdirSync(dist).filter((f) => f.endsWith('.css'))) {
+// dark.css và contrast.css do scripts/generate-themes.mjs sinh ra và sao chép `!important` của nguồn (để thắng đúng như bản sáng), nên không tính vào nợ.
+const GENERATED = new Set(['dark.css', 'contrast.css']);
+for (const file of fs.readdirSync(dist).filter((f) => f.endsWith('.css') && !GENERATED.has(f))) {
   const css = fs.readFileSync(path.join(dist, file), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
   const n = (css.match(/!important/g) || []).length;
   perFile[file] = n;

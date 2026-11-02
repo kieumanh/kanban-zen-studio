@@ -110,6 +110,8 @@
     const list=[{label:'Tạo công việc mới',hint:'C',run:()=>{const p=project();if(p&&editable())taskForm(p);else if(editable())projectForm();}},{label:'Tìm kiếm toàn bộ nội dung',run:()=>document.querySelector('#search')?.focus()},{label:'Thẻ gọn / đầy đủ',run:()=>{localWrite('zen-compact',String(!compact()));render();}}];
     [['dashboard','Tổng quan'],['projects','Bảng Kanban'],['tasks','Tất cả công việc'],['focus','Chế độ tập trung'],['notes','Ghi chú'],['calendar','Lịch'],['gantt','Gantt']].forEach(([v,label])=>list.push({label,run:()=>go(v)}));
     list.push({label:'Cài đặt',run:()=>accountPanel()});
+    // v1.16.0: đổi giao diện từ bảng lệnh.
+    if(window.zenTheme){[['Giao diện sáng','light'],['Giao diện tối','dark'],['Giao diện theo hệ thống','system']].forEach(([label,value])=>list.push({label,hint:'Màu sắc',run:()=>{window.zenTheme.setTheme(value);notify('Đã chọn: '+label.toLocaleLowerCase('vi')+'.');}}));list.push({label:'Bật / tắt tương phản cao',hint:'Màu sắc',run:()=>{const high=window.zenTheme.state().high;window.zenTheme.setContrast(high?'normal':'high');notify(high?'Đã tắt tương phản cao.':'Đã bật tương phản cao.');}});}
     visibleProjects().forEach(p=>list.push({label:'Dự án · '+p.name,run:()=>go('projects',p.id)}));
     allTasks().filter(t=>!t.archived&&!t.project.archived).forEach(t=>list.push({label:t.title,hint:t.project.name+' · '+columnDisplayName(t.project,t.col),run:()=>taskDetail(t.project,t)}));
     return list;
@@ -628,5 +630,62 @@
     button.replaceWith(section);
     section.append(button);
     zone(section, button, 'Xóa dự án này', 'Dự án và các việc bên trong chuyển vào Thùng rác, khôi phục được trong 30 ngày.');
+  };
+})();
+
+// v1.16.0: chế độ tối và tương phản cao. `theme.js` (nạp đầu trang) đặt `data-theme` / `data-contrast` trên <html>; bảng màu nằm ở
+// `dark.css` và `contrast.css` (sinh tự động từ CSS nguồn bằng scripts/generate-themes.mjs). Đây là phần giao diện chọn: mục "Giao diện" trong Cài đặt.
+// Lựa chọn lưu trên thiết bị này (localStorage), không đồng bộ lên máy chủ và không đụng vào dữ liệu làm việc.
+(() => {
+  const choices = (name, legend, options, current, onChange) => {
+    const set = document.createElement('fieldset');
+    set.className = 'zen-theme-group';
+    const title = document.createElement('legend');
+    title.textContent = legend;
+    set.append(title);
+    options.forEach(([value, label]) => {
+      const row = document.createElement('label');
+      row.className = 'zen-theme-choice';
+      const input = document.createElement('input');
+      input.type = 'radio';
+      input.name = name;
+      input.value = value;
+      input.checked = value === current;
+      input.addEventListener('change', () => input.checked && onChange(value));
+      const text = document.createElement('span');
+      text.textContent = label;
+      row.append(input, text);
+      set.append(row);
+    });
+    return set;
+  };
+  const baseAccountPanel = accountPanel;
+  accountPanel = function () {
+    baseAccountPanel.apply(this, arguments);
+    const body = document.querySelector('#editor-body');
+    if (!body || !window.zenTheme || body.querySelector('.settings-theme')) return;
+    const read = (key) => {
+      try {
+        return localStorage.getItem(key) || 'system';
+      } catch {
+        return 'system';
+      }
+    };
+    const section = document.createElement('section');
+    section.className = 'settings-theme profile-card';
+    const heading = document.createElement('h3');
+    heading.textContent = 'Giao diện';
+    const help = document.createElement('p');
+    help.className = 'help-copy';
+    help.textContent = 'Chỉ áp dụng trên thiết bị này. "Theo hệ thống" làm theo cài đặt sáng/tối và tương phản của thiết bị.';
+    section.append(
+      heading,
+      help,
+      choices('zen-theme', 'Màu giao diện', [['system', 'Theo hệ thống'], ['light', 'Sáng'], ['dark', 'Tối']], read('zen-theme'), (v) => window.zenTheme.setTheme(v)),
+      choices('zen-contrast', 'Độ tương phản', [['system', 'Theo hệ thống'], ['normal', 'Thường'], ['high', 'Cao']], read('zen-contrast'), (v) => window.zenTheme.setContrast(v)),
+    );
+    const anchor = body.querySelector('h3.settings-section');
+    if (anchor) anchor.before(section);
+    else body.append(section);
   };
 })();

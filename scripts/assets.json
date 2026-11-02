@@ -258,5 +258,20 @@
     "/studio-zen.css",
     "studio-zen.css",
     "text/css; charset=utf-8"
+  ],
+  [
+    "/theme.js",
+    "theme.js",
+    "text/javascript; charset=utf-8"
+  ],
+  [
+    "/dark.css",
+    "dark.css",
+    "text/css; charset=utf-8"
+  ],
+  [
+    "/contrast.css",
+    "contrast.css",
+    "text/css; charset=utf-8"
   ]
 ]
