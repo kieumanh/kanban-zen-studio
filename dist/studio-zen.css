@@ -768,3 +768,7 @@ input[type="range"] {
   .welcome-dialog .welcome-close { width: 44px !important; height: 44px !important; min-width: 44px !important; min-height: 44px !important; flex-basis: 44px !important; }
   .time-picker-dialog .picker-month button { width: 44px; height: 44px; min-width: 44px; min-height: 44px; }
 }
+
+/* v1.15.48: tay nắm Gantt trên cảm ứng — vùng chạm nới ra (xem dist/gantt.js), có vạch cầm nhìn thấy ở hai đầu thanh. */
+.gantt-port-hit { touch-action: none; cursor: crosshair; }
+.gantt-grip { fill: #3d294a; opacity: 0.45; pointer-events: none; }
