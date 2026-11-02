@@ -63,6 +63,8 @@ try {
       assert.ok(r.hint && r.hintSize >= 12, `${label}: mô tả phải có và cỡ chữ >= 12px (nhận được ${r.hintSize})`);
       assert.ok(r.button.h >= (touch ? 44 : 40), `${label}: nút ghim phải đủ cao (nhận được ${r.button.h}px)`);
       assert.ok(r.inside, `${label}: thẻ ghim không được tràn khỏi khung`);
+      assert.ok(r.button.w >= r.row.w - 48, `${label}: nút ghim phải rộng gần bằng thẻ (nút ${r.button.w}px, thẻ ${r.row.w}px)`);
+      assert.ok(r.button.l - r.row.l >= 12 && r.row.r - r.button.r >= 12, `${label}: nút ghim phải cách mép thẻ >= 12px (trái ${r.button.l - r.row.l}, phải ${r.row.r - r.button.r})`);
       assert.equal(r.pressed, 'false', `${label}: ghi chú chưa ghim`);
     }
     assert.ok(info.overflow <= 0, `${label}: trang không được tràn ngang (${info.overflow}px)`);
