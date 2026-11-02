@@ -318,8 +318,8 @@
   const classify = (message, kind) => {
     const raw = String(message || '').replace(/^[●•⚠]\s*/, '').trim();
     const online = navigator.onLine;
-    if (/xung đột|hợp nhất/i.test(raw)) return { ui: 'error', action: 'conflict', short: 'Xung đột', full: 'Xung đột · Xem và chọn bản cần giữ' };
-    if (/không thể lưu bản nháp trên máy/i.test(raw)) return { ui: 'error', action: 'retry', short: 'Không lưu được', full: 'Không lưu được trên thiết bị' };
+    if (/xung đột|hợp nhất/i.test(raw)) return { ui: 'error', action: 'conflict', short: 'Xung đột', full: 'Xung đột · Xem và chọn bản cần giữ', note: 'Bản trên thiết bị của bạn được giữ nguyên, chưa bị ghi đè.' };
+    if (/không thể lưu bản nháp trên máy/i.test(raw)) return { ui: 'error', action: 'retry', short: 'Không lưu được', full: 'Không lưu được trên thiết bị', note: 'Hãy xuất bản sao JSON trước khi đóng ứng dụng.' };
     if (kind === 'offline' || !online) {
       return online
         ? { ui: 'offline', short: 'Chưa kết nối được', full: 'Chưa kết nối được máy chủ · Đã lưu trên thiết bị' }
@@ -332,7 +332,7 @@
       else if (/bản nháp đã lưu/i.test(raw)) why = 'Bản nháp đã lưu trên thiết bị';
       else if (/kiểm tra dữ liệu/i.test(raw)) why = 'Cần kiểm tra dữ liệu';
       else why = raw.replace(/chưa đồng bộ( được)?/gi, '').replace(/^[\s·]+|[\s·]+$/g, '').replace(/\s*·\s*·\s*/g, ' · ');
-      return { ui: 'error', action: 'retry', short: 'Chưa đồng bộ được', full: 'Chưa đồng bộ được' + (why ? ' · ' + why : '') };
+      return { ui: 'error', action: 'retry', short: 'Chưa đồng bộ được', full: 'Chưa đồng bộ được' + (why ? ' · ' + why : ''), note: 'Bản nháp vẫn ở thiết bị, chưa mất dữ liệu.' };
     }
     if (/đang đồng bộ/i.test(raw)) return { ui: 'pending', short: 'Đang đồng bộ…', full: 'Đang đồng bộ…' };
     if (/đã lưu trên máy|tiếp tục đồng bộ/i.test(raw)) return { ui: 'pending', short: 'Chờ đồng bộ', full: 'Đã lưu trên thiết bị · Chờ đồng bộ' };
@@ -382,8 +382,16 @@
         bar.setAttribute('role', 'status');
         document.querySelector('.topbar')?.after(bar);
       }
-      const text = document.createElement('span');
-      text.textContent = current.full;
+      // v1.15.46: thông báo nổi trùng sự cố đã gỡ; lời trấn an ("bản nháp vẫn ở thiết bị") nằm ngay trong khung này, dòng phụ dưới nhãn chính.
+      const text = document.createElement('div'), main = document.createElement('span');
+      text.className = 'zen-sync-text';
+      main.textContent = current.full;
+      text.append(main);
+      if (current.note) {
+        const note = document.createElement('small');
+        note.textContent = current.note;
+        text.append(note);
+      }
       const action = document.createElement('button');
       action.type = 'button';
       action.className = 'btn';

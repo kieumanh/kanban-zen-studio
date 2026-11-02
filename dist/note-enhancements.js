@@ -102,7 +102,7 @@ noteForm=function(n){
       success=editor.noteCommit()===true;
       if(success)render();
       const status=composer.querySelector('.note-inline-save-status');
-      if(status)status.textContent=success?'Đã lưu trên máy · Tự đồng bộ':'Hãy kiểm tra nội dung trước khi lưu.';
+      if(status)status.textContent=success?'Đã lưu trên thiết bị · Tự đồng bộ':'Hãy kiểm tra nội dung trước khi lưu.';
     }finally{autoBusy=false;}
     return success;
   };

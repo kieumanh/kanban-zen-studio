@@ -65,7 +65,7 @@ async function flushCloud(manual=false){
   const {changesBetween}=await deltaReady,changes=changesBetween(cloudBase||{schema:1,projects:[],notes:[]},payload);
   if(!valid(payload)){
    syncBlocked=true;syncStatus('⚠ Dữ liệu không hợp lệ · Chưa đồng bộ','error');
-   if(!invalidSyncNotified){notify('Ghi chú hoặc dữ liệu chưa hợp lệ. Bản cục bộ được giữ nguyên.');invalidSyncNotified=true;}
+   invalidSyncNotified=true;
    return;
   }
   syncStatus('● Đang đồng bộ…','pending');
@@ -85,11 +85,11 @@ async function flushCloud(manual=false){
    if(typeof rebaseWorkspace==='function'&&await rebaseWorkspace(accountId)){retry=dirty;return;}
    syncConflict=true;
    syncStatus('⚠ Xung đột dữ liệu · Chưa ghi đè','error');
-   notify('Có thay đổi từ thiết bị khác. Bản trên máy của bạn được giữ nguyên.');
+   // v1.15.46: khung báo lỗi đồng bộ (studio-zen.js) đã nói điều này kèm nút xử lý; không phát thêm thông báo nổi.
   }else if([400,403,413,422].includes(error.status)){
    syncBlocked=true;
    syncStatus('⚠ Máy chủ từ chối dữ liệu · Chưa đồng bộ','error');
-   if(!invalidSyncNotified){notify('Dữ liệu chưa được máy chủ chấp nhận. Bản nháp vẫn ở thiết bị.');invalidSyncNotified=true;}
+   invalidSyncNotified=true;
   }else{
    retry=true;
    syncStatus('⚠ Đã lưu trên máy · Chờ kết nối','offline');

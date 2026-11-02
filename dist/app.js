@@ -17,7 +17,7 @@ function visibleProjects(){return data.projects.filter(p=>!p.archived).sort((a,b
 function healthPanel(){return '';}
 let data;try{const raw=localStorage.getItem(KEY);data=raw?JSON.parse(raw):sample();if(!valid(data))throw Error('Dữ liệu lưu không hợp lệ');}catch(e){data={schema:1,projects:[]};setTimeout(()=>notify('Không đọc được dữ liệu cũ. Hãy nhập bản sao lưu; dữ liệu cũ chưa bị ghi đè.'),500);}
 let view='dashboard',active=null,query='',filterProject='',filterStatus='',filterPriority='',drag=null,editing=null,undoData=null;
-function save(){try{localStorage.setItem(KEY,JSON.stringify(data));$('#save-state').textContent='● Đã lưu trên máy';return true;}catch(e){$('#save-state').textContent='⚠ Chưa lưu được';notify('Bộ nhớ trình duyệt không khả dụng hoặc đã đầy. Hãy xuất bản sao JSON ngay.');return false;}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(data));$('#save-state').textContent='● Đã lưu trên thiết bị';return true;}catch(e){$('#save-state').textContent='⚠ Chưa lưu được';notify('Bộ nhớ trình duyệt không khả dụng hoặc đã đầy. Hãy xuất bản sao JSON ngay.');return false;}}
 function notify(s){$('#toast').textContent=s;$('#toast').classList.add('show');clearTimeout(notify.timer);notify.timer=setTimeout(()=>$('#toast').classList.remove('show'),4500);}
 function units(t){return {total:1+t.checks.length,done:(t.col==='Done'?1:0)+t.checks.filter(c=>c.done).length};}
 function progress(tasks){tasks=tasks.filter(t=>!t.archived);const sums=tasks.reduce((a,t)=>{const u=units(t);return {total:a.total+u.total,done:a.done+u.done};},{total:0,done:0});return {...sums,pct:sums.total?Math.round(sums.done/sums.total*100):0};}

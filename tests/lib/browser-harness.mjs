@@ -63,7 +63,8 @@ export async function startHarness({ seed = defaultSeed, executablePath = proces
       ...(forcedColors ? { forcedColors } : {}),
     });
     const page = await context.newPage();
-    const state = { workspace: structuredClone(workspace || seed()), revision: 1 };
+    // state.mode: 'ok' | 'server500' | 'reject400' | 'conflict409' (kết quả của PUT/POST lưu dữ liệu).
+    const state = { workspace: structuredClone(workspace || seed()), revision: 1, mode: 'ok' };
     await context.addInitScript(({ day }) => {
       const prev = new Date(Date.parse(day + 'T00:00:00Z') - 86400000).toISOString().slice(0, 10);
       for (const d of [day, prev]) for (let i = 0; i < 4; i++) localStorage.setItem('zen-welcome:qa:' + d + ':' + i, 'seen');
@@ -75,6 +76,8 @@ export async function startHarness({ seed = defaultSeed, executablePath = proces
       if (path === 'me') result = { user: { id: 'qa', name: 'Kiểm tra', email: 'qa@example.test', session_expires: Date.now() + 600000 } };
       else if (path === 'workspace' || path === 'workspace-v2') {
         if (req.method() === 'PUT' || req.method() === 'POST') {
+          const status = { server500: 500, reject400: 400, conflict409: 409 }[state.mode];
+          if (status) return route.fulfill({ status, contentType: 'application/json', body: JSON.stringify({ error: 'Mô phỏng ' + state.mode }) });
           const b = req.postDataJSON();
           if (b.changes) {
             const entries = flatten(state.workspace);
