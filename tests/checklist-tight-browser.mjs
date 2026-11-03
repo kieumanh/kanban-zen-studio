@@ -48,8 +48,8 @@ try {
       };
     });
     assert.ok(m.rangeH >= 44 && m.rangeH <= 46, 'thanh % phải giữ vùng chạm 44px, được ' + m.rangeH + at);
-    // Trần 96px: thanh % giữ vùng chạm 44px (quy định v1.17.4/v1.19.0) và ô chữ 38px; không thể dưới ~84px mà vẫn chạm được.
-    assert.ok(m.rowH <= 96, 'một dòng checklist quá cao: ' + m.rowH + at);
+    // Trần 100px theo số đo thật (390px: 97px; 820/1440px: 87px; v1.19.3 đo được 107px và 90px). Thanh % giữ vùng chạm 44px nên dòng không thể thấp hơn ~85px.
+    assert.ok(m.rowH <= 100, 'một dòng checklist quá cao: ' + m.rowH + at);
     assert.ok(m.boxRadius >= 20, 'khung thêm mục phải bo tròn kiểu viên thuốc, được ' + m.boxRadius + at);
     assert.ok(m.boxInside, 'ô nhập hoặc nút Thêm nằm ngoài khung' + at);
     assert.equal(m.taBorder, '0px', 'ô nhập không được có viền riêng trong khung' + at);

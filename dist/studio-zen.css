@@ -1516,3 +1516,10 @@ dialog[open] button[aria-label^="Đóng"],
 }
 .wf-check-sort-list .compact-check { row-gap: 0; }
 .wf-check-sort-list .compact-check > .zen-ck-pct { margin-top: -8px; }
+/* v1.19.4 (sửa sau kiểm a11y): ô nhập và nút Thêm giữ vùng chạm 44px; trên điện thoại thanh % không kéo lên đè hàng nút (giữ thứ tự đọc). */
+#editor .zen-check-add textarea { min-height: 44px; }
+#editor .zen-check-add .wf-add-check { min-height: 44px; }
+@media (max-width: 700px) { .wf-check-sort-list .compact-check > .zen-ck-pct { margin-top: 0; } }
+/* v1.19.4 (sửa sau kiểm a11y): không dùng khoảng âm cho thanh % ở bất kỳ cỡ nào, để thứ tự đọc và Tab khớp thứ tự DOM. Bù chiều cao bằng đệm dòng nhỏ hơn. */
+.wf-check-sort-list .compact-check > .zen-ck-pct { margin-top: 0; margin-bottom: 0; }
+.wf-check-sort-list .compact-check { padding-top: 2px; padding-bottom: 2px; }
