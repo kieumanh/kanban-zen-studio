@@ -1452,7 +1452,7 @@ function zenPctMarkup(value, attrs, label) {
   const v = Math.min(100, Math.max(0, Math.round(Number(value) || 0)));
   return (
     '<span class="zen-ck-pct-label" aria-hidden="true">Tiến độ</span>' +
-    '<input type="range" min="0" max="100" step="5" value="' + v + '" ' + attrs + ' style="--p:' + v + '%" aria-label="' + esc(label) + ' (%)">' +
+    '<input type="range" min="0" max="100" step="5" value="' + v + '" ' + attrs + ' style="--p:' + v + '%;--pn:' + v / 100 + '" aria-label="' + esc(label) + ' (%)">' +
     '<output aria-hidden="true">' + v + '%</output>'
   );
 }
@@ -1464,7 +1464,10 @@ function zenPctPaint(row, value) {
   if (range && Number(range.value) !== v) range.value = String(v);
   if (box && box.checked !== (v === 100)) box.checked = v === 100;
   row.classList.toggle('is-complete', v === 100);
-  if (range) range.style.setProperty('--p', v + '%');
+  if (range) {
+      range.style.setProperty('--p', v + '%');
+      range.style.setProperty('--pn', String(v / 100));
+    }
   const out = row.querySelector('output');
   if (out) out.textContent = v + '%';
 }

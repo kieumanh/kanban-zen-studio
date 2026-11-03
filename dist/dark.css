@@ -3294,6 +3294,16 @@
 :root[data-theme=dark] .gantt-done-note span {
     color: #8fcfae
 }
+:root[data-theme=dark] .sidebar .view-group {
+    border: 1px solid #3f3944;
+    background: #17141b
+}
+:root[data-theme=dark] #editor .zen-ck-pct input[type="range"]::-webkit-slider-runnable-track {
+    background: linear-gradient(to right, #7950c8 calc(9px + (100% - 18px) * var(--pn, 0)), #231d28 calc(9px + (100% - 18px) * var(--pn, 0)))
+}
+:root[data-theme=dark] #editor .zen-ck-pct input[type="range"]::-moz-range-track {
+    background: linear-gradient(to right, #7950c8 calc(9px + (100% - 18px) * var(--pn, 0)), #231d28 calc(9px + (100% - 18px) * var(--pn, 0)))
+}
 
 :root[data-theme=dark] {
   color-scheme: dark;

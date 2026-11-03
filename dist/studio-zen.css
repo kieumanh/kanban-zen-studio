@@ -1528,3 +1528,14 @@ dialog[open] button[aria-label^="Đóng"],
 /* v1.19.6: Gantt ẩn việc đã hoàn thành, báo gọn bằng một dòng bo tròn */
 .gantt-done-note { display: inline-flex; align-items: center; gap: 6px; margin: 0 0 10px; padding: 4px 12px; border-radius: 999px; background: #f1f7f3; border: 1px solid #cfe5d8; color: var(--zen-text-muted); font-size: 12px; line-height: 1.4; }
 .gantt-done-note span { color: #3f9a72; font-weight: 700; }
+
+/* v1.19.7: khung "Chế độ xem" ở thanh bên bo tròn; thanh tiến độ từng mục checklist mỏng (rãnh 6px), đầu tô luôn bo tròn khi kéo.
+   Quy tắc cũ ".task-fields input" (độ ưu tiên cao hơn) đang ghi đè kiểu thanh của v1.19.4 nên thanh nằm trong một khung viền 12px, phần tô vuông góc.
+   Ở đây gỡ khung đó bằng bộ chọn có #editor (không dùng !important). Vùng chạm vẫn cao 44px; chỉ phần vẽ mỏng đi.
+   Phần tô kết thúc đúng tâm núm kéo (--pn = % chia 100), nên đầu phải của phần tô luôn nằm dưới núm tròn, không bao giờ lộ góc vuông; đầu trái theo bo của rãnh. */
+.sidebar .view-group { margin: 10px 0 14px; padding: 10px 6px 8px; border: 1px solid #e7dcf1; border-radius: 18px; background: #faf6fe; }
+.sidebar .view-options .view-mode { border-radius: 14px; }
+#editor .zen-ck-pct input[type="range"] { height: 44px; margin: 0; padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
+#editor .zen-ck-pct input[type="range"]::-webkit-slider-runnable-track { height: 6px; border-radius: 999px; background: linear-gradient(to right, #7950c8 calc(9px + (100% - 18px) * var(--pn, 0)), #e6dcef calc(9px + (100% - 18px) * var(--pn, 0))); }
+#editor .zen-ck-pct input[type="range"]::-webkit-slider-thumb { margin-top: -6px; }
+#editor .zen-ck-pct input[type="range"]::-moz-range-track { height: 6px; border-radius: 999px; background: linear-gradient(to right, #7950c8 calc(9px + (100% - 18px) * var(--pn, 0)), #e6dcef calc(9px + (100% - 18px) * var(--pn, 0))); }
