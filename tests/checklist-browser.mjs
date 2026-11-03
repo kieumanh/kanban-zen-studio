@@ -152,6 +152,15 @@ try {
       ['Gửi lời mời'],
       'mục mới' + at,
     );
+    // Dữ liệu được lưu ngay khi gửi biểu mẫu, còn vẽ lại hộp thoại (xóa ô nhập) diễn ra ở sự kiện đóng ngay sau đó: chờ vẽ lại rồi mới kiểm.
+    await page
+      .waitForFunction(
+        () =>
+          document.querySelector('#editor [name=extra-checks]')?.value === '',
+        null,
+        { timeout: 5000 },
+      )
+      .catch(() => {});
     assert.equal(
       await page.evaluate(
         () => document.querySelector('#editor [name=extra-checks]').value,

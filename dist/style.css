@@ -378,7 +378,7 @@ dialog .modal-head{position:sticky;top:0;z-index:5;background:var(--paper);paddi
  position:relative!important;top:auto!important;float:right!important;
  margin:0 0 16px 12px!important;z-index:2!important;
  width:44px!important;height:44px!important;min-width:44px!important;
- box-sizing:border-box;transform:none!important
+ box-sizing:border-box;transform:none
 }
 #editor .modal-head,#editor.keep-editor .modal-head,#editor.task-editor .modal-head{display:flex;align-items:center;clear:none
 }

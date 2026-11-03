@@ -1297,3 +1297,89 @@ input[type="range"] {
   .zen-fe-row > .zen-check-actions { grid-column: 2; justify-self: end; }
 }
 @media (pointer: coarse) { .zen-fe-row > input[type="checkbox"] { width: 28px; height: 28px; } }
+
+/* v1.18.1: nút đóng (×) có chuyển động nhẹ ở mọi hộp thoại: rê chuột / tiêu điểm bàn phím xoay 90° và phóng nhẹ, nhấn thì co lại, mở hộp thoại thì nút bật vào. Không dùng !important mới; tôn trọng "giảm chuyển động". */
+#editor .modal-close-pin,
+.welcome-close,
+.mobile-menu-close,
+.zen-search-close,
+button[aria-label^="Đóng"] {
+  transition:
+    transform 0.24s cubic-bezier(0.34, 1.56, 0.64, 1),
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+  will-change: transform;
+}
+@media (hover: hover) {
+  #editor .modal-close-pin:hover,
+  .welcome-close:hover,
+  .mobile-menu-close:hover,
+  .zen-search-close:hover,
+  button[aria-label^="Đóng"]:hover {
+    transform: rotate(90deg) scale(1.08);
+  }
+}
+#editor .modal-close-pin:focus-visible,
+.welcome-close:focus-visible,
+.mobile-menu-close:focus-visible,
+.zen-search-close:focus-visible,
+button[aria-label^="Đóng"]:focus-visible {
+  transform: rotate(90deg) scale(1.08);
+}
+#editor .modal-close-pin:active,
+.welcome-close:active,
+.mobile-menu-close:active,
+.zen-search-close:active,
+button[aria-label^="Đóng"]:active {
+  transform: rotate(90deg) scale(0.9);
+  transition-duration: 0.08s;
+}
+@keyframes zen-close-pop {
+  from {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+dialog[open] #editor-form .modal-close-pin,
+dialog[open] .welcome-close,
+dialog[open] button[aria-label^="Đóng"],
+#editor[open] .modal-close-pin {
+  animation: zen-close-pop 0.34s cubic-bezier(0.34, 1.56, 0.64, 1) 0.06s backwards;
+}
+@media (prefers-reduced-motion: reduce) {
+  #editor .modal-close-pin,
+  .welcome-close,
+  .mobile-menu-close,
+  .zen-search-close,
+  button[aria-label^="Đóng"],
+  #editor .modal-close-pin:hover,
+  .welcome-close:hover,
+  .mobile-menu-close:hover,
+  .zen-search-close:hover,
+  button[aria-label^="Đóng"]:hover,
+  #editor .modal-close-pin:focus-visible,
+  .welcome-close:focus-visible,
+  .mobile-menu-close:focus-visible,
+  .zen-search-close:focus-visible,
+  button[aria-label^="Đóng"]:focus-visible,
+  #editor .modal-close-pin:active,
+  .welcome-close:active,
+  .mobile-menu-close:active,
+  .zen-search-close:active,
+  button[aria-label^="Đóng"]:active {
+    transform: none;
+    transition: none;
+    will-change: auto;
+  }
+  dialog[open] #editor-form .modal-close-pin,
+  dialog[open] .welcome-close,
+  dialog[open] button[aria-label^="Đóng"],
+  #editor[open] .modal-close-pin {
+    animation: none;
+  }
+}
