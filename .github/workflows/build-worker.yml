@@ -90,6 +90,7 @@ jobs:
           node tests/release-notice-buttons-browser.mjs
           node tests/gantt-hide-done-browser.mjs
           node tests/rounded-view-checklist-browser.mjs
+          node tests/focus-edit-race-browser.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:

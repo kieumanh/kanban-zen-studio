@@ -1032,7 +1032,10 @@
     box.innerHTML = checksHTML(t);
     requestAnimationFrame(() => {
       fit(box);
-      if (focus) box.querySelector(focus)?.focus();
+      // v1.19.8: chỉ đưa con trỏ về ô mong muốn khi con trỏ đã mất do vẽ lại (activeElement về body). Nếu khung hình trễ mà người dùng
+      // đã chuyển sang ô khác (ví dụ vừa Hoàn tác rồi gõ ngay vào ô Thêm mục mới) thì không giật con trỏ đi nơi khác, tránh nuốt phím Enter.
+      const active = document.activeElement;
+      if (focus && (!active || active === document.body)) box.querySelector(focus)?.focus();
     });
     setTimeout(() => fit(box), 200);
     refreshMeta();
