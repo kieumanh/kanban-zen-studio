@@ -27,7 +27,7 @@
     const box = document.querySelector('#main .board-summary');
     if (!box || box.dataset.summary === 'v1.15.36' || typeof progress !== 'function' || typeof bar !== 'function') return;
     const tasks = p.tasks.filter((t) => !t.archived), done = tasks.filter((t) => t.col === 'Done').length, pr = progress(tasks);
-    const note = !tasks.length ? 'Chưa có việc nào' : pr.pct + '% tiến độ' + (pr.total !== tasks.length ? ' · tính cả mục checklist (' + pr.done + '/' + pr.total + ')' : '');
+    const note = !tasks.length ? 'Chưa có việc nào' : pr.pct + '% tiến độ' + ' · trung bình các việc';
     box.dataset.summary = 'v1.15.36';
     box.innerHTML = '<div class="summary-main"><strong style="color:' + esc(p.color) + '">' + (tasks.length ? done + '/' + tasks.length : '0') + '</strong><span>' + (tasks.length ? 'việc xong' : 'việc') + '</span></div><div class="grow">' + bar(pr.pct, p.color) + '<p>' + esc(note) + '</p></div>';
   }
@@ -889,7 +889,6 @@
 // v1.17.4: checklist trong hộp công việc. Mỗi mục là một thẻ bo tròn (mục xong chuyển màu nhạt), có nút ↑/↓ để đổi thứ tự bằng chạm hoặc bàn phím
 // (ngoài kéo thả và Alt + ↑/↓ sẵn có), ô nhập mục mới gọn một dòng: Enter để thêm, Shift + Enter xuống dòng. Ô chữ tự giãn đúng chiều cao sau khi hộp thoại hiện (trước đây có thể cắt dòng cuối).
 (() => {
-  const ARROW = (up) => '<svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="' + (up ? 'M5 12.5l5-5 5 5' : 'M5 7.5l5 5 5-5') + '"/></svg>';
   let pending = null;
   const fit = (box) => {
     if (typeof fitCheckText === 'function') box.querySelectorAll('.compact-check textarea, .zen-check-add textarea').forEach(fitCheckText);
@@ -906,8 +905,6 @@
         const actions = document.createElement('div');
         actions.className = 'zen-check-actions';
         const label = (row.querySelector('textarea')?.value || '').trim().slice(0, 40);
-        const move = (dir) => '<button type="button" class="zen-check-move" data-zen-check-move="' + dir + '" aria-label="Chuyển mục ' + (dir < 0 ? 'lên trên' : 'xuống dưới') + (label ? ': ' + label.replace(/"/g, '') : '') + '" title="' + (dir < 0 ? 'Lên trên' : 'Xuống dưới') + '"' + ((dir < 0 && index === 0) || (dir > 0 && index === rows.length - 1) ? ' disabled' : '') + '>' + ARROW(dir < 0) + '</button>';
-        actions.insertAdjacentHTML('beforeend', move(-1) + move(1));
         if (remove) actions.append(remove);
         row.append(actions);
       });
@@ -980,7 +977,6 @@
 // v1.18.0: sửa công việc ngay trong Chế độ tập trung (không mở hộp thoại): đổi tên, mô tả (có định dạng), và checklist — tích, sửa chữ, thêm, xóa (có Hoàn tác), đổi thứ tự bằng ↑/↓.
 // Mọi thay đổi tự lưu qua wfSave (có kiểm tra giới hạn và hoàn nguyên khi lỗi); nút "Xong" đóng chế độ sửa và vẽ lại màn hình.
 (() => {
-  const ARROW = (up) => '<svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="' + (up ? 'M5 12.5l5-5 5 5' : 'M5 7.5l5 5 5-5') + '"/></svg>';
   const PENCIL = '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16z M13.5 6.5l4 4"/></svg>';
   const SEL = '#main .wf-focus-workspace > article.wf-focus-task';
   const MAX_CHECKS = 200;
@@ -1015,9 +1011,8 @@
     '<div class="zen-fe-row' + (c.done ? ' is-complete' : '') + '" data-fe-id="' + esc(c.id) + '">' +
     '<input type="checkbox" data-fe-toggle aria-label="Đã xong: ' + esc(c.text.slice(0, 60)) + '"' + (c.done ? ' checked' : '') + '>' +
     '<textarea data-fe-text rows="1" maxlength="300" aria-label="Nội dung mục ' + (i + 1) + '">' + esc(c.text) + '</textarea>' +
+    '<label class="zen-ck-pct">' + zenPctMarkup(checkPct(c), 'data-fe-pct', 'Tiến độ mục ' + (i + 1) + ': ' + c.text.slice(0, 40)) + '</label>' +
     '<div class="zen-check-actions">' +
-    '<button type="button" class="zen-check-move" data-fe-move="-1" aria-label="Chuyển mục lên trên" title="Lên trên"' + (i === 0 ? ' disabled' : '') + '>' + ARROW(true) + '</button>' +
-    '<button type="button" class="zen-check-move" data-fe-move="1" aria-label="Chuyển mục xuống dưới" title="Xuống dưới"' + (i === n - 1 ? ' disabled' : '') + '>' + ARROW(false) + '</button>' +
     '<button type="button" class="compact-check-remove zen-fe-remove" data-fe-remove aria-label="Xóa mục" title="Xóa mục">×</button>' +
     '</div></div>';
   const checksHTML = (t) =>
@@ -1264,10 +1259,12 @@
         const c = t.checks.find((x) => x.id === id);
         if (!c) return;
         c.done = el.checked;
+        c.pct = el.checked ? 100 : c.pct >= 100 ? 0 : c.pct;
         syncChecks(t);
         nowDone = t.col === 'Done';
       })) {
         saved();
+        zenPctPaint(row, el.checked ? 100 : checkPct(current().t?.checks.find((x) => x.id === id) || { done: false, pct: 0 }));
         row.classList.toggle('is-complete', el.checked);
         refreshMeta();
         const heading = document.querySelector('.zen-fe-checks h3 small');
@@ -1275,6 +1272,23 @@
         if (heading && t) heading.textContent = t.checks.filter((c) => c.done).length + '/' + t.checks.length;
         if (el.checked) celebrateCompletion(!wasDone && nowDone ? 'task' : 'check');
       } else el.checked = !el.checked;
+    } else if (el.matches('[data-fe-pct]')) {
+      const v = Math.min(100, Math.max(0, Math.round(Number(el.value) || 0)));
+      const wasDone = current().t?.col === 'Done';
+      let nowDone = false;
+      if (apply((t) => {
+        const c = t.checks.find((x) => x.id === id);
+        if (!c) return;
+        c.pct = v;
+        c.done = v === 100;
+        syncChecks(t);
+        nowDone = t.col === 'Done';
+      })) {
+        saved();
+        zenPctPaint(row, v);
+        refreshMeta();
+        if (v === 100) celebrateCompletion(!wasDone && nowDone ? 'task' : 'check');
+      } else zenPctPaint(row, checkPct(current().t?.checks.find((x) => x.id === id) || { done: false, pct: 0 }));
     } else if (el.matches('textarea[data-fe-text]')) {
       const value = el.value.trim();
       const c = current().t?.checks.find((x) => x.id === id);
@@ -1321,4 +1335,64 @@
     observer.observe(body, { childList: true });
     document.querySelector('#editor').addEventListener('close', () => observer.disconnect(), { once: true });
   };
+})();
+
+// v1.19.0: checklist gọn hơn và có tiến độ riêng từng mục. Chỉ còn kéo thả để đổi thứ tự (Alt + ↑/↓ vẫn dùng được bằng bàn phím);
+// mỗi mục có thanh kéo % (0–100, bước 5) và thanh tiến độ mỏng. Tick = 100%; kéo về 100 = tick; bỏ tick = 0%.
+// Tiến độ việc và dự án được tính ở app.js (checkPct, taskPct, progress). Hộp công việc lưu % cùng lúc với nút Lưu (taskux.js).
+function zenPctMarkup(value, attrs, label) {
+  const v = Math.min(100, Math.max(0, Math.round(Number(value) || 0)));
+  return (
+    '<span class="zen-ck-pct-label" aria-hidden="true">Tiến độ</span>' +
+    '<input type="range" min="0" max="100" step="5" value="' + v + '" ' + attrs + ' style="--p:' + v + '%" aria-label="' + esc(label) + ' (%)">' +
+    '<output aria-hidden="true">' + v + '%</output>'
+  );
+}
+function zenPctPaint(row, value) {
+  if (!row) return;
+  const v = Math.min(100, Math.max(0, Math.round(Number(value) || 0)));
+  const range = row.querySelector('input[type="range"]');
+  const box = row.querySelector('input[name^="check-done-"], input[data-fe-toggle]');
+  if (range && Number(range.value) !== v) range.value = String(v);
+  if (box && box.checked !== (v === 100)) box.checked = v === 100;
+  row.classList.toggle('is-complete', v === 100);
+  if (range) range.style.setProperty('--p', v + '%');
+  const out = row.querySelector('output');
+  if (out) out.textContent = v + '%';
+}
+(() => {
+  const addToRows = () => {
+    const body = document.querySelector('#editor-body');
+    if (!body || !editing) return;
+    const t = project(editing.p)?.tasks.find((x) => x.id === editing.t);
+    if (!t) return;
+    body.querySelectorAll('.compact-check[data-check-index]').forEach((row) => {
+      if (row.querySelector('.zen-ck-pct')) return;
+      const i = Number(row.dataset.checkIndex);
+      const c = t.checks[i];
+      if (!c) return;
+      const label = (row.querySelector('textarea')?.value || '').trim().slice(0, 40);
+      const wrap = document.createElement('label');
+      wrap.className = 'zen-ck-pct';
+      wrap.innerHTML = zenPctMarkup(checkPct(c), 'name="check-pct-' + i + '"', 'Tiến độ mục ' + (i + 1) + (label ? ': ' + label : ''));
+      row.append(wrap);
+    });
+  };
+  const beforeRows = taskDetail;
+  taskDetail = function (p, t) {
+    beforeRows(p, t);
+    addToRows();
+  };
+  document.addEventListener('input', (event) => {
+    const el = event.target;
+    if (el.matches?.('.compact-check input[name^="check-pct-"]')) zenPctPaint(el.closest('.compact-check'), Number(el.value));
+    else if (el.matches?.('[data-fe-pct]')) zenPctPaint(el.closest('.zen-fe-row'), Number(el.value));
+  });
+  document.addEventListener('change', (event) => {
+    const el = event.target;
+    if (!el.matches?.('.compact-check input[name^="check-done-"]')) return;
+    const row = el.closest('.compact-check');
+    const current = Number(row.querySelector('input[name^="check-pct-"]')?.value) || 0;
+    zenPctPaint(row, el.checked ? 100 : current >= 100 ? 0 : current);
+  });
 })();

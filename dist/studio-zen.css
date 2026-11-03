@@ -1389,3 +1389,60 @@ dialog[open] button[aria-label^="Đóng"],
 .zen-settings-collapse > .wf-settings-content > .capacity-panel > h3 {
   display: none;
 }
+
+/* v1.19.0: checklist. Mỗi mục có thanh tiến độ là chính thanh kéo % (phần đã đạt tô màu theo --p). Bỏ nút ↑/↓; thanh kéo đủ 44px để chạm. */
+.zen-ck-pct {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  font-size: 12px;
+  color: var(--zen-text-muted, #5f5070);
+}
+.zen-ck-pct-label { flex: none; }
+.zen-ck-pct input[type="range"] {
+  flex: 1 1 96px;
+  min-width: 64px;
+  height: 44px;
+  margin: 0;
+  padding: 19px 0;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  appearance: none;
+  background: linear-gradient(to right, #7950c8 var(--p, 0%), #e6dcef var(--p, 0%)) content-box;
+  background-clip: content-box;
+  border-radius: 999px;
+  cursor: pointer;
+}
+.zen-ck-pct input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid #7950c8;
+  background: #fff;
+  box-shadow: 0 1px 3px #3b245c33;
+}
+.zen-ck-pct input[type="range"]::-moz-range-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid #7950c8;
+  background: #fff;
+}
+.zen-ck-pct input[type="range"]::-moz-range-track { background: transparent; }
+.zen-ck-pct input[type="range"]:focus-visible { outline: 2px solid #9a65c4; outline-offset: 2px; }
+.zen-ck-pct output {
+  flex: none;
+  min-width: 40px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  color: var(--zen-text-accent, #6e3fa0);
+}
+/* v1.19.0: hàng checklist: cột 1 tay kéo, cột 2 ô tick, cột 3 chữ, cột 4 nút ×; thanh tiến độ nằm dòng riêng bên dưới chữ. */
+.wf-check-sort-list .compact-check { grid-template-columns: 30px 26px minmax(0, 1fr) auto; }
+.wf-check-sort-list .compact-check > .zen-check-actions { grid-column: 4; justify-self: end; }
+.wf-check-sort-list .compact-check > .zen-ck-pct { grid-column: 2 / -1; grid-row: auto; padding: 0 4px 0 0; }
+.zen-fe-row { grid-template-columns: 26px minmax(0, 1fr) auto; }
+.zen-fe-row > .zen-ck-pct { grid-column: 2 / -1; }

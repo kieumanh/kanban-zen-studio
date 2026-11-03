@@ -144,8 +144,9 @@ try {
     assert.match(g.strong, /^\d+\/\d+$/, `số chính phải dạng "x/y", nhận được "${g.strong}" ở ${width}px`);
     assert.equal(g.strong, '3/14', `dự án mẫu có 3 trong 14 việc ở cột Hoàn thành (${width}px)`);
     assert.match(g.summary, /3\/14 việc xong/, `khối tiến độ phải ghi "3/14 việc xong": ${g.summary}`);
-    // Dữ liệu mẫu: 3/14 việc xong; một việc có 2 mục checklist (1 xong) nên tính cả mục là 4/16 đơn vị = 25%.
-    assert.match(g.summary, /25% tiến độ · tính cả mục checklist \(4\/16\)/, `khối tiến độ phải ghi phần trăm tính cả checklist: ${g.summary}`);
+    // v1.19.0 đổi công thức: tiến độ dự án = trung bình % của từng việc (việc Xong = 100%, việc có checklist = trung bình các mục).
+    // Dữ liệu mẫu: 3 việc Xong (100% mỗi việc), 1 việc có 2 mục (1 xong) = 50%, 10 việc còn lại = 0% → (300+50)/14 = 25%.
+    assert.match(g.summary, /25% tiến độ · trung bình các việc/, `khối tiến độ phải ghi phần trăm theo trung bình các việc: ${g.summary}`);
     assert.doesNotMatch(g.summary, /task Done|đơn vị hoàn thành|Mỗi task/, `khối tiến độ còn chữ cũ: ${g.summary}`);
     assert.equal(await page.locator('#main .board-summary [role=progressbar]').getAttribute('aria-valuenow'), '25', 'thanh tiến độ phải có aria-valuenow=25');
     // 3. Thẻ đầu tiên hiện trọn phần chính (tên việc và hàng hạn) trong màn hình đầu. Trước đây ở 390px thẻ bắt đầu ở 816px trên màn hình cao 844px (chỉ lộ 28px).

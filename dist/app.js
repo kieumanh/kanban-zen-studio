@@ -19,9 +19,11 @@ let data;try{const raw=localStorage.getItem(KEY);data=raw?JSON.parse(raw):sample
 let view='dashboard',active=null,query='',filterProject='',filterStatus='',filterPriority='',drag=null,editing=null,undoData=null;
 function save(){try{localStorage.setItem(KEY,JSON.stringify(data));$('#save-state').textContent='● Đã lưu trên thiết bị';return true;}catch(e){$('#save-state').textContent='⚠ Chưa lưu được';notify('Bộ nhớ trình duyệt không khả dụng hoặc đã đầy. Hãy xuất bản sao JSON ngay.');return false;}}
 function notify(s){$('#toast').textContent=s;$('#toast').classList.add('show');clearTimeout(notify.timer);notify.timer=setTimeout(()=>$('#toast').classList.remove('show'),4500);}
-function units(t){return {total:1+t.checks.length,done:(t.col==='Done'?1:0)+t.checks.filter(c=>c.done).length};}
-function progress(tasks){tasks=tasks.filter(t=>!t.archived);const sums=tasks.reduce((a,t)=>{const u=units(t);return {total:a.total+u.total,done:a.done+u.done};},{total:0,done:0});return {...sums,pct:sums.total?Math.round(sums.done/sums.total*100):0};}
-function taskPct(t){return t.checks.length?Math.round(t.checks.filter(c=>c.done).length/t.checks.length*100):t.col==='Done'?100:0;}
+// v1.19.0: tiến độ. Mỗi mục checklist có % riêng (c.pct, 0–100; mục đã tick = 100). Tiến độ việc = trung bình % các mục;
+// việc không có mục: 100 nếu ở cột Xong, còn lại 0. Tiến độ dự án = trung bình tiến độ các việc chưa lưu trữ (mỗi việc một phần bằng nhau).
+function checkPct(c){if(c.done)return 100;const v=Number(c.pct);return Number.isFinite(v)?Math.min(100,Math.max(0,Math.round(v))):0;}
+function taskPct(t){if(t.checks.length)return Math.round(t.checks.reduce((sum,c)=>sum+checkPct(c),0)/t.checks.length);return t.col==='Done'?100:0;}
+function progress(tasks){tasks=tasks.filter(t=>!t.archived);const pcts=tasks.map(taskPct);return {total:tasks.length,done:tasks.filter(t=>t.col==='Done').length,pct:pcts.length?Math.round(pcts.reduce((a,b)=>a+b,0)/pcts.length):0};}
 function allTasks(){return data.projects.filter(p=>!p.archived).flatMap(p=>p.tasks.filter(t=>!t.archived).map(t=>({...t,project:p})));}
 function project(id=active){return data.projects.find(p=>p.id===id);}
 function found(t){return (t.title+' '+t.description+' '+t.tag+' '+(t.labels||[]).map(l=>l.name).join(' ')+' '+(t.project?.name||'')).toLocaleLowerCase('vi').includes(query.toLocaleLowerCase('vi'));}

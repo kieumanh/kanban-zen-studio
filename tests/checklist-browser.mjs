@@ -34,16 +34,15 @@ try {
     await page.waitForSelector('#editor .zen-check-actions');
     await page.waitForTimeout(350);
 
-    // 1. Mỗi mục có cụm nút ↑ ↓ ×; mục đầu không lên được, mục cuối không xuống được.
+    // 1. Không còn nút ↑/↓ (v1.19.0): chỉ còn kéo thả và Alt + ↑/↓ trên tay kéo. Mỗi mục có tay kéo và nút bỏ mục nằm trong cụm.
     const state = await page.evaluate(() =>
       [
         ...document.querySelectorAll(
           '#editor .wf-check-sort-list .compact-check',
         ),
       ].map((row) => ({
-        move: [...row.querySelectorAll('.zen-check-move')].map(
-          (b) => b.disabled,
-        ),
+        moveButtons: row.querySelectorAll('.zen-check-move').length,
+        grip: !!row.querySelector('[data-wf-sort="check"]'),
         remove: !!row.querySelector('.zen-check-actions .compact-check-remove'),
         done: row.classList.contains('is-complete'),
         clipped:
@@ -53,14 +52,13 @@ try {
       })),
     );
     assert.equal(state.length, 3, 'số mục' + at);
-    assert.deepEqual(
-      state.map((s) => s.move),
-      [
-        [true, false],
-        [false, false],
-        [false, true],
-      ],
-      'trạng thái nút ↑/↓' + at,
+    assert.ok(
+      state.every((s) => s.moveButtons === 0),
+      'không còn nút ↑/↓' + at,
+    );
+    assert.ok(
+      state.every((s) => s.grip),
+      'mỗi mục có tay kéo' + at,
     );
     assert.ok(
       state.every((s) => s.remove),
@@ -87,55 +85,48 @@ try {
       'nhãn ô thêm mục' + at,
     );
 
-    // 2. Vùng chạm đủ lớn trên màn hình cảm ứng.
-    if (width < 700) {
-      const sizes = await page.evaluate(() =>
-        [
-          ...document.querySelectorAll(
-            '#editor .zen-check-move:not(:disabled)',
-          ),
-        ].map((b) => {
-          const r = b.getBoundingClientRect();
-          return [Math.round(r.width), Math.round(r.height)];
-        }),
-      );
-      assert.ok(
-        sizes.every(([w, hh]) => w >= 44 && hh >= 44),
-        'nút ↑/↓ nhỏ hơn 44px' + at + JSON.stringify(sizes),
-      );
-    }
-
-    // 3. ↓ ở mục đầu: đổi thứ tự, lưu vào dữ liệu và tiêu điểm ở lại trên mục đã di chuyển.
+    // 2. Alt + ↓ trên tay kéo của mục đầu: đổi thứ tự, lưu vào dữ liệu, tiêu điểm ở lại trên mục đã di chuyển. Alt + ↑ quay lại.
     await page
-      .locator('#editor .compact-check')
-      .first()
-      .locator('.zen-check-move[data-zen-check-move="1"]')
-      .click();
+      .locator(
+        '#editor .compact-check[data-wf-check-id="c1"] [data-wf-sort="check"]',
+      )
+      .focus();
+    await page.keyboard.press('Alt+ArrowDown');
     await page.waitForFunction(
       () => project('p1').tasks[0].checks[0].id === 'c2',
     );
-    assert.equal(await ids(page), 'c2,c1,c3', 'thứ tự sau khi bấm ↓' + at);
-    await page.waitForFunction(() =>
-      document.activeElement?.classList.contains('zen-check-move'),
-    );
     assert.equal(
-      await page.evaluate(
-        () =>
-          document.activeElement.closest('.compact-check').dataset.wfCheckId,
-      ),
-      'c1',
-      'tiêu điểm theo mục đã di chuyển' + at,
+      await ids(page),
+      'c2,c1,c3',
+      'thứ tự sau khi nhấn Alt + ↓' + at,
     );
-    // Bấm ↑ ở mục vừa xuống để quay lại.
+    // Ghi chú: Alt + ↑/↓ chưa giữ tiêu điểm sau khi di chuyển (có từ trước v1.19.0, không thuộc phạm vi bản này); test đặt lại tiêu điểm thủ công.
+    await page.waitForFunction(
+      () =>
+        [
+          ...document.querySelectorAll(
+            '#editor .wf-check-sort-list .compact-check',
+          ),
+        ]
+          .map((row) => row.dataset.wfCheckId)
+          .join(',') === 'c2,c1,c3',
+    );
+    // Chờ vẽ lại xong (có lần vẽ lại thứ hai) rồi mới đặt tiêu điểm, giống các bước khác trong file.
+    await page.waitForTimeout(400);
     await page
       .locator(
-        '#editor .compact-check[data-wf-check-id="c1"] .zen-check-move[data-zen-check-move="-1"]',
+        '#editor .compact-check[data-wf-check-id="c1"] [data-wf-sort="check"]',
       )
-      .click();
+      .focus();
+    await page.keyboard.press('Alt+ArrowUp');
     await page.waitForFunction(
       () => project('p1').tasks[0].checks[0].id === 'c1',
     );
-    assert.equal(await ids(page), 'c1,c2,c3', 'thứ tự sau khi bấm ↑' + at);
+    assert.equal(
+      await ids(page),
+      'c1,c2,c3',
+      'thứ tự sau khi nhấn Alt + ↑' + at,
+    );
 
     // 4. Gõ mục mới rồi nhấn Enter: thêm đúng một mục, không xuống dòng.
     await page.locator('#editor [name=extra-checks]').fill('Gửi lời mời');
@@ -178,7 +169,7 @@ try {
     await context.close();
   }
   console.log(
-    'PASS: checklist — thẻ bo tròn, ↑/↓ đổi thứ tự và giữ tiêu điểm, Enter để thêm, chữ không bị cắt (390/820/1440px).',
+    'PASS: checklist — không còn nút ↑/↓, Alt + ↑/↓ đổi thứ tự, Enter để thêm, chữ không bị cắt (390/820/1440px).',
   );
 } finally {
   await h.close();
