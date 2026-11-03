@@ -131,51 +131,73 @@ try {
       'mục trống được khôi phục' + at,
     );
 
-    // 6. Đổi thứ tự: ↑ ở mục cuối; tiêu điểm theo nút; ↑ mục đầu bị khóa.
+    // 6. Đổi thứ tự (v1.19.0): không còn nút ↑/↓; tay kéo ⠿ đổi thứ tự bằng kéo thả hoặc Alt + ↑/↓, giữ tiêu điểm theo mục.
+    assert.equal(await page.locator('.zen-fe-row [data-fe-move]').count(), 0, 'không còn nút ↑/↓' + at);
+    assert.equal(await page.locator('.zen-fe-row [data-fe-grip]').count(), 3, 'mỗi mục có tay kéo' + at);
     if (width < 700) {
       const sizes = await page.evaluate(() =>
-        [
-          ...document.querySelectorAll(
-            '.zen-fe-row .zen-check-move:not(:disabled)',
-          ),
-        ].map((b) => {
+        [...document.querySelectorAll('.zen-fe-row [data-fe-grip]')].map((b) => {
           const r = b.getBoundingClientRect();
           return [Math.round(r.width), Math.round(r.height)];
         }),
       );
       assert.ok(
         sizes.every(([w, hh]) => w >= 44 && hh >= 44),
-        'nút ↑/↓ nhỏ hơn 44px' + at + JSON.stringify(sizes),
+        'tay kéo nhỏ hơn 44px' + at + JSON.stringify(sizes),
       );
     }
-    assert.equal(
-      await page
-        .locator('.zen-fe-row')
-        .first()
-        .locator('[data-fe-move="-1"]')
-        .isDisabled(),
-      true,
-      'mục đầu không có ↑' + at,
-    );
-    await page
-      .locator('.zen-fe-row[data-fe-id="c3"] [data-fe-move="-1"]')
-      .click();
+    // Alt + ↑ trên tay kéo mục 3: lên trước mục 2, lưu, tiêu điểm vẫn ở tay kéo mục 3.
+    await page.locator('.zen-fe-row[data-fe-id="c3"] [data-fe-grip]').focus();
+    await page.keyboard.press('Alt+ArrowUp');
     await page.waitForFunction(
-      () =>
-        project('p1')
-          .tasks[0].checks.map((c) => c.id)
-          .join(',') === 'c1,c3,c2',
+      () => project('p1').tasks[0].checks.map((c) => c.id).join(',') === 'c1,c3,c2',
     );
     await page.waitForFunction(() =>
-      document.activeElement?.matches('[data-fe-move]'),
+      document.activeElement?.matches('[data-fe-grip]') &&
+      document.activeElement.dataset.feId === 'c3',
     );
-    assert.equal(
-      await page.evaluate(
-        () => document.activeElement.closest('.zen-fe-row').dataset.feId,
-      ),
-      'c3',
-      'tiêu điểm theo mục di chuyển' + at,
+    assert.equal(await ids(page), 'c1,c3,c2', 'Alt + ↑ đổi thứ tự và lưu' + at);
+    // Kéo thả: mục 2 vào nửa trên của mục 3 (trước mục 3), rồi vào nửa dưới của mục 3 (sau mục 3).
+    const row = (id) => page.locator('.zen-fe-row[data-fe-id="' + id + '"]');
+    const dragOnto = async (fromId, toId, side) => {
+      const box = await row(toId).boundingBox();
+      const y = side === 'before' ? 4 : box.height - 4;
+      await row(fromId).locator('[data-fe-grip]').dragTo(row(toId), { targetPosition: { x: 40, y } });
+    };
+    await dragOnto('c2', 'c3', 'before');
+    await page.waitForFunction(
+      () => project('p1').tasks[0].checks.map((c) => c.id).join(',') === 'c1,c2,c3',
     );
+    assert.equal(await ids(page), 'c1,c2,c3', 'kéo thả: đặt mục 2 trước mục 3' + at);
+    await dragOnto('c2', 'c3', 'after');
+    await page.waitForFunction(
+      () => project('p1').tasks[0].checks.map((c) => c.id).join(',') === 'c1,c3,c2',
+    );
+    assert.equal(await ids(page), 'c1,c3,c2', 'kéo thả: đặt mục 2 sau mục 3' + at);
+    // Cảm ứng (390px): kéo tay ⠿ bằng sự kiện chạm thật (CDP): mục 2 lên trước mục 3, rồi trả về sau mục 3.
+    if (width < 700) {
+      const cdp = await context.newCDPSession(page);
+      const touchDragOnto = async (fromId, toId, side) => {
+        const from = await row(fromId).locator('[data-fe-grip]').boundingBox();
+        const to = await row(toId).boundingBox();
+        const x0 = from.x + from.width / 2, y0 = from.y + from.height / 2;
+        const x1 = to.x + 40, y1 = side === 'before' ? to.y + 4 : to.y + to.height - 4;
+        await cdp.send('Input.dispatchTouchEvent', { type: 'touchStart', touchPoints: [{ x: x0, y: y0 }] });
+        for (let k = 1; k <= 10; k++) {
+          await cdp.send('Input.dispatchTouchEvent', { type: 'touchMove', touchPoints: [{ x: x0 + ((x1 - x0) * k) / 10, y: y0 + ((y1 - y0) * k) / 10 }] });
+        }
+        await cdp.send('Input.dispatchTouchEvent', { type: 'touchEnd', touchPoints: [] });
+      };
+      await touchDragOnto('c2', 'c3', 'before');
+      await page.waitForFunction(
+        () => project('p1').tasks[0].checks.map((c) => c.id).join(',') === 'c1,c2,c3',
+      );
+      await touchDragOnto('c2', 'c3', 'after');
+      await page.waitForFunction(
+        () => project('p1').tasks[0].checks.map((c) => c.id).join(',') === 'c1,c3,c2',
+      );
+      assert.equal(await ids(page), 'c1,c3,c2', 'cảm ứng: kéo tay ⠿ đổi thứ tự' + at);
+    }
 
     // 7. Xóa rồi hoàn tác: về đúng vị trí.
     await page.locator('.zen-fe-row[data-fe-id="c1"] [data-fe-remove]').click();

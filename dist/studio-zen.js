@@ -1009,6 +1009,7 @@
 
   const rowHTML = (c, i, n) =>
     '<div class="zen-fe-row' + (c.done ? ' is-complete' : '') + '" data-fe-id="' + esc(c.id) + '">' +
+    '<button type="button" class="zen-fe-grip" draggable="true" data-fe-grip data-fe-id="' + esc(c.id) + '" aria-label="Kéo để đổi thứ tự mục ' + (i + 1) + ' (hoặc Alt + ↑/↓)" title="Kéo để đổi thứ tự">⠿</button>' +
     '<input type="checkbox" data-fe-toggle aria-label="Đã xong: ' + esc(c.text.slice(0, 60)) + '"' + (c.done ? ' checked' : '') + '>' +
     '<textarea data-fe-text rows="1" maxlength="300" aria-label="Nội dung mục ' + (i + 1) + '">' + esc(c.text) + '</textarea>' +
     '<label class="zen-ck-pct">' + zenPctMarkup(checkPct(c), 'data-fe-pct', 'Tiến độ mục ' + (i + 1) + ': ' + c.text.slice(0, 40)) + '</label>' +
@@ -1141,7 +1142,7 @@
   };
 
   document.addEventListener('click', (event) => {
-    const target = event.target.closest('[data-fe-edit],[data-fe-done],[data-fe-move],[data-fe-remove],[data-fe-undo],[data-fe-add]');
+    const target = event.target.closest('[data-fe-edit],[data-fe-done],[data-fe-remove],[data-fe-undo],[data-fe-add]');
     if (!target) return;
     const article = target.closest(SEL) || document.querySelector(SEL);
     if (target.matches('[data-fe-edit]')) {
@@ -1158,19 +1159,6 @@
     }
     const row = target.closest('.zen-fe-row');
     const id = row?.dataset.feId;
-    if (target.matches('[data-fe-move]')) {
-      event.preventDefault();
-      const dir = Number(target.dataset.feMove);
-      if (apply((t) => {
-        const i = t.checks.findIndex((c) => c.id === id), j = i + dir;
-        if (i < 0 || j < 0 || j >= t.checks.length) return;
-        [t.checks[i], t.checks[j]] = [t.checks[j], t.checks[i]];
-      })) {
-        saved();
-        paintChecks('.zen-fe-row[data-fe-id="' + id + '"] [data-fe-move="' + dir + '"]:not([disabled])');
-      }
-      return;
-    }
     if (target.matches('[data-fe-remove]')) {
       event.preventDefault();
       const { t } = current();
@@ -1216,6 +1204,126 @@
       paintChecks('[data-fe-new]');
     }
   };
+  // v1.19.0: đổi thứ tự mục checklist trong Chế độ tập trung bằng kéo thả (tay ⠿) hoặc Alt + ↑/↓ trên tay kéo; thay cho nút ↑/↓ đã bỏ.
+  // to là vị trí cuối của mục trong danh sách (tính sau khi đã bỏ mục khỏi vị trí cũ).
+  const moveCheck = (id, to) => {
+    if (!apply((t) => {
+      const from = t.checks.findIndex((c) => c.id === id);
+      if (from < 0) return;
+      const [item] = t.checks.splice(from, 1);
+      t.checks.splice(Math.max(0, Math.min(t.checks.length, to)), 0, item);
+    })) return false;
+    saved();
+    paintChecks('.zen-fe-grip[data-fe-id="' + id + '"]');
+    return true;
+  };
+  document.addEventListener('keydown', (event) => {
+    const grip = event.target.closest?.('[data-fe-grip]');
+    if (!grip || !event.altKey || !['ArrowUp', 'ArrowDown'].includes(event.key)) return;
+    event.preventDefault();
+    const t = current().t;
+    if (!t) return;
+    const i = t.checks.findIndex((c) => c.id === grip.dataset.feId);
+    const j = i + (event.key === 'ArrowUp' ? -1 : 1);
+    if (i < 0 || j < 0 || j >= t.checks.length) return;
+    moveCheck(grip.dataset.feId, j);
+  });
+  let dragId = null;
+  const clearDropMarks = () => document.querySelectorAll('.zen-fe-row.zen-fe-drop-before,.zen-fe-row.zen-fe-drop-after,.zen-fe-row.zen-fe-dragging').forEach((el) => el.classList.remove('zen-fe-drop-before', 'zen-fe-drop-after', 'zen-fe-dragging'));
+  const dropSide = (row, clientY) => {
+    const r = row.getBoundingClientRect();
+    return clientY < r.top + r.height / 2 ? 'before' : 'after';
+  };
+  document.addEventListener('dragstart', (event) => {
+    const grip = event.target.closest?.('[data-fe-grip]');
+    if (!grip) return;
+    dragId = grip.dataset.feId;
+    if (event.dataTransfer) {
+      event.dataTransfer.effectAllowed = 'move';
+      event.dataTransfer.setData('text/plain', dragId);
+    }
+    grip.closest('.zen-fe-row')?.classList.add('zen-fe-dragging');
+  });
+  document.addEventListener('dragover', (event) => {
+    if (!dragId) return;
+    const row = event.target.closest?.('.zen-fe-row');
+    if (!row || !row.closest('.zen-fe-list')) return;
+    event.preventDefault();
+    if (event.dataTransfer) event.dataTransfer.dropEffect = 'move';
+    const side = dropSide(row, event.clientY);
+    row.classList.toggle('zen-fe-drop-before', side === 'before');
+    row.classList.toggle('zen-fe-drop-after', side === 'after');
+  });
+  document.addEventListener('drop', (event) => {
+    if (!dragId) return;
+    const row = event.target.closest?.('.zen-fe-row');
+    if (!row || !row.closest('.zen-fe-list')) return;
+    event.preventDefault();
+    const id = dragId, targetId = row.dataset.feId, side = dropSide(row, event.clientY);
+    dragId = null;
+    clearDropMarks();
+    if (targetId === id) return;
+    const t = current().t;
+    if (!t) return;
+    const src = t.checks.findIndex((c) => c.id === id);
+    const dst = t.checks.findIndex((c) => c.id === targetId);
+    if (src < 0 || dst < 0) return;
+    let to = dst + (side === 'before' ? 0 : 1);
+    if (src < to) to -= 1;
+    if (to !== src) moveCheck(id, to);
+  });
+  // Cảm ứng và bút: kéo bằng sự kiện con trỏ (HTML5 không chạy trên điện thoại). Chuột vẫn dùng kéo thả ở trên.
+  let pointerDrag = null;
+  const dropMark = (row, side) => {
+    row.classList.toggle('zen-fe-drop-before', side === 'before');
+    row.classList.toggle('zen-fe-drop-after', side === 'after');
+  };
+  const applyDrop = (id, targetId, side) => {
+    if (!id || !targetId || targetId === id) return;
+    const t = current().t;
+    if (!t) return;
+    const src = t.checks.findIndex((c) => c.id === id);
+    const dst = t.checks.findIndex((c) => c.id === targetId);
+    if (src < 0 || dst < 0) return;
+    let to = dst + (side === 'before' ? 0 : 1);
+    if (src < to) to -= 1;
+    if (to !== src) moveCheck(id, to);
+  };
+  document.addEventListener('pointerdown', (event) => {
+    const grip = event.target.closest?.('[data-fe-grip]');
+    if (!grip || event.pointerType === 'mouse' || event.button !== 0) return;
+    event.preventDefault();
+    try { grip.setPointerCapture(event.pointerId); } catch (_) { /* bỏ qua nếu trình duyệt không cho giữ con trỏ */ }
+    pointerDrag = { id: grip.dataset.feId, moved: false, over: null };
+    grip.closest('.zen-fe-row')?.classList.add('zen-fe-dragging');
+  });
+  document.addEventListener('pointermove', (event) => {
+    if (!pointerDrag) return;
+    pointerDrag.moved = true;
+    const row = document.elementFromPoint(event.clientX, event.clientY)?.closest?.('.zen-fe-row');
+    clearDropMarks();
+    document.querySelector('.zen-fe-row[data-fe-id="' + pointerDrag.id + '"]')?.classList.add('zen-fe-dragging');
+    if (!row || !row.closest('.zen-fe-list') || row.dataset.feId === pointerDrag.id) {
+      pointerDrag.over = null;
+      return;
+    }
+    const side = dropSide(row, event.clientY);
+    dropMark(row, side);
+    pointerDrag.over = { id: row.dataset.feId, side };
+  });
+  const endPointer = (event) => {
+    if (!pointerDrag) return;
+    const d = pointerDrag;
+    pointerDrag = null;
+    clearDropMarks();
+    if (event.type === 'pointerup' && d.moved && d.over) applyDrop(d.id, d.over.id, d.over.side);
+  };
+  document.addEventListener('pointerup', endPointer);
+  document.addEventListener('pointercancel', endPointer);
+  document.addEventListener('dragend', () => {
+    dragId = null;
+    clearDropMarks();
+  });
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Enter' && !event.shiftKey && !event.isComposing && event.target.matches?.('.zen-fe-form [data-fe-new]')) {
       event.preventDefault();

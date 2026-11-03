@@ -3245,6 +3245,12 @@
 :root[data-theme=dark] .zen-ck-pct output {
     color: var(--zen-text-accent, #d7bcfc)
 }
+:root[data-theme=dark] .zen-fe-grip {
+    color: var(--zen-text-muted, #d2c5e1)
+}
+:root[data-theme=dark] .zen-fe-grip:focus-visible {
+    outline: 2px solid #a671d1
+}
 
 :root[data-theme=dark] {
   color-scheme: dark;
