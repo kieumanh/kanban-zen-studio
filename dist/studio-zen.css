@@ -1498,3 +1498,21 @@ dialog[open] button[aria-label^="Đóng"],
   .zen-fe-row { grid-template-columns: 44px 28px minmax(0, 1fr) auto; }
   .zen-fe-grip { width: 44px; min-height: 44px; }
 }
+
+/* v1.19.4: checklist gọn và bo tròn hơn. Vùng chạm của thanh % vẫn 44px (bài kiểm chạm); chỉ thu khoảng đệm quanh nó.
+   Khung "Thêm mục mới" thành một ô bo tròn kiểu viên thuốc: ô nhập và nút Thêm nằm trong cùng một khung, gợi ý dưới khung nhỏ hơn. Không dùng !important. */
+.wf-check-sort-list { gap: 6px; }
+.wf-check-sort-list .compact-check { border-radius: 16px; padding: 4px 8px 4px 4px; }
+.wf-check-sort-list .compact-check > .zen-ck-pct { margin: -6px 0 -4px; padding: 0 4px 0 0; }
+.zen-ck-pct { gap: 6px; }
+.zen-ck-pct input[type="range"] { height: 44px; padding: 19px 0; }
+.zen-check-add { align-items: center; gap: 6px; padding: 4px 4px 4px 14px; border: 1px solid #e5dbed; border-radius: 999px; background: #fff; }
+#editor .zen-check-add textarea { min-height: 36px; padding: 7px 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
+#editor .zen-check-add .wf-add-check { min-height: 36px; padding: 0 16px; border-radius: 999px; white-space: nowrap; }
+.zen-check-hint { margin: 5px 0 0 14px; font-size: 12px; line-height: 1.5; }
+@media (max-width: 700px) {
+  .zen-check-add { flex-direction: row; align-items: center; }
+  .zen-check-add .wf-add-check { align-self: center; }
+}
+.wf-check-sort-list .compact-check { row-gap: 0; }
+.wf-check-sort-list .compact-check > .zen-ck-pct { margin-top: -8px; }

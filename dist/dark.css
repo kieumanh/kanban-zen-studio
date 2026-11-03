@@ -3283,6 +3283,10 @@
 :root[data-theme=dark] .zen-fe-grip:focus-visible {
     outline: 2px solid #a671d1
 }
+:root[data-theme=dark] .zen-check-add {
+    border: 1px solid #3f3a45;
+    background: #1b181f
+}
 
 :root[data-theme=dark] {
   color-scheme: dark;
