@@ -87,6 +87,7 @@ jobs:
           node tests/welcome-long-quote-browser.mjs
           node tests/pin-tasks-browser.mjs
           node tests/checklist-tight-browser.mjs
+          node tests/release-notice-buttons-browser.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:

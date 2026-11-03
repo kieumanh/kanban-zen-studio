@@ -1122,7 +1122,8 @@ input[type="range"] {
 #editor .notice-list .notice-item[data-kind="important"] .notice-tag { color: #5f3a93; background: #f4edfb; }
 #editor .notice-list .notice-item.release-notice { grid-template-areas: "title title" "meta meta" "action action"; padding-right: 22px; background: #f6faf7; border-color: #cfe5d8; }
 #editor .notice-list .notice-item.release-notice::after { content: none; }
-#editor .notice-list .notice-item.release-notice .btn { grid-area: action; justify-self: start; margin-top: 8px; }
+#editor .notice-list .notice-item.release-notice .release-actions { grid-area: action; display: flex; flex-wrap: wrap; gap: 8px; justify-self: start; margin-top: 8px; }
+#editor .notice-list .notice-item.release-notice .release-actions .btn { margin: 0; }
 #editor .notice-list .notice-item .notice-tag svg { width: 14px; height: 14px; vertical-align: -2px; margin-right: 3px; }
 #editor .notice-list .notice-item[hidden] { display: none; }
 #editor .notice-more { justify-self: center; min-height: 44px; min-width: 44px; padding: 8px 18px; border: 1px dashed #cdbadf; border-radius: 999px; background: transparent; color: var(--zen-text-accent); font: inherit; font-size: 13px; cursor: pointer; }
