@@ -3120,6 +3120,38 @@
 :root[data-contrast=high] #side-quick-notes button:focus-visible {
     outline: 2px solid #18102b
 }
+:root[data-contrast=high] #side-pinned-tasks {
+    background: #ffffff
+}
+:root[data-contrast=high] #side-pinned-tasks .navlabel .ui-icon {
+    color: #060606
+}
+:root[data-contrast=high] #side-pinned-tasks .navlabel small {
+    background: #ffffff;
+    color: #060606
+}
+:root[data-contrast=high] #side-pinned-tasks .zen-pin-task-item:hover, :root[data-contrast=high] #side-pinned-tasks .zen-pin-task-item:focus-within {
+    background: #ffffff;
+    border-color: #17151a
+}
+:root[data-contrast=high] #side-pinned-tasks .zen-pin-task-badge {
+    color: var(--task-color, #060606);
+    background: color-mix(in srgb, var(--task-color, #7950c8) 14%, #ffffff);
+    border: 1px solid color-mix(in srgb, var(--task-color, #18102b) 28%, #161616)
+}
+:root[data-contrast=high] #side-pinned-tasks .zen-pin-task-item > button:last-child {
+    color: #060606
+}
+:root[data-contrast=high] #side-pinned-tasks .zen-pin-task-item > button:last-child:hover {
+    color: #060606;
+    background: #ffffff
+}
+:root[data-contrast=high] #side-pinned-tasks .zen-pin-task-all:hover {
+    background: #ffffff
+}
+:root[data-contrast=high] #side-pinned-tasks button:focus-visible {
+    outline: 2px solid #18102b
+}
 :root[data-contrast=high] #main .zen-task-chip {
     background: #ffffff;
     color: #060606
@@ -6370,6 +6402,38 @@
     background: #030303
 }
 :root[data-theme=dark][data-contrast=high] #side-quick-notes button:focus-visible {
+    outline: 2px solid #cecece
+}
+:root[data-theme=dark][data-contrast=high] #side-pinned-tasks {
+    background: #030303
+}
+:root[data-theme=dark][data-contrast=high] #side-pinned-tasks .navlabel .ui-icon {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] #side-pinned-tasks .navlabel small {
+    background: #030303;
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] #side-pinned-tasks .zen-pin-task-item:hover, :root[data-theme=dark][data-contrast=high] #side-pinned-tasks .zen-pin-task-item:focus-within {
+    background: #030303;
+    border-color: #cecece
+}
+:root[data-theme=dark][data-contrast=high] #side-pinned-tasks .zen-pin-task-badge {
+    color: var(--task-color, #f5f5f5);
+    background: color-mix(in srgb, var(--task-color, #7950c8) 14%, #030303);
+    border: 1px solid color-mix(in srgb, var(--task-color, #cecece) 28%, #cecece)
+}
+:root[data-theme=dark][data-contrast=high] #side-pinned-tasks .zen-pin-task-item > button:last-child {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] #side-pinned-tasks .zen-pin-task-item > button:last-child:hover {
+    color: #f5f5f5;
+    background: #030303
+}
+:root[data-theme=dark][data-contrast=high] #side-pinned-tasks .zen-pin-task-all:hover {
+    background: #030303
+}
+:root[data-theme=dark][data-contrast=high] #side-pinned-tasks button:focus-visible {
     outline: 2px solid #cecece
 }
 :root[data-theme=dark][data-contrast=high] #main .zen-task-chip {

@@ -1196,6 +1196,34 @@ input[type="range"] {
 @media (pointer: fine) { #side-quick-notes .zen-quick-note-item > button:last-child { width: 34px; } }
 @media (prefers-reduced-motion: reduce) { #side-quick-notes .zen-quick-note-item { transition: none; } }
 
+/* v1.19.3: "Ghim công việc" ở thanh bên, nằm trên "Ghi chú ghim nhanh", cùng kiểu thẻ: tối đa 3 việc, ô màu theo dự án, nút bỏ ghim dạng biểu tượng, nút xem tất cả.
+   Chọn theo #side-pinned-tasks để thắng các luật cũ của .side-pinned-task* (workflow111.css) mà không dùng !important. */
+#side-pinned-tasks { margin: 14px 0 0; padding: 12px 8px 8px; border: 1px solid var(--line); border-radius: 16px; background: #fbf8fe; }
+#side-pinned-tasks .navlabel { display: flex; align-items: center; justify-content: space-between; gap: 6px; padding: 0 4px 8px; color: var(--zen-text-muted); font-size: 11.5px; font-weight: 650; letter-spacing: 0; white-space: nowrap; }
+#side-pinned-tasks .navlabel > span { display: inline-flex; align-items: center; gap: 7px; min-width: 0; }
+#side-pinned-tasks .navlabel .ui-icon { width: 15px; height: 15px; color: #8c68ad; flex: none; }
+#side-pinned-tasks .navlabel small { padding: 1px 8px; border-radius: 999px; background: #efe7f7; color: #5f4a76; font-size: 11px; font-weight: 650; }
+#side-pinned-tasks .zen-pin-task-list { display: grid; gap: 4px; }
+#side-pinned-tasks .zen-pin-task-item { display: flex; align-items: center; gap: 2px; min-width: 0; border-radius: 12px; border: 1px solid transparent; background: transparent; transition: background-color 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease; }
+#side-pinned-tasks .zen-pin-task-item:hover,
+#side-pinned-tasks .zen-pin-task-item:focus-within { background: #fff; border-color: #e3d6ef; box-shadow: 0 4px 14px #70538812; }
+#side-pinned-tasks .zen-pin-task-item > button:first-child { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; min-height: 48px; padding: 6px 4px 6px 6px; border-radius: 12px; text-align: left; color: var(--ink); }
+#side-pinned-tasks .zen-pin-task-badge { display: grid; place-items: center; flex: none; width: 32px; height: 32px; border-radius: 10px; color: var(--task-color, #7950c8); background: color-mix(in srgb, var(--task-color, #7950c8) 14%, #fff); border: 1px solid color-mix(in srgb, var(--task-color, #7950c8) 28%, #fff); }
+#side-pinned-tasks .zen-pin-task-badge svg { width: 17px; height: 17px; }
+#side-pinned-tasks .zen-pin-task-text { display: grid; gap: 1px; min-width: 0; flex: 1; }
+#side-pinned-tasks .zen-pin-task-title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; font-weight: 650; line-height: 1.35; }
+#side-pinned-tasks .zen-pin-task-text small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11.5px; line-height: 1.35; color: var(--zen-text-muted); }
+#side-pinned-tasks .zen-pin-task-item > button:last-child { display: grid; place-items: center; flex: none; width: 44px; min-height: 44px; border-radius: 10px; color: #7b6a8d; }
+#side-pinned-tasks .zen-pin-task-item > button:last-child svg { width: 15px; height: 15px; }
+#side-pinned-tasks .zen-pin-task-item > button:last-child:hover { color: #873f59; background: #f9eaf0; }
+#side-pinned-tasks .zen-pin-task-all { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; min-height: 44px; margin-top: 4px; border-radius: 10px; font-size: 12px; font-weight: 600; color: var(--zen-text-accent); }
+#side-pinned-tasks .zen-pin-task-all:hover { background: #f1e9f8; }
+#side-pinned-tasks button:focus-visible { outline: 2px solid #7950c8; outline-offset: 2px; }
+@media (pointer: fine) { #side-pinned-tasks .zen-pin-task-item > button:last-child { width: 34px; } }
+@media (prefers-reduced-motion: reduce) { #side-pinned-tasks .zen-pin-task-item { transition: none; } }
+#side-pinned-tasks .zen-pin-task-list.is-expanded { max-height: 264px; overflow-y: auto; overscroll-behavior: contain; }
+@media (max-width: 700px) { #side-pinned-tasks .zen-pin-task-list.is-expanded { max-height: 220px; } }
+
 /* v1.17.3: "Tất cả công việc" — chip lọc nhanh có số lượng và bảng dễ quét hơn (trạng thái thẳng hàng có chấm màu, hàng quá hạn tô nhẹ, hàng nổi nhẹ khi rê chuột / có tiêu điểm).
    Không dùng !important; chọn theo #main để thắng luật cũ. Chip cuộn ngang trên điện thoại. */
 #main .zen-task-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 14px; }

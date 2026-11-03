@@ -3119,6 +3119,38 @@
 :root[data-theme=dark] #side-quick-notes button:focus-visible {
     outline: 2px solid #845cd6
 }
+:root[data-theme=dark] #side-pinned-tasks {
+    background: #18151c
+}
+:root[data-theme=dark] #side-pinned-tasks .navlabel .ui-icon {
+    color: #cfb4eb
+}
+:root[data-theme=dark] #side-pinned-tasks .navlabel small {
+    background: #1c1821;
+    color: #d5c3ea
+}
+:root[data-theme=dark] #side-pinned-tasks .zen-pin-task-item:hover, :root[data-theme=dark] #side-pinned-tasks .zen-pin-task-item:focus-within {
+    background: #1b181f;
+    border-color: #423b49
+}
+:root[data-theme=dark] #side-pinned-tasks .zen-pin-task-badge {
+    color: var(--task-color, #cab8fe);
+    background: color-mix(in srgb, var(--task-color, #7950c8) 14%, #1b181f);
+    border: 1px solid color-mix(in srgb, var(--task-color, #845cd6) 28%, #302b36)
+}
+:root[data-theme=dark] #side-pinned-tasks .zen-pin-task-item > button:last-child {
+    color: #cbbdda
+}
+:root[data-theme=dark] #side-pinned-tasks .zen-pin-task-item > button:last-child:hover {
+    color: #f5b6c9;
+    background: #110e15
+}
+:root[data-theme=dark] #side-pinned-tasks .zen-pin-task-all:hover {
+    background: #1b1720
+}
+:root[data-theme=dark] #side-pinned-tasks button:focus-visible {
+    outline: 2px solid #845cd6
+}
 :root[data-theme=dark] #main .zen-task-chip {
     background: #1b181f;
     color: #d4c6e4

@@ -189,7 +189,7 @@ function zenPaintQuickNoteTabs(){
  document.querySelector('#tabs .zen-quick-note-tabs')?.remove();
  const sidebar=document.querySelector('.sidebar');if(!sidebar)return;
  let section=sidebar.querySelector('#side-quick-notes');
- if(!section){section=document.createElement('section');section.id='side-quick-notes';section.setAttribute('aria-label','Ghi chú truy cập nhanh');const anchor=sidebar.querySelector('#side-pinned-tasks');if(anchor)anchor.before(section);else sidebar.append(section);}
+ if(!section){section=document.createElement('section');section.id='side-quick-notes';section.setAttribute('aria-label','Ghi chú truy cập nhanh');const anchor=sidebar.querySelector('#side-pinned-tasks');if(anchor)anchor.after(section);else sidebar.append(section);}
  const notes=(data.notes||[]).filter(note=>note.quickPinned&&!note.deleted).slice(0,3);
  section.hidden=contentReadOnly||!notes.length;
  if(section.hidden){section.replaceChildren();return;}
@@ -198,16 +198,32 @@ function zenPaintQuickNoteTabs(){
  section.innerHTML='<div class="navlabel"><span>'+svgIcon('pin')+'Ghi chú ghim nhanh</span><small aria-label="'+notes.length+' trên 3 ghi chú ghim nhanh">'+notes.length+'/3</small></div><div class="zen-quick-note-list">'+notes.map(note=>{const color=/^#[0-9a-f]{6}$/i.test(note.color||'')?note.color:'#7950c8',title=note.title||'Ghi chú không tên',preview=quickPreview(note);return '<div class="zen-quick-note-item" style="--note-color:'+color+'"><button type="button" data-zen-quick-open="'+esc(note.id)+'" title="'+esc(title)+'"><span class="zen-quick-note-badge" aria-hidden="true">'+svgIcon(note.type==='todo'?'tasks':'notes')+'</span><span class="zen-quick-note-text"><span class="zen-quick-note-title">'+esc(title)+'</span>'+(preview?'<small>'+esc(preview)+'</small>':'')+'</span></button><button type="button" data-zen-quick-remove="'+esc(note.id)+'" aria-label="Bỏ ghim nhanh '+esc(note.title||'Ghi chú')+'" title="Bỏ ghim nhanh"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>';}).join('')+'</div><button type="button" class="zen-quick-note-all" data-view="notes">Tất cả ghi chú <span aria-hidden="true">→</span></button>';
 
 }
+// v1.19.3: "Ghim công việc" ở thanh bên, cùng kiểu "Ghi chú ghim nhanh": hiện tối đa 3 việc (ô màu theo dự án, tên việc, tên dự án, nút bỏ ghim) và nút xem tất cả.
+// Ít hơn hoặc đủ 3 việc: nút "Tất cả công việc" mở trang Tất cả công việc. Nhiều hơn 3: nút "Xem tất cả (N)" mở rộng ngay tại chỗ, bấm lại để thu gọn.
+let zenPinsExpanded=false;
 function zenPaintPinnedTasks(){
  const section=document.querySelector('#side-pinned-tasks');if(!section)return;
- const items=(data.projects||[]).filter(p=>!p.archived).flatMap(p=>(p.tasks||[]).filter(t=>t.pinned&&!t.archived).map(t=>({p,t}))).slice(0,100);
+ const items=(data.projects||[]).filter(p=>!p.archived).flatMap(p=>(p.tasks||[]).filter(t=>t.pinned&&!t.archived).map(t=>({p,t})));
  section.hidden=contentReadOnly||!items.length;if(section.hidden){section.replaceChildren();return;}
- section.innerHTML='<div class="navlabel"><span>'+svgIcon('pin')+'Pin</span></div><div class="side-pinned-task-list">'+items.map(({p,t})=>'<div class="side-pinned-task"><button type="button" data-zen-task-shortcut="'+esc(p.id)+'|'+esc(t.id)+'" title="Mở việc '+esc(t.title)+'"><span class="side-pinned-task-title">'+esc(t.title)+'</span><small>'+esc(p.name)+'</small></button><button type="button" data-zen-task-unpin="'+esc(p.id)+'|'+esc(t.id)+'" aria-label="Bỏ ghim '+esc(t.title)+'" title="Bỏ ghim">×</button></div>').join('')+'</div>';
+ const more=items.length>3;if(!more)zenPinsExpanded=false;
+ const shown=more&&zenPinsExpanded?items:items.slice(0,3);
+ const rows=shown.map(({p,t})=>{const color=/^#[0-9a-f]{6}$/i.test(p.color||'')?p.color:'#7950c8',title=t.title||'Việc không tên';return '<div class="zen-pin-task-item" style="--task-color:'+color+'"><button type="button" data-zen-task-shortcut="'+esc(p.id)+'|'+esc(t.id)+'" title="Mở việc '+esc(title)+'"><span class="zen-pin-task-badge" aria-hidden="true">'+svgIcon('tasks')+'</span><span class="zen-pin-task-text"><span class="zen-pin-task-title">'+esc(title)+'</span><small>'+esc(p.name)+'</small></span></button><button type="button" data-zen-task-unpin="'+esc(p.id)+'|'+esc(t.id)+'" aria-label="Bỏ ghim '+esc(title)+'" title="Bỏ ghim"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>';}).join('');
+ const all=more?'<button type="button" class="zen-pin-task-all" data-zen-pins-toggle aria-expanded="'+zenPinsExpanded+'">'+(zenPinsExpanded?'Thu gọn':'Xem tất cả ('+items.length+')')+' <span aria-hidden="true">'+(zenPinsExpanded?'↑':'↓')+'</span></button>':'<button type="button" class="zen-pin-task-all" data-view="tasks">Tất cả công việc <span aria-hidden="true">→</span></button>';
+ section.innerHTML='<div class="navlabel"><span>'+svgIcon('pin')+'Ghim công việc</span><small aria-label="'+items.length+' công việc đã ghim">'+items.length+'</small></div><div class="zen-pin-task-list'+(zenPinsExpanded?' is-expanded':'')+'">'+rows+'</div>'+all;
 }
-// v1.18.3→v1.18.4: thẻ công việc không còn nút ghim; danh sách Pin ở thanh bên vẫn hiện các việc đã ghim và bấm × để bỏ.
-function zenPaintPins(){zenPaintQuickNoteTabs();zenPaintPinnedTasks();}
+// v1.19.3: khôi phục nút ghim ở góc thẻ công việc (đã gỡ ở v1.18.4).
+function zenPaintTaskPinButtons(){
+ if(contentReadOnly||view!=='projects')return;
+ document.querySelectorAll('#main .task-card[data-task][data-pid]').forEach(card=>{
+  if(card.querySelector(':scope > .zen-task-pin'))return;
+  const task=project(card.dataset.pid)?.tasks.find(item=>item.id===card.dataset.task);if(!task)return;
+  const button=document.createElement('button');button.type='button';button.className='zen-task-pin';button.dataset.zenTaskPin=card.dataset.pid+'|'+card.dataset.task;button.setAttribute('aria-pressed',String(!!task.pinned));button.setAttribute('aria-label',task.pinned?'Bỏ ghim công việc':'Ghim công việc');button.title=button.getAttribute('aria-label');button.innerHTML=svgIcon('pin');const header=card.querySelector('.wf-card-head');if(header){header.insertBefore(button,header.firstChild);header.classList.add('wf-card-head-pinned');}else card.prepend(button);
+ });
+}
+function zenPaintPins(){zenPaintQuickNoteTabs();zenPaintPinnedTasks();zenPaintTaskPinButtons();}
 render=function(){zenOldRender();zenApplyNoteCards();zenPaintPins();};
 document.addEventListener('click',event=>{
+ const pinsToggle=event.target.closest('[data-zen-pins-toggle]');if(pinsToggle){event.preventDefault();event.stopImmediatePropagation();zenPinsExpanded=!zenPinsExpanded;zenPaintPinnedTasks();document.querySelector('#side-pinned-tasks [data-zen-pins-toggle]')?.focus();return;}
  const quickOpen=event.target.closest('[data-zen-quick-open]');if(quickOpen){const note=data.notes?.find(item=>item.id===quickOpen.dataset.zenQuickOpen);if(note){event.preventDefault();event.stopImmediatePropagation();document.querySelector('.sidebar')?.classList.remove('open');noteForm(note);}return;}
  const quickRemove=event.target.closest('[data-zen-quick-remove]');if(quickRemove){const note=data.notes?.find(item=>item.id===quickRemove.dataset.zenQuickRemove);if(note){event.preventDefault();event.stopImmediatePropagation();note.quickPinned=false;if(!save()){note.quickPinned=true;return;}render();notify('Đã bỏ ghi chú khỏi menu truy cập nhanh.');}return;}
  const taskButton=event.target.closest('[data-zen-task-pin],[data-zen-task-unpin]');if(taskButton){event.preventDefault();event.stopImmediatePropagation();const key=taskButton.dataset.zenTaskPin||taskButton.dataset.zenTaskUnpin,[pid,tid]=key.split('|'),p=project(pid),task=p?.tasks.find(item=>item.id===tid);if(!task)return;task.pinned=!task.pinned;if(!save()){task.pinned=!task.pinned;return;}render();return;}
