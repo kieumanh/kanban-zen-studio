@@ -204,15 +204,8 @@ function zenPaintPinnedTasks(){
  section.hidden=contentReadOnly||!items.length;if(section.hidden){section.replaceChildren();return;}
  section.innerHTML='<div class="navlabel"><span>'+svgIcon('pin')+'Pin</span></div><div class="side-pinned-task-list">'+items.map(({p,t})=>'<div class="side-pinned-task"><button type="button" data-zen-task-shortcut="'+esc(p.id)+'|'+esc(t.id)+'" title="Mở việc '+esc(t.title)+'"><span class="side-pinned-task-title">'+esc(t.title)+'</span><small>'+esc(p.name)+'</small></button><button type="button" data-zen-task-unpin="'+esc(p.id)+'|'+esc(t.id)+'" aria-label="Bỏ ghim '+esc(t.title)+'" title="Bỏ ghim">×</button></div>').join('')+'</div>';
 }
-function zenPaintTaskPinButtons(){
- if(contentReadOnly||view!=='projects')return;
- document.querySelectorAll('#main .task-card[data-task][data-pid]').forEach(card=>{
-  if(card.querySelector(':scope > .zen-task-pin'))return;
-  const task=project(card.dataset.pid)?.tasks.find(item=>item.id===card.dataset.task);if(!task)return;
-  const button=document.createElement('button');button.type='button';button.className='zen-task-pin';button.dataset.zenTaskPin=card.dataset.pid+'|'+card.dataset.task;button.setAttribute('aria-pressed',String(!!task.pinned));button.setAttribute('aria-label',task.pinned?'Bỏ ghim công việc':'Ghim công việc');button.title=button.getAttribute('aria-label');button.innerHTML=svgIcon('pin');const header=card.querySelector('.wf-card-head');if(header){header.insertBefore(button,header.firstChild);header.classList.add('wf-card-head-pinned');}else card.prepend(button);
- });
-}
-function zenPaintPins(){zenPaintQuickNoteTabs();zenPaintPinnedTasks();zenPaintTaskPinButtons();}
+// v1.18.3→v1.18.4: thẻ công việc không còn nút ghim; danh sách Pin ở thanh bên vẫn hiện các việc đã ghim và bấm × để bỏ.
+function zenPaintPins(){zenPaintQuickNoteTabs();zenPaintPinnedTasks();}
 render=function(){zenOldRender();zenApplyNoteCards();zenPaintPins();};
 document.addEventListener('click',event=>{
  const quickOpen=event.target.closest('[data-zen-quick-open]');if(quickOpen){const note=data.notes?.find(item=>item.id===quickOpen.dataset.zenQuickOpen);if(note){event.preventDefault();event.stopImmediatePropagation();document.querySelector('.sidebar')?.classList.remove('open');noteForm(note);}return;}

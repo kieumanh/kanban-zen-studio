@@ -146,7 +146,8 @@ try {
     assert.ok(plain.nextSize.w >= 24 && plain.nextSize.w <= 48 && plain.nextSize.h >= 24 && plain.nextSize.h <= 48, `nút chuyển nhanh ${plain.nextSize.w}x${plain.nextSize.h}px ở ${width}px, phải từ 24 đến 48px`);
     assert.match(plain.nextName, /^Chuyển sang .+/, `nút chuyển nhanh thiếu tên truy cập: "${plain.nextName}"`);
     assert.equal(plain.nextVisibleText, '→', `nút chuyển nhanh chỉ hiện mũi tên, nhận được "${plain.nextVisibleText}"`);
-    assert.ok(plain.pin && plain.grip, `thẻ mất nút ghim hoặc tay kéo ở ${width}px`);
+    // v1.18.4: thẻ công việc không còn nút ghim (đổi có chủ đích; kiểm riêng ở tests/kanban-pin-removed-browser.mjs).
+    assert.ok(!plain.pin && plain.grip, `thẻ phải có tay kéo và không còn nút ghim ở ${width}px`);
     assert.equal(last.hasNext, false, 'thẻ ở cột cuối không được có nút chuyển nhanh');
 
     // "Thẻ gọn" làm thẻ thấp hơn thẻ thường.
