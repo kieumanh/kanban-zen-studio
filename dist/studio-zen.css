@@ -1524,3 +1524,7 @@ dialog[open] button[aria-label^="Đóng"],
 /* v1.19.4 (sửa sau kiểm a11y): không dùng khoảng âm cho thanh % ở bất kỳ cỡ nào, để thứ tự đọc và Tab khớp thứ tự DOM. Bù chiều cao bằng đệm dòng nhỏ hơn. */
 .wf-check-sort-list .compact-check > .zen-ck-pct { margin-top: 0; margin-bottom: 0; }
 .wf-check-sort-list .compact-check { padding-top: 2px; padding-bottom: 2px; }
+
+/* v1.19.6: Gantt ẩn việc đã hoàn thành, báo gọn bằng một dòng bo tròn */
+.gantt-done-note { display: inline-flex; align-items: center; gap: 6px; margin: 0 0 10px; padding: 4px 12px; border-radius: 999px; background: #f1f7f3; border: 1px solid #cfe5d8; color: var(--zen-text-muted); font-size: 12px; line-height: 1.4; }
+.gantt-done-note span { color: #3f9a72; font-weight: 700; }
