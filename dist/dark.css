@@ -3225,6 +3225,26 @@
     background: #17141b;
     color: #e5c9a1
 }
+:root[data-theme=dark] .zen-ck-pct {
+    color: var(--zen-text-muted, #d2c5e1)
+}
+:root[data-theme=dark] .zen-ck-pct input[type="range"] {
+    background: linear-gradient(to right, #7950c8 var(--p, 0%), #231d28 var(--p, 0%)) content-box
+}
+:root[data-theme=dark] .zen-ck-pct input[type="range"]::-webkit-slider-thumb {
+    border: 2px solid #845cd6;
+    background: #1b181f
+}
+:root[data-theme=dark] .zen-ck-pct input[type="range"]::-moz-range-thumb {
+    border: 2px solid #845cd6;
+    background: #1b181f
+}
+:root[data-theme=dark] .zen-ck-pct input[type="range"]:focus-visible {
+    outline: 2px solid #a671d1
+}
+:root[data-theme=dark] .zen-ck-pct output {
+    color: var(--zen-text-accent, #d7bcfc)
+}
 
 :root[data-theme=dark] {
   color-scheme: dark;
