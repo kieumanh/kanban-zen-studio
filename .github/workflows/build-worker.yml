@@ -84,6 +84,7 @@ jobs:
           node tests/settings-collapse-browser.mjs
           node tests/kanban-pin-removed-browser.mjs
           node tests/checklist-progress-browser.mjs
+          node tests/welcome-flow-browser.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:

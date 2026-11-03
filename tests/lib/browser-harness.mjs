@@ -53,7 +53,10 @@ export async function startHarness({ seed = defaultSeed, executablePath = proces
   const day = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
 
   // open: trả về { context, page, server: { workspace, revision } }; đổi server.workspace rồi gọi page.reload() để mô phỏng dữ liệu từ nơi khác.
-  async function open(width, { touch = false, height = width <= 700 ? 844 : 900, colorScheme, contrast, forcedColors, workspace } = {}) {
+  // v1.19.1: welcome=true bỏ việc đánh dấu sẵn "đã thấy lời chào" (để thử đúng luồng vào trang); now = giờ giả (Date/ISO) cài trước khi tải trang;
+  // meDelay = độ trễ (ms) của /api/me; receiptsMode = 'ok' | 'fail' | 'hang' cho GET notification-receipts; receiptsSeed = các dấu đã đọc máy chủ đã có;
+  // setup = hàm chạy trước khi tải trang.
+  async function open(width, { touch = false, height = width <= 700 ? 844 : 900, colorScheme, contrast, forcedColors, workspace, welcome = false, now = null, meDelay = 0, receiptsMode = 'ok', receiptsSeed = [], setup = null } = {}) {
     const context = await browser.newContext({
       viewport: { width, height },
       timezoneId: 'Asia/Ho_Chi_Minh',
@@ -63,17 +66,23 @@ export async function startHarness({ seed = defaultSeed, executablePath = proces
       ...(forcedColors ? { forcedColors } : {}),
     });
     const page = await context.newPage();
+    if (now) await page.clock.install({ time: new Date(now) });
     // state.mode: 'ok' | 'server500' | 'reject400' | 'conflict409' (kết quả của PUT/POST lưu dữ liệu).
-    const state = { workspace: structuredClone(workspace || seed()), revision: 1, mode: 'ok' };
-    await context.addInitScript(({ day }) => {
-      const prev = new Date(Date.parse(day + 'T00:00:00Z') - 86400000).toISOString().slice(0, 10);
-      for (const d of [day, prev]) for (let i = 0; i < 4; i++) localStorage.setItem('zen-welcome:qa:' + d + ':' + i, 'seen');
-    }, { day });
+    const state = { workspace: structuredClone(workspace || seed()), revision: 1, mode: 'ok', meDelay, receiptsMode, receiptsSeed, receipts: [] };
+    if (!welcome)
+      await context.addInitScript(({ day }) => {
+        const prev = new Date(Date.parse(day + 'T00:00:00Z') - 86400000).toISOString().slice(0, 10);
+        for (const d of [day, prev]) for (let i = 0; i < 4; i++) localStorage.setItem('zen-welcome:qa:' + d + ':' + i, 'seen');
+      }, { day });
     await page.route('**/api/**', async (route) => {
       const req = route.request(),
         path = new URL(req.url()).pathname.slice(5);
       let result = {};
-      if (path === 'me') result = { user: { id: 'qa', name: 'Kiểm tra', email: 'qa@example.test', session_expires: Date.now() + 600000 } };
+      if (path === 'me') {
+        if (state.meDelay) await new Promise((r) => setTimeout(r, state.meDelay));
+        // welcome=true dùng giờ giả nhảy xa: phiên phải sống đủ lâu để không bị đăng xuất giữa chừng.
+        result = { user: { id: 'qa', name: 'Kiểm tra', email: 'qa@example.test', session_expires: Date.now() + (welcome ? 30 * 86400000 : 600000) } };
+      }
       else if (path === 'workspace' || path === 'workspace-v2') {
         if (req.method() === 'PUT' || req.method() === 'POST') {
           const status = { server500: 500, reject400: 400, conflict409: 409 }[state.mode];
@@ -91,7 +100,14 @@ export async function startHarness({ seed = defaultSeed, executablePath = proces
           state.workspace = b.data;
           result = { revision: ++state.revision };
         } else result = { data: state.workspace, revision: state.revision };
-      } else if (path === 'notification-receipts') result = req.method() === 'PUT' ? { ok: true } : { keys: [] };
+      } else if (path === 'notification-receipts') {
+        if (req.method() === 'PUT') {
+          state.receipts.push(...(req.postDataJSON().keys || []));
+          result = { ok: true };
+        } else if (state.receiptsMode === 'fail') return route.fulfill({ status: 500, contentType: 'application/json', body: '{"error":"Mô phỏng receipts 500"}' });
+        else if (state.receiptsMode === 'hang') return new Promise(() => {});
+        else result = { keys: state.receiptsSeed };
+      }
       else if (path === 'activity') result = { expires: Date.now() + 600000 };
       else if (path === 'resources') result = { files: [], total: 0, used: 0, offset: 0 };
       else if (path === 'assets') result = { files: [], used: 0, quota: 1000000000 };
@@ -101,6 +117,8 @@ export async function startHarness({ seed = defaultSeed, executablePath = proces
     });
     await page.route('https://fonts.googleapis.com/**', (r) => r.abort());
     await page.route('https://fonts.gstatic.com/**', (r) => r.abort());
+    // setup({ context, page, state }): chạy ngay trước khi tải trang (thêm route, init script...).
+    if (setup) await setup({ context, page, state });
     await page.goto('http://127.0.0.1:' + server.address().port);
     await page.waitForFunction(() => typeof _WF !== 'undefined' && currentUser?.id === 'qa' && document.documentElement.dataset.zenReady === '1');
     return { context, page, server: state };
