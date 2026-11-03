@@ -1287,3 +1287,38 @@
     }
   });
 })();
+
+// v1.18.3: "Giao diện" và "Dung lượng dữ liệu" trong Cài đặt được thu gọn như các nhóm khác (đóng sẵn, bấm tiêu đề để mở).
+// Hai phần này được chèn sau khi nhóm Cài đặt đã dựng xong (giao diện ở đây, dung lượng ở modules/settings-capacity.mjs),
+// nên bộ quan sát theo dõi #editor-body và bọc lại từng phần khi nó xuất hiện.
+(() => {
+  const COLLAPSE = [
+    ['.settings-theme', 'Giao diện'],
+    ['#storage-capacity', 'Dung lượng dữ liệu'],
+  ];
+  const collapseSettings = (body) => {
+    for (const [selector, title] of COLLAPSE) {
+      const node = body.querySelector(':scope > ' + selector);
+      if (!node) continue;
+      const group = document.createElement('details');
+      group.className = 'wf-settings-group zen-settings-collapse';
+      const summary = document.createElement('summary');
+      summary.textContent = title;
+      const content = document.createElement('div');
+      content.className = 'wf-settings-content';
+      group.append(summary, content);
+      node.before(group);
+      content.append(node);
+    }
+  };
+  const baseAccountPanel = accountPanel;
+  accountPanel = function () {
+    baseAccountPanel.apply(this, arguments);
+    const body = document.querySelector('#editor-body');
+    if (!body) return;
+    collapseSettings(body);
+    const observer = new MutationObserver(() => collapseSettings(body));
+    observer.observe(body, { childList: true });
+    document.querySelector('#editor').addEventListener('close', () => observer.disconnect(), { once: true });
+  };
+})();

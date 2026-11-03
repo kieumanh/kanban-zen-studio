@@ -81,6 +81,7 @@ jobs:
           node tests/focus-edit-browser.mjs
           node tests/close-animation-browser.mjs
           node tests/note-art-soft-browser.mjs
+          node tests/settings-collapse-browser.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:

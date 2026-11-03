@@ -1383,3 +1383,9 @@ dialog[open] button[aria-label^="Đóng"],
     animation: none;
   }
 }
+
+/* v1.18.3: tiêu đề bên trong hai nhóm thu gọn trùng với tiêu đề nhóm, nên ẩn đi (chữ vẫn có trong thẻ tóm tắt). */
+.zen-settings-collapse > .wf-settings-content > .settings-theme > h3,
+.zen-settings-collapse > .wf-settings-content > .capacity-panel > h3 {
+  display: none;
+}
