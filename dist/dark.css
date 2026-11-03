@@ -3175,6 +3175,27 @@
         background: #18151c
     }
 }
+:root[data-theme=dark] .wf-check-sort-list .compact-check {
+    background: #16131a
+}
+:root[data-theme=dark] .wf-check-sort-list .compact-check.is-complete {
+    background: var(--zen-done-bg, #131017)
+}
+:root[data-theme=dark] .wf-check-sort-list .compact-check:focus-within {
+    background: #110e15
+}
+:root[data-theme=dark] .zen-check-move {
+    color: var(--zen-text-accent, #d7bcfc)
+}
+:root[data-theme=dark] .zen-check-move:hover:not(:disabled) {
+    background: #221b29
+}
+:root[data-theme=dark] .zen-check-move:disabled {
+    color: #b6aec0
+}
+:root[data-theme=dark] .zen-check-hint {
+    color: var(--zen-text-muted, #d2c5e1)
+}
 
 :root[data-theme=dark] {
   color-scheme: dark;

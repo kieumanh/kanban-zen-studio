@@ -885,3 +885,86 @@
   });
 })();
 
+
+// v1.17.4: checklist trong hộp công việc. Mỗi mục là một thẻ bo tròn (mục xong chuyển màu nhạt), có nút ↑/↓ để đổi thứ tự bằng chạm hoặc bàn phím
+// (ngoài kéo thả và Alt + ↑/↓ sẵn có), ô nhập mục mới gọn một dòng: Enter để thêm, Shift + Enter xuống dòng. Ô chữ tự giãn đúng chiều cao sau khi hộp thoại hiện (trước đây có thể cắt dòng cuối).
+(() => {
+  const ARROW = (up) => '<svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="' + (up ? 'M5 12.5l5-5 5 5' : 'M5 7.5l5 5 5-5') + '"/></svg>';
+  let pending = null;
+  const fit = (box) => {
+    if (typeof fitCheckText === 'function') box.querySelectorAll('.compact-check textarea, .zen-check-add textarea').forEach(fitCheckText);
+  };
+  const decorate = () => {
+    const body = document.querySelector('#editor-body');
+    const list = body?.querySelector('.wf-check-sort-list');
+    if (!body) return;
+    if (list && !list.dataset.zenChecks) {
+      list.dataset.zenChecks = '1';
+      const rows = [...list.querySelectorAll(':scope > .compact-check')];
+      rows.forEach((row, index) => {
+        const remove = row.querySelector('.compact-check-remove');
+        const actions = document.createElement('div');
+        actions.className = 'zen-check-actions';
+        const label = (row.querySelector('textarea')?.value || '').trim().slice(0, 40);
+        const move = (dir) => '<button type="button" class="zen-check-move" data-zen-check-move="' + dir + '" aria-label="Chuyển mục ' + (dir < 0 ? 'lên trên' : 'xuống dưới') + (label ? ': ' + label.replace(/"/g, '') : '') + '" title="' + (dir < 0 ? 'Lên trên' : 'Xuống dưới') + '"' + ((dir < 0 && index === 0) || (dir > 0 && index === rows.length - 1) ? ' disabled' : '') + '>' + ARROW(dir < 0) + '</button>';
+        actions.insertAdjacentHTML('beforeend', move(-1) + move(1));
+        if (remove) actions.append(remove);
+        row.append(actions);
+      });
+    }
+    const extra = body.querySelector('[name=extra-checks]');
+    const button = body.querySelector('.wf-add-check');
+    if (extra && !extra.closest('.zen-check-add')) {
+      const label = extra.closest('label');
+      const text = label && [...label.childNodes].find((node) => node.nodeType === 3 && /Thêm checklist/.test(node.textContent));
+      if (text) text.textContent = 'Thêm mục mới';
+      extra.rows = 1;
+      extra.placeholder = 'Nhập việc cần làm rồi nhấn Enter';
+      const wrap = document.createElement('div');
+      wrap.className = 'zen-check-add';
+      extra.before(wrap);
+      wrap.append(extra);
+      if (button) wrap.append(button);
+      const hint = document.createElement('small');
+      hint.className = 'zen-check-hint';
+      hint.textContent = 'Enter để thêm · Shift + Enter để thêm nhiều mục (mỗi dòng một mục)';
+      wrap.after(hint);
+    }
+    requestAnimationFrame(() => {
+      fit(body);
+      if (pending) {
+        const { id, dir } = pending;
+        pending = null;
+        const row = body.querySelector('[data-wf-check-id="' + id + '"]');
+        const target = row?.querySelector('.zen-check-move[data-zen-check-move="' + dir + '"]:not([disabled])') || row?.querySelector('.zen-check-move:not([disabled])');
+        target?.focus({ preventScroll: false });
+      }
+    });
+    setTimeout(() => fit(body), 200);
+  };
+  const before = taskDetail;
+  taskDetail = function (p, t) {
+    before(p, t);
+    decorate();
+  };
+  document.addEventListener('click', (event) => {
+    const button = event.target.closest('[data-zen-check-move]');
+    if (!button || button.disabled) return;
+    event.preventDefault();
+    const row = button.closest('.compact-check');
+    const dir = Number(button.dataset.zenCheckMove);
+    const siblings = [...row.parentElement.children].filter((el) => el.matches('.compact-check') && !el.hidden);
+    const target = siblings[siblings.indexOf(row) + dir];
+    if (!target) return;
+    pending = { id: row.dataset.wfCheckId, dir };
+    wfMove('check', row.dataset.wfCheckId, editing?.p || '', target, dir > 0);
+  });
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Enter' || event.shiftKey || event.isComposing || !event.target.matches?.('.zen-check-add textarea')) return;
+    event.preventDefault();
+    event.target.closest('.zen-check-add').querySelector('.wf-add-check')?.click();
+  });
+  document.addEventListener('input', (event) => {
+    if (event.target.matches?.('.zen-check-add textarea') && typeof fitCheckText === 'function') fitCheckText(event.target);
+  });
+})();

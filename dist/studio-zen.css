@@ -416,7 +416,7 @@ textarea {
   margin: 0 !important;
 }
 .wf-check-sort-list .compact-check {
-  grid-template-columns: 30px 26px minmax(0, 1fr) 30px !important;
+  grid-template-columns: 30px 26px minmax(0, 1fr) auto !important;
 }
 input[type="range"] {
   height: 24px;
@@ -454,6 +454,7 @@ input[type="range"] {
   .work-legend button,
   .zen-priority-menu button,
   .compact-check-remove,
+  .zen-check-move,
   .task-focus-shortcut,
   .modal-close-pin,
   .avatar,
@@ -477,6 +478,7 @@ input[type="range"] {
   .avatar,
   .workspace-home,
   .compact-check-remove,
+  .zen-check-move,
   .task-focus-shortcut,
   .modal-close-pin {
     min-width: 44px !important;
@@ -1225,3 +1227,25 @@ input[type="range"] {
   #main .zen-task-chip { flex: none; }
 }
 @media (prefers-reduced-motion: reduce) { #main .zen-task-chip, #main .task-table tbody tr { transition: none; } }
+
+/* v1.17.4: checklist trong hộp công việc — mỗi mục là một thẻ bo tròn nền nhạt; mục xong đổi sang màu "hoàn thành"; nút ↑/↓/× gom một cụm; ô thêm mục gọn một dòng. */
+.wf-check-sort-list { display: grid; gap: 8px; margin: 4px 0 12px; }
+.wf-check-sort-list .compact-check { align-items: center; padding: 6px 8px 6px 4px; border: 0; border-radius: 14px; background: #f8f4fc; transition: background-color 0.15s ease; }
+.wf-check-sort-list .compact-check.is-complete { background: var(--zen-done-bg, #f3f0f6); }
+.wf-check-sort-list .compact-check:focus-within { background: #f2ebfb; }
+.zen-check-actions { display: flex; align-items: center; gap: 2px; }
+.zen-check-move { display: inline-grid; place-items: center; width: 30px; height: 30px; padding: 0; border: 0; border-radius: 10px; background: transparent; color: var(--zen-text-accent, #6e3fa0); cursor: pointer; }
+.zen-check-move svg { width: 16px; height: 16px; }
+.zen-check-move:hover:not(:disabled) { background: #e9def7; }
+.zen-check-move:disabled { color: #b9aec6; cursor: default; }
+.zen-check-add { display: flex; align-items: flex-start; gap: 8px; }
+.zen-check-add textarea { flex: 1 1 auto; min-width: 0; min-height: 44px; resize: none; overflow: hidden; border-radius: 12px; }
+.zen-check-add .wf-add-check { flex: none; margin: 0; align-self: flex-start; min-height: 44px; border-radius: 12px; }
+.zen-check-hint { display: block; margin-top: 6px; color: var(--zen-text-muted, #5f5070); font-size: 12px; }
+@media (max-width: 700px) {
+  .wf-check-sort-list .compact-check { grid-template-columns: 30px 26px minmax(0, 1fr); row-gap: 2px; }
+  .wf-check-sort-list .compact-check > .zen-check-actions { grid-column: 3; justify-self: end; }
+  .zen-check-add { flex-direction: column; align-items: stretch; }
+  .zen-check-add .wf-add-check { align-self: flex-end; }
+}
+@media (prefers-reduced-motion: reduce) { .wf-check-sort-list .compact-check { transition: none; } }
