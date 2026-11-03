@@ -3,6 +3,14 @@
 import assert from 'node:assert/strict';
 import { startHarness } from './lib/browser-harness.mjs';
 
+// v1.18.3: phần Giao diện nằm trong nhóm "Giao diện" đóng sẵn ở Cài đặt; mở nhóm trước khi thao tác (không đổi kiểm tra).
+const openThemeGroup = async (page) => {
+  await page.waitForSelector('#editor .settings-theme', { state: 'attached' });
+  const group = page.locator('#editor details.zen-settings-collapse').filter({ has: page.locator('.settings-theme') });
+  if (!(await group.evaluate((d) => d.open))) await group.locator('summary').first().click();
+  await page.waitForSelector('#editor .settings-theme', { state: 'visible' });
+};
+
 const h = await startHarness();
 const attrs = (page) =>
   page.evaluate(() => ({
@@ -46,7 +54,7 @@ try {
 
     // 3. Chọn tay trong Cài đặt: Tối thắng hệ điều hành sáng, nhớ sau khi tải lại.
     await page.evaluate(() => accountPanel());
-    await page.waitForSelector('#editor .settings-theme');
+    await openThemeGroup(page);
     assert.equal(await page.locator('#editor .settings-theme input[name=zen-theme]:checked').inputValue(), 'system', `${label}: mặc định "Theo hệ thống"`);
     await page.locator('#editor .settings-theme input[name=zen-theme][value=dark]').check();
     await page.waitForFunction(() => document.documentElement.dataset.theme === 'dark');
@@ -63,7 +71,7 @@ try {
 
     // 4. Quay lại "Theo hệ thống": xóa lựa chọn đã lưu.
     await page.evaluate(() => accountPanel());
-    await page.waitForSelector('#editor .settings-theme');
+    await openThemeGroup(page);
     assert.equal(await page.locator('#editor .settings-theme input[name=zen-theme]:checked').inputValue(), 'dark', `${label}: Cài đặt hiện lựa chọn đã lưu`);
     await page.locator('#editor .settings-theme input[name=zen-theme][value=system]').check();
     await page.waitForFunction(() => document.documentElement.dataset.theme === 'light');
