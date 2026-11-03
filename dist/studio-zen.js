@@ -976,3 +976,314 @@
     return before(t).replace('class="wf-focus-card"', 'class="wf-focus-card" style="--card-color:' + esc(t.project.color) + '"');
   };
 })();
+
+// v1.18.0: sửa công việc ngay trong Chế độ tập trung (không mở hộp thoại): đổi tên, mô tả (có định dạng), và checklist — tích, sửa chữ, thêm, xóa (có Hoàn tác), đổi thứ tự bằng ↑/↓.
+// Mọi thay đổi tự lưu qua wfSave (có kiểm tra giới hạn và hoàn nguyên khi lỗi); nút "Xong" đóng chế độ sửa và vẽ lại màn hình.
+(() => {
+  const ARROW = (up) => '<svg viewBox="0 0 20 20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="' + (up ? 'M5 12.5l5-5 5 5' : 'M5 7.5l5 5 5-5') + '"/></svg>';
+  const PENCIL = '<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16z M13.5 6.5l4 4"/></svg>';
+  const SEL = '#main .wf-focus-workspace > article.wf-focus-task';
+  const MAX_CHECKS = 200;
+  let editKey = null;
+  let undo = null;
+  let timers = {};
+
+  const keyOf = () => (_WF.focus ? _WF.focus.p + ':' + _WF.focus.t : null);
+  const current = () => {
+    const f = _WF.focus;
+    const p = f && project(f.p);
+    const t = p?.tasks.find((x) => x.id === f.t && !x.archived);
+    return t ? { p, t } : {};
+  };
+  // Lưu một thay đổi lên đúng việc đang tập trung (tra lại theo id vì wfSave có thể hoàn nguyên `data`).
+  const apply = (mutate) => {
+    const f = _WF.focus;
+    if (!f) return false;
+    return wfSave(() => {
+      const t = project(f.p)?.tasks.find((x) => x.id === f.t);
+      if (!t) throw Error('Công việc đã thay đổi hoặc bị xóa trên thiết bị khác.');
+      mutate(t);
+    });
+  };
+  const status = (text) => {
+    const el = document.querySelector('.zen-fe-status');
+    if (el) el.textContent = text;
+  };
+  const saved = () => status('Đã lưu ' + new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Ho_Chi_Minh' }));
+
+  const rowHTML = (c, i, n) =>
+    '<div class="zen-fe-row' + (c.done ? ' is-complete' : '') + '" data-fe-id="' + esc(c.id) + '">' +
+    '<input type="checkbox" data-fe-toggle aria-label="Đã xong: ' + esc(c.text.slice(0, 60)) + '"' + (c.done ? ' checked' : '') + '>' +
+    '<textarea data-fe-text rows="1" maxlength="300" aria-label="Nội dung mục ' + (i + 1) + '">' + esc(c.text) + '</textarea>' +
+    '<div class="zen-check-actions">' +
+    '<button type="button" class="zen-check-move" data-fe-move="-1" aria-label="Chuyển mục lên trên" title="Lên trên"' + (i === 0 ? ' disabled' : '') + '>' + ARROW(true) + '</button>' +
+    '<button type="button" class="zen-check-move" data-fe-move="1" aria-label="Chuyển mục xuống dưới" title="Xuống dưới"' + (i === n - 1 ? ' disabled' : '') + '>' + ARROW(false) + '</button>' +
+    '<button type="button" class="compact-check-remove zen-fe-remove" data-fe-remove aria-label="Xóa mục" title="Xóa mục">×</button>' +
+    '</div></div>';
+  const checksHTML = (t) =>
+    '<h3>Checklist <small>' + t.checks.filter((c) => c.done).length + '/' + t.checks.length + '</small></h3>' +
+    (undo && undo.tid === t.id ? '<p class="zen-fe-undo" role="status">Đã xóa mục «' + esc(undo.item.text.slice(0, 40)) + '» <button type="button" class="text-btn" data-fe-undo>Hoàn tác</button></p>' : '') +
+    '<div class="zen-fe-list">' + t.checks.map((c, i) => rowHTML(c, i, t.checks.length)).join('') + '</div>' +
+    '<div class="zen-check-add"><textarea data-fe-new rows="1" maxlength="300" placeholder="Thêm mục mới — Enter để thêm" aria-label="Thêm mục checklist mới"></textarea><button type="button" class="btn primary" data-fe-add>+ Thêm</button></div>' +
+    '<small class="zen-check-hint">Enter để thêm · Shift + Enter để thêm nhiều mục (mỗi dòng một mục)</small>';
+  const fit = (root) => {
+    if (typeof fitCheckText === 'function') root.querySelectorAll('textarea[data-fe-text], textarea[data-fe-new]').forEach(fitCheckText);
+  };
+  const paintChecks = (focus) => {
+    const { t } = current();
+    const box = document.querySelector('.zen-fe-checks');
+    if (!t || !box) return;
+    box.innerHTML = checksHTML(t);
+    requestAnimationFrame(() => {
+      fit(box);
+      if (focus) box.querySelector(focus)?.focus();
+    });
+    setTimeout(() => fit(box), 200);
+    refreshMeta();
+  };
+  // Cập nhật tiến độ và dòng trạng thái của khối đọc (đang ẩn) ngay khi dữ liệu đổi để khi thoát chế độ sửa vẫn khớp.
+  const refreshMeta = () => {
+    const { p, t } = current();
+    const article = document.querySelector(SEL);
+    if (!t || !article) return;
+    const done = t.checks.filter((c) => c.done).length;
+    const meta = article.querySelector('.wf-focus-progress-meta');
+    if (meta) meta.innerHTML = '<span>' + done + '/' + t.checks.length + ' mục hoàn thành</span><strong>' + taskPct(t) + '%</strong>';
+    const old = article.querySelector('.wf-focus-task-progress, .progress');
+    if (old) {
+      const tmp = document.createElement('div');
+      tmp.innerHTML = bar(taskPct(t), p.color);
+      tmp.firstElementChild.classList.add('wf-focus-task-progress');
+      old.replaceWith(tmp.firstElementChild);
+    }
+    const sub = article.querySelector('.wf-focus-task-meta');
+    if (sub) sub.textContent = t.col + (t.due ? ' · Hạn ' + dateLabel(t.due) : '');
+  };
+  const enter = (article) => {
+    const { t } = current();
+    if (!t) return;
+    editKey = keyOf();
+    article.classList.add('zen-focus-editing');
+    article.querySelector('.zen-fe-toolbar')?.remove();
+    const bar0 = document.createElement('div');
+    bar0.className = 'zen-fe-toolbar is-editing';
+    bar0.innerHTML = '<span class="zen-fe-status" role="status" aria-live="polite">Mọi thay đổi tự lưu</span><button type="button" class="btn primary" data-fe-done>Xong</button>';
+    article.prepend(bar0);
+    article.querySelector('.zen-fe-form')?.remove();
+    const form = document.createElement('form');
+    form.className = 'zen-fe-form';
+    form.noValidate = true;
+    form.addEventListener('submit', (e) => e.preventDefault());
+    form.innerHTML =
+      '<label class="field">Tên công việc<input name="title" maxlength="200" value="' + esc(t.title) + '" autocomplete="off"></label>' +
+      '<label class="field">Mô tả<textarea name="description" maxlength="5000">' + esc(t.description || '') + '</textarea></label>' +
+      '<section class="zen-fe-checks"></section>';
+    const anchor = article.querySelector(':scope > .wf-focus-progress-meta') || article.lastElementChild;
+    anchor.before(form);
+    if (typeof wfRichEditor === 'function') wfRichEditor(form.querySelector('[name=description]'));
+    paintChecks();
+  };
+  const exit = () => {
+    flushPending();
+    editKey = null;
+    undo = null;
+    render();
+  };
+  const paint = () => {
+    if (view !== 'focus') {
+      editKey = null;
+      undo = null;
+      return;
+    }
+    const article = document.querySelector(SEL);
+    const { t } = current();
+    if (!article || !t) return;
+    if (editKey && editKey !== keyOf()) editKey = null;
+    if (article.querySelector('.zen-fe-toolbar, .zen-fe-form')) return;
+    if (editKey) return enter(article);
+    const bar0 = document.createElement('div');
+    bar0.className = 'zen-fe-toolbar';
+    bar0.innerHTML = '<button type="button" class="btn zen-fe-edit-btn" data-fe-edit>' + PENCIL + '<span>Sửa tại đây</span></button>';
+    article.prepend(bar0);
+  };
+  const before = wfPaintFocus;
+  wfPaintFocus = function () {
+    before();
+    paint();
+  };
+
+  // Lưu chữ đang gõ: tên và mô tả lưu sau khi ngừng gõ 0,6 giây và khi rời ô; không vẽ lại để không mất con trỏ.
+  const commitTitle = () => {
+    const input = document.querySelector('.zen-fe-form [name=title]');
+    const { t } = current();
+    if (!input || !t) return;
+    const value = input.value.trim();
+    if (!value) return;
+    if (value !== t.title && apply((x) => { x.title = value.slice(0, 200); })) {
+      const h1 = document.querySelector(SEL + ' h1');
+      if (h1) h1.textContent = value;
+      saved();
+    }
+  };
+  const commitDescription = () => {
+    const source = document.querySelector('.zen-fe-form [name=description]');
+    const { t } = current();
+    if (!source || !t) return;
+    const value = source.value;
+    if (value.length > 5000) return notify('Mô tả vượt giới hạn 5.000 ký tự.');
+    if (value !== (t.description || '') && apply((x) => { x.description = value; })) saved();
+  };
+  const flushPending = () => {
+    Object.values(timers).forEach(clearTimeout);
+    timers = {};
+    commitTitle();
+    commitDescription();
+  };
+  const later = (name, fn) => {
+    clearTimeout(timers[name]);
+    status('Đang lưu…');
+    timers[name] = setTimeout(fn, 600);
+  };
+
+  document.addEventListener('click', (event) => {
+    const target = event.target.closest('[data-fe-edit],[data-fe-done],[data-fe-move],[data-fe-remove],[data-fe-undo],[data-fe-add]');
+    if (!target) return;
+    const article = target.closest(SEL) || document.querySelector(SEL);
+    if (target.matches('[data-fe-edit]')) {
+      event.preventDefault();
+      if (!current().t || contentReadOnly) return contentReadOnly ? notify('Bản chia sẻ chỉ có quyền xem.') : undefined;
+      article.querySelector('.zen-fe-toolbar')?.remove();
+      enter(article);
+      article.querySelector('.zen-fe-form [name=title]')?.focus();
+      return;
+    }
+    if (target.matches('[data-fe-done]')) {
+      event.preventDefault();
+      return exit();
+    }
+    const row = target.closest('.zen-fe-row');
+    const id = row?.dataset.feId;
+    if (target.matches('[data-fe-move]')) {
+      event.preventDefault();
+      const dir = Number(target.dataset.feMove);
+      if (apply((t) => {
+        const i = t.checks.findIndex((c) => c.id === id), j = i + dir;
+        if (i < 0 || j < 0 || j >= t.checks.length) return;
+        [t.checks[i], t.checks[j]] = [t.checks[j], t.checks[i]];
+      })) {
+        saved();
+        paintChecks('.zen-fe-row[data-fe-id="' + id + '"] [data-fe-move="' + dir + '"]:not([disabled])');
+      }
+      return;
+    }
+    if (target.matches('[data-fe-remove]')) {
+      event.preventDefault();
+      const { t } = current();
+      const index = t?.checks.findIndex((c) => c.id === id);
+      if (index < 0) return;
+      const item = { ...t.checks[index] };
+      if (apply((x) => { x.checks.splice(x.checks.findIndex((c) => c.id === id), 1); syncChecks(x); })) {
+        undo = { tid: t.id, item, index };
+        saved();
+        paintChecks('[data-fe-new]');
+      }
+      return;
+    }
+    if (target.matches('[data-fe-undo]')) {
+      event.preventDefault();
+      if (!undo) return;
+      const { item, index } = undo;
+      if (apply((x) => { if (x.checks.length < MAX_CHECKS) x.checks.splice(Math.min(index, x.checks.length), 0, item); if (x.col === 'Done' && !x.checks.every((c) => c.done)) x.col = 'Doing'; })) {
+        undo = null;
+        saved();
+        paintChecks('.zen-fe-row[data-fe-id="' + item.id + '"] textarea');
+      }
+      return;
+    }
+    if (target.matches('[data-fe-add]')) {
+      event.preventDefault();
+      addFromInput();
+    }
+  });
+  const addFromInput = () => {
+    const input = document.querySelector('.zen-fe-form [data-fe-new]');
+    if (!input) return;
+    const lines = input.value.split('\n').map((s) => s.trim()).filter(Boolean);
+    if (!lines.length) return input.focus();
+    const { t } = current();
+    if (t.checks.length >= MAX_CHECKS) return notify('Tối đa 200 mục checklist mỗi việc.');
+    if (apply((x) => {
+      lines.slice(0, MAX_CHECKS - x.checks.length).forEach((text) => x.checks.push({ id: uid(), text: text.slice(0, 300), done: false }));
+      if (x.col === 'Done') x.col = 'Doing';
+    })) {
+      undo = null;
+      saved();
+      paintChecks('[data-fe-new]');
+    }
+  };
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Enter' && !event.shiftKey && !event.isComposing && event.target.matches?.('.zen-fe-form [data-fe-new]')) {
+      event.preventDefault();
+      addFromInput();
+    } else if (event.key === 'Enter' && !event.isComposing && event.target.matches?.('.zen-fe-form [name=title], .zen-fe-form textarea[data-fe-text]')) {
+      event.preventDefault();
+      event.target.blur();
+    } else if (event.key === 'Escape' && editKey && event.target.closest?.('.zen-fe-form')) {
+      event.preventDefault();
+      exit();
+    }
+  });
+  document.addEventListener('input', (event) => {
+    const el = event.target;
+    if (!el.closest?.('.zen-fe-form')) return;
+    if (el.matches('[name=title]')) later('title', commitTitle);
+    else if (el.matches('textarea[data-fe-text], textarea[data-fe-new]') && typeof fitCheckText === 'function') fitCheckText(el);
+    if (el.matches('[contenteditable]')) later('description', commitDescription);
+  });
+  document.addEventListener('focusout', (event) => {
+    if (event.target.closest?.('.zen-fe-form [contenteditable]')) setTimeout(() => { clearTimeout(timers.description); commitDescription(); }, 0);
+  });
+  document.addEventListener('change', (event) => {
+    const el = event.target;
+    if (!el.closest?.('.zen-fe-form')) return;
+    if (el.matches('[name=title]')) {
+      if (!el.value.trim()) {
+        el.value = current().t?.title || '';
+        return notify('Tên công việc không được để trống.');
+      }
+      clearTimeout(timers.title);
+      commitTitle();
+      return;
+    }
+    const row = el.closest('.zen-fe-row');
+    const id = row?.dataset.feId;
+    if (el.matches('[data-fe-toggle]')) {
+      const wasDone = current().t?.col === 'Done';
+      let nowDone = false;
+      if (apply((t) => {
+        const c = t.checks.find((x) => x.id === id);
+        if (!c) return;
+        c.done = el.checked;
+        syncChecks(t);
+        nowDone = t.col === 'Done';
+      })) {
+        saved();
+        row.classList.toggle('is-complete', el.checked);
+        refreshMeta();
+        const heading = document.querySelector('.zen-fe-checks h3 small');
+        const { t } = current();
+        if (heading && t) heading.textContent = t.checks.filter((c) => c.done).length + '/' + t.checks.length;
+        if (el.checked) celebrateCompletion(!wasDone && nowDone ? 'task' : 'check');
+      } else el.checked = !el.checked;
+    } else if (el.matches('textarea[data-fe-text]')) {
+      const value = el.value.trim();
+      const c = current().t?.checks.find((x) => x.id === id);
+      if (!c) return;
+      if (!value) {
+        el.value = c.text;
+        return notify('Nội dung mục không được để trống. Dùng nút × để xóa mục.');
+      }
+      if (value !== c.text && apply((t) => { t.checks.find((x) => x.id === id).text = value.slice(0, 300); })) saved();
+    }
+  });
+})();

@@ -3197,6 +3197,34 @@
 :root[data-theme=dark] .zen-check-hint {
     color: var(--zen-text-muted, #d2c5e1)
 }
+:root[data-theme=dark] .zen-fe-toolbar.is-editing {
+    background: #130f16
+}
+:root[data-theme=dark] .zen-fe-status {
+    color: var(--zen-text-muted, #d2c5e1)
+}
+:root[data-theme=dark] .zen-fe-checks h3 small {
+    color: var(--zen-text-muted, #d2c5e1)
+}
+:root[data-theme=dark] .zen-fe-row {
+    background: #16131a
+}
+:root[data-theme=dark] .zen-fe-row.is-complete {
+    background: var(--zen-done-bg, #131017)
+}
+:root[data-theme=dark] .zen-fe-row.is-complete textarea {
+    color: var(--zen-text-muted, #d2c5e1)
+}
+:root[data-theme=dark] .zen-fe-row:focus-within {
+    background: #110e15
+}
+:root[data-theme=dark] .zen-fe-row textarea {
+    border: 1px solid var(--zen-field-border, #9b89ac)
+}
+:root[data-theme=dark] .zen-fe-undo {
+    background: #17141b;
+    color: #e5c9a1
+}
 
 :root[data-theme=dark] {
   color-scheme: dark;
