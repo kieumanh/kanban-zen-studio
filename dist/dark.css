@@ -2212,8 +2212,9 @@
     border-color: #54455e !important;
     outline: 2px solid #4d4056
 }
-:root[data-theme=dark] .task-focus-shortcut::after {
-    color: #ffffff
+:root[data-theme=dark] #editor.wf-task-editor .wf-task-heading-row {
+    border: 1px solid #3d3843;
+    background: #17141b
 }
 :root[data-theme=dark] .project-note-picker {
     background: var(--surface,#1b181f)

@@ -36,10 +36,13 @@ try {
       document.querySelectorAll('.welcome-dialog').forEach((d) => d.remove());
     });
   const dialogShown = async () => {
+    // dailyWelcome bỏ qua nếu một lần gọi khác (do bộ hẹn giờ của chính trang) đang chạy; đợi nó xong rồi mới gọi để kết quả không phụ thuộc tốc độ máy.
+    await page.waitForFunction(() => !welcomeLoading);
     await page.evaluate(async () => {
       await loadReadReceipts(true);
       await dailyWelcome();
     });
+    await page.waitForFunction(() => !welcomeLoading);
     return page.locator('.welcome-dialog[open]').count();
   };
 

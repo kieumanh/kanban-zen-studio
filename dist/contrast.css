@@ -2212,8 +2212,9 @@
     border-color: #19141d !important;
     outline: 2px solid #19141c
 }
-:root[data-contrast=high] .task-focus-shortcut::after {
-    color: #ffffff
+:root[data-contrast=high] #editor.wf-task-editor .wf-task-heading-row {
+    border: 1px solid #171519;
+    background: #ffffff
 }
 :root[data-contrast=high] .project-note-picker {
     background: var(--surface,#ffffff)
@@ -5409,8 +5410,9 @@
     border-color: #cecece !important;
     outline: 2px solid #cecece
 }
-:root[data-theme=dark][data-contrast=high] .task-focus-shortcut::after {
-    color: #ffffff
+:root[data-theme=dark][data-contrast=high] #editor.wf-task-editor .wf-task-heading-row {
+    border: 1px solid #cecece;
+    background: #030303
 }
 :root[data-theme=dark][data-contrast=high] .project-note-picker {
     background: var(--surface,#030303)
