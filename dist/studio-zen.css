@@ -1446,3 +1446,10 @@ dialog[open] button[aria-label^="Đóng"],
 .wf-check-sort-list .compact-check > .zen-ck-pct { grid-column: 2 / -1; grid-row: auto; padding: 0 4px 0 0; }
 .zen-fe-row { grid-template-columns: 26px minmax(0, 1fr) auto; }
 .zen-fe-row > .zen-ck-pct { grid-column: 2 / -1; }
+/* v1.19.0: nhãn "Tiến độ" và số % tối thiểu 12px (bài kiểm cỡ chữ tối thiểu). */
+#editor .compact-check .zen-ck-pct,
+#editor .compact-check .zen-ck-pct-label,
+#editor .compact-check .zen-ck-pct output,
+.zen-fe-row .zen-ck-pct,
+.zen-fe-row .zen-ck-pct-label,
+.zen-fe-row .zen-ck-pct output { font-size: 12px; }
