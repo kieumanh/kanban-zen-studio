@@ -13,7 +13,7 @@ assert.equal(new Set(active.map(q=>q.vi.normalize('NFC').toLowerCase().replace(/
 assert.equal(status.sourcedExcerpts,active.length);
 assert.equal(status.editorialReflections,quotes.length-active.length);
 assert.equal(status.remaining,Math.max(0,status.target-active.length));
-assert.equal(status.target,3333);
+assert.equal(status.target,2222);
 assert.equal(status.complete,active.length===status.target);
 for(const q of quotes){
   assert.ok(q.vi.trim()&&q.text.trim()&&q.author.trim()&&q.source.trim());

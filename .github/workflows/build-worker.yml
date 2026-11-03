@@ -85,6 +85,7 @@ jobs:
           node tests/kanban-pin-removed-browser.mjs
           node tests/checklist-progress-browser.mjs
           node tests/welcome-flow-browser.mjs
+          node tests/welcome-long-quote-browser.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:

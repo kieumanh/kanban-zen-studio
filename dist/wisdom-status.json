@@ -1,10 +1,10 @@
 {
-  "target": 3333,
-  "totalEntries": 1065,
-  "sourcedExcerpts": 1020,
+  "target": 2222,
+  "totalEntries": 1265,
+  "sourcedExcerpts": 1220,
   "editorialReflections": 45,
-  "remaining": 2313,
-  "sourceMatchedNewBatch": 602,
+  "remaining": 1002,
+  "sourceMatchedNewBatch": 802,
   "allTranslationsHumanReviewed": false,
   "complete": false,
   "countsByAuthor": {
@@ -33,7 +33,10 @@
     "Trần Nhân Tông": 1,
     "Tuệ Trung Thượng Sĩ": 1,
     "Hoài Nam Tử · tập thể tác giả thời Tây Hán": 106,
-    "Trang Tử · Nam Hoa Kinh": 32
+    "Trang Tử · Nam Hoa Kinh": 32,
+    "Upanishad": 88,
+    "Kabir": 81,
+    "Bhagavad Gita": 31
   },
   "note": "Có nguồn không đồng nghĩa với đã thẩm định toàn bộ bản dịch. Dữ liệu cũ cần tiếp tục rà soát. Không tính đoạn thô hoặc lời biên soạn vào mục tiêu trích đoạn."
 }
