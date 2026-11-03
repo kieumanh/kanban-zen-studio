@@ -77,6 +77,7 @@ jobs:
           node tests/task-chips-browser.mjs
           node tests/checklist-browser.mjs
           node tests/focus-button-browser.mjs
+          node tests/focus-hover-browser.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:

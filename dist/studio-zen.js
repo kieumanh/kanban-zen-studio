@@ -968,3 +968,11 @@
     if (event.target.matches?.('.zen-check-add textarea') && typeof fitCheckText === 'function') fitCheckText(event.target);
   });
 })();
+
+// v1.17.6: thẻ việc ở Chế độ tập trung có hiệu ứng khi rê chuột / lấy tiêu điểm (CSS). Ở đây chỉ gắn màu dự án vào thẻ (--card-color) để vạch nhấn phía trên mang màu dự án.
+(() => {
+  const before = wfFocusCard;
+  wfFocusCard = function (t) {
+    return before(t).replace('class="wf-focus-card"', 'class="wf-focus-card" style="--card-color:' + esc(t.project.color) + '"');
+  };
+})();

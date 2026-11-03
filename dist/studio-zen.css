@@ -1249,3 +1249,23 @@ input[type="range"] {
   .zen-check-add .wf-add-check { align-self: flex-end; }
 }
 @media (prefers-reduced-motion: reduce) { .wf-check-sort-list .compact-check { transition: none; } }
+
+/* v1.17.6: hiệu ứng khi lướt chuột (hoặc dùng Tab) vào thẻ việc ở Chế độ tập trung — thẻ nhấc nhẹ, bóng tím mềm, vạch nhấn màu dự án chạy ra ở mép trên, chữ "Tập trung →" nhích sang phải.
+   Chỉ bật khi thiết bị có chuột (hover: hover) hoặc khi dùng bàn phím; chạm thì chỉ có hiệu ứng nhấn nhẹ. Tắt hẳn khi người dùng chọn giảm chuyển động. */
+.wf-focus-grid > .wf-focus-card { transition: transform 0.22s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.22s ease, border-color 0.18s ease, background-color 0.18s ease; }
+.wf-focus-grid > .wf-focus-card::before { content: ""; position: absolute; top: 0; left: 16px; right: 16px; height: 3px; border-radius: 0 0 4px 4px; background: var(--card-color, #7950c8); transform: scaleX(0); transform-origin: left center; transition: transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1); pointer-events: none; }
+.wf-focus-grid > .wf-focus-card .focus-card-action { display: inline-block; transition: transform 0.22s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.wf-focus-grid > .wf-focus-card:focus-visible { transform: translateY(-4px); box-shadow: 0 14px 28px #6c428e24; }
+.wf-focus-grid > .wf-focus-card:focus-visible::before { transform: scaleX(1); }
+.wf-focus-grid > .wf-focus-card:focus-visible .focus-card-action { transform: translateX(4px); }
+@media (hover: hover) {
+  .wf-focus-grid > .wf-focus-card:hover { transform: translateY(-4px); box-shadow: 0 14px 28px #6c428e24; }
+  .wf-focus-grid > .wf-focus-card:hover::before { transform: scaleX(1); }
+  .wf-focus-grid > .wf-focus-card:hover .focus-card-action { transform: translateX(4px); }
+}
+.wf-focus-grid > .wf-focus-card:active { transform: translateY(-1px) scale(0.99); transition-duration: 0.08s; }
+@media (prefers-reduced-motion: reduce) {
+  .wf-focus-grid > .wf-focus-card, .wf-focus-grid > .wf-focus-card::before, .wf-focus-grid > .wf-focus-card .focus-card-action { transition: none; }
+  .wf-focus-grid > .wf-focus-card:hover, .wf-focus-grid > .wf-focus-card:focus-visible, .wf-focus-grid > .wf-focus-card:active { transform: none; }
+  .wf-focus-grid > .wf-focus-card:hover .focus-card-action, .wf-focus-grid > .wf-focus-card:focus-visible .focus-card-action { transform: none; }
+}
