@@ -2486,10 +2486,10 @@
     background: #17141b
 }
 :root[data-theme=dark] .keep-card[data-zen-art]:not([data-zen-art=none]), :root[data-theme=dark] .content-card[data-zen-art]:not([data-zen-art=none]) {
-    background-image: linear-gradient(125deg,rgba(27,24,31,0.88),rgba(27,24,31,0.77) 58%,rgba(27,24,31,0.69)),var(--zen-art) !important
+    background-image: linear-gradient(125deg,rgba(27,24,31,0.94),rgba(27,24,31,0.9) 58%,rgba(27,24,31,0.86)),var(--zen-art) !important
 }
 :root[data-theme=dark] #editor.keep-editor .note-composer[data-zen-art]:not([data-zen-art=none]) {
-    background-image: linear-gradient(125deg,rgba(27,24,31,0.91),rgba(27,24,31,0.79) 58%,rgba(27,24,31,0.7)),var(--zen-art) !important
+    background-image: linear-gradient(125deg,rgba(27,24,31,0.95),rgba(27,24,31,0.9) 58%,rgba(27,24,31,0.84)),var(--zen-art) !important
 }
 :root[data-theme=dark] .side-pinned-notes .navlabel .ui-icon {
     color: #cfb4eb

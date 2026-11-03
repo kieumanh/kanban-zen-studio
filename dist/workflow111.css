@@ -332,9 +332,9 @@ body:not(.wf-is-focused) .zen-music{display:none!important}
 @media(max-width:700px){.wf-comments{padding:16px}.wf-comment{padding:12px}.wf-comments textarea{min-height:100px}.zen-task-delete{padding:12px}.zen-due-trigger{width:100%;min-width:0}.zen-quick-due label{width:100%;min-height:0}.task-table td.zen-quick-priority-cell .zen-priority-picker{width:100%;margin:0}.task-table td[data-label="Hạn chót"],.task-table td[data-label="Ưu tiên"]{align-items:center}}
 
 /* Spread note motifs across each surface; remove the shared corner thumbnail band. */
-.keep-card[data-zen-art]:not([data-zen-art=none]),.content-card[data-zen-art]:not([data-zen-art=none]){background-image:linear-gradient(125deg,rgba(255,255,255,.88),rgba(255,255,255,.77) 58%,rgba(255,255,255,.69)),var(--zen-art)!important;background-size:cover!important;background-position:center!important;background-repeat:no-repeat!important}
+.keep-card[data-zen-art]:not([data-zen-art=none]),.content-card[data-zen-art]:not([data-zen-art=none]){background-image:linear-gradient(125deg,rgba(255,255,255,.94),rgba(255,255,255,.9) 58%,rgba(255,255,255,.86)),var(--zen-art)!important;background-size:cover!important;background-position:center!important;background-repeat:no-repeat!important}
 .keep-card[data-zen-art]:not([data-zen-art=none])::before,.content-card[data-zen-art]:not([data-zen-art=none])::before,#editor.keep-editor .note-composer[data-zen-art]:not([data-zen-art=none])::before{content:none!important;display:none!important}
-#editor.keep-editor .note-composer[data-zen-art]:not([data-zen-art=none]){background-image:linear-gradient(125deg,rgba(255,255,255,.91),rgba(255,255,255,.79) 58%,rgba(255,255,255,.7)),var(--zen-art)!important;background-size:cover!important;background-position:center!important;background-repeat:no-repeat!important}
+#editor.keep-editor .note-composer[data-zen-art]:not([data-zen-art=none]){background-image:linear-gradient(125deg,rgba(255,255,255,.95),rgba(255,255,255,.9) 58%,rgba(255,255,255,.84)),var(--zen-art)!important;background-size:cover!important;background-position:center!important;background-repeat:no-repeat!important}
 
 @media(max-width:700px){.month-cell{height:auto!important}.month-event{display:block!important;width:100%;white-space:normal;max-height:none!important}.month-grid{align-items:stretch}.zen-calendar-date{max-width:100%;font-size:11px}}
 

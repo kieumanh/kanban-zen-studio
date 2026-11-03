@@ -80,6 +80,7 @@ jobs:
           node tests/focus-hover-browser.mjs
           node tests/focus-edit-browser.mjs
           node tests/close-animation-browser.mjs
+          node tests/note-art-soft-browser.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
