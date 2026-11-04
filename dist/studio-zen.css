@@ -1049,9 +1049,6 @@ input[type="range"] {
   margin: 0;
 }
 #editor .zen-theme-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
   margin: 0;
   padding: 0;
   border: 0;
@@ -1060,36 +1057,117 @@ input[type="range"] {
 #editor .zen-theme-group legend {
   padding: 0;
   margin-bottom: 8px;
-  font-weight: 650;
-  color: var(--ink);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+/* v1.21.1: danh sách một cột, có icon, mô tả và dấu tích ở ô đang chọn (mẫu "Appearance"). */
+#editor .zen-theme-list {
+  display: grid;
+  gap: 6px;
+  padding: 6px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--paper);
 }
 #editor .zen-theme-choice {
   position: relative;
-  display: inline-flex;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr) 24px;
   align-items: center;
-  gap: 8px;
-  min-height: 44px;
-  padding: 8px 14px;
-  border: 1px solid var(--zen-field-border);
-  border-radius: 12px;
-  background: var(--paper);
+  gap: 12px;
+  min-height: 52px;
+  padding: 8px 12px;
+  border-radius: 14px;
   color: var(--ink);
   cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.16s ease;
+}
+#editor .zen-theme-choice:hover {
+  background: color-mix(in srgb, var(--brand-purple) 6%, transparent);
+}
+#editor .zen-theme-choice:active {
+  transform: scale(0.99);
 }
 #editor .zen-theme-choice:has(input:checked) {
-  border-color: var(--zen-text-accent);
-  background: var(--tint);
-  box-shadow: inset 0 0 0 1px var(--zen-text-accent);
+  background: color-mix(in srgb, var(--brand-purple) 11%, var(--paper));
 }
 #editor .zen-theme-choice:has(input:focus-visible) {
   outline: 3px solid var(--zen-text-accent);
   outline-offset: 2px;
 }
+/* Ô radio thật phủ kín cả dòng nhưng trong suốt: bấm vào đâu trên dòng cũng chọn đúng lựa chọn, và bàn phím/trình đọc màn hình vẫn dùng radio thật. */
 #editor .zen-theme-choice input {
-  width: 18px;
-  height: 18px;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   margin: 0;
-  accent-color: var(--zen-text-accent);
+  opacity: 0;
+  cursor: pointer;
+  z-index: 1;
+}
+#editor .zen-theme-icon {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--brand-purple) 10%, var(--paper));
+  color: var(--brand-purple);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+#editor .zen-theme-icon svg {
+  width: 20px;
+  height: 20px;
+}
+#editor .zen-theme-choice:has(input:checked) .zen-theme-icon {
+  background: var(--brand-purple);
+  color: #fff;
+}
+#editor .zen-theme-text {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+#editor .zen-theme-text strong {
+  font-size: 15px;
+  line-height: 1.3;
+  font-weight: 700;
+  color: var(--ink);
+}
+#editor .zen-theme-text small {
+  font-size: 12px;
+  line-height: 1.35;
+  color: var(--muted);
+}
+#editor .zen-theme-check {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  color: transparent;
+  transition: color 0.2s ease, background-color 0.2s ease, transform 0.2s cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+#editor .zen-theme-tick {
+  width: 16px;
+  height: 16px;
+}
+#editor .zen-theme-choice:has(input:checked) .zen-theme-check {
+  color: #fff;
+  background: var(--brand-purple);
+  transform: scale(1.05);
+}
+@media (prefers-reduced-motion: reduce) {
+  #editor .zen-theme-choice,
+  #editor .zen-theme-icon,
+  #editor .zen-theme-check {
+    transition: none;
+  }
 }
 
 /* v1.17.1: thông báo gọn, dễ quét. Hộp thoại Thông báo gom việc theo nhóm (Quá hạn / Sắp đến hạn / Quan trọng / Khác), mỗi việc một hàng; thanh nhắc hạn và hộp "Công việc cần chú ý" cùng bảng màu theo mức độ.

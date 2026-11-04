@@ -3053,6 +3053,12 @@
 :root[data-theme=dark] #editor .zen-danger-zone .zen-danger-button:focus-visible {
     outline: 3px solid #f49b9d
 }
+:root[data-theme=dark] #editor .zen-theme-choice:has(input:checked) .zen-theme-icon {
+    color: #ffffff
+}
+:root[data-theme=dark] #editor .zen-theme-choice:has(input:checked) .zen-theme-check {
+    color: #ffffff
+}
 :root[data-theme=dark] #editor .notice-stats [data-kind="late"] {
     color: #feb0bc;
     background: #151219;

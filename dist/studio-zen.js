@@ -637,13 +637,26 @@
 // `dark.css` và `contrast.css` (sinh tự động từ CSS nguồn bằng scripts/generate-themes.mjs). Đây là phần giao diện chọn: mục "Giao diện" trong Cài đặt.
 // Lựa chọn lưu trên thiết bị này (localStorage), không đồng bộ lên máy chủ và không đụng vào dữ liệu làm việc.
 (() => {
+  // v1.21.1: lựa chọn dạng danh sách có icon, mô tả ngắn và dấu tích ở ô đang chọn (giống mẫu "Appearance").
+  // Giữ nguyên input radio (name/value) để bàn phím, trình đọc màn hình và các test hiện có vẫn hoạt động.
+  const ICONS = {
+    system: '<path d="M4 5h16v11H4z M9 20h6 M12 16v4"/>',
+    light: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2 M12 20v2 M4.9 4.9l1.4 1.4 M17.7 17.7l1.4 1.4 M2 12h2 M20 12h2 M4.9 19.1l1.4-1.4 M17.7 6.3l1.4-1.4"/>',
+    dark: '<path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/>',
+    normal: '<circle cx="12" cy="12" r="8"/>',
+    high: '<circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/>',
+  };
+  const CHECK = '<svg class="zen-theme-tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7.5"/></svg>';
+  const svgOf = (key) => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (ICONS[key] || '') + '</svg>';
   const choices = (name, legend, options, current, onChange) => {
     const set = document.createElement('fieldset');
     set.className = 'zen-theme-group';
     const title = document.createElement('legend');
     title.textContent = legend;
     set.append(title);
-    options.forEach(([value, label]) => {
+    const list = document.createElement('div');
+    list.className = 'zen-theme-list';
+    options.forEach(([value, label, sub, icon]) => {
       const row = document.createElement('label');
       row.className = 'zen-theme-choice';
       const input = document.createElement('input');
@@ -652,11 +665,26 @@
       input.value = value;
       input.checked = value === current;
       input.addEventListener('change', () => input.checked && onChange(value));
+      const mark = document.createElement('span');
+      mark.className = 'zen-theme-icon';
+      mark.innerHTML = svgOf(icon);
       const text = document.createElement('span');
-      text.textContent = label;
-      row.append(input, text);
-      set.append(row);
+      text.className = 'zen-theme-text';
+      const strong = document.createElement('strong');
+      strong.textContent = label;
+      text.append(strong);
+      if (sub) {
+        const small = document.createElement('small');
+        small.textContent = sub;
+        text.append(small);
+      }
+      const tick = document.createElement('span');
+      tick.className = 'zen-theme-check';
+      tick.innerHTML = CHECK;
+      row.append(input, mark, text, tick);
+      list.append(row);
     });
+    set.append(list);
     return set;
   };
   const baseAccountPanel = accountPanel;
@@ -681,8 +709,8 @@
     section.append(
       heading,
       help,
-      choices('zen-theme', 'Màu giao diện', [['system', 'Theo hệ thống'], ['light', 'Sáng'], ['dark', 'Tối']], read('zen-theme'), (v) => window.zenTheme.setTheme(v)),
-      choices('zen-contrast', 'Độ tương phản', [['system', 'Theo hệ thống'], ['normal', 'Thường'], ['high', 'Cao']], read('zen-contrast'), (v) => window.zenTheme.setContrast(v)),
+      choices('zen-theme', 'Màu giao diện', [['system', 'Theo hệ thống', 'Theo thiết bị', 'system'], ['light', 'Sáng', 'Nền sáng', 'light'], ['dark', 'Tối', 'Nền tối', 'dark']], read('zen-theme'), (v) => window.zenTheme.setTheme(v)),
+      choices('zen-contrast', 'Độ tương phản', [['system', 'Theo hệ thống', 'Theo thiết bị', 'system'], ['normal', 'Thường', 'Màu dịu, như mặc định', 'normal'], ['high', 'Cao', 'Viền và chữ rõ hơn', 'high']], read('zen-contrast'), (v) => window.zenTheme.setContrast(v)),
     );
     const anchor = body.querySelector('h3.settings-section');
     if (anchor) anchor.before(section);
