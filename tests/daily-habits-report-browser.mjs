@@ -54,9 +54,10 @@ try {
     assert.equal(s1.check, '1', 'dấu tích giữa vòng phải hiện');
     assert.equal(s1.stroke, 'rgb(46, 125, 91)', 'vòng đổi sang xanh khi hoàn thành');
     assert.match(s1.cheer, /hoàn thành tất cả/);
-    assert.equal(s1.full, true, 'thanh cộng gộp đầy phải đổi màu xanh');
-    assert.equal(s1.pct, '100%', 'một việc, mới tạo hôm nay, đã tích → 100% (chỉ tính từ ngày tạo)');
-    assert.equal(s1.width, '100%');
+    // v1.22.0: tiến độ tính theo mục tiêu tuần (mặc định 7 lần/tuần). Một việc mục tiêu 7, tích 1 lần → 1/7.
+    assert.equal(s1.full, false, 'chưa đạt mục tiêu tuần thì thanh chưa đầy');
+    assert.equal(s1.pct, '14%', 'một việc mục tiêu 7 lần/tuần, tích 1 lần → 14%');
+    assert.equal(s1.width, '14%');
     // Bỏ tích: mọi thứ phải quay lại.
     await page.click(`[data-hb-date="${day}"]`);
     await wait(page, 400);
@@ -70,11 +71,11 @@ try {
     const { page, server } = await h.open(1440, { workspace: ws });
     server.mode = 'reject400';
     await h.show(page, 'habits');
-    const total = dow + 1;
+    // v1.22.0: hai việc, mỗi việc mục tiêu 7 lần/tuần → tổng 14 lượt; tích 1 lần → 1/14.
     await page.click(`[data-hb-row="a"] [data-hb-date="${back(1)}"]`);
     await wait(page, 500);
     const pct = await page.evaluate(() => Number(document.querySelector('#hb-progress-pct').textContent.replace('%', '')));
-    assert.equal(pct, Math.round((1 / (total * 2)) * 100), 'thanh cộng gộp phải đổi ngay khi tích một ngày đã qua, kể cả khi chưa đồng bộ được');
+    assert.equal(pct, Math.round((1 / 14) * 100), 'thanh cộng gộp phải đổi ngay khi tích một ngày đã qua, kể cả khi chưa đồng bộ được');
     assert.equal(await page.locator('#hb-summary-count').innerText(), '0/2', 'hôm nay vẫn 0/2');
     await page.click(`[data-hb-row="a"] [data-hb-date="${day}"]`);
     await page.click(`[data-hb-row="b"] [data-hb-date="${day}"]`);

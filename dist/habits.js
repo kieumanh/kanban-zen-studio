@@ -33,19 +33,35 @@
     }
     return n;
   }
-  const weekDone = (h) => days().filter((d) => h.done.includes(d)).length;
+  const weekDone = (h) => { const s = weekStats(h, week()); return s ? s.n : 0; };
   const todayDone = () => list().filter((h) => h.done.includes(today())).length;
-  // Một ngày được tính cho một việc khi đã tới ngày và (việc đã tạo từ ngày đó hoặc người dùng tích bổ sung).
-  const tracked = (h, d) => d <= today() && (d >= h.createdAt || h.done.includes(d));
-  // v1.21.0: tiến độ cộng gộp của tuần đang xem = số lượt đã tích / số lượt cần tích (mọi việc, các ngày đã tới).
+  // v1.22.0: mục tiêu mỗi việc = số lần trong tuần người dùng chọn (1–7). Việc cũ không có mục tiêu tính như mỗi ngày (7).
+  const goalOf = (h) => (Number.isInteger(h.goal) && h.goal >= 1 && h.goal <= 7 ? h.goal : 7);
+  // Thống kê một việc trong một tuần (bắt đầu từ thứ Hai `mon`): g = mục tiêu, n = số lượt tích trong tuần, tối đa g.
+  // Việc tạo sau Chủ nhật của tuần đó không tính vào tuần ấy.
+  function weekStats(h, mon) {
+    const sun = addDays(mon, 6);
+    if (h.createdAt > sun) return null;
+    const g = goalOf(h);
+    let n = 0;
+    for (const d of h.done) if (d >= mon && d <= sun) n++;
+    return { g, n: Math.min(n, g), raw: n };
+  }
+  // Tiến độ cộng gộp của tuần đang xem: tổng lượt tích được tính (mỗi việc tối đa đúng số lần đã chọn) / tổng mục tiêu.
   function weekProgress() {
+    const mon = week();
     let tr = 0, dn = 0;
-    for (const h of list()) for (const d of days()) if (tracked(h, d)) { tr++; if (h.done.includes(d)) dn++; }
+    for (const h of list()) {
+      const s = weekStats(h, mon);
+      if (!s) continue;
+      tr += s.g;
+      dn += s.n;
+    }
     return { tr, dn, pct: tr ? Math.round((dn / tr) * 100) : 0 };
   }
   let mode = 'week';
   let range = 30;
-  window.zenHabits = { list, today: () => today(), addDays, toDate, mondayOf, short, streak, tracked, SHORT, LONG, esc: (s) => esc(s) };
+  window.zenHabits = { list, today: () => today(), addDays, toDate, mondayOf, short, streak, goalOf, weekStats, SHORT, LONG, esc: (s) => esc(s) };
 
   iconPaths.habits = 'M4 12a8 8 0 0 1 14-5.3L20 9 M20 4v5h-5 M20 12a8 8 0 0 1-14 5.3L4 15 M4 20v-5h5 M9.5 12l2 2 3.5-4';
   const flame = '<svg class="hb-flame" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3c1 3.5 5 5.5 5 10a5 5 0 0 1-10 0c0-2 1-3.2 2-4.2 0 2 1 3 2 3 0-3 0-5.8 1-8.8z"/></svg>';
@@ -55,13 +71,22 @@
   const gridIcon = '<svg class="hb-rp-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><path d="M14.5 17l2 2 3.5-4"/></svg>';
   function checkButton(h, d) {
     const done = h.done.includes(d),
-      future = d > today(),
       i = (toDate(d).getUTCDay() + 6) % 7;
-    return '<div class="hb-cell' + (d === today() ? ' is-today' : '') + '"><span class="hb-dayname" aria-hidden="true">' + SHORT[i] + '</span><button type="button" class="hb-check' + (done ? ' is-done' : '') + '" role="checkbox" aria-checked="' + done + '" data-hb-toggle="' + esc(h.id) + '" data-hb-date="' + d + '"' + (future ? ' disabled' : '') + ' aria-label="' + esc(h.name) + ' — ' + LONG[i] + ' ' + short(d) + (future ? ' (chưa đến ngày)' : '') + '">' + tick + '</button></div>';
+    return '<div class="hb-cell' + (d === today() ? ' is-today' : '') + '"><span class="hb-dayname" aria-hidden="true">' + SHORT[i] + '</span><button type="button" class="hb-check' + (done ? ' is-done' : '') + '" role="checkbox" aria-checked="' + done + '" data-hb-toggle="' + esc(h.id) + '" data-hb-date="' + d + '"' + '' + ' aria-label="' + esc(h.name) + ' — ' + LONG[i] + ' ' + short(d) + '' + '">' + tick + '</button></div>';
   }
+  // v1.22.0: liên kết dự án (hiển thị ở từng việc để biết việc này phục vụ dự án nào).
+  const projectOf = (h) => (h.projectId ? (data.projects || []).find((p) => p.id === h.projectId) : null);
+  function projectChip(h) {
+    if (!h.projectId) return '';
+    const p = projectOf(h);
+    if (!p) return '<span class="hb-project is-missing">Dự án đã xóa</span>';
+    return '<span class="hb-project" style="--pc:' + esc(p.color) + '" title="Dự án liên quan"><i aria-hidden="true"></i>' + esc(p.name) + '</span>';
+  }
+  const goalLabel = (g) => (g === 7 ? 'Mỗi ngày (7 lần)' : g + ' lần mỗi tuần');
   function meta(h) {
     const s = streak(h);
-    return '<span class="hb-streak' + (s ? ' is-on' : '') + '">' + flame + (s ? 'Chuỗi ' + s + ' ngày' : 'Chưa có chuỗi') + '</span><span class="hb-week-count">' + weekDone(h) + '/7 trong tuần</span>';
+    const g = goalOf(h);
+    return '<span class="hb-streak' + (s ? ' is-on' : '') + '">' + flame + (s ? 'Chuỗi ' + s + ' ngày' : 'Chưa có chuỗi') + '</span><span class="hb-week-count">' + weekDone(h) + '/' + g + ' trong tuần</span>' + projectChip(h);
   }
   function row(h) {
     return '<li class="hb-row" data-hb-row="' + esc(h.id) + '" style="--hb:' + esc(h.color) + '"><div class="hb-info"><span class="hb-icon" aria-hidden="true">' + esc(h.icon || '✳') + '</span><div class="hb-text"><strong class="hb-name">' + esc(h.name) + '</strong><span class="hb-meta">' + meta(h) + '</span></div><div class="hb-actions"><button type="button" class="icon-btn hb-act" data-hb-edit="' + esc(h.id) + '" aria-label="Sửa ' + esc(h.name) + '" title="Sửa">' + svgIcon('edit') + '</button><button type="button" class="icon-btn hb-act hb-del" data-hb-delete="' + esc(h.id) + '" aria-label="Xóa ' + esc(h.name) + '" title="Xóa">' + svgIcon('trash') + '</button></div></div><div class="hb-days">' + days().map((d) => checkButton(h, d)).join('') + '</div></li>';
@@ -81,7 +106,7 @@
       current = week() === mondayOf(today());
     return '<div class="hb-progress' + (p.pct === 100 && p.tr ? ' is-full' : '') + '" id="hb-progress"><div class="hb-progress-head"><span id="hb-progress-title">' + (current ? 'Tiến độ tuần này' : 'Tiến độ tuần ' + short(week()) + ' – ' + short(addDays(week(), 6))) + '</span><strong id="hb-progress-pct">' + p.pct + '%</strong></div><div class="hb-bar" id="hb-bar" role="progressbar" aria-label="Tiến độ cộng gộp của tất cả việc trong tuần" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + p.pct + '"><span style="width:' + p.pct + '%"></span></div><small id="hb-progress-note">' + progressNote(p) + '</small></div>';
   }
-  const progressNote = (p) => (p.tr ? p.dn + '/' + p.tr + ' lượt đã tích, cộng gộp mọi việc' : 'Chưa có ngày nào để tính trong tuần này');
+  const progressNote = (p) => (p.tr ? p.dn + '/' + p.tr + ' lượt theo mục tiêu, cộng gộp mọi việc' : 'Chưa có việc nào trong tuần này');
   function head() {
     const labels = days().map((d, i) => '<span class="' + (d === today() ? 'is-today' : '') + '"><b>' + SHORT[i] + '</b><small>' + short(d).slice(0, 2) + '</small></span>').join('');
     return '<div class="hb-head" aria-hidden="true"><span></span><div class="hb-days">' + labels + '</div></div>';
@@ -170,12 +195,27 @@
   function form(h) {
     if (!h && list().length >= MAX) return notify('Tối đa ' + MAX + ' việc hằng ngày.');
     const color = h?.color || COLORS[list().length % COLORS.length];
-    modal('<h2>' + (h ? 'Chỉnh sửa việc hằng ngày' : 'Thêm việc hằng ngày') + '</h2><div class="hb-form"><div class="hb-preview" id="hb-preview" style="--hb:' + color + '" aria-hidden="true"><span class="hb-icon">' + esc(h?.icon || '🌿') + '</span><span class="hb-preview-name">' + (esc(h?.name) || 'Tên việc của bạn') + '</span><span class="hb-preview-check">' + tick + '</span></div>' + field('Tên việc', 'name', h?.name || '', 'text', true, 80) + '<div class="hb-icon-field">' + field('Biểu tượng (1 ký tự)', 'icon', h?.icon || '🌿', 'text', true, 8) + '<div class="hb-icon-picks" role="group" aria-label="Gợi ý biểu tượng">' + ICONS.map((i) => '<button type="button" class="hb-icon-pick" data-hb-icon="' + i + '" aria-label="Chọn biểu tượng ' + i + '">' + i + '</button>').join('') + '</div></div><fieldset class="hb-swatches"><legend>Màu dấu tích</legend>' + COLORS.map((c, i) => '<label class="hb-swatch" style="--hb:' + c + '"><input type="radio" name="color" value="' + c + '"' + (c === color ? ' checked' : '') + '><span aria-hidden="true"></span><em class="sr-only">Màu ' + (i + 1) + '</em></label>').join('') + '</fieldset>' + (h ? '<button type="button" class="text-btn danger hb-form-delete" data-hb-delete="' + esc(h.id) + '">Xóa việc này</button>' : '') + '</div>', (fd) => {
+    const goal = h ? goalOf(h) : 7;
+    const pid = h?.projectId || '';
+    const options = (data.projects || []).filter((p) => !p.archived || p.id === pid);
+    const projectField = '<label class="field hb-project-field">Dự án liên quan<select name="projectId"><option value="">Không gắn dự án</option>' + options.map((p) => '<option value="' + esc(p.id) + '"' + (p.id === pid ? ' selected' : '') + '>' + esc(p.name) + '</option>').join('') + '</select></label>';
+    const goalField = '<div class="hb-goal"><span class="hb-goal-label" id="hb-goal-title">Số lần trong tuần</span><div class="hb-stepper" role="group" aria-labelledby="hb-goal-title"><button type="button" class="hb-step" data-hb-goal-step="-1" aria-label="Giảm số lần trong tuần">−</button><output class="hb-step-value" id="hb-goal-value" aria-live="polite">' + goalLabel(goal) + '</output><button type="button" class="hb-step" data-hb-goal-step="1" aria-label="Tăng số lần trong tuần">+</button></div><input type="hidden" name="goal" value="' + goal + '"></div>';
+    modal('<h2>' + (h ? 'Chỉnh sửa việc hằng ngày' : 'Thêm việc hằng ngày') + '</h2><div class="hb-form"><div class="hb-preview" id="hb-preview" style="--hb:' + color + '" aria-hidden="true"><span class="hb-icon">' + esc(h?.icon || '🌿') + '</span><span class="hb-preview-name">' + (esc(h?.name) || 'Tên việc của bạn') + '</span><span class="hb-preview-check">' + tick + '</span></div>' + field('Tên việc', 'name', h?.name || '', 'text', true, 80) + goalField + projectField + '<div class="hb-icon-field">' + field('Biểu tượng (1 ký tự)', 'icon', h?.icon || '🌿', 'text', true, 8) + '<div class="hb-icon-picks" role="group" aria-label="Gợi ý biểu tượng">' + ICONS.map((i) => '<button type="button" class="hb-icon-pick" data-hb-icon="' + i + '" aria-label="Chọn biểu tượng ' + i + '">' + i + '</button>').join('') + '</div></div><fieldset class="hb-swatches"><legend>Màu dấu tích</legend>' + COLORS.map((c, i) => '<label class="hb-swatch" style="--hb:' + c + '"><input type="radio" name="color" value="' + c + '"' + (c === color ? ' checked' : '') + '><span aria-hidden="true"></span><em class="sr-only">Màu ' + (i + 1) + '</em></label>').join('') + '</fieldset>' + (h ? '<button type="button" class="text-btn danger hb-form-delete" data-hb-delete="' + esc(h.id) + '">Xóa việc này</button>' : '') + '</div>', (fd) => {
       const name = String(fd.get('name') || '').trim(), icon = String(fd.get('icon') || '').trim() || '🌿', col = String(fd.get('color') || color);
+      const g = Math.min(7, Math.max(1, parseInt(fd.get('goal'), 10) || 7)), link = String(fd.get('projectId') || '');
       if (!name) return;
       if (wfSave(() => {
-        if (h) { const t = find(h.id); if (!t) throw Error('Việc này không còn tồn tại.'); Object.assign(t, { name, icon, color: col }); }
-        else { data.dailyHabits = list().concat({ id: uid(), name, icon, color: col, createdAt: today(), done: [] }); }
+        if (h) {
+          const t = find(h.id);
+          if (!t) throw Error('Việc này không còn tồn tại.');
+          Object.assign(t, { name, icon, color: col, goal: g });
+          if (link) t.projectId = link;
+          else delete t.projectId;
+        } else {
+          const item = { id: uid(), name, icon, color: col, goal: g, createdAt: today(), done: [] };
+          if (link) item.projectId = link;
+          data.dailyHabits = list().concat(item);
+        }
       })) { $('#editor').close(); render(); notify(h ? 'Đã cập nhật việc hằng ngày.' : 'Đã thêm việc hằng ngày.'); }
     });
     const eyebrow = document.querySelector('#modal-eyebrow');
@@ -192,7 +232,7 @@
   }
 
   document.addEventListener('click', (e) => {
-    const t = e.target.closest('[data-hb-toggle],[data-hb-add],[data-hb-edit],[data-hb-delete],[data-hb-confirm-delete],[data-hb-cancel],[data-hb-week],[data-hb-preset],[data-hb-icon],[data-hb-mode],[data-hb-range]');
+    const t = e.target.closest('[data-hb-toggle],[data-hb-add],[data-hb-edit],[data-hb-delete],[data-hb-confirm-delete],[data-hb-cancel],[data-hb-week],[data-hb-preset],[data-hb-icon],[data-hb-mode],[data-hb-range],[data-hb-goal-step]');
     if (!t) return;
     if (t.dataset.hbToggle) {
       const h = find(t.dataset.hbToggle), d = t.dataset.hbDate;
@@ -236,6 +276,14 @@
       if (list().length >= MAX) return notify('Tối đa ' + MAX + ' việc hằng ngày.');
       const [icon, name] = PRESETS.find(([, n]) => n === t.dataset.hbPreset) || [];
       if (name && wfSave(() => { data.dailyHabits = list().concat({ id: uid(), name, icon, color: COLORS[list().length % COLORS.length], createdAt: today(), done: [] }); })) { render(); notify('Đã thêm “' + name + '”.'); }
+      return;
+    }
+    if (t.dataset.hbGoalStep) {
+      const input = document.querySelector('#editor-body [name=goal]'), out = document.querySelector('#hb-goal-value');
+      if (!input || !out) return;
+      const v = Math.min(7, Math.max(1, (parseInt(input.value, 10) || 7) + Number(t.dataset.hbGoalStep)));
+      input.value = String(v);
+      out.textContent = goalLabel(v);
       return;
     }
     if (t.dataset.hbIcon) {

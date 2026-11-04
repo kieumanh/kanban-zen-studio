@@ -355,6 +355,17 @@ function validHabits(list) {
     if (typeof h.color !== 'string' || !/^#[0-9a-fA-F]{6}$/.test(h.color))
       return false;
     if (
+      h.goal !== undefined &&
+      !(Number.isInteger(h.goal) && h.goal >= 1 && h.goal <= 7)
+    )
+      return false;
+    if (
+      h.projectId !== undefined &&
+      (typeof h.projectId !== 'string' ||
+        !/^[A-Za-z0-9_-]{1,99}$/.test(h.projectId))
+    )
+      return false;
+    if (
       typeof h.createdAt !== 'string' ||
       h.createdAt === '' ||
       !validDate(h.createdAt)

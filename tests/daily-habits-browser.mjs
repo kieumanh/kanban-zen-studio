@@ -94,12 +94,11 @@ try {
     assert.match(done.streak, /Chuỗi 1 ngày/);
     assert.match(done.week, /^1\/7/);
     assert.ok(Math.abs(Number(done.ring) - Math.PI * 22) < 0.5, 'vòng tiến độ phải đầy một nửa: ' + done.ring);
-    // Ngày quá khứ: tích được; ngày tương lai: không tích được.
+    // v1.22.0 (yêu cầu có chủ đích): mọi ngày trong tuần, kể cả T7/CN, đều tích được — không còn ô nào bị khóa.
     const ws = await page.evaluate(() => document.querySelector('#hb-week-label').textContent);
-    const future = page.locator('[data-hb-row] [data-hb-toggle][disabled]');
-    const futureCount = await future.count();
+    const futureCount = await page.locator('[data-hb-row] [data-hb-toggle][disabled]').count();
     const dow = (new Date(day + 'T12:00:00Z').getUTCDay() + 6) % 7;
-    assert.equal(futureCount, (6 - dow) * 2, 'các ô sau hôm nay phải bị khóa (' + ws + ')');
+    assert.equal(futureCount, 0, 'không ô nào bị khóa, kể cả ngày tương lai (' + ws + ')');
     if (dow > 0) {
       await page.click(`[data-hb-row] [data-hb-date="${back(1)}"] >> nth=0`);
       await page.waitForFunction(() => document.querySelector('.hb-row .hb-streak').textContent.includes('2 ngày'));

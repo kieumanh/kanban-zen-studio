@@ -12,13 +12,35 @@
   }
   function dayStat(hs, d) {
     let tr = 0, dn = 0;
-    for (const h of hs) if (Z().tracked(h, d)) { tr++; if (h.done.includes(d)) dn++; }
+    for (const h of hs) if (d >= h.createdAt) { tr++; if (h.done.includes(d)) dn++; }
     return { d, tr, dn, rate: tr ? dn / tr : null };
+  }
+  // v1.22.0: tỷ lệ theo mục tiêu tuần, cùng quy tắc với thanh tiến độ: mỗi việc đóng góp tối đa `goal` lượt mỗi tuần.
+  // Biểu đồ theo ngày (perDay) vẫn dùng dayStat để thể hiện nhịp từng ngày.
+  function weeksOf(days) {
+    return [...new Set(days.map((d) => Z().mondayOf(d)))].sort();
+  }
+  function weekly(hs, days) {
+    const weeks = weeksOf(days);
+    const perHabit = hs.map((h) => {
+      let tr = 0, dn = 0;
+      for (const mon of weeks) {
+        const sun = Z().addDays(mon, 6);
+        if (h.createdAt > sun) continue;
+        const g = Z().goalOf(h);
+        const n = h.done.filter((d) => d >= mon && d <= sun).length;
+        tr += g;
+        dn += Math.min(n, g);
+      }
+      return { h, tr, dn, rate: tr ? dn / tr : null };
+    });
+    const tr = perHabit.reduce((s, x) => s + x.tr, 0), dn = perHabit.reduce((s, x) => s + x.dn, 0);
+    return { tr, dn, rate: tr ? dn / tr : null, perHabit };
   }
   function period(hs, days) {
     const perDay = days.map((d) => dayStat(hs, d));
-    const tr = perDay.reduce((s, x) => s + x.tr, 0), dn = perDay.reduce((s, x) => s + x.dn, 0);
-    return { perDay, tr, dn, rate: tr ? dn / tr : null };
+    const wk = weekly(hs, days);
+    return { perDay, tr: wk.tr, dn: wk.dn, rate: wk.rate, perHabit: wk.perHabit };
   }
   function longest(h) {
     let best = 0, run = 0, prev = null;
@@ -36,11 +58,7 @@
   }
   function stats(n) {
     const hs = Z().list(), days = span(n), cur = period(hs, days), prev = period(hs, span(n, n));
-    const perHabit = hs.map((h) => {
-      let tr = 0, dn = 0;
-      for (const d of days) if (Z().tracked(h, d)) { tr++; if (h.done.includes(d)) dn++; }
-      return { h, tr, dn, rate: tr ? dn / tr : null, streak: Z().streak(h), best: longest(h), idle: idle(h) };
-    });
+    const perHabit = cur.perHabit.map((x) => ({ ...x, streak: Z().streak(x.h), best: longest(x.h), idle: idle(x.h) }));
     const wd = Array.from({ length: 7 }, () => ({ tr: 0, dn: 0 }));
     for (const p of cur.perDay) { const i = dowOf(p.d); wd[i].tr += p.tr; wd[i].dn += p.dn; }
     return { n, hs, days, cur, prev, perHabit, wd, allDone: hs.reduce((s, h) => s + h.done.length, 0) };
@@ -57,7 +75,7 @@
       return out;
     }
     out.level = r >= 85 ? { key: 'excellent', label: 'Xuất sắc' } : r >= 70 ? { key: 'good', label: 'Tốt' } : r >= 50 ? { key: 'forming', label: 'Đang hình thành' } : { key: 'low', label: 'Cần nâng đỡ' };
-    out.summary = 'Trong ' + s.n + ' ngày qua bạn hoàn thành ' + r + '% (' + s.cur.dn + '/' + s.cur.tr + ' lượt tích).';
+    out.summary = 'Trong ' + s.n + ' ngày qua bạn hoàn thành ' + r + '% (' + s.cur.dn + '/' + s.cur.tr + ' lượt theo mục tiêu tuần).';
     if (s.prev.tr > 0) {
       const delta = r - Math.round(s.prev.rate * 100);
       if (delta >= 5) out.findings.push({ tone: 'good', text: 'Tăng ' + delta + ' điểm phần trăm so với ' + s.n + ' ngày trước đó. Bạn đang đi đúng hướng.' });

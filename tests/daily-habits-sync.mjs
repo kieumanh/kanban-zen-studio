@@ -31,6 +31,17 @@ next=structuredClone(before);next.dailyHabits=next.dailyHabits.filter(h=>h.id!==
 await push(next,'xóa một việc (không cần xác nhận mật khẩu như dự án/ghi chú)');
 loaded=(await(await req('workspace-v2','GET',null,cookie)).json()).data;
 assert.deepEqual(loaded.dailyHabits.map(h=>h.id),['h-2'],'sau khi xóa chỉ còn việc còn lại');
+// v1.22.0: mục tiêu tuần (1–7) và liên kết dự án là tùy chọn; mục tiêu ngoài 1–7 bị từ chối.
+const linked={id:'h-3',name:'Tưới cây',icon:'🌱',color:'#3a6fb0',createdAt:'2026-11-05',done:[],goal:3,projectId:'p-farm'};
+next=structuredClone(before);next.dailyHabits.push(linked);
+await push(next,'thêm việc có mục tiêu 3 lần/tuần và dự án');
+loaded=(await(await req('workspace-v2','GET',null,cookie)).json()).data;
+const savedLinked=loaded.dailyHabits.find(h=>h.id==='h-3');
+assert.equal(savedLinked.goal,3,'mục tiêu tuần phải được lưu');
+assert.equal(savedLinked.projectId,'p-farm','liên kết dự án phải được lưu');
+const badGoal=structuredClone(before);badGoal.dailyHabits.push({...linked,id:'h-4',goal:9});
+const rejectedGoal=await req('workspace-v2','POST',{revision,changes:changesBetween(before,badGoal)},cookie);
+assert.ok(rejectedGoal.status>=400,'mục tiêu 9 lần/tuần phải bị từ chối, nhận '+rejectedGoal.status);
 const bad=structuredClone(before);bad.dailyHabits[0].color='đỏ';
 const rejected=await req('workspace-v2','POST',{revision,changes:changesBetween(before,bad)},cookie);
 assert.ok(rejected.status>=400,'máy chủ phải từ chối màu sai, nhận '+rejected.status);
