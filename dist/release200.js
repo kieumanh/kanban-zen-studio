@@ -61,7 +61,7 @@ noteForm=function(n){
    const hasUnsyncedChanges=dirty||syncConflict||syncing;
    const response=await requestAPI('note-history?id='+encodeURIComponent(id));if(owner!==currentUser?.id)return;
    composer.querySelector('.note-history-inline')?.remove();const d=document.createElement('section');d.className='note-history-inline';
-   d.innerHTML='<header><h2>Phiên bản ghi chú · 7 ngày</h2><button type="button" aria-label="Đóng lịch sử">×</button></header><p>Khôi phục tạo một lần lưu mới; phiên bản hiện tại vẫn được giữ trong lịch sử. Lịch sử bắt đầu từ bản cập nhật này.</p><div class="note-history-list"></div>';
+   d.innerHTML='<header><h2>Phiên bản ghi chú · 7 ngày</h2><button type="button" class="icon-btn exit-x" aria-label="Đóng lịch sử" title="Đóng">×</button></header><p>Khôi phục tạo một lần lưu mới; phiên bản hiện tại vẫn được giữ trong lịch sử. Lịch sử bắt đầu từ bản cập nhật này.</p><div class="note-history-list"></div>';
    d.querySelector('header button').onclick=()=>d.remove();
    if(hasUnsyncedChanges){const warning=document.createElement('p');warning.className='subtext';warning.textContent='Đây là lịch sử trên máy chủ. Bản nháp hiện tại chưa đồng bộ; hãy đồng bộ trước khi khôi phục.';d.querySelector('header').after(warning);}
    const list=d.querySelector('.note-history-list');

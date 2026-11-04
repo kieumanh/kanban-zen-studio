@@ -739,17 +739,17 @@
 :root[data-theme=dark] .sidebar-version span {
     color: #c7bfd1
 }
-:root[data-theme=dark] .modal-head .icon-btn, :root[data-theme=dark] #close-weekly-report, :root[data-theme=dark] [data-picker-close], :root[data-theme=dark] .welcome-close {
-    color: #fcaeb1 !important;
-    border: 1px solid #5e3e43 !important;
-    background: #151219 !important
+:root[data-theme=dark] .modal-head .icon-btn, :root[data-theme=dark] #close-weekly-report, :root[data-theme=dark] [data-picker-close], :root[data-theme=dark] .welcome-close, :root[data-theme=dark] .exit-x {
+    color: #fcacb2 !important;
+    border: 1px solid #5f3e45 !important;
+    background: #16131a !important
 }
-:root[data-theme=dark] .modal-head .icon-btn:hover, :root[data-theme=dark] #close-weekly-report:hover, :root[data-theme=dark] [data-picker-close]:hover, :root[data-theme=dark] .welcome-close:hover {
-    background: #271619 !important;
-    border-color: #e77485 !important
+:root[data-theme=dark] .modal-head .icon-btn:hover, :root[data-theme=dark] #close-weekly-report:hover, :root[data-theme=dark] [data-picker-close]:hover, :root[data-theme=dark] .welcome-close:hover, :root[data-theme=dark] .exit-x:hover {
+    background: #231518 !important;
+    border-color: #e57c8d !important
 }
-:root[data-theme=dark] .modal-head .icon-btn:focus-visible {
-    outline: 3px solid #e993a1
+:root[data-theme=dark] .modal-head .icon-btn:focus-visible, :root[data-theme=dark] .exit-x:focus-visible {
+    outline: 3px solid #a671d1
 }
 :root[data-theme=dark] .note-toolbar {
     background: #16121a
