@@ -2748,6 +2748,57 @@
     color: #fcacb2;
     border-color: #5f3e45
 }
+:root[data-theme=dark] .hb-ring-check {
+    color: #9cd4b7
+}
+:root[data-theme=dark] .hb-done-pill {
+    background: #110e15;
+    color: #a3d9bc
+}
+:root[data-theme=dark] .hb-report-btn.is-active {
+    color: #ffffff
+}
+:root[data-theme=dark] .hb-preview-check {
+    color: #ffffff
+}
+:root[data-theme=dark] .hb-seg-btn.is-on {
+    color: #ffffff
+}
+:root[data-theme=dark] .hb-delta.up {
+    color: #a3d9bc
+}
+:root[data-theme=dark] .hb-delta.down {
+    color: #fcacb2
+}
+:root[data-theme=dark] .hb-assess.is-excellent, :root[data-theme=dark] .hb-assess.is-good {
+    border-left-color: #3b8966
+}
+:root[data-theme=dark] .hb-assess.is-forming {
+    border-left-color: #c26137
+}
+:root[data-theme=dark] .hb-assess.is-low {
+    border-left-color: #cb4259
+}
+:root[data-theme=dark] .hb-level[data-level=excellent], :root[data-theme=dark] .hb-level[data-level=good] {
+    background: #110e15;
+    color: #a3d9bc
+}
+:root[data-theme=dark] .hb-level[data-level=forming] {
+    background: #131017;
+    color: #fbb89e
+}
+:root[data-theme=dark] .hb-level[data-level=low] {
+    background: #16131a;
+    color: #fcacb2
+}
+:root[data-theme=dark] .hb-findings .good>span {
+    background: #110e15;
+    color: #a3d9bc
+}
+:root[data-theme=dark] .hb-findings .warn>span {
+    background: #131017;
+    color: #fbb89e
+}
 :root[data-theme=dark] {
     --muted: #ccc2d7;
     --text-muted: #ccc2d7

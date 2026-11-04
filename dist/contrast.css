@@ -2749,6 +2749,57 @@
     color: #060606;
     border-color: #1e1215
 }
+:root[data-contrast=high] .hb-ring-check {
+    color: #060606
+}
+:root[data-contrast=high] .hb-done-pill {
+    background: #ffffff;
+    color: #060606
+}
+:root[data-contrast=high] .hb-report-btn.is-active {
+    color: #ffffff
+}
+:root[data-contrast=high] .hb-preview-check {
+    color: #ffffff
+}
+:root[data-contrast=high] .hb-seg-btn.is-on {
+    color: #ffffff
+}
+:root[data-contrast=high] .hb-delta.up {
+    color: #060606
+}
+:root[data-contrast=high] .hb-delta.down {
+    color: #060606
+}
+:root[data-contrast=high] .hb-assess.is-excellent, :root[data-contrast=high] .hb-assess.is-good {
+    border-left-color: #091a12
+}
+:root[data-contrast=high] .hb-assess.is-forming {
+    border-left-color: #250f06
+}
+:root[data-contrast=high] .hb-assess.is-low {
+    border-left-color: #290a0f
+}
+:root[data-contrast=high] .hb-level[data-level=excellent], :root[data-contrast=high] .hb-level[data-level=good] {
+    background: #ffffff;
+    color: #060606
+}
+:root[data-contrast=high] .hb-level[data-level=forming] {
+    background: #ffffff;
+    color: #060606
+}
+:root[data-contrast=high] .hb-level[data-level=low] {
+    background: #ffffff;
+    color: #060606
+}
+:root[data-contrast=high] .hb-findings .good>span {
+    background: #ffffff;
+    color: #060606
+}
+:root[data-contrast=high] .hb-findings .warn>span {
+    background: #ffffff;
+    color: #060606
+}
 :root[data-contrast=high] {
     --muted: #060606;
     --text-muted: #060606
@@ -6088,6 +6139,57 @@
     background: #030303;
     color: #f5f5f5;
     border-color: #cecece
+}
+:root[data-theme=dark][data-contrast=high] .hb-ring-check {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .hb-done-pill {
+    background: #030303;
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .hb-report-btn.is-active {
+    color: #ffffff
+}
+:root[data-theme=dark][data-contrast=high] .hb-preview-check {
+    color: #ffffff
+}
+:root[data-theme=dark][data-contrast=high] .hb-seg-btn.is-on {
+    color: #ffffff
+}
+:root[data-theme=dark][data-contrast=high] .hb-delta.up {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .hb-delta.down {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .hb-assess.is-excellent, :root[data-theme=dark][data-contrast=high] .hb-assess.is-good {
+    border-left-color: #cecece
+}
+:root[data-theme=dark][data-contrast=high] .hb-assess.is-forming {
+    border-left-color: #cecece
+}
+:root[data-theme=dark][data-contrast=high] .hb-assess.is-low {
+    border-left-color: #cecece
+}
+:root[data-theme=dark][data-contrast=high] .hb-level[data-level=excellent], :root[data-theme=dark][data-contrast=high] .hb-level[data-level=good] {
+    background: #030303;
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .hb-level[data-level=forming] {
+    background: #030303;
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .hb-level[data-level=low] {
+    background: #030303;
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .hb-findings .good>span {
+    background: #030303;
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .hb-findings .warn>span {
+    background: #030303;
+    color: #f5f5f5
 }
 :root[data-theme=dark][data-contrast=high] {
     --muted: #f5f5f5;
