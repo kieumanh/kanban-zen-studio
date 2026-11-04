@@ -94,6 +94,7 @@ jobs:
           node tests/task-exit-prompt-browser.mjs
           node tests/checklist-no-overflow-browser.mjs
           node tests/add-check-symmetry-browser.mjs
+          node tests/task-pin-shortcut-browser.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:

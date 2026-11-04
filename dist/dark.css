@@ -3304,6 +3304,21 @@
 :root[data-theme=dark] #editor .zen-ck-pct input[type="range"]::-moz-range-track {
     background: linear-gradient(to right, #7950c8 calc(9px + (100% - 18px) * var(--pn, 0)), #231d28 calc(9px + (100% - 18px) * var(--pn, 0)))
 }
+:root[data-theme=dark] #editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row .task-pin-shortcut {
+    color: #d7bcec;
+    background: #18151c;
+    border: 1px solid #403945
+}
+:root[data-theme=dark] #editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row .task-pin-shortcut:hover, :root[data-theme=dark] #editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row .task-pin-shortcut:focus-visible {
+    background: #1c1821;
+    border-color: #54455e;
+    outline: 2px solid #4d4056
+}
+:root[data-theme=dark] #editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row .task-pin-shortcut.is-pinned {
+    background: #1d1822;
+    border-color: #c6a2e3;
+    color: #d9c3fb
+}
 
 :root[data-theme=dark] {
   color-scheme: dark;
