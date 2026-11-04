@@ -50,7 +50,7 @@ export async function workspaceStage(request, env, u) {
     if (
       !c ||
       typeof c.key !== 'string' ||
-      !/^(root:root|(?:project|task|note|trash|template):[A-Za-z0-9_-]{1,100})$/.test(
+      !/^(root:root|(?:project|task|note|trash|template|habit):[A-Za-z0-9_-]{1,100})$/.test(
         c.key,
       ) ||
       c.value === undefined ||
@@ -464,7 +464,7 @@ export async function workspaceV2(request, env, u) {
     if (
       !change ||
       typeof change.key !== 'string' ||
-      !/^(root:root|(?:project|task|note|trash|template):[A-Za-z0-9_-]{1,100})$/.test(
+      !/^(root:root|(?:project|task|note|trash|template|habit):[A-Za-z0-9_-]{1,100})$/.test(
         change.key,
       ) ||
       seen.has(change.key)
