@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 
-const BUDGET = 845;
+const BUDGET = 844;
 const dist = path.join(import.meta.dirname, '..', 'dist');
 let total = 0;
 const perFile = {};

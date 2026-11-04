@@ -1567,3 +1567,9 @@ dialog[open] button[aria-label^="Đóng"],
 #editor .wf-check-sort-list .compact-check input[type="checkbox"]:focus-visible,
 #editor .wf-check-sort-list .compact-check input[type="range"]:focus-visible,
 #editor .wf-check-sort-list .compact-check .compact-check-remove:focus-visible { outline-offset: -2px; }
+
+/* v1.19.11: ô "Thêm mục mới" cân đối. Nút "+ Thêm" từng bị đẩy xuống 12px bởi lề trên (workflow111.css, đã bỏ !important ở đó),
+   nên khoảng trống trên/dưới không bằng nhau. Nay nút và ô nhập đều căn giữa theo chiều dọc trong viên bo. */
+#editor .zen-check-add { align-items: center; }
+#editor .zen-check-add .wf-add-check { margin: 0; align-self: center; }
+#editor .zen-check-add textarea { margin: 0; }
