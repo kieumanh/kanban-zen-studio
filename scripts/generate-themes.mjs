@@ -17,6 +17,7 @@ export const SOURCES = [
   'usability',
   'task-list',
   'experience',
+  'habits',
   'studio-zen',
 ];
 

@@ -336,6 +336,42 @@ function validColumnNames(p) {
     )
   );
 }
+function validHabits(list) {
+  if (list === undefined) return true;
+  if (!Array.isArray(list) || list.length > 60) return false;
+  const ids = new Set();
+  return list.every((h) => {
+    if (!h || typeof h !== 'object' || Array.isArray(h)) return false;
+    if (
+      typeof h.id !== 'string' ||
+      !/^[A-Za-z0-9_-]{1,99}$/.test(h.id) ||
+      ids.has(h.id)
+    )
+      return false;
+    ids.add(h.id);
+    if (typeof h.name !== 'string' || !h.name.trim() || h.name.length > 80)
+      return false;
+    if (typeof h.icon !== 'string' || h.icon.length > 8) return false;
+    if (typeof h.color !== 'string' || !/^#[0-9a-fA-F]{6}$/.test(h.color))
+      return false;
+    if (
+      typeof h.createdAt !== 'string' ||
+      h.createdAt === '' ||
+      !validDate(h.createdAt)
+    )
+      return false;
+    if (!Array.isArray(h.done) || h.done.length > 3700) return false;
+    const seen = new Set();
+    return h.done.every(
+      (d) =>
+        typeof d === 'string' &&
+        d !== '' &&
+        validDate(d) &&
+        !seen.has(d) &&
+        seen.add(d),
+    );
+  });
+}
 function validExtras(d) {
   if (
     d.notes !== undefined &&
@@ -369,6 +405,7 @@ function validExtras(d) {
   )
     return false;
   return (
+    validHabits(d.dailyHabits) &&
     (d.taskTemplates === undefined ||
       (Array.isArray(d.taskTemplates) &&
         d.taskTemplates.length <= 100 &&

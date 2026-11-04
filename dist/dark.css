@@ -1,5 +1,5 @@
 /*  v1.16.0 — chế độ tối (chọn bằng thuộc tính data-theme="dark" trên <html>, đặt bởi theme.js).
-   Sinh tự động bằng scripts/generate-themes.mjs từ 9 tệp CSS nguồn. KHÔNG sửa tay: sửa bộ sinh rồi chạy "node scripts/generate-themes.mjs".  */
+   Sinh tự động bằng scripts/generate-themes.mjs từ 10 tệp CSS nguồn. KHÔNG sửa tay: sửa bộ sinh rồi chạy "node scripts/generate-themes.mjs".  */
 :root[data-theme=dark] {
     --bg: #151219;
     --paper: #1b181f;
@@ -2727,6 +2727,26 @@
 }
 :root[data-theme=dark] #editor .detail-actions #task-state {
     background-color: #1b181f
+}
+:root[data-theme=dark] .hb-summary.is-complete .hb-ring-fg {
+    stroke: #9cd4b7
+}
+:root[data-theme=dark] .hb-cheer {
+    color: #9cd4b7
+}
+:root[data-theme=dark] .hb-del {
+    color: #fcacb2
+}
+:root[data-theme=dark] .hb-check {
+    color: #ffffff
+}
+:root[data-theme=dark] .hb-check:focus-visible {
+    outline: 3px solid color-mix(in srgb,var(--hb) 55%,#302b36)
+}
+:root[data-theme=dark] .hb-confirm-delete {
+    background: #16131a;
+    color: #fcacb2;
+    border-color: #5f3e45
 }
 :root[data-theme=dark] {
     --muted: #ccc2d7;

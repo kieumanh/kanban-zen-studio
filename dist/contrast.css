@@ -2729,6 +2729,26 @@
 :root[data-contrast=high] #editor .detail-actions #task-state {
     background-color: #ffffff
 }
+:root[data-contrast=high] .hb-summary.is-complete .hb-ring-fg {
+    stroke: #060606
+}
+:root[data-contrast=high] .hb-cheer {
+    color: #060606
+}
+:root[data-contrast=high] .hb-del {
+    color: #060606
+}
+:root[data-contrast=high] .hb-check {
+    color: #ffffff
+}
+:root[data-contrast=high] .hb-check:focus-visible {
+    outline: 3px solid color-mix(in srgb,var(--hb) 55%,#161616)
+}
+:root[data-contrast=high] .hb-confirm-delete {
+    background: #ffffff;
+    color: #060606;
+    border-color: #1e1215
+}
 :root[data-contrast=high] {
     --muted: #060606;
     --text-muted: #060606
@@ -6048,6 +6068,26 @@
 }
 :root[data-theme=dark][data-contrast=high] #editor .detail-actions #task-state {
     background-color: #030303
+}
+:root[data-theme=dark][data-contrast=high] .hb-summary.is-complete .hb-ring-fg {
+    stroke: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .hb-cheer {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .hb-del {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .hb-check {
+    color: #ffffff
+}
+:root[data-theme=dark][data-contrast=high] .hb-check:focus-visible {
+    outline: 3px solid color-mix(in srgb,var(--hb) 55%,#cecece)
+}
+:root[data-theme=dark][data-contrast=high] .hb-confirm-delete {
+    background: #030303;
+    color: #f5f5f5;
+    border-color: #cecece
 }
 :root[data-theme=dark][data-contrast=high] {
     --muted: #f5f5f5;

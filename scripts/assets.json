@@ -250,6 +250,16 @@
     "text/css; charset=utf-8"
   ],
   [
+    "/habits.js",
+    "habits.js",
+    "text/javascript; charset=utf-8"
+  ],
+  [
+    "/habits.css",
+    "habits.css",
+    "text/css; charset=utf-8"
+  ],
+  [
     "/studio-zen.js",
     "studio-zen.js",
     "text/javascript; charset=utf-8"
