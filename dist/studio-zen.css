@@ -1539,3 +1539,9 @@ dialog[open] button[aria-label^="Đóng"],
 #editor .zen-ck-pct input[type="range"]::-webkit-slider-runnable-track { height: 6px; border-radius: 999px; background: linear-gradient(to right, #7950c8 calc(9px + (100% - 18px) * var(--pn, 0)), #e6dcef calc(9px + (100% - 18px) * var(--pn, 0))); }
 #editor .zen-ck-pct input[type="range"]::-webkit-slider-thumb { margin-top: -6px; }
 #editor .zen-ck-pct input[type="range"]::-moz-range-track { height: 6px; border-radius: 999px; background: linear-gradient(to right, #7950c8 calc(9px + (100% - 18px) * var(--pn, 0)), #e6dcef calc(9px + (100% - 18px) * var(--pn, 0))); }
+
+/* v1.19.9: bảng "Bạn có thay đổi chưa lưu" dính ngay dưới tiêu đề hộp thoại (sticky) nên luôn hiện ở vị trí đang đọc, kể cả khi đã cuộn xuống.
+   Nút Lưu nằm trên cùng, chiếm cả hàng; hai nút còn lại chia đôi. Chỉ đổi vị trí và bố cục, không đổi hành vi lưu/bỏ. */
+#editor #editor-body .task-unsaved-confirm { position: sticky !important; top: var(--zen-modal-head-h, 72px) !important; z-index: 6; margin: 8px 0 14px; }
+#editor .task-unsaved-confirm > div .btn[data-task-save] { grid-column: 1 / -1; }
+#editor .task-unsaved-confirm > div { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }

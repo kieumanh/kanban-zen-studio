@@ -33,10 +33,13 @@ taskForm=function(p,t,col='List'){
  const dialog=$('#editor');dialog.dataset.taskForm='1';dialog.dataset.taskFormSnapshot=body.dataset.taskFormSnapshot;dialog.dataset.taskFormDiscard='';
 };
 function taskFormDirty(){const dialog=$('#editor'),form=$('#editor-form');if(!dialog.dataset.taskForm||!form)return false;return JSON.stringify([...new FormData(form).entries()])!==dialog.dataset.taskFormSnapshot;}
-function showTaskClosePrompt(){const body=$('#editor-body');let prompt=body.querySelector('.task-unsaved-confirm');if(prompt)return;body.insertAdjacentHTML('afterbegin','<aside class="task-unsaved-confirm" role="alertdialog" aria-label="Thay đổi chưa lưu"><strong>Bạn có thay đổi chưa lưu.</strong><span>Tiếp tục chỉnh sửa hoặc bỏ các thay đổi này.</span><div><button type="button" class="btn" data-task-keep-editing>Tiếp tục chỉnh sửa</button><button type="button" class="btn danger" data-task-discard> Bỏ thay đổi</button></div></aside>');body.querySelector('[data-task-keep-editing]').focus();}
+function showTaskClosePrompt(){const body=$('#editor-body');let prompt=body.querySelector('.task-unsaved-confirm');if(prompt)return;body.insertAdjacentHTML('afterbegin','<aside class="task-unsaved-confirm" role="alertdialog" aria-label="Thay đổi chưa lưu"><strong>Bạn có thay đổi chưa lưu.</strong><span>Lưu, tiếp tục chỉnh sửa hoặc bỏ các thay đổi này.</span><div><button type="button" class="btn primary" data-task-save>Lưu</button><button type="button" class="btn" data-task-keep-editing>Tiếp tục chỉnh sửa</button><button type="button" class="btn danger" data-task-discard>Bỏ thay đổi</button></div></aside>');
+ // v1.19.9: bảng nằm sticky ngay dưới tiêu đề của hộp thoại nên hiện đúng khung nhìn đang đọc (không ở đầu nội dung đã cuộn qua). Không kéo khung nhìn đi chỗ khác khi hiện.
+ const dialog=$('#editor'),head=dialog.querySelector('.modal-head'),notice=body.querySelector('.task-unsaved-confirm');if(head&&notice)notice.style.setProperty('top',(head.getBoundingClientRect().bottom-dialog.getBoundingClientRect().top-dialog.clientTop+8)+'px','important');body.querySelector('[data-task-keep-editing]').focus({preventScroll:true});}
 document.addEventListener('click',event=>{
  const close=event.target.closest('[data-action="close-modal"]');
  if(close&&taskFormDirty()&&!$('#editor').dataset.taskFormDiscard){event.preventDefault();event.stopImmediatePropagation();showTaskClosePrompt();return;}
+ if(event.target.closest('[data-task-save]')){event.preventDefault();$('#editor-body .task-unsaved-confirm')?.remove();const form=$('#editor-form');if(form)form.requestSubmit();return;}
  if(event.target.closest('[data-task-keep-editing]')){$('#editor-body .task-unsaved-confirm')?.remove();return;}
  if(event.target.closest('[data-task-discard]')){$('#editor').dataset.taskFormDiscard='1';$('#editor').close();return;}
  const filter=event.target.closest('[data-dashboard-filter]');
