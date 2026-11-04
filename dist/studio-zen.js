@@ -1494,8 +1494,10 @@ function zenPctPaint(row, value) {
   };
   const beforeRows = taskDetail;
   taskDetail = function (p, t) {
+    const wasOpen = !!document.querySelector('#editor')?.open;
     beforeRows(p, t);
     addToRows();
+    if (!wasOpen) refreshTaskFormSnapshot();
   };
   document.addEventListener('input', (event) => {
     const el = event.target;

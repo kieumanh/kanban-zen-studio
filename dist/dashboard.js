@@ -32,6 +32,8 @@ taskForm=function(p,t,col='List'){
  body.classList.toggle('task-create-quick',quick);
  const dialog=$('#editor');dialog.dataset.taskForm='1';dialog.dataset.taskFormSnapshot=body.dataset.taskFormSnapshot;dialog.dataset.taskFormDiscard='';
 };
+// v1.19.14: chốt lại mốc "chưa đổi gì" sau khi toàn bộ form (kể cả checklist) đã dựng xong, để mở rồi bấm × không báo sai là có thay đổi.
+function refreshTaskFormSnapshot(){const dialog=$('#editor'),body=$('#editor-body'),form=$('#editor-form');if(!dialog?.dataset.taskForm||!form||!body)return;const snapshot=JSON.stringify([...new FormData(form).entries()]);body.dataset.taskFormSnapshot=snapshot;dialog.dataset.taskFormSnapshot=snapshot;}
 function taskFormDirty(){const dialog=$('#editor'),form=$('#editor-form');if(!dialog.dataset.taskForm||!form)return false;return JSON.stringify([...new FormData(form).entries()])!==dialog.dataset.taskFormSnapshot;}
 function showTaskClosePrompt(){const body=$('#editor-body');let prompt=body.querySelector('.task-unsaved-confirm');if(prompt)return;body.insertAdjacentHTML('afterbegin','<aside class="task-unsaved-confirm" role="alertdialog" aria-label="Thay đổi chưa lưu"><strong>Bạn có thay đổi chưa lưu.</strong><span>Lưu, tiếp tục chỉnh sửa hoặc bỏ các thay đổi này.</span><div><button type="button" class="btn primary" data-task-save>Lưu</button><button type="button" class="btn" data-task-keep-editing>Tiếp tục chỉnh sửa</button><button type="button" class="btn danger" data-task-discard>Bỏ thay đổi</button></div></aside>');
  // v1.19.9: bảng nằm sticky ngay dưới tiêu đề của hộp thoại nên hiện đúng khung nhìn đang đọc (không ở đầu nội dung đã cuộn qua). Không kéo khung nhìn đi chỗ khác khi hiện.
