@@ -143,15 +143,17 @@
 
   function addNav() {
     const anchor = document.querySelector('.sidebar [data-view="tasks"]');
-    if (anchor && !document.querySelector('.sidebar [data-view="habits"]')) {
-      const b = document.createElement('button');
+    let b = document.querySelector('.sidebar [data-view="habits"]');
+    if (!b) {
+      b = document.createElement('button');
       b.type = 'button';
       b.className = 'nav';
       b.dataset.view = 'habits';
       b.innerHTML = '<span>' + svgIcon('habits') + '</span>Việc hằng ngày';
-      anchor.after(b);
     }
-    document.querySelector('.sidebar [data-view="habits"]')?.classList.toggle('active', view === 'habits');
+    // v1.21.1: luôn đặt ngay dưới "Tất cả công việc", bất kể mục "Chế độ tập trung" được chèn lúc nào.
+    if (anchor && anchor.nextElementSibling !== b) anchor.after(b);
+    b.classList.toggle('active', view === 'habits');
   }
   const baseRender = render;
   render = function () {
