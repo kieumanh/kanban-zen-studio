@@ -97,6 +97,7 @@ jobs:
           node tests/task-pin-shortcut-browser.mjs
           node tests/exit-buttons-sync-browser.mjs
           node tests/task-clean-close-browser.mjs
+          node tests/mobile-menu-views-browser.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:

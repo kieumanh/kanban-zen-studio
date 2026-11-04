@@ -1588,3 +1588,10 @@ dialog[open] button[aria-label^="Đóng"],
   #editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row .task-pin-shortcut { width: 40px; padding: 0; gap: 0; }
   #editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row .task-pin-shortcut span { display: none; }
 }
+
+/* v1.19.15: menu điện thoại (≤700px) tinh gọn: bỏ mục "Dự án" (đã chọn dự án ở thanh tab phía trên) và hiện khung 3 chế độ xem
+   (Bảng Kanban / Lịch / Gantt) vốn bị ẩn, để chuyển chế độ xem ngay trong menu. */
+@media (max-width: 700px) {
+  .sidebar .side-projects { display: none; }
+  .sidebar #view-group.view-group { display: block; }
+}
