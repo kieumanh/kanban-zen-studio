@@ -1546,25 +1546,21 @@ dialog[open] button[aria-label^="Đóng"],
 #editor .task-unsaved-confirm > div .btn[data-task-save] { grid-column: 1 / -1; }
 #editor .task-unsaved-confirm > div { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 
-/* v1.19.10: checklist không tràn viền. Nút kéo ⠿ trên màn hình cảm ứng giữ vùng chạm 44px bằng lớp ::before vô hình,
-   phần vẽ (nền, vòng focus) chỉ 32px và nằm gọn trong dòng bo tròn; vòng focus của nút kéo, ô tick và thanh % được vẽ vào trong dòng
-   (outline-offset âm) nên không ló ra khỏi viền bo. Không đổi thứ tự đọc, không đổi kích thước vùng chạm. */
+/* v1.19.10: checklist không tràn viền. Trên màn hình cảm ứng nút kéo ⠿ giữ kích thước chạm 44x44 THẬT (không dùng lề âm nữa):
+   nó có cột riêng 44px trong dòng, dòng đủ cao để chứa nó, nên nền và vòng focus nằm gọn trong dòng bo tròn và không đè ô tick.
+   Vòng focus của nút kéo, ô tick và thanh % được vẽ vào trong dòng (outline-offset âm) nên không ló ra khỏi viền bo. */
 @media (pointer: coarse) {
-  #editor .wf-check-sort-list .compact-check .wf-grip {
-    width: 32px !important;
-    min-width: 32px !important;
-    height: 32px !important;
-    min-height: 32px !important;
-    margin: 0 !important;
-    position: relative;
-  }
-  #editor .wf-check-sort-list .compact-check .wf-grip::before {
-    content: "";
-    position: absolute;
-    inset: -6px;
-  }
   #editor .wf-check-sort-list .compact-check {
-    grid-template-columns: 32px 26px minmax(0, 1fr) auto !important;
+    grid-template-columns: 44px 26px minmax(0, 1fr) auto !important;
+    min-height: 52px;
+  }
+  #editor .wf-check-sort-list .compact-check .wf-grip {
+    width: 44px !important;
+    min-width: 44px !important;
+    height: 44px !important;
+    min-height: 44px !important;
+    margin: 0 !important;
+    align-self: center;
   }
 }
 #editor .wf-check-sort-list .compact-check .wf-grip:focus-visible { outline-offset: -3px; }

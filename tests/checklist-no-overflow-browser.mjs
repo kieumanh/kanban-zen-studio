@@ -1,7 +1,7 @@
 // Hồi quy v1.19.10: dòng checklist trong hộp công việc không tràn viền. Trước đây trên màn hình cảm ứng nút kéo ⠿ được phóng 44px bằng lề âm nên
 // nền và vòng focus của nó ló ra ngoài góc bo của dòng (và đè 2px lên ô tick ở 390px); vòng focus của ô tick / thanh % / nút xóa cũng ló 1–2px.
 // Kiểm ở 390 / 820 (cảm ứng) và 1440 (chuột): mọi phần tử con nằm trong dòng, nút kéo không chồng ô tick, vòng focus nằm trong dòng,
-// và trên cảm ứng vùng chạm của nút kéo vẫn đủ 44px.
+// và trên cảm ứng nút kéo vẫn đủ 44x44px thật.
 import assert from 'node:assert/strict';
 import { startHarness, makeProject } from './lib/browser-harness.mjs';
 
@@ -131,31 +131,19 @@ try {
       );
     }
 
-    // 3. Cảm ứng: vùng chạm nút kéo vẫn đủ 44px (lớp vô hình), bấm vào rìa vùng chạm vẫn trúng nút kéo.
+    // 3. Cảm ứng: nút kéo vẫn đủ 44x44 THẬT (hộp bao của chính nút), không dựa vào lớp vô hình.
     if (touch) {
-      const hit = await page.evaluate(() => {
-        const grip = document.querySelector(
-          '#editor-body .wf-check-sort-list .compact-check:nth-child(2) .wf-grip',
-        );
-        const b = grip.getBoundingClientRect();
-        const cx = b.left + b.width / 2;
-        const cy = b.top + b.height / 2;
-        const probe = (x, y) => {
-          const el = document.elementFromPoint(x, y);
-          return el === grip || grip.contains(el);
-        };
-        return {
-          w: b.width,
-          h: b.height,
-          left: probe(cx - 21, cy),
-          right: probe(cx + 21, cy),
-          top: probe(cx, cy - 21),
-          bottom: probe(cx, cy + 21),
-        };
+      const size = await page.evaluate(() => {
+        const b = document
+          .querySelector(
+            '#editor-body .wf-check-sort-list .compact-check .wf-grip',
+          )
+          .getBoundingClientRect();
+        return { w: b.width, h: b.height };
       });
       assert.ok(
-        hit.left && hit.right && hit.top && hit.bottom,
-        'vùng chạm 44px của nút kéo bị thu nhỏ: ' + JSON.stringify(hit) + at,
+        size.w >= 44 && size.h >= 44,
+        'nút kéo nhỏ hơn 44px: ' + JSON.stringify(size) + at,
       );
     }
 
@@ -173,7 +161,7 @@ try {
     await context.close();
   }
   console.log(
-    'PASS: dòng checklist không tràn viền: phần tử con, nút kéo, vòng focus nằm trong dòng; vùng chạm nút kéo vẫn 44px (390/820/1440px).',
+    'PASS: dòng checklist không tràn viền: phần tử con, nút kéo, vòng focus nằm trong dòng; nút kéo vẫn 44×44px thật (390/820/1440px).',
   );
 } finally {
   await h.close();
