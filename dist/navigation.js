@@ -45,3 +45,30 @@ document.addEventListener('change',event=>{
  }
  render();
 });
+
+// v1.25.0: nhóm menu bên trái. Chỉ sắp xếp lại các nút sẵn có (giữ nguyên data-view, không tạo mục mới).
+// Mục ít dùng (Lưu trữ, Thùng rác) nằm trong "Thêm" thu gọn; tự mở khi đang ở một trong hai mục đó.
+const NAV_MORE_VIEWS=['archive','trash'];
+function navGroupLabel(key,text){const el=document.createElement('div');el.className='navlabel nav-group-label';el.dataset.navLabel=key;el.textContent=text;return el;}
+function arrangeNavGroups(){
+ const nav=document.querySelector('.sidebar nav');
+ if(!nav)return;
+ const place=(key,text,anchor)=>{if(anchor&&!nav.querySelector(':scope>[data-nav-label='+key+']'))anchor.before(navGroupLabel(key,text));};
+ place('work','Làm việc',nav.querySelector(':scope>[data-view=dashboard]'));
+ place('ideas','Ý tưởng',nav.querySelector(':scope>[data-view=notes]'));
+ const notes=nav.querySelector(':scope>[data-view=notes]'),resources=nav.querySelector(':scope>[data-view=resources]');
+ if(notes&&resources&&notes.nextElementSibling!==resources)notes.after(resources);
+ let more=nav.querySelector(':scope>details.nav-more');
+ const first=nav.querySelector('[data-view='+NAV_MORE_VIEWS[0]+']');
+ if(!more&&first){
+  more=document.createElement('details');
+  more.className='nav-more';
+  more.innerHTML='<summary class="nav-more-summary">Thêm</summary>';
+  first.before(more);
+ }
+ if(!more)return;
+ for(const v of NAV_MORE_VIEWS){const b=nav.querySelector('[data-view='+v+']');if(b&&b.parentElement!==more)more.append(b);}
+ if(NAV_MORE_VIEWS.includes(view))more.open=true;
+}
+const navGroupsBeforeRender=render;
+render=function(){navGroupsBeforeRender();arrangeNavGroups();};

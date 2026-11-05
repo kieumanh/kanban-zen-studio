@@ -105,6 +105,7 @@ jobs:
           node tests/login-remember-browser.mjs
           node tests/habit-today-icon-browser.mjs
           node tests/ux-polish-browser.mjs
+          node tests/nav-groups-browser.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
