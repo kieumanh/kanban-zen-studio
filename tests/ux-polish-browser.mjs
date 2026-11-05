@@ -1,5 +1,5 @@
 // v1.24.0: cải thiện UX theo đánh giá — ô ngày có số và chấm hôm nay trên điện thoại; ghi chú tiến độ còn bao nhiêu lượt
-// và trạng thái tuần mới; nhãn "Máy cá nhân" ở đăng nhập; "Đăng xuất mọi thiết bị" có xác nhận.
+// và trạng thái tuần mới; nhãn "Máy cá nhân" ở đăng nhập; không còn nút "Đăng xuất mọi thiết bị" trong Cài đặt.
 // Kiểm tra ở 390/820/1440px, không tràn ngang.
 import assert from 'node:assert/strict';
 import { startHarness, makeProject } from './lib/browser-harness.mjs';
@@ -74,25 +74,17 @@ try {
     await page.context().close();
   }
 
-  // 4) Cài đặt: "Đăng xuất mọi thiết bị" hỏi xác nhận, gọi đúng yêu cầu, rồi về màn đăng nhập.
+  // 4) Cài đặt: không còn nút "Đăng xuất mọi thiết bị" (v1.30.0); nút đăng xuất của máy này vẫn có.
   {
     const { page } = await h.open(820, { workspace: seed()() });
     await h.show(page, 'habits');
-    let calls = 0;
-    await page.route('**/api/logout-all', (route) => { calls++; route.fulfill({ status: 200, contentType: 'application/json', body: '{"ok":true}' }); });
     await page.evaluate(() => accountPanel());
-    await page.waitForSelector('#sign-out-all');
-    await page.click('#sign-out-all');
-    await page.waitForSelector('#editor[open]');
-    assert.match(await page.textContent('#editor'), /Đăng xuất mọi thiết bị\?/, 'có hộp xác nhận');
-    assert.equal(calls, 0, 'chưa gọi máy chủ trước khi xác nhận');
-    await page.click('#editor-form [type=submit]');
-    await page.waitForFunction(() => document.querySelector('#auth-screen form#auth-form'), null, { timeout: 15000 });
-    assert.equal(calls, 1, 'đúng một yêu cầu đăng xuất mọi thiết bị');
-    assert.match(await page.textContent('#auth-message'), /Đã đăng xuất mọi thiết bị/, 'thông báo sau khi đăng xuất');
+    await page.waitForSelector('#sign-out');
+    assert.equal(await page.locator('#sign-out-all').count(), 0, 'không còn nút đăng xuất mọi thiết bị');
+    assert.equal(await page.locator('#editor-body').getByText('Đăng xuất mọi thiết bị', { exact: false }).count(), 0, 'không còn chữ "Đăng xuất mọi thiết bị" trong Cài đặt');
     await page.context().close();
   }
-  console.log('PASS UX polish: ô ngày trên điện thoại, ghi chú tiến độ, nhãn đăng nhập, đăng xuất mọi thiết bị');
+  console.log('PASS UX polish: ô ngày trên điện thoại, ghi chú tiến độ, nhãn đăng nhập, Cài đặt không còn đăng xuất mọi thiết bị');
 } finally {
   await h.close();
 }
