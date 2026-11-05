@@ -905,7 +905,8 @@ export async function api(request, env) {
           Date.now() + 7 * 86400000,
         )
         .run();
-      return json({ url: ORIGIN + '/?boardshare=' + token });
+      // v1.28.0: token nằm trong phần neo (#) nên không gửi lên máy chủ, không vào log truy cập và Referer.
+      return json({ url: ORIGIN + '/#boardshare=' + token });
     }
     if (path === '/api/file-updates' && request.method === 'GET') {
       const cursor = Date.now(),
