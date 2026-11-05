@@ -72,7 +72,7 @@
   function checkButton(h, d) {
     const done = h.done.includes(d),
       i = (toDate(d).getUTCDay() + 6) % 7;
-    return '<div class="hb-cell' + (d === today() ? ' is-today' : '') + '"><span class="hb-dayname" aria-hidden="true">' + SHORT[i] + '</span><button type="button" class="hb-check' + (done ? ' is-done' : '') + '" role="checkbox" aria-checked="' + done + '" data-hb-toggle="' + esc(h.id) + '" data-hb-date="' + d + '"' + '' + ' aria-label="' + esc(h.name) + ' — ' + LONG[i] + ' ' + short(d) + '' + '">' + tick + '</button></div>';
+    return '<div class="hb-cell' + (d === today() ? ' is-today' : '') + '"><span class="hb-dayname" aria-hidden="true">' + SHORT[i] + '<small class="hb-daynum">' + short(d).slice(0, 2) + '</small></span><button type="button" class="hb-check' + (done ? ' is-done' : '') + '" role="checkbox" aria-checked="' + done + '" data-hb-toggle="' + esc(h.id) + '" data-hb-date="' + d + '"' + '' + ' aria-label="' + esc(h.name) + ' — ' + LONG[i] + ' ' + short(d) + '' + '">' + tick + '</button></div>';
   }
   // v1.22.0: liên kết dự án (hiển thị ở từng việc để biết việc này phục vụ dự án nào).
   const projectOf = (h) => (h.projectId ? (data.projects || []).find((p) => p.id === h.projectId) : null);
@@ -106,7 +106,15 @@
       current = week() === mondayOf(today());
     return '<div class="hb-progress' + (p.pct === 100 && p.tr ? ' is-full' : '') + '" id="hb-progress"><div class="hb-progress-head"><span id="hb-progress-title">' + (current ? 'Tiến độ tuần này' : 'Tiến độ tuần ' + short(week()) + ' – ' + short(addDays(week(), 6))) + '</span><strong id="hb-progress-pct">' + p.pct + '%</strong></div><div class="hb-bar" id="hb-bar" role="progressbar" aria-label="Tiến độ cộng gộp của tất cả việc trong tuần" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + p.pct + '"><span style="width:' + p.pct + '%"></span></div><small id="hb-progress-note">' + progressNote(p) + '</small></div>';
   }
-  const progressNote = (p) => (p.tr ? p.dn + '/' + p.tr + ' lượt theo mục tiêu, cộng gộp mọi việc' : 'Chưa có việc nào trong tuần này');
+  // v1.24.0: tuần đang xem cho biết còn bao nhiêu lượt cần làm; tuần mới có trạng thái riêng.
+  const progressNote = (p) => {
+    if (!p.tr) return 'Chưa có việc nào trong tuần này';
+    const tail = p.dn + '/' + p.tr + ' lượt theo mục tiêu, cộng gộp mọi việc';
+    if (week() !== mondayOf(today())) return tail;
+    if (!p.dn) return 'Tuần mới: bắt đầu bằng 1 lượt · ' + tail;
+    const left = p.tr - p.dn;
+    return left > 0 ? 'Còn ' + left + ' lượt cần làm tuần này · ' + tail : 'Đã đủ mục tiêu tuần này · ' + tail;
+  };
   function head() {
     const labels = days().map((d, i) => '<span class="' + (d === today() ? 'is-today' : '') + '"><b>' + SHORT[i] + '</b><small>' + short(d).slice(0, 2) + '</small></span>').join('');
     return '<div class="hb-head" aria-hidden="true"><span></span><div class="hb-days">' + labels + '</div></div>';

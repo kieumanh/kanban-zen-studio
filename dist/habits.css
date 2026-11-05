@@ -291,3 +291,11 @@
 .hb-icon-field .hb-icon-pick{width:44px;height:44px;border-radius:12px;border:1px solid var(--line);background:var(--paper);font-size:20px;line-height:1;cursor:pointer}
 .hb-icon-field .hb-icon-pick.is-on{border-color:var(--brand-purple);box-shadow:0 0 0 2px var(--paper),0 0 0 4px var(--brand-purple)}
 .hb-icon-picker{margin-top:6px}
+
+/* v1.24.0: trên điện thoại (đầu bảng tuần ẩn) mỗi ô có số ngày và chấm tím đánh dấu hôm nay. */
+.hb-daynum{display:block;font-size:11px;line-height:1.2;color:var(--muted);font-weight:600}
+.hb-cell.is-today .hb-daynum{color:var(--brand-purple);font-weight:800}
+.hb-cell.is-today .hb-dayname::after{content:"";display:block;width:6px;height:6px;margin:3px auto 0;border-radius:50%;background:var(--brand-purple)}
+
+/* v1.24.0: dòng giải thích dưới lựa chọn "Máy cá nhân" ở màn hình đăng nhập. */
+.remember-hint{display:block;margin-top:2px;color:var(--muted);font-size:12px;line-height:1.45}

@@ -23,6 +23,8 @@ try {
   // 1) Menu: nằm ngay dưới "Tất cả công việc"; trống thì có gợi ý.
   {
     const { page, server } = await h.open(1440);
+    // v1.24.0: chờ mục menu được thêm sau khi render (trước đây đọc thứ tự ngay nên đôi khi thiếu "habits"). Không nới khẳng định.
+    await page.waitForSelector('.sidebar [data-view=habits]');
     const order = await page.evaluate(() => [...document.querySelectorAll('.sidebar nav [data-view], .sidebar .nav[data-view]')].map((b) => b.dataset.view));
     const i = order.indexOf('tasks');
     assert.equal(order[i + 1], 'habits', 'mục Việc hằng ngày phải nằm ngay dưới Tất cả công việc: ' + order.join(','));

@@ -1,11 +1,11 @@
 {
   "name": "kanban-zen-studio",
-  "version": "1.23.0",
+  "version": "1.24.0",
   "private": true,
   "type": "module",
   "scripts": {
     "build": "node scripts/build.mjs",
-    "test": "node tests/workspace-v2.mjs && node tests/static-assets.mjs && node tests/backend-security.mjs && node tests/build.mjs && node tests/request-body.mjs && node tests/core.mjs && node tests/accounts.mjs && node tests/sync.mjs && node tests/content.mjs && node tests/reports.mjs && node tests/projectux.mjs && node tests/resources.mjs && node tests/note-reminders.mjs && node tests/report-sharing.mjs && node tests/wisdom.mjs && node tests/note-enhancements.mjs && node tests/keep198.mjs && node tests/editor199.mjs && node tests/note110.mjs && node tests/manual-sync.mjs && node tests/release110.mjs && node tests/workflow111.mjs && node tests/calendar-span.mjs && node tests/css-important-budget.mjs && node tests/themes-generated.mjs && node tests/trash-no-reauth.mjs && node tests/daily-habits-sync.mjs",
+    "test": "node tests/workspace-v2.mjs && node tests/static-assets.mjs && node tests/backend-security.mjs && node tests/build.mjs && node tests/request-body.mjs && node tests/core.mjs && node tests/accounts.mjs && node tests/sync.mjs && node tests/content.mjs && node tests/reports.mjs && node tests/projectux.mjs && node tests/resources.mjs && node tests/note-reminders.mjs && node tests/report-sharing.mjs && node tests/wisdom.mjs && node tests/note-enhancements.mjs && node tests/keep198.mjs && node tests/editor199.mjs && node tests/note110.mjs && node tests/manual-sync.mjs && node tests/release110.mjs && node tests/workflow111.mjs && node tests/calendar-span.mjs && node tests/css-important-budget.mjs && node tests/themes-generated.mjs && node tests/trash-no-reauth.mjs && node tests/daily-habits-sync.mjs && node tests/logout-all-sync.mjs",
     "format": "prettier --write \"server/**/*.mjs\" \"scripts/**/*.mjs\"",
     "format:check": "prettier --check \"server/**/*.mjs\" \"scripts/**/*.mjs\"",
     "lint": "eslint server scripts"

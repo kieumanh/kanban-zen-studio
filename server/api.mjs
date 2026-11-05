@@ -915,6 +915,15 @@ export async function api(request, env) {
       const result = await assetAPI(request, env, u);
       if (result) return result;
     }
+    // v1.24.0: đăng xuất mọi thiết bị. Chỉ xóa phiên của chính người dùng; không đụng dữ liệu công việc.
+    if (path === '/api/logout-all' && request.method === 'POST') {
+      const u = await session(request, env);
+      await db.prepare('DELETE FROM sessions WHERE user_id=?').bind(u.id).run();
+      return json({ ok: true }, 200, {
+        'Set-Cookie':
+          'zen_session=; HttpOnly; Secure; SameSite=Strict; Path=/; Max-Age=0',
+      });
+    }
     if (path === '/api/logout' && request.method === 'POST') {
       const token = request.headers
         .get('Cookie')
