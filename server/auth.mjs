@@ -9,6 +9,8 @@ import {
   limited,
   passwordHash,
   passwordMatches,
+  passwordIterations,
+  PASSWORD_ITERATIONS,
 } from './api.mjs';
 export async function tokenMail(env, user, kind) {
   const token = random(),
@@ -131,6 +133,17 @@ export async function authAPI(request, env, path, ip) {
           'Vui lòng xác minh email trước khi đăng nhập. Bạn có thể gửi lại email xác minh.',
           403,
         );
+      // v1.27.0: mật khẩu đúng nhưng hash còn số vòng cũ thì tính lại với số vòng mới. Lỗi ở đây không chặn đăng nhập.
+      if (passwordIterations(u.password_hash) < PASSWORD_ITERATIONS) {
+        try {
+          await db
+            .prepare(
+              'UPDATE users SET password_hash=? WHERE id=? AND password_hash=?',
+            )
+            .bind(await passwordHash(password), u.id, u.password_hash)
+            .run();
+        } catch {}
+      }
       const token = random(),
         remembered = b.rememberDevice === true,
         expires = Date.now() + (remembered ? 30 * 86400000 : 600000);

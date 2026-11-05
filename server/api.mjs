@@ -69,9 +69,18 @@ const bytes = (h) =>
 export const random = () => hex(crypto.getRandomValues(new Uint8Array(32)));
 export const hash = async (s) =>
   hex(await crypto.subtle.digest('SHA-256', enc.encode(s)));
+// v1.27.0: số vòng PBKDF2 cho mật khẩu mới. Hash cũ (100.000 vòng, không có tiền tố) vẫn kiểm tra đúng
+// và được nâng lên số vòng mới ở lần đăng nhập thành công kế tiếp (xem auth.mjs). Không cần đổi schema.
+export const PASSWORD_ITERATIONS = 600000;
+export const LEGACY_PASSWORD_ITERATIONS = 100000;
+export function passwordIterations(stored) {
+  const m = /^(\d+)\$/.exec(String(stored || ''));
+  return m ? Number(m[1]) : LEGACY_PASSWORD_ITERATIONS;
+}
 export async function passwordHash(
   password,
   salt = hex(crypto.getRandomValues(new Uint8Array(16))),
+  iterations = PASSWORD_ITERATIONS,
 ) {
   const k = await crypto.subtle.importKey(
     'raw',
@@ -80,25 +89,29 @@ export async function passwordHash(
     false,
     ['deriveBits'],
   );
-  return (
-    salt +
-    ':' +
-    hex(
-      await crypto.subtle.deriveBits(
-        {
-          name: 'PBKDF2',
-          salt: bytes(salt),
-          iterations: 100000,
-          hash: 'SHA-256',
-        },
-        k,
-        256,
-      ),
-    )
+  const digest = hex(
+    await crypto.subtle.deriveBits(
+      {
+        name: 'PBKDF2',
+        salt: bytes(salt),
+        iterations,
+        hash: 'SHA-256',
+      },
+      k,
+      256,
+    ),
   );
+  const body = salt + ':' + digest;
+  return iterations === LEGACY_PASSWORD_ITERATIONS
+    ? body
+    : iterations + '$' + body;
 }
 export async function passwordMatches(password, stored) {
-  const candidate = await passwordHash(password, stored.split(':')[0]);
+  const iterations = passwordIterations(stored);
+  const salt = String(stored)
+    .replace(/^\d+\$/, '')
+    .split(':')[0];
+  const candidate = await passwordHash(password, salt, iterations);
   let diff = candidate.length ^ stored.length;
   for (let i = 0; i < stored.length; i++)
     diff |= (candidate.charCodeAt(i) || 0) ^ stored.charCodeAt(i);
