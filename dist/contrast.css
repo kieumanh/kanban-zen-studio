@@ -2800,6 +2800,15 @@
     background: #ffffff;
     color: #060606
 }
+:root[data-contrast=high] .hb-head .hb-days .is-today {
+    color: #ffffff
+}
+:root[data-contrast=high] .hb-head .hb-days .is-today small {
+    color: #ffffff
+}
+:root[data-contrast=high] .hb-today-chip {
+    color: #ffffff
+}
 :root[data-contrast=high] {
     --muted: #060606;
     --text-muted: #060606
@@ -6196,6 +6205,15 @@
 :root[data-theme=dark][data-contrast=high] .hb-findings .warn>span {
     background: #030303;
     color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .hb-head .hb-days .is-today {
+    color: #ffffff
+}
+:root[data-theme=dark][data-contrast=high] .hb-head .hb-days .is-today small {
+    color: #ffffff
+}
+:root[data-theme=dark][data-contrast=high] .hb-today-chip {
+    color: #ffffff
 }
 :root[data-theme=dark][data-contrast=high] {
     --muted: #f5f5f5;

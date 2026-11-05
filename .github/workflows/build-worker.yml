@@ -103,6 +103,7 @@ jobs:
           node tests/theme-choice-browser.mjs
           node tests/habit-goal-project-browser.mjs
           node tests/login-remember-browser.mjs
+          node tests/habit-today-icon-browser.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:

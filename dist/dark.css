@@ -2799,6 +2799,15 @@
     background: #131017;
     color: #fbb89e
 }
+:root[data-theme=dark] .hb-head .hb-days .is-today {
+    color: #ffffff
+}
+:root[data-theme=dark] .hb-head .hb-days .is-today small {
+    color: #ffffff
+}
+:root[data-theme=dark] .hb-today-chip {
+    color: #ffffff
+}
 :root[data-theme=dark] {
     --muted: #ccc2d7;
     --text-muted: #ccc2d7

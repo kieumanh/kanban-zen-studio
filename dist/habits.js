@@ -77,7 +77,7 @@
   // v1.22.0: liên kết dự án (hiển thị ở từng việc để biết việc này phục vụ dự án nào).
   const projectOf = (h) => (h.projectId ? (data.projects || []).find((p) => p.id === h.projectId) : null);
   function projectChip(h) {
-    if (!h.projectId) return '';
+    if (!h.projectId) return '<span class="hb-project is-empty">Chưa gắn dự án</span>';
     const p = projectOf(h);
     if (!p) return '<span class="hb-project is-missing">Dự án đã xóa</span>';
     return '<span class="hb-project" style="--pc:' + esc(p.color) + '" title="Dự án liên quan"><i aria-hidden="true"></i>' + esc(p.name) + '</span>';
@@ -117,7 +117,7 @@
   function weekBar() {
     const ws = week(),
       current = ws === mondayOf(today());
-    return '<div class="hb-weekbar"><span class="hb-weekbar-title">Bảng tuần</span><div class="hb-week-nav" role="group" aria-label="Chọn tuần"><button type="button" class="icon-btn hb-week-btn" data-hb-week="-1" aria-label="Tuần trước">‹</button><strong class="hb-week-label" id="hb-week-label">' + short(ws) + ' – ' + short(addDays(ws, 6)) + '</strong><button type="button" class="icon-btn hb-week-btn" data-hb-week="1" aria-label="Tuần sau">›</button><button type="button" class="btn hb-now" data-hb-week="0"' + (current ? ' disabled' : '') + '>Hôm nay</button></div></div>';
+    return '<div class="hb-weekbar"><span class="hb-weekbar-title">Bảng tuần</span><div class="hb-week-nav" role="group" aria-label="Chọn tuần"><button type="button" class="icon-btn hb-week-btn" data-hb-week="-1" aria-label="Tuần trước">‹</button><strong class="hb-week-label" id="hb-week-label">' + short(ws) + ' – ' + short(addDays(ws, 6)) + '</strong><button type="button" class="icon-btn hb-week-btn" data-hb-week="1" aria-label="Tuần sau">›</button><button type="button" class="btn hb-now" data-hb-week="0"' + (current ? ' disabled' : '') + '>Hôm nay</button></div>' + todayChip() + '</div>';
   }
   function actions() {
     const report = mode === 'report';
@@ -192,6 +192,37 @@
     $('#main').innerHTML = page();
   };
 
+  // v1.23.0: bộ chọn biểu tượng giống form dự án: gợi ý nhanh + tìm trong thư viện (icon-library.js), có nhóm và tìm kiếm.
+  const ICON_RESULT_LIMIT = 180;
+  const iconLibrary = () => (typeof ICON_LIBRARY !== 'undefined' ? ICON_LIBRARY : []);
+  const iconCategories = () => (typeof ICON_CATEGORY_LABELS !== 'undefined' ? ICON_CATEGORY_LABELS : { all: 'Tất cả' });
+  const weekdayIndex = (d) => (toDate(d).getUTCDay() + 6) % 7;
+  function todayChip() {
+    const t = today(), name = LONG[weekdayIndex(t)];
+    return '<span class="hb-today-chip" aria-label="Hôm nay là ' + name + ' ngày ' + short(t) + '">Hôm nay · ' + name + ', ' + short(t) + '</span>';
+  }
+  function pickIcon(icon, closePanel) {
+    const input = document.querySelector('#editor-body [name=icon]');
+    if (!input) return;
+    input.value = icon;
+    const label = document.querySelector('#hb-icon-preview');
+    if (label) label.textContent = icon;
+    document.querySelectorAll('#editor-body [data-hb-icon]').forEach((b) => { const on = b.dataset.hbIcon === icon; b.classList.toggle('is-on', on); b.setAttribute('aria-pressed', String(on)); });
+    if (closePanel) { const picker = document.querySelector('#hb-icon-picker'); if (picker) picker.open = false; }
+    syncPreview();
+    drawIconResults();
+  }
+  function drawIconResults() {
+    const box = document.querySelector('#hb-icon-results'), count = document.querySelector('#hb-icon-count');
+    if (!box || !count) return;
+    const terms = (document.querySelector('#hb-icon-search')?.value || '').trim().toLowerCase().split(/\s+/).filter(Boolean);
+    const cat = document.querySelector('#hb-icon-cat')?.value || 'all';
+    const current = document.querySelector('#editor-body [name=icon]')?.value.trim();
+    const all = iconLibrary().filter((i) => (cat === 'all' || i.category === cat) && terms.every((t) => i.keywords.includes(t) || i.icon.includes(t)));
+    const shown = all.slice(0, ICON_RESULT_LIMIT);
+    count.textContent = all.length + ' biểu tượng' + (all.length > shown.length ? ' · hiện ' + shown.length + ' đầu, gõ để tìm thêm' : '');
+    box.innerHTML = shown.map((i) => '<button type="button" class="hb-lib-btn" data-hb-lib="' + esc(i.icon) + '" title="' + esc(i.keywords) + '" aria-label="Chọn ' + esc(i.keywords) + '" aria-pressed="' + (i.icon === current) + '">' + i.icon + '</button>').join('') || '<p class="hb-icon-empty">Không tìm thấy. Thử từ tiếng Anh khác, ví dụ “leaf”, “water”, “book”.</p>';
+  }
   function form(h) {
     if (!h && list().length >= MAX) return notify('Tối đa ' + MAX + ' việc hằng ngày.');
     const color = h?.color || COLORS[list().length % COLORS.length];
@@ -199,8 +230,10 @@
     const pid = h?.projectId || '';
     const options = (data.projects || []).filter((p) => !p.archived || p.id === pid);
     const projectField = '<label class="field hb-project-field">Dự án liên quan<select name="projectId"><option value="">Không gắn dự án</option>' + options.map((p) => '<option value="' + esc(p.id) + '"' + (p.id === pid ? ' selected' : '') + '>' + esc(p.name) + '</option>').join('') + '</select></label>';
-    const goalField = '<div class="hb-goal"><span class="hb-goal-label" id="hb-goal-title">Số lần trong tuần</span><div class="hb-stepper" role="group" aria-labelledby="hb-goal-title"><button type="button" class="hb-step" data-hb-goal-step="-1" aria-label="Giảm số lần trong tuần">−</button><output class="hb-step-value" id="hb-goal-value" aria-live="polite">' + goalLabel(goal) + '</output><button type="button" class="hb-step" data-hb-goal-step="1" aria-label="Tăng số lần trong tuần">+</button></div><input type="hidden" name="goal" value="' + goal + '"></div>';
-    modal('<h2>' + (h ? 'Chỉnh sửa việc hằng ngày' : 'Thêm việc hằng ngày') + '</h2><div class="hb-form"><div class="hb-preview" id="hb-preview" style="--hb:' + color + '" aria-hidden="true"><span class="hb-icon">' + esc(h?.icon || '🌿') + '</span><span class="hb-preview-name">' + (esc(h?.name) || 'Tên việc của bạn') + '</span><span class="hb-preview-check">' + tick + '</span></div>' + field('Tên việc', 'name', h?.name || '', 'text', true, 80) + goalField + projectField + '<div class="hb-icon-field">' + field('Biểu tượng (1 ký tự)', 'icon', h?.icon || '🌿', 'text', true, 8) + '<div class="hb-icon-picks" role="group" aria-label="Gợi ý biểu tượng">' + ICONS.map((i) => '<button type="button" class="hb-icon-pick" data-hb-icon="' + i + '" aria-label="Chọn biểu tượng ' + i + '">' + i + '</button>').join('') + '</div></div><fieldset class="hb-swatches"><legend>Màu dấu tích</legend>' + COLORS.map((c, i) => '<label class="hb-swatch" style="--hb:' + c + '"><input type="radio" name="color" value="' + c + '"' + (c === color ? ' checked' : '') + '><span aria-hidden="true"></span><em class="sr-only">Màu ' + (i + 1) + '</em></label>').join('') + '</fieldset>' + (h ? '<button type="button" class="text-btn danger hb-form-delete" data-hb-delete="' + esc(h.id) + '">Xóa việc này</button>' : '') + '</div>', (fd) => {
+    const goalField = '<div class="hb-goal" role="group" aria-labelledby="hb-goal-title"><span class="hb-goal-label" id="hb-goal-title">Số lần trong tuần</span><div class="hb-stepper"><button type="button" class="hb-step" data-hb-goal-step="-1" aria-label="Giảm số lần trong tuần">−</button><output class="hb-step-value" id="hb-goal-value" aria-live="polite">' + goalLabel(goal) + '</output><button type="button" class="hb-step" data-hb-goal-step="1" aria-label="Tăng số lần trong tuần">+</button></div><input type="hidden" name="goal" value="' + goal + '"></div>';
+    const iconNow = h?.icon || '🌿';
+    const iconPicker = '<div class="hb-icon-field" role="group" aria-labelledby="hb-icon-title"><span class="hb-goal-label" id="hb-icon-title">Biểu tượng</span><div class="hb-icon-picks">' + ICONS.map((i) => '<button type="button" class="hb-icon-pick' + (i === iconNow ? ' is-on' : '') + '" data-hb-icon="' + i + '" aria-label="Chọn biểu tượng ' + i + '" aria-pressed="' + (i === iconNow) + '">' + i + '</button>').join('') + '</div><details class="appearance-picker hb-icon-picker" id="hb-icon-picker"><summary><span>Thư viện biểu tượng</span><span class="appearance-value"><b id="hb-icon-preview">' + esc(iconNow) + '</b>Mở thư viện ⌄</span></summary><input type="hidden" name="icon" value="' + esc(iconNow) + '"><div class="icon-picker-panel hb-icon-panel"><div class="icon-library-tools"><input type="search" id="hb-icon-search" class="emoji-search" placeholder="Tìm: leaf, book, water…" aria-label="Tìm biểu tượng bằng tiếng Anh"><label class="hb-icon-cat">Nhóm<select id="hb-icon-cat">' + Object.entries(iconCategories()).map(([k, name]) => '<option value="' + k + '">' + name + '</option>').join('') + '</select></label></div><small class="icon-result-count" id="hb-icon-count" role="status"></small><div class="icon-library-results" id="hb-icon-results"></div></div></details></div>';
+    modal('<h2>' + (h ? 'Chỉnh sửa việc hằng ngày' : 'Thêm việc hằng ngày') + '</h2><div class="hb-form"><div class="hb-preview" id="hb-preview" style="--hb:' + color + '" aria-hidden="true"><span class="hb-icon">' + esc(h?.icon || '🌿') + '</span><span class="hb-preview-name">' + (esc(h?.name) || 'Tên việc của bạn') + '</span><span class="hb-preview-check">' + tick + '</span></div>' + field('Tên việc', 'name', h?.name || '', 'text', true, 80) + goalField + projectField + iconPicker + '<fieldset class="hb-swatches"><legend>Màu dấu tích</legend>' + COLORS.map((c, i) => '<label class="hb-swatch" style="--hb:' + c + '"><input type="radio" name="color" value="' + c + '"' + (c === color ? ' checked' : '') + '><span aria-hidden="true"></span><em class="sr-only">Màu ' + (i + 1) + '</em></label>').join('') + '</fieldset>' + (h ? '<button type="button" class="text-btn danger hb-form-delete" data-hb-delete="' + esc(h.id) + '">Xóa việc này</button>' : '') + '</div>', (fd) => {
       const name = String(fd.get('name') || '').trim(), icon = String(fd.get('icon') || '').trim() || '🌿', col = String(fd.get('color') || color);
       const g = Math.min(7, Math.max(1, parseInt(fd.get('goal'), 10) || 7)), link = String(fd.get('projectId') || '');
       if (!name) return;
@@ -218,6 +251,9 @@
         }
       })) { $('#editor').close(); render(); notify(h ? 'Đã cập nhật việc hằng ngày.' : 'Đã thêm việc hằng ngày.'); }
     });
+    document.querySelector('#hb-icon-search')?.addEventListener('input', drawIconResults);
+    document.querySelector('#hb-icon-cat')?.addEventListener('change', drawIconResults);
+    drawIconResults();
     const eyebrow = document.querySelector('#modal-eyebrow');
     if (eyebrow) eyebrow.textContent = 'VIỆC HẰNG NGÀY';
     document.querySelector('#editor-body [name=name]')?.focus();
@@ -232,7 +268,7 @@
   }
 
   document.addEventListener('click', (e) => {
-    const t = e.target.closest('[data-hb-toggle],[data-hb-add],[data-hb-edit],[data-hb-delete],[data-hb-confirm-delete],[data-hb-cancel],[data-hb-week],[data-hb-preset],[data-hb-icon],[data-hb-mode],[data-hb-range],[data-hb-goal-step]');
+    const t = e.target.closest('[data-hb-toggle],[data-hb-add],[data-hb-edit],[data-hb-delete],[data-hb-confirm-delete],[data-hb-cancel],[data-hb-week],[data-hb-preset],[data-hb-icon],[data-hb-mode],[data-hb-range],[data-hb-goal-step],[data-hb-lib]');
     if (!t) return;
     if (t.dataset.hbToggle) {
       const h = find(t.dataset.hbToggle), d = t.dataset.hbDate;
@@ -286,10 +322,8 @@
       out.textContent = goalLabel(v);
       return;
     }
-    if (t.dataset.hbIcon) {
-      const input = document.querySelector('#editor-body [name=icon]');
-      if (input) { input.value = t.dataset.hbIcon; input.focus(); syncPreview(); }
-    }
+    if (t.dataset.hbIcon) return pickIcon(t.dataset.hbIcon, false);
+    if (t.dataset.hbLib) return pickIcon(t.dataset.hbLib, true);
   });
   function syncPreview() {
     const box = document.querySelector('#hb-preview'),
