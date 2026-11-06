@@ -22,13 +22,14 @@
   const week = () => weekStartDate || mondayOf(today());
   const days = () => Array.from({ length: 7 }, (_, i) => addDays(week(), i));
 
+  // v1.33.0: ngày "nghỉ" không làm đứt chuỗi và không được tính là đã làm.
   function streak(h) {
-    const done = new Set(h.done);
+    const done = new Set(h.done), rest = new Set(h.rest || []);
     let d = today();
-    if (!done.has(d)) d = addDays(d, -1);
+    if (!done.has(d) && !rest.has(d)) d = addDays(d, -1);
     let n = 0;
-    while (done.has(d)) {
-      n++;
+    while (done.has(d) || rest.has(d)) {
+      if (done.has(d)) n++;
       d = addDays(d, -1);
     }
     return n;
@@ -71,8 +72,9 @@
   const gridIcon = '<svg class="hb-rp-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5"/><rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5"/><path d="M14.5 17l2 2 3.5-4"/></svg>';
   function checkButton(h, d) {
     const done = h.done.includes(d),
+      rested = !done && (h.rest || []).includes(d),
       i = (toDate(d).getUTCDay() + 6) % 7;
-    return '<div class="hb-cell' + (d === today() ? ' is-today' : '') + '"><span class="hb-dayname" aria-hidden="true">' + SHORT[i] + '<small class="hb-daynum">' + short(d).slice(0, 2) + '</small></span><button type="button" class="hb-check' + (done ? ' is-done' : '') + '" role="checkbox" aria-checked="' + done + '" data-hb-toggle="' + esc(h.id) + '" data-hb-date="' + d + '"' + '' + ' aria-label="' + esc(h.name) + ' — ' + LONG[i] + ' ' + short(d) + '' + '">' + tick + '</button></div>';
+    return '<div class="hb-cell' + (d === today() ? ' is-today' : '') + (rested ? ' is-rest' : '') + '"><span class="hb-dayname" aria-hidden="true">' + SHORT[i] + '<small class="hb-daynum">' + short(d).slice(0, 2) + '</small></span><button type="button" class="hb-check' + (done ? ' is-done' : '') + '" role="checkbox" aria-checked="' + done + '" data-hb-toggle="' + esc(h.id) + '" data-hb-date="' + d + '"' + '' + ' aria-label="' + esc(h.name) + ' — ' + LONG[i] + ' ' + short(d) + (rested ? ' (nghỉ)' : '') + '">' + tick + '</button></div>';
   }
   // v1.22.0: liên kết dự án (hiển thị ở từng việc để biết việc này phục vụ dự án nào).
   const projectOf = (h) => (h.projectId ? (data.projects || []).find((p) => p.id === h.projectId) : null);
@@ -88,8 +90,24 @@
     const g = goalOf(h);
     return '<span class="hb-streak' + (s ? ' is-on' : '') + '">' + flame + (s ? 'Chuỗi ' + s + ' ngày' : 'Chưa có chuỗi') + '</span><span class="hb-week-count">' + weekDone(h) + '/' + g + ' trong tuần</span>' + projectChip(h);
   }
+  // v1.33.0: "Nghỉ hôm nay" — chỉ khi hôm nay chưa làm; bấm lại để bỏ nghỉ.
+  function restButton(h) {
+    if (week() !== mondayOf(today())) return '';
+    const t = today(), done = h.done.includes(t), rested = (h.rest || []).includes(t);
+    if (done) return '';
+    return '<button type="button" class="hb-rest' + (rested ? ' is-on' : '') + '" data-hb-rest="' + esc(h.id) + '" aria-pressed="' + rested + '">' + (rested ? 'Bỏ nghỉ hôm nay' : 'Nghỉ hôm nay') + '</button>';
+  }
+  // v1.33.0: lịch sử 28 ngày gần nhất của một việc (đã làm / nghỉ / chưa làm).
+  function history(h) {
+    if (!h) return;
+    const t = today(), done = new Set(h.done), rest = new Set(h.rest || []);
+    const cells = Array.from({ length: 28 }, (_, i) => addDays(t, i - 27));
+    const doneCount = cells.filter((d) => done.has(d)).length, restCount = cells.filter((d) => rest.has(d) && !done.has(d)).length;
+    const grid = cells.map((d) => '<span class="hb-hist-cell' + (done.has(d) ? ' is-done' : rest.has(d) ? ' is-rest' : '') + (d === t ? ' is-today' : '') + '" title="' + short(d) + (done.has(d) ? ' · đã làm' : rest.has(d) ? ' · nghỉ' : '') + '"><small>' + short(d) + '</small></span>').join('');
+    modal('<h2>Lịch sử: ' + esc(h.name) + '</h2><div class="hb-hist"><p class="hb-hist-sum">Chuỗi hiện tại <strong>' + streak(h) + ' ngày</strong> · đã làm <strong>' + doneCount + '</strong>/28 ngày' + (restCount ? ' · nghỉ <strong>' + restCount + '</strong>' : '') + '</p><div class="hb-hist-grid" role="img" aria-label="28 ngày gần nhất">' + grid + '</div><p class="help-copy">Ô đậm là ngày đã làm, ô nét đứt là ngày nghỉ. Ngày nghỉ không làm đứt chuỗi.</p></div>', null, true);
+  }
   function row(h) {
-    return '<li class="hb-row" data-hb-row="' + esc(h.id) + '" style="--hb:' + esc(h.color) + '"><div class="hb-info"><span class="hb-icon" aria-hidden="true">' + esc(h.icon || '✳') + '</span><div class="hb-text"><strong class="hb-name">' + esc(h.name) + '</strong><span class="hb-meta">' + meta(h) + '</span></div><div class="hb-actions"><button type="button" class="icon-btn hb-act" data-hb-edit="' + esc(h.id) + '" aria-label="Sửa ' + esc(h.name) + '" title="Sửa">' + svgIcon('edit') + '</button><button type="button" class="icon-btn hb-act hb-del" data-hb-delete="' + esc(h.id) + '" aria-label="Xóa ' + esc(h.name) + '" title="Xóa">' + svgIcon('trash') + '</button></div></div><div class="hb-days">' + days().map((d) => checkButton(h, d)).join('') + '</div></li>';
+    return '<li class="hb-row" data-hb-row="' + esc(h.id) + '" style="--hb:' + esc(h.color) + '"><div class="hb-info"><span class="hb-icon" aria-hidden="true">' + esc(h.icon || '✳') + '</span><div class="hb-text"><strong class="hb-name">' + esc(h.name) + '</strong><span class="hb-meta">' + meta(h) + '</span></div><div class="hb-actions"><button type="button" class="icon-btn hb-act" data-hb-history="' + esc(h.id) + '" aria-label="Lịch sử ' + esc(h.name) + '" title="Lịch sử">' + svgIcon('notes') + '</button><button type="button" class="icon-btn hb-act" data-hb-edit="' + esc(h.id) + '" aria-label="Sửa ' + esc(h.name) + '" title="Sửa">' + svgIcon('edit') + '</button><button type="button" class="icon-btn hb-act hb-del" data-hb-delete="' + esc(h.id) + '" aria-label="Xóa ' + esc(h.name) + '" title="Xóa">' + svgIcon('trash') + '</button></div></div><div class="hb-days">' + days().map((d) => checkButton(h, d)).join('') + '</div>' + restButton(h) + '</li>';
   }
   function ring(done, total) {
     const pct = total ? done / total : 0;
@@ -276,7 +294,7 @@
   }
 
   document.addEventListener('click', (e) => {
-    const t = e.target.closest('[data-hb-toggle],[data-hb-add],[data-hb-edit],[data-hb-delete],[data-hb-confirm-delete],[data-hb-cancel],[data-hb-week],[data-hb-preset],[data-hb-icon],[data-hb-mode],[data-hb-range],[data-hb-goal-step],[data-hb-lib]');
+    const t = e.target.closest('[data-hb-rest],[data-hb-history],[data-hb-toggle],[data-hb-add],[data-hb-edit],[data-hb-delete],[data-hb-confirm-delete],[data-hb-cancel],[data-hb-week],[data-hb-preset],[data-hb-icon],[data-hb-mode],[data-hb-range],[data-hb-goal-step],[data-hb-lib]');
     if (!t) return;
     if (t.dataset.hbToggle) {
       const h = find(t.dataset.hbToggle), d = t.dataset.hbDate;
@@ -303,6 +321,14 @@
       return render();
     }
     if (t.hasAttribute('data-hb-add')) return form();
+    if (t.dataset.hbRest) {
+      const h = find(t.dataset.hbRest), k = today();
+      if (!h || h.done.includes(k)) return;
+      const on = (h.rest || []).includes(k);
+      if (!wfSave(() => { h.rest = on ? h.rest.filter((x) => x !== k) : (h.rest || []).concat(k).sort(); })) return render();
+      return render();
+    }
+    if (t.dataset.hbHistory) return history(find(t.dataset.hbHistory));
     if (t.dataset.hbEdit) return form(find(t.dataset.hbEdit));
     if (t.dataset.hbDelete) return confirmDelete(t.dataset.hbDelete);
     if (t.hasAttribute('data-hb-cancel')) return $('#editor').close();

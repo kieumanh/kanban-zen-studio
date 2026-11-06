@@ -384,6 +384,13 @@ function validHabits(list) {
       !validDate(h.createdAt)
     )
       return false;
+    if (
+      h.rest !== undefined &&
+      (!Array.isArray(h.rest) ||
+        h.rest.length > 3700 ||
+        !h.rest.every((d) => typeof d === 'string' && validDate(d)))
+    )
+      return false;
     if (!Array.isArray(h.done) || h.done.length > 3700) return false;
     const seen = new Set();
     return h.done.every(
