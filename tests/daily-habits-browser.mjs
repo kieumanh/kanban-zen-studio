@@ -52,7 +52,7 @@ try {
     await waitServer(page, server, (l) => l.length === 2, 'việc thứ hai');
 
     // 3) Sửa.
-    await page.click('[data-hb-edit]:nth-of-type(1) >> nth=1');
+    await page.click('[data-hb-edit] >> nth=1');
     await page.waitForSelector('#editor[open] [name=name]');
     assert.equal(await page.inputValue('#editor [name=name]'), 'Uống đủ nước', 'biểu mẫu sửa nạp đúng tên');
     await page.fill('#editor [name=name]', 'Uống 2 lít nước');
