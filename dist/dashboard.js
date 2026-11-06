@@ -88,7 +88,7 @@ render=function(){rememberDashboardProject();dashboardRenderBefore();if(view==='
  const main=$('#main'),plan=main.querySelector('.wf-today-plan'),headingNode=main.querySelector('.page-heading');
  if(plan&&headingNode)headingNode.after(plan);
  main.querySelector('.version-preview')?.remove();
- }if(view==='versions'&&!$('#main .dashboard-release-note'))$('#main .release')?.insertAdjacentHTML('afterbegin','<article class="timeline-item dashboard-release-note"><h4>v'+esc(APP_VERSION)+' · Công việc rõ nhịp, tiến độ dễ hiểu</h4><p>Dashboard ưu tiên việc cần làm, quá hạn và sắp đến hạn; thẻ Kanban gọn dữ liệu; tiến độ được giải thích nhất quán; tạo nhanh và chỉnh sửa đầy đủ được tách riêng.</p></article>');};
+ }};
 function refreshDashboardPlan(){
  const section=$('.wf-today-plan');if(!section)return;
  const tasks=allTasks().filter(t=>t.col!=='Done'&&!t.archived),day=today(),soonEnd=new Date(day+'T12:00:00');soonEnd.setDate(soonEnd.getDate()+7);const end=soonEnd.toLocaleDateString('en-CA',{timeZone:'Asia/Ho_Chi_Minh'});

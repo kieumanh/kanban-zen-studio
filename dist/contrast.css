@@ -2678,6 +2678,9 @@
 :root[data-contrast=high] :focus-visible {
     outline: 3px solid #18102b
 }
+:root[data-contrast=high] .release-ver {
+    background: rgba(121,80,200,0.078)
+}
 :root[data-contrast=high] .zen-row-overdue .zen-due-label {
     color: #060606
 }
@@ -6083,6 +6086,9 @@
 }
 :root[data-theme=dark][data-contrast=high] :focus-visible {
     outline: 3px solid #cecece
+}
+:root[data-theme=dark][data-contrast=high] .release-ver {
+    background: rgba(121,80,200,0.078)
 }
 :root[data-theme=dark][data-contrast=high] .zen-row-overdue .zen-due-label {
     color: #f5f5f5

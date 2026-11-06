@@ -9,3 +9,14 @@
 .sidebar nav .nav-more[open]>.nav-more-summary::after{transform:rotate(180deg)}
 .sidebar nav .nav-more-summary:focus-visible{outline:3px solid var(--brand-purple);outline-offset:2px}
 .sidebar nav .nav-more>.nav{padding-left:22px}
+
+/* v1.31.0: nhật ký phiên bản — mỗi phiên bản một khung, có từ khóa hạng mục */
+.release-log{display:grid;gap:14px;margin-top:6px}
+.release-card{border:1px solid var(--line);background:var(--paper);border-radius:18px;padding:16px 18px;box-shadow:0 4px 14px #7950c80d;min-width:0}
+.release-card header{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.release-card h4{margin:0;font-size:16px;line-height:1.35;color:var(--ink);overflow-wrap:anywhere}
+.release-ver{font-size:12px;font-weight:800;color:var(--orange);background:#7950c814;border-radius:999px;padding:3px 10px;white-space:nowrap}
+.release-tags{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 8px}
+.release-tag{font-size:12px;font-weight:700;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:3px 10px}
+.release-card ul{margin:0;padding-left:20px;display:grid;gap:4px;font-size:14px;line-height:1.55;color:var(--ink)}
+@media(max-width:600px){.release-card{padding:14px}.release-card h4{font-size:15px}}
