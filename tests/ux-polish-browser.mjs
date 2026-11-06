@@ -50,13 +50,13 @@ try {
   {
     const { page } = await h.open(1440, { workspace: seed([monday, addDays(monday, 1)])() });
     await h.show(page, 'habits');
-    assert.equal(await page.textContent('#hb-progress-note'), 'Còn 1 lượt cần làm tuần này · 2/3 lượt theo mục tiêu, cộng gộp mọi việc', 'ghi chú nêu còn 1 lượt');
+    assert.equal(await page.textContent('#hb-progress-note'), 'Còn 1 lượt cần làm tuần này · đã làm 2/3', 'ghi chú nêu còn 1 lượt');
     await page.context().close();
   }
   {
     const { page } = await h.open(390, { touch: true, workspace: seed()() });
     await h.show(page, 'habits');
-    assert.equal(await page.textContent('#hb-progress-note'), 'Tuần mới: bắt đầu bằng 1 lượt · 0/3 lượt theo mục tiêu, cộng gộp mọi việc', 'tuần mới có trạng thái riêng');
+    assert.equal(await page.textContent('#hb-progress-note'), 'Tuần mới: bắt đầu bằng 1 lượt · đã làm 0/3', 'tuần mới có trạng thái riêng');
     await page.context().close();
   }
 

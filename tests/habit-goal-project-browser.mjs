@@ -61,7 +61,7 @@ try {
     const { page, server } = await h.open(1440, { workspace: capSeed() });
     await h.show(page, 'habits');
     assert.equal(await page.textContent('#hb-progress-pct'), '30%', 'năm lượt với mục tiêu 3 chỉ cộng 3');
-    assert.match(await page.textContent('#hb-progress-note'), /3\/10 lượt/, 'ghi chú hiện 3/10 lượt theo mục tiêu');
+    assert.match(await page.textContent('#hb-progress-note'), /đã làm 3\/10/, 'ghi chú hiện 3/10 lượt theo mục tiêu');
     const weekCount = await page.locator('[data-hb-row]', { hasText: 'Đọc sách' }).locator('.hb-week-count').innerText();
     assert.match(weekCount.trim(), /^3\/3/, 'dòng việc hiện 3/3 trong tuần, không phải 5/3');
 

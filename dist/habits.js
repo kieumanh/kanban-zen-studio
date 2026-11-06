@@ -109,7 +109,7 @@
   // v1.24.0: tuần đang xem cho biết còn bao nhiêu lượt cần làm; tuần mới có trạng thái riêng.
   const progressNote = (p) => {
     if (!p.tr) return 'Chưa có việc nào trong tuần này';
-    const tail = p.dn + '/' + p.tr + ' lượt theo mục tiêu, cộng gộp mọi việc';
+    const tail = 'đã làm ' + p.dn + '/' + p.tr;
     if (week() !== mondayOf(today())) return tail;
     if (!p.dn) return 'Tuần mới: bắt đầu bằng 1 lượt · ' + tail;
     const left = p.tr - p.dn;
@@ -140,7 +140,7 @@
         ? window.zenHabitsReport.html(range)
         : ''
       : '<div class="hb-overview">' + summary() + progressBlock() + '</div>' + weekBar() + (hs.length ? head() + '<ul class="hb-list">' + hs.map(row).join('') + '</ul>' : empty());
-    return heading('MỖI NGÀY MỘT BƯỚC NHỎ', report ? 'Báo cáo việc hằng ngày' : 'Việc hằng ngày', report ? 'Biểu đồ, đánh giá và đề xuất cải thiện từ chính dữ liệu tích của bạn.' : 'Tích từng việc nhỏ mỗi ngày để nuôi dưỡng thói quen tốt.', actions()) + '<section class="panel hb-panel' + (report ? ' is-report' : '') + '" aria-label="' + (report ? 'Báo cáo việc hằng ngày' : 'Bảng việc hằng ngày') + '">' + body + '</section>';
+    return heading('', report ? 'Báo cáo việc hằng ngày' : 'Việc hằng ngày', report ? 'Biểu đồ, đánh giá và đề xuất cải thiện từ chính dữ liệu tích của bạn.' : 'Tích từng việc nhỏ mỗi ngày để nuôi dưỡng thói quen tốt.', actions()) + '<section class="panel hb-panel' + (report ? ' is-report' : '') + '" aria-label="' + (report ? 'Báo cáo việc hằng ngày' : 'Bảng việc hằng ngày') + '">' + body + '</section>';
   }
 
   function paintStats(celebrate) {

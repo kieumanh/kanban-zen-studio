@@ -251,7 +251,7 @@ dialog .modal-head{position:sticky;top:0;z-index:5;background:var(--paper);paddi
 #editor .modal-close-pin{top:12px;float:right;z-index:35;display:grid!important;place-items:center;flex:0 0 44px;min-height:44px!important;margin:0 0 -44px 10px;padding:0!important;color:#bd344e!important;border:1px solid #eeb5c0!important;background:#fff3f5!important;border-radius:13px!important;box-shadow:0 3px 12px #432a4420;font:700 27px/1 var(--sans)!important;cursor:pointer;touch-action:manipulation}
 #editor .modal-close-pin:hover{background:#ffe4e9!important;border-color:#d77081!important}
 #editor .modal-close-pin:focus-visible{outline:3px solid #9a65c4;outline-offset:2px}
-#editor .modal-foot{position:static!important;bottom:auto!important;margin:20px 0 0!important;padding:15px 0 0!important;background:transparent!important}
+#editor:not(:has(.hb-form)) .modal-foot{position:static!important;bottom:auto!important;margin:20px 0 0!important;padding:15px 0 0!important;background:transparent!important}
 #editor:has(.notice-list) .notice-list{max-height:none!important;height:auto!important;overflow:visible!important;overscroll-behavior:auto!important;min-width:0;margin:16px 0}
 #editor:has(.notice-list) .notice-item{box-sizing:border-box;width:100%;min-width:0;overflow-wrap:anywhere;white-space:normal}
 #editor:has(.notice-list) #clear-file-alerts{display:block;position:static;width:100%;max-width:100%;min-height:44px;margin:18px 0 8px;text-align:center}
