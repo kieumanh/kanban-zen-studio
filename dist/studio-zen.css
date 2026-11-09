@@ -416,10 +416,7 @@ textarea {
   margin: 0 !important;
 }
 .wf-check-sort-list .compact-check {
-  grid-template-columns: 30px 26px minmax(0, 1fr) auto !important;
-}
-input[type="range"] {
-  height: 24px;
+  grid-template-columns: 30px 26px minmax(0, 1fr) auto auto !important;
 }
 .text-btn,
 .settings-toggle {
@@ -1497,84 +1494,81 @@ dialog[open] button[aria-label^="Đóng"],
   display: none;
 }
 
-/* v1.19.0: checklist. Mỗi mục có thanh tiến độ là chính thanh kéo % (phần đã đạt tô màu theo --p). Bỏ nút ↑/↓; thanh kéo đủ 44px để chạm. */
+/* v1.19.0: checklist. v1.42.0: thay thanh kéo bằng ô số nhỏ gọn (nhập trực tiếp 0–100) đặt cuối dòng. */
 .zen-ck-pct {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 8px;
-  min-width: 0;
-  font-size: 12px;
-  color: var(--zen-text-muted, #5f5070);
-}
-.zen-ck-pct-label { flex: none; }
-.zen-ck-pct input[type="range"] {
-  flex: 1 1 96px;
-  min-width: 64px;
-  height: 44px;
-  margin: 0;
-  padding: 19px 0;
-  box-sizing: border-box;
-  -webkit-appearance: none;
-  appearance: none;
-  background: linear-gradient(to right, #7950c8 var(--p, 0%), #e6dcef var(--p, 0%)) content-box;
-  background-clip: content-box;
-  border-radius: 999px;
-  cursor: pointer;
-}
-.zen-ck-pct input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  border: 2px solid #7950c8;
-  background: #fff;
-  box-shadow: 0 1px 3px #3b245c33;
-}
-.zen-ck-pct input[type="range"]::-moz-range-thumb {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  border: 2px solid #7950c8;
-  background: #fff;
-}
-.zen-ck-pct input[type="range"]::-moz-range-track { background: transparent; }
-.zen-ck-pct input[type="range"]:focus-visible { outline: 2px solid #9a65c4; outline-offset: 2px; }
-.zen-ck-pct output {
+  gap: 3px;
   flex: none;
-  min-width: 40px;
-  text-align: right;
+  font-size: 12px;
+}
+.zen-ck-num {
+  width: 46px;
+  min-height: 32px;
+  padding: 2px 4px;
+  border: 1px solid #d4c4e9;
+  border-radius: 8px;
+  background: #faf7fd;
+  font-size: 13px;
+  font-weight: 700;
   font-variant-numeric: tabular-nums;
+  color: var(--zen-text-accent, #6e3fa0);
+  text-align: center;
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+.zen-ck-num::-webkit-inner-spin-button,
+.zen-ck-num::-webkit-outer-spin-button { -webkit-appearance: none; }
+.zen-ck-num:focus-visible { outline: 2px solid #9a65c4; outline-offset: 2px; }
+/* Cảm ứng: ô số giữ vùng chạm 44px. Ghi đè thêm bằng #editor vì các quy tắc input chung trong hộp chi tiết làm ô rộng 100px. */
+#editor .zen-ck-pct .zen-ck-num,
+.zen-fe-row .zen-ck-pct .zen-ck-num {
+  box-sizing: border-box;
+  width: 48px;
+  height: 32px;
+  min-height: 32px;
+  margin: 0;
+  padding: 2px 2px;
+  line-height: 1.2;
+  font-size: 13px;
   font-weight: 700;
   color: var(--zen-text-accent, #6e3fa0);
 }
-/* v1.19.0: hàng checklist: cột 1 tay kéo, cột 2 ô tick, cột 3 chữ, cột 4 nút ×; thanh tiến độ nằm dòng riêng bên dưới chữ. */
-.wf-check-sort-list .compact-check { grid-template-columns: 30px 26px minmax(0, 1fr) auto; }
-.wf-check-sort-list .compact-check > .zen-check-actions { grid-column: 4; justify-self: end; }
-.wf-check-sort-list .compact-check > .zen-ck-pct { grid-column: 2 / -1; grid-row: auto; padding: 0 4px 0 0; }
-.zen-fe-row { grid-template-columns: 26px minmax(0, 1fr) auto; }
-.zen-fe-row > .zen-ck-pct { grid-column: 2 / -1; }
-/* v1.19.0: nhãn "Tiến độ" và số % tối thiểu 12px (bài kiểm cỡ chữ tối thiểu). */
+@media (pointer: coarse) {
+  #editor .zen-ck-pct .zen-ck-num,
+  .zen-fe-row .zen-ck-pct .zen-ck-num { width: 56px; height: 44px; min-height: 44px; }
+}
+.zen-ck-pct-unit {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--zen-text-accent, #6e3fa0);
+}
+/* v1.42.0: hàng checklist một dòng: cột 1 tay kéo, cột 2 ô tick, cột 3 chữ, cột 4 ô % (in đậm cuối dòng), cột 5 nút ×. */
+.wf-check-sort-list .compact-check { grid-template-columns: 30px 26px minmax(0, 1fr) auto auto; }
+.wf-check-sort-list .compact-check > .zen-ck-pct { grid-column: 4; grid-row: 1; justify-self: end; padding: 0; }
+.wf-check-sort-list .compact-check > .zen-check-actions { grid-column: 5; grid-row: 1; justify-self: end; }
+.zen-fe-row { grid-template-columns: 26px minmax(0, 1fr) auto auto; }
+.zen-fe-row > .zen-ck-pct { grid-column: 3; grid-row: 1; justify-self: end; }
+.zen-fe-row > .zen-check-actions { grid-column: 4; }
+/* v1.42.0: cỡ chữ tối thiểu 12px cho nhãn % (bài kiểm cỡ chữ tối thiểu). */
 #editor .compact-check .zen-ck-pct,
-#editor .compact-check .zen-ck-pct-label,
-#editor .compact-check .zen-ck-pct output,
 .zen-fe-row .zen-ck-pct,
-.zen-fe-row .zen-ck-pct-label,
-.zen-fe-row .zen-ck-pct output { font-size: 12px; }
+.zen-fe-row .zen-ck-pct-unit { font-size: 12px; }
 
 /* v1.19.0: Chế độ tập trung — tay kéo ⠿ đổi thứ tự (thay nút ↑/↓); lưới 4 cột: tay kéo, ô tick, chữ, nút ×; thanh % nằm dòng dưới. */
-.zen-fe-row { grid-template-columns: 26px 26px minmax(0, 1fr) auto; }
+.zen-fe-row { grid-template-columns: 26px 26px minmax(0, 1fr) auto auto; }
 .zen-fe-row > .zen-fe-grip { grid-column: 1; grid-row: 1; }
 .zen-fe-row > input[type="checkbox"] { grid-column: 2; grid-row: 1; }
 .zen-fe-row > textarea { grid-column: 3; grid-row: 1; }
-.zen-fe-row > .zen-check-actions { grid-column: 4; grid-row: 1; justify-self: end; }
-.zen-fe-row > .zen-ck-pct { grid-column: 2 / -1; grid-row: 2; }
+.zen-fe-row > .zen-ck-pct { grid-column: 4; grid-row: 1; justify-self: end; }
+.zen-fe-row > .zen-check-actions { grid-column: 5; grid-row: 1; justify-self: end; }
 .zen-fe-grip { width: 26px; min-height: 36px; padding: 0; border: 0; background: transparent; color: var(--zen-text-muted, #5f5070); font-size: 16px; line-height: 1; cursor: grab; touch-action: none; }
 .zen-fe-grip:focus-visible { outline: 2px solid #9a65c4; outline-offset: 2px; border-radius: 8px; }
 .zen-fe-row.zen-fe-dragging { opacity: 0.5; }
 .zen-fe-row.zen-fe-drop-before { box-shadow: inset 0 3px 0 #7950c8; }
 .zen-fe-row.zen-fe-drop-after { box-shadow: inset 0 -3px 0 #7950c8; }
 @media (max-width: 700px) {
-  .zen-fe-row { grid-template-columns: 44px 28px minmax(0, 1fr) auto; }
+  .zen-fe-row { grid-template-columns: 44px 28px minmax(0, 1fr) auto auto; }
   .zen-fe-grip { width: 44px; min-height: 44px; }
 }
 
@@ -1584,7 +1578,6 @@ dialog[open] button[aria-label^="Đóng"],
 .wf-check-sort-list .compact-check { border-radius: 16px; padding: 4px 8px 4px 4px; }
 .wf-check-sort-list .compact-check > .zen-ck-pct { margin: -6px 0 -4px; padding: 0 4px 0 0; }
 .zen-ck-pct { gap: 6px; }
-.zen-ck-pct input[type="range"] { height: 44px; padding: 19px 0; }
 .zen-check-add { align-items: center; gap: 6px; padding: 4px 4px 4px 14px; border: 1px solid #e5dbed; border-radius: 999px; background: #fff; }
 #editor .zen-check-add textarea { min-height: 36px; padding: 7px 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
 #editor .zen-check-add .wf-add-check { min-height: 36px; padding: 0 16px; border-radius: 999px; white-space: nowrap; }
@@ -1613,10 +1606,6 @@ dialog[open] button[aria-label^="Đóng"],
    Phần tô kết thúc đúng tâm núm kéo (--pn = % chia 100), nên đầu phải của phần tô luôn nằm dưới núm tròn, không bao giờ lộ góc vuông; đầu trái theo bo của rãnh. */
 .sidebar .view-group { margin: 10px 0 14px; padding: 10px 6px 8px; border: 1px solid #e7dcf1; border-radius: 18px; background: #faf6fe; }
 .sidebar .view-options .view-mode { border-radius: 14px; }
-#editor .zen-ck-pct input[type="range"] { height: 44px; margin: 0; padding: 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
-#editor .zen-ck-pct input[type="range"]::-webkit-slider-runnable-track { height: 6px; border-radius: 999px; background: linear-gradient(to right, #7950c8 calc(9px + (100% - 18px) * var(--pn, 0)), #e6dcef calc(9px + (100% - 18px) * var(--pn, 0))); }
-#editor .zen-ck-pct input[type="range"]::-webkit-slider-thumb { margin-top: -6px; }
-#editor .zen-ck-pct input[type="range"]::-moz-range-track { height: 6px; border-radius: 999px; background: linear-gradient(to right, #7950c8 calc(9px + (100% - 18px) * var(--pn, 0)), #e6dcef calc(9px + (100% - 18px) * var(--pn, 0))); }
 
 /* v1.19.9: bảng "Bạn có thay đổi chưa lưu" dính ngay dưới tiêu đề hộp thoại (sticky) nên luôn hiện ở vị trí đang đọc, kể cả khi đã cuộn xuống.
    Nút Lưu nằm trên cùng, chiếm cả hàng; hai nút còn lại chia đôi. Chỉ đổi vị trí và bố cục, không đổi hành vi lưu/bỏ. */
@@ -1629,7 +1618,7 @@ dialog[open] button[aria-label^="Đóng"],
    Vòng focus của nút kéo, ô tick và thanh % được vẽ vào trong dòng (outline-offset âm) nên không ló ra khỏi viền bo. */
 @media (pointer: coarse) {
   #editor .wf-check-sort-list .compact-check {
-    grid-template-columns: 44px 26px minmax(0, 1fr) auto !important;
+    grid-template-columns: 44px 26px minmax(0, 1fr) auto auto !important;
     min-height: 52px;
   }
   #editor .wf-check-sort-list .compact-check .wf-grip {
@@ -1643,7 +1632,7 @@ dialog[open] button[aria-label^="Đóng"],
 }
 #editor .wf-check-sort-list .compact-check .wf-grip:focus-visible { outline-offset: -3px; }
 #editor .wf-check-sort-list .compact-check input[type="checkbox"]:focus-visible,
-#editor .wf-check-sort-list .compact-check input[type="range"]:focus-visible,
+#editor .wf-check-sort-list .compact-check .zen-ck-num:focus-visible,
 #editor .wf-check-sort-list .compact-check .compact-check-remove:focus-visible { outline-offset: -2px; }
 
 /* v1.19.11: ô "Thêm mục mới" cân đối. Nút "+ Thêm" từng bị đẩy xuống 12px bởi lề trên (workflow111.css, đã bỏ !important ở đó),

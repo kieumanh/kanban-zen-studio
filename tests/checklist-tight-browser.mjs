@@ -47,7 +47,9 @@ try {
         bodyOverflow: document.querySelector('#editor-body').scrollWidth - document.querySelector('#editor-body').clientWidth,
       };
     });
-    assert.ok(m.rangeH >= 44 && m.rangeH <= 46, 'thanh % phải giữ vùng chạm 44px, được ' + m.rangeH + at);
+    // v1.42.0: ô % là ô số nhỏ; trên cảm ứng giữ vùng chạm 44px, trên máy tính 32px.
+    const minH = width < 700 ? 44 : 32;
+    assert.ok(m.rangeH >= minH && m.rangeH <= 60, 'ô % phải đủ vùng chạm (' + minH + 'px), được ' + m.rangeH + at);
     // Trần 100px theo số đo thật (390px: 97px; 820/1440px: 87px; v1.19.3 đo được 107px và 90px). Thanh % giữ vùng chạm 44px nên dòng không thể thấp hơn ~85px.
     assert.ok(m.rowH <= 100, 'một dòng checklist quá cao: ' + m.rowH + at);
     assert.ok(m.boxRadius >= 20, 'khung thêm mục phải bo tròn kiểu viên thuốc, được ' + m.boxRadius + at);

@@ -65,8 +65,8 @@ try {
       // Bàn phím tăng % mục 2 từ 40 lên 50; tick mục 3 (→100), bỏ tick (→0), tick lại (→100).
       const range2 = page.locator('#editor-body input[name="check-pct-1"]');
       await range2.focus();
-      await page.keyboard.press('ArrowRight');
-      await page.keyboard.press('ArrowRight');
+      await page.keyboard.press('ArrowUp');
+      await page.keyboard.press('ArrowUp');
       assert.equal(
         await range2.inputValue(),
         '50',
@@ -186,7 +186,7 @@ try {
         'Chế độ tập trung: mỗi mục có thanh %' + at,
       );
       await page.locator('[data-fe-pct]').nth(1).focus();
-      await page.keyboard.press('ArrowRight');
+      await page.keyboard.press('ArrowUp');
       await page.waitForFunction(
         () => project('p1').tasks[0].checks[1].pct === 45,
       );

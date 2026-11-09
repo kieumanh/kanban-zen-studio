@@ -1479,30 +1479,23 @@
 })();
 
 // v1.19.0: checklist gọn hơn và có tiến độ riêng từng mục. Chỉ còn kéo thả để đổi thứ tự (Alt + ↑/↓ vẫn dùng được bằng bàn phím);
-// mỗi mục có thanh kéo % (0–100, bước 5) và thanh tiến độ mỏng. Tick = 100%; kéo về 100 = tick; bỏ tick = 0%.
+// v1.42.0: thay thanh kéo bằng ô số nhỏ gọn cuối dòng (nhập trực tiếp 0–100). Tick = 100%; bỏ tick = 0%.
 // Tiến độ việc và dự án được tính ở app.js (checkPct, taskPct, progress). Hộp công việc lưu % cùng lúc với nút Lưu (taskux.js).
 function zenPctMarkup(value, attrs, label) {
   const v = Math.min(100, Math.max(0, Math.round(Number(value) || 0)));
   return (
-    '<span class="zen-ck-pct-label" aria-hidden="true">Tiến độ</span>' +
-    '<input type="range" min="0" max="100" step="5" value="' + v + '" ' + attrs + ' style="--p:' + v + '%;--pn:' + v / 100 + '" aria-label="' + esc(label) + ' (%)">' +
-    '<output aria-hidden="true">' + v + '%</output>'
+    '<input type="number" min="0" max="100" step="5" value="' + v + '" class="zen-ck-num" ' + attrs + ' aria-label="' + esc(label) + ' (%)">' +
+    '<span class="zen-ck-pct-unit" aria-hidden="true">%</span>'
   );
 }
 function zenPctPaint(row, value) {
   if (!row) return;
   const v = Math.min(100, Math.max(0, Math.round(Number(value) || 0)));
-  const range = row.querySelector('input[type="range"]');
+  const num = row.querySelector('input[type="number"].zen-ck-num');
   const box = row.querySelector('input[name^="check-done-"], input[data-fe-toggle]');
-  if (range && Number(range.value) !== v) range.value = String(v);
+  if (num && Number(num.value) !== v) num.value = String(v);
   if (box && box.checked !== (v === 100)) box.checked = v === 100;
   row.classList.toggle('is-complete', v === 100);
-  if (range) {
-      range.style.setProperty('--p', v + '%');
-      range.style.setProperty('--pn', String(v / 100));
-    }
-  const out = row.querySelector('output');
-  if (out) out.textContent = v + '%';
 }
 (() => {
   const addToRows = () => {
@@ -1519,7 +1512,10 @@ function zenPctPaint(row, value) {
       const wrap = document.createElement('label');
       wrap.className = 'zen-ck-pct';
       wrap.innerHTML = zenPctMarkup(checkPct(c), 'name="check-pct-' + i + '"', 'Tiến độ mục ' + (i + 1) + (label ? ': ' + label : ''));
-      row.append(wrap);
+      // v1.42.0: ô % đặt trước nút × để thứ tự Tab khớp thứ tự đọc (text → % → ×).
+      const actionsEl = row.querySelector('.zen-check-actions');
+      if (actionsEl) row.insertBefore(wrap, actionsEl);
+      else row.append(wrap);
     });
   };
   const beforeRows = taskDetail;

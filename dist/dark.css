@@ -3348,24 +3348,18 @@
     background: #17141b;
     color: #e5c9a1
 }
-:root[data-theme=dark] .zen-ck-pct {
-    color: var(--zen-text-muted, #d2c5e1)
+:root[data-theme=dark] .zen-ck-num {
+    border: 1px solid #4a4156;
+    background: #18141c;
+    color: var(--zen-text-accent, #d7bcfc)
 }
-:root[data-theme=dark] .zen-ck-pct input[type="range"] {
-    background: linear-gradient(to right, #7950c8 var(--p, 0%), #231d28 var(--p, 0%)) content-box
-}
-:root[data-theme=dark] .zen-ck-pct input[type="range"]::-webkit-slider-thumb {
-    border: 2px solid #845cd6;
-    background: #1b181f
-}
-:root[data-theme=dark] .zen-ck-pct input[type="range"]::-moz-range-thumb {
-    border: 2px solid #845cd6;
-    background: #1b181f
-}
-:root[data-theme=dark] .zen-ck-pct input[type="range"]:focus-visible {
+:root[data-theme=dark] .zen-ck-num:focus-visible {
     outline: 2px solid #a671d1
 }
-:root[data-theme=dark] .zen-ck-pct output {
+:root[data-theme=dark] #editor .zen-ck-pct .zen-ck-num, :root[data-theme=dark] .zen-fe-row .zen-ck-pct .zen-ck-num {
+    color: var(--zen-text-accent, #d7bcfc)
+}
+:root[data-theme=dark] .zen-ck-pct-unit {
     color: var(--zen-text-accent, #d7bcfc)
 }
 :root[data-theme=dark] .zen-fe-grip {
@@ -3388,12 +3382,6 @@
 :root[data-theme=dark] .sidebar .view-group {
     border: 1px solid #3f3944;
     background: #17141b
-}
-:root[data-theme=dark] #editor .zen-ck-pct input[type="range"]::-webkit-slider-runnable-track {
-    background: linear-gradient(to right, #7950c8 calc(9px + (100% - 18px) * var(--pn, 0)), #231d28 calc(9px + (100% - 18px) * var(--pn, 0)))
-}
-:root[data-theme=dark] #editor .zen-ck-pct input[type="range"]::-moz-range-track {
-    background: linear-gradient(to right, #7950c8 calc(9px + (100% - 18px) * var(--pn, 0)), #231d28 calc(9px + (100% - 18px) * var(--pn, 0)))
 }
 :root[data-theme=dark] #editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row .task-pin-shortcut {
     color: #d7bcec;

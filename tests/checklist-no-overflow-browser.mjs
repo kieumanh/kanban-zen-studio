@@ -93,7 +93,7 @@ try {
     for (const sel of [
       '.wf-grip',
       'input[type="checkbox"]',
-      'input[type="range"]',
+      '.zen-ck-num',
       '.compact-check-remove',
       'textarea',
     ]) {
