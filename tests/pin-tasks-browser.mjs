@@ -6,6 +6,7 @@ import { startHarness, makeProject } from './lib/browser-harness.mjs';
 const seed = () => {
   const p = makeProject('p1', 'Khóa tu mùa thu', '#d65380', 8);
   for (let i = 0; i < 4; i++) p.tasks[i].pinned = true; // 4 việc đã ghim: quá 3 nên có "Xem tất cả (4)"
+  p.tasks[3].col = 'Doing'; // v1.46.0: việc Xong không còn được ghim; việc mẫu thứ 4 đang mở để vẫn đủ 4 việc ghim
   p.tasks[0].title = 'Việc ghim có tên rất dài để thử cắt chữ ở thanh bên hẹp trên điện thoại';
   return {
     schema: 1,

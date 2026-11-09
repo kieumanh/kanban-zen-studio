@@ -1538,3 +1538,23 @@ function zenPctPaint(row, value) {
     zenPctPaint(row, el.checked ? 100 : current >= 100 ? 0 : current);
   });
 })();
+
+// v1.46.0: việc đã hoàn thành (cột Xong) không còn được ghim: khi lưu, tự gỡ ghim cho mọi việc Xong còn ghim.
+// Việc đang mở vẫn ghim như cũ. Dùng chuỗi wrapper của save() nên luôn chạy trước khi dữ liệu được lưu.
+function zenUnpinDoneTasks() {
+  let changed = false;
+  for (const p of data?.projects || []) {
+    for (const t of p.tasks || []) {
+      if (t.pinned && t.col === 'Done') {
+        t.pinned = false;
+        changed = true;
+      }
+    }
+  }
+  return changed;
+}
+const zenSaveBeforeUnpin = save;
+save = function (...args) {
+  zenUnpinDoneTasks();
+  return zenSaveBeforeUnpin.apply(this, args);
+};

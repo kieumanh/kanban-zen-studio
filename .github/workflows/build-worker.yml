@@ -91,6 +91,7 @@ jobs:
           node tests/habit-remind-picker-browser.mjs
           node tests/rich-text-escape-browser.mjs
           node tests/completion-milestone-browser.mjs
+          node tests/auto-unpin-done-browser.mjs
           node tests/release-notice-buttons-browser.mjs
           node tests/gantt-hide-done-browser.mjs
           node tests/rounded-view-checklist-browser.mjs
