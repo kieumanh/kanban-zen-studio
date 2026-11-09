@@ -35,6 +35,11 @@
 .board-head .board-tools{flex:0 1 auto;max-width:min(100%,600px);justify-content:flex-start}
 }
 #tabs .tab[data-project]:not(.pinned)>span{flex:0 0 auto;min-width:max-content;white-space:nowrap;overflow-wrap:normal;word-break:keep-all}
+/* v1.47.0: tab dự án giữ nguyên khung (rộng, viền, bo góc). Tên dài xuống dòng và canh giữa trong khung; khung chỉ cao thêm khi cần đủ dòng, nên chữ không bị cắt ở trên và dưới. */
+#tabs .tab[data-project]:not(.pinned){height:auto!important;min-height:64px!important;max-height:none!important;justify-content:center;align-items:center;text-align:center;white-space:normal;overflow-wrap:anywhere;word-break:normal;line-height:1.3}
+#tabs .tab[data-project]:not(.pinned) .zen-active-tab-name{white-space:normal;overflow-wrap:anywhere;text-overflow:clip;text-align:center;line-height:1.3}
+/* Tab dự án không chọn khi đang mở một dự án: khung nhỏ hơn (tối đa 130 px) nhưng cũng xuống dòng, không cắt chữ. */
+#tabs.has-current-project .tab[data-project]:not(.pinned):not(.tab-home){height:auto!important;min-height:64px!important;max-height:none!important;white-space:normal;overflow-wrap:anywhere;word-break:normal;text-overflow:clip;text-align:center;justify-content:center;align-items:center;line-height:1.3}
 @media(min-width:701px) and (max-width:900px){
 .topbar .breadcrumb{flex:0 1 auto;min-width:0;max-width:26%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .top-actions{min-width:0;gap:10px}

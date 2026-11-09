@@ -1558,3 +1558,21 @@ save = function (...args) {
   zenUnpinDoneTasks();
   return zenSaveBeforeUnpin.apply(this, args);
 };
+
+/* v1.47.0: tab dự án cao thêm khi tên dài xuống dòng, nên khung dính cao hơn. Khoảng đệm cuộn theo đúng chiều cao khung dính
+   (từ 701px trở lên) để ô đang lấy nét không bị khung che; dưới 701px trả về quy tắc CSS cũ. */
+(() => {
+  const tabs = document.getElementById('tabs');
+  if (!tabs || typeof ResizeObserver !== 'function') return;
+  const sync = () => {
+    if (!window.matchMedia('(min-width:701px)').matches) {
+      document.documentElement.style.removeProperty('scroll-padding-top');
+      return;
+    }
+    const top = parseFloat(getComputedStyle(tabs).top) || 0;
+    document.documentElement.style.setProperty('scroll-padding-top', Math.ceil(top + tabs.offsetHeight + 8) + 'px');
+  };
+  new ResizeObserver(sync).observe(tabs);
+  window.addEventListener('resize', sync);
+  sync();
+})();
