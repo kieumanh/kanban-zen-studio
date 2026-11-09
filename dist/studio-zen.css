@@ -775,6 +775,10 @@ textarea {
 
 /* v1.15.48: tay nắm Gantt trên cảm ứng — vùng chạm nới ra (xem dist/gantt.js), có vạch cầm nhìn thấy ở hai đầu thanh. */
 .gantt-port-hit { touch-action: none; cursor: crosshair; }
+/* v1.48.0: tay nắm đổi đường nối Gantt — mờ khi không trỏ, rõ khi di chuột hoặc lấy tiêu điểm bằng bàn phím. */
+.gantt-bend { fill: #fff; stroke: #9876b7; stroke-width: 1.5; cursor: col-resize; opacity: .55; touch-action: none; transition: opacity .15s, stroke-width .15s; }
+.gantt-bend-hit { cursor: col-resize; touch-action: none; }
+.gantt-bend:hover, .gantt-bend:focus-visible { opacity: 1; stroke-width: 2.5; outline: none; }
 .gantt-grip { fill: #3d294a; opacity: 0.45; pointer-events: none; }
 /* v1.15.49: Lịch dạng danh sách (Agenda) cho màn hình vừa; nút đổi kiểu Danh sách | Lưới tháng. */
 .month-controls:has(.zen-cal-mode) { flex-wrap: wrap; row-gap: 10px; }

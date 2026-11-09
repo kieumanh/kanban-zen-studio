@@ -3003,6 +3003,10 @@
 :root[data-theme=dark] .notification-bell .notification-extra {
     border: 2px solid #302b36
 }
+:root[data-theme=dark] .gantt-bend {
+    fill: #ffffff;
+    stroke: #cbb1e5
+}
 :root[data-theme=dark] .gantt-grip {
     fill: #e1cfee
 }

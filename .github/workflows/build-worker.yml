@@ -125,6 +125,7 @@ jobs:
           node tests/habit-history-report-browser.mjs
           node tests/habit-nudge-browser.mjs
           node tests/project-tab-wrap-browser.mjs
+          node tests/gantt-edge-route-browser.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:

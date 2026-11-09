@@ -3004,6 +3004,10 @@
 :root[data-contrast=high] .notification-bell .notification-extra {
     border: 2px solid #161616
 }
+:root[data-contrast=high] .gantt-bend {
+    fill: #ffffff;
+    stroke: #060606
+}
 :root[data-contrast=high] .gantt-grip {
     fill: #060606
 }
@@ -6432,6 +6436,10 @@
 }
 :root[data-theme=dark][data-contrast=high] .notification-bell .notification-extra {
     border: 2px solid #cecece
+}
+:root[data-theme=dark][data-contrast=high] .gantt-bend {
+    fill: #ffffff;
+    stroke: #f5f5f5
 }
 :root[data-theme=dark][data-contrast=high] .gantt-grip {
     fill: #f5f5f5

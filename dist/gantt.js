@@ -23,7 +23,9 @@ function ganttPage(){
  const chartHeight=gridRows*row+72,last=ganttDate(first,ganttDays-1),edges=ganttEdges(p);
  const headers=Array.from({length:ganttDays},(_,i)=>{const date=ganttDate(first,i),dow=new Date(date+'T12:00:00Z').getUTCDay();return '<rect class="'+([0,6].includes(dow)?'gantt-day gantt-day-off':'gantt-day')+'" x="'+i*scale+'" y="0" width="'+scale+'" height="'+chartHeight+'" fill="'+([0,6].includes(dow)?'#f5f1f7':'#fffdfd')+'"/><text x="'+(i*scale+scale/2)+'" y="24" text-anchor="middle" font-size="11">'+date.slice(8)+'/'+date.slice(5,7)+'</text><text x="'+(i*scale+scale/2)+'" y="43" text-anchor="middle" class="gantt-dow" font-size="10" fill="#92869c">'+(['CN','T2','T3','T4','T5','T6','T7'][dow])+'</text><path d="M'+i*scale+' 54V'+chartHeight+'" class="gantt-col-line" stroke="#ede5f2"/>';}).join('');
  const slots=Array.from({length:ganttDays},(_,i)=>{const date=ganttDate(first,i);return '<rect class="gantt-create-slot" tabindex="0" role="button" aria-label="Tạo công việc ngày '+dateLabel(date)+'" data-gantt-create-date="'+date+'" data-gantt-p="'+esc(p.id)+'" x="'+i*scale+'" y="0" width="'+scale+'" height="'+chartHeight+'" rx="5" fill="transparent"/>';}).join('');
- const dependencyPaths=edges.map((edge,index)=>{const a=items.find(i=>i.t.id===edge.from),b=items.find(i=>i.t.id===edge.to);if(!a||!b)return '';return '<path class="gantt-edge" tabindex="0" role="button" aria-label="Gỡ liên kết '+esc(a.t.title)+' đến '+esc(b.t.title)+'" data-gantt-remove="'+index+'" data-gantt-p="'+esc(p.id)+'" d="M'+(a.x+a.w)+' '+(a.y+17)+' C'+(a.x+a.w+30)+' '+(a.y+17)+','+(b.x-30)+' '+(b.y+17)+','+b.x+' '+(b.y+17)+'" fill="none" stroke="#9876b7" stroke-width="2" marker-end="url(#gantt-arrow)"/>';}).join('');
+ const dependencyPaths=edges.map((edge,index)=>{const a=items.find(i=>i.t.id===edge.from),b=items.find(i=>i.t.id===edge.to);if(!a||!b)return '';return '<path class="gantt-edge" tabindex="0" role="button" aria-label="Gỡ liên kết '+esc(a.t.title)+' đến '+esc(b.t.title)+'" data-gantt-remove="'+index+'" data-gantt-p="'+esc(p.id)+'" d="'+ganttEdgeRoute(a,b,edge,scale).d+'" fill="none" stroke="#9876b7" stroke-width="2" marker-end="url(#gantt-arrow)"/>';}).join('');
+ // v1.48.0: tay nắm kéo đoạn dọc của đường nối; vùng chạm 44px khi dùng ngón tay, 28px khi dùng chuột.
+ const bendHandles=edges.map((edge,index)=>{const a=items.find(i=>i.t.id===edge.from),b=items.find(i=>i.t.id===edge.to);if(!a||!b)return '';const route=ganttEdgeRoute(a,b,edge,scale);if(!route.handle)return '';const hit=typeof matchMedia==='function'&&matchMedia('(pointer: coarse)').matches?22:14,label=esc(a.t.title)+' đến '+esc(b.t.title);return '<circle class="gantt-bend-hit" aria-hidden="true" fill="transparent" cx="'+route.handle.x+'" cy="'+route.handle.y+'" r="'+hit+'"/><circle class="gantt-bend" tabindex="0" role="slider" aria-label="Kéo để đổi đường nối '+label+'" aria-valuemin="-40" aria-valuemax="40" aria-valuenow="'+ganttBendOf(edge)+'" data-gantt-bend="'+index+'" data-gantt-p="'+esc(p.id)+'" cx="'+route.handle.x+'" cy="'+route.handle.y+'" r="5"/>';}).join('');
  // v1.15.48: trên màn hình cảm ứng (pointer: coarse) vùng chạm của thanh Gantt nới ra để ngón tay kéo được; hình vẽ thanh giữ nguyên.
  // Đầu bắt đầu: nới tối đa 22px ra ngoài mép trái (không vượt mép trái biểu đồ) + tối đa 22px vào trong; đầu kết thúc: tối đa 22px vào trong (bên ngoài mép phải là vùng nút nối); chiều cao 44px (hàng cách nhau 62px nên không chồng); nút nối có vùng chạm 44×44px nằm ngoài mép phải.
  const coarse=typeof matchMedia==='function'&&matchMedia('(pointer: coarse)').matches,pad=coarse?5:0,grip=i=>Math.min(22,i.w/3),outer=i=>Math.min(22,i.x);
@@ -32,14 +34,14 @@ function ganttPage(){
  const todayLine=today()>=first&&today()<=last?'<path d="M'+((Date.parse(today())-Date.parse(first))/86400000*scale+scale/2)+' 50V'+chartHeight+'" class="gantt-today-line" stroke="#be6e8f" stroke-dasharray="4 4" pointer-events="none"/>':'';
  const rows=items.map(i=>'<button data-task="'+esc(i.t.id)+'" data-pid="'+esc(p.id)+'"><span>'+esc(i.t.title)+'</span><small>'+dateLabel(i.start)+' → '+dateLabel(i.end)+'</small></button>').join('');
  const idle=unscheduled.map(t=>'<article class="gantt-unscheduled"><button class="gantt-unscheduled-title" data-task="'+esc(t.id)+'" data-pid="'+esc(p.id)+'"><strong>'+esc(t.title)+'</strong><small>Chưa có mốc thời gian</small></button><button class="btn" data-gantt-schedule="'+esc(t.id)+'" data-gantt-p="'+esc(p.id)+'">'+svgIcon('calendar')+'<span>Lên lịch hôm nay</span></button></article>').join('')||'<p class="gantt-empty"><span aria-hidden="true">✦</span><strong>Không còn việc chưa lên lịch</strong><small>Mọi công việc trong dự án đã có ngày thực hiện.</small></p>';
- return heading('TIẾN TRÌNH DỰ ÁN','Gantt',esc(p.name))+projectSummary(whole)+'<div class="gantt-controls"><div><button class="btn" data-gantt-window="-1" aria-label="Khoảng trước">←</button><button class="btn" data-gantt-today>Hôm nay</button><button class="btn" data-gantt-window="1" aria-label="Khoảng sau">→</button></div><strong>'+dateLabel(first)+'/'+first.slice(0,4)+' – '+dateLabel(last)+'/'+last.slice(0,4)+'</strong><label>Khoảng xem <select id="gantt-range">'+[7,15,30].map(n=>'<option value="'+n+'" '+(ganttDays===n?'selected':'')+'>'+n+' ngày</option>').join('')+'</select></label></div><p class="help-copy gantt-hint">Chọn một ngày trống để tạo công việc ngay tại đó. Kéo thanh hoặc hai mép để đổi lịch; nối các chấm để tạo phụ thuộc. Esc hủy thao tác.</p>'+(hiddenDone?'<p class="gantt-done-note" role="note"><span aria-hidden="true">✓</span>Đã ẩn '+hiddenDone+' việc hoàn thành khỏi biểu đồ.</p>':'')+'<p id="gantt-live" class="gantt-live" role="status"></p><div class="gantt-scroll"><div class="gantt-layout" style="--timeline-width:'+width+'px;width:calc(var(--timeline-width) + var(--gantt-label-width,240px))"><div class="gantt-labels"><strong>Công việc · '+items.length+'</strong>'+rows+'</div><svg class="gantt-svg" data-day-px="'+scale+'" data-gantt-start="'+first+'" width="'+width+'" height="'+chartHeight+'" viewBox="0 0 '+width+' '+chartHeight+'"><defs><marker id="gantt-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path class="gantt-arrow-head" d="M0 0L8 4L0 8" fill="#9876b7"/></marker></defs>'+headers+slots+items.map(i=>'<path d="M0 '+(i.y+45)+'H'+(ganttDays*scale)+'" class="gantt-row-line" stroke="#eee8f3" pointer-events="none"/>').join('')+dependencyPaths+taskBars+todayLine+'</svg></div></div><section class="panel gantt-undated"><div class="gantt-undated-head"><div><small>VIỆC CẦN XẾP LỊCH</small><h3>Chưa đặt lịch <span>'+unscheduled.length+'</span></h3></div><p class="help-copy">Chọn “Lên lịch hôm nay” để thêm nhanh, hoặc mở việc để đặt khoảng ngày khác.</p></div><div class="gantt-unscheduled-list">'+idle+'</div></section>';
+ return heading('TIẾN TRÌNH DỰ ÁN','Gantt',esc(p.name))+projectSummary(whole)+'<div class="gantt-controls"><div><button class="btn" data-gantt-window="-1" aria-label="Khoảng trước">←</button><button class="btn" data-gantt-today>Hôm nay</button><button class="btn" data-gantt-window="1" aria-label="Khoảng sau">→</button></div><strong>'+dateLabel(first)+'/'+first.slice(0,4)+' – '+dateLabel(last)+'/'+last.slice(0,4)+'</strong><label>Khoảng xem <select id="gantt-range">'+[7,15,30].map(n=>'<option value="'+n+'" '+(ganttDays===n?'selected':'')+'>'+n+' ngày</option>').join('')+'</select></label></div><p class="help-copy gantt-hint">Chọn một ngày trống để tạo công việc ngay tại đó. Kéo thanh hoặc hai mép để đổi lịch; nối các chấm để tạo phụ thuộc. Esc hủy thao tác.</p>'+(hiddenDone?'<p class="gantt-done-note" role="note"><span aria-hidden="true">✓</span>Đã ẩn '+hiddenDone+' việc hoàn thành khỏi biểu đồ.</p>':'')+'<p id="gantt-live" class="gantt-live" role="status"></p><div class="gantt-scroll"><div class="gantt-layout" style="--timeline-width:'+width+'px;width:calc(var(--timeline-width) + var(--gantt-label-width,240px))"><div class="gantt-labels"><strong>Công việc · '+items.length+'</strong>'+rows+'</div><svg class="gantt-svg" data-day-px="'+scale+'" data-gantt-start="'+first+'" width="'+width+'" height="'+chartHeight+'" viewBox="0 0 '+width+' '+chartHeight+'"><defs><marker id="gantt-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path class="gantt-arrow-head" d="M0 0L8 4L0 8" fill="#9876b7"/></marker></defs>'+headers+slots+items.map(i=>'<path d="M0 '+(i.y+45)+'H'+(ganttDays*scale)+'" class="gantt-row-line" stroke="#eee8f3" pointer-events="none"/>').join('')+dependencyPaths+taskBars+bendHandles+todayLine+'</svg></div></div><section class="panel gantt-undated"><div class="gantt-undated-head"><div><small>VIỆC CẦN XẾP LỊCH</small><h3>Chưa đặt lịch <span>'+unscheduled.length+'</span></h3></div><p class="help-copy">Chọn “Lên lịch hôm nay” để thêm nhanh, hoặc mở việc để đặt khoảng ngày khác.</p></div><div class="gantt-unscheduled-list">'+idle+'</div></section>';
 }
 function ganttCreateAtDate(pid,date){const p=project(pid);if(!p||!validDate(date))return;taskForm(p,null);const values={start:date+'T09:00',end:date+'T17:00'};for(const [name,value] of Object.entries(values)){const input=$('#editor-form [name="'+name+'"]');if(!input)continue;input.value=value;input.dispatchEvent(new Event('input',{bubbles:true}));input.dispatchEvent(new Event('change',{bubbles:true}));const button=input.nextElementSibling;if(button?.classList.contains('date-field-trigger'))button.textContent=date.split('-').reverse().join('/')+' · '+value.slice(11);}}
 document.addEventListener('click',e=>{const slot=e.target.closest('[data-gantt-create-date]');if(slot){e.preventDefault();ganttCreateAtDate(slot.dataset.ganttP,slot.dataset.ganttCreateDate);return;}const b=e.target.closest('[data-gantt-window],[data-gantt-today],[data-gantt-schedule]');if(!b)return;if(b.hasAttribute('data-gantt-window')){const p=project()||visibleProjects()[0],first=ganttStart||p.tasks.filter(t=>!t.archived&&t.col!=='Done'&&(t.start||t.end||t.due)).map(t=>ganttDates(t).start).sort()[0]||today();ganttStart=ganttDate(first,Number(b.dataset.ganttWindow)*ganttDays);}if(b.hasAttribute('data-gantt-today'))ganttStart=ganttDate(today(),-3);if(b.dataset.ganttSchedule){const t=project(b.dataset.ganttP)?.tasks.find(t=>t.id===b.dataset.ganttSchedule);if(t){t.start=today()+'T09:00';t.end=today()+'T17:00';t.due=today();save();ganttStart=ganttDate(today(),-3);}}render();});
 
 document.addEventListener('change',e=>{if(e.target.matches('[id^=gantt-range]')){ganttDays=Number(e.target.value);render();}});
 // v1.15.48: Chrome hủy cử chỉ kéo (pointercancel) khi ngón tay bắt đầu từ phần tử SVG, dù đã đặt touch-action:none; hủy mặc định của touchstart (không thụ động) giữ cử chỉ cho biểu đồ nên kéo bằng ngón tay mới chạy được. Chuột không bị ảnh hưởng.
-document.addEventListener('touchstart',e=>{if(e.target.closest?.('[data-gantt-drag],[data-gantt-port]'))e.preventDefault();},{passive:false});
+document.addEventListener('touchstart',e=>{if(e.target.closest?.('[data-gantt-drag],[data-gantt-port],[data-gantt-bend]'))e.preventDefault();},{passive:false});
 document.addEventListener('pointerdown',e=>{const b=e.target.closest('[data-gantt-drag]');if(!b||e.button!==0)return;ganttFrom=null;e.preventDefault();const p=project(b.dataset.ganttP),t=p?.tasks.find(t=>t.id===b.dataset.ganttDrag);if(!t)return;const svg=b.closest('svg'),ghost=document.createElementNS('http://www.w3.org/2000/svg','rect'),d=ganttDates(t),first=ganttStart||p.tasks.filter(t=>t.start||t.end||t.due).map(t=>ganttDates(t).start).sort()[0],scale=Number(svg.dataset.dayPx);ganttStart=first;ghost.setAttribute('class','gantt-ghost');ghost.setAttribute('y',b.closest('g').querySelector('rect').getAttribute('y'));ghost.setAttribute('height','34');ghost.setAttribute('rx','9');svg.append(ghost);ganttPointer={pid:p.id,id:t.id,mode:b.dataset.ganttMode,x:e.clientX,scale:scale*svg.getBoundingClientRect().width/svg.viewBox.baseVal.width,svg,ghost,days:0,moved:false,pointerY:e.clientY,first,unit:scale,original:JSON.stringify([t.start,t.end,t.due]),task:structuredClone(t)};b.setPointerCapture(e.pointerId);b.closest('g').classList.add('is-dragging');});
 document.addEventListener('pointermove',e=>{const g=ganttPointer;if(!g)return;if(Math.hypot(e.clientX-g.x,e.clientY-g.pointerY)>5)g.moved=true;g.days=Math.round((e.clientX-g.x)/g.scale);const t=structuredClone(g.task);if(!rescheduleGantt(t,g.mode,g.days))return;const d=ganttDates(t);g.ghost.setAttribute('x',(Date.parse(d.start)-Date.parse(g.first))/86400000*g.unit);g.ghost.setAttribute('width',((Date.parse(d.end)-Date.parse(d.start))/86400000+1)*g.unit);$('#gantt-live').textContent=dateLabel(d.start)+' → '+dateLabel(d.end);});
 function finishGanttDrag(commit){const g=ganttPointer;if(!g)return;ganttPointer=null;const t=project(g.pid)?.tasks.find(t=>t.id===g.id);if(commit&&t&&g.days){if(JSON.stringify([t.start,t.end,t.due])!==g.original)notify('Lịch vừa thay đổi trên thiết bị khác. Hãy kéo lại.');else if(rescheduleGantt(t,g.mode,g.days)){save();notify('Đã cập nhật lịch công việc.');}}const openTask=commit&&t&&!g.moved&&g.mode==='move';render();if(openTask)taskDetail(project(g.pid),t);}
@@ -55,4 +57,71 @@ const detailBeforeRename=resourceDetail;resourceDetail=function(f){detailBeforeR
 
 const saveBeforeDependencies=save;save=function(){for(const p of data.projects)if(p.dependencies)p.dependencies=ganttEdges(p);return saveBeforeDependencies();};
 document.addEventListener('keydown',e=>{if(!['Enter',' '].includes(e.key))return;const port=e.target.closest('[data-gantt-port]'),edge=e.target.closest('[data-gantt-remove]');if(edge){e.preventDefault();edge.dispatchEvent(new MouseEvent('click',{bubbles:true}));}if(port){e.preventDefault();if(ganttFrom&&ganttFrom.id!==port.dataset.ganttPort){addGanttEdge(project(port.dataset.ganttP),ganttFrom.id,port.dataset.ganttPort);ganttFrom=null;render();}else ganttFrom={id:port.dataset.ganttPort,p:port.dataset.ganttP};}});
+
+// v1.48.0: đường nối đi theo đường vuông góc có góc bo tròn thay cho đường cong cũ.
+// bend là số ngày lệch của đoạn dọc so với vị trí mặc định (lưu trong phụ thuộc, không đổi khi đổi khoảng xem);
+// bend được giới hạn trong khoảng cho phép của đường đi nên không bao giờ tạo lệch ẩn.
+const GANTT_LINK_GAP=14,GANTT_LINK_RADIUS=10,GANTT_BEND_LIMIT=40;
+let ganttBendDrag=null;
+function ganttClamp(v,[lo,hi]){return Math.max(lo,Math.min(hi,v));}
+function ganttBendOf(e){return Number.isFinite(e?.bend)?ganttClamp(e.bend,[-GANTT_BEND_LIMIT,GANTT_BEND_LIMIT]):0;}
+function ganttRoundedPath(pts,r){
+ const dedup=[];for(const p of pts){const l=dedup[dedup.length-1];if(!l||Math.abs(l[0]-p[0])>0.01||Math.abs(l[1]-p[1])>0.01)dedup.push(p);}
+ const s=dedup.filter((c,i)=>{if(i===0||i===dedup.length-1)return true;const a=dedup[i-1],n=dedup[i+1];return !((Math.abs(a[0]-c[0])<0.01&&Math.abs(c[0]-n[0])<0.01)||(Math.abs(a[1]-c[1])<0.01&&Math.abs(c[1]-n[1])<0.01));});
+ if(s.length<2)return 'M0 0';
+ let d='M'+s[0][0].toFixed(1)+' '+s[0][1].toFixed(1);
+ for(let i=1;i<s.length-1;i++){const p=s[i-1],c=s[i],n=s[i+1],lin=Math.hypot(c[0]-p[0],c[1]-p[1]),lout=Math.hypot(n[0]-c[0],n[1]-c[1]),k=Math.min(r,lin/2,lout/2),ux=(c[0]-p[0])/lin,uy=(c[1]-p[1])/lin,vx=(n[0]-c[0])/lout,vy=(n[1]-c[1])/lout;d+=' L'+(c[0]-ux*k).toFixed(1)+' '+(c[1]-uy*k).toFixed(1)+' Q'+c[0].toFixed(1)+' '+c[1].toFixed(1)+' '+(c[0]+vx*k).toFixed(1)+' '+(c[1]+vy*k).toFixed(1);}
+ const last=s[s.length-1];
+ return d+' L'+last[0].toFixed(1)+' '+last[1].toFixed(1);
+}
+function ganttEdgeRoute(a,b,edge,scale,bendOverride){
+ const bend=bendOverride??ganttBendOf(edge),sx=a.x+a.w+7,sy=a.y+17,ex=b.x,ey=b.y+17;
+ if(ex>=sx+2*GANTT_LINK_GAP){
+  const def=(sx+ex)/2,range=[sx+8,ex-8],xm=ganttClamp(def+bend*scale,range);
+  return {d:ganttRoundedPath([[sx,sy],[xm,sy],[xm,ey],[ex,ey]],GANTT_LINK_RADIUS),handle:Math.abs(sy-ey)<1?null:{x:xm,y:(sy+ey)/2},def,range,scale};
+ }
+ // Đích nằm trước hoặc sát điểm xuất phát: đi vòng qua khoảng trống giữa hai hàng rồi vào đích từ bên trái.
+ const midY=Math.abs(a.y-b.y)<1?a.y-14:(a.y+b.y+34)/2,def=sx+GANTT_LINK_GAP,range=[sx+8,sx+GANTT_LINK_GAP+320],xm=ganttClamp(def+bend*scale,range),xl=ex-GANTT_LINK_GAP;
+ return {d:ganttRoundedPath([[sx,sy],[xm,sy],[xm,midY],[xl,midY],[xl,ey],[ex,ey]],GANTT_LINK_RADIUS),handle:{x:xm,y:(sy+midY)/2},def,range,scale};
+}
+function ganttEdgeGeometry(svg,edge){
+ const bar=id=>{const r=svg.querySelector('.gantt-task[data-gantt-row="'+CSS.escape(id)+'"] rect');return r?{x:+r.getAttribute('x'),y:+r.getAttribute('y'),w:+r.getAttribute('width')}:null;};
+ return {a:bar(edge.from),b:bar(edge.to)};
+}
+function ganttSetBend(p,index,raw,route){
+ const edge=p?ganttEdges(p)[index]:null;if(!edge||!route)return false;
+ const lo=Math.max(-GANTT_BEND_LIMIT,(route.range[0]-route.def)/route.scale),hi=Math.min(GANTT_BEND_LIMIT,(route.range[1]-route.def)/route.scale),next=Math.round(ganttClamp(raw,[lo,hi])*4)/4;
+ if(next===ganttBendOf(edge))return false;
+ if(next===0)delete edge.bend;else edge.bend=next;
+ save();return true;
+}
+document.addEventListener('pointerdown',e=>{
+ const h=e.target.closest?.('[data-gantt-bend]');if(!h||e.button!==0)return;
+ const p=project(h.dataset.ganttP),index=Number(h.dataset.ganttBend),edge=p?ganttEdges(p)[index]:null;if(!edge)return;
+ const svg=h.closest('svg'),{a,b}=ganttEdgeGeometry(svg,edge);if(!a||!b)return;
+ const route=ganttEdgeRoute(a,b,edge,Number(svg.dataset.dayPx));if(!route.handle)return;
+ e.preventDefault();h.setPointerCapture(e.pointerId);
+ ganttBendDrag={h,pid:p.id,index,edge,a,b,svg,route,startClientX:e.clientX,startX:route.handle.x,bend:ganttBendOf(edge),moved:false,pathEl:svg.querySelector('.gantt-edge[data-gantt-remove="'+index+'"]')};
+});
+document.addEventListener('pointermove',e=>{
+ const g=ganttBendDrag;if(!g)return;
+ const k=g.svg.viewBox.baseVal.width/g.svg.getBoundingClientRect().width,x=ganttClamp(g.startX+(e.clientX-g.startClientX)*k,g.route.range);
+ if(Math.abs(e.clientX-g.startClientX)>3)g.moved=true;
+ const bend=ganttClamp(Math.round((x-g.route.def)/g.route.scale*4)/4,[-GANTT_BEND_LIMIT,GANTT_BEND_LIMIT]);
+ g.bend=bend;
+ const r=ganttEdgeRoute(g.a,g.b,g.edge,g.route.scale,bend);
+ g.pathEl?.setAttribute('d',r.d);
+ if(r.handle)for(const el of [g.h,g.h.previousElementSibling])el?.setAttribute('cx',r.handle.x),el?.setAttribute('cy',r.handle.y);
+});
+function finishGanttBend(commit){const g=ganttBendDrag;if(!g)return;ganttBendDrag=null;if(!g.moved)return;if(commit)ganttSetBend(project(g.pid),g.index,g.bend,g.route);render();}
+document.addEventListener('pointerup',()=>finishGanttBend(true));
+document.addEventListener('pointercancel',()=>finishGanttBend(false));
+document.addEventListener('keydown',e=>{
+ const h=e.target.closest?.('[data-gantt-bend]');if(!h||!['ArrowLeft','ArrowRight'].includes(e.key))return;
+ e.preventDefault();
+ const p=project(h.dataset.ganttP),index=Number(h.dataset.ganttBend),edge=p?ganttEdges(p)[index]:null;if(!edge)return;
+ const svg=h.closest('svg'),{a,b}=ganttEdgeGeometry(svg,edge);if(!a||!b)return;
+ const route=ganttEdgeRoute(a,b,edge,Number(svg.dataset.dayPx));
+ if(ganttSetBend(p,index,ganttBendOf(edge)+(e.key==='ArrowRight'?0.5:-0.5),route)){render();document.querySelector('[data-gantt-bend="'+index+'"][data-gantt-p="'+CSS.escape(p.id)+'"]')?.focus();}
+});
 
