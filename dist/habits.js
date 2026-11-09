@@ -123,15 +123,23 @@
       notify(text ? 'Đã lưu ghi chú.' : 'Đã xóa ghi chú.');
     });
   }
-  // v1.33.0: lịch sử 28 ngày gần nhất của một việc (đã làm / nghỉ / chưa làm).
-  function history(h) {
+  // v1.33.0: lịch sử của một việc. v1.40.0: báo cáo riêng gồm 28 hoặc 90 ngày, tỷ lệ, chuỗi dài nhất và ghi chú.
+  function history(h, days = 28) {
     if (!h) return;
-    const t = today(), done = new Set(h.done), rest = new Set(h.rest || []);
-    const cells = Array.from({ length: 28 }, (_, i) => addDays(t, i - 27));
+    const n = days === 90 ? 90 : 28, t = today(), done = new Set(h.done), rest = new Set(h.rest || []), notes = h.notes || {};
+    const cells = Array.from({ length: n }, (_, i) => addDays(t, i - (n - 1)));
     const doneCount = cells.filter((d) => done.has(d)).length, restCount = cells.filter((d) => rest.has(d) && !done.has(d)).length;
-    const notes = h.notes || {}, noteRows = cells.filter((d) => notes[d]).map((d) => '<li><strong>' + short(d) + '</strong> ' + esc(notes[d]) + '</li>').join('');
+    let best = 0, run = 0;
+    for (const d of cells) {
+      if (done.has(d)) run += 1;
+      else if (!rest.has(d)) run = 0;
+      best = Math.max(best, run);
+    }
+    const rate = n - restCount > 0 ? Math.round((doneCount / (n - restCount)) * 100) : 0;
     const grid = cells.map((d) => '<span class="hb-hist-cell' + (done.has(d) ? ' is-done' : rest.has(d) ? ' is-rest' : '') + (d === t ? ' is-today' : '') + '" title="' + short(d) + (done.has(d) ? ' · đã làm' : rest.has(d) ? ' · nghỉ' : '') + (notes[d] ? ' · có ghi chú' : '') + '"><small>' + short(d) + '</small></span>').join('');
-    modal('<h2>Lịch sử: ' + esc(h.name) + '</h2><div class="hb-hist"><p class="hb-hist-sum">Chuỗi hiện tại <strong>' + streak(h) + ' ngày</strong> · đã làm <strong>' + doneCount + '</strong>/28 ngày' + (restCount ? ' · nghỉ <strong>' + restCount + '</strong>' : '') + '</p><div class="hb-hist-grid" role="img" aria-label="28 ngày gần nhất">' + grid + '</div><p class="help-copy">Ô đậm là ngày đã làm, ô nét đứt là ngày nghỉ. Ngày nghỉ không làm đứt chuỗi.</p>' + (noteRows ? '<div class="hb-hist-notes"><h3>Ghi chú trong 28 ngày</h3><ul>' + noteRows + '</ul></div>' : '') + '</div>', null, true);
+    const noteRows = cells.filter((d) => notes[d]).map((d) => '<li><strong>' + short(d) + '</strong> ' + esc(notes[d]) + '</li>').join('');
+    const range = '<div class="hb-hist-range" role="group" aria-label="Khoảng thời gian">' + [28, 90].map((k) => '<button type="button" class="hb-hist-days' + (k === n ? ' is-on' : '') + '" data-hb-hist-days="' + k + '" data-hb-hist-id="' + esc(h.id) + '" aria-pressed="' + (k === n) + '">' + k + ' ngày</button>').join('') + '</div>';
+    modal('<h2>Báo cáo: ' + esc(h.name) + '</h2>' + range + '<div class="hb-hist"><p class="hb-hist-sum">Chuỗi hiện tại <strong>' + streak(h) + ' ngày</strong> · đã làm <strong>' + doneCount + '</strong>/' + n + ' ngày' + (restCount ? ' · nghỉ <strong>' + restCount + '</strong>' : '') + '</p><p class="hb-hist-rate">Tỷ lệ <strong>' + rate + '%</strong> (không tính ngày nghỉ) · chuỗi dài nhất <strong>' + best + ' ngày</strong></p><div class="hb-hist-grid" role="img" aria-label="' + n + ' ngày gần nhất">' + grid + '</div><p class="help-copy">Ô đậm là ngày đã làm, ô nét đứt là ngày nghỉ. Ngày nghỉ không làm đứt chuỗi.</p>' + (noteRows ? '<div class="hb-hist-notes"><h3>Ghi chú trong ' + n + ' ngày</h3><ul>' + noteRows + '</ul></div>' : '') + '</div>', null, true);
   }
   // v1.34.0: nhắc riêng từng việc theo giờ Việt Nam (cùng múi giờ với ngày trong ứng dụng).
   // Việc được nhắc khi đã đến giờ, chưa làm và chưa nghỉ hôm nay. "Đã xem" tắt nhắc đến hết ngày hoặc khi đổi giờ.
@@ -146,11 +154,13 @@
     if (!due.length) return '';
     return '<section class="hb-due" role="status" aria-label="Việc đến giờ nhắc"><div class="hb-due-text"><strong>' + svgIcon('bell') + due.length + ' việc đến giờ nhắc</strong><span>' + due.map((h) => esc(h.name)).join(' · ') + '</span></div><button type="button" class="btn hb-due-dismiss" data-hb-due-dismiss>Đã xem</button></section>';
   }
+  // v1.40.0: nút "Xem lịch sử" bằng chữ ở từng việc, mở báo cáo riêng của việc đó.
+  const historyButton = (h) => '<button type="button" class="hb-hist-btn" data-hb-history="' + esc(h.id) + '" aria-label="Xem lịch sử: ' + esc(h.name) + '">Xem lịch sử</button>';
   // v1.39.0: tay cầm đổi thứ tự (sáu chấm), đặt cuối dòng "Nghỉ hôm nay" để không làm hẹp tên việc trên điện thoại.
   const gripIcon = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="9" cy="6" r="1.6"/><circle cx="15" cy="6" r="1.6"/><circle cx="9" cy="12" r="1.6"/><circle cx="15" cy="12" r="1.6"/><circle cx="9" cy="18" r="1.6"/><circle cx="15" cy="18" r="1.6"/></svg>';
   const gripButton = (h) => '<button type="button" class="hb-grip" data-hb-grip="' + esc(h.id) + '" aria-label="Đổi thứ tự “' + esc(h.name) + '”: kéo, hoặc nhấn mũi tên lên xuống" title="Kéo để đổi thứ tự">' + gripIcon + '</button>';
   function row(h) {
-    return '<li class="hb-row" data-hb-row="' + esc(h.id) + '" style="--hb:' + esc(h.color) + '"><div class="hb-info"><span class="hb-icon" aria-hidden="true">' + esc(h.icon || '✳') + '</span><div class="hb-text"><strong class="hb-name">' + esc(h.name) + '</strong><span class="hb-meta">' + meta(h) + '</span></div><div class="hb-actions"><button type="button" class="icon-btn hb-act" data-hb-history="' + esc(h.id) + '" aria-label="Lịch sử ' + esc(h.name) + '" title="Lịch sử">' + svgIcon('notes') + '</button><button type="button" class="icon-btn hb-act" data-hb-edit="' + esc(h.id) + '" aria-label="Sửa ' + esc(h.name) + '" title="Sửa">' + svgIcon('edit') + '</button><button type="button" class="icon-btn hb-act hb-del" data-hb-delete="' + esc(h.id) + '" aria-label="Xóa ' + esc(h.name) + '" title="Xóa">' + svgIcon('trash') + '</button></div></div><div class="hb-days">' + days().map((d) => checkButton(h, d)).join('') + '</div><div class="hb-foot">' + restButton(h) + gripButton(h) + '</div></li>';
+    return '<li class="hb-row" data-hb-row="' + esc(h.id) + '" style="--hb:' + esc(h.color) + '"><div class="hb-info"><span class="hb-icon" aria-hidden="true">' + esc(h.icon || '✳') + '</span><div class="hb-text"><strong class="hb-name">' + esc(h.name) + '</strong><span class="hb-meta">' + meta(h) + '</span></div><div class="hb-actions"><button type="button" class="icon-btn hb-act" data-hb-edit="' + esc(h.id) + '" aria-label="Sửa ' + esc(h.name) + '" title="Sửa">' + svgIcon('edit') + '</button><button type="button" class="icon-btn hb-act hb-del" data-hb-delete="' + esc(h.id) + '" aria-label="Xóa ' + esc(h.name) + '" title="Xóa">' + svgIcon('trash') + '</button></div></div><div class="hb-days">' + days().map((d) => checkButton(h, d)).join('') + '</div><div class="hb-foot">' + restButton(h) + historyButton(h) + gripButton(h) + '</div></li>';
   }
   function ring(done, total) {
     const pct = total ? done / total : 0;
@@ -345,7 +355,7 @@
   }
 
   document.addEventListener('click', (e) => {
-    const t = e.target.closest('[data-hb-due-dismiss],[data-hb-open],[data-hb-rest],[data-hb-history],[data-hb-toggle],[data-hb-add],[data-hb-edit],[data-hb-delete],[data-hb-confirm-delete],[data-hb-cancel],[data-hb-week],[data-hb-preset],[data-hb-icon],[data-hb-mode],[data-hb-range],[data-hb-goal-step],[data-hb-lib]');
+    const t = e.target.closest('[data-hb-due-dismiss],[data-hb-open],[data-hb-rest],[data-hb-history],[data-hb-hist-days],[data-hb-toggle],[data-hb-add],[data-hb-edit],[data-hb-delete],[data-hb-confirm-delete],[data-hb-cancel],[data-hb-week],[data-hb-preset],[data-hb-icon],[data-hb-mode],[data-hb-range],[data-hb-goal-step],[data-hb-lib]');
     if (!t) return;
     if (t.dataset.hbToggle) {
       const h = find(t.dataset.hbToggle), d = t.dataset.hbDate;
@@ -391,6 +401,7 @@
       if (!wfSave(() => { h.rest = on ? h.rest.filter((x) => x !== k) : (h.rest || []).concat(k).sort(); })) return render();
       return render();
     }
+    if (t.dataset.hbHistDays) return history(find(t.dataset.hbHistId), Number(t.dataset.hbHistDays));
     if (t.dataset.hbHistory) return history(find(t.dataset.hbHistory));
     if (t.dataset.hbEdit) return form(find(t.dataset.hbEdit));
     if (t.dataset.hbDelete) return confirmDelete(t.dataset.hbDelete);

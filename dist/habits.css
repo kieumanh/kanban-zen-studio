@@ -354,3 +354,12 @@
 .hb-row{position:relative}
 .hb-row.is-dragging{z-index:5;box-shadow:0 14px 30px rgba(60,40,90,.22);background:var(--paper)}
 .hb-row.is-drop{outline:2px dashed var(--brand-purple);outline-offset:4px}
+
+/* v1.40.0: nút "Xem lịch sử" bằng chữ ở dòng cuối và báo cáo riêng của việc (chọn 28 hoặc 90 ngày, tỷ lệ, chuỗi dài nhất). */
+.hb-hist-btn{min-height:44px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--ink);font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap}
+.hb-hist-btn:hover{border-color:var(--brand-purple);color:var(--brand-purple)}
+.hb-hist-range{display:inline-flex;gap:4px;padding:4px;margin:0 0 12px;border-radius:999px;background:var(--line)}
+.hb-hist-days{min-height:44px;padding:0 14px;border-radius:999px;border:0;background:transparent;color:var(--muted);font-weight:700;cursor:pointer}
+.hb-hist-days.is-on{background:var(--paper);color:var(--ink);box-shadow:0 1px 4px rgba(60,40,90,.12)}
+.hb-hist-rate{margin:4px 0 12px;color:var(--muted)}
+.hb-hist-rate strong{color:var(--ink)}
