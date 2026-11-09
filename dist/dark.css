@@ -3401,6 +3401,33 @@
     border-color: #c6a2e3;
     color: #d9c3fb
 }
+:root[data-theme=dark] .completion-card.is-milestone {
+    border-color: #4f3f5d;
+    background-color: rgba(27,24,31,0.98);
+    background-image: radial-gradient(circle at 1px 1px, rgba(86,58,114,0.251) 1.2px, transparent 1.7px), linear-gradient(135deg, #17141b 0%, #18151c 100%)
+}
+:root[data-theme=dark] .completion-icon.is-large {
+    background: linear-gradient(135deg, #1f1825, #24160e)
+}
+:root[data-theme=dark] .completion-card.is-milestone .completion-caption {
+    color: #d8b2f2
+}
+:root[data-theme=dark] .completion-deco::before {
+    background: radial-gradient(circle, rgba(70,46,96,0.333) 0 30%, transparent 70%)
+}
+:root[data-theme=dark] .completion-deco::after {
+    background: radial-gradient(circle, rgba(60,30,3,0.4) 0 28%, transparent 70%)
+}
+:root[data-theme=dark][data-theme="dark"] .completion-card.is-milestone {
+    border-color: #beb0d4;
+    background-image: radial-gradient(circle at 1px 1px, rgba(84,52,115,0.302) 1.2px, transparent 1.7px), linear-gradient(135deg, #2a2236 0%, #2e2230 100%)
+}
+@media (prefers-color-scheme: dark) {
+    :root[data-theme=dark]:not([data-theme="light"]) .completion-card.is-milestone {
+        border-color: #beb0d4;
+        background-image: radial-gradient(circle at 1px 1px, rgba(84,52,115,0.302) 1.2px, transparent 1.7px), linear-gradient(135deg, #2a2236 0%, #2e2230 100%)
+    }
+}
 
 :root[data-theme=dark] {
   color-scheme: dark;

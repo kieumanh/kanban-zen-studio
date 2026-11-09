@@ -1411,7 +1411,7 @@
         const heading = document.querySelector('.zen-fe-checks h3 small');
         const { t } = current();
         if (heading && t) heading.textContent = t.checks.filter((c) => c.done).length + '/' + t.checks.length;
-        if (el.checked) celebrateCompletion(!wasDone && nowDone ? 'task' : 'check');
+        if (el.checked) celebrateCompletion(!wasDone && nowDone ? completionKindFor(current().p, current().t) : 'check');
       } else el.checked = !el.checked;
     } else if (el.matches('[data-fe-pct]')) {
       const v = Math.min(100, Math.max(0, Math.round(Number(el.value) || 0)));
@@ -1428,7 +1428,7 @@
         saved();
         zenPctPaint(row, v);
         refreshMeta();
-        if (v === 100) celebrateCompletion(!wasDone && nowDone ? 'task' : 'check');
+        if (v === 100) celebrateCompletion(!wasDone && nowDone ? completionKindFor(current().p, current().t) : 'check');
       } else zenPctPaint(row, checkPct(current().t?.checks.find((x) => x.id === id) || { done: false, pct: 0 }));
     } else if (el.matches('textarea[data-fe-text]')) {
       const value = el.value.trim();

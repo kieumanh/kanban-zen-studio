@@ -1662,3 +1662,52 @@ dialog[open] button[aria-label^="Đóng"],
   .sidebar .side-projects { display: none; }
   .sidebar #view-group.view-group { display: block; }
 }
+
+/* v1.45.0: lời chúc mốc lớn (gỡ hết việc quá hạn, hoàn tất mọi việc của dự án): khung rộng hơn, icon lớn có vòng tròn,
+   họa tiết chấm nền và hai đốm màu trang trí. Chỉ đổi giao diện lời chúc, không đổi dữ liệu hay thời gian hiện. */
+.completion-card.is-milestone {
+  width: min(680px, calc(100vw - 32px));
+  padding: 26px 52px 26px 26px;
+  gap: 20px;
+  border-radius: 26px;
+  border-color: #d9bdf0;
+  background-color: #fffdfdfa;
+  background-image: radial-gradient(circle at 1px 1px, #b28cdb40 1.2px, transparent 1.7px), linear-gradient(135deg, #fbf5ff 0%, #fff7f1 100%);
+  background-size: 14px 14px, auto;
+  box-shadow: 0 22px 70px #7544b82e, inset 0 0 0 5px #fffdfdcc, inset 0 0 0 6px #e6d2f5;
+  overflow: hidden;
+}
+.completion-icon.is-large {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f0e3fb, #ffe6d7);
+  box-shadow: 0 0 0 6px #fffdfd, 0 0 0 7px #e3cce9;
+}
+.completion-icon.is-large svg { width: 40px; height: 40px; }
+.completion-card.is-milestone .completion-caption { font-size: 11px; letter-spacing: 1.6px; color: #8a5aa8; }
+.completion-card.is-milestone p { font-size: 16px; line-height: 1.7; }
+.completion-card.is-milestone .completion-close { right: 6px; top: 6px; width: 44px; height: 44px; border-radius: 12px; }
+.completion-deco { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.completion-deco::before,
+.completion-deco::after { content: ""; position: absolute; width: 220px; height: 220px; border-radius: 50%; filter: blur(2px); }
+.completion-deco::before { left: calc(50% - 360px); top: calc(100% - 260px); background: radial-gradient(circle, #c4a3ed55 0 30%, transparent 70%); }
+.completion-deco::after { right: calc(50% - 360px); top: calc(100% - 230px); background: radial-gradient(circle, #ffc99e66 0 28%, transparent 70%); }
+@media (max-width: 600px) {
+  .completion-card.is-milestone { padding: 20px 46px 20px 18px; gap: 14px; }
+  .completion-icon.is-large { width: 56px; height: 56px; }
+  .completion-icon.is-large svg { width: 30px; height: 30px; }
+  .completion-card.is-milestone p { font-size: 14px; }
+}
+:root[data-theme="dark"] .completion-card.is-milestone {
+  border-color: #4d3a66;
+  background-color: #241d2e;
+  background-image: radial-gradient(circle at 1px 1px, #b98ee84d 1.2px, transparent 1.7px), linear-gradient(135deg, #2a2236 0%, #2e2230 100%);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .completion-card.is-milestone {
+    border-color: #4d3a66;
+    background-color: #241d2e;
+    background-image: radial-gradient(circle at 1px 1px, #b98ee84d 1.2px, transparent 1.7px), linear-gradient(135deg, #2a2236 0%, #2e2230 100%);
+  }
+}
