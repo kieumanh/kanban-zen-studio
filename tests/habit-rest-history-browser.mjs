@@ -3,7 +3,9 @@
 import assert from 'node:assert/strict';
 import { startHarness, makeProject } from './lib/browser-harness.mjs';
 
-const todayStr = new Date().toISOString().slice(0, 10);
+// Ngày "hôm nay" của ứng dụng là ngày theo giờ Việt Nam (today()), không phải UTC:
+// từ 00:00 đến 07:00 giờ Việt Nam, ngày UTC vẫn là hôm qua nên việc "đã làm hôm nay" bị lệch.
+const todayStr = new Date().toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
 const addD = (n) =>
   new Date(Date.parse(todayStr + 'T12:00:00Z') + n * 864e5)
     .toISOString()
