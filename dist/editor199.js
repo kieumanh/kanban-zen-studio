@@ -1,29 +1,52 @@
 'use strict';
 /* v1.9.9 — In-place rich-text editing. Existing note.text remains portable Markdown. */
+// v1.44.0: ch\u1eef ng\u01b0\u1eddi d\u00f9ng g\u00f5 m\u00e0 tr\u00f9ng k\u00fd hi\u1ec7u \u0111\u1ecbnh d\u1ea1ng (v\u00ed d\u1ee5 "5 * 3", "__init__", "# ti\u00eau \u0111\u1ec1", "- vi\u1ec7c") \u0111\u01b0\u1ee3c
+// escape b\u1eb1ng d\u1ea5u \ \u0111\u1ec3 khi m\u1edf l\u1ea1i kh\u00f4ng bi\u1ebfn th\u00e0nh in nghi\u00eang, g\u1ea1ch ch\u00e2n, ti\u00eau \u0111\u1ec1 hay danh s\u00e1ch. zenFormattedHTML b\u1ecf d\u1ea5u \ khi hi\u1ec3n th\u1ecb.
+function zenEscapeText(s){
+ return s.replace(/\\(?=[\\*_~#\-.\u2022\u25e6\u25aa])/g,'\\\\').replace(/\*/g,'\\*').replace(/~~/g,'\\~\\~').replace(/__/g,'\\_\\_');
+}
+function zenLineSafe(s){
+ return s.replace(/^#(?=#{0,2}\s)/,'\\#').replace(/^([-\u2022\u25e6\u25aa])(?=\s)/,'\\$1').replace(/^(\d+)\.(?=\s)/,'$1\\.');
+}
+// v1.44.0: gi\u1eef kho\u1ea3ng tr\u1eafng \u0111\u1ea7u/cu\u1ed1i ngo\u00e0i d\u1ea5u \u0111\u1ecbnh d\u1ea1ng, \u0111\u1ec3 "**ch\u1eef **" th\u00e0nh "**ch\u1eef** " v\u00e0 in \u0111\u1eadm v\u1eabn \u0111\u00fang khi m\u1edf l\u1ea1i.
+function zenWrapMark(out,mark){
+ const m=out.match(/^(\s*)([\s\S]*?)(\s*)$/);
+ return m[2]?m[1]+mark+m[2]+mark+m[3]:out;
+}
 function zenRichMarkdown(root){
  function convert(node){
-  if(node.nodeType===3)return (node.nodeValue||'').replace(/\u00a0/g,' ');
+  if(node.nodeType===3)return zenEscapeText((node.nodeValue||'').replace(/\u00a0/g,' '));
   if(node.nodeType!==1)return '';
   const tag=node.tagName.toLowerCase();
   if(tag==='br')return '\n';
   let out=Array.from(node.childNodes||[]).map(convert).join('');
-  if(['strong','b'].includes(tag))return out.trim()?'**'+out+'**':out;
-  if(['em','i'].includes(tag))return out.trim()?'*'+out+'*':out;
-  if(tag==='u')return out.trim()?'__'+out+'__':out;
-  if(['s','strike','del'].includes(tag))return out.trim()?'~~'+out+'~~':out;
+  if(['strong','b'].includes(tag))return zenWrapMark(out,'**');
+  if(['em','i'].includes(tag))return zenWrapMark(out,'*');
+  if(tag==='u')return zenWrapMark(out,'__');
+  if(['s','strike','del'].includes(tag))return zenWrapMark(out,'~~');
   if(tag==='span'){
    const style=node.getAttribute('style')||'';
-   if(/font-weight:\s*(bold|[6-9]00)/i.test(style))out='**'+out+'**';
-   if(/font-style:\s*italic/i.test(style))out='*'+out+'*';
-   if(/text-decoration[^:]*:\s*[^;]*underline/i.test(style))out='__'+out+'__';
-   if(/text-decoration[^:]*:\s*[^;]*line-through/i.test(style))out='~~'+out+'~~';
+   if(/font-weight:\s*(bold|[6-9]00)/i.test(style))out=zenWrapMark(out,'**');
+   if(/font-style:\s*italic/i.test(style))out=zenWrapMark(out,'*');
+   if(/text-decoration[^:]*:\s*[^;]*underline/i.test(style))out=zenWrapMark(out,'__');
+   if(/text-decoration[^:]*:\s*[^;]*line-through/i.test(style))out=zenWrapMark(out,'~~');
   }
   if(/^h[1-3]$/.test(tag))return '#'.repeat(Number(tag[1]))+' '+out.trimEnd()+'\n';
   if(tag==='li'){const parent=node.parentElement;const ordered=parent?.tagName==='OL';const i=parent?Array.from(parent.children).indexOf(node)+Number(parent.getAttribute('start')||1):1;const marker=parent?.classList?.contains('zen-list-circle')?'◦ ':parent?.classList?.contains('zen-list-square')?'▪ ':'- ';let depth=0;for(let p=parent?.parentElement;p&&p!==root;p=p.parentElement)if(p.tagName==='LI')depth++;const own=Array.from(node.childNodes).filter(n=>!['UL','OL'].includes(n.nodeName)).map(convert).join('').trimEnd();const nested=Array.from(node.children).filter(n=>['UL','OL'].includes(n.tagName)).map(convert).join('');return '  '.repeat(depth)+(ordered?i+'. ':marker)+own+'\n'+nested;}
-  if(['p','div','blockquote'].includes(tag))return out.replace(/\n+$/,'')+'\n';
+  if(['p','div','blockquote'].includes(tag))return zenLineSafe(out.replace(/\n+$/,''))+'\n';
   return out;
  }
- return Array.from(root.childNodes||[]).map(convert).join('').replace(/\r/g,'').replace(/\n{4,}/g,'\n\n\n').replace(/\n+$/,'');
+ // v1.44.0: chữ gõ trực tiếp ở gốc (không nằm trong đoạn) cũng được escape khi đứng đầu dòng.
+ let atLineStart=true;
+ const parts=Array.from(root.childNodes||[]).map(node=>{
+  const isBlock=node.nodeType===1&&['p','div','blockquote','h1','h2','h3','ul','ol'].includes(node.tagName.toLowerCase());
+  let out=convert(node);
+  const isBreak=node.nodeType===1&&node.tagName.toLowerCase()==='br';
+  if(atLineStart&&!isBlock&&!isBreak)out=zenLineSafe(out);
+  atLineStart=isBlock?true:/\n$/.test(out)||(out===''&&atLineStart);
+  return out;
+ });
+ return parts.join('').replace(/\r/g,'').replace(/\n{4,}/g,'\n\n\n').replace(/\n+$/,'');
 }
 function zenApplyFormatting(rich,command){
  rich.focus();

@@ -178,6 +178,9 @@ try {
     if (width < 700) {
       const cdp = await context.newCDPSession(page);
       const touchDragOnto = async (fromId, toId, side) => {
+        // Cuộn hai dòng vào khung nhìn trước: sự kiện chạm qua CDP không tự cuộn như chuột.
+        await row(fromId).scrollIntoViewIfNeeded();
+        await row(toId).scrollIntoViewIfNeeded();
         const from = await row(fromId).locator('[data-fe-grip]').boundingBox();
         const to = await row(toId).boundingBox();
         const x0 = from.x + from.width / 2, y0 = from.y + from.height / 2;

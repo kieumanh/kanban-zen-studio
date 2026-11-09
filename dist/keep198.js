@@ -85,7 +85,13 @@ function zenApplyNoteCards(){
  section('GHIM',pinned);section('GHI CHÚ KHÁC',others);
 }
 function zenFormattedHTML(text){
- function inline(s){return esc(s).replace(/\*\*([^*\n]+)\*\*/g,'<strong>$1</strong>').replace(/__([^_\n]+)__/g,'<u>$1</u>').replace(/~~([^~\n]+)~~/g,'<s>$1</s>').replace(/(^|[^\*])\*([^*\n]+)\*(?!\*)/g,'$1<em>$2</em>');}
+ // v1.44.0: ký tự đã escape bằng \ (xem zenEscapeText) được giữ tạm bằng mã đặc biệt, không bị coi là định dạng, rồi trả lại đúng ký tự.
+ function inline(s){
+  const kept=[];
+  const t=esc(s).replace(/\\([\\*_~#\-.•◦▪])/g,(m,c)=>{kept.push(c);return ''+(kept.length-1)+'';});
+  const html=t.replace(/\*\*([^*\n]+)\*\*/g,'<strong>$1</strong>').replace(/__([^_\n]+)__/g,'<u>$1</u>').replace(/~~([^~\n]+)~~/g,'<s>$1</s>').replace(/(^|[^\*])\*([^*\n]+)\*(?!\*)/g,'$1<em>$2</em>');
+  return html.replace(/(\d+)/g,(m,n)=>esc(kept[Number(n)]));
+ }
  const lines=String(text||'').split(/\r?\n/),out=[],stack=[];
  const closeOne=()=>{const item=stack.pop();if(item)out.push('</li></'+item.type+'>');};
  const closeAll=()=>{while(stack.length)closeOne();};

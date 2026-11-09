@@ -1536,7 +1536,7 @@ dialog[open] button[aria-label^="Đóng"],
 }
 @media (pointer: coarse) {
   #editor .zen-ck-pct .zen-ck-num,
-  .zen-fe-row .zen-ck-pct .zen-ck-num { width: 56px; height: 44px; min-height: 44px; }
+  .zen-fe-row .zen-ck-pct .zen-ck-num { width: 50px; height: 44px; min-height: 44px; padding: 2px 0; }
 }
 .zen-ck-pct-unit {
   font-size: 12px;
