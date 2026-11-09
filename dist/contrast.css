@@ -2811,6 +2811,9 @@
 :root[data-contrast=high] .hb-hist-cell.is-done small {
     color: #ffffff
 }
+:root[data-contrast=high] .hb-grip:focus-visible {
+    outline: 3px solid color-mix(in srgb,var(--brand-purple) 55%,#161616)
+}
 :root[data-contrast=high] {
     --muted: #060606;
     --text-muted: #060606
@@ -6218,6 +6221,9 @@
 }
 :root[data-theme=dark][data-contrast=high] .hb-hist-cell.is-done small {
     color: #ffffff
+}
+:root[data-theme=dark][data-contrast=high] .hb-grip:focus-visible {
+    outline: 3px solid color-mix(in srgb,var(--brand-purple) 55%,#cecece)
 }
 :root[data-theme=dark][data-contrast=high] {
     --muted: #f5f5f5;

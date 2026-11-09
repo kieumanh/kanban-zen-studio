@@ -146,8 +146,11 @@
     if (!due.length) return '';
     return '<section class="hb-due" role="status" aria-label="Việc đến giờ nhắc"><div class="hb-due-text"><strong>' + svgIcon('bell') + due.length + ' việc đến giờ nhắc</strong><span>' + due.map((h) => esc(h.name)).join(' · ') + '</span></div><button type="button" class="btn hb-due-dismiss" data-hb-due-dismiss>Đã xem</button></section>';
   }
+  // v1.39.0: tay cầm đổi thứ tự (sáu chấm), đặt cuối dòng "Nghỉ hôm nay" để không làm hẹp tên việc trên điện thoại.
+  const gripIcon = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="9" cy="6" r="1.6"/><circle cx="15" cy="6" r="1.6"/><circle cx="9" cy="12" r="1.6"/><circle cx="15" cy="12" r="1.6"/><circle cx="9" cy="18" r="1.6"/><circle cx="15" cy="18" r="1.6"/></svg>';
+  const gripButton = (h) => '<button type="button" class="hb-grip" data-hb-grip="' + esc(h.id) + '" aria-label="Đổi thứ tự “' + esc(h.name) + '”: kéo, hoặc nhấn mũi tên lên xuống" title="Kéo để đổi thứ tự">' + gripIcon + '</button>';
   function row(h) {
-    return '<li class="hb-row" data-hb-row="' + esc(h.id) + '" style="--hb:' + esc(h.color) + '"><div class="hb-info"><span class="hb-icon" aria-hidden="true">' + esc(h.icon || '✳') + '</span><div class="hb-text"><strong class="hb-name">' + esc(h.name) + '</strong><span class="hb-meta">' + meta(h) + '</span></div><div class="hb-actions"><button type="button" class="icon-btn hb-act" data-hb-history="' + esc(h.id) + '" aria-label="Lịch sử ' + esc(h.name) + '" title="Lịch sử">' + svgIcon('notes') + '</button><button type="button" class="icon-btn hb-act" data-hb-edit="' + esc(h.id) + '" aria-label="Sửa ' + esc(h.name) + '" title="Sửa">' + svgIcon('edit') + '</button><button type="button" class="icon-btn hb-act hb-del" data-hb-delete="' + esc(h.id) + '" aria-label="Xóa ' + esc(h.name) + '" title="Xóa">' + svgIcon('trash') + '</button></div></div><div class="hb-days">' + days().map((d) => checkButton(h, d)).join('') + '</div>' + restButton(h) + '</li>';
+    return '<li class="hb-row" data-hb-row="' + esc(h.id) + '" style="--hb:' + esc(h.color) + '"><div class="hb-info"><span class="hb-icon" aria-hidden="true">' + esc(h.icon || '✳') + '</span><div class="hb-text"><strong class="hb-name">' + esc(h.name) + '</strong><span class="hb-meta">' + meta(h) + '</span></div><div class="hb-actions"><button type="button" class="icon-btn hb-act" data-hb-history="' + esc(h.id) + '" aria-label="Lịch sử ' + esc(h.name) + '" title="Lịch sử">' + svgIcon('notes') + '</button><button type="button" class="icon-btn hb-act" data-hb-edit="' + esc(h.id) + '" aria-label="Sửa ' + esc(h.name) + '" title="Sửa">' + svgIcon('edit') + '</button><button type="button" class="icon-btn hb-act hb-del" data-hb-delete="' + esc(h.id) + '" aria-label="Xóa ' + esc(h.name) + '" title="Xóa">' + svgIcon('trash') + '</button></div></div><div class="hb-days">' + days().map((d) => checkButton(h, d)).join('') + '</div><div class="hb-foot">' + restButton(h) + gripButton(h) + '</div></li>';
   }
   function ring(done, total) {
     const pct = total ? done / total : 0;
@@ -477,6 +480,67 @@
     e.preventDefault();
     noteForm(find(cell.dataset.hbToggle), cell.dataset.hbDate);
   });
+  // v1.39.0: đổi thứ tự việc: kéo tay cầm (chuột hoặc cảm ứng), hoặc chọn tay cầm rồi nhấn mũi tên lên/xuống.
+  // Thứ tự là thứ tự mảng dailyHabits, được lưu và đồng bộ cùng dữ liệu việc.
+  let drag = null;
+  const habitRows = () => Array.from(document.querySelectorAll('.hb-list > .hb-row'));
+  function moveHabit(id, to) {
+    const arr = list().slice(), from = arr.findIndex((h) => h.id === id);
+    if (from < 0 || to < 0 || to >= arr.length || to === from) return false;
+    const [moved] = arr.splice(from, 1);
+    arr.splice(to, 0, moved);
+    return wfSave(() => { data.dailyHabits = arr; });
+  }
+  document.addEventListener('keydown', (e) => {
+    const grip = e.target.closest?.('[data-hb-grip]');
+    if (!grip || (e.key !== 'ArrowUp' && e.key !== 'ArrowDown')) return;
+    e.preventDefault();
+    const id = grip.dataset.hbGrip, from = list().findIndex((h) => h.id === id), to = from + (e.key === 'ArrowUp' ? -1 : 1);
+    if (!moveHabit(id, to)) return;
+    render();
+    document.querySelector('[data-hb-grip="' + CSS.escape(id) + '"]')?.focus();
+    notify('Đã chuyển “' + list()[to].name + '” ' + (e.key === 'ArrowUp' ? 'lên trên' : 'xuống dưới') + '.');
+  });
+  document.addEventListener('pointerdown', (e) => {
+    const grip = e.target.closest?.('[data-hb-grip]');
+    if (!grip || e.button !== 0) return;
+    const row = grip.closest('.hb-row');
+    if (!row) return;
+    e.preventDefault();
+    grip.setPointerCapture?.(e.pointerId);
+    const rect = row.getBoundingClientRect();
+    drag = { id: grip.dataset.hbGrip, row, rows: habitRows(), from: habitRows().indexOf(row), to: -1, pointerId: e.pointerId, startDocY: e.clientY + window.scrollY, topDoc: rect.top + window.scrollY, h: rect.height, dy: 0, moved: false };
+    drag.to = drag.from;
+    row.classList.add('is-dragging');
+  });
+  document.addEventListener('pointermove', (e) => {
+    if (!drag || e.pointerId !== drag.pointerId) return;
+    if (e.clientY < 90) window.scrollBy(0, -14);
+    else if (e.clientY > innerHeight - 90) window.scrollBy(0, 14);
+    drag.dy = e.clientY + window.scrollY - drag.startDocY;
+    if (!drag.moved && Math.abs(drag.dy) < 6) return;
+    drag.moved = true;
+    drag.row.style.transform = 'translateY(' + drag.dy + 'px)';
+    const center = drag.topDoc + drag.dy + drag.h / 2;
+    const others = drag.rows.filter((r) => r !== drag.row);
+    drag.to = others.filter((r) => { const b = r.getBoundingClientRect(); return b.top + window.scrollY + b.height / 2 < center; }).length;
+    drag.rows.forEach((r) => r.classList.toggle('is-drop', r === others[drag.to]));
+  });
+  const endDrag = (e) => {
+    if (!drag || (e && e.pointerId !== drag.pointerId)) return;
+    const d = drag;
+    drag = null;
+    d.row.classList.remove('is-dragging');
+    d.row.style.transform = '';
+    d.rows.forEach((r) => r.classList.remove('is-drop'));
+    if (!d.moved || d.to === d.from) return;
+    if (moveHabit(d.id, d.to)) {
+      render();
+      notify('Đã đổi thứ tự việc.');
+    }
+  };
+  document.addEventListener('pointerup', endDrag);
+  document.addEventListener('pointercancel', endDrag);
   // v1.34.0: chuông thông báo (studio-zen.js) đọc số việc đến giờ nhắc qua zenHabits.dueReminders(), hiện như nhắc ghi chú.
   // Bấm một mục trong hộp thoại Thông báo để mở đúng trang việc hằng ngày.
   window.zenHabits.dueReminders = () => dueHabitReminders();

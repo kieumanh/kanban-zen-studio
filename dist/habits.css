@@ -344,3 +344,13 @@
 .hb-hist-notes h3{font-size:15px;margin:0 0 6px}
 .hb-hist-notes ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}
 .hb-hist-notes li{font-size:14px;line-height:1.45}
+
+/* v1.39.0: dòng cuối của mỗi việc: "Nghỉ hôm nay" và tay cầm kéo đổi thứ tự (vùng chạm 44px). */
+.hb-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;min-width:0}
+.hb-grip{flex:none;width:44px;height:44px;display:grid;place-items:center;margin-left:auto;border:0;border-radius:12px;background:transparent;color:var(--muted);cursor:grab;touch-action:none;padding:0}
+.hb-grip svg{width:20px;height:20px}
+.hb-grip:hover{color:var(--ink)}
+.hb-grip:focus-visible{outline:3px solid color-mix(in srgb,var(--brand-purple) 55%,#fff);outline-offset:2px}
+.hb-row{position:relative}
+.hb-row.is-dragging{z-index:5;box-shadow:0 14px 30px rgba(60,40,90,.22);background:var(--paper)}
+.hb-row.is-drop{outline:2px dashed var(--brand-purple);outline-offset:4px}

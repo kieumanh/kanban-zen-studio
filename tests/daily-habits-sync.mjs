@@ -58,4 +58,10 @@ await push(next,'thêm ghi chú theo ngày');
 loaded=(await(await req('workspace-v2','GET',null,cookie)).json()).data;
 assert.equal(loaded.dailyHabits.find(h=>h.id==='h-7').notes['2026-11-05'],'Đi bộ 20 phút, thấy nhẹ đầu','ghi chú theo ngày phải được lưu');
 for(const notes of [{'2026-13-01':'x'},{'':'x'},{'2026-11-05':''},{'2026-11-05':'   '},{'2026-11-05':'x'.repeat(141)},{'2026-11-05':5},['2026-11-05','x'],'chuỗi']){const b=structuredClone(before);b.dailyHabits.push({id:'h-8',name:'Đi bộ',icon:'🌿',color:'#2e7d5b',createdAt:'2026-11-05',done:[],notes});const r=await req('workspace-v2','POST',{revision,changes:changesBetween(before,b)},cookie);assert.ok(r.status>=400,'ghi chú sai '+JSON.stringify(notes).slice(0,40)+' phải bị từ chối, nhận '+r.status);}
+// v1.39.0: thứ tự việc được lưu và đồng bộ: đảo thứ tự, tải lại vẫn đúng thứ tự.
+const orderIds=before.dailyHabits.map(h=>h.id);
+next=structuredClone(before);next.dailyHabits=[...next.dailyHabits].reverse();
+await push(next,'đổi thứ tự việc');
+loaded=(await(await req('workspace-v2','GET',null,cookie)).json()).data;
+assert.deepEqual(loaded.dailyHabits.map(h=>h.id),[...orderIds].reverse(),'thứ tự việc phải được lưu và tải lại');
 console.log('PASS: Việc hằng ngày đồng bộ qua kho máy chủ (thêm, tích, xóa, tải lại, giờ nhắc, từ chối dữ liệu sai)');

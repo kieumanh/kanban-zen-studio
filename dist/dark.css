@@ -2810,6 +2810,9 @@
 :root[data-theme=dark] .hb-hist-cell.is-done small {
     color: #ffffff
 }
+:root[data-theme=dark] .hb-grip:focus-visible {
+    outline: 3px solid color-mix(in srgb,var(--brand-purple) 55%,#302b36)
+}
 :root[data-theme=dark] {
     --muted: #ccc2d7;
     --text-muted: #ccc2d7
