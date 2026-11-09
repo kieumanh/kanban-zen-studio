@@ -52,4 +52,10 @@ await push(next,'thêm việc có giờ nhắc 07:30');
 loaded=(await(await req('workspace-v2','GET',null,cookie)).json()).data;
 assert.equal(loaded.dailyHabits.find(h=>h.id==='h-5').remindTime,'07:30','giờ nhắc phải được lưu');
 for(const badTime of ['7:30','25:00','07:60','0730']){const b=structuredClone(before);b.dailyHabits.push({...reminded,id:'h-6',remindTime:badTime});const r=await req('workspace-v2','POST',{revision,changes:changesBetween(before,b)},cookie);assert.ok(r.status>=400,'giờ nhắc '+badTime+' phải bị từ chối, nhận '+r.status);}
+// v1.38.0: ghi chú theo ngày được lưu; ngày sai, ghi chú rỗng, quá 140 ký tự hoặc sai kiểu bị từ chối.
+next=structuredClone(before);next.dailyHabits.push({id:'h-7',name:'Đi bộ',icon:'🌿',color:'#2e7d5b',createdAt:'2026-11-05',done:[],notes:{'2026-11-05':'Đi bộ 20 phút, thấy nhẹ đầu'}});
+await push(next,'thêm ghi chú theo ngày');
+loaded=(await(await req('workspace-v2','GET',null,cookie)).json()).data;
+assert.equal(loaded.dailyHabits.find(h=>h.id==='h-7').notes['2026-11-05'],'Đi bộ 20 phút, thấy nhẹ đầu','ghi chú theo ngày phải được lưu');
+for(const notes of [{'2026-13-01':'x'},{'':'x'},{'2026-11-05':''},{'2026-11-05':'   '},{'2026-11-05':'x'.repeat(141)},{'2026-11-05':5},['2026-11-05','x'],'chuỗi']){const b=structuredClone(before);b.dailyHabits.push({id:'h-8',name:'Đi bộ',icon:'🌿',color:'#2e7d5b',createdAt:'2026-11-05',done:[],notes});const r=await req('workspace-v2','POST',{revision,changes:changesBetween(before,b)},cookie);assert.ok(r.status>=400,'ghi chú sai '+JSON.stringify(notes).slice(0,40)+' phải bị từ chối, nhận '+r.status);}
 console.log('PASS: Việc hằng ngày đồng bộ qua kho máy chủ (thêm, tích, xóa, tải lại, giờ nhắc, từ chối dữ liệu sai)');

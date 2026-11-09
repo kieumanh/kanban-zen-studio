@@ -115,6 +115,7 @@ jobs:
           node tests/focus-refresh-button-browser.mjs
           node tests/habits-sticky-bar-browser.mjs
           node tests/habit-progress-layout-browser.mjs
+          node tests/habit-notes-browser.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:

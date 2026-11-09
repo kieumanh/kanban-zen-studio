@@ -398,6 +398,23 @@ function validHabits(list) {
         !/^([01]\d|2[0-3]):[0-5]\d$/.test(h.remindTime))
     )
       return false;
+    // v1.38.0: ghi chú cảm nhận theo ngày: khóa là ngày YYYY-MM-DD, mỗi ghi chú từ 1 đến 140 ký tự.
+    if (
+      h.notes !== undefined &&
+      (!h.notes ||
+        typeof h.notes !== 'object' ||
+        Array.isArray(h.notes) ||
+        Object.keys(h.notes).length > 3700 ||
+        !Object.entries(h.notes).every(
+          ([day, text]) =>
+            day !== '' &&
+            validDate(day) &&
+            typeof text === 'string' &&
+            text.trim() !== '' &&
+            text.length <= 140,
+        ))
+    )
+      return false;
     if (!Array.isArray(h.done) || h.done.length > 3700) return false;
     const seen = new Set();
     return h.done.every(

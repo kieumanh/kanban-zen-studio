@@ -73,8 +73,9 @@
   function checkButton(h, d) {
     const done = h.done.includes(d),
       rested = !done && (h.rest || []).includes(d),
-      i = (toDate(d).getUTCDay() + 6) % 7;
-    return '<div class="hb-cell' + (d === today() ? ' is-today' : '') + (rested ? ' is-rest' : '') + '"><span class="hb-dayname" aria-hidden="true">' + SHORT[i] + '<small class="hb-daynum">' + short(d).slice(0, 2) + '</small></span><button type="button" class="hb-check' + (done ? ' is-done' : '') + '" role="checkbox" aria-checked="' + done + '" data-hb-toggle="' + esc(h.id) + '" data-hb-date="' + d + '"' + '' + ' aria-label="' + esc(h.name) + ' — ' + LONG[i] + ' ' + short(d) + (rested ? ' (nghỉ)' : '') + '">' + tick + '</button></div>';
+      i = (toDate(d).getUTCDay() + 6) % 7,
+      note = (h.notes || {})[d] || '';
+    return '<div class="hb-cell' + (d === today() ? ' is-today' : '') + (rested ? ' is-rest' : '') + '"><span class="hb-dayname" aria-hidden="true">' + SHORT[i] + '<small class="hb-daynum">' + short(d).slice(0, 2) + '</small></span><button type="button" class="hb-check' + (done ? ' is-done' : '') + '" role="checkbox" aria-checked="' + done + '" data-hb-toggle="' + esc(h.id) + '" data-hb-date="' + d + '"' + '' + ' aria-label="' + esc(h.name) + ' — ' + LONG[i] + ' ' + short(d) + (rested ? ' (nghỉ)' : '') + (note ? ' (có ghi chú)' : '') + '"' + (note ? ' title="' + esc(note) + '"' : '') + '>' + tick + (note ? '<i class="hb-note-dot" aria-hidden="true"></i>' : '') + '</button></div>';
   }
   // v1.22.0: liên kết dự án (hiển thị ở từng việc để biết việc này phục vụ dự án nào).
   const projectOf = (h) => (h.projectId ? (data.projects || []).find((p) => p.id === h.projectId) : null);
@@ -99,14 +100,38 @@
     if (done) return '';
     return '<button type="button" class="hb-rest' + (rested ? ' is-on' : '') + '" data-hb-rest="' + esc(h.id) + '" aria-pressed="' + rested + '">' + (rested ? 'Bỏ nghỉ hôm nay' : 'Nghỉ hôm nay') + '</button>';
   }
+  // v1.38.0: ghi chú cảm nhận theo ngày. Mở bằng cách giữ ô ngày (0,5 giây), chuột phải, hoặc Shift+Enter khi dùng bàn phím.
+  // Để trống rồi lưu là xóa ghi chú. Không ghi chú cho ngày sau hôm nay.
+  const NOTE_MAX = 140;
+  const noteTip = () => '<p class="hb-note-tip">Giữ một ô ngày để ghi chú cảm nhận.</p>';
+  function noteForm(h, d) {
+    if (!h || !d || d > today()) return;
+    const cur = (h.notes || {})[d] || '',
+      i = (toDate(d).getUTCDay() + 6) % 7;
+    modal('<h2>Ghi chú · ' + esc(h.name) + '</h2><p class="hb-note-date">' + LONG[i] + ' ' + short(d) + (d === today() ? ' · hôm nay' : '') + '</p><label class="field hb-note-field">Cảm nhận<textarea name="note" rows="3" maxlength="' + NOTE_MAX + '" placeholder="Một câu ngắn về việc này…">' + esc(cur) + '</textarea></label><small class="hb-note-hint">Để trống rồi lưu để xóa ghi chú. Tối đa ' + NOTE_MAX + ' ký tự.</small>', (fd) => {
+      const text = String(fd.get('note') || '').trim().slice(0, NOTE_MAX);
+      if (text === cur) return $('#editor').close();
+      if (!wfSave(() => {
+        const notes = Object.assign({}, h.notes || {});
+        if (text) notes[d] = text;
+        else delete notes[d];
+        if (Object.keys(notes).length) h.notes = notes;
+        else delete h.notes;
+      })) return render();
+      $('#editor').close();
+      render();
+      notify(text ? 'Đã lưu ghi chú.' : 'Đã xóa ghi chú.');
+    });
+  }
   // v1.33.0: lịch sử 28 ngày gần nhất của một việc (đã làm / nghỉ / chưa làm).
   function history(h) {
     if (!h) return;
     const t = today(), done = new Set(h.done), rest = new Set(h.rest || []);
     const cells = Array.from({ length: 28 }, (_, i) => addDays(t, i - 27));
     const doneCount = cells.filter((d) => done.has(d)).length, restCount = cells.filter((d) => rest.has(d) && !done.has(d)).length;
-    const grid = cells.map((d) => '<span class="hb-hist-cell' + (done.has(d) ? ' is-done' : rest.has(d) ? ' is-rest' : '') + (d === t ? ' is-today' : '') + '" title="' + short(d) + (done.has(d) ? ' · đã làm' : rest.has(d) ? ' · nghỉ' : '') + '"><small>' + short(d) + '</small></span>').join('');
-    modal('<h2>Lịch sử: ' + esc(h.name) + '</h2><div class="hb-hist"><p class="hb-hist-sum">Chuỗi hiện tại <strong>' + streak(h) + ' ngày</strong> · đã làm <strong>' + doneCount + '</strong>/28 ngày' + (restCount ? ' · nghỉ <strong>' + restCount + '</strong>' : '') + '</p><div class="hb-hist-grid" role="img" aria-label="28 ngày gần nhất">' + grid + '</div><p class="help-copy">Ô đậm là ngày đã làm, ô nét đứt là ngày nghỉ. Ngày nghỉ không làm đứt chuỗi.</p></div>', null, true);
+    const notes = h.notes || {}, noteRows = cells.filter((d) => notes[d]).map((d) => '<li><strong>' + short(d) + '</strong> ' + esc(notes[d]) + '</li>').join('');
+    const grid = cells.map((d) => '<span class="hb-hist-cell' + (done.has(d) ? ' is-done' : rest.has(d) ? ' is-rest' : '') + (d === t ? ' is-today' : '') + '" title="' + short(d) + (done.has(d) ? ' · đã làm' : rest.has(d) ? ' · nghỉ' : '') + (notes[d] ? ' · có ghi chú' : '') + '"><small>' + short(d) + '</small></span>').join('');
+    modal('<h2>Lịch sử: ' + esc(h.name) + '</h2><div class="hb-hist"><p class="hb-hist-sum">Chuỗi hiện tại <strong>' + streak(h) + ' ngày</strong> · đã làm <strong>' + doneCount + '</strong>/28 ngày' + (restCount ? ' · nghỉ <strong>' + restCount + '</strong>' : '') + '</p><div class="hb-hist-grid" role="img" aria-label="28 ngày gần nhất">' + grid + '</div><p class="help-copy">Ô đậm là ngày đã làm, ô nét đứt là ngày nghỉ. Ngày nghỉ không làm đứt chuỗi.</p>' + (noteRows ? '<div class="hb-hist-notes"><h3>Ghi chú trong 28 ngày</h3><ul>' + noteRows + '</ul></div>' : '') + '</div>', null, true);
   }
   // v1.34.0: nhắc riêng từng việc theo giờ Việt Nam (cùng múi giờ với ngày trong ứng dụng).
   // Việc được nhắc khi đã đến giờ, chưa làm và chưa nghỉ hôm nay. "Đã xem" tắt nhắc đến hết ngày hoặc khi đổi giờ.
@@ -174,7 +199,7 @@
       ? window.zenHabitsReport
         ? window.zenHabitsReport.html(range)
         : ''
-      : '<div class="hb-overview">' + summary() + progressBlock() + '</div>' + weekBar() + (hs.length ? head() + '<ul class="hb-list">' + hs.map(row).join('') + '</ul>' : empty());
+      : '<div class="hb-overview">' + summary() + progressBlock() + '</div>' + weekBar() + (hs.length ? noteTip() + head() + '<ul class="hb-list">' + hs.map(row).join('') + '</ul>' : empty());
     return heading('', report ? 'Báo cáo việc hằng ngày' : 'Việc hằng ngày', report ? 'Biểu đồ, đánh giá và đề xuất cải thiện từ chính dữ liệu tích của bạn.' : 'Tích từng việc nhỏ mỗi ngày để nuôi dưỡng thói quen tốt.', actions()) + dueBanner(report ? [] : due) + '<section class="panel hb-panel' + (report ? ' is-report' : '') + '" aria-label="' + (report ? 'Báo cáo việc hằng ngày' : 'Bảng việc hằng ngày') + '">' + body + '</section>';
   }
 
@@ -405,6 +430,53 @@
   }
   document.addEventListener('input', (e) => { if (e.target.closest('#editor-body .hb-form')) syncPreview(); });
   document.addEventListener('change', (e) => { if (e.target.closest('#editor-body .hb-form')) syncPreview(); });
+  // v1.38.0: giữ ô để ghi chú (không tích). Sau khi mở ghi chú, lần nhả tay không kích hoạt tích ô.
+  let pressTimer = 0, pressCell = null, pressAt = null, pressFired = false, swallowUntil = 0;
+  const cancelPress = () => { clearTimeout(pressTimer); pressTimer = 0; pressCell = null; };
+  document.addEventListener('pointerdown', (e) => {
+    cancelPress();
+    const cell = e.target.closest?.('[data-hb-toggle]');
+    if (!cell || e.button !== 0) return;
+    pressCell = cell;
+    pressAt = { x: e.clientX, y: e.clientY };
+    pressTimer = setTimeout(() => {
+      const target = pressCell;
+      cancelPress();
+      if (!target) return;
+      pressFired = true;
+      noteForm(find(target.dataset.hbToggle), target.dataset.hbDate);
+    }, 500);
+  });
+  document.addEventListener('pointermove', (e) => {
+    if (pressCell && Math.hypot(e.clientX - pressAt.x, e.clientY - pressAt.y) > 10) cancelPress();
+  });
+  const endPress = () => {
+    cancelPress();
+    if (pressFired) swallowUntil = Date.now() + 400;
+    pressFired = false;
+  };
+  document.addEventListener('pointerup', endPress);
+  document.addEventListener('pointercancel', endPress);
+  document.addEventListener('click', (e) => {
+    if (Date.now() >= swallowUntil) return;
+    swallowUntil = 0;
+    e.preventDefault();
+    e.stopPropagation();
+  }, true);
+  document.addEventListener('contextmenu', (e) => {
+    const cell = e.target.closest?.('[data-hb-toggle]');
+    if (!cell) return;
+    e.preventDefault();
+    cancelPress();
+    noteForm(find(cell.dataset.hbToggle), cell.dataset.hbDate);
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter' || !e.shiftKey) return;
+    const cell = e.target.closest?.('[data-hb-toggle]');
+    if (!cell) return;
+    e.preventDefault();
+    noteForm(find(cell.dataset.hbToggle), cell.dataset.hbDate);
+  });
   // v1.34.0: chuông thông báo (studio-zen.js) đọc số việc đến giờ nhắc qua zenHabits.dueReminders(), hiện như nhắc ghi chú.
   // Bấm một mục trong hộp thoại Thông báo để mở đúng trang việc hằng ngày.
   window.zenHabits.dueReminders = () => dueHabitReminders();

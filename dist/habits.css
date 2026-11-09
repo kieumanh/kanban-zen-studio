@@ -332,3 +332,15 @@
 .hb-due-text span{font-size:13px;line-height:1.45;color:var(--muted);overflow-wrap:anywhere}
 .hb-due-dismiss{min-height:44px;flex:none}
 @media(max-width:600px){.hb-due{flex-direction:column;align-items:stretch}.hb-due-dismiss{width:100%}}
+
+/* v1.38.0: ghi chú cảm nhận theo ngày: chấm trên ô đã có ghi chú, gợi ý giữ ô, hộp ghi chú và danh sách trong lịch sử. */
+.hb-check{-webkit-touch-callout:none;-webkit-user-select:none;user-select:none}
+.hb-note-dot{position:absolute;top:1px;right:1px;width:9px;height:9px;border-radius:50%;background:var(--brand-purple);box-shadow:0 0 0 2px var(--paper);pointer-events:none}
+.hb-note-tip{margin:0 0 6px;font-size:13px;color:var(--muted);text-align:center}
+.hb-note-date{margin:0 0 10px;color:var(--muted)}
+.hb-note-field textarea{width:100%;min-height:88px;resize:vertical}
+.hb-note-hint{display:block;margin-top:6px;color:var(--muted)}
+.hb-hist-notes{margin-top:14px}
+.hb-hist-notes h3{font-size:15px;margin:0 0 6px}
+.hb-hist-notes ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.hb-hist-notes li{font-size:14px;line-height:1.45}
