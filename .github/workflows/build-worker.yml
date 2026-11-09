@@ -88,6 +88,7 @@ jobs:
           node tests/pin-tasks-browser.mjs
           node tests/checklist-tight-browser.mjs
           node tests/checklist-number-browser.mjs
+          node tests/habit-remind-picker-browser.mjs
           node tests/release-notice-buttons-browser.mjs
           node tests/gantt-hide-done-browser.mjs
           node tests/rounded-view-checklist-browser.mjs

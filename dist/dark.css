@@ -2810,6 +2810,9 @@
 :root[data-theme=dark] .hb-hist-cell.is-done small {
     color: #ffffff
 }
+:root[data-theme=dark] .hb-time-chip.is-on {
+    color: #ffffff
+}
 :root[data-theme=dark] .hb-grip:focus-visible {
     outline: 3px solid color-mix(in srgb,var(--brand-purple) 55%,#302b36)
 }

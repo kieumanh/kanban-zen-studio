@@ -2811,6 +2811,9 @@
 :root[data-contrast=high] .hb-hist-cell.is-done small {
     color: #ffffff
 }
+:root[data-contrast=high] .hb-time-chip.is-on {
+    color: #ffffff
+}
 :root[data-contrast=high] .hb-grip:focus-visible {
     outline: 3px solid color-mix(in srgb,var(--brand-purple) 55%,#161616)
 }
@@ -6208,6 +6211,9 @@
     color: #ffffff
 }
 :root[data-theme=dark][data-contrast=high] .hb-hist-cell.is-done small {
+    color: #ffffff
+}
+:root[data-theme=dark][data-contrast=high] .hb-time-chip.is-on {
     color: #ffffff
 }
 :root[data-theme=dark][data-contrast=high] .hb-grip:focus-visible {

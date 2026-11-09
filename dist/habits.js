@@ -322,7 +322,22 @@
     const projectField = '<label class="field hb-project-field">Dự án liên quan<select name="projectId"><option value="">Không gắn dự án</option>' + options.map((p) => '<option value="' + esc(p.id) + '"' + (p.id === pid ? ' selected' : '') + '>' + esc(p.name) + '</option>').join('') + '</select></label>';
     const goalField = '<div class="hb-goal" role="group" aria-labelledby="hb-goal-title"><span class="hb-goal-label" id="hb-goal-title">Số lần trong tuần</span><div class="hb-stepper"><button type="button" class="hb-step" data-hb-goal-step="-1" aria-label="Giảm số lần trong tuần">−</button><output class="hb-step-value" id="hb-goal-value" aria-live="polite">' + goalLabel(goal) + '</output><button type="button" class="hb-step" data-hb-goal-step="1" aria-label="Tăng số lần trong tuần">+</button></div><input type="hidden" name="goal" value="' + goal + '"></div>';
     // v1.34.0: "Nhắc lúc" là tùy chọn; để trống thì việc không được nhắc.
-    const remindField = '<label class="field hb-remind-field">Nhắc lúc<input type="time" lang="vi-VN" name="remindTime" value="' + esc(h?.remindTime || '') + '"><small class="hb-remind-hint">Để trống nếu không cần nhắc. Khi đến giờ, việc sẽ hiện ở đầu trang này và trong chuông thông báo.</small></label>';
+    // v1.43.0: "Nhắc lúc" dùng nút gợi ý nhanh + hai ô chọn giờ/phút (bước 5 phút). Giá trị thật nằm ở ô ẩn name="remindTime" ("HH:MM" hoặc rỗng).
+    const remindNow = h?.remindTime || '';
+    const remindParts = remindNow ? remindNow.split(':') : ['07', '00'];
+    const remindHours = Array.from({ length: 24 }, (_, i) => String(i).padStart(2, '0'));
+    const remindMinutes = Array.from({ length: 12 }, (_, i) => String(i * 5).padStart(2, '0'));
+    if (!remindMinutes.includes(remindParts[1])) remindMinutes.push(remindParts[1]), remindMinutes.sort();
+    const remindPresets = [['', 'Không nhắc'], ['07:00', '7:00'], ['12:00', '12:00'], ['18:00', '18:00'], ['21:00', '21:00']];
+    const remindField = '<div class="hb-time-field" role="group" aria-labelledby="hb-time-title">' +
+      '<span class="hb-goal-label" id="hb-time-title">Nhắc lúc</span>' +
+      '<div class="hb-time-presets">' + remindPresets.map(([v, label]) => '<button type="button" class="hb-time-chip' + (v === remindNow ? ' is-on' : '') + '" data-hb-time="' + v + '" aria-pressed="' + (v === remindNow) + '">' + esc(label) + '</button>').join('') + '</div>' +
+      '<div class="hb-time-pick"><label class="hb-time-sel"><span>Giờ</span><select id="hb-time-h" aria-label="Giờ nhắc">' + remindHours.map((x) => '<option value="' + x + '"' + (x === remindParts[0] ? ' selected' : '') + '>' + x + '</option>').join('') + '</select></label>' +
+      '<span class="hb-time-colon" aria-hidden="true">:</span>' +
+      '<label class="hb-time-sel"><span>Phút</span><select id="hb-time-m" aria-label="Phút nhắc">' + remindMinutes.map((x) => '<option value="' + x + '"' + (x === remindParts[1] ? ' selected' : '') + '>' + x + '</option>').join('') + '</select></label></div>' +
+      '<input type="hidden" name="remindTime" value="' + esc(remindNow) + '">' +
+      '<small class="hb-remind-hint" id="hb-time-status" role="status">' + (remindNow ? 'Sẽ nhắc lúc ' + esc(remindNow) + ' (giờ Việt Nam).' : 'Không nhắc việc này. Chọn giờ để bật nhắc.') + '</small>' +
+      '</div>';
     const iconNow = h?.icon || '🌿';
     const iconPicker = '<div class="hb-icon-field" role="group" aria-labelledby="hb-icon-title"><span class="hb-goal-label" id="hb-icon-title">Biểu tượng</span><div class="hb-icon-picks">' + ICONS.map((i) => '<button type="button" class="hb-icon-pick' + (i === iconNow ? ' is-on' : '') + '" data-hb-icon="' + i + '" aria-label="Chọn biểu tượng ' + i + '" aria-pressed="' + (i === iconNow) + '">' + i + '</button>').join('') + '</div><details class="appearance-picker hb-icon-picker" id="hb-icon-picker"><summary><span>Thư viện biểu tượng</span><span class="appearance-value"><b id="hb-icon-preview">' + esc(iconNow) + '</b>Mở thư viện ⌄</span></summary><input type="hidden" name="icon" value="' + esc(iconNow) + '"><div class="icon-picker-panel hb-icon-panel"><div class="icon-library-tools"><input type="search" id="hb-icon-search" class="emoji-search" placeholder="Tìm: leaf, book, water…" aria-label="Tìm biểu tượng bằng tiếng Anh"><label class="hb-icon-cat">Nhóm<select id="hb-icon-cat">' + Object.entries(iconCategories()).map(([k, name]) => '<option value="' + k + '">' + name + '</option>').join('') + '</select></label></div><small class="icon-result-count" id="hb-icon-count" role="status"></small><div class="icon-library-results" id="hb-icon-results"></div></div></details></div>';
     modal('<h2>' + (h ? 'Chỉnh sửa việc hằng ngày' : 'Thêm việc hằng ngày') + '</h2><div class="hb-form"><div class="hb-preview" id="hb-preview" style="--hb:' + color + '" aria-hidden="true"><span class="hb-icon">' + esc(h?.icon || '🌿') + '</span><span class="hb-preview-name">' + (esc(h?.name) || 'Tên việc của bạn') + '</span><span class="hb-preview-check">' + tick + '</span></div>' + field('Tên việc', 'name', h?.name || '', 'text', true, 80) + goalField + projectField + remindField + iconPicker + '<fieldset class="hb-swatches"><legend>Màu dấu tích</legend>' + COLORS.map((c, i) => '<label class="hb-swatch" style="--hb:' + c + '"><input type="radio" name="color" value="' + c + '"' + (c === color ? ' checked' : '') + '><span aria-hidden="true"></span><em class="sr-only">Màu ' + (i + 1) + '</em></label>').join('') + '</fieldset>' + (h ? '<button type="button" class="text-btn danger hb-form-delete" data-hb-delete="' + esc(h.id) + '">Xóa việc này</button>' : '') + '</div>', (fd) => {
@@ -364,7 +379,7 @@
   }
 
   document.addEventListener('click', (e) => {
-    const t = e.target.closest('[data-hb-due-dismiss],[data-hb-nudge-close],[data-hb-open],[data-hb-rest],[data-hb-history],[data-hb-hist-days],[data-hb-toggle],[data-hb-add],[data-hb-edit],[data-hb-delete],[data-hb-confirm-delete],[data-hb-cancel],[data-hb-week],[data-hb-preset],[data-hb-icon],[data-hb-mode],[data-hb-range],[data-hb-goal-step],[data-hb-lib]');
+    const t = e.target.closest('[data-hb-due-dismiss],[data-hb-nudge-close],[data-hb-open],[data-hb-rest],[data-hb-history],[data-hb-hist-days],[data-hb-toggle],[data-hb-add],[data-hb-edit],[data-hb-delete],[data-hb-confirm-delete],[data-hb-cancel],[data-hb-week],[data-hb-preset],[data-hb-icon],[data-hb-mode],[data-hb-range],[data-hb-goal-step],[data-hb-lib],[data-hb-time]');
     if (!t) return;
     if (t.dataset.hbToggle) {
       const h = find(t.dataset.hbToggle), d = t.dataset.hbDate;
@@ -444,6 +459,7 @@
       out.textContent = goalLabel(v);
       return;
     }
+    if (t.dataset.hbTime !== undefined) return setRemind(t.dataset.hbTime, false);
     if (t.dataset.hbIcon) return pickIcon(t.dataset.hbIcon, false);
     if (t.dataset.hbLib) return pickIcon(t.dataset.hbLib, true);
   });
@@ -457,7 +473,22 @@
     box.querySelector('.hb-preview-name').textContent = body.querySelector('[name=name]')?.value.trim() || 'Tên việc của bạn';
   }
   document.addEventListener('input', (e) => { if (e.target.closest('#editor-body .hb-form')) syncPreview(); });
-  document.addEventListener('change', (e) => { if (e.target.closest('#editor-body .hb-form')) syncPreview(); });
+  document.addEventListener('change', (e) => {
+    if (e.target.closest('#editor-body .hb-time-pick')) setRemind('', true);
+    if (e.target.closest('#editor-body .hb-form')) syncPreview();
+  });
+  // v1.43.0: đặt giờ nhắc từ nút gợi ý (value = "HH:MM" hoặc "" = không nhắc) hoặc từ hai ô giờ/phút (fromSelects).
+  function setRemind(value, fromSelects) {
+    const body = document.querySelector('#editor-body');
+    const hidden = body?.querySelector('[name=remindTime]'), hSel = body?.querySelector('#hb-time-h'), mSel = body?.querySelector('#hb-time-m');
+    if (!hidden || !hSel || !mSel) return;
+    if (!fromSelects && value) { const [hh, mm] = value.split(':'); hSel.value = hh; mSel.value = mm; }
+    hidden.value = fromSelects ? hSel.value + ':' + mSel.value : value;
+    const v = hidden.value;
+    body.querySelectorAll('[data-hb-time]').forEach((b) => { const on = b.dataset.hbTime === v; b.classList.toggle('is-on', on); b.setAttribute('aria-pressed', String(on)); });
+    const status = body.querySelector('#hb-time-status');
+    if (status) status.textContent = v ? 'Sẽ nhắc lúc ' + v + ' (giờ Việt Nam).' : 'Không nhắc việc này. Chọn giờ để bật nhắc.';
+  }
   // v1.38.0: giữ ô để ghi chú (không tích). Sau khi mở ghi chú, lần nhả tay không kích hoạt tích ô.
   let pressTimer = 0, pressCell = null, pressAt = null, pressFired = false, swallowUntil = 0;
   const cancelPress = () => { clearTimeout(pressTimer); pressTimer = 0; pressCell = null; };

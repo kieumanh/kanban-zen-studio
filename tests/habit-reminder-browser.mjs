@@ -155,19 +155,21 @@ try {
 
     // Biểu mẫu: đặt giờ nhắc cho việc chưa có, rồi xóa giờ nhắc của việc đang có.
     await page.click('[data-hb-edit="d"]');
-    await page.waitForSelector('#editor[open] input[name=remindTime]');
-    await page.fill('#editor-body input[name=remindTime]', '23:58');
+    // v1.43.0: giờ nhắc chọn bằng hai ô giờ/phút (bước 5 phút) hoặc nút gợi ý; "Không nhắc" xóa giờ.
+    await page.waitForSelector('#editor[open] #hb-time-h');
+    await page.selectOption('#editor-body #hb-time-h', '23');
+    await page.selectOption('#editor-body #hb-time-m', '55');
     await page.click('#editor-form [type=submit]');
-    await page.waitForFunction(() => window.zenHabits.list().find((x) => x.id === 'd')?.remindTime === '23:58');
+    await page.waitForFunction(() => window.zenHabits.list().find((x) => x.id === 'd')?.remindTime === '23:55');
     assert.match(
       await page.locator('[data-hb-row="d"] .hb-remind').innerText(),
-      /Nhắc 23:58/,
+      /Nhắc 23:55/,
       'lưu giờ nhắc từ biểu mẫu' + at,
     );
 
     await page.click('[data-hb-edit="a"]');
-    await page.waitForSelector('#editor[open] input[name=remindTime]');
-    await page.fill('#editor-body input[name=remindTime]', '');
+    await page.waitForSelector('#editor[open] #hb-time-h');
+    await page.click('#editor-body [data-hb-time=""]');
     await page.click('#editor-form [type=submit]');
     await page.waitForFunction(() => window.zenHabits.list().find((x) => x.id === 'a')?.remindTime === undefined);
     assert.equal(await page.locator('[data-hb-row="a"] .hb-remind').count(), 0, 'để trống thì xóa giờ nhắc' + at);
