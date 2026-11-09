@@ -1,10 +1,8 @@
-// Hồi quy v1.19.7: (1) khung "Chế độ xem" ở thanh bên bo tròn; (2) thanh tiến độ từng mục checklist mỏng, không nằm trong khung viền,
-// đầu tô luôn bo tròn và hình vẽ KHÔNG đổi khi kéo. Sáng + tối, 390 / 820 / 1440px.
-// Nguyên nhân cũ của (2): quy tắc ".task-fields input" (độ ưu tiên cao hơn) ghi đè kiểu thanh nên thanh nằm trong khung 12px, phần tô dày và vuông góc.
-// Rãnh nằm trong shadow DOM của trình duyệt nên đo bằng điểm ảnh thật (chụp vùng thanh rồi đếm điểm ảnh cùng màu theo cột).
+// Hồi quy v1.19.7: (1) khung "Chế độ xem" ở thanh bên bo tròn; (2) ô % cuối dòng checklist bo tròn, đủ vùng chạm và lưu được giá trị gõ vào.
+// Cập nhật v1.45.1: phần (2) từng kiểm thanh tiến độ kéo thả (đã gỡ ở v1.42.0 theo yêu cầu thay bằng ô % nhỏ cuối dòng),
+// nên nay kiểm đúng ô % mới thay thế. Sáng + tối, 390 / 820 / 1440px.
 import assert from 'node:assert/strict';
 import { startHarness, makeProject } from './lib/browser-harness.mjs';
-import { decodePng, colorRun } from './lib/png.mjs';
 
 const seed = () => {
   const p = makeProject('p1', 'Dự án A', '#7950c8', 3);
@@ -19,45 +17,7 @@ const seed = () => {
 };
 const h = await startHarness({ seed });
 
-const FILL = [121, 80, 200];
-const REST = { light: [230, 220, 239], dark: [35, 29, 40] };
 const sel = '#editor-body input[name="check-pct-1"]';
-
-const state = (page) =>
-  page.evaluate((sel) => {
-    const el = document.querySelector(sel);
-    const r = getComputedStyle(el);
-    const b = el.getBoundingClientRect();
-    return {
-      x: b.x,
-      y: b.y,
-      w: b.width,
-      h: b.height,
-      pad: r.padding,
-      borderW: r.borderTopWidth,
-      bg: r.backgroundImage,
-      p: el.style.getPropertyValue('--p'),
-      pn: el.style.getPropertyValue('--pn'),
-      value: el.value,
-    };
-  }, sel);
-
-// Đo hình vẽ: độ dày phần tô (ở khoảng 15% chiều rộng, luôn nằm trong phần tô khi giá trị ≥ 40) và độ dày rãnh còn lại (ở 95%), cùng số điểm ảnh tô ở cột ngoài cùng bên trái.
-async function paint(page, scheme, expectFill) {
-  const s = await state(page);
-  const png = await page.screenshot({
-    clip: { x: s.x, y: s.y, width: s.w, height: s.h },
-  });
-  const img = decodePng(png);
-  const col = (f) => Math.round(f * (img.width - 1));
-  return {
-    s,
-    fill: expectFill ? colorRun(img, col(0.15), FILL) : null,
-    rest: colorRun(img, col(0.95), REST[scheme]),
-    leftEdge: colorRun(img, 1, FILL),
-    leftMid: colorRun(img, col(0.15), FILL),
-  };
-}
 
 try {
   for (const scheme of ['light', 'dark']) {
@@ -117,7 +77,8 @@ try {
       );
       assert.ok(!view.overflow, 'tràn ngang' + at);
 
-      // 2. Thanh tiến độ checklist (mục 2 đang ở 40%): mỏng, không khung, đầu trái bo tròn.
+      // 2. Ô % cuối dòng checklist (mục 2 đang 40%): là ô số có ký hiệu %, bo tròn;
+      //    trên màn hình cảm ứng giữ vùng chạm 44px.
       await page.evaluate(() =>
         document.querySelector('.sidebar').classList.remove('open'),
       );
@@ -126,84 +87,42 @@ try {
       );
       await page.waitForSelector(sel, { state: 'attached' });
       await page.locator(sel).scrollIntoViewIfNeeded();
-      const before = await paint(page, scheme, true);
-      assert.ok(
-        before.s.h >= 44 && before.s.h <= 46,
-        'vùng chạm thanh % phải giữ 44px: ' + before.s.h + at,
+      const pct = await page.evaluate((sel) => {
+        const el = document.querySelector(sel);
+        const r = getComputedStyle(el);
+        return {
+          type: el.type,
+          value: el.value,
+          unit: el.nextElementSibling?.textContent?.trim() || '',
+          radius: parseFloat(r.borderTopLeftRadius),
+          h: el.getBoundingClientRect().height,
+        };
+      }, sel);
+      assert.equal(pct.type, 'number', 'ô % là ô số' + at);
+      assert.equal(pct.value, '40', 'ô % hiện đúng 40' + at);
+      assert.equal(pct.unit, '%', 'có ký hiệu % ngay cạnh ô số' + at);
+      assert.ok(pct.radius >= 6, 'ô % chưa bo tròn: ' + pct.radius + at);
+      if (width < 700)
+        assert.ok(
+          pct.h >= 44 && pct.h <= 46,
+          'vùng chạm ô % phải giữ 44px: ' + pct.h + at,
+        );
+
+      // Gõ số mới rồi bấm Lưu: giá trị được ghi vào đúng mục.
+      await page.locator(sel).fill('70');
+      await page.locator(sel).dispatchEvent('input');
+      await page.locator(sel).dispatchEvent('change');
+      await page.locator('#editor-form button[type=submit]').click();
+      await page.waitForFunction(
+        () => project('p1').tasks[0].checks[1].pct === 70,
+        null,
+        { timeout: 10000 },
       );
       assert.equal(
-        before.s.pad,
-        '0px',
-        'thanh % không được còn đệm của ô nhập (khung): ' + before.s.pad + at,
+        await page.evaluate(() => project('p1').tasks[0].checks[1].pct),
+        70,
+        'giá trị gõ vào được lưu' + at,
       );
-      assert.equal(
-        before.s.borderW,
-        '0px',
-        'thanh % không được còn viền khung' + at,
-      );
-      assert.equal(before.s.bg, 'none', 'nền khung của thanh % phải bỏ' + at);
-      assert.equal(before.s.pn, '0.4', 'đầu tô phải theo % hiện tại' + at);
-      assert.ok(
-        before.fill >= 4 && before.fill <= 8,
-        'phần tô phải mỏng (4–8px), đo được ' + before.fill + at,
-      );
-      assert.ok(
-        before.rest >= 4 && before.rest <= 8,
-        'rãnh còn lại phải mỏng (4–8px), đo được ' + before.rest + at,
-      );
-      assert.ok(
-        before.leftEdge < before.leftMid,
-        `đầu trái phải bo tròn: cột ngoài cùng ${before.leftEdge}px < giữa ${before.leftMid}px` +
-          at,
-      );
-
-      // Kéo thật bằng chuột từ 40% sang khoảng 70%: hình vẽ không đổi, đầu tô vẫn theo núm.
-      const s0 = before.s;
-      await page.mouse.move(s0.x + 9 + (s0.w - 18) * 0.4, s0.y + s0.h / 2);
-      await page.mouse.down();
-      const states = [];
-      for (const f of [0.55, 0.7]) {
-        await page.mouse.move(s0.x + 9 + (s0.w - 18) * f, s0.y + s0.h / 2, {
-          steps: 4,
-        });
-        states.push(await paint(page, scheme, true));
-      }
-      await page.mouse.up();
-      states.push(await paint(page, scheme, true));
-      for (const m of states) {
-        assert.equal(m.fill, before.fill, 'độ dày phần tô đổi khi kéo' + at);
-        assert.equal(m.rest, before.rest, 'độ dày rãnh đổi khi kéo' + at);
-        assert.equal(
-          m.leftEdge,
-          before.leftEdge,
-          'đầu trái đổi hình khi kéo' + at,
-        );
-        assert.equal(m.s.pad, before.s.pad, 'đệm đổi khi kéo' + at);
-        assert.equal(m.s.borderW, before.s.borderW, 'viền đổi khi kéo' + at);
-        assert.equal(
-          Number(m.s.pn),
-          Number(m.s.value) / 100,
-          `--pn phải bằng giá trị (${m.s.value}) / 100, được ${m.s.pn}` + at,
-        );
-        assert.equal(m.s.p, m.s.value + '%', '--p phải bằng giá trị' + at);
-      }
-      assert.ok(
-        Number(states.at(-1).s.value) >= 65,
-        'kéo chuột phải đổi giá trị, được ' + states.at(-1).s.value + at,
-      );
-
-      // Bàn phím: End về 100%, Home về 0%; hình vẽ rãnh vẫn giữ (ở 0% chỉ đo rãnh, vì phần tô nằm dưới núm).
-      await page.locator(sel).focus();
-      await page.keyboard.press('End');
-      const end = await paint(page, scheme, true);
-      assert.equal(end.s.value, '100', at);
-      assert.equal(end.s.pn, '1', at);
-      assert.equal(end.fill, before.fill, 'độ dày phần tô đổi ở 100%' + at);
-      await page.keyboard.press('Home');
-      const home = await paint(page, scheme, false);
-      assert.equal(home.s.value, '0', at);
-      assert.equal(home.s.pn, '0', at);
-      assert.equal(home.rest, before.rest, 'độ dày rãnh đổi ở 0%' + at);
 
       const overflow = await page.evaluate(() => {
         const b = document.querySelector('#editor-body');
@@ -220,7 +139,7 @@ try {
     }
   }
   console.log(
-    'PASS: khung Chế độ xem bo tròn; thanh tiến độ checklist mỏng, không khung, bo tròn và giữ nguyên hình khi kéo (sáng/tối, 390/820/1440px).',
+    'PASS: khung Chế độ xem bo tròn; ô % cuối dòng checklist là ô số bo tròn, vùng chạm 44px khi chạm, lưu giá trị gõ vào (sáng/tối, 390/820/1440px).',
   );
 } finally {
   await h.close();
