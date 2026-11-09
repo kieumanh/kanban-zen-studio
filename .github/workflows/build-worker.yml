@@ -118,6 +118,7 @@ jobs:
           node tests/habit-notes-browser.mjs
           node tests/habit-reorder-browser.mjs
           node tests/habit-history-report-browser.mjs
+          node tests/habit-nudge-browser.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:

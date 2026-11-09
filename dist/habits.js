@@ -202,6 +202,15 @@
     const report = mode === 'report';
     return '<div class="hb-heading-actions"><button class="btn primary hb-add" type="button" data-hb-add><span class="btn-icon">+</span> Thêm việc</button><button class="btn hb-report-btn' + (report ? ' is-active' : '') + '" type="button" data-hb-mode="' + (report ? 'week' : 'report') + '" aria-pressed="' + report + '">' + (report ? gridIcon : reportIcon) + '<span>' + (report ? 'Bảng tuần' : 'Báo cáo') + '</span></button></div>';
   }
+  // v1.41.0: lời nhắc nhẹ khi hôm nay chưa tích việc nào. Chỉ ở tuần hiện tại; đóng một lần thì ẩn đến hết ngày.
+  const nudgeKey = () => 'zen-habit-nudge:' + (currentUser?.id || '') + ':' + today();
+  function nudgeBanner() {
+    const t = today(), hs = list();
+    if (!hs.length || week() !== mondayOf(t) || todayDone() > 0) return '';
+    if (hs.every((h) => (h.rest || []).includes(t))) return '';
+    if (localRead(nudgeKey()) === '1') return '';
+    return '<section class="hb-nudge" role="status" aria-label="Gợi ý bắt đầu hôm nay"><p><strong>Hôm nay chưa có việc nào được tích.</strong><span>Bắt đầu bằng một việc nhỏ nhất.</span></p><button type="button" class="btn hb-nudge-close" data-hb-nudge-close>Đóng</button></section>';
+  }
   function page() {
     renderedDay = today();
     const hs = list(),
@@ -213,7 +222,7 @@
         ? window.zenHabitsReport.html(range)
         : ''
       : '<div class="hb-overview">' + summary() + progressBlock() + '</div>' + weekBar() + (hs.length ? noteTip() + head() + '<ul class="hb-list">' + hs.map(row).join('') + '</ul>' : empty());
-    return heading('', report ? 'Báo cáo việc hằng ngày' : 'Việc hằng ngày', report ? 'Biểu đồ, đánh giá và đề xuất cải thiện từ chính dữ liệu tích của bạn.' : 'Tích từng việc nhỏ mỗi ngày để nuôi dưỡng thói quen tốt.', actions()) + dueBanner(report ? [] : due) + '<section class="panel hb-panel' + (report ? ' is-report' : '') + '" aria-label="' + (report ? 'Báo cáo việc hằng ngày' : 'Bảng việc hằng ngày') + '">' + body + '</section>';
+    return heading('', report ? 'Báo cáo việc hằng ngày' : 'Việc hằng ngày', report ? 'Biểu đồ, đánh giá và đề xuất cải thiện từ chính dữ liệu tích của bạn.' : 'Tích từng việc nhỏ mỗi ngày để nuôi dưỡng thói quen tốt.', actions()) + dueBanner(report ? [] : due) + (report ? '' : nudgeBanner()) + '<section class="panel hb-panel' + (report ? ' is-report' : '') + '" aria-label="' + (report ? 'Báo cáo việc hằng ngày' : 'Bảng việc hằng ngày') + '">' + body + '</section>';
   }
 
   function paintStats(celebrate) {
@@ -355,7 +364,7 @@
   }
 
   document.addEventListener('click', (e) => {
-    const t = e.target.closest('[data-hb-due-dismiss],[data-hb-open],[data-hb-rest],[data-hb-history],[data-hb-hist-days],[data-hb-toggle],[data-hb-add],[data-hb-edit],[data-hb-delete],[data-hb-confirm-delete],[data-hb-cancel],[data-hb-week],[data-hb-preset],[data-hb-icon],[data-hb-mode],[data-hb-range],[data-hb-goal-step],[data-hb-lib]');
+    const t = e.target.closest('[data-hb-due-dismiss],[data-hb-nudge-close],[data-hb-open],[data-hb-rest],[data-hb-history],[data-hb-hist-days],[data-hb-toggle],[data-hb-add],[data-hb-edit],[data-hb-delete],[data-hb-confirm-delete],[data-hb-cancel],[data-hb-week],[data-hb-preset],[data-hb-icon],[data-hb-mode],[data-hb-range],[data-hb-goal-step],[data-hb-lib]');
     if (!t) return;
     if (t.dataset.hbToggle) {
       const h = find(t.dataset.hbToggle), d = t.dataset.hbDate;
@@ -370,6 +379,7 @@
         t.classList.add('hb-pop');
         t.addEventListener('animationend', () => t.classList.remove('hb-pop'), { once: true });
       }
+      if (!had && d === today()) document.querySelector('.hb-nudge')?.remove();
       return paintStats(!had && d === today());
     }
     if (t.dataset.hbMode) {
@@ -379,6 +389,10 @@
     }
     if (t.dataset.hbRange) {
       range = [7, 30, 90].includes(Number(t.dataset.hbRange)) ? Number(t.dataset.hbRange) : 30;
+      return render();
+    }
+    if (t.hasAttribute('data-hb-nudge-close')) {
+      localWrite(nudgeKey(), '1');
       return render();
     }
     if (t.hasAttribute('data-hb-due-dismiss')) {

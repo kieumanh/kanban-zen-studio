@@ -363,3 +363,10 @@
 .hb-hist-days.is-on{background:var(--paper);color:var(--ink);box-shadow:0 1px 4px rgba(60,40,90,.12)}
 .hb-hist-rate{margin:4px 0 12px;color:var(--muted)}
 .hb-hist-rate strong{color:var(--ink)}
+
+/* v1.41.0: lời nhắc nhẹ khi hôm nay chưa tích việc nào (một dòng nền nhạt, nút Đóng vùng chạm 44px). */
+.hb-nudge{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 14px;padding:12px 14px;border-radius:18px;border:1px solid color-mix(in srgb,var(--brand-purple) 22%,var(--line));background:color-mix(in srgb,var(--brand-purple) 7%,var(--paper))}
+.hb-nudge p{margin:0;display:grid;gap:2px;min-width:0}
+.hb-nudge strong{font-size:14px;color:var(--ink)}
+.hb-nudge span{font-size:13px;color:var(--muted)}
+.hb-nudge-close{min-height:44px;flex:none}
