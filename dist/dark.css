@@ -405,7 +405,7 @@
         background: rgba(27,24,31,0.98)
     }
     :root[data-theme=dark] .mobile-viewbar {
-        background: rgba(21,18,25,0.969)
+        background: #151219
     }
     :root[data-theme=dark] .nav-open .menu-scrim {
         background: rgba(53,33,63,0.4)

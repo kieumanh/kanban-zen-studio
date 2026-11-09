@@ -113,6 +113,7 @@ jobs:
           node tests/logout-cleanup-browser.mjs
           node tests/board-share-link-browser.mjs
           node tests/focus-refresh-button-browser.mjs
+          node tests/habits-sticky-bar-browser.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
