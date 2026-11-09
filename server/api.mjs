@@ -391,6 +391,13 @@ function validHabits(list) {
         !h.rest.every((d) => typeof d === 'string' && validDate(d)))
     )
       return false;
+    // v1.34.0: giờ nhắc riêng là tùy chọn, dạng HH:MM (24 giờ).
+    if (
+      h.remindTime !== undefined &&
+      (typeof h.remindTime !== 'string' ||
+        !/^([01]\d|2[0-3]):[0-5]\d$/.test(h.remindTime))
+    )
+      return false;
     if (!Array.isArray(h.done) || h.done.length > 3700) return false;
     const seen = new Set();
     return h.done.every(

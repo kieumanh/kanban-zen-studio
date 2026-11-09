@@ -85,10 +85,12 @@
     return '<span class="hb-project" style="--pc:' + esc(p.color) + '" title="Dự án liên quan"><i aria-hidden="true"></i>' + esc(p.name) + '</span>';
   }
   const goalLabel = (g) => (g === 7 ? 'Mỗi ngày (7 lần)' : g + ' lần mỗi tuần');
+  // v1.34.0: giờ nhắc riêng của việc (chỉ hiện khi đã đặt giờ).
+  const remindChip = (h) => (h.remindTime ? '<span class="hb-remind">' + svgIcon('bell') + 'Nhắc ' + esc(h.remindTime) + '</span>' : '');
   function meta(h) {
     const s = streak(h);
     const g = goalOf(h);
-    return '<span class="hb-streak' + (s ? ' is-on' : '') + '">' + flame + (s ? 'Chuỗi ' + s + ' ngày' : 'Chưa có chuỗi') + '</span><span class="hb-week-count">' + weekDone(h) + '/' + g + ' trong tuần</span>' + projectChip(h);
+    return '<span class="hb-streak' + (s ? ' is-on' : '') + '">' + flame + (s ? 'Chuỗi ' + s + ' ngày' : 'Chưa có chuỗi') + '</span><span class="hb-week-count">' + weekDone(h) + '/' + g + ' trong tuần</span>' + remindChip(h) + projectChip(h);
   }
   // v1.33.0: "Nghỉ hôm nay" — chỉ khi hôm nay chưa làm; bấm lại để bỏ nghỉ.
   function restButton(h) {
@@ -105,6 +107,19 @@
     const doneCount = cells.filter((d) => done.has(d)).length, restCount = cells.filter((d) => rest.has(d) && !done.has(d)).length;
     const grid = cells.map((d) => '<span class="hb-hist-cell' + (done.has(d) ? ' is-done' : rest.has(d) ? ' is-rest' : '') + (d === t ? ' is-today' : '') + '" title="' + short(d) + (done.has(d) ? ' · đã làm' : rest.has(d) ? ' · nghỉ' : '') + '"><small>' + short(d) + '</small></span>').join('');
     modal('<h2>Lịch sử: ' + esc(h.name) + '</h2><div class="hb-hist"><p class="hb-hist-sum">Chuỗi hiện tại <strong>' + streak(h) + ' ngày</strong> · đã làm <strong>' + doneCount + '</strong>/28 ngày' + (restCount ? ' · nghỉ <strong>' + restCount + '</strong>' : '') + '</p><div class="hb-hist-grid" role="img" aria-label="28 ngày gần nhất">' + grid + '</div><p class="help-copy">Ô đậm là ngày đã làm, ô nét đứt là ngày nghỉ. Ngày nghỉ không làm đứt chuỗi.</p></div>', null, true);
+  }
+  // v1.34.0: nhắc riêng từng việc theo giờ Việt Nam (cùng múi giờ với ngày trong ứng dụng).
+  // Việc được nhắc khi đã đến giờ, chưa làm và chưa nghỉ hôm nay. "Đã xem" tắt nhắc đến hết ngày hoặc khi đổi giờ.
+  const nowHM = () => new Date().toLocaleTimeString('en-GB', { timeZone: 'Asia/Ho_Chi_Minh', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
+  const reminderKey = (h) => 'zen-habit-seen:' + (currentUser?.id || '') + ':' + h.id + ':' + today() + ':' + h.remindTime;
+  let dueSig = '';
+  function dueHabitReminders() {
+    const t = today(), now = nowHM();
+    return list().filter((h) => h.remindTime && h.remindTime <= now && !h.done.includes(t) && !(h.rest || []).includes(t) && localRead(reminderKey(h)) !== '1');
+  }
+  function dueBanner(due) {
+    if (!due.length) return '';
+    return '<section class="hb-due" role="status" aria-label="Việc đến giờ nhắc"><div class="hb-due-text"><strong>' + svgIcon('bell') + due.length + ' việc đến giờ nhắc</strong><span>' + due.map((h) => esc(h.name)).join(' · ') + '</span></div><button type="button" class="btn hb-due-dismiss" data-hb-due-dismiss>Đã xem</button></section>';
   }
   function row(h) {
     return '<li class="hb-row" data-hb-row="' + esc(h.id) + '" style="--hb:' + esc(h.color) + '"><div class="hb-info"><span class="hb-icon" aria-hidden="true">' + esc(h.icon || '✳') + '</span><div class="hb-text"><strong class="hb-name">' + esc(h.name) + '</strong><span class="hb-meta">' + meta(h) + '</span></div><div class="hb-actions"><button type="button" class="icon-btn hb-act" data-hb-history="' + esc(h.id) + '" aria-label="Lịch sử ' + esc(h.name) + '" title="Lịch sử">' + svgIcon('notes') + '</button><button type="button" class="icon-btn hb-act" data-hb-edit="' + esc(h.id) + '" aria-label="Sửa ' + esc(h.name) + '" title="Sửa">' + svgIcon('edit') + '</button><button type="button" class="icon-btn hb-act hb-del" data-hb-delete="' + esc(h.id) + '" aria-label="Xóa ' + esc(h.name) + '" title="Xóa">' + svgIcon('trash') + '</button></div></div><div class="hb-days">' + days().map((d) => checkButton(h, d)).join('') + '</div>' + restButton(h) + '</li>';
@@ -152,13 +167,15 @@
   function page() {
     renderedDay = today();
     const hs = list(),
-      report = mode === 'report';
+      report = mode === 'report',
+      due = dueHabitReminders();
+    dueSig = due.map((h) => h.id).join();
     const body = report
       ? window.zenHabitsReport
         ? window.zenHabitsReport.html(range)
         : ''
       : '<div class="hb-overview">' + summary() + progressBlock() + '</div>' + weekBar() + (hs.length ? head() + '<ul class="hb-list">' + hs.map(row).join('') + '</ul>' : empty());
-    return heading('', report ? 'Báo cáo việc hằng ngày' : 'Việc hằng ngày', report ? 'Biểu đồ, đánh giá và đề xuất cải thiện từ chính dữ liệu tích của bạn.' : 'Tích từng việc nhỏ mỗi ngày để nuôi dưỡng thói quen tốt.', actions()) + '<section class="panel hb-panel' + (report ? ' is-report' : '') + '" aria-label="' + (report ? 'Báo cáo việc hằng ngày' : 'Bảng việc hằng ngày') + '">' + body + '</section>';
+    return heading('', report ? 'Báo cáo việc hằng ngày' : 'Việc hằng ngày', report ? 'Biểu đồ, đánh giá và đề xuất cải thiện từ chính dữ liệu tích của bạn.' : 'Tích từng việc nhỏ mỗi ngày để nuôi dưỡng thói quen tốt.', actions()) + dueBanner(report ? [] : due) + '<section class="panel hb-panel' + (report ? ' is-report' : '') + '" aria-label="' + (report ? 'Báo cáo việc hằng ngày' : 'Bảng việc hằng ngày') + '">' + body + '</section>';
   }
 
   function paintStats(celebrate) {
@@ -257,12 +274,15 @@
     const options = (data.projects || []).filter((p) => !p.archived || p.id === pid);
     const projectField = '<label class="field hb-project-field">Dự án liên quan<select name="projectId"><option value="">Không gắn dự án</option>' + options.map((p) => '<option value="' + esc(p.id) + '"' + (p.id === pid ? ' selected' : '') + '>' + esc(p.name) + '</option>').join('') + '</select></label>';
     const goalField = '<div class="hb-goal" role="group" aria-labelledby="hb-goal-title"><span class="hb-goal-label" id="hb-goal-title">Số lần trong tuần</span><div class="hb-stepper"><button type="button" class="hb-step" data-hb-goal-step="-1" aria-label="Giảm số lần trong tuần">−</button><output class="hb-step-value" id="hb-goal-value" aria-live="polite">' + goalLabel(goal) + '</output><button type="button" class="hb-step" data-hb-goal-step="1" aria-label="Tăng số lần trong tuần">+</button></div><input type="hidden" name="goal" value="' + goal + '"></div>';
+    // v1.34.0: "Nhắc lúc" là tùy chọn; để trống thì việc không được nhắc.
+    const remindField = '<label class="field hb-remind-field">Nhắc lúc<input type="time" lang="vi-VN" name="remindTime" value="' + esc(h?.remindTime || '') + '"><small class="hb-remind-hint">Để trống nếu không cần nhắc. Khi đến giờ, việc sẽ hiện ở đầu trang này và trong chuông thông báo.</small></label>';
     const iconNow = h?.icon || '🌿';
     const iconPicker = '<div class="hb-icon-field" role="group" aria-labelledby="hb-icon-title"><span class="hb-goal-label" id="hb-icon-title">Biểu tượng</span><div class="hb-icon-picks">' + ICONS.map((i) => '<button type="button" class="hb-icon-pick' + (i === iconNow ? ' is-on' : '') + '" data-hb-icon="' + i + '" aria-label="Chọn biểu tượng ' + i + '" aria-pressed="' + (i === iconNow) + '">' + i + '</button>').join('') + '</div><details class="appearance-picker hb-icon-picker" id="hb-icon-picker"><summary><span>Thư viện biểu tượng</span><span class="appearance-value"><b id="hb-icon-preview">' + esc(iconNow) + '</b>Mở thư viện ⌄</span></summary><input type="hidden" name="icon" value="' + esc(iconNow) + '"><div class="icon-picker-panel hb-icon-panel"><div class="icon-library-tools"><input type="search" id="hb-icon-search" class="emoji-search" placeholder="Tìm: leaf, book, water…" aria-label="Tìm biểu tượng bằng tiếng Anh"><label class="hb-icon-cat">Nhóm<select id="hb-icon-cat">' + Object.entries(iconCategories()).map(([k, name]) => '<option value="' + k + '">' + name + '</option>').join('') + '</select></label></div><small class="icon-result-count" id="hb-icon-count" role="status"></small><div class="icon-library-results" id="hb-icon-results"></div></div></details></div>';
-    modal('<h2>' + (h ? 'Chỉnh sửa việc hằng ngày' : 'Thêm việc hằng ngày') + '</h2><div class="hb-form"><div class="hb-preview" id="hb-preview" style="--hb:' + color + '" aria-hidden="true"><span class="hb-icon">' + esc(h?.icon || '🌿') + '</span><span class="hb-preview-name">' + (esc(h?.name) || 'Tên việc của bạn') + '</span><span class="hb-preview-check">' + tick + '</span></div>' + field('Tên việc', 'name', h?.name || '', 'text', true, 80) + goalField + projectField + iconPicker + '<fieldset class="hb-swatches"><legend>Màu dấu tích</legend>' + COLORS.map((c, i) => '<label class="hb-swatch" style="--hb:' + c + '"><input type="radio" name="color" value="' + c + '"' + (c === color ? ' checked' : '') + '><span aria-hidden="true"></span><em class="sr-only">Màu ' + (i + 1) + '</em></label>').join('') + '</fieldset>' + (h ? '<button type="button" class="text-btn danger hb-form-delete" data-hb-delete="' + esc(h.id) + '">Xóa việc này</button>' : '') + '</div>', (fd) => {
+    modal('<h2>' + (h ? 'Chỉnh sửa việc hằng ngày' : 'Thêm việc hằng ngày') + '</h2><div class="hb-form"><div class="hb-preview" id="hb-preview" style="--hb:' + color + '" aria-hidden="true"><span class="hb-icon">' + esc(h?.icon || '🌿') + '</span><span class="hb-preview-name">' + (esc(h?.name) || 'Tên việc của bạn') + '</span><span class="hb-preview-check">' + tick + '</span></div>' + field('Tên việc', 'name', h?.name || '', 'text', true, 80) + goalField + projectField + remindField + iconPicker + '<fieldset class="hb-swatches"><legend>Màu dấu tích</legend>' + COLORS.map((c, i) => '<label class="hb-swatch" style="--hb:' + c + '"><input type="radio" name="color" value="' + c + '"' + (c === color ? ' checked' : '') + '><span aria-hidden="true"></span><em class="sr-only">Màu ' + (i + 1) + '</em></label>').join('') + '</fieldset>' + (h ? '<button type="button" class="text-btn danger hb-form-delete" data-hb-delete="' + esc(h.id) + '">Xóa việc này</button>' : '') + '</div>', (fd) => {
       const name = String(fd.get('name') || '').trim(), icon = String(fd.get('icon') || '').trim() || '🌿', col = String(fd.get('color') || color);
-      const g = Math.min(7, Math.max(1, parseInt(fd.get('goal'), 10) || 7)), link = String(fd.get('projectId') || '');
+      const g = Math.min(7, Math.max(1, parseInt(fd.get('goal'), 10) || 7)), link = String(fd.get('projectId') || ''), remind = String(fd.get('remindTime') || '').trim();
       if (!name) return;
+      if (remind && !/^([01]\d|2[0-3]):[0-5]\d$/.test(remind)) return notify('Giờ nhắc chưa đúng. Hãy chọn giờ theo đồng hồ 24 giờ.');
       if (wfSave(() => {
         if (h) {
           const t = find(h.id);
@@ -270,9 +290,12 @@
           Object.assign(t, { name, icon, color: col, goal: g });
           if (link) t.projectId = link;
           else delete t.projectId;
+          if (remind) t.remindTime = remind;
+          else delete t.remindTime;
         } else {
           const item = { id: uid(), name, icon, color: col, goal: g, createdAt: today(), done: [] };
           if (link) item.projectId = link;
+          if (remind) item.remindTime = remind;
           data.dailyHabits = list().concat(item);
         }
       })) { $('#editor').close(); render(); notify(h ? 'Đã cập nhật việc hằng ngày.' : 'Đã thêm việc hằng ngày.'); }
@@ -294,7 +317,7 @@
   }
 
   document.addEventListener('click', (e) => {
-    const t = e.target.closest('[data-hb-rest],[data-hb-history],[data-hb-toggle],[data-hb-add],[data-hb-edit],[data-hb-delete],[data-hb-confirm-delete],[data-hb-cancel],[data-hb-week],[data-hb-preset],[data-hb-icon],[data-hb-mode],[data-hb-range],[data-hb-goal-step],[data-hb-lib]');
+    const t = e.target.closest('[data-hb-due-dismiss],[data-hb-open],[data-hb-rest],[data-hb-history],[data-hb-toggle],[data-hb-add],[data-hb-edit],[data-hb-delete],[data-hb-confirm-delete],[data-hb-cancel],[data-hb-week],[data-hb-preset],[data-hb-icon],[data-hb-mode],[data-hb-range],[data-hb-goal-step],[data-hb-lib]');
     if (!t) return;
     if (t.dataset.hbToggle) {
       const h = find(t.dataset.hbToggle), d = t.dataset.hbDate;
@@ -319,6 +342,18 @@
     if (t.dataset.hbRange) {
       range = [7, 30, 90].includes(Number(t.dataset.hbRange)) ? Number(t.dataset.hbRange) : 30;
       return render();
+    }
+    if (t.hasAttribute('data-hb-due-dismiss')) {
+      dueHabitReminders().forEach((h) => localWrite(reminderKey(h), '1'));
+      refreshBell();
+      return render();
+    }
+    if (t.dataset.hbOpen) {
+      $('#editor').close();
+      view = 'habits';
+      mode = 'week';
+      render();
+      return window.scrollTo({ top: 0, left: 0 });
     }
     if (t.hasAttribute('data-hb-add')) return form();
     if (t.dataset.hbRest) {
@@ -370,6 +405,20 @@
   }
   document.addEventListener('input', (e) => { if (e.target.closest('#editor-body .hb-form')) syncPreview(); });
   document.addEventListener('change', (e) => { if (e.target.closest('#editor-body .hb-form')) syncPreview(); });
+  // v1.34.0: chuông thông báo (studio-zen.js) đọc số việc đến giờ nhắc qua zenHabits.dueReminders(), hiện như nhắc ghi chú.
+  // Bấm một mục trong hộp thoại Thông báo để mở đúng trang việc hằng ngày.
+  window.zenHabits.dueReminders = () => dueHabitReminders();
+  const habitBellClickBefore = bell.onclick;
+  bell.onclick = () => {
+    habitBellClickBefore?.();
+    const due = dueHabitReminders();
+    document.querySelector('#editor-body .notice-list')?.insertAdjacentHTML('afterbegin', due.map((h) => '<button type="button" class="notice-item" data-hb-open="' + esc(h.id) + '"><strong>' + svgIcon('bell') + ' Đến giờ nhắc việc</strong><span>' + esc(h.name) + '</span><small>Nhắc lúc ' + esc(h.remindTime) + ' · Giờ Việt Nam</small><span class="notice-detail-link">Mở việc hằng ngày →</span></button>').join(''));
+  };
+  // Khi đến giờ nhắc (không đang mở biểu mẫu), trang việc hằng ngày tự hiện khung nhắc.
+  setInterval(() => {
+    if (!currentUser || document.hidden || view !== 'habits' || $('#editor').open) return;
+    if (dueHabitReminders().map((h) => h.id).join() !== dueSig) render();
+  }, 60000);
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'visible' && view === 'habits' && renderedDay && renderedDay !== today()) render();
   });

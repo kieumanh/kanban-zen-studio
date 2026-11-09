@@ -266,8 +266,9 @@
 // ghi chú) báo bằng một chấm nhỏ cạnh chuông, không cộng vào số, và được nêu tên ở dòng tóm tắt đầu hộp thoại Thông báo. Việc "quan trọng" chưa tới hạn vẫn được liệt kê trong hộp thoại nhưng không tính vào số.
 // Ghi đè hoàn toàn refreshBell (ux.js, welcome.js, keepplus.js đã bọc nhau nhiều lớp).
 (() => {
+  // v1.34.0: việc hằng ngày đến giờ nhắc (habits.js) báo như nhắc ghi chú: chấm nhỏ và được nêu tên, không cộng vào số việc quá hạn.
   const bellParts = () => {
-    if (!currentUser) return { late: 0, soon: 0, due: 0, important: 0, release: 0, files: 0, notes: 0, extra: 0 };
+    if (!currentUser) return { late: 0, soon: 0, due: 0, important: 0, release: 0, files: 0, notes: 0, habits: 0, extra: 0 };
     const tasks = taskNotices();
     const late = tasks.filter((t) => t.notice === 'Quá hạn').length;
     const soon = tasks.filter((t) => t.notice === 'Sắp đến hạn').length;
@@ -275,10 +276,11 @@
     const release = releaseUnread() ? 1 : 0;
     const files = fileAlerts.length;
     const notes = dueNoteReminders().filter((n) => !localRead('zen-note-seen:' + currentUser.id + ':' + noteReminderKey(n))).length;
-    return { late, soon, due: late + soon, important, release, files, notes, extra: release + files + notes };
+    const habits = window.zenHabits?.dueReminders ? window.zenHabits.dueReminders().length : 0;
+    return { late, soon, due: late + soon, important, release, files, notes, habits, extra: release + files + notes + habits };
   };
   const dueText = (p) => [p.late && p.late + ' quá hạn', p.soon && p.soon + ' đến hạn trong 3 ngày'].filter(Boolean).join(', ');
-  const extraText = (p) => [p.release && 'có phiên bản mới', p.files && p.files + ' tệp mới', p.notes && p.notes + ' nhắc ghi chú'].filter(Boolean).join(', ');
+  const extraText = (p) => [p.release && 'có phiên bản mới', p.files && p.files + ' tệp mới', p.notes && p.notes + ' nhắc ghi chú', p.habits && p.habits + ' việc đến giờ nhắc'].filter(Boolean).join(', ');
   refreshBell = function () {
     const p = bellParts();
     bell.innerHTML =

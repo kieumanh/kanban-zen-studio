@@ -45,4 +45,11 @@ assert.ok(rejectedGoal.status>=400,'mục tiêu 9 lần/tuần phải bị từ 
 const bad=structuredClone(before);bad.dailyHabits[0].color='đỏ';
 const rejected=await req('workspace-v2','POST',{revision,changes:changesBetween(before,bad)},cookie);
 assert.ok(rejected.status>=400,'máy chủ phải từ chối màu sai, nhận '+rejected.status);
-console.log('PASS: Việc hằng ngày đồng bộ qua kho máy chủ (thêm, tích, xóa, tải lại, từ chối dữ liệu sai)');
+// v1.34.0: giờ nhắc riêng (HH:MM, 24 giờ) là tùy chọn; giờ sai định dạng hoặc ngoài khoảng bị từ chối.
+const reminded={id:'h-5',name:'Uống đủ nước',icon:'💧',color:'#3a6fb0',createdAt:'2026-11-05',done:[],remindTime:'07:30'};
+next=structuredClone(before);next.dailyHabits.push(reminded);
+await push(next,'thêm việc có giờ nhắc 07:30');
+loaded=(await(await req('workspace-v2','GET',null,cookie)).json()).data;
+assert.equal(loaded.dailyHabits.find(h=>h.id==='h-5').remindTime,'07:30','giờ nhắc phải được lưu');
+for(const badTime of ['7:30','25:00','07:60','0730']){const b=structuredClone(before);b.dailyHabits.push({...reminded,id:'h-6',remindTime:badTime});const r=await req('workspace-v2','POST',{revision,changes:changesBetween(before,b)},cookie);assert.ok(r.status>=400,'giờ nhắc '+badTime+' phải bị từ chối, nhận '+r.status);}
+console.log('PASS: Việc hằng ngày đồng bộ qua kho máy chủ (thêm, tích, xóa, tải lại, giờ nhắc, từ chối dữ liệu sai)');
