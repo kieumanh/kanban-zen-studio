@@ -2195,13 +2195,6 @@
     border: 1px solid #171518;
     background: #ffffff
 }
-:root[data-contrast=high] .focus-check-updates {
-    color: #060606 !important;
-    background: #ffffff !important
-}
-:root[data-contrast=high] .focus-check-updates:hover {
-    background: #ffffff !important
-}
 :root[data-contrast=high] .task-focus-shortcut {
     color: #060606 !important;
     background: #ffffff !important;
@@ -5609,13 +5602,6 @@
 :root[data-theme=dark][data-contrast=high] .wf-focus-note {
     border: 1px solid #cecece;
     background: #030303
-}
-:root[data-theme=dark][data-contrast=high] .focus-check-updates {
-    color: #f5f5f5 !important;
-    background: #030303 !important
-}
-:root[data-theme=dark][data-contrast=high] .focus-check-updates:hover {
-    background: #030303 !important
 }
 :root[data-theme=dark][data-contrast=high] .task-focus-shortcut {
     color: #f5f5f5 !important;

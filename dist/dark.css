@@ -2195,13 +2195,6 @@
     border: 1px solid #3b3641;
     background: #1b181f
 }
-:root[data-theme=dark] .focus-check-updates {
-    color: #d6b9f6 !important;
-    background: #1b181f !important
-}
-:root[data-theme=dark] .focus-check-updates:hover {
-    background: #151219 !important
-}
 :root[data-theme=dark] .task-focus-shortcut {
     color: #d7bcec !important;
     background: #18151c !important;
