@@ -446,7 +446,9 @@ dialog .modal-head{position:sticky;top:0;z-index:5;background:var(--paper);paddi
 .zen-formatted h1,.zen-format-preview h1{font:700 23px/1.35 var(--sans);margin:10px 0}
 .zen-formatted h2,.zen-format-preview h2{font:700 19px/1.4 var(--sans);margin:9px 0}
 .zen-formatted h3,.zen-format-preview h3{font:700 16px/1.4 var(--sans);margin:8px 0}
-.zen-blank-line{height:11px}
+/* v1.49.0: chiều cao cố định chỉ áp cho dòng trống thật; dòng có chữ (kể cả dòng được tách khi dán) tự cao theo nội dung, không chồng lên dòng bên dưới. */
+.zen-blank-line:empty{height:11px}
+.zen-blank-line:has(> br:only-child){height:11px}
 .zen-search-kind{width:27px;min-width:27px;font-size:22px;color:#815daa;display:grid;place-items:center}
 .zen-search-copy{min-width:0;display:grid;gap:4px;line-height:1.4}
 .zen-search-copy strong{font-size:12px;font-weight:700;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}

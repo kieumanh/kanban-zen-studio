@@ -126,6 +126,7 @@ jobs:
           node tests/habit-nudge-browser.mjs
           node tests/project-tab-wrap-browser.mjs
           node tests/gantt-edge-route-browser.mjs
+          node tests/note-paste-lines-browser.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
