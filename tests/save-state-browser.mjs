@@ -243,7 +243,10 @@ for (const cfg of [
   await waitSync(page, 'saved');
 
   // 1. trạng thái bình thường
+  // v1.56.0: viên thuốc nằm trong dropdown "Tùy chọn nhanh"; mở dropdown để kiểm tra biểu tượng hiện, rồi đóng.
+  await page.click('#top-tools-trigger');
   let c = await info(page);
+  await page.keyboard.press('Escape');
   if (!FULL_SAVED.test(c.pill) || c.aria !== c.pill || c.sync !== 'saved')
     fail(
       cfg,
