@@ -3432,6 +3432,26 @@
         background-image: radial-gradient(circle at 1px 1px, rgba(84,52,115,0.302) 1.2px, transparent 1.7px), linear-gradient(135deg, #2a2236 0%, #2e2230 100%)
     }
 }
+:root[data-theme=dark] .top-tools.is-open .top-tools-trigger {
+    background: #110e15
+}
+:root[data-theme=dark] .top-tools-panel {
+    background: var(--paper, #1b181f);
+    border: 1px solid var(--line, #3f3a45)
+}
+:root[data-theme=dark] .top-tools-row:hover {
+    background: var(--surface-base, #16131a)
+}
+:root[data-theme=dark] .top-tools-ico {
+    background: #110e15;
+    color: var(--brand-purple, #d2befc)
+}
+:root[data-theme=dark] .top-tools-label {
+    color: var(--ink, #dcd5f0)
+}
+:root[data-theme=dark] .top-tools-value #save-state {
+    color: var(--muted, #c8c2da)
+}
 
 :root[data-theme=dark] {
   color-scheme: dark;

@@ -1823,3 +1823,39 @@ dialog[open] button[aria-label^="Đóng"],
 #editor .zen-check-add textarea { font-size: 15px; line-height: 22px; min-height: 44px; padding: 11px 0; }
 #editor .zen-check-add .wf-add-check { min-height: 44px; padding: 0 20px; font-size: 14px; }
 #editor .zen-check-hint { margin: 8px 0 0 18px; line-height: 1.5; }
+
+/* v1.56.0 — Thanh trên: ô tìm kiếm căn đúng giữa màn hình ở cả điện thoại; ba tính năng gom vào một dropdown có icon. */
+@media (max-width: 700px) {
+  .topbar { grid-template-columns: 96px minmax(0, 1fr) 96px; }
+  .topbar .top-actions { justify-content: flex-end; }
+}
+.topbar .top-tools { position: relative; display: inline-flex; }
+.topbar .top-tools-trigger { position: relative; }
+.top-tools-dot { position: absolute; top: 7px; right: 7px; width: 8px; height: 8px; border-radius: 50%; background: var(--orange, #d6336c); box-shadow: 0 0 0 2px #fffdfd; }
+.top-tools-trigger svg { width: 20px; height: 20px; }
+.top-tools.is-open .top-tools-trigger { background: #f3ebfb; }
+.top-tools-panel {
+  position: absolute; right: 0; top: calc(100% + 8px); z-index: 60;
+  width: min(320px, calc(100vw - 24px)); padding: 8px; display: grid; gap: 4px;
+  background: var(--paper, #fff); border: 1px solid var(--line, #e5dbed); border-radius: 16px;
+  box-shadow: 0 14px 36px rgba(60, 40, 90, 0.18);
+}
+.top-tools-panel[hidden] { display: none; }
+.top-tools-row { display: flex; align-items: center; gap: 10px; min-height: 52px; padding: 6px 8px; border-radius: 12px; }
+.top-tools-row:hover { background: var(--surface-base, #f8f4fc); }
+.top-tools-ico { flex: none; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 10px; background: #f3ebfb; color: var(--brand-purple, #6b3fa8); }
+.top-tools-ico svg { width: 18px; height: 18px; }
+.top-tools-label { flex: 1; min-width: 0; font-size: 14px; color: var(--ink, #2d2540); white-space: nowrap; }
+.top-tools-value { display: flex; align-items: center; min-width: 0; max-width: 180px; }
+.top-tools-value #save-state { font-size: 13px; color: var(--muted, #6b6480); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+@media (min-width: 701px) {
+  .topbar { grid-template-columns: minmax(0, 1fr) minmax(0, min(420px, 34vw)) minmax(0, 1fr); justify-content: normal; }
+  .topbar .search { width: 100%; max-width: min(420px, 34vw); justify-self: center; }
+}
+@media (max-width: 700px) {
+  .topbar { grid-template-columns: 64px minmax(0, 1fr) 64px; justify-content: normal; }
+  .topbar .search { width: 100%; justify-self: stretch; }
+}
+@media (max-width: 700px) {
+  .topbar .search { justify-self: center; }
+}

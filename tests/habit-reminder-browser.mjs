@@ -129,6 +129,8 @@ try {
       new RegExp(expected + ' việc đến giờ nhắc'),
       'nhãn chuông nêu việc đến giờ nhắc' + at,
     );
+    // v1.56.0: chuông nằm trong dropdown "Tùy chọn nhanh", mở dropdown trước khi bấm chuông.
+    if (await page.locator('#top-tools-panel').isHidden()) await page.click('#top-tools-trigger');
     await page.click('#notifications-button');
     await page.waitForSelector('#editor[open] [data-hb-open="a"]');
     assert.match(

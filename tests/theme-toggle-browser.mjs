@@ -1,4 +1,5 @@
-// Hồi quy v1.17.0: nút chuyển nhanh sáng / tối nằm ngay cạnh biểu tượng thông báo ở 390/820/1440px.
+// Hồi quy v1.17.0, cập nhật v1.56.0: nút chuyển sáng / tối nằm trong dropdown "Tùy chọn nhanh",
+// cùng với Đồng bộ và Thông báo, ở 390/820/1440px. Nút mở dropdown nằm trên thanh công cụ.
 import assert from 'node:assert/strict';
 import { startHarness } from './lib/browser-harness.mjs';
 
@@ -13,16 +14,32 @@ try {
     const theme = () =>
       page.evaluate(() => document.documentElement.dataset.theme);
     const toggle = page.locator('#theme-toggle');
+    const trigger = page.locator('#top-tools-trigger');
+    const panel = page.locator('#top-tools-panel');
+    const openPanel = async () => {
+      if (await panel.isHidden()) await trigger.click();
+      await panel.waitFor({ state: 'visible' });
+    };
 
-    // 1. Có đúng một nút, đứng ngay trước chuông thông báo, đủ lớn để bấm, có tên đọc được.
+    // 1. Có đúng một nút chuyển, nằm trong dropdown cùng Đồng bộ và Thông báo; nút mở có tên đọc được.
     assert.equal(await toggle.count(), 1, 'số nút chuyển giao diện' + at);
     assert.equal(
-      await page.evaluate(
-        () => document.querySelector('#theme-toggle').nextElementSibling?.id,
-      ),
-      'notifications-button',
-      'nút phải cạnh chuông' + at,
+      await page.evaluate(() => {
+        const box = document.querySelector('#top-tools-panel');
+        return ['#theme-toggle', '#notifications-button', '#save-state'].every(
+          (sel) => box.contains(document.querySelector(sel)),
+        );
+      }),
+      true,
+      'nút chuyển, chuông và đồng bộ phải nằm trong dropdown' + at,
     );
+    assert.equal(
+      await trigger.getAttribute('aria-label'),
+      'Tùy chọn nhanh',
+      'nút mở dropdown có tên' + at,
+    );
+    assert.equal(await panel.isHidden(), true, 'dropdown đóng lúc đầu' + at);
+    await openPanel();
     assert.equal(await theme(), 'light');
     assert.equal(
       await toggle.getAttribute('aria-label'),
@@ -35,11 +52,10 @@ try {
     );
     const iconLight = await page.locator('#theme-toggle .ui-icon').innerHTML();
 
-    // 2. Không chồng lấn với ô tìm kiếm / chuông, không tràn ngang trang.
+    // 2. Nút đủ lớn để bấm (44px khi cảm ứng), nằm gọn trong dropdown, dropdown không tràn ngang trang.
     const geo = await page.evaluate(() => {
       const r = (sel) => {
-        const e = document.querySelector(sel);
-        const b = e && e.getBoundingClientRect();
+        const b = document.querySelector(sel)?.getBoundingClientRect();
         return (
           b && {
             l: b.left,
@@ -53,26 +69,33 @@ try {
       };
       return {
         toggle: r('#theme-toggle'),
-        bell: r('#notifications-button'),
-        search: r('.topbar .search'),
+        panel: r('#top-tools-panel'),
         vw: innerWidth,
         scrollW: document.documentElement.scrollWidth,
       };
     });
+    const minSize = width < 700 ? 44 : 36;
     assert.ok(
-      geo.toggle.w >= 36 && geo.toggle.h >= 36,
+      geo.toggle.w >= minSize && geo.toggle.h >= minSize,
       'nút quá nhỏ' + at + JSON.stringify(geo.toggle),
     );
-    assert.ok(geo.toggle.r <= geo.bell.l + 1, 'nút chồng lên chuông' + at);
     assert.ok(
-      geo.search.r <= geo.toggle.l + 1,
-      'nút chồng lên ô tìm kiếm' + at,
+      geo.toggle.l >= geo.panel.l && geo.toggle.r <= geo.panel.r,
+      'nút tràn ra ngoài dropdown' + at,
     );
-    assert.ok(geo.bell.r <= geo.vw && geo.scrollW <= geo.vw, 'tràn ngang' + at);
+    assert.ok(
+      geo.panel.l >= 0 && geo.panel.r <= geo.vw && geo.scrollW <= geo.vw,
+      'dropdown tràn ngang' + at,
+    );
 
-    // 3. Bấm: sang tối, đổi biểu tượng + nhãn, lưu lựa chọn; bấm lại: về sáng.
+    // 3. Bấm: sang tối, đổi biểu tượng + nhãn, lưu lựa chọn; dropdown vẫn mở để xem tiếp.
     await toggle.click();
     assert.equal(await theme(), 'dark', 'bấm lần 1' + at);
+    assert.equal(
+      await panel.isVisible(),
+      true,
+      'dropdown phải vẫn mở sau khi đổi giao diện' + at,
+    );
     assert.equal(
       await toggle.getAttribute('aria-label'),
       'Chuyển sang giao diện sáng',
@@ -86,6 +109,7 @@ try {
       await page.evaluate(() => localStorage.getItem('zen-theme')),
       'dark',
     );
+
     // 4. Đổi từ nơi khác (Cài đặt / hệ thống) cũng cập nhật nút.
     await page.evaluate(() => window.zenTheme.setTheme('light'));
     assert.equal(
@@ -95,6 +119,17 @@ try {
     );
     await toggle.click();
     assert.equal(await theme(), 'dark');
+
+    // 5. Escape đóng dropdown và trả tiêu điểm về nút mở.
+    await page.keyboard.press('Escape');
+    assert.equal(await panel.isHidden(), true, 'Escape phải đóng dropdown' + at);
+    assert.equal(
+      await page.evaluate(() => document.activeElement?.id),
+      'top-tools-trigger',
+      'tiêu điểm phải trả về nút mở' + at,
+    );
+
+    // 6. Lựa chọn giữ nguyên sau khi tải lại.
     await page.reload();
     await page.waitForFunction(
       () =>
@@ -110,14 +145,18 @@ try {
       await page.locator('#theme-toggle').getAttribute('aria-label'),
       'Chuyển sang giao diện sáng',
     );
-    // 5. Bàn phím: Enter đổi được.
-    await page.locator('#theme-toggle').focus();
+
+    // 7. Bàn phím: Enter mở dropdown, Enter trên nút chuyển đổi được giao diện.
+    await trigger.focus();
+    await page.keyboard.press('Enter');
+    await panel.waitFor({ state: 'visible' });
+    await toggle.focus();
     await page.keyboard.press('Enter');
     assert.equal(await theme(), 'light', 'bàn phím' + at);
     await context.close();
   }
   console.log(
-    'PASS: nút chuyển sáng / tối cạnh chuông thông báo (390/820/1440px).',
+    'PASS: nút chuyển sáng / tối nằm trong dropdown Tùy chọn nhanh cùng Đồng bộ và Thông báo (390/820/1440px).',
   );
 } finally {
   await h.close();

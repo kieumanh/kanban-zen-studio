@@ -51,6 +51,8 @@ try {
     });
 
     // 1. Hộp thoại Thông báo.
+    // v1.56.0: chuông nằm trong dropdown "Tùy chọn nhanh", mở dropdown trước khi bấm chuông.
+    if (await page.locator('#top-tools-panel').isHidden()) await page.click('#top-tools-trigger');
     await page.locator('#notifications-button').click();
     await page.waitForSelector('#editor[open] .notice-group');
     const dlg = await page.evaluate(() => {

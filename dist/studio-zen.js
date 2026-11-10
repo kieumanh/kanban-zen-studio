@@ -1576,3 +1576,81 @@ save = function (...args) {
   window.addEventListener('resize', sync);
   sync();
 })();
+
+// v1.56.0 — Gom Đồng bộ, Giao diện tối và Thông báo vào MỘT dropdown có icon ở góc phải thanh trên.
+// Di chuyển chính các phần tử hiện có (giữ nguyên id và trình xử lý sự kiện), không tạo lại.
+(() => {
+  const actions = document.querySelector('.topbar .top-actions');
+  if (!actions || document.getElementById('top-tools')) return;
+  const icons = {
+    sync: '<path d="M7 18a4.5 4.5 0 0 1-.9-8.9 6 6 0 0 1 11.6 1.9A3.5 3.5 0 0 1 17 18z"/><path d="M9.5 13.5l2 2 3.5-3.5"/>',
+    moon: '<path d="M20.5 14.2A8.5 8.5 0 0 1 9.8 3.5a8.5 8.5 0 1 0 10.7 10.7z"/>',
+    bell: '<path d="M6 8a6 6 0 1 1 12 0c0 7 3 8 3 8H3s3-1 3-8"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/>',
+    tune: '<path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/>',
+  };
+  const svg = (paths) => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths}</svg>`;
+  const wrap = document.createElement('div');
+  wrap.id = 'top-tools';
+  wrap.className = 'top-tools';
+  const trigger = document.createElement('button');
+  trigger.type = 'button';
+  trigger.id = 'top-tools-trigger';
+  trigger.className = 'icon-btn top-tools-trigger';
+  trigger.setAttribute('aria-haspopup', 'true');
+  trigger.setAttribute('aria-expanded', 'false');
+  trigger.setAttribute('aria-controls', 'top-tools-panel');
+  trigger.setAttribute('aria-label', 'Tùy chọn nhanh');
+  trigger.title = 'Tùy chọn nhanh';
+  trigger.innerHTML = svg(icons.tune) + '<span class="top-tools-dot" hidden aria-hidden="true"></span>';
+  const panel = document.createElement('div');
+  panel.id = 'top-tools-panel';
+  panel.className = 'top-tools-panel';
+  panel.setAttribute('role', 'group');
+  panel.setAttribute('aria-label', 'Tùy chọn nhanh');
+  panel.hidden = true;
+  const addRow = (icon, label, node) => {
+    if (!node) return;
+    const row = document.createElement('div');
+    row.className = 'top-tools-row';
+    row.innerHTML = `<span class="top-tools-ico">${svg(icon)}</span><span class="top-tools-label">${label}</span><span class="top-tools-value"></span>`;
+    row.querySelector('.top-tools-value').append(node);
+    panel.append(row);
+  };
+  addRow(icons.sync, 'Đồng bộ', document.querySelector('#save-state'));
+  addRow(icons.moon, 'Giao diện tối', document.querySelector('#theme-toggle'));
+  addRow(icons.bell, 'Thông báo', document.querySelector('#notifications-button'));
+  wrap.append(trigger, panel);
+  actions.prepend(wrap);
+
+  const setOpen = (open) => {
+    panel.hidden = !open;
+    trigger.setAttribute('aria-expanded', String(open));
+    wrap.classList.toggle('is-open', open);
+  };
+  trigger.addEventListener('click', (event) => {
+    event.stopPropagation();
+    setOpen(panel.hidden);
+  });
+  // Bấm "Thông báo" trong dropdown thì đóng dropdown để hộp thoại mở ra không bị che.
+  panel.addEventListener('click', (event) => {
+    if (event.target.closest('#notifications-button')) setOpen(false);
+  });
+  // composedPath được chốt lúc sự kiện bắt đầu: nút đổi giao diện vẽ lại biểu tượng nên phần tử được bấm có thể đã bị gỡ khỏi DOM.
+  document.addEventListener('click', (event) => {
+    if (!panel.hidden && !event.composedPath().includes(wrap)) setOpen(false);
+  });
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && !panel.hidden) {
+      setOpen(false);
+      trigger.focus();
+    }
+  });
+  // Chấm đỏ trên nút khi có thông báo cần xem (đọc từ số đếm của chuông).
+  const bell = document.querySelector('#notifications-button');
+  const dot = trigger.querySelector('.top-tools-dot');
+  const syncDot = () => {
+    dot.hidden = !(bell && bell.querySelector('.notification-count'));
+  };
+  if (bell) new MutationObserver(syncDot).observe(bell, { childList: true, subtree: true });
+  syncDot();
+})();

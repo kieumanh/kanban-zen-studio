@@ -250,6 +250,8 @@ for (const cfg of [
     fail(cfg, 'mở app', `nhãn đọc-được của chuông sai: "${c.aria}"`);
 
   // 3. hộp thoại Thông báo
+  // v1.56.0: chuông nằm trong dropdown "Tùy chọn nhanh", mở dropdown trước.
+  if (await page.locator('#top-tools-panel').isHidden()) await page.click('#top-tools-trigger');
   await page.locator('#notifications-button').click();
   await page
     .waitForSelector('#editor[open] .notice-summary', { timeout: 5000 })
@@ -427,6 +429,8 @@ for (const cfg of [
       'đã đọc tất cả',
       `trước khi xác nhận: thanh nhắc 7, chuông 7 và chấm phiên bản mới (thấy "${c.strip}" / ${c.badge} / chấm ${c.dot})`,
     );
+  // v1.56.0: chuông nằm trong dropdown "Tùy chọn nhanh", mở dropdown trước.
+  if (await page.locator('#top-tools-panel').isHidden()) await page.click('#top-tools-trigger');
   await page.locator('#notifications-button').click();
   await page
     .waitForSelector('#editor[open] #clear-file-alerts', { timeout: 5000 })
@@ -444,6 +448,8 @@ for (const cfg of [
     );
   if (!/^Thông báo · không có việc quá hạn hay đến hạn$/.test(c.aria))
     fail(cfg, 'đã đọc tất cả', `nhãn đọc-được: "${c.aria}"`);
+  // v1.56.0: chuông nằm trong dropdown "Tùy chọn nhanh", mở dropdown trước.
+  if (await page.locator('#top-tools-panel').isHidden()) await page.click('#top-tools-trigger');
   await page.locator('#notifications-button').click();
   await page
     .waitForSelector('#editor[open] .notice-summary', { timeout: 5000 })
