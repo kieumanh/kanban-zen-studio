@@ -75,9 +75,9 @@ for item in read("scripts/guiguzi-excerpts.json"):
     additions.append(dict(item, sourceFile="sources/guiguzi-nguyenlu.txt", kind="excerpt",
         sourceChecked=True, batch="guiguzi-2026-11-10"))
 
-# Osho (câu nói tiếng Việt, v1.52.0): không có tệp nguồn vật lý, sourceChecked=False.
+# Osho (câu nói tiếng Việt, v1.52.0): mặc định sourceChecked=False; mục đã đối chiếu nguồn giữ trường riêng (v1.57.0).
 for item in read("scripts/osho-excerpts.json"):
-    additions.append(dict(item, kind="excerpt", sourceChecked=False, batch="osho-2026-11-10"))
+    additions.append(dict(item, kind="excerpt", sourceChecked=item.get("sourceChecked", False), batch=item.get("batch", "osho-2026-11-10")))
 
 seen_vi = {norm(x["vi"]) for x in q}
 seen_text = {(x["author"], norm(x.get("text", ""))) for x in q}
