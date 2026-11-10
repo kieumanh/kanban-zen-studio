@@ -469,19 +469,6 @@ textarea {
   width: 24px !important;
   height: 24px !important;
 }
-/* v1.53.0: căn chỉnh checkbox trong wf-check-sort-list — giữ margin-top để khớp với padding textarea. */
-.wf-check-sort-list .compact-check > input[type="checkbox"] {
-  margin-top: 8px !important;
-}
-.wf-check-sort-list .compact-check {
-  grid-template-columns: 30px 26px minmax(0, 1fr) auto auto !important;
-}
-/* v1.53.0: nút × trong compact-check gốc span đến cột cuối để không lệch khi không có zen-ck-pct. */
-.wf-check-sort-list .compact-check > .compact-check-remove {
-  grid-column: 4 / -1;
-  align-self: start;
-  margin-top: 4px;
-}
 .text-btn,
 .settings-toggle {
   min-height: 24px;
@@ -1415,8 +1402,6 @@ textarea {
 .zen-check-add .wf-add-check { flex: none; margin: 0; align-self: flex-start; min-height: 44px; border-radius: 12px; }
 .zen-check-hint { display: block; margin-top: 6px; color: var(--zen-text-muted, #5f5070); font-size: 12px; }
 @media (max-width: 700px) {
-  .wf-check-sort-list .compact-check { grid-template-columns: 30px 26px minmax(0, 1fr); row-gap: 2px; }
-  .wf-check-sort-list .compact-check > .zen-check-actions { grid-column: 3; justify-self: end; }
   .zen-check-add { flex-direction: column; align-items: stretch; }
   .zen-check-add .wf-add-check { align-self: flex-end; }
 }
@@ -1612,9 +1597,7 @@ dialog[open] button[aria-label^="Đóng"],
   color: var(--zen-text-accent, #6e3fa0);
 }
 /* v1.42.0: hàng checklist một dòng: cột 1 tay kéo, cột 2 ô tick, cột 3 chữ, cột 4 ô % (in đậm cuối dòng), cột 5 nút ×. */
-.wf-check-sort-list .compact-check { grid-template-columns: 30px 26px minmax(0, 1fr) auto auto; }
 .wf-check-sort-list .compact-check > .zen-ck-pct { grid-column: 4; grid-row: 1; justify-self: end; padding: 0; }
-.wf-check-sort-list .compact-check > .zen-check-actions { grid-column: 5; grid-row: 1; justify-self: end; }
 .zen-fe-row { grid-template-columns: 26px minmax(0, 1fr) auto auto; }
 .zen-fe-row > .zen-ck-pct { grid-column: 3; grid-row: 1; justify-self: end; }
 .zen-fe-row > .zen-check-actions { grid-column: 4; }
@@ -1684,20 +1667,6 @@ dialog[open] button[aria-label^="Đóng"],
 /* v1.19.10: checklist không tràn viền. Trên màn hình cảm ứng nút kéo ⠿ giữ kích thước chạm 44x44 THẬT (không dùng lề âm nữa):
    nó có cột riêng 44px trong dòng, dòng đủ cao để chứa nó, nên nền và vòng focus nằm gọn trong dòng bo tròn và không đè ô tick.
    Vòng focus của nút kéo, ô tick và thanh % được vẽ vào trong dòng (outline-offset âm) nên không ló ra khỏi viền bo. */
-@media (pointer: coarse) {
-  #editor .wf-check-sort-list .compact-check {
-    grid-template-columns: 44px 26px minmax(0, 1fr) auto auto !important;
-    min-height: 52px;
-  }
-  #editor .wf-check-sort-list .compact-check .wf-grip {
-    width: 44px !important;
-    min-width: 44px !important;
-    height: 44px !important;
-    min-height: 44px !important;
-    margin: 0 !important;
-    align-self: center;
-  }
-}
 #editor .wf-check-sort-list .compact-check .wf-grip:focus-visible { outline-offset: -3px; }
 #editor .wf-check-sort-list .compact-check input[type="checkbox"]:focus-visible,
 #editor .wf-check-sort-list .compact-check .zen-ck-num:focus-visible,
@@ -1778,4 +1747,73 @@ dialog[open] button[aria-label^="Đóng"],
     background-color: #241d2e;
     background-image: radial-gradient(circle at 1px 1px, #b98ee84d 1.2px, transparent 1.7px), linear-gradient(135deg, #2a2236 0%, #2e2230 100%);
   }
+}
+
+/* v1.55.0 — Căn lề checklist theo MỘT trục: dòng chữ đầu tiên của mỗi mục.
+   Tay kéo, ô tick và nút × đều căn giữa đúng dòng chữ đầu (--ck-mid); mục nhiều dòng thì các nút vẫn đứng ở dòng đầu.
+   Lưới cố định 4 cột hiển thị: tay kéo | ô tick | nội dung | nút ×. Thay thế mọi lưới 3/5 cột cũ của .wf-check-sort-list .compact-check.
+   Kích thước theo con trỏ: cảm ứng (điện thoại, máy tính bảng) dùng vùng chạm 44px; chuột dùng gọn hơn. */
+#editor .wf-check-sort-list .compact-check {
+  --ck-mid: 22px;
+  --ck-grip-w: 28px;
+  --ck-grip-h: 44px;
+  --ck-del-w: 36px;
+  --ck-del-h: 44px;
+  display: grid;
+  grid-template-columns: var(--ck-grip-w) 24px minmax(0, 1fr) var(--ck-del-w);
+  column-gap: 4px;
+  row-gap: 0;
+  align-items: start;
+  align-content: start;
+  min-height: 0;
+  padding: 3px 4px 3px 2px;
+}
+@media (pointer: fine) {
+  #editor .wf-check-sort-list .compact-check {
+    --ck-grip-w: 28px;
+    --ck-grip-h: 32px;
+    --ck-del-w: 30px;
+    --ck-del-h: 34px;
+    column-gap: 6px;
+  }
+}
+#editor .wf-check-sort-list .compact-check > .wf-grip {
+  width: var(--ck-grip-w);
+  height: var(--ck-grip-h);
+  min-width: var(--ck-grip-w) !important;
+  margin: calc(var(--ck-mid) - var(--ck-grip-h) / 2) 0 0 !important;
+  align-self: start;
+  padding: 0;
+}
+#editor .wf-check-sort-list .compact-check > input[type="checkbox"] {
+  align-self: start;
+  justify-self: center;
+  margin: calc(var(--ck-mid) - 12px) 0 0 !important;
+}
+#editor .wf-check-sort-list .compact-check > textarea {
+  grid-column: 3;
+  align-self: start;
+  min-width: 0;
+  min-height: 44px;
+  margin: 0;
+  padding: 10px 10px !important;
+  font-size: 15px !important;
+  line-height: 22px !important;
+}
+#editor .wf-check-sort-list .compact-check > .zen-check-actions {
+  grid-column: 4;
+  grid-row: auto;
+  align-self: start;
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin: calc(var(--ck-mid) - var(--ck-del-h) / 2) 0 0;
+}
+#editor .wf-check-sort-list .compact-check > .zen-check-actions > .compact-check-remove {
+  width: var(--ck-del-w);
+  height: var(--ck-del-h);
+  min-width: var(--ck-del-w) !important;
+  margin: 0;
+  padding: 0;
 }
