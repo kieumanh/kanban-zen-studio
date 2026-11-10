@@ -1,10 +1,10 @@
 {
   "target": 2222,
-  "totalEntries": 1265,
-  "sourcedExcerpts": 1220,
+  "totalEntries": 1279,
+  "sourcedExcerpts": 1234,
   "editorialReflections": 45,
-  "remaining": 1002,
-  "sourceMatchedNewBatch": 802,
+  "remaining": 988,
+  "sourceMatchedNewBatch": 816,
   "allTranslationsHumanReviewed": false,
   "complete": false,
   "countsByAuthor": {
@@ -36,7 +36,8 @@
     "Trang Tử · Nam Hoa Kinh": 32,
     "Upanishad": 88,
     "Kabir": 81,
-    "Bhagavad Gita": 31
+    "Bhagavad Gita": 31,
+    "Quỷ Cốc Tử": 14
   },
   "note": "Có nguồn không đồng nghĩa với đã thẩm định toàn bộ bản dịch. Dữ liệu cũ cần tiếp tục rà soát. Không tính đoạn thô hoặc lời biên soạn vào mục tiêu trích đoạn."
 }
