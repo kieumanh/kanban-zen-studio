@@ -1,10 +1,10 @@
 {
   "target": 2222,
-  "totalEntries": 1327,
-  "sourcedExcerpts": 1282,
+  "totalEntries": 1405,
+  "sourcedExcerpts": 1360,
   "editorialReflections": 45,
-  "remaining": 940,
-  "sourceMatchedNewBatch": 866,
+  "remaining": 862,
+  "sourceMatchedNewBatch": 944,
   "allTranslationsHumanReviewed": false,
   "complete": false,
   "countsByAuthor": {
@@ -12,7 +12,7 @@
     "Lão Tử": 89,
     "Trang Tử": 115,
     "Sadhguru": 3,
-    "Osho": 33,
+    "Osho": 111,
     "Khổng Tử": 117,
     "Thích Nhất Hạnh": 1,
     "Ram Dass": 1,

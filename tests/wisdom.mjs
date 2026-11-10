@@ -29,8 +29,8 @@ assert.ok(active.some(q=>q.author==='Mạnh Tử'&&q.text.includes('養心莫善
 assert.ok(active.some(q=>q.author==='Tuân Tử'&&q.text.includes('學不可以已')));
 assert.ok(active.filter(q=>q.sourceFile==='sources/zhuangzi-giles.txt').every(q=>q.attribution.includes('Nam Hoa Kinh')&&q.source.includes('nhân vật')));
 assert.ok(active.filter(q=>q.author==='Quỷ Cốc Tử'&&q.sourceFile==='sources/guiguzi-nguyenlu.txt').length>=30,'30 câu Quỷ Cốc Tử phải được nạp từ tệp nguồn');
-assert.ok(active.filter(q=>q.author==='Osho').length>=33,'33 câu Osho có nguồn phải có trong kho (không tính gợi ý chiêm nghiệm; v1.58.0 gỡ 79 câu chưa tìm được nguyên văn)');
-assert.ok(active.filter(q=>q.author==='Osho'&&q.sourceChecked===true).length>=33,'33 câu Osho có nguồn đã đối chiếu phải có trong kho');
+assert.ok(active.filter(q=>q.author==='Osho').length>=111,'111 câu Osho có nguồn phải có trong kho (không tính gợi ý chiêm nghiệm; v1.59.0 bổ sung 78 câu có nguyên văn trên oshonews.com)');
+assert.ok(active.filter(q=>q.author==='Osho'&&q.sourceChecked===true).length>=111,'111 câu Osho có nguồn đã đối chiếu phải có trong kho');
 for(const name of ['Trang Tử','Tuân Tử']){
   const profile=teachers.profiles.find(p=>p.name===name);
   assert.ok(profile.image.startsWith('data:image/jpeg;base64,'));
