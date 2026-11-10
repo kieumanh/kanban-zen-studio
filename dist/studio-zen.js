@@ -946,7 +946,7 @@
       const text = label && [...label.childNodes].find((node) => node.nodeType === 3 && /Thêm checklist/.test(node.textContent));
       if (text) text.textContent = 'Thêm mục mới';
       extra.rows = 1;
-      extra.placeholder = 'Nhập việc cần làm rồi nhấn Enter';
+      extra.placeholder = 'Thêm việc cần làm…';
       const wrap = document.createElement('div');
       wrap.className = 'zen-check-add';
       extra.before(wrap);
@@ -954,7 +954,7 @@
       if (button) wrap.append(button);
       const hint = document.createElement('small');
       hint.className = 'zen-check-hint';
-      hint.textContent = 'Enter để thêm · Shift + Enter để thêm nhiều mục (mỗi dòng một mục)';
+      hint.textContent = 'Enter để thêm · Shift + Enter để thêm nhiều mục';
       wrap.after(hint);
     }
     requestAnimationFrame(() => {
@@ -1050,8 +1050,8 @@
     '<h3>Checklist <small>' + t.checks.filter((c) => c.done).length + '/' + t.checks.length + '</small></h3>' +
     (undo && undo.tid === t.id ? '<p class="zen-fe-undo" role="status">Đã xóa mục «' + esc(undo.item.text.slice(0, 40)) + '» <button type="button" class="text-btn" data-fe-undo>Hoàn tác</button></p>' : '') +
     '<div class="zen-fe-list">' + t.checks.map((c, i) => rowHTML(c, i, t.checks.length)).join('') + '</div>' +
-    '<div class="zen-check-add"><textarea data-fe-new rows="1" maxlength="300" placeholder="Thêm mục mới — Enter để thêm" aria-label="Thêm mục checklist mới"></textarea><button type="button" class="btn primary" data-fe-add>+ Thêm</button></div>' +
-    '<small class="zen-check-hint">Enter để thêm · Shift + Enter để thêm nhiều mục (mỗi dòng một mục)</small>';
+    '<div class="zen-check-add"><textarea data-fe-new rows="1" maxlength="300" placeholder="Thêm việc cần làm…" aria-label="Thêm mục checklist mới"></textarea><button type="button" class="btn primary" data-fe-add>+ Thêm</button></div>' +
+    '<small class="zen-check-hint">Enter để thêm · Shift + Enter để thêm nhiều mục</small>';
   const fit = (root) => {
     if (typeof fitCheckText === 'function') root.querySelectorAll('textarea[data-fe-text], textarea[data-fe-new]').forEach(fitCheckText);
   };

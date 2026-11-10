@@ -1817,3 +1817,9 @@ dialog[open] button[aria-label^="Đóng"],
   margin: 0;
   padding: 0;
 }
+
+/* v1.55.2 — Ô thêm việc mới trong checklist: một dòng, viên thuốc gọn, nút căn giữa, gợi ý ngắn. */
+#editor .zen-check-add { align-items: center; gap: 8px; padding: 6px 6px 6px 18px; min-height: 56px; border-radius: 999px; }
+#editor .zen-check-add textarea { font-size: 15px; line-height: 22px; min-height: 44px; padding: 11px 0; }
+#editor .zen-check-add .wf-add-check { min-height: 44px; padding: 0 20px; font-size: 14px; }
+#editor .zen-check-hint { margin: 8px 0 0 18px; line-height: 1.5; }
