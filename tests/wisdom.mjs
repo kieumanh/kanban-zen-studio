@@ -29,7 +29,7 @@ assert.ok(active.some(q=>q.author==='Mạnh Tử'&&q.text.includes('養心莫善
 assert.ok(active.some(q=>q.author==='Tuân Tử'&&q.text.includes('學不可以已')));
 assert.ok(active.filter(q=>q.sourceFile==='sources/zhuangzi-giles.txt').every(q=>q.attribution.includes('Nam Hoa Kinh')&&q.source.includes('nhân vật')));
 assert.ok(active.filter(q=>q.author==='Quỷ Cốc Tử'&&q.sourceFile==='sources/guiguzi-nguyenlu.txt').length>=30,'30 câu Quỷ Cốc Tử phải được nạp từ tệp nguồn');
-assert.ok(active.filter(q=>q.author==='Osho').length>=97,'97 câu Osho phải được nạp vào kho (bao gồm các câu từ trước)');
+assert.ok(active.filter(q=>q.author==='Osho').length>=111,'111 câu Osho phải được nạp vào kho (bao gồm các câu từ trước)');
 for(const name of ['Trang Tử','Tuân Tử']){
   const profile=teachers.profiles.find(p=>p.name===name);
   assert.ok(profile.image.startsWith('data:image/jpeg;base64,'));
