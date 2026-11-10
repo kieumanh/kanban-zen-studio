@@ -1077,7 +1077,7 @@
     if (!t || !article) return;
     const done = t.checks.filter((c) => c.done).length;
     const meta = article.querySelector('.wf-focus-progress-meta');
-    if (meta) meta.innerHTML = '<span>' + done + '/' + t.checks.length + ' mục hoàn thành</span><strong>' + taskPct(t) + '%</strong>';
+    if (meta) meta.innerHTML = '<span>' + done + '/' + t.checks.length + ' mục hoàn thành</span>';
     const old = article.querySelector('.wf-focus-task-progress, .progress');
     if (old) {
       const tmp = document.createElement('div');

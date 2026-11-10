@@ -54,7 +54,7 @@ try {
       return {
         toggle: r('#theme-toggle'),
         bell: r('#notifications-button'),
-        search: r('.top-actions .search'),
+        search: r('.topbar .search'),
         vw: innerWidth,
         scrollW: document.documentElement.scrollWidth,
       };

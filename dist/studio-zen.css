@@ -40,13 +40,63 @@
 #tabs .tab[data-project]:not(.pinned) .zen-active-tab-name{white-space:normal;overflow-wrap:anywhere;text-overflow:clip;text-align:center;line-height:1.3}
 /* Tab dự án không chọn khi đang mở một dự án: khung nhỏ hơn (tối đa 130 px) nhưng cũng xuống dòng, không cắt chữ. */
 #tabs.has-current-project .tab[data-project]:not(.pinned):not(.tab-home){height:auto;min-height:64px;white-space:normal;overflow-wrap:anywhere;word-break:normal;text-overflow:clip;text-align:center;justify-content:center;align-items:center;line-height:1.3}
-@media(min-width:701px) and (max-width:900px){
-.topbar .breadcrumb{flex:0 1 auto;min-width:0;max-width:26%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.top-actions{min-width:0;gap:10px}
-.top-actions .search{flex:0 1 200px;min-width:96px}
-.top-actions .search input{min-width:0;width:100%}
-.top-actions #save-state{flex:0 3 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* v1.50.0: thanh trên một hàng. Từ 701px: tên mục bên trái, ô tìm kiếm ở giữa, mọi nút gom về một cụm bên phải.
+   Điện thoại: ☰ | tìm kiếm | cụm nút. Ô tìm kiếm nằm ngoài cụm nút trong HTML. Không dùng !important. */
+.topbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 380px) minmax(0, 1fr);
+  align-items: center;
+  gap: 14px;
 }
+.topbar #menu { grid-column: 1; justify-self: start; }
+.topbar .breadcrumb {
+  grid-column: 1;
+  justify-self: start;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.topbar .search {
+  grid-column: 2;
+  justify-self: stretch;
+  width: 100%;
+  max-width: 380px;
+  min-width: 0;
+  flex: none;
+  margin: 0;
+}
+.topbar .search input { width: 100%; min-width: 0; }
+.topbar .top-actions {
+  grid-column: 3;
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  min-width: 0;
+  position: static;
+  flex: none;
+}
+.topbar .top-actions #save-state { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* Máy tính bảng (701–1100px): cụm nút hẹp hơn nên trạng thái lưu chỉ còn biểu tượng; chữ vẫn có trong nhãn (title). */
+@media (min-width: 701px) and (max-width: 1100px) {
+  .topbar { grid-template-columns: minmax(0, 1fr) minmax(0, 300px) minmax(0, 1fr); gap: 12px; }
+  .topbar .search { max-width: 300px; }
+  .topbar .top-actions { gap: 8px; }
+  .topbar #save-state span:last-child { display: none; }
+}
+/* Điện thoại: ☰ | tìm kiếm (chiếm phần giữa) | cụm nút, trên một hàng. */
+@media (max-width: 700px) {
+  .topbar { grid-template-columns: auto minmax(0, 1fr) auto; gap: 8px; }
+  .topbar .search { grid-column: 2; max-width: none; height: 38px; padding: 0 10px; }
+  .topbar .top-actions { grid-column: 3; gap: 4px; }
+}
+/* v1.50.0: bỏ phần trăm trên checklist (ô % và chữ %). Giá trị % vẫn nằm trong form và được lưu như cũ; chỉ ẩn để ưu tiên nội dung. */
+#editor .zen-ck-pct,
+.compact-check .zen-ck-pct,
+.zen-fe-row .zen-ck-pct { display: none; }
 /* v1.15.34: khung điều hướng ổn định từ 701px. Thanh trên và dải tab dự án dính ở đầu màn hình (trước đây trôi mất sau mỗi lần chuyển màn hình); dải tab là cách chọn dự án duy nhất nên danh sách dự án ở thanh bên chỉ còn trên điện thoại. */
 @media(min-width:701px){
 .topbar{position:sticky;top:0;z-index:30}

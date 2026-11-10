@@ -1,6 +1,6 @@
 // Hồi quy v1.19.7: (1) khung "Chế độ xem" ở thanh bên bo tròn; (2) ô % cuối dòng checklist bo tròn, đủ vùng chạm và lưu được giá trị gõ vào.
-// Cập nhật v1.45.1: phần (2) từng kiểm thanh tiến độ kéo thả (đã gỡ ở v1.42.0 theo yêu cầu thay bằng ô % nhỏ cuối dòng),
-// nên nay kiểm đúng ô % mới thay thế. Sáng + tối, 390 / 820 / 1440px.
+// Cập nhật v1.45.1: phần (2) kiểm ô % nhỏ cuối dòng. v1.50.0: ô % đã ẩn khỏi checklist, nên phần (2) chỉ kiểm
+// % vẫn được giữ khi lưu. Sáng + tối, 390 / 820 / 1440px.
 import assert from 'node:assert/strict';
 import { startHarness, makeProject } from './lib/browser-harness.mjs';
 
@@ -86,7 +86,6 @@ try {
         taskDetail(project('p1'), project('p1').tasks[0]),
       );
       await page.waitForSelector(sel, { state: 'attached' });
-      await page.locator(sel).scrollIntoViewIfNeeded();
       const pct = await page.evaluate((sel) => {
         const el = document.querySelector(sel);
         const r = getComputedStyle(el);
@@ -98,30 +97,18 @@ try {
           h: el.getBoundingClientRect().height,
         };
       }, sel);
-      assert.equal(pct.type, 'number', 'ô % là ô số' + at);
-      assert.equal(pct.value, '40', 'ô % hiện đúng 40' + at);
-      assert.equal(pct.unit, '%', 'có ký hiệu % ngay cạnh ô số' + at);
-      assert.ok(pct.radius >= 6, 'ô % chưa bo tròn: ' + pct.radius + at);
-      if (width < 700)
-        assert.ok(
-          pct.h >= 44 && pct.h <= 46,
-          'vùng chạm ô % phải giữ 44px: ' + pct.h + at,
-        );
+      // v1.50.0: ô % không còn hiện (chiều cao đo được = 0), nhưng giá trị 40 vẫn nằm trong dữ liệu.
+      assert.equal(pct.type, 'number', 'ô % vẫn là ô số trong form' + at);
+      assert.equal(pct.value, '40', 'giá trị % vẫn là 40' + at);
+      assert.equal(pct.h, 0, 'ô % không hiện trên checklist' + at);
 
-      // Gõ số mới rồi bấm Lưu: giá trị được ghi vào đúng mục.
-      await page.locator(sel).fill('70');
-      await page.locator(sel).dispatchEvent('input');
-      await page.locator(sel).dispatchEvent('change');
+      // Lưu không làm mất % đã có.
       await page.locator('#editor-form button[type=submit]').click();
-      await page.waitForFunction(
-        () => project('p1').tasks[0].checks[1].pct === 70,
-        null,
-        { timeout: 10000 },
-      );
+      await page.waitForFunction(() => !document.querySelector('#editor').open, null, { timeout: 10000 });
       assert.equal(
         await page.evaluate(() => project('p1').tasks[0].checks[1].pct),
-        70,
-        'giá trị gõ vào được lưu' + at,
+        40,
+        'lưu giữ % đã có' + at,
       );
 
       const overflow = await page.evaluate(() => {
@@ -139,7 +126,7 @@ try {
     }
   }
   console.log(
-    'PASS: khung Chế độ xem bo tròn; ô % cuối dòng checklist là ô số bo tròn, vùng chạm 44px khi chạm, lưu giá trị gõ vào (sáng/tối, 390/820/1440px).',
+    'PASS: khung Chế độ xem bo tròn; ô % đã ẩn khỏi checklist nhưng giá trị vẫn được giữ khi lưu (sáng/tối, 390/820/1440px).',
   );
 } finally {
   await h.close();
