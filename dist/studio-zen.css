@@ -1755,9 +1755,9 @@ dialog[open] button[aria-label^="Đóng"],
    Kích thước theo con trỏ: cảm ứng (điện thoại, máy tính bảng) dùng vùng chạm 44px; chuột dùng gọn hơn. */
 #editor .wf-check-sort-list .compact-check {
   --ck-mid: 22px;
-  --ck-grip-w: 28px;
+  --ck-grip-w: 44px;
   --ck-grip-h: 44px;
-  --ck-del-w: 36px;
+  --ck-del-w: 44px;
   --ck-del-h: 44px;
   display: grid;
   grid-template-columns: var(--ck-grip-w) 24px minmax(0, 1fr) var(--ck-del-w);
