@@ -1,6 +1,10 @@
 // Pure selection functions are embedded into welcome.js at build-authoring time.
 // Every excerpt occurs exactly once in a complete cycle, including authors
 // without a profile. Entries for each author are spread across the cycle.
+// Priority authors (Osho + non-Chinese sages) appear more frequently in the cycle
+// by using a compressed position range (0.0–0.5) so they cluster near the front
+// of each half-cycle, interleaved with other authors.
+const PRIORITY_AUTHORS = ['Osho'];
 function welcomeAllowed(entry) {
   return !/marcus\s+aurelius|stoic|khắc\s*kỷ|khac\s*ky|epictetus|seneca/i.test([entry.author,entry.name,entry.id,entry.school,entry.theme,entry.source].filter(Boolean).join(' '));
 }
@@ -24,9 +28,16 @@ function welcomeDeck(quotes, profiles) {
   }
   const deck = [];
   for (const [key, entries] of groups) {
+    const author = entries[0]?.quote?.author || '';
+    const isPriority = PRIORITY_AUTHORS.some(p => author === p || author.startsWith(p + ' '));
     entries.sort((a,b) => welcomeHash(a.quote.id || a.quote.vi) - welcomeHash(b.quote.id || b.quote.vi)
       || a.quote.vi.localeCompare(b.quote.vi));
-    entries.forEach((entry,i) => deck.push({...entry, position:(i+0.5)/entries.length,key}));
+    entries.forEach((entry,i) => {
+      // Priority authors: compress their positions into the 0.0–0.5 range so
+      // they interleave with every other author at the front of each cycle half.
+      const base = isPriority ? (i+0.5)/entries.length * 0.5 : (i+0.5)/entries.length;
+      deck.push({...entry, position: base, key});
+    });
   }
   return deck.sort((a,b) => a.position - b.position || a.key.localeCompare(b.key));
 }

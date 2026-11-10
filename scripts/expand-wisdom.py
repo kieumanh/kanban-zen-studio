@@ -68,12 +68,16 @@ additions.extend(runpy.run_path(str(ROOT/"scripts/classical-passages.py"))["pass
 for item in read("scripts/additional-sources.json"):
     additions.append(dict(item,kind="excerpt",sourceChecked=True,batch="additional-2026-10-25"))
 
-# Quỷ Cốc Tử (bản dịch Nguyễn Lư, v1.51.0): mỗi câu phải có nguyên văn trong tệp nguồn.
+# Quỷ Cốc Tử (bản dịch Nguyễn Lư, v1.51.0 → v1.52.0): mỗi câu phải có nguyên văn trong tệp nguồn.
 guiguzi_source = " ".join((ROOT / "sources/guiguzi-nguyenlu.txt").read_text().split())
 for item in read("scripts/guiguzi-excerpts.json"):
     assert " ".join(item["text"].split()) in guiguzi_source, item["text"]
     additions.append(dict(item, sourceFile="sources/guiguzi-nguyenlu.txt", kind="excerpt",
         sourceChecked=True, batch="guiguzi-2026-11-10"))
+
+# Osho (câu nói tiếng Việt, v1.52.0): không có tệp nguồn vật lý, sourceChecked=False.
+for item in read("scripts/osho-excerpts.json"):
+    additions.append(dict(item, kind="excerpt", sourceChecked=False, batch="osho-2026-11-10"))
 
 seen_vi = {norm(x["vi"]) for x in q}
 seen_text = {(x["author"], norm(x.get("text", ""))) for x in q}

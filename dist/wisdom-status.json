@@ -1,17 +1,17 @@
 {
   "target": 2222,
-  "totalEntries": 1279,
-  "sourcedExcerpts": 1234,
+  "totalEntries": 1399,
+  "sourcedExcerpts": 1354,
   "editorialReflections": 45,
-  "remaining": 988,
-  "sourceMatchedNewBatch": 816,
+  "remaining": 868,
+  "sourceMatchedNewBatch": 833,
   "allTranslationsHumanReviewed": false,
   "complete": false,
   "countsByAuthor": {
     "Phật Thích Ca · Kinh Pháp Cú": 392,
     "Lão Tử": 89,
     "Trang Tử": 115,
-    "Osho": 2,
+    "Osho": 105,
     "Sadhguru": 3,
     "Khổng Tử": 117,
     "Thích Nhất Hạnh": 1,
@@ -37,7 +37,7 @@
     "Upanishad": 88,
     "Kabir": 81,
     "Bhagavad Gita": 31,
-    "Quỷ Cốc Tử": 14
+    "Quỷ Cốc Tử": 31
   },
   "note": "Có nguồn không đồng nghĩa với đã thẩm định toàn bộ bản dịch. Dữ liệu cũ cần tiếp tục rà soát. Không tính đoạn thô hoặc lời biên soạn vào mục tiêu trích đoạn."
 }

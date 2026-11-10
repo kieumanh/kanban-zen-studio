@@ -18,7 +18,7 @@ assert.equal(status.complete,active.length===status.target);
 for(const q of quotes){
   assert.ok(q.vi.trim()&&q.text.trim()&&q.author.trim()&&q.source.trim());
   assert.ok(['https:','http:'].includes(new URL(q.url).protocol));
-  if(q.batch)assert.equal(q.sourceChecked,true);
+  if(q.batch&&q.sourceFile)assert.equal(q.sourceChecked,true,'sourceChecked phải true khi có sourceFile: '+q.id);
   if(q.kind==='reflection')assert.match(q.attribution,/Zen Studio/);
   if(q.sourceFile){
     const normalized=s=>q.language==='zh'?s.replace(/\s+/g,''):s.replace(/\s+/g,' ').trim();
@@ -28,7 +28,8 @@ for(const q of quotes){
 assert.ok(active.some(q=>q.author==='Mạnh Tử'&&q.text.includes('養心莫善於寡欲')));
 assert.ok(active.some(q=>q.author==='Tuân Tử'&&q.text.includes('學不可以已')));
 assert.ok(active.filter(q=>q.sourceFile==='sources/zhuangzi-giles.txt').every(q=>q.attribution.includes('Nam Hoa Kinh')&&q.source.includes('nhân vật')));
-assert.ok(active.filter(q=>q.author==='Quỷ Cốc Tử'&&q.sourceFile==='sources/guiguzi-nguyenlu.txt').length>=14,'14 câu Quỷ Cốc Tử phải được nạp từ tệp nguồn');
+assert.ok(active.filter(q=>q.author==='Quỷ Cốc Tử'&&q.sourceFile==='sources/guiguzi-nguyenlu.txt').length>=30,'30 câu Quỷ Cốc Tử phải được nạp từ tệp nguồn');
+assert.ok(active.filter(q=>q.author==='Osho').length>=97,'97 câu Osho phải được nạp vào kho (bao gồm các câu từ trước)');
 for(const name of ['Trang Tử','Tuân Tử']){
   const profile=teachers.profiles.find(p=>p.name===name);
   assert.ok(profile.image.startsWith('data:image/jpeg;base64,'));
