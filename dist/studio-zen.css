@@ -468,10 +468,19 @@ textarea {
 .compact-check > input[type="checkbox"] {
   width: 24px !important;
   height: 24px !important;
-  margin: 0 !important;
+}
+/* v1.53.0: căn chỉnh checkbox trong wf-check-sort-list — giữ margin-top để khớp với padding textarea. */
+.wf-check-sort-list .compact-check > input[type="checkbox"] {
+  margin-top: 8px !important;
 }
 .wf-check-sort-list .compact-check {
   grid-template-columns: 30px 26px minmax(0, 1fr) auto auto !important;
+}
+/* v1.53.0: nút × trong compact-check gốc span đến cột cuối để không lệch khi không có zen-ck-pct. */
+.wf-check-sort-list .compact-check > .compact-check-remove {
+  grid-column: 4 / -1;
+  align-self: start;
+  margin-top: 4px;
 }
 .text-btn,
 .settings-toggle {

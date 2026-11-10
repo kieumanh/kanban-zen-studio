@@ -1,0 +1,1781 @@
+/* Quiet hierarchy, explicit interaction and motion alternatives. */
+:root{--muted:#6c6078;--text-muted:#6c6078}
+.studio-board-tools{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:20px 0 16px}.studio-board-tools>span{margin-right:auto;color:#685974;font-size:13px}.studio-board-tools .btn{min-height:44px}.studio-board-tools kbd{font:11px var(--sans);margin-left:7px;color:#685974}
+#main .board{gap:22px;align-items:start}#main .column{padding:16px 14px}#main .column .task-card{margin-bottom:18px;padding:20px;line-height:1.6}#main .task-card h3{font-size:17px;line-height:1.45;font-weight:650;overflow-wrap:anywhere}#main .task-card .tag{font-size:11px}#main .task-card .task-footer{color:#685974}.studio-wip{display:block;width:fit-content;font-size:12px;line-height:1.5;color:#64576f;background:#f7f3fa;border:1px solid #ddd2e5;border-radius:999px;padding:3px 9px;margin:8px 0 16px}.studio-wip.is-over{color:#8a491a;background:#fff2e6;border-color:#cfad89}.studio-empty{font-size:13px;color:#685974;line-height:1.7;padding:15px 8px;margin:8px 0 16px}.studio-limit{display:grid;grid-template-columns:1fr 100px;align-items:center;gap:16px;margin:14px 0}.studio-limit input{width:100%;min-height:44px}
+#main .studio-compact .task-card{padding:15px;margin-bottom:14px}#main .studio-compact .task-card h3{font-size:15px;margin:10px 0}#main .studio-compact .wf-card-description,#main .studio-compact .card-checks,#main .studio-compact .next-step{display:none!important}.studio-column-tabs{display:none}
+.task-card.wf-is-moving{transform:rotate(1deg) scale(1.015)!important;box-shadow:0 14px 32px #49355730!important;opacity:.8}.column.dragover{background:#eee5f7!important;outline:2px dashed #9273ad;outline-offset:-3px}.task-card{transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease}dialog[open]{animation:studio-enter .16s ease-out}@keyframes studio-enter{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+.matrix-chip.q1{color:#684093;background:#f4effa}.matrix-chip.q2{color:#2e673f;background:#eff8f0}.matrix-chip.q3{color:#963959;background:#fff0f5}.matrix-chip.q4{color:#8a491a;background:#fff4e8}
+.studio-palette{width:min(580px,calc(100vw - 28px));max-height:80dvh;padding:20px;border:1px solid #d8c9e4;border-radius:20px;background:#fffdfd;color:#352a44;box-shadow:0 24px 80px #352a4430}.studio-palette::backdrop{background:#30223960;backdrop-filter:blur(4px)}.studio-palette header{display:flex;justify-content:space-between;align-items:center;gap:12px}.studio-palette h2{font-size:20px;margin:0}.studio-palette input{width:100%;box-sizing:border-box;margin:16px 0;padding:14px;font:inherit;border:1px solid #bda7d0;border-radius:12px}.studio-palette [role=listbox]{max-height:45dvh;overflow:auto}.studio-palette [role=option]{width:100%;display:flex;gap:12px;justify-content:space-between;align-items:center;text-align:left;border:1px solid transparent;border-radius:10px;background:transparent;padding:12px;font:inherit;color:#352a44;min-height:48px}.studio-palette [role=option] span{overflow-wrap:anywhere}.studio-palette [role=option] small{color:#685974;font-size:12px;flex-shrink:0;max-width:40%;overflow-wrap:anywhere}.studio-palette [aria-selected=true],.studio-palette [role=option]:hover{background:#f2eaf8;border-color:#cbb6db}.studio-command-help{color:#685974;font-size:12px;margin-bottom:0}.studio-pomodoro{padding:16px;margin-bottom:24px;border:1px solid #d9cbe5;border-radius:16px;background:#faf7fd}.studio-pomodoro summary{cursor:pointer;color:#5d3c7a;min-height:28px}.studio-pomodoro p,.studio-timer-status{font-size:13px;line-height:1.6;color:#685974}.studio-pomodoro output{display:block;font-size:36px;font-variant-numeric:tabular-nums;margin:12px 0;color:#493557}.studio-pomodoro .btn{margin:0 8px 8px 0;min-height:44px}
+@media(max-width:700px){#main .board{display:flex!important;overflow-x:auto;scroll-snap-type:x mandatory;gap:14px;align-items:flex-start;padding-bottom:20px}#main .board>.column{flex:0 0 calc(100% - 12px)!important;min-width:0!important;width:calc(100% - 12px)!important;box-sizing:border-box;scroll-snap-align:start}#main .board>.add-column{flex:0 0 150px;scroll-snap-align:start}.studio-column-tabs{display:flex;gap:8px;overflow-x:auto;margin:0 0 14px;padding:4px 2px 10px}.studio-column-tabs button{flex-shrink:0;border:1px solid #d4c5e0;background:#fffdfd;color:#685974;border-radius:999px;padding:10px 14px;min-height:44px;font:inherit;font-size:13px}.studio-column-tabs [aria-pressed=true]{background:#eee4f6;color:#573577;border-color:#9673b4}.studio-board-tools>span{flex-basis:100%}.studio-board-tools .btn{font-size:12px;padding:8px 10px}.studio-board-tools kbd{display:none}}
+@media(prefers-reduced-motion:reduce){dialog[open]{animation:none}.task-card{transition:none}.task-card.wf-is-moving{transform:none!important}*{scroll-behavior:auto!important}}
+/* v1.15.31: nút chuyển nhanh nằm trên hàng riêng của thẻ thay vì bị đẩy ra ngoài thẻ; họa tiết phủ nhẹ lên nền thẻ giống thẻ ghi chú. */
+.task-card .wf-card-head{flex-wrap:wrap;row-gap:8px}
+.task-card .wf-card-head>.tag{flex:0 1 auto!important;min-width:0!important;max-width:calc(100% - 106px)!important;overflow-wrap:anywhere!important}
+.task-card .wf-card-head>.task-next{order:3;flex:1 1 100%;width:100%;max-width:100%;min-width:0;margin:0;white-space:normal;overflow-wrap:anywhere;text-align:center}
+.task-card[data-zen-art]:not([data-zen-art=none]){background-image:linear-gradient(125deg,rgba(255,255,255,.9),rgba(255,255,255,.8) 58%,rgba(255,255,255,.7)),var(--zen-art)!important;background-size:cover!important;background-position:center!important;background-repeat:no-repeat!important}
+.task-card[data-zen-art]:not([data-zen-art=none])::before{content:none!important;display:none!important}
+/* v1.15.32: task nhiều ngày là một thanh liền xuyên các ô ngày trong tuần, thay cho thẻ lặp ở từng ngày. */
+.month-grid{--cell-pad:6px;--lane-h:26px}
+.month-grid .month-cell{padding-inline:var(--cell-pad)!important}
+.month-lanes{position:relative;height:calc(var(--lanes)*var(--lane-h));margin:0 calc(-1*var(--cell-pad)) 4px}
+.month-bar{--bl:3px;--br:3px;position:absolute;z-index:2;top:calc(var(--lane)*var(--lane-h));left:var(--bl);width:calc(var(--span)*100% + (var(--span) - 1)*1px - var(--bl) - var(--br));height:calc(var(--lane-h) - 3px);min-height:0;display:flex;align-items:center;gap:5px;margin:0;padding:0 8px;overflow:hidden;border:0;border-left:3px solid var(--event-color);border-radius:7px;background:color-mix(in srgb,var(--event-color) 16%,white);color:var(--ink);font:600 12px/1 var(--sans);text-align:left;white-space:nowrap;cursor:pointer}
+.month-bar:hover{background:color-mix(in srgb,var(--event-color) 26%,white)}
+.month-bar:focus-visible{outline:2px solid var(--event-color);outline-offset:1px}
+.month-bar.event-done{opacity:.55}
+.month-bar-title{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.month-bar .zen-event-time{flex:0 0 auto;font-size:10px;font-weight:700;font-variant-numeric:tabular-nums;color:#6b5a7a}
+.month-bar-progress{position:absolute;left:0;bottom:0;height:3px;width:var(--pct);background:var(--event-color);opacity:.55}
+.month-bar.bar-open-left{--bl:0px;border-left-width:0;border-top-left-radius:0;border-bottom-left-radius:0}
+.month-bar.bar-open-right{--br:-1px;border-top-right-radius:0;border-bottom-right-radius:0}
+@media(max-width:700px){.month-grid{--cell-pad:2px;--lane-h:22px}.month-bar{padding:0 4px;font-size:10px;border-radius:5px}.month-bar .zen-event-time{display:none}}
+/* v1.15.33: tiêu đề trang và tab dự án không còn bị bóp ở độ rộng tablet (701–1000px). Hàng nút xuống dòng thay vì chiếm hết chỗ của tên dự án. */
+@media(min-width:701px){
+.board-head,.page-heading{flex-wrap:wrap;row-gap:12px}
+.board-head>div:first-child,.page-heading>div:first-child{flex:1 1 260px;min-width:min(100%,260px)}
+.board-head .board-tools{flex:0 1 auto;max-width:min(100%,600px);justify-content:flex-start}
+}
+#tabs .tab[data-project]:not(.pinned)>span{flex:0 0 auto;min-width:max-content;white-space:nowrap;overflow-wrap:normal;word-break:keep-all}
+/* v1.47.0: tab dự án giữ nguyên khung (rộng, viền, bo góc). Tên dài xuống dòng và canh giữa trong khung; khung chỉ cao thêm khi cần đủ dòng, nên chữ không bị cắt ở trên và dưới. */
+#tabs .tab[data-project]:not(.pinned){height:auto;min-height:64px;justify-content:center;align-items:center;text-align:center;white-space:normal;overflow-wrap:anywhere;word-break:normal;line-height:1.3}
+#tabs .tab[data-project]:not(.pinned) .zen-active-tab-name{white-space:normal;overflow-wrap:anywhere;text-overflow:clip;text-align:center;line-height:1.3}
+/* Tab dự án không chọn khi đang mở một dự án: khung nhỏ hơn (tối đa 130 px) nhưng cũng xuống dòng, không cắt chữ. */
+#tabs.has-current-project .tab[data-project]:not(.pinned):not(.tab-home){height:auto;min-height:64px;white-space:normal;overflow-wrap:anywhere;word-break:normal;text-overflow:clip;text-align:center;justify-content:center;align-items:center;line-height:1.3}
+/* v1.50.0: thanh trên một hàng. Từ 701px: tên mục bên trái, ô tìm kiếm ở giữa, mọi nút gom về một cụm bên phải.
+   Điện thoại: ☰ | tìm kiếm | cụm nút. Ô tìm kiếm nằm ngoài cụm nút trong HTML. Không dùng !important. */
+.topbar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 380px) minmax(0, 1fr);
+  align-items: center;
+  gap: 14px;
+}
+.topbar #menu { grid-column: 1; justify-self: start; }
+.topbar .breadcrumb {
+  grid-column: 1;
+  justify-self: start;
+  min-width: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.topbar .search {
+  grid-column: 2;
+  justify-self: stretch;
+  width: 100%;
+  max-width: 380px;
+  min-width: 0;
+  flex: none;
+  margin: 0;
+}
+.topbar .search input { width: 100%; min-width: 0; }
+.topbar .top-actions {
+  grid-column: 3;
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  min-width: 0;
+  position: static;
+  flex: none;
+}
+.topbar .top-actions #save-state { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* Máy tính bảng (701–1100px): cụm nút hẹp hơn nên trạng thái lưu chỉ còn biểu tượng; chữ vẫn có trong nhãn (title). */
+@media (min-width: 701px) and (max-width: 1100px) {
+  .topbar { grid-template-columns: minmax(0, 1fr) minmax(0, 300px) minmax(0, 1fr); gap: 12px; }
+  .topbar .search { max-width: 300px; }
+  .topbar .top-actions { gap: 8px; }
+  .topbar #save-state span:last-child { display: none; }
+}
+/* Điện thoại: ☰ | tìm kiếm (chiếm phần giữa) | cụm nút, trên một hàng. */
+@media (max-width: 700px) {
+  .topbar { grid-template-columns: auto minmax(0, 1fr) auto; gap: 8px; }
+  .topbar .search { grid-column: 2; max-width: none; height: 38px; padding: 0 10px; }
+  .topbar .top-actions { grid-column: 3; gap: 4px; }
+}
+/* v1.50.0: bỏ phần trăm trên checklist (ô % và chữ %). Giá trị % vẫn nằm trong form và được lưu như cũ; chỉ ẩn để ưu tiên nội dung. */
+#editor .zen-ck-pct,
+.compact-check .zen-ck-pct,
+.zen-fe-row .zen-ck-pct { display: none; }
+/* v1.15.34: khung điều hướng ổn định từ 701px. Thanh trên và dải tab dự án dính ở đầu màn hình (trước đây trôi mất sau mỗi lần chuyển màn hình); dải tab là cách chọn dự án duy nhất nên danh sách dự án ở thanh bên chỉ còn trên điện thoại. */
+@media(min-width:701px){
+.topbar{position:sticky;top:0;z-index:30}
+#tabs{position:sticky;top:73px;z-index:29}
+html{scroll-padding-top:170px}
+.sidebar>.side-projects{display:none}
+.side-bottom{margin-top:auto}
+}
+/* v1.15.35: thẻ Kanban gọn. Nút chuyển nhanh thu thành mũi tên cạnh hạn (không còn một hàng riêng ở mọi thẻ); việc chưa có checklist không hiện "0%" và thanh tiến độ trống; khoảng cách trong thẻ chặt hơn. */
+.task-card .task-card-decision{justify-content:space-between;gap:8px;min-height:28px}
+.task-card .task-card-decision>.task-next{flex:0 0 auto;display:grid;place-items:center;width:28px;min-width:28px;height:28px;min-height:28px;margin:0;padding:0;border-radius:999px;font-size:15px;line-height:1}
+.task-card.task-card-no-checks .progress-meta,.task-card.task-card-no-checks .progress{display:none}
+#main .column .task-card{padding:16px;margin-bottom:12px}
+#main .studio-compact .task-card{padding:12px;margin-bottom:10px}
+@media(pointer:coarse){.task-card .task-card-decision{min-height:44px}.task-card .task-card-decision>.task-next{width:44px;min-width:44px;height:44px;min-height:44px}}
+@media(hover:hover) and (pointer:fine){.task-card .card-check-control{min-height:28px;padding:4px 2px}.task-card .card-checks li{padding:2px 0}}
+.task-card.wf-task-card{gap:6px}
+.task-card .wf-card-head{margin-bottom:0}
+.task-card.wf-task-card h3{margin:2px 0 0!important}
+.task-card .card-checks{margin:2px 0!important}
+/* v1.15.35: điện thoại (≤700px) cũng chừa chỗ cho thanh trên + dải chế độ xem dính khi trình duyệt cuộn tới một phần tử (kéo thả, Tab). Thẻ ngắn hơn làm trang ngắn lại, tay kéo của thẻ đầu có thể rơi dưới thanh trên. */
+@media(max-width:700px){html{scroll-padding-top:120px}}
+/* v1.15.36: đầu trang dự án gọn. Một nút chính "Thêm việc"; Ghim / Lưu trữ / Tệp / Sửa dự án nằm trong menu "Tùy chọn"; "x/y việc xong" là số chính của khối tiến độ; các nút phụ (Thẻ gọn, Giới hạn WIP, Lệnh nhanh) dịu đi. */
+.board-head .board-tools{align-items:center;gap:8px}
+.wf-project-menu{position:relative}
+.wf-project-menu>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:8px;min-height:40px;padding:8px 14px;border:1px solid #e0d3eb;border-radius:12px;background:#fff;font-size:12px;font-weight:650;color:#674688}
+.wf-project-menu>summary::-webkit-details-marker{display:none}
+.wf-project-menu>summary:before{content:'⋯';font-size:18px;line-height:1}
+.wf-project-menu[open]>.wf-project-menu-list{position:absolute;z-index:20;right:0;top:100%;width:210px;margin:6px 0 0;padding:8px;display:grid;gap:2px;border:1px solid #e0d3eb;border-radius:14px;background:#fff;box-shadow:0 12px 30px #43235c22}
+.wf-project-menu-list .btn{display:flex;align-items:center;gap:10px;justify-content:flex-start;width:100%;min-height:40px;margin:0;border-color:transparent;background:transparent;box-shadow:none;text-align:left}
+.wf-project-menu-list .btn:hover{background:#f4eefa}
+.board-summary .summary-main{display:flex;align-items:baseline;gap:8px;white-space:nowrap}
+.board-summary .summary-main strong{font-size:26px;line-height:1.2}
+.board-summary .summary-main span{font-size:14px;font-weight:650;color:#554566}
+.board-summary .grow p{margin:6px 0 0}
+.studio-board-tools{margin:14px 0 12px}
+.studio-board-tools .btn{min-height:40px;border-color:transparent;background:transparent;box-shadow:none;font-size:13px;color:#674688}
+.studio-board-tools .btn:hover{background:#f4eefa}
+@media(pointer:coarse){.wf-project-menu>summary,.wf-project-menu-list .btn,.studio-board-tools .btn{min-height:44px}}
+/* Hai bảng (Hiển thị, Tùy chọn) neo vào mép phải của thanh nút, không neo vào từng nút, để luôn nằm trong vùng nội dung và không đè lên thanh bên. */
+#main .board-head .board-tools{position:relative}
+#main .board-head .board-tools .wf-display-options,#main .board-head .board-tools .wf-project-menu{position:static}
+#main .board-tools .wf-display-options[open] .kanban-options,#main .wf-project-menu[open]>.wf-project-menu-list{left:auto;right:0;top:100%}
+@media(max-width:700px){
+#main .board-head{gap:8px;margin-bottom:12px}
+#main .board-head h1{margin:4px 0}
+#main .board-head .board-tools{display:flex;flex-wrap:nowrap;align-items:center;gap:8px;width:100%;max-width:none}
+#main .board-head .board-tools>[data-action=new-task]{order:-1;flex:1 1 auto;min-width:0;justify-content:center;min-height:44px}
+#main .board-head .board-tools .wf-display-options,#main .board-head .board-tools .wf-project-menu{flex:0 0 auto;margin:0}
+#main .board-tools .wf-display-options>summary,#main .wf-project-menu>summary{min-height:44px}
+#main .board-tools .wf-display-options[open] .kanban-options,#main .wf-project-menu[open]>.wf-project-menu-list{left:0;right:0;width:auto;top:100%}
+#main .board-summary{flex-wrap:wrap;align-items:center;gap:6px 14px;padding:10px 14px;margin-bottom:10px}
+#main .board-summary>.grow{flex:1 1 130px}
+.studio-board-tools{margin:2px 0 8px;gap:4px}
+.studio-board-tools>span,.studio-board-tools kbd{display:none}
+}
+/* v1.15.37: Thẻ gọn, Giới hạn WIP và Lệnh nhanh gom vào menu "Hiển thị" (không còn thanh công cụ riêng dưới khối tiến độ). */
+.kanban-options .wf-display-compact{display:flex;gap:10px;align-items:center;min-height:30px}
+.kanban-options .wf-display-actions{display:grid;gap:2px;margin:2px -8px -8px;padding:8px;border-top:1px solid #eadff3}
+.kanban-options .wf-display-actions .btn{display:flex;align-items:center;justify-content:flex-start;gap:10px;width:100%;min-height:40px;margin:0;border-color:transparent;background:transparent;box-shadow:none;font-size:13px;color:#674688;text-align:left}
+.kanban-options .wf-display-actions .btn:hover{background:#f4eefa}
+.kanban-options .wf-display-actions kbd{margin-left:auto;font:11px var(--sans);color:#685974}
+@media(pointer:coarse){.kanban-options .wf-display-actions .btn{min-height:44px}.kanban-options .wf-display-compact{min-height:44px}}
+@media(max-width:700px){.kanban-options .wf-display-actions kbd{display:none}}
+#main .board-tools .wf-display-options .kanban-options{grid-template-columns:minmax(0,1fr)}
+/* v1.15.39: thống nhất từ ngữ. Thanh chế độ xem trên điện thoại dùng đủ tên tiếng Việt ("Bảng Kanban", "Dòng thời gian", "Lịch", "Gantt"). Biểu tượng nằm trên nhãn để nhãn dài vẫn gọn một dòng. */
+@media(max-width:700px){
+.mobile-viewbar .view-mode{flex-direction:column!important;justify-content:center;gap:2px!important}
+.mobile-viewbar .view-mode span{display:block;max-width:100%;white-space:nowrap;line-height:1.25}
+/* Thanh cao 54px (trước 49px): cuộn tới một thẻ vẫn để đủ khoảng trống dưới khung dính. */
+html{scroll-padding-top:126px}
+}
+
+/* v1.15.40: truy cập I — chữ đủ lớn và đủ tương phản. Token màu chữ dùng chung; cỡ chữ tối thiểu 12px; nút gradient sẫm hơn để chữ trắng đạt 4,5:1; viền ô nhập đạt 3:1.
+   Cỡ chữ: danh sách dưới đây là các thành phần đã đo nhỏ hơn 12px (tests/a11y-contrast-browser.mjs quét lại ở 390/820/1440px). Dùng !important một lần ở đây vì nhiều quy tắc cũ đặt cỡ chữ nhỏ bằng bộ chọn cụ thể. */
+:root{--zen-text-muted:#5f5070;--zen-text-accent:#6e3fa0;--zen-field-border:#8f7da0;--zen-placeholder:#6f6080;--zen-primary-gradient:linear-gradient(110deg,#6a40b8,#a8468a 62%,#b9503f);--zen-min-font:12px}
+#crumb,
+#modal-eyebrow,
+#project-color-value,
+#work-group-detail small,
+.gantt-svg text,
+.gantt-task text,
+.mobile-viewbar .view-mode span,
+.view-mode span,
+button.btn kbd,
+button.calendar-task small,
+button.dashboard-progress-row small,
+button.label-chip,
+button.month-event,
+button.note-motif-option small,
+button.stat small,
+button.tab,
+button.tab span,
+button.tab.active,
+button.tab.active span,
+button.work-task-row small,
+details.progress-explanation p,
+div.color-picker-panel label,
+div.column-title b,
+div.dashboard-plan-part small,
+div.gantt-labels small,
+div.gantt-undated-head small,
+div.grow p,
+div.progress-meta span,
+div.progress-meta strong,
+div.progress-meta.task-card-progress-meta span,
+div.progress-meta.task-card-progress-meta strong,
+div.project-bottom span,
+div.resource-filters label,
+div.resource-filters small,
+div.rgb-inputs label,
+div.view-group-label,
+div.work-chart-total span,
+div.work-legend span,
+div.work-legend strong,
+div.workspace-scope span,
+footer,
+footer span,
+footer strong,
+p.gantt-empty small,
+p.task-next-step,
+p.task-next-step span,
+section.board-summary.project-view-summary p,
+section.recycle-overview span,
+small.icon-library-footnote,
+small.icon-result-count,
+small.sidebar-version,
+small.sidebar-version span,
+small.zen-event-kind,
+span.appearance-value,
+span.brand-sub,
+span.calendar-progress,
+span.eyebrow,
+span.focus-card-priority,
+span.home-project-total small,
+span.label-chip,
+span.matrix-chip.q1,
+span.matrix-chip.q2,
+span.matrix-chip.q3,
+span.matrix-chip.q4,
+span.matrix-chip.unclassified,
+span.notification-count,
+span.pill,
+span.stat-detail-hint,
+span.status.Doing,
+span.status.Done,
+span.status.Idea,
+span.status.List,
+span.tag,
+span.task-card-deadline,
+span.task-card-deadline.is-overdue,
+span.task-project-choice-copy small,
+span.wf-keyword-count{font-size:12px!important}
+.help-copy,
+thead th,
+.recycle-toolbar .btn,
+.wf-task-tools .btn,
+.work-legend strong{font-size:12px!important}
+
+/* Chữ phụ: dùng chung hai màu token thay cho các màu tím nhạt rải rác (đạt từ 4,5:1 trên mọi nền chữ đang dùng; nền sẫm nhất là #ddcfeb ≈ 4,9:1). */
+.task-card-deadline:not(.is-overdue),
+.view-mode:not([aria-pressed="true"]),
+.view-mode:not([aria-pressed="true"]) span,
+.column-title b,
+.focus-card-priority,
+.home-project-total small,
+.view-group-label,
+.task-next-step,
+.task-next-step span,
+.task-card-progress-meta span,
+.task-card-progress-meta strong,
+.card-check-control span,
+.task-project-choice-copy small,
+.form-intro,
+.icon-library-footnote,
+.gantt-undated-head > div > small,
+.gantt-empty,
+.gantt-empty small,
+.wf-task-heading,
+.breadcrumb > span,
+.stat small,
+.note-motif-current,
+.note-motif-option small,
+.gantt-labels small,
+.calendar-task small,
+.work-task-row small,
+.project-bottom span,
+.date-field-trigger,
+.sidebar-version,
+.sidebar-version span,
+.other-month time {
+  color: var(--zen-text-muted) !important;
+}
+.tag,
+.brand-sub,
+.eyebrow,
+.stat-detail-hint {
+  color: var(--zen-text-accent) !important;
+}
+footer,
+footer span {
+  color: #6b6552 !important;
+}
+.avatar {
+  color: #5a4d36 !important;
+}
+.pill {
+  color: #5f5430 !important;
+}
+.status.Idea {
+  color: #94406d !important;
+}
+.wf-keyword-count {
+  color: #5c4470 !important;
+}
+.compact-check-remove {
+  color: #8a4455 !important;
+}
+.work-legend strong {
+  color: color-mix(in srgb, var(--group-color) 45%, #2a1f35) !important;
+}
+
+/* Thay độ mờ bằng màu: chữ giữ nguyên độ tương phản, thứ bậc nhìn vẫn còn (tab không chọn nhỏ hơn, thẻ Hoàn thành xám và nhạt nền, ngày ngoài tháng nền nhạt). */
+#tabs.has-current-project .tab:not(.active) {
+  opacity: 1 !important;
+}
+#tabs.has-current-project .tab:not(.active):not(.tab-home),
+#tabs.has-current-project .tab:not(.active):not(.tab-home) span {
+  color: var(--zen-text-muted) !important;
+}
+.column[data-column="Done"] .task-card {
+  opacity: 1 !important;
+}
+.column[data-column="Done"] .task-card h3 {
+  color: var(--zen-text-muted) !important;
+}
+.other-month time,
+.stat-detail-hint {
+  opacity: 1 !important;
+}
+
+/* Nút gradient: sẫm hơn để chữ trắng đạt 4,5:1 ở điểm sáng nhất của gradient (#b9503f: 4,9:1). */
+.btn.primary,
+button.primary,
+.primary:not(.danger),
+#note-save,
+#save-profile,
+#save-reminders,
+#save-weekly-settings,
+.wf-comments > button,
+.wf-add-check,
+[data-action="new-project"],
+[data-action="new-task"],
+[data-note-new],
+button.focus-check-updates,
+button.focus-check-updates:hover,
+button[data-resources-refresh],
+button[data-resources-refresh]:hover,
+.welcome-actions .btn {
+  background: var(--zen-primary-gradient) !important;
+  color: #fff !important;
+}
+#editor-form button[type="submit"].primary.danger {
+  background: linear-gradient(110deg, #a8305c, #b13a50 64%, #b4452f) !important;
+}
+.wf-is-focused .zen-music .music-toggle,
+.wf-is-focused .zen-music {
+  background: linear-gradient(110deg, #6a40b8, #a8468a) !important;
+}
+
+/* Ô nhập: viền đạt 3:1 trên nền trắng và nền tím nhạt; chữ gợi ý (placeholder) đạt 4,5:1. */
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not([type="color"]):not([type="hidden"]):not([type="button"]):not([type="submit"]),
+select,
+textarea {
+  border-color: var(--zen-field-border) !important;
+}
+.compact-check textarea {
+  border-color: var(--zen-field-border) !important;
+}
+::placeholder {
+  color: var(--zen-placeholder) !important;
+  opacity: 1 !important;
+}
+
+/* Huy hiệu số thông báo: chữ 12px trong huy hiệu rộng hơn một chút, nền sẫm hơn để chữ trắng đạt 4,5:1. */
+.notification-count {
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  background: #a8325a;
+  font-size: 12px !important;
+  line-height: 18px;
+}
+
+/* Tiêu đề bảng "Tất cả việc" 12px: giảm giãn chữ, và ở 701–900px bớt khoảng đệm ngang để bảng vẫn vừa khung (ở 701px bảng rộng 709px khi chưa chỉnh). */
+.task-table th {
+  letter-spacing: 0.3px;
+}
+@media (min-width: 701px) and (max-width: 900px) {
+  .task-table th {
+    letter-spacing: 0.2px;
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+}
+
+/* Thanh chế độ xem trên điện thoại: nhãn 12px, bớt khoảng đệm hai bên để "Dòng thời gian" vẫn nằm trên một dòng. */
+@media (max-width: 700px) {
+  .mobile-viewbar .view-mode {
+    padding: 5px 1px !important;
+  }
+  .mobile-viewbar .view-mode span {
+    font-size: 12px !important;
+    letter-spacing: -0.01em;
+  }
+}
+/* Điện thoại hẹp: ≤380px thu khoảng đệm và giãn chữ để "Dòng thời gian" vẫn một dòng (đo ở 360px); ≤349px (hiếm) cho nhãn xuống dòng thay vì bị cắt, thanh cao hơn một chút. */
+@media (max-width: 380px) {
+  .mobile-viewbar {
+    padding-left: 6px;
+    padding-right: 6px;
+  }
+  .mobile-viewbar .view-mode {
+    padding: 5px 0 !important;
+  }
+  .mobile-viewbar .view-mode span {
+    letter-spacing: -0.03em;
+  }
+}
+@media (max-width: 349px) {
+  .mobile-viewbar .view-mode span {
+    white-space: normal;
+    text-align: center;
+    line-height: 1.15;
+  }
+}
+
+/* v1.15.41: truy cập II — hộp thoại, vùng chạm, thứ tự Tab. */
+/* Bổ sung sau khi test hộp thoại Thông báo và Ghi chú mới thật sự mở được (bản v1.15.40 chưa quét hai hộp thoại này). */
+.zen-editor-pin-hint,
+.note-reminder-options small,
+.note-keywords-field small,
+.zen-rich-save-state,
+.note-motif-current,
+.note-composer > small,
+.notice-detail-link {
+  font-size: 12px !important;
+}
+.zen-editor-pin-hint,
+.note-composer > small {
+  color: var(--zen-text-muted) !important;
+}
+.notice-detail-link {
+  color: var(--zen-text-accent) !important;
+}
+.notice-item strong {
+  color: #84521a !important;
+}
+.wf-project-choice {
+  color: color-mix(in srgb, var(--project-color) 45%, #2a1f35);
+}
+/* Tiêu đề hộp thoại nhận tiêu điểm bằng mã (tabindex -1): không vẽ viền tiêu điểm quanh tiêu đề. */
+#editor-body h2[tabindex="-1"]:focus {
+  outline: none;
+}
+
+/* Vùng chạm tối thiểu 24×24px ở mọi thiết bị. */
+.task-name input[type="checkbox"],
+.compact-check > input[type="checkbox"] {
+  width: 24px !important;
+  height: 24px !important;
+}
+/* v1.53.0: căn chỉnh checkbox trong wf-check-sort-list — giữ margin-top để khớp với padding textarea. */
+.wf-check-sort-list .compact-check > input[type="checkbox"] {
+  margin-top: 8px !important;
+}
+.wf-check-sort-list .compact-check {
+  grid-template-columns: 30px 26px minmax(0, 1fr) auto auto !important;
+}
+/* v1.53.0: nút × trong compact-check gốc span đến cột cuối để không lệch khi không có zen-ck-pct. */
+.wf-check-sort-list .compact-check > .compact-check-remove {
+  grid-column: 4 / -1;
+  align-self: start;
+  margin-top: 4px;
+}
+.text-btn,
+.settings-toggle {
+  min-height: 24px;
+}
+.progress-explanation > summary {
+  min-height: 24px;
+  box-sizing: border-box;
+  padding-block: 2px;
+}
+/* Thứ tự Tab = thứ tự nhìn: trên điện thoại, nút "Tệp đính kèm" đứng sau các nút trạng thái trong DOM nên cũng nằm dưới chúng. */
+@media (max-width: 700px) {
+  #editor-body .detail-actions .wf-state-choices {
+    order: 0 !important;
+  }
+  #editor-body .detail-actions > .btn {
+    order: 1 !important;
+  }
+}
+
+/* Màn hình cảm ứng (pointer: coarse, gồm cả máy tính bảng): điều khiển chính tối thiểu 44×44px. Nhãn từ khóa, ô chọn, thanh trượt, thanh định dạng và tay nắm Gantt giữ mức 24px (xem ghi chú phát hành).
+   !important vì nhiều quy tắc cũ đặt min-height / height riêng cho từng khối. */
+@media (pointer: coarse) {
+  .btn,
+  .icon-btn,
+  .tab-add,
+  .add-task,
+  .nav,
+  .wf-column-name,
+  .text-btn,
+  .month-event,
+  .work-legend button,
+  .zen-priority-menu button,
+  .compact-check-remove,
+  .zen-check-move,
+  .task-focus-shortcut,
+  .modal-close-pin,
+  .avatar,
+  .workspace-home,
+  select,
+  summary:not(.zen-list-menu > summary),
+  input:not([type]),
+  input[type="text"],
+  input[type="search"],
+  input[type="email"],
+  input[type="number"],
+  input[type="tel"],
+  input[type="url"],
+  input[type="date"],
+  .compact-check textarea {
+    min-height: 44px !important;
+  }
+  .btn,
+  .icon-btn,
+  .tab-add,
+  .avatar,
+  .workspace-home,
+  .compact-check-remove,
+  .zen-check-move,
+  .task-focus-shortcut,
+  .modal-close-pin {
+    min-width: 44px !important;
+  }
+  /* Tay nắm và nút ghim nhỏ trong thẻ / dòng: hit area 44px, bù bằng lề âm để dòng không cao thêm. */
+  .zen-task-pin {
+    min-width: 44px !important;
+    min-height: 44px !important;
+    margin: -3px !important;
+  }
+  .wf-grip {
+    min-width: 44px !important;
+    min-height: 44px !important;
+    margin: -6px !important;
+  }
+  .kanban-options label {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+  #editor.keep-editor .note-unified-options summary,
+  #editor .note-more-settings > summary {
+    min-height: 44px !important;
+  }
+  #editor .modal-close-pin {
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+  }
+}
+/* Thanh bên ở máy tính bảng cảm ứng: ba nút chế độ xem (Kanban, Lịch, Gantt) xếp ba cột, mỗi nút rộng ≥44px (v1.16.6: bỏ Dòng thời gian). */
+@media (pointer: coarse) and (min-width: 701px) {
+  .view-options {
+    display: grid !important;
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+
+/* v1.15.42: danh sách việc gọn. Tên dự án nằm dưới tên việc (thay cho cột Dự án); ngày và ưu tiên là chip bấm để sửa; không còn nhãn "Hạn chót" lặp; việc xong xuống cuối và đổi sang màu chữ phụ.
+   ≥1181px: bảng một dòng mỗi việc (~56px). ≤1180px: mỗi việc một khối lưới 3 dòng (tên + trạng thái / ngày + ưu tiên) thay cho khối dọc 309px ở điện thoại và hàng 114–163px ở máy tính bảng. */
+#main .task-table td.task-name {
+  position: relative !important;
+  padding: 8px 10px 8px 44px !important;
+}
+#main .task-table td.task-name > input[type='checkbox'] {
+  position: absolute !important;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+#main .task-table .zen-row-title {
+  display: block;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--ink);
+  overflow-wrap: anywhere;
+}
+#main .task-table .zen-row-project {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  margin-top: 2px;
+  font-size: 12px;
+  line-height: 1.3;
+  color: var(--zen-text-muted);
+}
+#main .task-table .zen-row-project .dot {
+  flex: none;
+  margin: 0 !important;
+}
+#main .task-table .zen-row-project-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#main .task-table .zen-row-late {
+  flex: none;
+  color: #a5223c;
+  font-weight: 700;
+  white-space: nowrap;
+}
+#main .task-table .zen-row-late::before {
+  content: '·';
+  margin-right: 6px;
+  color: var(--zen-text-muted);
+  font-weight: 400;
+}
+#main .task-table .zen-row-done .zen-row-title {
+  color: var(--zen-text-muted);
+  font-weight: 500;
+  text-decoration: line-through;
+}
+#main .task-table .zen-quick-due label {
+  display: block;
+  width: auto !important;
+  min-height: 0 !important;
+}
+#main .task-table .zen-due-trigger {
+  display: inline-flex !important;
+  width: auto !important;
+  min-width: 0 !important;
+  min-height: 32px !important;
+  gap: 6px;
+  padding: 3px 10px !important;
+  border-radius: 999px !important;
+  font-size: 13px !important;
+  white-space: nowrap;
+}
+#main .task-table .zen-due-trigger::after {
+  font-size: 13px;
+}
+#main .task-table .zen-row-overdue .zen-due-trigger {
+  border-color: #a5223c !important;
+  background: #fff6f8 !important;
+  color: #a5223c !important;
+}
+#main .task-table td.zen-quick-priority-cell {
+  min-width: 0 !important;
+  padding: 8px 10px !important;
+}
+#main .task-table td.zen-quick-priority-cell .zen-priority-picker {
+  display: block;
+  width: auto !important;
+  max-width: 100%;
+  margin: 0 !important;
+}
+#main .task-table td.zen-quick-priority-cell .zen-priority-picker > summary {
+  display: inline-flex !important;
+  justify-content: space-between;
+  gap: 8px;
+  width: auto !important;
+  max-width: 100%;
+  min-height: 32px !important;
+  padding: 3px 10px !important;
+  border-radius: 999px !important;
+  font-size: 13px !important;
+}
+#main .task-table .zen-priority-current {
+  text-align: left;
+}
+#main .task-table .row-progress {
+  min-width: 0;
+}
+.wf-select-hint {
+  margin: 0 0 8px;
+  font-size: 12px;
+  color: var(--zen-text-muted);
+}
+@media (pointer: coarse) {
+  #main .task-table .zen-due-trigger,
+  #main .task-table td.zen-quick-priority-cell .zen-priority-picker > summary {
+    min-height: 44px !important;
+  }
+}
+@media (min-width: 1181px) {
+  #main .task-table {
+    table-layout: fixed;
+  }
+  #main .task-table th:nth-child(2) {
+    width: 132px;
+  }
+  #main .task-table th:nth-child(3) {
+    width: 108px;
+  }
+  #main .task-table th:nth-child(4) {
+    width: 136px;
+  }
+  #main .task-table th:nth-child(5) {
+    width: 276px;
+  }
+  #main .task-table td {
+    padding: 8px 10px;
+    vertical-align: middle;
+  }
+  #main .task-table .zen-row-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+}
+@media (max-width: 1180px) {
+  #main .table-wrap {
+    margin: 0 !important;
+    overflow: visible !important;
+  }
+  #main .task-table,
+  #main .task-table tbody {
+    display: block !important;
+    min-width: 0 !important;
+    width: 100% !important;
+  }
+  #main .task-table thead {
+    display: none !important;
+  }
+  #main .task-table tbody tr[data-task] {
+    display: grid !important;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    column-gap: 8px;
+    row-gap: 6px;
+    align-items: center;
+    padding: 10px 4px !important;
+    border-bottom: 1px solid var(--line);
+  }
+  #main .task-table tbody tr[data-task][hidden] {
+    display: none !important;
+  }
+  #main .task-table tbody tr[data-task] > td {
+    display: block !important;
+    min-width: 0;
+    padding: 0 !important;
+    border: 0 !important;
+  }
+  #main .task-table tbody tr[data-task] > td::before {
+    content: none !important;
+  }
+  #main .task-table tbody tr[data-task] > td.task-name {
+    grid-column: 1 / 3;
+    grid-row: 1 / 3;
+    padding: 0 0 0 34px !important;
+  }
+  #main .task-table tbody tr[data-task] > td.task-name > input[type='checkbox'] {
+    left: 2px;
+  }
+  #main .task-table tbody tr[data-task] > td[data-label='Trạng thái'] {
+    grid-column: 3;
+    grid-row: 1;
+    align-self: start;
+    justify-self: end;
+  }
+  #main .task-table tbody tr[data-task] > td[data-label='Tiến độ'] {
+    grid-column: 3;
+    grid-row: 2;
+    align-self: end;
+    justify-self: end;
+  }
+  #main .task-table .zen-priority-current {
+    overflow: visible;
+    line-height: 1.2;
+    text-overflow: clip;
+    white-space: normal;
+  }
+  #main .task-table .zen-row-title {
+    display: -webkit-box;
+    overflow: hidden;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+  #main .task-table tbody tr[data-task] > td.zen-quick-due {
+    grid-column: 1;
+    grid-row: 3;
+  }
+  #main .task-table tbody tr[data-task] > td.zen-quick-priority-cell {
+    grid-column: 2 / 4;
+    grid-row: 3;
+  }
+}
+
+/* v1.15.43: một kênh nhắc việc đến hạn. Dòng tóm tắt ở đầu hộp thoại Thông báo cộng ra đúng số trên chuông. */
+.notice-summary {
+  margin: 0 0 12px;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--zen-text-muted);
+}
+.notification-bell .notification-extra {
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  width: 10px;
+  height: 10px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: #2e7d5b;
+}
+
+/* v1.15.45: ô "Hiện checklist trên thẻ" bị khóa khi Thẻ gọn đang ẩn checklist; chú thích đi kèm. */
+.kanban-options .wf-option-hint { display: block; margin: -2px 0 4px 28px; font-size: 12px; line-height: 1.4; color: var(--zen-text-muted); }
+.kanban-options label:has(> input:disabled) { color: var(--zen-text-muted); cursor: not-allowed; }
+
+/* v1.15.46: khung báo lỗi đồng bộ có dòng phụ trấn an dưới nhãn chính. */
+#zen-sync-feedback .zen-sync-text { display: grid; gap: 2px; flex: 1 1 220px; min-width: 0; }
+#zen-sync-feedback .zen-sync-text small { font-size: 12px; line-height: 1.4; color: var(--zen-text-muted); }
+
+/* v1.15.47: các hộp thoại còn lại đạt vùng chạm 44px trên cảm ứng (nút đóng lời chào; nút tháng trước/sau của bảng chọn ngày). */
+@media (pointer: coarse) {
+  .welcome-dialog .welcome-close { width: 44px !important; height: 44px !important; min-width: 44px !important; min-height: 44px !important; flex-basis: 44px !important; }
+  .time-picker-dialog .picker-month button { width: 44px; height: 44px; min-width: 44px; min-height: 44px; }
+}
+
+/* v1.15.48: tay nắm Gantt trên cảm ứng — vùng chạm nới ra (xem dist/gantt.js), có vạch cầm nhìn thấy ở hai đầu thanh. */
+.gantt-port-hit { touch-action: none; cursor: crosshair; }
+/* v1.48.0: tay nắm đổi đường nối Gantt — mờ khi không trỏ, rõ khi di chuột hoặc lấy tiêu điểm bằng bàn phím. */
+.gantt-bend { fill: #fff; stroke: #9876b7; stroke-width: 1.5; cursor: col-resize; opacity: .55; touch-action: none; transition: opacity .15s, stroke-width .15s; }
+.gantt-bend-hit { cursor: col-resize; touch-action: none; }
+.gantt-bend:hover, .gantt-bend:focus-visible { opacity: 1; stroke-width: 2.5; outline: none; }
+.gantt-grip { fill: #3d294a; opacity: 0.45; pointer-events: none; }
+/* v1.15.49: Lịch dạng danh sách (Agenda) cho màn hình vừa; nút đổi kiểu Danh sách | Lưới tháng. */
+.month-controls:has(.zen-cal-mode) { flex-wrap: wrap; row-gap: 10px; }
+.zen-cal-mode { display: inline-flex; margin-left: auto; padding: 3px; border: 1px solid var(--line); border-radius: 999px; background: var(--paper); }
+.zen-cal-mode button { min-height: 38px; padding: 0 16px; border: 0; border-radius: 999px; background: transparent; color: var(--zen-text-muted); font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; }
+.zen-cal-mode button[aria-pressed='true'] { background: color-mix(in srgb, var(--brand-purple) 13%, var(--paper)); color: var(--zen-text-accent); }
+.zen-cal-mode button:focus-visible { outline: 2px solid var(--zen-text-accent); outline-offset: 1px; }
+.zen-month-agenda { display: grid; gap: 14px; margin: 0 0 20px; }
+.zen-ma-day { overflow: hidden; border: 1px solid var(--surface-border); border-radius: var(--radius-lg); background: var(--paper); }
+.zen-ma-day.today { border-color: var(--brand-purple); box-shadow: 0 0 0 1px var(--brand-purple); }
+.zen-ma-date { display: flex; align-items: center; gap: 10px; margin: 0; padding: 12px 18px; border-bottom: 1px solid var(--line); background: var(--surface-base); color: var(--ink); font: 600 14px/1.4 var(--sans); }
+.zen-ma-date em { padding: 2px 10px; border-radius: 999px; background: var(--brand-purple); color: #fff; font-size: 12px; font-style: normal; }
+.zen-ma-day ul { margin: 0; padding: 0; list-style: none; }
+.zen-ma-day li + li { border-top: 1px solid var(--line); }
+.zen-ma-item { display: grid; grid-template-columns: 64px minmax(0, 1fr) auto; align-items: center; gap: 12px; width: 100%; min-height: 56px; padding: 10px 18px 10px 14px; border: 0; border-left: 4px solid var(--event-color, var(--brand-purple)); border-radius: 0; background: transparent; color: var(--ink); font: inherit; text-align: left; cursor: pointer; }
+.zen-ma-item:hover { background: var(--surface-base); }
+.zen-ma-item:focus-visible { outline: 2px solid var(--zen-text-accent); outline-offset: -2px; }
+.zen-ma-when { color: var(--zen-text-muted); font-size: 13px; font-variant-numeric: tabular-nums; }
+.zen-ma-body { display: grid; gap: 2px; min-width: 0; }
+.zen-ma-body strong { font-weight: 600; overflow-wrap: anywhere; }
+.zen-ma-body small { color: var(--zen-text-muted); font-size: 12px; line-height: 1.5; }
+.zen-ma-pct { color: var(--zen-text-accent); font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.zen-ma-empty { margin: 0; padding: 28px 20px; border: 1px dashed var(--surface-border); border-radius: var(--radius-lg); color: var(--zen-text-muted); text-align: center; }
+@media (pointer: coarse) { .zen-cal-mode button { min-height: 44px; } .zen-ma-item { min-height: 60px; } }
+
+/* v1.15.51: ghim ghi chú — hai thẻ có biểu tượng, tiêu đề, mô tả và nút; trạng thái đang ghim nhìn thấy ngay.
+   Bộ chọn dài hơn quy tắc v1.9.10 ở style.css để thắng mà không cần `!important`. Thay thế các quy tắc `.zen-note-pin-panel` cũ ở workflow111.css (đã gỡ, bớt `!important`). */
+#editor.keep-editor .note-composer .zen-note-pin-panel {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 0 0 20px;
+  padding: 0;
+  border: 0;
+  background: none;
+}
+#editor.keep-editor .note-composer .zen-note-pin-panel .zen-editor-pin-row {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: 14px;
+  margin: 0;
+  padding: 16px;
+  min-width: 0;
+  border: 1px solid #e2d6eb;
+  border-radius: 16px;
+  background: #fffdfe;
+  transition: border-color 0.18s, background-color 0.18s, box-shadow 0.18s;
+}
+#editor.keep-editor .note-composer .zen-note-pin-panel .zen-editor-pin-row:has(.zen-editor-pin[aria-pressed='true']) {
+  border-color: #b99ad3;
+  background: #f6effc;
+  box-shadow: 0 2px 10px #6e3fa01a;
+}
+.zen-pin-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-width: 0;
+}
+.zen-pin-icon {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 13px;
+  background: #f1e9f8;
+  color: var(--zen-text-accent);
+  transition: background 0.18s, color 0.18s, transform 0.18s;
+}
+.zen-editor-pin-row:has(.zen-editor-pin[aria-pressed='true']) .zen-pin-icon {
+  background: var(--zen-primary-gradient);
+  color: #fff;
+  transform: rotate(-8deg);
+}
+.zen-pin-text {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+}
+.zen-pin-title {
+  font: 650 14px/1.4 var(--sans);
+  color: #3b2d4c;
+}
+#editor.keep-editor .note-composer .zen-note-pin-panel .zen-pin-text .zen-editor-pin-hint {
+  text-align: left;
+  line-height: 1.55;
+  font-size: 12px;
+  color: var(--zen-text-muted);
+}
+#editor.keep-editor .note-composer .zen-note-pin-panel .zen-editor-pin {
+  align-self: stretch;
+  max-width: none;
+  min-height: 44px;
+  border-radius: 12px;
+  white-space: normal;
+  background: #fff;
+  border: 1px solid var(--zen-field-border);
+  color: var(--zen-text-accent);
+}
+#editor.keep-editor .note-composer .zen-note-pin-panel .zen-editor-pin:hover {
+  background: #f6effc;
+}
+#editor.keep-editor .note-composer .zen-note-pin-panel .zen-editor-pin[aria-pressed='true'] {
+  background: #efe3fa;
+  border-color: #a77fcb;
+  color: #573477;
+}
+#editor.keep-editor .note-composer .zen-note-pin-panel .zen-editor-pin:focus-visible {
+  outline: 3px solid #6e3fa0;
+  outline-offset: 2px;
+}
+@media (max-width: 520px) {
+  #editor.keep-editor .note-composer .zen-note-pin-panel {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  #editor.keep-editor .note-composer .zen-note-pin-panel .zen-editor-pin-row {
+    padding: 14px;
+    gap: 12px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #editor.keep-editor .note-composer .zen-note-pin-panel .zen-editor-pin-row,
+  .zen-pin-icon {
+    transition: none;
+  }
+  .zen-editor-pin-row:has(.zen-editor-pin[aria-pressed='true']) .zen-pin-icon {
+    transform: none;
+  }
+}
+
+/* v1.15.52: việc đã hoàn thành "chìm" xuống để mắt không phải chú ý tới nữa.
+   Không dùng `opacity` (làm chữ mờ, hỏng độ tương phản): rút màu (grayscale), nền xám nhạt, bỏ bóng, chữ tiêu đề gạch ngang,
+   nhãn và thanh tiến độ chuyển xám. Đưa chuột / bàn phím tới thẻ thì thẻ hiện lại đầy đủ để vẫn đọc và kéo thả được.
+   Màu khai báo bằng biến để chế độ tối (v1.16.0) chỉ cần đổi biến. Mọi chữ giữ độ tương phản >= 4,5:1. */
+:root {
+  --zen-done-bg: #f3f0f6;
+  --zen-done-border: #e4dee9;
+  --zen-done-ink: #5f5070;
+  --zen-done-strike: #a99bb6;
+  --zen-done-chip: #ebe8ee;
+  --zen-done-fill: #9b92a6;
+}
+#main .column[data-column='Done'] .task-card {
+  background: var(--zen-done-bg);
+  border-color: var(--zen-done-border);
+  box-shadow: none;
+  filter: grayscale(0.7);
+  transition: filter 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
+}
+#main .column[data-column='Done'] .task-card h3 {
+  text-decoration: line-through;
+  text-decoration-color: var(--zen-done-strike);
+  text-decoration-thickness: 1px;
+}
+#main .column[data-column='Done'] .task-card :is(.tag, .matrix-chip, .label-chips > *, .wf-card-keywords > *) {
+  background: var(--zen-done-chip);
+  color: var(--zen-done-ink);
+  border-color: transparent;
+}
+#main .column[data-column='Done'] .task-card .progress > span {
+  background: var(--zen-done-fill);
+}
+#main .column[data-column='Done'] .task-card :is(.task-card-deadline, .task-card-progress-meta, .task-card-progress-meta *) {
+  color: var(--zen-done-ink);
+}
+#main .column[data-column='Done'] .task-card:is(:hover, :focus-visible, :focus-within) {
+  filter: none;
+  background: var(--paper);
+  box-shadow: 0 8px 22px #392a4818;
+}
+#main .column[data-column='Done'] .task-card:is(:hover, :focus-visible, :focus-within) h3 {
+  text-decoration: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  #main .column[data-column='Done'] .task-card {
+    transition: none;
+  }
+}
+
+/* v1.15.53: vùng xóa việc / xóa dự án — biểu tượng + lời giải thích + nút viền đỏ nhạt (không phải khối đỏ đặc).
+   Chữ nút #a02a39 trên nền trắng đạt tương phản > 7:1; vùng chạm >= 44px; trên điện thoại nút rộng hết hàng. */
+#editor .zen-danger-zone {
+  display: flex;
+  align-items: center;
+  justify-content: center; /* chữ chiếm hết chỗ trống nên không đổi bố cục; giữ đúng khẳng định của test workflow111 cũ */
+  gap: 14px;
+  margin: 20px 0 4px;
+  padding: 14px 16px;
+  border: 1px solid #f0dde1;
+  border-radius: 16px;
+  background: #fffafb;
+  text-align: left;
+}
+#editor .zen-danger-icon {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: #fbe9ec;
+  color: #a02a39;
+}
+#editor .zen-danger-text {
+  flex: 1 1 auto;
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+#editor .zen-danger-text strong {
+  font: 650 14px/1.4 var(--sans);
+  color: #3b2d4c;
+}
+#editor .zen-danger-text span {
+  font-size: 12px;
+  line-height: 1.55;
+  color: var(--zen-text-muted);
+}
+#editor .zen-danger-zone .zen-danger-button {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+  min-width: 0;
+  margin: 0;
+  padding: 10px 16px;
+  border: 1px solid #e3a9b1;
+  border-radius: 12px;
+  background: #fff;
+  color: #a02a39;
+  font-weight: 650;
+  box-shadow: none;
+  transition: background-color 0.18s, border-color 0.18s;
+}
+#editor .zen-danger-zone .zen-danger-button:hover {
+  background: #fdecee;
+  border-color: #c9606d;
+}
+#editor .zen-danger-zone .zen-danger-button:focus-visible {
+  outline: 3px solid #a02a39;
+  outline-offset: 2px;
+}
+@media (max-width: 520px) {
+  #editor .zen-danger-zone {
+    flex-wrap: wrap;
+    padding: 14px;
+  }
+  #editor .zen-danger-zone .zen-danger-text {
+    flex-basis: calc(100% - 56px);
+  }
+  #editor .zen-danger-zone .zen-danger-button {
+    flex: 1 1 100%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #editor .zen-danger-zone .zen-danger-button {
+    transition: none;
+  }
+}
+
+/* v1.16.0: mục "Giao diện" trong Cài đặt. Màu lấy từ biến nên chế độ tối/tương phản cao tự đổi theo. */
+#editor .settings-theme {
+  display: grid;
+  gap: 12px;
+  margin: 18px 0;
+}
+#editor .settings-theme h3 {
+  margin: 0;
+}
+#editor .zen-theme-group {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+#editor .zen-theme-group legend {
+  padding: 0;
+  margin-bottom: 8px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+/* v1.21.1: danh sách một cột, có icon, mô tả và dấu tích ở ô đang chọn (mẫu "Appearance"). */
+#editor .zen-theme-list {
+  display: grid;
+  gap: 6px;
+  padding: 6px;
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: var(--paper);
+}
+#editor .zen-theme-choice {
+  position: relative;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 36px minmax(0, 1fr) 24px;
+  align-items: center;
+  gap: 12px;
+  min-height: 52px;
+  padding: 8px 12px;
+  border-radius: 14px;
+  color: var(--ink);
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.16s ease;
+}
+#editor .zen-theme-choice:hover {
+  background: color-mix(in srgb, var(--brand-purple) 6%, transparent);
+}
+#editor .zen-theme-choice:active {
+  transform: scale(0.99);
+}
+#editor .zen-theme-choice:has(input:checked) {
+  background: color-mix(in srgb, var(--brand-purple) 11%, var(--paper));
+}
+#editor .zen-theme-choice:has(input:focus-visible) {
+  outline: 3px solid var(--zen-text-accent);
+  outline-offset: 2px;
+}
+/* Ô radio thật phủ kín cả dòng nhưng trong suốt: bấm vào đâu trên dòng cũng chọn đúng lựa chọn, và bàn phím/trình đọc màn hình vẫn dùng radio thật. */
+#editor .zen-theme-choice input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 1;
+}
+#editor .zen-theme-icon {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--brand-purple) 10%, var(--paper));
+  color: var(--brand-purple);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+#editor .zen-theme-icon svg {
+  width: 20px;
+  height: 20px;
+}
+#editor .zen-theme-choice:has(input:checked) .zen-theme-icon {
+  background: var(--brand-purple);
+  color: #fff;
+}
+#editor .zen-theme-text {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+#editor .zen-theme-text strong {
+  font-size: 15px;
+  line-height: 1.3;
+  font-weight: 700;
+  color: var(--ink);
+}
+#editor .zen-theme-text small {
+  font-size: 12px;
+  line-height: 1.35;
+  color: var(--muted);
+}
+#editor .zen-theme-check {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  color: transparent;
+  transition: color 0.2s ease, background-color 0.2s ease, transform 0.2s cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+#editor .zen-theme-tick {
+  width: 16px;
+  height: 16px;
+}
+#editor .zen-theme-choice:has(input:checked) .zen-theme-check {
+  color: #fff;
+  background: var(--brand-purple);
+  transform: scale(1.05);
+}
+@media (prefers-reduced-motion: reduce) {
+  #editor .zen-theme-choice,
+  #editor .zen-theme-icon,
+  #editor .zen-theme-check {
+    transition: none;
+  }
+}
+
+/* v1.17.1: thông báo gọn, dễ quét. Hộp thoại Thông báo gom việc theo nhóm (Quá hạn / Sắp đến hạn / Quan trọng / Khác), mỗi việc một hàng; thanh nhắc hạn và hộp "Công việc cần chú ý" cùng bảng màu theo mức độ.
+   Màu mức độ: quá hạn (hồng đỏ), sắp đến hạn (hổ phách), quan trọng (tím), khác (xanh lá). Không dùng !important; chọn theo #editor để thắng các luật cũ của .notice-item. */
+#editor .notice-stats { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 10px; }
+#editor .notice-stats span { display: inline-flex; align-items: baseline; gap: 5px; padding: 5px 12px; border-radius: 999px; font-size: 13px; border: 1px solid transparent; }
+#editor .notice-stats b { font-size: 16px; }
+#editor .notice-stats [data-kind="late"] { color: #a8244b; background: #fff0f4; border-color: #f2c4d1; }
+#editor .notice-stats [data-kind="soon"] { color: #8a5200; background: #fff6e3; border-color: #efd7a0; }
+#editor .notice-stats [data-kind="important"] { color: #5f3a93; background: #f4edfb; border-color: #dccbef; }
+#editor .notice-list { display: grid; gap: 8px; margin: 10px 0 16px; }
+#editor .notice-group { display: flex; align-items: center; gap: 8px; margin: 14px 0 2px; font-size: 13px; letter-spacing: 0.02em; color: var(--zen-text-muted); }
+#editor .notice-group small { font-size: 12px; padding: 1px 8px; border-radius: 999px; background: #f1ebf6; color: #6a5a78; }
+#editor .notice-group .notice-dot,
+#editor .notice-item .notice-dot { flex: none; width: 9px; height: 9px; border-radius: 50%; background: #7a6a88; }
+#editor .notice-group[data-kind="late"] .notice-dot, #editor .notice-item[data-kind="late"]::before { background: #c0345c; }
+#editor .notice-group[data-kind="soon"] .notice-dot, #editor .notice-item[data-kind="soon"]::before { background: #d98a1d; }
+#editor .notice-group[data-kind="important"] .notice-dot, #editor .notice-item[data-kind="important"]::before { background: #7c4fb3; }
+#editor .notice-group[data-kind="other"] .notice-dot, #editor .notice-item[data-kind="other"]::before { background: #3f9a72; }
+#editor .notice-list .notice-item { position: relative; display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "title tag" "meta tag"; align-items: center; gap: 2px 12px; padding: 11px 38px 11px 22px; border-radius: 14px; border: 1px solid var(--line); background: #fff; text-align: left; text-decoration: none; transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease; }
+#editor .notice-list .notice-item::before { content: ""; position: absolute; left: 9px; top: 50%; width: 6px; height: 28px; border-radius: 6px; transform: translateY(-50%); }
+#editor .notice-list .notice-item::after { content: "›"; position: absolute; right: 14px; top: 50%; transform: translateY(-50%); font-size: 22px; line-height: 1; color: #9a8aa8; }
+#editor .notice-list .notice-item:hover { transform: translateY(-1px); border-color: #cdbadf; box-shadow: 0 6px 18px #70538814; }
+#editor .notice-list .notice-item:focus-visible { outline: 2px solid #7950c8; outline-offset: 2px; }
+#editor .notice-list .notice-item .notice-title { grid-area: title; font-size: 15px; font-weight: 650; line-height: 1.4; color: var(--ink); }
+#editor .notice-list .notice-item small { grid-area: meta; font-size: 12px; line-height: 1.45; color: var(--zen-text-muted); }
+#editor .notice-list .notice-item .notice-tag { grid-area: tag; justify-self: end; align-self: start; padding: 2px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; white-space: nowrap; color: #6a5a78; background: #f4eff8; }
+#editor .notice-list .notice-item[data-kind="late"] .notice-tag { color: #a8244b; background: #fff0f4; }
+#editor .notice-list .notice-item[data-kind="soon"] .notice-tag { color: #8a5200; background: #fff6e3; }
+#editor .notice-list .notice-item[data-kind="important"] .notice-tag { color: #5f3a93; background: #f4edfb; }
+#editor .notice-list .notice-item.release-notice { grid-template-areas: "title title" "meta meta" "action action"; padding-right: 22px; background: #f6faf7; border-color: #cfe5d8; }
+#editor .notice-list .notice-item.release-notice::after { content: none; }
+#editor .notice-list .notice-item.release-notice .release-actions { grid-area: action; display: flex; flex-wrap: wrap; gap: 8px; justify-self: start; margin-top: 8px; }
+#editor .notice-list .notice-item.release-notice .release-actions .btn { margin: 0; }
+#editor .notice-list .notice-item .notice-tag svg { width: 14px; height: 14px; vertical-align: -2px; margin-right: 3px; }
+#editor .notice-list .notice-item[hidden] { display: none; }
+#editor .notice-more { justify-self: center; min-height: 44px; min-width: 44px; padding: 8px 18px; border: 1px dashed #cdbadf; border-radius: 999px; background: transparent; color: var(--zen-text-accent); font: inherit; font-size: 13px; cursor: pointer; }
+#editor .notice-more:hover { background: #f6f0fb; }
+#editor .notice-empty { display: grid; justify-items: center; gap: 4px; margin: 10px 0; padding: 28px 16px; border: 1px dashed #d9cce6; border-radius: 16px; text-align: center; color: var(--zen-text-muted); }
+#editor .notice-empty svg { width: 34px; height: 34px; color: #3f9a72; }
+#editor .notice-empty strong { color: var(--ink); font-size: 15px; }
+#editor .notice-summary { padding: 10px 12px; border-radius: 12px; background: #faf7fd; border: 1px solid #eee5f4; }
+#editor .notice-read-toolbar .btn { min-height: 44px; padding: 8px 16px; border-radius: 999px; font-size: 13px; }
+@media (max-width: 600px) {
+  #editor .notice-list .notice-item { grid-template-columns: minmax(0, 1fr); grid-template-areas: "title" "meta" "tag"; padding: 11px 34px 11px 22px; }
+  #editor .notice-list .notice-item .notice-tag { justify-self: start; margin-top: 4px; }
+  #editor .notice-read-toolbar .btn { width: 100%; }
+}
+
+/* Hộp "Công việc cần chú ý": thẻ chuyển nhóm có số lượng rõ, hàng việc có vạch màu theo nhóm. */
+.due-work-tabs { display: flex; gap: 8px; margin: 6px 0 14px; padding: 4px; border-radius: 999px; background: #f4eff8; width: fit-content; max-width: 100%; }
+.due-work-tabs .btn { min-height: 44px; padding: 8px 16px; border: 0; border-radius: 999px; background: transparent; box-shadow: none; font-size: 13px; font-weight: 600; color: #6a5a78; }
+.due-work-tabs .btn[data-due-list="late"] { color: #a8244b; }
+.due-work-tabs .btn[data-due-list="soon"] { color: #8a5200; }
+.due-work-tabs .btn.primary { color: #fff; background: #7950c8; }
+.due-work-tabs .btn.primary[data-due-list="late"] { background: #c0345c; }
+.due-work-tabs .btn.primary[data-due-list="soon"] { background: #c47a12; }
+.due-work-list { display: grid; gap: 8px; }
+.due-work-list .work-task-row { position: relative; display: grid; gap: 3px; width: 100%; padding: 11px 14px 11px 22px; border: 1px solid var(--line); border-radius: 14px; background: #fff; text-align: left; transition: transform 0.16s ease, box-shadow 0.16s ease, border-color 0.16s ease; }
+.due-work-list .work-task-row::before { content: ""; position: absolute; left: 9px; top: 50%; width: 6px; height: 26px; border-radius: 6px; transform: translateY(-50%); background: #7a6a88; }
+.due-work-list[data-tone="late"] .work-task-row::before { background: #c0345c; }
+.due-work-list[data-tone="soon"] .work-task-row::before { background: #d98a1d; }
+.due-work-list .work-task-row:hover { transform: translateY(-1px); border-color: #cdbadf; box-shadow: 0 6px 18px #70538814; }
+.due-work-list .work-task-row strong { font-size: 15px; line-height: 1.4; }
+.due-work-list .work-task-row small { font-size: 12px; color: var(--zen-text-muted); }
+
+/* Thanh nhắc hạn: biểu tượng trong vòng tròn tô màu theo mức độ, nút chính rõ hơn nút phụ. */
+.due-alert-strip[data-tone] svg { flex: none; }
+.due-alert-strip[data-tone="late"] { border-color: #f0c2cf; background: #fff6f8; }
+.due-alert-strip[data-tone="late"] > span > svg { color: #b4234e; }
+.due-alert-strip[data-tone="soon"] { border-color: #efd9a8; background: #fffaf0; }
+.due-alert-strip[data-tone="soon"] > span > svg { color: #96600a; }
+.due-alert-strip > span { display: flex; align-items: center; gap: 10px; }
+.due-alert-strip > span > svg { width: 34px; height: 34px; padding: 7px; border-radius: 50%; background: #ffffffb3; }
+.due-alert-strip strong { font-size: 14px; line-height: 1.4; }
+.due-alert-strip [data-open-due] { font-weight: 650; }
+@media (prefers-reduced-motion: reduce) {
+  #editor .notice-list .notice-item, .due-work-list .work-task-row { transition: none; }
+  #editor .notice-list .notice-item:hover, .due-work-list .work-task-row:hover { transform: none; }
+}
+
+/* v1.17.2: "Ghi chú ghim nhanh" ở thanh bên. Mỗi ghi chú là một hàng có ô màu theo màu ghi chú, tên (1 dòng) và dòng xem trước; nút bỏ ghim dạng biểu tượng; lối tắt "Tất cả ghi chú".
+   Chọn theo #side-quick-notes để thắng các luật cũ của .zen-quick-note-* (workflow111.css) mà không dùng !important. */
+#side-quick-notes { margin: 14px 0; padding: 12px 8px 8px; border: 1px solid var(--line); border-radius: 16px; background: #fbf8fe; }
+#side-quick-notes .navlabel { display: flex; align-items: center; justify-content: space-between; gap: 6px; padding: 0 4px 8px; color: var(--zen-text-muted); font-size: 11.5px; font-weight: 650; letter-spacing: 0; white-space: nowrap; }
+#side-quick-notes .navlabel > span { display: inline-flex; align-items: center; gap: 7px; min-width: 0; }
+#side-quick-notes .navlabel .ui-icon { width: 15px; height: 15px; color: #8c68ad; flex: none; }
+#side-quick-notes .navlabel small { padding: 1px 8px; border-radius: 999px; background: #efe7f7; color: #5f4a76; font-size: 11px; font-weight: 650; }
+#side-quick-notes .zen-quick-note-list { display: grid; gap: 4px; }
+#side-quick-notes .zen-quick-note-item { display: flex; align-items: center; gap: 2px; min-width: 0; border-radius: 12px; border: 1px solid transparent; background: transparent; transition: background-color 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease; }
+#side-quick-notes .zen-quick-note-item:hover,
+#side-quick-notes .zen-quick-note-item:focus-within { background: #fff; border-color: #e3d6ef; box-shadow: 0 4px 14px #70538812; }
+#side-quick-notes .zen-quick-note-item > button:first-child { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; min-height: 48px; padding: 6px 4px 6px 6px; border-radius: 12px; text-align: left; color: var(--ink); }
+#side-quick-notes .zen-quick-note-badge { display: grid; place-items: center; flex: none; width: 32px; height: 32px; border-radius: 10px; color: var(--note-color, #7950c8); background: color-mix(in srgb, var(--note-color, #7950c8) 14%, #fff); border: 1px solid color-mix(in srgb, var(--note-color, #7950c8) 28%, #fff); }
+#side-quick-notes .zen-quick-note-badge svg { width: 17px; height: 17px; }
+#side-quick-notes .zen-quick-note-text { display: grid; gap: 1px; min-width: 0; flex: 1; }
+#side-quick-notes .zen-quick-note-title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; font-weight: 650; line-height: 1.35; }
+#side-quick-notes .zen-quick-note-text small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11.5px; line-height: 1.35; color: var(--zen-text-muted); }
+#side-quick-notes .zen-quick-note-item > button:last-child { display: grid; place-items: center; flex: none; width: 44px; min-height: 44px; border-radius: 10px; color: #7b6a8d; }
+#side-quick-notes .zen-quick-note-item > button:last-child svg { width: 15px; height: 15px; }
+#side-quick-notes .zen-quick-note-item > button:last-child:hover { color: #873f59; background: #f9eaf0; }
+#side-quick-notes .zen-quick-note-all { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; min-height: 44px; margin-top: 4px; border-radius: 10px; font-size: 12px; font-weight: 600; color: var(--zen-text-accent); }
+#side-quick-notes .zen-quick-note-all:hover { background: #f1e9f8; }
+#side-quick-notes button:focus-visible { outline: 2px solid #7950c8; outline-offset: 2px; }
+@media (pointer: fine) { #side-quick-notes .zen-quick-note-item > button:last-child { width: 34px; } }
+@media (prefers-reduced-motion: reduce) { #side-quick-notes .zen-quick-note-item { transition: none; } }
+
+/* v1.19.3: "Ghim công việc" ở thanh bên, nằm trên "Ghi chú ghim nhanh", cùng kiểu thẻ: tối đa 3 việc, ô màu theo dự án, nút bỏ ghim dạng biểu tượng, nút xem tất cả.
+   Chọn theo #side-pinned-tasks để thắng các luật cũ của .side-pinned-task* (workflow111.css) mà không dùng !important. */
+#side-pinned-tasks { margin: 14px 0 0; padding: 12px 8px 8px; border: 1px solid var(--line); border-radius: 16px; background: #fbf8fe; }
+#side-pinned-tasks .navlabel { display: flex; align-items: center; justify-content: space-between; gap: 6px; padding: 0 4px 8px; color: var(--zen-text-muted); font-size: 11.5px; font-weight: 650; letter-spacing: 0; white-space: nowrap; }
+#side-pinned-tasks .navlabel > span { display: inline-flex; align-items: center; gap: 7px; min-width: 0; }
+#side-pinned-tasks .navlabel .ui-icon { width: 15px; height: 15px; color: #8c68ad; flex: none; }
+#side-pinned-tasks .navlabel small { padding: 1px 8px; border-radius: 999px; background: #efe7f7; color: #5f4a76; font-size: 11px; font-weight: 650; }
+#side-pinned-tasks .zen-pin-task-list { display: grid; gap: 4px; }
+#side-pinned-tasks .zen-pin-task-item { display: flex; align-items: center; gap: 2px; min-width: 0; border-radius: 12px; border: 1px solid transparent; background: transparent; transition: background-color 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease; }
+#side-pinned-tasks .zen-pin-task-item:hover,
+#side-pinned-tasks .zen-pin-task-item:focus-within { background: #fff; border-color: #e3d6ef; box-shadow: 0 4px 14px #70538812; }
+#side-pinned-tasks .zen-pin-task-item > button:first-child { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; min-height: 48px; padding: 6px 4px 6px 6px; border-radius: 12px; text-align: left; color: var(--ink); }
+#side-pinned-tasks .zen-pin-task-badge { display: grid; place-items: center; flex: none; width: 32px; height: 32px; border-radius: 10px; color: var(--task-color, #7950c8); background: color-mix(in srgb, var(--task-color, #7950c8) 14%, #fff); border: 1px solid color-mix(in srgb, var(--task-color, #7950c8) 28%, #fff); }
+#side-pinned-tasks .zen-pin-task-badge svg { width: 17px; height: 17px; }
+#side-pinned-tasks .zen-pin-task-text { display: grid; gap: 1px; min-width: 0; flex: 1; }
+#side-pinned-tasks .zen-pin-task-title { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; font-weight: 650; line-height: 1.35; }
+#side-pinned-tasks .zen-pin-task-text small { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 11.5px; line-height: 1.35; color: var(--zen-text-muted); }
+#side-pinned-tasks .zen-pin-task-item > button:last-child { display: grid; place-items: center; flex: none; width: 44px; min-height: 44px; border-radius: 10px; color: #7b6a8d; }
+#side-pinned-tasks .zen-pin-task-item > button:last-child svg { width: 15px; height: 15px; }
+#side-pinned-tasks .zen-pin-task-item > button:last-child:hover { color: #873f59; background: #f9eaf0; }
+#side-pinned-tasks .zen-pin-task-all { display: flex; align-items: center; justify-content: center; gap: 6px; width: 100%; min-height: 44px; margin-top: 4px; border-radius: 10px; font-size: 12px; font-weight: 600; color: var(--zen-text-accent); }
+#side-pinned-tasks .zen-pin-task-all:hover { background: #f1e9f8; }
+#side-pinned-tasks button:focus-visible { outline: 2px solid #7950c8; outline-offset: 2px; }
+@media (pointer: fine) { #side-pinned-tasks .zen-pin-task-item > button:last-child { width: 34px; } }
+@media (prefers-reduced-motion: reduce) { #side-pinned-tasks .zen-pin-task-item { transition: none; } }
+#side-pinned-tasks .zen-pin-task-list.is-expanded { max-height: 264px; overflow-y: auto; overscroll-behavior: contain; }
+@media (max-width: 700px) { #side-pinned-tasks .zen-pin-task-list.is-expanded { max-height: 220px; } }
+
+/* v1.17.3: "Tất cả công việc" — chip lọc nhanh có số lượng và bảng dễ quét hơn (trạng thái thẳng hàng có chấm màu, hàng quá hạn tô nhẹ, hàng nổi nhẹ khi rê chuột / có tiêu điểm).
+   Không dùng !important; chọn theo #main để thắng luật cũ. Chip cuộn ngang trên điện thoại. */
+#main .zen-task-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 14px; }
+#main .zen-task-chip { display: inline-flex; align-items: center; gap: 7px; min-height: 44px; padding: 6px 14px; border: 1px solid var(--line); border-radius: 999px; background: #fff; font: inherit; font-size: 13px; font-weight: 600; color: #5a4a6c; cursor: pointer; transition: background-color 0.16s ease, border-color 0.16s ease, color 0.16s ease; }
+#main .zen-task-chip b { min-width: 22px; padding: 1px 7px; border-radius: 999px; background: #f1ebf6; font-size: 12px; text-align: center; color: #5a4a6c; }
+#main .zen-task-chip:hover { border-color: #cdbadf; background: #f8f3fc; }
+#main .zen-task-chip:focus-visible { outline: 2px solid #7950c8; outline-offset: 2px; }
+#main .zen-task-chip[aria-pressed="true"] { border-color: #7950c8; box-shadow: inset 0 0 0 1px #7950c8; background: #efe6fb; color: #3f2570; }
+#main .zen-task-chip[aria-pressed="true"] b { background: #d9c8f2; color: #3f2570; }
+#main .zen-task-chip[data-kind="overdue"]:not([aria-pressed="true"]) { color: #a8244b; }
+#main .zen-task-chip[data-kind="overdue"]:not([aria-pressed="true"]) b { background: #fff0f4; color: #a8244b; }
+#main .zen-task-chip[data-kind="overdue"][aria-pressed="true"] { border-color: #c0345c; box-shadow: inset 0 0 0 1px #c0345c; background: #ffe3ea; color: #8a1c3d; }
+#main .zen-task-chip[data-kind="overdue"][aria-pressed="true"] b { background: #f9c6d3; color: #8a1c3d; }
+#main .task-table td[data-label="Trạng thái"] .status { display: inline-flex; align-items: center; gap: 7px; min-width: 116px; justify-content: flex-start; padding: 4px 11px; border-radius: 999px; font-size: 12.5px; font-weight: 600; white-space: nowrap; }
+#main .task-table td[data-label="Trạng thái"] .status::before { content: ""; flex: none; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+#main .task-table tbody tr { transition: background-color 0.14s ease; }
+#main .task-table tbody tr:hover,
+#main .task-table tbody tr:focus-visible { background: #faf6fe; }
+#main .task-table tbody tr.zen-row-overdue { background: linear-gradient(90deg, #fff4f7, transparent 45%); }
+#main .task-table tbody tr.zen-row-overdue:hover { background: linear-gradient(90deg, #ffeaf0, #faf6fe 55%); }
+#main .task-table tbody tr:focus-visible { outline: 2px solid #7950c8; outline-offset: -2px; }
+#main .task-table thead th { font-size: 11.5px; letter-spacing: 0.06em; }
+#main .task-table .zen-priority-current { max-width: 190px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+@media (max-width: 1180px) {
+  #main .task-table tbody tr.zen-row-overdue { background: #fff6f8; }
+}
+@media (max-width: 700px) {
+  #main .zen-task-chips { flex-wrap: nowrap; overflow-x: auto; margin-inline: -4px; padding: 2px 4px 6px; scrollbar-width: none; }
+  #main .zen-task-chip { flex: none; }
+}
+@media (prefers-reduced-motion: reduce) { #main .zen-task-chip, #main .task-table tbody tr { transition: none; } }
+
+/* v1.17.4: checklist trong hộp công việc — mỗi mục là một thẻ bo tròn nền nhạt; mục xong đổi sang màu "hoàn thành"; nút ↑/↓/× gom một cụm; ô thêm mục gọn một dòng. */
+.wf-check-sort-list { display: grid; gap: 8px; margin: 4px 0 12px; }
+.wf-check-sort-list .compact-check { align-items: center; padding: 6px 8px 6px 4px; border: 0; border-radius: 14px; background: #f8f4fc; transition: background-color 0.15s ease; }
+.wf-check-sort-list .compact-check.is-complete { background: var(--zen-done-bg, #f3f0f6); }
+.wf-check-sort-list .compact-check:focus-within { background: #f2ebfb; }
+.zen-check-actions { display: flex; align-items: center; gap: 2px; }
+.zen-check-move { display: inline-grid; place-items: center; width: 30px; height: 30px; padding: 0; border: 0; border-radius: 10px; background: transparent; color: var(--zen-text-accent, #6e3fa0); cursor: pointer; }
+.zen-check-move svg { width: 16px; height: 16px; }
+.zen-check-move:hover:not(:disabled) { background: #e9def7; }
+.zen-check-move:disabled { color: #b9aec6; cursor: default; }
+.zen-check-add { display: flex; align-items: flex-start; gap: 8px; }
+.zen-check-add textarea { flex: 1 1 auto; min-width: 0; min-height: 44px; resize: none; overflow: hidden; border-radius: 12px; }
+.zen-check-add .wf-add-check { flex: none; margin: 0; align-self: flex-start; min-height: 44px; border-radius: 12px; }
+.zen-check-hint { display: block; margin-top: 6px; color: var(--zen-text-muted, #5f5070); font-size: 12px; }
+@media (max-width: 700px) {
+  .wf-check-sort-list .compact-check { grid-template-columns: 30px 26px minmax(0, 1fr); row-gap: 2px; }
+  .wf-check-sort-list .compact-check > .zen-check-actions { grid-column: 3; justify-self: end; }
+  .zen-check-add { flex-direction: column; align-items: stretch; }
+  .zen-check-add .wf-add-check { align-self: flex-end; }
+}
+@media (prefers-reduced-motion: reduce) { .wf-check-sort-list .compact-check { transition: none; } }
+
+/* v1.17.6: hiệu ứng khi lướt chuột (hoặc dùng Tab) vào thẻ việc ở Chế độ tập trung — thẻ nhấc nhẹ, bóng tím mềm, vạch nhấn màu dự án chạy ra ở mép trên, chữ "Tập trung →" nhích sang phải.
+   Chỉ bật khi thiết bị có chuột (hover: hover) hoặc khi dùng bàn phím; chạm thì chỉ có hiệu ứng nhấn nhẹ. Tắt hẳn khi người dùng chọn giảm chuyển động. */
+.wf-focus-grid > .wf-focus-card { transition: transform 0.22s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.22s ease, border-color 0.18s ease, background-color 0.18s ease; }
+.wf-focus-grid > .wf-focus-card::before { content: ""; position: absolute; top: 0; left: 16px; right: 16px; height: 3px; border-radius: 0 0 4px 4px; background: var(--card-color, #7950c8); transform: scaleX(0); transform-origin: left center; transition: transform 0.3s cubic-bezier(0.2, 0.7, 0.2, 1); pointer-events: none; }
+.wf-focus-grid > .wf-focus-card .focus-card-action { display: inline-block; transition: transform 0.22s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.wf-focus-grid > .wf-focus-card:focus-visible { transform: translateY(-4px); box-shadow: 0 14px 28px #6c428e24; }
+.wf-focus-grid > .wf-focus-card:focus-visible::before { transform: scaleX(1); }
+.wf-focus-grid > .wf-focus-card:focus-visible .focus-card-action { transform: translateX(4px); }
+@media (hover: hover) {
+  .wf-focus-grid > .wf-focus-card:hover { transform: translateY(-4px); box-shadow: 0 14px 28px #6c428e24; }
+  .wf-focus-grid > .wf-focus-card:hover::before { transform: scaleX(1); }
+  .wf-focus-grid > .wf-focus-card:hover .focus-card-action { transform: translateX(4px); }
+}
+.wf-focus-grid > .wf-focus-card:active { transform: translateY(-1px) scale(0.99); transition-duration: 0.08s; }
+@media (prefers-reduced-motion: reduce) {
+  .wf-focus-grid > .wf-focus-card, .wf-focus-grid > .wf-focus-card::before, .wf-focus-grid > .wf-focus-card .focus-card-action { transition: none; }
+  .wf-focus-grid > .wf-focus-card:hover, .wf-focus-grid > .wf-focus-card:focus-visible, .wf-focus-grid > .wf-focus-card:active { transform: none; }
+  .wf-focus-grid > .wf-focus-card:hover .focus-card-action, .wf-focus-grid > .wf-focus-card:focus-visible .focus-card-action { transform: none; }
+}
+
+/* v1.18.0: sửa công việc ngay trong Chế độ tập trung. Khối đọc (tiêu đề, mô tả, checklist) ẩn đi khi đang sửa; mọi thay đổi tự lưu. */
+.zen-fe-toolbar { display: flex; align-items: center; justify-content: flex-end; gap: 12px; margin: -4px 0 14px; }
+.zen-fe-toolbar.is-editing { justify-content: space-between; padding: 8px 8px 8px 14px; border-radius: 14px; background: #f4eefb; }
+.zen-fe-status { color: var(--zen-text-muted, #5f5070); font-size: 13px; }
+.zen-fe-edit-btn { display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 0 14px 0 11px; border-radius: 999px; font-weight: 650; }
+.zen-fe-edit-btn svg { width: 17px; height: 17px; }
+.zen-focus-editing > .wf-focus-task-heading > h1, .zen-focus-editing > .wf-focus-task-description, .zen-focus-editing > .wf-focus-checklist-heading, .zen-focus-editing > .check-row, .zen-focus-editing > h3, .zen-focus-editing > div:not(.zen-fe-toolbar):not(.wf-focus-progress-meta):not(.progress) { display: none; }
+.zen-fe-form { display: grid; gap: 14px; margin: 4px 0 16px; }
+.zen-fe-form > .field, .zen-fe-form .wf-description-field { display: grid; gap: 6px; font-weight: 650; }
+.zen-fe-form [name="title"] { font-size: 20px; font-weight: 700; }
+.zen-fe-checks h3 { display: flex; align-items: baseline; gap: 8px; margin: 6px 0 10px; }
+.zen-fe-checks h3 small { color: var(--zen-text-muted, #5f5070); font-weight: 600; }
+.zen-fe-list { display: grid; gap: 8px; margin: 0 0 12px; }
+.zen-fe-row { display: grid; grid-template-columns: 26px minmax(0, 1fr) auto; gap: 8px; align-items: center; padding: 6px 8px 6px 10px; border-radius: 14px; background: #f8f4fc; }
+.zen-fe-row.is-complete { background: var(--zen-done-bg, #f3f0f6); }
+.zen-fe-row.is-complete textarea { text-decoration: line-through; color: var(--zen-text-muted, #5f5070); }
+.zen-fe-row:focus-within { background: #f2ebfb; }
+.zen-fe-row > input[type="checkbox"] { width: 24px; height: 24px; margin: 0; accent-color: #7950c8; }
+.zen-fe-row textarea { display: block; width: 100%; min-height: 38px; resize: none; overflow: hidden; box-sizing: border-box; border: 1px solid var(--zen-field-border, #8f7da0); border-radius: 10px; background: transparent; color: inherit; font: inherit; line-height: 1.5; padding: 6px 10px; overflow-wrap: anywhere; }
+.zen-fe-undo { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 0 0 10px; padding: 8px 12px; border-radius: 12px; background: #fff7e9; color: #6a4a12; font-size: 13px; }
+.zen-fe-form .zen-check-add textarea { flex: 1 1 auto; min-width: 0; min-height: 44px; resize: none; overflow: hidden; border-radius: 12px; }
+@media (max-width: 700px) {
+  .zen-fe-toolbar.is-editing { padding: 6px 6px 6px 12px; }
+  .zen-fe-row { grid-template-columns: 26px minmax(0, 1fr); row-gap: 2px; }
+  .zen-fe-row > .zen-check-actions { grid-column: 2; justify-self: end; }
+}
+@media (pointer: coarse) { .zen-fe-row > input[type="checkbox"] { width: 28px; height: 28px; } }
+
+/* v1.18.1: nút đóng (×) có chuyển động nhẹ ở mọi hộp thoại: rê chuột / tiêu điểm bàn phím xoay 90° và phóng nhẹ, nhấn thì co lại, mở hộp thoại thì nút bật vào. Không dùng !important mới; tôn trọng "giảm chuyển động". */
+#editor .modal-close-pin,
+.welcome-close,
+.mobile-menu-close,
+.zen-search-close,
+button[aria-label^="Đóng"] {
+  transition:
+    transform 0.24s cubic-bezier(0.34, 1.56, 0.64, 1),
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+  will-change: transform;
+}
+@media (hover: hover) {
+  #editor .modal-close-pin:hover,
+  .welcome-close:hover,
+  .mobile-menu-close:hover,
+  .zen-search-close:hover,
+  button[aria-label^="Đóng"]:hover {
+    transform: rotate(90deg) scale(1.08);
+  }
+}
+#editor .modal-close-pin:focus-visible,
+.welcome-close:focus-visible,
+.mobile-menu-close:focus-visible,
+.zen-search-close:focus-visible,
+button[aria-label^="Đóng"]:focus-visible {
+  transform: rotate(90deg) scale(1.08);
+}
+#editor .modal-close-pin:active,
+.welcome-close:active,
+.mobile-menu-close:active,
+.zen-search-close:active,
+button[aria-label^="Đóng"]:active {
+  transform: rotate(90deg) scale(0.9);
+  transition-duration: 0.08s;
+}
+@keyframes zen-close-pop {
+  from {
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+dialog[open] #editor-form .modal-close-pin,
+dialog[open] .welcome-close,
+dialog[open] button[aria-label^="Đóng"],
+#editor[open] .modal-close-pin {
+  animation: zen-close-pop 0.34s cubic-bezier(0.34, 1.56, 0.64, 1) 0.06s backwards;
+}
+@media (prefers-reduced-motion: reduce) {
+  #editor .modal-close-pin,
+  .welcome-close,
+  .mobile-menu-close,
+  .zen-search-close,
+  button[aria-label^="Đóng"],
+  #editor .modal-close-pin:hover,
+  .welcome-close:hover,
+  .mobile-menu-close:hover,
+  .zen-search-close:hover,
+  button[aria-label^="Đóng"]:hover,
+  #editor .modal-close-pin:focus-visible,
+  .welcome-close:focus-visible,
+  .mobile-menu-close:focus-visible,
+  .zen-search-close:focus-visible,
+  button[aria-label^="Đóng"]:focus-visible,
+  #editor .modal-close-pin:active,
+  .welcome-close:active,
+  .mobile-menu-close:active,
+  .zen-search-close:active,
+  button[aria-label^="Đóng"]:active {
+    transform: none;
+    transition: none;
+    will-change: auto;
+  }
+  dialog[open] #editor-form .modal-close-pin,
+  dialog[open] .welcome-close,
+  dialog[open] button[aria-label^="Đóng"],
+  #editor[open] .modal-close-pin {
+    animation: none;
+  }
+}
+
+/* v1.18.3: tiêu đề bên trong hai nhóm thu gọn trùng với tiêu đề nhóm, nên ẩn đi (chữ vẫn có trong thẻ tóm tắt). */
+.zen-settings-collapse > .wf-settings-content > .settings-theme > h3,
+.zen-settings-collapse > .wf-settings-content > .capacity-panel > h3 {
+  display: none;
+}
+
+/* v1.19.0: checklist. v1.42.0: thay thanh kéo bằng ô số nhỏ gọn (nhập trực tiếp 0–100) đặt cuối dòng. */
+.zen-ck-pct {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  flex: none;
+  font-size: 12px;
+}
+.zen-ck-num {
+  width: 46px;
+  min-height: 32px;
+  padding: 2px 4px;
+  border: 1px solid #d4c4e9;
+  border-radius: 8px;
+  background: #faf7fd;
+  font-size: 13px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--zen-text-accent, #6e3fa0);
+  text-align: center;
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+.zen-ck-num::-webkit-inner-spin-button,
+.zen-ck-num::-webkit-outer-spin-button { -webkit-appearance: none; }
+.zen-ck-num:focus-visible { outline: 2px solid #9a65c4; outline-offset: 2px; }
+/* Cảm ứng: ô số giữ vùng chạm 44px. Ghi đè thêm bằng #editor vì các quy tắc input chung trong hộp chi tiết làm ô rộng 100px. */
+#editor .zen-ck-pct .zen-ck-num,
+.zen-fe-row .zen-ck-pct .zen-ck-num {
+  box-sizing: border-box;
+  width: 48px;
+  height: 32px;
+  min-height: 32px;
+  margin: 0;
+  padding: 2px 2px;
+  line-height: 1.2;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--zen-text-accent, #6e3fa0);
+}
+@media (pointer: coarse) {
+  #editor .zen-ck-pct .zen-ck-num,
+  .zen-fe-row .zen-ck-pct .zen-ck-num { width: 50px; height: 44px; min-height: 44px; padding: 2px 0; }
+}
+.zen-ck-pct-unit {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--zen-text-accent, #6e3fa0);
+}
+/* v1.42.0: hàng checklist một dòng: cột 1 tay kéo, cột 2 ô tick, cột 3 chữ, cột 4 ô % (in đậm cuối dòng), cột 5 nút ×. */
+.wf-check-sort-list .compact-check { grid-template-columns: 30px 26px minmax(0, 1fr) auto auto; }
+.wf-check-sort-list .compact-check > .zen-ck-pct { grid-column: 4; grid-row: 1; justify-self: end; padding: 0; }
+.wf-check-sort-list .compact-check > .zen-check-actions { grid-column: 5; grid-row: 1; justify-self: end; }
+.zen-fe-row { grid-template-columns: 26px minmax(0, 1fr) auto auto; }
+.zen-fe-row > .zen-ck-pct { grid-column: 3; grid-row: 1; justify-self: end; }
+.zen-fe-row > .zen-check-actions { grid-column: 4; }
+/* v1.42.0: cỡ chữ tối thiểu 12px cho nhãn % (bài kiểm cỡ chữ tối thiểu). */
+#editor .compact-check .zen-ck-pct,
+.zen-fe-row .zen-ck-pct,
+.zen-fe-row .zen-ck-pct-unit { font-size: 12px; }
+
+/* v1.19.0: Chế độ tập trung — tay kéo ⠿ đổi thứ tự (thay nút ↑/↓); lưới 4 cột: tay kéo, ô tick, chữ, nút ×; thanh % nằm dòng dưới. */
+.zen-fe-row { grid-template-columns: 26px 26px minmax(0, 1fr) auto auto; }
+.zen-fe-row > .zen-fe-grip { grid-column: 1; grid-row: 1; }
+.zen-fe-row > input[type="checkbox"] { grid-column: 2; grid-row: 1; }
+.zen-fe-row > textarea { grid-column: 3; grid-row: 1; }
+.zen-fe-row > .zen-ck-pct { grid-column: 4; grid-row: 1; justify-self: end; }
+.zen-fe-row > .zen-check-actions { grid-column: 5; grid-row: 1; justify-self: end; }
+.zen-fe-grip { width: 26px; min-height: 36px; padding: 0; border: 0; background: transparent; color: var(--zen-text-muted, #5f5070); font-size: 16px; line-height: 1; cursor: grab; touch-action: none; }
+.zen-fe-grip:focus-visible { outline: 2px solid #9a65c4; outline-offset: 2px; border-radius: 8px; }
+.zen-fe-row.zen-fe-dragging { opacity: 0.5; }
+.zen-fe-row.zen-fe-drop-before { box-shadow: inset 0 3px 0 #7950c8; }
+.zen-fe-row.zen-fe-drop-after { box-shadow: inset 0 -3px 0 #7950c8; }
+@media (max-width: 700px) {
+  .zen-fe-row { grid-template-columns: 44px 28px minmax(0, 1fr) auto auto; }
+  .zen-fe-grip { width: 44px; min-height: 44px; }
+}
+
+/* v1.19.4: checklist gọn và bo tròn hơn. Vùng chạm của thanh % vẫn 44px (bài kiểm chạm); chỉ thu khoảng đệm quanh nó.
+   Khung "Thêm mục mới" thành một ô bo tròn kiểu viên thuốc: ô nhập và nút Thêm nằm trong cùng một khung, gợi ý dưới khung nhỏ hơn. Không dùng !important. */
+.wf-check-sort-list { gap: 6px; }
+.wf-check-sort-list .compact-check { border-radius: 16px; padding: 4px 8px 4px 4px; }
+.wf-check-sort-list .compact-check > .zen-ck-pct { margin: -6px 0 -4px; padding: 0 4px 0 0; }
+.zen-ck-pct { gap: 6px; }
+.zen-check-add { align-items: center; gap: 6px; padding: 4px 4px 4px 14px; border: 1px solid #e5dbed; border-radius: 999px; background: #fff; }
+#editor .zen-check-add textarea { min-height: 36px; padding: 7px 0; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
+#editor .zen-check-add .wf-add-check { min-height: 36px; padding: 0 16px; border-radius: 999px; white-space: nowrap; }
+.zen-check-hint { margin: 5px 0 0 14px; font-size: 12px; line-height: 1.5; }
+@media (max-width: 700px) {
+  .zen-check-add { flex-direction: row; align-items: center; }
+  .zen-check-add .wf-add-check { align-self: center; }
+}
+.wf-check-sort-list .compact-check { row-gap: 0; }
+.wf-check-sort-list .compact-check > .zen-ck-pct { margin-top: -8px; }
+/* v1.19.4 (sửa sau kiểm a11y): ô nhập và nút Thêm giữ vùng chạm 44px; trên điện thoại thanh % không kéo lên đè hàng nút (giữ thứ tự đọc). */
+#editor .zen-check-add textarea { min-height: 44px; }
+#editor .zen-check-add .wf-add-check { min-height: 44px; }
+@media (max-width: 700px) { .wf-check-sort-list .compact-check > .zen-ck-pct { margin-top: 0; } }
+/* v1.19.4 (sửa sau kiểm a11y): không dùng khoảng âm cho thanh % ở bất kỳ cỡ nào, để thứ tự đọc và Tab khớp thứ tự DOM. Bù chiều cao bằng đệm dòng nhỏ hơn. */
+.wf-check-sort-list .compact-check > .zen-ck-pct { margin-top: 0; margin-bottom: 0; }
+.wf-check-sort-list .compact-check { padding-top: 2px; padding-bottom: 2px; }
+
+/* v1.19.6: Gantt ẩn việc đã hoàn thành, báo gọn bằng một dòng bo tròn */
+.gantt-done-note { display: inline-flex; align-items: center; gap: 6px; margin: 0 0 10px; padding: 4px 12px; border-radius: 999px; background: #f1f7f3; border: 1px solid #cfe5d8; color: var(--zen-text-muted); font-size: 12px; line-height: 1.4; }
+.gantt-done-note span { color: #3f9a72; font-weight: 700; }
+
+/* v1.19.7: khung "Chế độ xem" ở thanh bên bo tròn; thanh tiến độ từng mục checklist mỏng (rãnh 6px), đầu tô luôn bo tròn khi kéo.
+   Quy tắc cũ ".task-fields input" (độ ưu tiên cao hơn) đang ghi đè kiểu thanh của v1.19.4 nên thanh nằm trong một khung viền 12px, phần tô vuông góc.
+   Ở đây gỡ khung đó bằng bộ chọn có #editor (không dùng !important). Vùng chạm vẫn cao 44px; chỉ phần vẽ mỏng đi.
+   Phần tô kết thúc đúng tâm núm kéo (--pn = % chia 100), nên đầu phải của phần tô luôn nằm dưới núm tròn, không bao giờ lộ góc vuông; đầu trái theo bo của rãnh. */
+.sidebar .view-group { margin: 10px 0 14px; padding: 10px 6px 8px; border: 1px solid #e7dcf1; border-radius: 18px; background: #faf6fe; }
+.sidebar .view-options .view-mode { border-radius: 14px; }
+
+/* v1.19.9: bảng "Bạn có thay đổi chưa lưu" dính ngay dưới tiêu đề hộp thoại (sticky) nên luôn hiện ở vị trí đang đọc, kể cả khi đã cuộn xuống.
+   Nút Lưu nằm trên cùng, chiếm cả hàng; hai nút còn lại chia đôi. Chỉ đổi vị trí và bố cục, không đổi hành vi lưu/bỏ. */
+#editor #editor-body .task-unsaved-confirm { position: sticky !important; top: var(--zen-modal-head-h, 72px) !important; z-index: 6; margin: 8px 0 14px; }
+#editor .task-unsaved-confirm > div .btn[data-task-save] { grid-column: 1 / -1; }
+#editor .task-unsaved-confirm > div { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+/* v1.19.10: checklist không tràn viền. Trên màn hình cảm ứng nút kéo ⠿ giữ kích thước chạm 44x44 THẬT (không dùng lề âm nữa):
+   nó có cột riêng 44px trong dòng, dòng đủ cao để chứa nó, nên nền và vòng focus nằm gọn trong dòng bo tròn và không đè ô tick.
+   Vòng focus của nút kéo, ô tick và thanh % được vẽ vào trong dòng (outline-offset âm) nên không ló ra khỏi viền bo. */
+@media (pointer: coarse) {
+  #editor .wf-check-sort-list .compact-check {
+    grid-template-columns: 44px 26px minmax(0, 1fr) auto auto !important;
+    min-height: 52px;
+  }
+  #editor .wf-check-sort-list .compact-check .wf-grip {
+    width: 44px !important;
+    min-width: 44px !important;
+    height: 44px !important;
+    min-height: 44px !important;
+    margin: 0 !important;
+    align-self: center;
+  }
+}
+#editor .wf-check-sort-list .compact-check .wf-grip:focus-visible { outline-offset: -3px; }
+#editor .wf-check-sort-list .compact-check input[type="checkbox"]:focus-visible,
+#editor .wf-check-sort-list .compact-check .zen-ck-num:focus-visible,
+#editor .wf-check-sort-list .compact-check .compact-check-remove:focus-visible { outline-offset: -2px; }
+
+/* v1.19.11: ô "Thêm mục mới" cân đối. Nút "+ Thêm" từng bị đẩy xuống 12px bởi lề trên (workflow111.css, đã bỏ !important ở đó),
+   nên khoảng trống trên/dưới không bằng nhau. Nay nút và ô nhập đều căn giữa theo chiều dọc trong viên bo. */
+#editor .zen-check-add { align-items: center; }
+#editor .zen-check-add .wf-add-check { margin: 0; align-self: center; }
+#editor .zen-check-add textarea { margin: 0; }
+
+/* v1.19.12: nút Ghim công việc đặt cạnh nút Chế độ tập trung trong hàng tiêu đề của hộp chi tiết (chỗ trống trước đây).
+   Hai nút nằm trong một nhóm căn phải, cùng chiều cao 40px và cùng kiểu viên bo. Trên điện thoại (≤600px) nút Ghim chỉ còn icon
+   (vẫn có tên đọc và tooltip) để tiêu đề và hai nút vẫn nằm trên một hàng, thẳng hàng với nút Chế độ tập trung. */
+#editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row .wf-task-heading-actions { display: flex; align-items: center; gap: 8px; justify-self: end; min-width: 0; }
+#editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row .task-pin-shortcut { position: relative; height: 40px; flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center; gap: 8px; margin: 0; padding: 0 14px 0 12px; font-size: 13px; font-weight: 650; white-space: nowrap; border-radius: 999px; color: #72518a; background: #fbf8fd; border: 1px solid #e6daef; transition: background 0.18s, border-color 0.18s; }
+#editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row .task-pin-shortcut:hover,
+#editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row .task-pin-shortcut:focus-visible { background: #f1e8f8; border-color: #cdb5df; outline: 2px solid #d8c2e8; outline-offset: 2px; }
+#editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row .task-pin-shortcut.is-pinned { background: #efe6f8; border-color: #b996d6; color: #5b3587; }
+#editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row .task-pin-shortcut:disabled { opacity: 0.55; cursor: not-allowed; }
+#editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row .task-pin-shortcut svg { width: 18px; height: 18px; flex: none; }
+@media (max-width: 600px) {
+  #editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row .task-pin-shortcut { width: 40px; padding: 0; gap: 0; }
+  #editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row .task-pin-shortcut span { display: none; }
+}
+
+/* v1.19.15: menu điện thoại (≤700px) tinh gọn: bỏ mục "Dự án" (đã chọn dự án ở thanh tab phía trên) và hiện khung 3 chế độ xem
+   (Bảng Kanban / Lịch / Gantt) vốn bị ẩn, để chuyển chế độ xem ngay trong menu. */
+@media (max-width: 700px) {
+  .sidebar .side-projects { display: none; }
+  .sidebar #view-group.view-group { display: block; }
+}
+
+/* v1.45.0: lời chúc mốc lớn (gỡ hết việc quá hạn, hoàn tất mọi việc của dự án): khung rộng hơn, icon lớn có vòng tròn,
+   họa tiết chấm nền và hai đốm màu trang trí. Chỉ đổi giao diện lời chúc, không đổi dữ liệu hay thời gian hiện. */
+.completion-card.is-milestone {
+  width: min(680px, calc(100vw - 32px));
+  padding: 26px 52px 26px 26px;
+  gap: 20px;
+  border-radius: 26px;
+  border-color: #d9bdf0;
+  background-color: #fffdfdfa;
+  background-image: radial-gradient(circle at 1px 1px, #b28cdb40 1.2px, transparent 1.7px), linear-gradient(135deg, #fbf5ff 0%, #fff7f1 100%);
+  background-size: 14px 14px, auto;
+  box-shadow: 0 22px 70px #7544b82e, inset 0 0 0 5px #fffdfdcc, inset 0 0 0 6px #e6d2f5;
+  overflow: hidden;
+}
+.completion-icon.is-large {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f0e3fb, #ffe6d7);
+  box-shadow: 0 0 0 6px #fffdfd, 0 0 0 7px #e3cce9;
+}
+.completion-icon.is-large svg { width: 40px; height: 40px; }
+.completion-card.is-milestone .completion-caption { font-size: 11px; letter-spacing: 1.6px; color: #8a5aa8; }
+.completion-card.is-milestone p { font-size: 16px; line-height: 1.7; }
+.completion-card.is-milestone .completion-close { right: 6px; top: 6px; width: 44px; height: 44px; border-radius: 12px; }
+.completion-deco { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.completion-deco::before,
+.completion-deco::after { content: ""; position: absolute; width: 220px; height: 220px; border-radius: 50%; filter: blur(2px); }
+.completion-deco::before { left: calc(50% - 360px); top: calc(100% - 260px); background: radial-gradient(circle, #c4a3ed55 0 30%, transparent 70%); }
+.completion-deco::after { right: calc(50% - 360px); top: calc(100% - 230px); background: radial-gradient(circle, #ffc99e66 0 28%, transparent 70%); }
+@media (max-width: 600px) {
+  .completion-card.is-milestone { padding: 20px 46px 20px 18px; gap: 14px; }
+  .completion-icon.is-large { width: 56px; height: 56px; }
+  .completion-icon.is-large svg { width: 30px; height: 30px; }
+  .completion-card.is-milestone p { font-size: 14px; }
+}
+:root[data-theme="dark"] .completion-card.is-milestone {
+  border-color: #4d3a66;
+  background-color: #241d2e;
+  background-image: radial-gradient(circle at 1px 1px, #b98ee84d 1.2px, transparent 1.7px), linear-gradient(135deg, #2a2236 0%, #2e2230 100%);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .completion-card.is-milestone {
+    border-color: #4d3a66;
+    background-color: #241d2e;
+    background-image: radial-gradient(circle at 1px 1px, #b98ee84d 1.2px, transparent 1.7px), linear-gradient(135deg, #2a2236 0%, #2e2230 100%);
+  }
+}
