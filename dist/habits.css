@@ -298,7 +298,9 @@
 /* v1.24.0: trên điện thoại (đầu bảng tuần ẩn) mỗi ô có số ngày và chấm tím đánh dấu hôm nay. */
 .hb-daynum{display:block;font-size:11px;line-height:1.2;color:var(--muted);font-weight:600}
 .hb-cell.is-today .hb-daynum{color:var(--brand-purple);font-weight:800}
-.hb-cell.is-today .hb-dayname::after{content:"";display:block;width:6px;height:6px;margin:3px auto 0;border-radius:50%;background:var(--brand-purple)}
+/* v1.65.0: chấm đánh dấu chiếm chỗ ở MỌI ô (chỉ ô hôm nay có màu) để vòng tròn hôm nay không bị đẩy xuống thấp hơn các ngày khác. */
+.hb-dayname::after{content:"";display:block;width:6px;height:6px;margin:3px auto 0;border-radius:50%;background:transparent}
+.hb-cell.is-today .hb-dayname::after{background:var(--brand-purple)}
 
 /* v1.24.0: dòng giải thích dưới lựa chọn "Máy cá nhân" ở màn hình đăng nhập. */
 .remember-hint{display:block;margin-top:2px;color:var(--muted);font-size:12px;line-height:1.45}

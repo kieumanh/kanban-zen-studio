@@ -3452,6 +3452,9 @@
 :root[data-theme=dark] .top-tools-value #save-state {
     color: var(--muted, #c8c2da)
 }
+:root[data-theme=dark] #editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row {
+    color: var(--ink, #dcd3ec)
+}
 
 :root[data-theme=dark] {
   color-scheme: dark;

@@ -1859,3 +1859,48 @@ dialog[open] button[aria-label^="Đóng"],
 @media (max-width: 700px) {
   .topbar .search { justify-self: center; }
 }
+
+/* v1.65.0 — Khung "Tùy chọn nhanh" (Đồng bộ / Giao diện tối / Thông báo) thu nhỏ: hẹp hơn, hàng thấp hơn, biểu tượng và chữ nhỏ hơn. */
+.top-tools-panel { width: min(224px, calc(100vw - 24px)); padding: 6px; gap: 2px; border-radius: 14px; box-shadow: 0 10px 26px rgba(60, 40, 90, 0.16); }
+.top-tools-row { gap: 8px; min-height: 40px; padding: 2px 6px; border-radius: 10px; }
+.top-tools-ico { width: 28px; height: 28px; border-radius: 9px; }
+.top-tools-ico svg { width: 16px; height: 16px; }
+.top-tools-label { font-size: 13px; }
+.top-tools-value { max-width: 96px; }
+.top-tools-value #save-state { font-size: 12px; }
+/* Nút trong khung giữ vùng chạm 44px (quy tắc truy cập chung); lề âm để hàng chỉ cao 40px, vùng chạm lấn vào khe giữa các hàng. */
+.top-tools-value { margin: -4px 0; }
+.top-tools-value svg { width: 18px; height: 18px; }
+
+/* v1.65.0 — Trình sửa Task tinh gọn: đầu hộp thoại gọn, dòng trạng thái lưu mảnh, hàng tiêu đề một dòng không khung,
+   mức độ là lưới 2×2 (ma trận khẩn cấp/quan trọng), bớt chữ hướng dẫn lặp, các khối ít đệm hơn. */
+#editor.wf-task-editor .modal-head { padding-bottom: 4px; }
+#editor.wf-task-editor #editor-body > p.zen-task-save-status { margin: 0 0 8px !important; padding: 5px 12px !important; width: fit-content; max-width: 100%; border-radius: 999px; font-size: 12px !important; line-height: 1.4 !important; }
+#editor.wf-task-editor #editor-body > p.task-context { margin: 0 0 4px !important; gap: 6px !important; }
+#editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row { margin: 4px 0 6px !important; padding: 0; border: 0; border-radius: 0; background: transparent; font-size: 15px !important; font-weight: 700; color: var(--ink, #352a44); }
+#editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row .task-pin-shortcut,
+#editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row .task-focus-shortcut { height: 40px; }
+#editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row { white-space: nowrap; }
+#editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row .task-focus-shortcut { padding: 0 11px 0 9px; gap: 6px; font-size: 12.5px; }
+#editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row .task-pin-shortcut { padding: 0 12px 0 10px; }
+@media (max-width: 600px) {
+  #editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row .task-pin-shortcut { width: 40px; padding: 0; }
+}
+@media (max-width: 380px) {
+  #editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row .task-focus-shortcut { width: 40px; padding: 0; gap: 0; }
+  #editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row .task-focus-shortcut span { display: none; }
+}
+#editor.wf-task-editor .task-form-intro, #editor.wf-task-editor .form-intro { display: none; }
+#editor.wf-task-editor .zen-task-section { padding: 14px 16px; margin: 10px 0; border-radius: 14px; }
+#editor.wf-task-editor .zen-task-section > h3 { margin: 0 0 12px; font-size: 14px; }
+#editor.wf-task-editor .priority-choices { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; padding: 8px 10px 10px; margin: 12px 0 4px; }
+#editor.wf-task-editor .priority-choice { padding: 8px 10px; border-radius: 12px; font-size: 12.5px; line-height: 1.35; min-height: 40px; gap: 7px; }
+/* Nút radio ẩn về hình nhưng vẫn phủ kín ô (bấm, bàn phím, trình đọc màn hình giữ nguyên); ô đang chọn nhận biết bằng viền đậm và chữ đậm. */
+#editor.wf-task-editor .priority-choice input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
+#editor.wf-task-editor .priority-choice:has(input:focus-visible) { outline: 3px solid currentColor; outline-offset: 2px; }
+#editor.wf-task-editor .priority-choice:has(input:checked)::after { content: "\2713"; margin-left: auto; font-weight: 800; }
+#editor.wf-task-editor .priority-clear.priority-choice { padding: 8px 10px; grid-column: 1 / -1; }
+@media (max-width: 600px) {
+  #editor.wf-task-editor .zen-task-section { padding: 12px; }
+  #editor.wf-task-editor input.wf-task-title { font-size: 20px !important; min-height: 52px; padding: 10px 14px; }
+}

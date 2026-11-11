@@ -129,6 +129,9 @@ jobs:
           node tests/note-paste-lines-browser.mjs
           node tests/topbar-center-browser.mjs
           node tests/habit-today-frame-browser.mjs
+          node tests/top-tools-compact-browser.mjs
+          node tests/habit-today-align-browser.mjs
+          node tests/task-editor-compact-browser.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
