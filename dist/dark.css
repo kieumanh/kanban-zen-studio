@@ -3057,6 +3057,41 @@
 :root[data-theme=dark] .bg-net-neg, :root[data-theme=dark] .bg-net-pos {
     background: #1b1720
 }
+:root[data-theme=dark] .bg-be-fill.is-in {
+    fill: #9cd4b7
+}
+:root[data-theme=dark] .bg-be-line.is-out {
+    stroke: #fb9eb8
+}
+:root[data-theme=dark] .bg-be-line.is-in {
+    stroke: #9cd4b7
+}
+:root[data-theme=dark] .bg-be-goal {
+    stroke: #ffabc8
+}
+:root[data-theme=dark] .bg-be-dot {
+    border: 3px solid #94c5aa;
+    background: var(--paper, #1b181f)
+}
+:root[data-theme=dark] .bg-be-ylab {
+    color: var(--muted, #c8bed2);
+    background: var(--paper, #1b181f)
+}
+:root[data-theme=dark] .bg-be-x {
+    color: var(--muted, #c8bed2)
+}
+:root[data-theme=dark] .bg-be-status.is-loss {
+    color: #ffabc8
+}
+:root[data-theme=dark] .bg-be-status.is-gain {
+    color: #a3d9bc
+}
+:root[data-theme=dark] .bg-be-key-goal {
+    border-top: 2px dashed #b44371
+}
+:root[data-theme=dark] .bg-be-key-dot {
+    border: 3px solid #94c5aa
+}
 :root[data-theme=dark] {
     --muted: #ccc2d7;
     --text-muted: #ccc2d7

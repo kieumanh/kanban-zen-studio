@@ -3058,6 +3058,41 @@
 :root[data-contrast=high] .bg-net-neg, :root[data-contrast=high] .bg-net-pos {
     background: #ffffff
 }
+:root[data-contrast=high] .bg-be-fill.is-in {
+    fill: #060606
+}
+:root[data-contrast=high] .bg-be-line.is-out {
+    stroke: #060606
+}
+:root[data-contrast=high] .bg-be-line.is-in {
+    stroke: #060606
+}
+:root[data-contrast=high] .bg-be-goal {
+    stroke: #060606
+}
+:root[data-contrast=high] .bg-be-dot {
+    border: 3px solid #060606;
+    background: var(--paper, #ffffff)
+}
+:root[data-contrast=high] .bg-be-ylab {
+    color: var(--muted, #060606);
+    background: var(--paper, #ffffff)
+}
+:root[data-contrast=high] .bg-be-x {
+    color: var(--muted, #060606)
+}
+:root[data-contrast=high] .bg-be-status.is-loss {
+    color: #060606
+}
+:root[data-contrast=high] .bg-be-status.is-gain {
+    color: #060606
+}
+:root[data-contrast=high] .bg-be-key-goal {
+    border-top: 2px dashed #260c16
+}
+:root[data-contrast=high] .bg-be-key-dot {
+    border: 3px solid #060606
+}
 :root[data-contrast=high] {
     --muted: #060606;
     --text-muted: #060606
@@ -6754,6 +6789,41 @@
 }
 :root[data-theme=dark][data-contrast=high] .bg-net-neg, :root[data-theme=dark][data-contrast=high] .bg-net-pos {
     background: #030303
+}
+:root[data-theme=dark][data-contrast=high] .bg-be-fill.is-in {
+    fill: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .bg-be-line.is-out {
+    stroke: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .bg-be-line.is-in {
+    stroke: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .bg-be-goal {
+    stroke: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .bg-be-dot {
+    border: 3px solid #cecece;
+    background: var(--paper, #030303)
+}
+:root[data-theme=dark][data-contrast=high] .bg-be-ylab {
+    color: var(--muted, #f5f5f5);
+    background: var(--paper, #030303)
+}
+:root[data-theme=dark][data-contrast=high] .bg-be-x {
+    color: var(--muted, #f5f5f5)
+}
+:root[data-theme=dark][data-contrast=high] .bg-be-status.is-loss {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .bg-be-status.is-gain {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .bg-be-key-goal {
+    border-top: 2px dashed #cecece
+}
+:root[data-theme=dark][data-contrast=high] .bg-be-key-dot {
+    border: 3px solid #cecece
 }
 :root[data-theme=dark][data-contrast=high] {
     --muted: #f5f5f5;

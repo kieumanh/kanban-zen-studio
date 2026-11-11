@@ -1,4 +1,5 @@
 'use strict';
+// v1.70.0: biểu đồ hòa vốn — thu hồi và chi cộng dồn theo thời gian trên cùng một biểu đồ, kèm mốc hòa vốn.
 // v1.69.0: nút quay lại khi vào từng dự án (kể cả nút Back của điện thoại), biểu đồ dòng tiền 6 tháng, thanh lãi/lỗ từng dự án, điểm nổi bật, sắp xếp và lọc.
 // v1.66.0: "Phân bổ tài nguyên" — theo dõi tiền đầu tư (chi) và tiền thu hồi (thu) của từng dự án để biết dự án đang lãi hay lỗ.
 // Dữ liệu: project.ledger = [{id, type:'in'|'out', amount (đồng, số nguyên > 0), category, note, date:'YYYY-MM-DD'}] nằm ngay trong bản ghi dự án,
@@ -183,6 +184,64 @@
     return { label: 'Tháng này', value: (r.net > 0 ? 'Lãi ' : r.net < 0 ? 'Lỗ ' : 'Hòa vốn') + (r.net ? money(Math.abs(r.net)) : ''), sub: 'Chi ' + money(r.out) + ' · Thu ' + money(r.inc), tone: r.net > 0 ? 'gain' : r.net < 0 ? 'loss' : '' };
   };
 
+  // ---- Biểu đồ hòa vốn: tiền chi và tiền thu hồi cộng dồn theo ngày trên cùng một trục -----------------------------------------
+  const dayNum = (s) => Math.floor(Date.parse(s + 'T00:00:00Z') / 86400000);
+  const dayStr = (d) => new Date(d * 86400000).toISOString().slice(0, 10);
+  function breakEven(entries) {
+    if (!entries.length) return '<p class="bg-empty-note">Chưa có khoản thu chi nào để vẽ biểu đồ hòa vốn.</p>';
+    const list = entries.slice().sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
+    const endD = Math.max(dayNum(today()), dayNum(list[list.length - 1].date));
+    let startD = dayNum(list[0].date);
+    if (endD - startD < 14) startD = endD - 14; // ít ngày quá thì kéo dài trục để các bước không dồn thành một vạch
+    const span = endD - startD;
+    let out = 0, inc = 0, since = null;
+    const pts = [{ d: startD, out: 0, inc: 0 }];
+    for (let i = 0; i < list.length; ) {
+      const date = list[i].date;
+      while (i < list.length && list[i].date === date) {
+        if (list[i].type === 'out') out += list[i].amount;
+        else inc += list[i].amount;
+        i++;
+      }
+      pts.push({ d: dayNum(date), out, inc });
+      // "Hòa vốn từ" = ngày bắt đầu chuỗi liên tục thu hồi ≥ chi cho tới hiện tại (chi thêm làm tụt lại thì tính lại).
+      if (out > 0 && inc >= out) {
+        if (!since) since = { date, d: dayNum(date), inc };
+      } else since = null;
+    }
+    pts.push({ d: endD, out, inc });
+    // Trần trục dọc làm tròn lên số "đẹp" (1,2 / 1,5 / 2 / 2,5 / 3 / 4 / 5 / 6 / 8 / 10 × lũy thừa 10) để nhãn 0 – giữa – trên dễ đọc.
+    const raw = Math.max(out, inc) * 1.04, mag = Math.pow(10, Math.floor(Math.log10(raw))), nrm = raw / mag;
+    const max = ([1.2, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10].find((n) => nrm <= n) || 10) * mag;
+    const X = (d) => ((d - startD) / span) * 100;
+    const Y = (v) => 100 - (v / max) * 100;
+    const f = (n) => n.toFixed(2);
+    const step = (key) => {
+      let d = 'M' + f(X(pts[0].d)) + ' ' + f(Y(pts[0][key]));
+      for (let k = 1; k < pts.length; k++) d += ' H' + f(X(pts[k].d)) + ' V' + f(Y(pts[k][key]));
+      return d;
+    };
+    const area = (key) => step(key) + ' V100 H' + f(X(pts[0].d)) + ' Z';
+    const loss = inc < out;
+    const status = loss
+      ? 'Còn thiếu ' + money(out - inc) + ' để hòa vốn · đã thu hồi ' + pctText((inc / out) * 100) + ' số đã chi'
+      : 'Đã hòa vốn từ ' + dateVi(since.date) + (inc > out ? ' · đang lãi ' + money(inc - out) : ' · đúng mốc hòa vốn');
+    const alt = 'Biểu đồ hòa vốn từ ' + dateVi(dayStr(startD)) + ' đến ' + dateVi(dayStr(endD)) + ': đã chi ' + money(out) + ', đã thu hồi ' + money(inc) + '. ' + status + '.';
+    const svg =
+      '<svg class="bg-be-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true" focusable="false">' +
+      [0, 50, 100].map((y) => '<line class="bg-be-grid" x1="0" x2="100" y1="' + y + '" y2="' + y + '" vector-effect="non-scaling-stroke"/>').join('') +
+      '<path class="bg-be-fill is-in" d="' + area('inc') + '"/>' +
+      (loss ? '<line class="bg-be-goal" x1="0" x2="100" y1="' + f(Y(out)) + '" y2="' + f(Y(out)) + '" vector-effect="non-scaling-stroke"/>' : '') +
+      '<path class="bg-be-line is-out" d="' + step('out') + '" vector-effect="non-scaling-stroke"/><path class="bg-be-line is-in" d="' + step('inc') + '" vector-effect="non-scaling-stroke"/></svg>';
+    const mark = since ? '<i class="bg-be-dot" style="left:' + f(X(since.d)) + '%;top:' + f(Y(since.inc)) + '%" aria-hidden="true"></i>' : '';
+    return (
+      '<div class="bg-be" role="img" aria-label="' + esc(alt) + '"><div class="bg-be-plot" aria-hidden="true">' + svg + mark + '<span class="bg-be-ylab is-top">' + short(max).replace(/^\+/, '') + '</span><span class="bg-be-ylab is-mid">' + short(max / 2).replace(/^\+/, '') + '</span></div>' +
+      '<div class="bg-be-x" aria-hidden="true"><span>' + dateVi(dayStr(startD)) + '</span><span>' + dateVi(dayStr(endD)) + '</span></div>' +
+      '<div class="bg-trend-key" aria-hidden="true"><span><i class="bg-swatch is-out"></i>Chi cộng dồn</span><span><i class="bg-swatch is-in"></i>Thu hồi cộng dồn</span>' + (loss ? '<span><i class="bg-be-key-goal"></i>Mốc hòa vốn</span>' : '<span><i class="bg-be-key-dot"></i>Điểm hòa vốn</span>') + '</div>' +
+      '<p class="bg-be-status ' + (loss ? 'is-loss' : 'is-gain') + '">' + status + '</p></div>'
+    );
+  }
+
   // ---- Giao diện -------------------------------------------------------------------------------------------------------
   function cards(t) {
     const st = status(t);
@@ -222,6 +281,7 @@
       cards(all) +
       recoveryBar(all) +
       facts +
+      '<section class="panel bg-panel"><h2>Biểu đồ hòa vốn <small>tất cả dự án</small></h2>' + breakEven(rows.flatMap((r) => entriesOf(r.p))) + '</section>' +
       '<div class="bg-grid"><section class="panel bg-panel"><h2>Dòng tiền theo tháng</h2>' + trend(rows.flatMap((r) => entriesOf(r.p))) + '</section>' +
       '<section class="panel bg-panel"><h2>Chi theo dự án</h2><div class="bg-chart-body"><div class="bg-donut-wrap">' + donut(spent, spentTotal, 'Chi theo dự án') + '<div class="bg-donut-center"><small>Tổng chi</small><strong>' + centerText(spentTotal) + '</strong></div></div>' + (spent.length ? legend(spent, spentTotal) : '<p class="bg-empty-note">Chưa có khoản chi nào ở dự án nào.</p>') + '</div></section></div>' +
       '<section class="panel bg-panel"><div class="bg-chart-head"><h2>Tình trạng từng dự án</h2><div class="bg-seg" role="group" aria-label="Sắp xếp dự án">' + Object.entries(SORTS).map(([key, v]) => '<button type="button" data-bg-sort="' + key + '" aria-pressed="' + (sortKey === key) + '">' + v.label + '</button>').join('') + '</div></div><p class="bg-hint">' + SORTS[sortKey].hint + ' Chọn một dự án để ghi thu, chi và xem chi tiết.</p><ul class="bg-projects">' +
@@ -261,6 +321,7 @@
         thisMonth(entries),
         t.count ? { label: 'Khoản gần nhất', value: dateVi(entries.map((e) => e.date).sort().at(-1)), sub: t.count + ' khoản tất cả' } : null,
       ]) +
+      '<section class="panel bg-panel"><h2>Biểu đồ hòa vốn <small>thu và chi cộng dồn</small></h2>' + breakEven(entries) + '</section>' +
       '<div class="bg-grid"><section class="panel bg-panel"><h2>Dòng tiền theo tháng</h2>' + trend(entries) + '</section>' +
       '<section class="panel bg-panel"><div class="bg-chart-head"><h2>Theo hạng mục</h2><div class="bg-seg" role="group" aria-label="Loại biểu đồ"><button type="button" data-bg-kind="out" aria-pressed="' + (chartKind === 'out') + '">Chi</button><button type="button" data-bg-kind="in" aria-pressed="' + (chartKind === 'in') + '">Thu</button></div></div>' + chartBlock(entries, chartKind, (chartKind === 'out' ? 'Chi' : 'Thu') + ' theo hạng mục') + '</section></div>' +
       history(p) +

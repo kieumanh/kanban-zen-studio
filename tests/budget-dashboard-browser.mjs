@@ -210,7 +210,7 @@ try {
     await h.show(page, 'budget');
     await page.click('[data-bg-open="p9"]');
     await page.waitForSelector('.bg-actions');
-    assert.match(await page.locator('.bg-trend, .bg-empty-note').first().textContent(), /Chưa có khoản thu chi nào trong 6 tháng/);
+    assert.match(await page.locator('.bg-grid .bg-panel').first().textContent(), /Chưa có khoản thu chi nào trong 6 tháng/);
     await page.click('.bg-nav [data-bg-back]');
     await page.waitForSelector('.bg-projects');
     assert.deepEqual(errors, []);
