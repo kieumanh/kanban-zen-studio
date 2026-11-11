@@ -1,105 +1,557 @@
 [
- [0,"仁者如射，射者正己而後發。發而不中，不怨勝己者，反求諸己而已矣。","Người có lòng nhân giống người bắn cung: sửa mình ngay ngắn rồi mới bắn. Bắn không trúng thì không oán người giỏi hơn, chỉ quay lại xét chính mình."],
- [0,"故術不可不慎也。","Vì vậy, không thể không thận trọng khi chọn nghề mình làm."],
- [1,"子路，人告之以有過則喜。禹聞善言則拜。","Tử Lộ vui khi có người chỉ lỗi cho mình; vua Vũ nghe lời hay thì kính cẩn bái tạ."],
- [1,"舍己從人，樂取於人以為善。","Biết bỏ ý riêng để theo điều đúng nơi người khác, vui nhận điều hay của người để làm việc thiện."],
- [1,"取諸人以為善，是與人為善者也。故君子莫大乎與人為善。","Tiếp nhận điều hay của người để làm thiện chính là cùng người làm thiện. Vì vậy, với người quân tử, không gì lớn hơn việc cùng người hướng thiện."],
- [2,"天時不如地利，地利不如人和。","Thời cơ thuận không bằng địa thế thuận; địa thế thuận không bằng lòng người hòa hợp."],
- [2,"得道者多助，失道者寡助。","Người giữ đạo được nhiều người giúp; người đánh mất đạo thì ít người giúp."],
- [4,"惡死亡而樂不仁，是猶惡醉而強酒。","Ghét sự diệt vong mà lại thích làm điều bất nhân thì giống như ghét say mà vẫn cố uống rượu."],
- [5,"愛人不親反其仁，治人不治反其智，禮人不答反其敬。","Thương người mà chưa được gần gũi, hãy xét lại lòng nhân của mình; quản lý chưa tốt, hãy xét lại sự sáng suốt; giữ lễ mà không được đáp lại, hãy xét lại lòng kính trọng."],
- [5,"行有不得者，皆反求諸己，其身正而天下歸之。","Làm việc chưa đạt điều mong muốn thì quay lại xét mình. Bản thân ngay thẳng, người đời sẽ hướng về."],
- [6,"天下之本在國，國之本在家，家之本在身。","Gốc của thiên hạ ở nước, gốc của nước ở nhà, gốc của nhà ở chính mỗi người."],
- [9,"仁，人之安宅也；義，人之正路也。曠安宅而弗居，舍正路而不由，哀哉！","Lòng nhân là mái nhà yên ổn của người; nghĩa là con đường ngay thẳng. Bỏ nhà yên không ở, bỏ đường chính không đi, đáng buồn thay!"],
- [10,"道在爾而求諸遠，事在易而求之難。","Đạo ở gần mà lại tìm nơi xa; việc vốn dễ mà lại tìm trong chỗ khó."],
- [10,"人人親其親、長其長而天下平。","Mỗi người biết thương người thân và kính trọng bậc trưởng thượng của mình thì thiên hạ được yên."],
- [11,"是故誠者，天之道也；思誠者，人之道也。","Chân thành là đạo của trời; nỗ lực sống chân thành là đạo của người."],
- [11,"至誠而不動者，未之有也；不誠，未有能動者也。","Chân thành đến cùng mà không cảm động được người, chưa từng có; thiếu chân thành mà cảm động được người, cũng chưa từng có."],
- [13,"爭地以戰，殺人盈野；爭城以戰，殺人盈城。","Đánh nhau giành đất thì người chết đầy đồng; đánh nhau giành thành thì người chết đầy thành."],
- [15,"恭者不侮人，儉者不奪人。","Người cung kính không làm nhục người; người tiết kiệm không chiếm đoạt của người."],
- [15,"恭儉豈可以聲音笑貌為哉？","Cung kính và tiết kiệm lẽ nào chỉ làm nên bằng giọng nói, nụ cười và dáng vẻ?"],
- [16,"事孰為大？事親為大；守孰為大？守身為大。","Phụng sự điều gì là lớn? Phụng sự cha mẹ. Gìn giữ điều gì là lớn? Gìn giữ chính mình."],
- [16,"孰不為事？事親，事之本也；孰不為守？守身，守之本也。","Việc gì chẳng cần phụng sự? Phụng sự cha mẹ là gốc. Điều gì chẳng cần gìn giữ? Gìn giữ chính mình là gốc."],
- [17,"君仁莫不仁，君義莫不義，君正莫不正。","Người đứng đầu có lòng nhân thì người dưới noi theo lòng nhân; trọng nghĩa thì người dưới trọng nghĩa; ngay thẳng thì người dưới ngay thẳng."],
- [19,"仁之實，事親是也；義之實，從兄是也。","Thực chất của lòng nhân thể hiện ở phụng sự cha mẹ; thực chất của nghĩa thể hiện ở kính thuận anh."],
- [22,"無罪而殺士，則大夫可以去；無罪而戮民，則士可以徙。","Vô cớ giết kẻ sĩ thì đại phu có thể rời đi; vô cớ giết dân thì kẻ sĩ có thể chuyển sang nơi khác."],
- [23,"中也養不中，才也養不才，故人樂有賢父兄也。","Người giữ được trung chính giúp người chưa trung chính; người có tài nâng đỡ người chưa có tài. Vì vậy, ai cũng vui khi có cha anh hiền đức."],
- [25,"大人者，言不必信，行不必果，惟義所在。","Bậc đại nhân không cố giữ lời hay làm đến cùng một cách máy móc; điều quyết định là việc ấy có hợp nghĩa hay không."],
- [27,"君子深造之以道，欲其自得之也。","Người quân tử học sâu theo đạo là để tự mình thấu hiểu và thực sự có được điều ấy."],
- [27,"自得之，則居之安；居之安，則資之深；資之深，則取之左右逢其原","Tự mình thấu hiểu thì an trú vững vàng; an trú vững vàng thì tích lũy sâu; tích lũy sâu thì tìm bên nào cũng gặp nguồn."],
- [28,"以善服人者，未有能服人者也；以善養人，然後能服天下。","Dùng điều thiện để ép người phục thì chưa thực sự khiến họ phục; dùng điều thiện để nuôi dưỡng người mới có thể khiến thiên hạ tâm phục."],
- [29,"舜明於庶物，察於人倫，由仁義行，非行仁義也。","Vua Thuấn hiểu rõ sự vật, xét thấu quan hệ giữa người với người; hành động từ lòng nhân nghĩa, chứ không gượng làm ra nhân nghĩa."],
- [30,"禹惡旨酒而好善言。","Vua Vũ không ưa rượu ngon mà yêu lời nói tốt lành."],
- [30,"文王視民如傷，望道而未之見。","Văn Vương chăm dân như chăm người đang bị thương, hướng về đạo như người vẫn chưa thấy được đạo."],
- [32,"予未得為孔子徒也，予私淑諸人也。","Ta chưa được làm học trò trực tiếp của Khổng Tử; ta học hỏi và tự rèn mình qua những người truyền lại lời dạy của ngài."],
- [33,"可以取，可以無取，取，傷廉；可以與，可以無與，與，傷惠；可以死，可以無死，死，傷勇。","Có thể nhận mà cũng có thể không nhận, nhận sẽ tổn hại liêm khiết; có thể cho mà cũng có thể không cho, cho sẽ tổn hại ân huệ; có thể chết mà cũng có thể không chết, chết sẽ tổn hại dũng khí."],
- [35,"所惡於智者，為其鑿也。","Điều đáng chê ở trí khôn là sự suy diễn gượng ép của nó."],
- [35,"禹之行水也，行其所無事也。","Vua Vũ dẫn nước bằng cách thuận theo chỗ nước tự đi được, không cưỡng ép."],
- [37,"今夫弈之為數，小數也；不專心致志，則不得也。","Đánh cờ chỉ là một kỹ năng nhỏ; không chuyên tâm, dốc chí thì cũng không học được."],
- [38,"仁，人心也；義，人路也。","Lòng nhân là trái tim của người; nghĩa là con đường của người."],
- [38,"人有雞犬放，則知求之；有放心，而不知求。","Gà chó thất lạc thì người ta biết đi tìm; tâm mình thất lạc lại không biết tìm về."],
- [38,"學問之道無他，求其放心而已矣。","Con đường học hỏi không có gì khác: tìm lại tâm mình đã để thất lạc."],
- [39,"指不若人，則知惡之；心不若人，則不知惡，此之謂不知類也。","Ngón tay kém người thì biết lo; tâm mình kém người lại không biết lo. Đó là không nhận ra điều cùng loại để suy xét."],
- [40,"至於身，而不知所以養之者，豈愛身不若桐梓哉？弗思甚也。","Đến chính mình lại không biết nuôi dưỡng: chẳng lẽ thương mình còn kém thương cây ngô đồng, cây tử? Đó là vì quá thiếu suy nghĩ."],
- [41,"無以小害大，無以賤害貴。","Đừng vì điều nhỏ mà làm hại điều lớn; đừng vì điều thấp kém mà làm hại điều quý giá."],
- [41,"養其小者為小人，養其大者為大人。","Chỉ nuôi dưỡng phần nhỏ hẹp thì thành người nhỏ hẹp; nuôi dưỡng phần lớn lao thì thành người lớn lao."],
- [42,"仁義忠信，樂善不倦，此天爵也；公卿大夫，此人爵也。","Nhân, nghĩa, trung, tín, vui làm thiện không mỏi là tước vị của trời; công, khanh, đại phu là tước vị của người."],
- [43,"欲貴者，人之同心也。人人有貴於己者，弗思耳。","Muốn được quý trọng là lòng chung của người đời. Ai cũng có điều quý giá ngay nơi mình, chỉ vì không suy nghĩ mà không nhận ra."],
- [44,"仁之勝不仁也，猶水勝火。","Lòng nhân thắng sự bất nhân như nước thắng lửa."],
- [45,"五穀者，種之美者也；苟為不熟，不如荑稗。夫仁亦在乎熟之而已矣。","Ngũ cốc là giống cây tốt, nhưng không chín thì chẳng bằng cỏ dại. Lòng nhân cũng cần được nuôi dưỡng đến chín muồi."],
- [46,"大匠誨人，必以規矩；學者亦必以規矩。","Thợ giỏi dạy người nhất định dùng khuôn thước; người học cũng phải theo khuôn thước."],
- [48,"人恆過，然後能改；困於心，衡於慮，而後作","Con người thường mắc lỗi rồi mới biết sửa; tâm gặp khốn khó, suy nghĩ gặp bế tắc rồi mới phấn chấn hành động."],
- [48,"然後知生於憂患而死於安樂也。","Từ đó biết rằng lo âu, thử thách có thể giúp người sống vững; an nhàn, hưởng lạc có thể dẫn đến suy vong."],
- [49,"教亦多術矣，予不屑之教誨也者，是亦教誨之而已矣。","Dạy học có nhiều cách. Có khi ta không nhận lời dạy bảo, chính điều ấy cũng là một cách dạy."],
- [50,"盡其心者，知其性也。知其性，則知天矣。","Hiểu thấu tâm mình thì biết được bản tính; biết được bản tính thì biết được trời."],
- [50,"存其心，養其性，所以事天也。","Gìn giữ tâm, nuôi dưỡng bản tính là cách phụng sự trời."],
- [51,"是故知命者，不立乎巖牆之下。","Vì vậy, người hiểu mệnh không đứng dưới bức tường có nguy cơ đổ."],
- [52,"求則得之，舍則失之，是求有益於得也，求在我者也。","Tìm thì được, bỏ thì mất: sự tìm kiếm ấy có ích cho việc đạt được, vì ta tìm điều vốn ở nơi mình."],
- [53,"反身而誠，樂莫大焉。強恕而行，求仁莫近焉。","Quay lại xét mình mà thấy chân thành thì không niềm vui nào lớn hơn. Gắng thực hành lòng cảm thông thì không con đường nào gần lòng nhân hơn."],
- [54,"行之而不著焉，習矣而不察焉，終身由之而不知其道者，眾也。","Làm mà không hiểu rõ, quen mà không xét kỹ, suốt đời đi theo mà chẳng biết đạo của việc ấy: người như thế rất nhiều."],
- [55,"不恥不若人，何若人有？","Không biết hổ thẹn vì mình chưa bằng người thì làm sao tiến được cho bằng người?"],
- [56,"古之賢王好善而忘勢","Vua hiền ngày xưa yêu điều thiện đến mức quên địa vị, quyền thế."],
- [57,"若夫豪傑之士，雖無文王猶興。","Bậc hào kiệt thì dù không có Văn Vương nâng đỡ, vẫn tự vươn lên."],
- [61,"善政，不如善教之得民也。善政民畏之，善教民愛之；善政得民財，善教得民心。","Chính sự tốt chưa bằng giáo dục tốt trong việc thu phục lòng dân. Chính sự tốt khiến dân kính sợ; giáo dục tốt khiến dân yêu mến. Chính sự tốt có được tài lực của dân; giáo dục tốt có được lòng dân."],
- [62,"人之所不學而能者，其良能也；所不慮而知者，其良知也。","Điều con người không cần học mà vẫn làm được là lương năng; điều không cần suy tính mà vẫn biết là lương tri."],
- [62,"親親，仁也；敬長，義也。無他，達之天下也。","Yêu người thân là nhân; kính người lớn là nghĩa. Không gì khác, hãy mở rộng điều ấy ra thiên hạ."],
- [64,"無為其所不為，無欲其所不欲，如此而已矣。","Đừng làm điều mình biết không nên làm; đừng ham muốn điều mình biết không nên ham muốn. Chỉ vậy thôi."],
- [66,"有大人者，正己而物正者也。","Có bậc đại nhân: sửa mình ngay thẳng rồi sự vật quanh mình cũng được ngay thẳng."],
- [67,"父母俱存，兄弟無故，一樂也。","Cha mẹ đều còn, anh em bình an: đó là một niềm vui."],
- [67,"仰不愧於天，俯不怍於人，二樂也。","Ngẩng lên không thẹn với trời, cúi xuống không hổ với người: đó là niềm vui thứ hai."],
- [67,"得天下英才而教育之，三樂也。","Có được người tài trong thiên hạ mà dạy dỗ họ: đó là niềm vui thứ ba."],
- [68,"君子所性，雖大行不加焉，雖窮居不損焉，分定故也。","Phẩm tính của người quân tử không tăng vì được thi thố rộng rãi, cũng không giảm vì sống khốn khó; bởi phần gốc ấy đã được xác lập."],
- [69,"易其田疇，薄其稅斂，民可使富也。","Chăm lo ruộng đất, giảm nhẹ thuế khóa thì có thể giúp dân sung túc."],
- [69,"食之以時，用之以禮，財不可勝用也。","Tiêu dùng đúng lúc, sử dụng có chừng mực thì của cải đủ dùng không hết."],
- [70,"流水之為物也，不盈科不行；君子之志於道也，不成章不達。","Nước chảy phải đầy chỗ trũng rồi mới tiến; người quân tử học đạo phải hoàn thành từng bậc rồi mới thông đạt."],
- [71,"欲知舜與蹠之分，無他，利與善之間也。","Muốn biết chỗ khác nhau giữa vua Thuấn và kẻ cướp Chích, không có gì khác: ở giữa việc cầu lợi và làm thiện."],
- [72,"所惡執一者，為其賊道也，舉一而廢百也。","Điều đáng chê ở chấp chặt một phía là nó làm hại đạo: giữ lấy một điều mà bỏ mất trăm điều."],
- [73,"豈惟口腹有飢渴之害？人心亦皆有害。","Đâu chỉ miệng bụng bị đói khát làm sai lệch? Tâm người cũng có những điều làm sai lệch như vậy."],
- [74,"有為者辟若掘井，掘井九軔而不及泉，猶為棄井也。","Người làm việc giống người đào giếng: đào sâu chín nhẫn mà chưa tới mạch nước thì vẫn là giếng bỏ dở."],
- [77,"恭敬而無實，君子不可虛拘。","Cung kính mà không có thực chất thì không thể dùng hình thức suông để ràng buộc người quân tử."],
- [78,"有如時雨化之者，有成德者，有達財者，有答問者，有私淑艾者。","Có cách dạy như mưa đúng mùa giúp người chuyển hóa; có cách vun bồi đức, phát huy tài, giải đáp câu hỏi, hoặc giúp người tự học hỏi mà tiến bộ."],
- [80,"其進銳者，其退速。","Tiến quá gấp thì lùi cũng nhanh."],
- [81,"親親而仁民，仁民而愛物。","Từ thương người thân mà mở lòng nhân với dân; từ nhân với dân mà mở lòng yêu thương muôn vật."],
- [82,"知者無不知也，當務之為急","Người trí muốn biết mọi điều, nhưng trước hết phải lo điều cần làm ngay."],
- [84,"春秋無義戰。彼善於此，則有之矣。","Thời Xuân Thu không có cuộc chiến hoàn toàn chính nghĩa; chỉ có bên này đỡ hơn bên kia mà thôi."],
- [85,"盡信書，則不如無書。","Tin sách hoàn toàn, không biết xét lại, thì thà không có sách còn hơn."],
- [88,"殺人之父，人亦殺其父；殺人之兄，人亦殺其兄。","Giết cha người thì người cũng giết cha mình; giết anh người thì người cũng giết anh mình."],
- [89,"古之為關也，將以禦暴。今之為關也，將以為暴。","Ngày xưa lập cửa quan để ngăn bạo lực; ngày nay có nơi lại dùng cửa quan để làm điều bạo ngược."],
- [90,"身不行道，不行於妻子；使人不以道，不能行於妻子。","Tự mình không thực hành đạo thì ngay vợ con cũng không theo; sai khiến người không đúng đạo thì ngay vợ con cũng khó sai khiến."],
- [91,"周于利者，凶年不能殺；周于德者，邪世不能亂。","Chuẩn bị đủ sinh kế thì năm đói không làm khốn mình; bồi đắp đầy đủ đức hạnh thì thời loạn không làm rối mình."],
- [92,"好名之人，能讓千乘之國；苟非其人，簞食豆羹見於色。","Người ham danh có thể nhường cả nước nghìn cỗ xe; nhưng nếu không có thực đức, chỉ một giỏ cơm, bát canh cũng đủ khiến họ lộ vẻ tranh giành."],
- [93,"無禮義，則上下亂。無政事，則財用不足。","Thiếu lễ nghĩa thì trên dưới rối loạn; thiếu sự quản trị thì tài lực không đủ dùng."],
- [95,"民為貴，社稷次之，君為輕。","Dân là quý nhất, xã tắc đứng sau, người làm vua đứng cuối."],
- [98,"賢者以其昭昭，使人昭昭；今以其昏昏，使人昭昭。","Người hiền dùng sự sáng rõ của mình để giúp người sáng rõ; nay có người tự mình còn mờ tối mà muốn làm người khác sáng ra."],
- [100,"歸，斯受之而已矣。","Khi người ta đã quay về điều đúng, cứ tiếp nhận họ là đủ."],
- [101,"有布縷之征，粟米之征，力役之征。君子用其一，緩其二。","Có thuế vải sợi, thuế thóc gạo và lao dịch. Người quân tử dùng một loại thì nới hai loại còn lại."],
- [102,"諸侯之寶三：土地，人民，政事。寶珠玉者，殃必及身。","Chư hầu có ba điều quý: đất đai, nhân dân và chính sự. Chỉ quý châu ngọc thì tai họa sẽ đến thân."],
- [103,"人皆有所不忍，達之於其所忍，仁也","Ai cũng có điều không nỡ làm; mở rộng sự không nỡ ấy đến những nơi mình còn nhẫn tâm, đó là nhân."],
- [103,"人能充無欲害人之心，而仁不可勝用也","Mở rộng được tấm lòng không muốn hại người thì lòng nhân dùng không hết."],
- [104,"言近而指遠者，善言也；守約而施博者，善道也。","Lời nói gần gũi mà ý chỉ sâu xa là lời hay; giữ điều cốt yếu mà ứng dụng rộng rãi là đạo tốt."],
- [104,"人病舍其田而芸人之田，所求於人者重，而所以自任者輕。","Cái bệnh của người là bỏ ruộng mình để làm cỏ ruộng người: đòi hỏi người khác thì nặng, nhận trách nhiệm cho mình thì nhẹ."],
- [105,"君子行法，以俟命而已矣。","Người quân tử làm theo điều đúng rồi bình thản đợi điều sẽ đến."],
- [106,"說大人，則藐之，勿視其巍巍然。","Khi thuyết phục người quyền thế, đừng để vẻ cao sang của họ khiến mình khiếp sợ."],
- [107,"養心莫善於寡欲。","Nuôi dưỡng tâm không gì tốt bằng bớt ham muốn."],
- [107,"其為人也多欲，雖有存焉者，寡矣。","Người quá nhiều ham muốn thì dù còn giữ được tâm tốt, phần giữ được ấy cũng ít."]
+  [
+    0,
+    "仁者如射，射者正己而後發。發而不中，不怨勝己者，反求諸己而已矣。",
+    "Người có lòng nhân giống người bắn cung: sửa mình ngay ngắn rồi mới bắn. Bắn không trúng thì không oán người giỏi hơn, chỉ quay lại xét chính mình."
+  ],
+  [
+    0,
+    "故術不可不慎也。",
+    "Vì vậy, không thể không thận trọng khi chọn nghề mình làm."
+  ],
+  [
+    1,
+    "子路，人告之以有過則喜。禹聞善言則拜。",
+    "Tử Lộ vui khi có người chỉ lỗi cho mình; vua Vũ nghe lời hay thì kính cẩn bái tạ."
+  ],
+  [
+    1,
+    "舍己從人，樂取於人以為善。",
+    "Biết bỏ ý riêng để theo điều đúng nơi người khác, vui nhận điều hay của người để làm việc thiện."
+  ],
+  [
+    1,
+    "取諸人以為善，是與人為善者也。故君子莫大乎與人為善。",
+    "Tiếp nhận điều hay của người để làm thiện chính là cùng người làm thiện. Vì vậy, với người quân tử, không gì lớn hơn việc cùng người hướng thiện."
+  ],
+  [
+    2,
+    "天時不如地利，地利不如人和。",
+    "Thời cơ thuận không bằng địa thế thuận; địa thế thuận không bằng lòng người hòa hợp."
+  ],
+  [
+    2,
+    "得道者多助，失道者寡助。",
+    "Người giữ đạo được nhiều người giúp; người đánh mất đạo thì ít người giúp."
+  ],
+  [
+    4,
+    "惡死亡而樂不仁，是猶惡醉而強酒。",
+    "Ghét sự diệt vong mà lại thích làm điều bất nhân thì giống như ghét say mà vẫn cố uống rượu."
+  ],
+  [
+    5,
+    "愛人不親反其仁，治人不治反其智，禮人不答反其敬。",
+    "Thương người mà chưa được gần gũi, hãy xét lại lòng nhân của mình; quản lý chưa tốt, hãy xét lại sự sáng suốt; giữ lễ mà không được đáp lại, hãy xét lại lòng kính trọng."
+  ],
+  [
+    5,
+    "行有不得者，皆反求諸己，其身正而天下歸之。",
+    "Làm việc chưa đạt điều mong muốn thì quay lại xét mình. Bản thân ngay thẳng, người đời sẽ hướng về."
+  ],
+  [
+    6,
+    "天下之本在國，國之本在家，家之本在身。",
+    "Gốc của thiên hạ ở nước, gốc của nước ở nhà, gốc của nhà ở chính mỗi người."
+  ],
+  [
+    9,
+    "仁，人之安宅也；義，人之正路也。曠安宅而弗居，舍正路而不由，哀哉！",
+    "Lòng nhân là mái nhà yên ổn của người; nghĩa là con đường ngay thẳng. Bỏ nhà yên không ở, bỏ đường chính không đi, đáng buồn thay!"
+  ],
+  [
+    10,
+    "道在爾而求諸遠，事在易而求之難。",
+    "Đạo ở gần mà lại tìm nơi xa; việc vốn dễ mà lại tìm trong chỗ khó."
+  ],
+  [
+    10,
+    "人人親其親、長其長而天下平。",
+    "Mỗi người biết thương người thân và kính trọng bậc trưởng thượng của mình thì thiên hạ được yên."
+  ],
+  [
+    11,
+    "是故誠者，天之道也；思誠者，人之道也。",
+    "Chân thành là đạo của trời; nỗ lực sống chân thành là đạo của người."
+  ],
+  [
+    11,
+    "至誠而不動者，未之有也；不誠，未有能動者也。",
+    "Chân thành đến cùng mà không cảm động được người, chưa từng có; thiếu chân thành mà cảm động được người, cũng chưa từng có."
+  ],
+  [
+    13,
+    "爭地以戰，殺人盈野；爭城以戰，殺人盈城。",
+    "Đánh nhau giành đất thì người chết đầy đồng; đánh nhau giành thành thì người chết đầy thành."
+  ],
+  [
+    15,
+    "恭者不侮人，儉者不奪人。",
+    "Người cung kính không làm nhục người; người tiết kiệm không chiếm đoạt của người."
+  ],
+  [
+    15,
+    "恭儉豈可以聲音笑貌為哉？",
+    "Cung kính và tiết kiệm lẽ nào chỉ làm nên bằng giọng nói, nụ cười và dáng vẻ?"
+  ],
+  [
+    16,
+    "事孰為大？事親為大；守孰為大？守身為大。",
+    "Phụng sự điều gì là lớn? Phụng sự cha mẹ. Gìn giữ điều gì là lớn? Gìn giữ chính mình."
+  ],
+  [
+    16,
+    "孰不為事？事親，事之本也；孰不為守？守身，守之本也。",
+    "Việc gì chẳng cần phụng sự? Phụng sự cha mẹ là gốc. Điều gì chẳng cần gìn giữ? Gìn giữ chính mình là gốc."
+  ],
+  [
+    17,
+    "君仁莫不仁，君義莫不義，君正莫不正。",
+    "Người đứng đầu có lòng nhân thì người dưới noi theo lòng nhân; trọng nghĩa thì người dưới trọng nghĩa; ngay thẳng thì người dưới ngay thẳng."
+  ],
+  [
+    19,
+    "仁之實，事親是也；義之實，從兄是也。",
+    "Thực chất của lòng nhân thể hiện ở phụng sự cha mẹ; thực chất của nghĩa thể hiện ở kính thuận anh."
+  ],
+  [
+    22,
+    "無罪而殺士，則大夫可以去；無罪而戮民，則士可以徙。",
+    "Vô cớ giết kẻ sĩ thì đại phu có thể rời đi; vô cớ giết dân thì kẻ sĩ có thể chuyển sang nơi khác."
+  ],
+  [
+    23,
+    "中也養不中，才也養不才，故人樂有賢父兄也。",
+    "Người giữ được trung chính giúp người chưa trung chính; người có tài nâng đỡ người chưa có tài. Vì vậy, ai cũng vui khi có cha anh hiền đức."
+  ],
+  [
+    25,
+    "大人者，言不必信，行不必果，惟義所在。",
+    "Bậc đại nhân không cố giữ lời hay làm đến cùng một cách máy móc; điều quyết định là việc ấy có hợp nghĩa hay không."
+  ],
+  [
+    27,
+    "君子深造之以道，欲其自得之也。",
+    "Người quân tử học sâu theo đạo là để tự mình thấu hiểu và thực sự có được điều ấy."
+  ],
+  [
+    27,
+    "自得之，則居之安；居之安，則資之深；資之深，則取之左右逢其原",
+    "Tự mình thấu hiểu thì an trú vững vàng; an trú vững vàng thì tích lũy sâu; tích lũy sâu thì tìm bên nào cũng gặp nguồn."
+  ],
+  [
+    28,
+    "以善服人者，未有能服人者也；以善養人，然後能服天下。",
+    "Dùng điều thiện để ép người phục thì chưa thực sự khiến họ phục; dùng điều thiện để nuôi dưỡng người mới có thể khiến thiên hạ tâm phục."
+  ],
+  [
+    29,
+    "舜明於庶物，察於人倫，由仁義行，非行仁義也。",
+    "Vua Thuấn hiểu rõ sự vật, xét thấu quan hệ giữa người với người; hành động từ lòng nhân nghĩa, chứ không gượng làm ra nhân nghĩa."
+  ],
+  [
+    30,
+    "禹惡旨酒而好善言。",
+    "Vua Vũ không ưa rượu ngon mà yêu lời nói tốt lành."
+  ],
+  [
+    30,
+    "文王視民如傷，望道而未之見。",
+    "Văn Vương chăm dân như chăm người đang bị thương, hướng về đạo như người vẫn chưa thấy được đạo."
+  ],
+  [
+    32,
+    "予未得為孔子徒也，予私淑諸人也。",
+    "Ta chưa được làm học trò trực tiếp của Khổng Tử; ta học hỏi và tự rèn mình qua những người truyền lại lời dạy của ngài."
+  ],
+  [
+    33,
+    "可以取，可以無取，取，傷廉；可以與，可以無與，與，傷惠；可以死，可以無死，死，傷勇。",
+    "Có thể nhận mà cũng có thể không nhận, nhận sẽ tổn hại liêm khiết; có thể cho mà cũng có thể không cho, cho sẽ tổn hại ân huệ; có thể chết mà cũng có thể không chết, chết sẽ tổn hại dũng khí."
+  ],
+  [
+    35,
+    "所惡於智者，為其鑿也。",
+    "Điều đáng chê ở trí khôn là sự suy diễn gượng ép của nó."
+  ],
+  [
+    35,
+    "禹之行水也，行其所無事也。",
+    "Vua Vũ dẫn nước bằng cách thuận theo chỗ nước tự đi được, không cưỡng ép."
+  ],
+  [
+    37,
+    "今夫弈之為數，小數也；不專心致志，則不得也。",
+    "Đánh cờ chỉ là một kỹ năng nhỏ; không chuyên tâm, dốc chí thì cũng không học được."
+  ],
+  [
+    38,
+    "仁，人心也；義，人路也。",
+    "Lòng nhân là trái tim của người; nghĩa là con đường của người."
+  ],
+  [
+    38,
+    "人有雞犬放，則知求之；有放心，而不知求。",
+    "Gà chó thất lạc thì người ta biết đi tìm; tâm mình thất lạc lại không biết tìm về."
+  ],
+  [
+    38,
+    "學問之道無他，求其放心而已矣。",
+    "Con đường học hỏi không có gì khác: tìm lại tâm mình đã để thất lạc."
+  ],
+  [
+    39,
+    "指不若人，則知惡之；心不若人，則不知惡，此之謂不知類也。",
+    "Ngón tay kém người thì biết lo; tâm mình kém người lại không biết lo. Đó là không nhận ra điều cùng loại để suy xét."
+  ],
+  [
+    40,
+    "至於身，而不知所以養之者，豈愛身不若桐梓哉？弗思甚也。",
+    "Đến chính mình lại không biết nuôi dưỡng: chẳng lẽ thương mình còn kém thương cây ngô đồng, cây tử? Đó là vì quá thiếu suy nghĩ."
+  ],
+  [
+    41,
+    "無以小害大，無以賤害貴。",
+    "Đừng vì điều nhỏ mà làm hại điều lớn; đừng vì điều thấp kém mà làm hại điều quý giá."
+  ],
+  [
+    41,
+    "養其小者為小人，養其大者為大人。",
+    "Chỉ nuôi dưỡng phần nhỏ hẹp thì thành người nhỏ hẹp; nuôi dưỡng phần lớn lao thì thành người lớn lao."
+  ],
+  [
+    42,
+    "仁義忠信，樂善不倦，此天爵也；公卿大夫，此人爵也。",
+    "Nhân, nghĩa, trung, tín, vui làm thiện không mỏi là tước vị của trời; công, khanh, đại phu là tước vị của người."
+  ],
+  [
+    43,
+    "欲貴者，人之同心也。人人有貴於己者，弗思耳。",
+    "Muốn được quý trọng là lòng chung của người đời. Ai cũng có điều quý giá ngay nơi mình, chỉ vì không suy nghĩ mà không nhận ra."
+  ],
+  [
+    44,
+    "仁之勝不仁也，猶水勝火。",
+    "Lòng nhân thắng sự bất nhân như nước thắng lửa."
+  ],
+  [
+    45,
+    "五穀者，種之美者也；苟為不熟，不如荑稗。夫仁亦在乎熟之而已矣。",
+    "Ngũ cốc là giống cây tốt, nhưng không chín thì chẳng bằng cỏ dại. Lòng nhân cũng cần được nuôi dưỡng đến chín muồi."
+  ],
+  [
+    46,
+    "大匠誨人，必以規矩；學者亦必以規矩。",
+    "Thợ giỏi dạy người nhất định dùng khuôn thước; người học cũng phải theo khuôn thước."
+  ],
+  [
+    48,
+    "人恆過，然後能改；困於心，衡於慮，而後作",
+    "Con người thường mắc lỗi rồi mới biết sửa; tâm gặp khốn khó, suy nghĩ gặp bế tắc rồi mới phấn chấn hành động."
+  ],
+  [
+    48,
+    "然後知生於憂患而死於安樂也。",
+    "Từ đó biết rằng lo âu, thử thách có thể giúp người sống vững; an nhàn, hưởng lạc có thể dẫn đến suy vong."
+  ],
+  [
+    49,
+    "教亦多術矣，予不屑之教誨也者，是亦教誨之而已矣。",
+    "Dạy học có nhiều cách. Có khi ta không nhận lời dạy bảo, chính điều ấy cũng là một cách dạy."
+  ],
+  [
+    50,
+    "盡其心者，知其性也。知其性，則知天矣。",
+    "Hiểu thấu tâm mình thì biết được bản tính; biết được bản tính thì biết được trời."
+  ],
+  [
+    50,
+    "存其心，養其性，所以事天也。",
+    "Gìn giữ tâm, nuôi dưỡng bản tính là cách phụng sự trời."
+  ],
+  [
+    51,
+    "是故知命者，不立乎巖牆之下。",
+    "Vì vậy, người hiểu mệnh không đứng dưới bức tường có nguy cơ đổ."
+  ],
+  [
+    52,
+    "求則得之，舍則失之，是求有益於得也，求在我者也。",
+    "Tìm thì được, bỏ thì mất: sự tìm kiếm ấy có ích cho việc đạt được, vì ta tìm điều vốn ở nơi mình."
+  ],
+  [
+    53,
+    "反身而誠，樂莫大焉。強恕而行，求仁莫近焉。",
+    "Quay lại xét mình mà thấy chân thành thì không niềm vui nào lớn hơn. Gắng thực hành lòng cảm thông thì không con đường nào gần lòng nhân hơn."
+  ],
+  [
+    54,
+    "行之而不著焉，習矣而不察焉，終身由之而不知其道者，眾也。",
+    "Làm mà không hiểu rõ, quen mà không xét kỹ, suốt đời đi theo mà chẳng biết đạo của việc ấy: người như thế rất nhiều."
+  ],
+  [
+    55,
+    "不恥不若人，何若人有？",
+    "Không biết hổ thẹn vì mình chưa bằng người thì làm sao tiến được cho bằng người?"
+  ],
+  [
+    56,
+    "古之賢王好善而忘勢",
+    "Vua hiền ngày xưa yêu điều thiện đến mức quên địa vị, quyền thế."
+  ],
+  [
+    57,
+    "若夫豪傑之士，雖無文王猶興。",
+    "Bậc hào kiệt thì dù không có Văn Vương nâng đỡ, vẫn tự vươn lên."
+  ],
+  [
+    61,
+    "善政，不如善教之得民也。善政民畏之，善教民愛之；善政得民財，善教得民心。",
+    "Chính sự tốt chưa bằng giáo dục tốt trong việc thu phục lòng dân. Chính sự tốt khiến dân kính sợ; giáo dục tốt khiến dân yêu mến. Chính sự tốt có được tài lực của dân; giáo dục tốt có được lòng dân."
+  ],
+  [
+    62,
+    "人之所不學而能者，其良能也；所不慮而知者，其良知也。",
+    "Điều con người không cần học mà vẫn làm được là lương năng; điều không cần suy tính mà vẫn biết là lương tri."
+  ],
+  [
+    62,
+    "親親，仁也；敬長，義也。無他，達之天下也。",
+    "Yêu người thân là nhân; kính người lớn là nghĩa. Không gì khác, hãy mở rộng điều ấy ra thiên hạ."
+  ],
+  [
+    64,
+    "無為其所不為，無欲其所不欲，如此而已矣。",
+    "Đừng làm điều mình biết không nên làm; đừng ham muốn điều mình biết không nên ham muốn. Chỉ vậy thôi."
+  ],
+  [
+    66,
+    "有大人者，正己而物正者也。",
+    "Có bậc đại nhân: sửa mình ngay thẳng rồi sự vật quanh mình cũng được ngay thẳng."
+  ],
+  [
+    67,
+    "父母俱存，兄弟無故，一樂也。",
+    "Cha mẹ đều còn, anh em bình an: đó là một niềm vui."
+  ],
+  [
+    67,
+    "仰不愧於天，俯不怍於人，二樂也。",
+    "Ngẩng lên không thẹn với trời, cúi xuống không hổ với người: đó là niềm vui thứ hai."
+  ],
+  [
+    67,
+    "得天下英才而教育之，三樂也。",
+    "Có được người tài trong thiên hạ mà dạy dỗ họ: đó là niềm vui thứ ba."
+  ],
+  [
+    68,
+    "君子所性，雖大行不加焉，雖窮居不損焉，分定故也。",
+    "Phẩm tính của người quân tử không tăng vì được thi thố rộng rãi, cũng không giảm vì sống khốn khó; bởi phần gốc ấy đã được xác lập."
+  ],
+  [
+    69,
+    "易其田疇，薄其稅斂，民可使富也。",
+    "Chăm lo ruộng đất, giảm nhẹ thuế khóa thì có thể giúp dân sung túc."
+  ],
+  [
+    69,
+    "食之以時，用之以禮，財不可勝用也。",
+    "Tiêu dùng đúng lúc, sử dụng có chừng mực thì của cải đủ dùng không hết."
+  ],
+  [
+    70,
+    "流水之為物也，不盈科不行；君子之志於道也，不成章不達。",
+    "Nước chảy phải đầy chỗ trũng rồi mới tiến; người quân tử học đạo phải hoàn thành từng bậc rồi mới thông đạt."
+  ],
+  [
+    71,
+    "欲知舜與蹠之分，無他，利與善之間也。",
+    "Muốn biết chỗ khác nhau giữa vua Thuấn và kẻ cướp Chích, không có gì khác: ở giữa việc cầu lợi và làm thiện."
+  ],
+  [
+    72,
+    "所惡執一者，為其賊道也，舉一而廢百也。",
+    "Điều đáng chê ở chấp chặt một phía là nó làm hại đạo: giữ lấy một điều mà bỏ mất trăm điều."
+  ],
+  [
+    73,
+    "豈惟口腹有飢渴之害？人心亦皆有害。",
+    "Đâu chỉ miệng bụng bị đói khát làm sai lệch? Tâm người cũng có những điều làm sai lệch như vậy."
+  ],
+  [
+    74,
+    "有為者辟若掘井，掘井九軔而不及泉，猶為棄井也。",
+    "Người làm việc giống người đào giếng: đào sâu chín nhẫn mà chưa tới mạch nước thì vẫn là giếng bỏ dở."
+  ],
+  [
+    77,
+    "恭敬而無實，君子不可虛拘。",
+    "Cung kính mà không có thực chất thì không thể dùng hình thức suông để ràng buộc người quân tử."
+  ],
+  [
+    78,
+    "有如時雨化之者，有成德者，有達財者，有答問者，有私淑艾者。",
+    "Có cách dạy như mưa đúng mùa giúp người chuyển hóa; có cách vun bồi đức, phát huy tài, giải đáp câu hỏi, hoặc giúp người tự học hỏi mà tiến bộ."
+  ],
+  [
+    80,
+    "其進銳者，其退速。",
+    "Tiến quá gấp thì lùi cũng nhanh."
+  ],
+  [
+    81,
+    "親親而仁民，仁民而愛物。",
+    "Từ thương người thân mà mở lòng nhân với dân; từ nhân với dân mà mở lòng yêu thương muôn vật."
+  ],
+  [
+    82,
+    "知者無不知也，當務之為急",
+    "Người trí muốn biết mọi điều, nhưng trước hết phải lo điều cần làm ngay."
+  ],
+  [
+    84,
+    "春秋無義戰。彼善於此，則有之矣。",
+    "Thời Xuân Thu không có cuộc chiến hoàn toàn chính nghĩa; chỉ có bên này đỡ hơn bên kia mà thôi."
+  ],
+  [
+    85,
+    "盡信書，則不如無書。",
+    "Tin sách hoàn toàn, không biết xét lại, thì thà không có sách còn hơn."
+  ],
+  [
+    88,
+    "殺人之父，人亦殺其父；殺人之兄，人亦殺其兄。",
+    "Giết cha người thì người cũng giết cha mình; giết anh người thì người cũng giết anh mình."
+  ],
+  [
+    89,
+    "古之為關也，將以禦暴。今之為關也，將以為暴。",
+    "Ngày xưa lập cửa quan để ngăn bạo lực; ngày nay có nơi lại dùng cửa quan để làm điều bạo ngược."
+  ],
+  [
+    90,
+    "身不行道，不行於妻子；使人不以道，不能行於妻子。",
+    "Tự mình không thực hành đạo thì ngay vợ con cũng không theo; sai khiến người không đúng đạo thì ngay vợ con cũng khó sai khiến."
+  ],
+  [
+    91,
+    "周于利者，凶年不能殺；周于德者，邪世不能亂。",
+    "Chuẩn bị đủ sinh kế thì năm đói không làm khốn mình; bồi đắp đầy đủ đức hạnh thì thời loạn không làm rối mình."
+  ],
+  [
+    92,
+    "好名之人，能讓千乘之國；苟非其人，簞食豆羹見於色。",
+    "Người ham danh có thể nhường cả nước nghìn cỗ xe; nhưng nếu không có thực đức, chỉ một giỏ cơm, bát canh cũng đủ khiến họ lộ vẻ tranh giành."
+  ],
+  [
+    93,
+    "無禮義，則上下亂。無政事，則財用不足。",
+    "Thiếu lễ nghĩa thì trên dưới rối loạn; thiếu sự quản trị thì tài lực không đủ dùng."
+  ],
+  [
+    95,
+    "民為貴，社稷次之，君為輕。",
+    "Dân là quý nhất, xã tắc đứng sau, người làm vua đứng cuối."
+  ],
+  [
+    98,
+    "賢者以其昭昭，使人昭昭；今以其昏昏，使人昭昭。",
+    "Người hiền dùng sự sáng rõ của mình để giúp người sáng rõ; nay có người tự mình còn mờ tối mà muốn làm người khác sáng ra."
+  ],
+  [
+    100,
+    "歸，斯受之而已矣。",
+    "Khi người ta đã quay về điều đúng, cứ tiếp nhận họ là đủ."
+  ],
+  [
+    101,
+    "有布縷之征，粟米之征，力役之征。君子用其一，緩其二。",
+    "Có thuế vải sợi, thuế thóc gạo và lao dịch. Người quân tử dùng một loại thì nới hai loại còn lại."
+  ],
+  [
+    102,
+    "諸侯之寶三：土地，人民，政事。寶珠玉者，殃必及身。",
+    "Chư hầu có ba điều quý: đất đai, nhân dân và chính sự. Chỉ quý châu ngọc thì tai họa sẽ đến thân."
+  ],
+  [
+    103,
+    "人皆有所不忍，達之於其所忍，仁也",
+    "Ai cũng có điều không nỡ làm; mở rộng sự không nỡ ấy đến những nơi mình còn nhẫn tâm, đó là nhân."
+  ],
+  [
+    103,
+    "人能充無欲害人之心，而仁不可勝用也",
+    "Mở rộng được tấm lòng không muốn hại người thì lòng nhân dùng không hết."
+  ],
+  [
+    104,
+    "言近而指遠者，善言也；守約而施博者，善道也。",
+    "Lời nói gần gũi mà ý chỉ sâu xa là lời hay; giữ điều cốt yếu mà ứng dụng rộng rãi là đạo tốt."
+  ],
+  [
+    104,
+    "人病舍其田而芸人之田，所求於人者重，而所以自任者輕。",
+    "Cái bệnh của người là bỏ ruộng mình để làm cỏ ruộng người: đòi hỏi người khác thì nặng, nhận trách nhiệm cho mình thì nhẹ."
+  ],
+  [
+    105,
+    "君子行法，以俟命而已矣。",
+    "Người quân tử làm theo điều đúng rồi bình thản đợi điều sẽ đến."
+  ],
+  [
+    106,
+    "說大人，則藐之，勿視其巍巍然。",
+    "Khi thuyết phục người quyền thế, đừng để vẻ cao sang của họ khiến mình khiếp sợ."
+  ],
+  [
+    107,
+    "養心莫善於寡欲。",
+    "Nuôi dưỡng tâm không gì tốt bằng bớt ham muốn."
+  ],
+  [
+    107,
+    "其為人也多欲，雖有存焉者，寡矣。",
+    "Người quá nhiều ham muốn thì dù còn giữ được tâm tốt, phần giữ được ấy cũng ít."
+  ],
+  [
+    14,
+    "胸中正，則眸子瞭焉；胸中不正，則眸子眊焉",
+    "Lòng ngay thẳng thì con ngươi sáng; lòng không ngay thẳng thì con ngươi đục."
+  ],
+  [
+    8,
+    "夫人必自侮，然後人侮之；家必自毀，而後人毀之；國必自伐，而後人伐之",
+    "Người ta ắt tự khinh mình rồi người khác mới khinh; nhà ắt tự phá hoại rồi người khác mới phá; nước ắt tự gây chiến rồi người khác mới đánh."
+  ],
+  [
+    65,
+    "人之有德慧術知者，恆存乎疢疾",
+    "Người có đức, có trí tuệ và tài năng, thường được nuôi dưỡng từ những nỗi khó nhọc, bệnh tật."
+  ],
+  [
+    63,
+    "及其聞一善言，見一善行，若決江河，沛然莫之能禦也",
+    "Khi nghe một lời thiện, thấy một việc thiện, thì như nước vỡ bờ sông, ào ạt không ai ngăn được."
+  ],
+  [
+    79,
+    "天下有道，以道殉身；天下無道，以身殉道",
+    "Thiên hạ có đạo thì lấy đạo mà giữ thân; thiên hạ không có đạo thì lấy thân mà giữ đạo."
+  ],
+  [
+    60,
+    "君子所過者化，所存者神，上下與天地同流",
+    "Bậc quân tử đi qua đâu thì cảm hóa đến đó, tâm ở đâu thì thần diệu ở đó, trên dưới cùng dòng chảy với trời đất."
+  ],
+  [
+    58,
+    "如其自視欿然，則過人遠矣",
+    "Nếu tự thấy mình còn thiếu thốn và khiêm nhường, thì vượt người xa lắm."
+  ],
+  [
+    24,
+    "言人之不善，當如後患何",
+    "Nói điều bất thiện của người khác, thì hậu họa biết làm sao?"
+  ]
 ]

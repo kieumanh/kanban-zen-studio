@@ -1,45 +1,257 @@
 [
- [1,"學不可以已。","Việc học không thể ngừng lại."],
- [1,"青，取之於藍，而青於藍；冰，水為之，而寒於水。","Màu xanh lấy từ cây chàm mà xanh hơn chàm; băng do nước tạo nên mà lạnh hơn nước."],
- [1,"君子博學而日參省乎己，則知明而行無過矣。","Người quân tử học rộng, mỗi ngày xét lại mình, thì hiểu biết sáng rõ và hành động tránh được sai lầm."],
- [1,"故不登高山，不知天之高也；不臨深谿，不知地之厚也；不聞先王之遺言，不知學問之大也。","Không lên núi cao thì chưa biết trời cao; không tới khe sâu thì chưa biết đất dày; không nghe lời người xưa để lại thì chưa biết sự học rộng lớn."],
- [1,"吾嘗終日而思矣，不如須臾之所學也。","Ta từng suy nghĩ suốt ngày, vẫn không bằng học hỏi trong một khoảnh khắc."],
- [1,"吾嘗跂而望矣，不如登高之博見也。","Ta từng kiễng chân trông xa, vẫn không bằng lên chỗ cao để nhìn rộng."],
- [1,"登高而招，臂非加長也，而見者遠；順風而呼，聲非加疾也，而聞者彰。","Đứng cao vẫy gọi, tay không dài thêm mà người xa vẫn thấy; thuận gió cất tiếng, giọng không mạnh hơn mà người nghe vẫn rõ."],
- [1,"君子生非異也，善假於物也。","Bản tính người quân tử không khác người; họ khéo nhờ vào những điều kiện bên ngoài."],
- [1,"故君子居必擇鄉，遊必就士，所以防邪僻而近中正也。","Vì vậy, người quân tử chọn nơi ở, chọn người giao du, để tránh lệch lạc và gần điều ngay chính."],
- [1,"故言有召禍也，行有招辱也，君子慎其所立乎！","Có lời nói rước họa, có hành động chuốc nhục; người quân tử phải thận trọng với chỗ mình đứng."],
- [1,"積土成山，風雨興焉；積水成淵，蛟龍生焉；積善成德，而神明自得，聖心備焉。","Góp đất thành núi thì gió mưa nổi lên; góp nước thành vực thì giao long sinh sống; tích điều thiện thành đức thì sự sáng suốt tự đến, tâm thánh dần đầy đủ."],
- [1,"故不積蹞步，無以致千里；不積小流，無以成江海。","Không góp từng bước nhỏ thì không tới nghìn dặm; không góp từng dòng nhỏ thì không thành sông biển."],
- [1,"騏驥一躍，不能十步；駑馬十駕，功在不舍。","Ngựa hay nhảy một lần chưa đi được mười bước; ngựa chậm đi mười chặng vẫn có công nhờ không bỏ cuộc."],
- [1,"鍥而舍之，朽木不折；鍥而不舍，金石可鏤。","Khắc rồi bỏ dở, gỗ mục cũng chưa đứt; khắc mãi không dừng, vàng đá cũng có thể chạm thành."],
- [1,"目不能兩視而明，耳不能兩聽而聰。","Mắt không thể nhìn hai phía cùng lúc mà vẫn rõ; tai không thể nghe hai nơi cùng lúc mà vẫn tỏ."],
- [1,"學至乎沒而後止也。","Việc học chỉ dừng khi đời sống kết thúc."],
- [1,"君子之學也，入乎耳，箸乎心，布乎四體，形乎動靜。","Sự học của người quân tử đi vào tai, ghi trong tâm, thấm khắp thân và biểu hiện trong từng động tĩnh."],
- [1,"小人之學也，入乎耳，出乎口；口耳之間，則四寸耳，曷足以美七尺之軀哉！","Sự học của kẻ tiểu nhân chỉ vào tai rồi ra miệng. Quanh quẩn giữa miệng và tai, làm sao đủ để hoàn thiện cả con người?"],
- [1,"君子之學也，以美其身；小人之學也，以為禽犢。","Người quân tử học để hoàn thiện mình; kẻ tiểu nhân học để làm món quà cầu lợi."],
- [1,"學莫便乎近其人。","Học không gì thuận lợi bằng được gần người có thể làm gương cho mình."],
- [1,"有爭氣者，勿與辯也。","Người đang mang tâm hiếu thắng thì đừng cùng họ tranh biện."],
- [1,"故未可與言而言謂之傲，可與言而不言謂之隱，不觀氣色而言謂之瞽。","Chưa đến lúc nói mà nói là thiếu chừng mực; có thể nói mà không nói là giấu điều cần nói; không xét thái độ người nghe mà nói là thiếu sáng suốt."],
- [1,"德操然後能定，能定然後能應。能定能應，夫是之謂成人。","Có đức và tiết tháo mới vững; vững rồi mới biết ứng xử. Vừa vững vàng vừa biết ứng xử, đó mới là người trưởng thành."],
- [2,"見善，修然必以自存也；見不善，愀然必以自省也。","Thấy điều thiện thì nghiêm túc giữ lấy cho mình; thấy điều chưa thiện thì lo mà tự xét lại."],
- [2,"故非我而當者，吾師也；是我而當者，吾友也；諂諛我者，吾賊也。","Người chê ta đúng là thầy ta; người khen ta đúng là bạn ta; người nịnh ta là kẻ làm hại ta."],
- [2,"好善無厭，受諫而能誡，雖欲無進，得乎哉！","Yêu điều thiện không chán, nhận lời can gián rồi biết tự răn, dù muốn không tiến bộ cũng khó!"],
- [2,"以善先人者謂之教，以善和人者謂之順","Lấy điều thiện dẫn dắt người là dạy; lấy điều thiện hòa cùng người là thuận."],
- [2,"是是非非謂之知，非是是非謂之愚。","Nhận điều đúng là đúng, điều sai là sai gọi là trí; đảo đúng thành sai, sai thành đúng gọi là ngu."],
- [2,"多聞曰博，少聞曰淺。多見曰閑，少見曰陋。","Nghe nhiều thì rộng, nghe ít thì nông; thấy nhiều thì thông thạo, thấy ít thì hẹp hòi."],
- [2,"少而理曰治，多而亂曰秏。","Ít mà có trật tự là biết tổ chức; nhiều mà rối loạn là hao tổn."],
- [2,"血氣剛強，則柔之以調和","Khí tính quá cứng mạnh thì làm mềm bằng sự điều hòa."],
- [2,"狹隘褊小，則廓之以廣大","Lòng hẹp hòi, nhỏ bé thì mở ra bằng tầm rộng lớn."],
- [2,"卑溼重遲貪利，則抗之以高志","Tinh thần thấp trệ, chậm chạp, ham lợi thì nâng lên bằng chí hướng cao."],
- [2,"愚款端慤，則合之以禮樂，通之以思索。","Chất phác mà thiếu hiểu biết thì bồi đắp bằng lễ nhạc, khai thông bằng suy xét."],
- [2,"內省而外物輕矣。","Biết xét vào bên trong thì những thứ bên ngoài nhẹ đi."],
- [2,"君子役物，小人役於物","Người quân tử sử dụng vật; kẻ tiểu nhân bị vật sử dụng."],
- [2,"身勞而心安，為之；利少而義多，為之","Thân nhọc mà tâm yên thì làm; lợi ít mà nghĩa nhiều thì làm."],
- [2,"良農不為水旱不耕，良賈不為折閱不市，士君子不為貧窮怠乎道。","Nhà nông giỏi không vì lo lụt hạn mà bỏ cày; người buôn giỏi không vì sợ lỗ mà bỏ chợ; người quân tử không vì nghèo mà lười với đạo."],
- [2,"勞苦之事則爭先，饒樂之事則能讓","Việc nhọc nhằn thì nhận trước; việc hưởng thụ thì biết nhường."],
- [2,"故蹞步而不休，跛鼈千里；累土而不輟，丘山崇成。","Từng bước không nghỉ, rùa què cũng đi được nghìn dặm; góp đất không ngừng, gò núi cũng cao lên."],
- [2,"道雖邇，不行不至；事雖小，不為不成。","Đường dù gần, không đi thì không tới; việc dù nhỏ, không làm thì không thành."],
- [2,"禮者所以正身也，師者所以正禮也。","Lễ dùng để sửa mình; thầy giúp hiểu và sửa cho đúng lễ."],
- [2,"無師吾安知禮之為是也？","Không có thầy, ta dựa vào đâu để biết cách thực hành lễ của mình là đúng?"]
+  [
+    1,
+    "學不可以已。",
+    "Việc học không thể ngừng lại."
+  ],
+  [
+    1,
+    "青，取之於藍，而青於藍；冰，水為之，而寒於水。",
+    "Màu xanh lấy từ cây chàm mà xanh hơn chàm; băng do nước tạo nên mà lạnh hơn nước."
+  ],
+  [
+    1,
+    "君子博學而日參省乎己，則知明而行無過矣。",
+    "Người quân tử học rộng, mỗi ngày xét lại mình, thì hiểu biết sáng rõ và hành động tránh được sai lầm."
+  ],
+  [
+    1,
+    "故不登高山，不知天之高也；不臨深谿，不知地之厚也；不聞先王之遺言，不知學問之大也。",
+    "Không lên núi cao thì chưa biết trời cao; không tới khe sâu thì chưa biết đất dày; không nghe lời người xưa để lại thì chưa biết sự học rộng lớn."
+  ],
+  [
+    1,
+    "吾嘗終日而思矣，不如須臾之所學也。",
+    "Ta từng suy nghĩ suốt ngày, vẫn không bằng học hỏi trong một khoảnh khắc."
+  ],
+  [
+    1,
+    "吾嘗跂而望矣，不如登高之博見也。",
+    "Ta từng kiễng chân trông xa, vẫn không bằng lên chỗ cao để nhìn rộng."
+  ],
+  [
+    1,
+    "登高而招，臂非加長也，而見者遠；順風而呼，聲非加疾也，而聞者彰。",
+    "Đứng cao vẫy gọi, tay không dài thêm mà người xa vẫn thấy; thuận gió cất tiếng, giọng không mạnh hơn mà người nghe vẫn rõ."
+  ],
+  [
+    1,
+    "君子生非異也，善假於物也。",
+    "Bản tính người quân tử không khác người; họ khéo nhờ vào những điều kiện bên ngoài."
+  ],
+  [
+    1,
+    "故君子居必擇鄉，遊必就士，所以防邪僻而近中正也。",
+    "Vì vậy, người quân tử chọn nơi ở, chọn người giao du, để tránh lệch lạc và gần điều ngay chính."
+  ],
+  [
+    1,
+    "故言有召禍也，行有招辱也，君子慎其所立乎！",
+    "Có lời nói rước họa, có hành động chuốc nhục; người quân tử phải thận trọng với chỗ mình đứng."
+  ],
+  [
+    1,
+    "積土成山，風雨興焉；積水成淵，蛟龍生焉；積善成德，而神明自得，聖心備焉。",
+    "Góp đất thành núi thì gió mưa nổi lên; góp nước thành vực thì giao long sinh sống; tích điều thiện thành đức thì sự sáng suốt tự đến, tâm thánh dần đầy đủ."
+  ],
+  [
+    1,
+    "故不積蹞步，無以致千里；不積小流，無以成江海。",
+    "Không góp từng bước nhỏ thì không tới nghìn dặm; không góp từng dòng nhỏ thì không thành sông biển."
+  ],
+  [
+    1,
+    "騏驥一躍，不能十步；駑馬十駕，功在不舍。",
+    "Ngựa hay nhảy một lần chưa đi được mười bước; ngựa chậm đi mười chặng vẫn có công nhờ không bỏ cuộc."
+  ],
+  [
+    1,
+    "鍥而舍之，朽木不折；鍥而不舍，金石可鏤。",
+    "Khắc rồi bỏ dở, gỗ mục cũng chưa đứt; khắc mãi không dừng, vàng đá cũng có thể chạm thành."
+  ],
+  [
+    1,
+    "目不能兩視而明，耳不能兩聽而聰。",
+    "Mắt không thể nhìn hai phía cùng lúc mà vẫn rõ; tai không thể nghe hai nơi cùng lúc mà vẫn tỏ."
+  ],
+  [
+    1,
+    "學至乎沒而後止也。",
+    "Việc học chỉ dừng khi đời sống kết thúc."
+  ],
+  [
+    1,
+    "君子之學也，入乎耳，箸乎心，布乎四體，形乎動靜。",
+    "Sự học của người quân tử đi vào tai, ghi trong tâm, thấm khắp thân và biểu hiện trong từng động tĩnh."
+  ],
+  [
+    1,
+    "小人之學也，入乎耳，出乎口；口耳之間，則四寸耳，曷足以美七尺之軀哉！",
+    "Sự học của kẻ tiểu nhân chỉ vào tai rồi ra miệng. Quanh quẩn giữa miệng và tai, làm sao đủ để hoàn thiện cả con người?"
+  ],
+  [
+    1,
+    "君子之學也，以美其身；小人之學也，以為禽犢。",
+    "Người quân tử học để hoàn thiện mình; kẻ tiểu nhân học để làm món quà cầu lợi."
+  ],
+  [
+    1,
+    "學莫便乎近其人。",
+    "Học không gì thuận lợi bằng được gần người có thể làm gương cho mình."
+  ],
+  [
+    1,
+    "有爭氣者，勿與辯也。",
+    "Người đang mang tâm hiếu thắng thì đừng cùng họ tranh biện."
+  ],
+  [
+    1,
+    "故未可與言而言謂之傲，可與言而不言謂之隱，不觀氣色而言謂之瞽。",
+    "Chưa đến lúc nói mà nói là thiếu chừng mực; có thể nói mà không nói là giấu điều cần nói; không xét thái độ người nghe mà nói là thiếu sáng suốt."
+  ],
+  [
+    1,
+    "德操然後能定，能定然後能應。能定能應，夫是之謂成人。",
+    "Có đức và tiết tháo mới vững; vững rồi mới biết ứng xử. Vừa vững vàng vừa biết ứng xử, đó mới là người trưởng thành."
+  ],
+  [
+    2,
+    "見善，修然必以自存也；見不善，愀然必以自省也。",
+    "Thấy điều thiện thì nghiêm túc giữ lấy cho mình; thấy điều chưa thiện thì lo mà tự xét lại."
+  ],
+  [
+    2,
+    "故非我而當者，吾師也；是我而當者，吾友也；諂諛我者，吾賊也。",
+    "Người chê ta đúng là thầy ta; người khen ta đúng là bạn ta; người nịnh ta là kẻ làm hại ta."
+  ],
+  [
+    2,
+    "好善無厭，受諫而能誡，雖欲無進，得乎哉！",
+    "Yêu điều thiện không chán, nhận lời can gián rồi biết tự răn, dù muốn không tiến bộ cũng khó!"
+  ],
+  [
+    2,
+    "以善先人者謂之教，以善和人者謂之順",
+    "Lấy điều thiện dẫn dắt người là dạy; lấy điều thiện hòa cùng người là thuận."
+  ],
+  [
+    2,
+    "是是非非謂之知，非是是非謂之愚。",
+    "Nhận điều đúng là đúng, điều sai là sai gọi là trí; đảo đúng thành sai, sai thành đúng gọi là ngu."
+  ],
+  [
+    2,
+    "多聞曰博，少聞曰淺。多見曰閑，少見曰陋。",
+    "Nghe nhiều thì rộng, nghe ít thì nông; thấy nhiều thì thông thạo, thấy ít thì hẹp hòi."
+  ],
+  [
+    2,
+    "少而理曰治，多而亂曰秏。",
+    "Ít mà có trật tự là biết tổ chức; nhiều mà rối loạn là hao tổn."
+  ],
+  [
+    2,
+    "血氣剛強，則柔之以調和",
+    "Khí tính quá cứng mạnh thì làm mềm bằng sự điều hòa."
+  ],
+  [
+    2,
+    "狹隘褊小，則廓之以廣大",
+    "Lòng hẹp hòi, nhỏ bé thì mở ra bằng tầm rộng lớn."
+  ],
+  [
+    2,
+    "卑溼重遲貪利，則抗之以高志",
+    "Tinh thần thấp trệ, chậm chạp, ham lợi thì nâng lên bằng chí hướng cao."
+  ],
+  [
+    2,
+    "愚款端慤，則合之以禮樂，通之以思索。",
+    "Chất phác mà thiếu hiểu biết thì bồi đắp bằng lễ nhạc, khai thông bằng suy xét."
+  ],
+  [
+    2,
+    "內省而外物輕矣。",
+    "Biết xét vào bên trong thì những thứ bên ngoài nhẹ đi."
+  ],
+  [
+    2,
+    "君子役物，小人役於物",
+    "Người quân tử sử dụng vật; kẻ tiểu nhân bị vật sử dụng."
+  ],
+  [
+    2,
+    "身勞而心安，為之；利少而義多，為之",
+    "Thân nhọc mà tâm yên thì làm; lợi ít mà nghĩa nhiều thì làm."
+  ],
+  [
+    2,
+    "良農不為水旱不耕，良賈不為折閱不市，士君子不為貧窮怠乎道。",
+    "Nhà nông giỏi không vì lo lụt hạn mà bỏ cày; người buôn giỏi không vì sợ lỗ mà bỏ chợ; người quân tử không vì nghèo mà lười với đạo."
+  ],
+  [
+    2,
+    "勞苦之事則爭先，饒樂之事則能讓",
+    "Việc nhọc nhằn thì nhận trước; việc hưởng thụ thì biết nhường."
+  ],
+  [
+    2,
+    "故蹞步而不休，跛鼈千里；累土而不輟，丘山崇成。",
+    "Từng bước không nghỉ, rùa què cũng đi được nghìn dặm; góp đất không ngừng, gò núi cũng cao lên."
+  ],
+  [
+    2,
+    "道雖邇，不行不至；事雖小，不為不成。",
+    "Đường dù gần, không đi thì không tới; việc dù nhỏ, không làm thì không thành."
+  ],
+  [
+    2,
+    "禮者所以正身也，師者所以正禮也。",
+    "Lễ dùng để sửa mình; thầy giúp hiểu và sửa cho đúng lễ."
+  ],
+  [
+    2,
+    "無師吾安知禮之為是也？",
+    "Không có thầy, ta dựa vào đâu để biết cách thực hành lễ của mình là đúng?"
+  ],
+  [
+    2,
+    "志意修則驕富貴，道義重則輕王公；內省而外物輕矣",
+    "Chí ý được tu dưỡng thì không kiêu ngạo trước giàu sang; đạo nghĩa được coi trọng thì coi nhẹ bậc vương công; biết nội tỉnh thì ngoại vật cũng nhẹ đi."
+  ],
+  [
+    2,
+    "凡治氣養心之術，莫徑由禮，莫要得師，莫神一好",
+    "Phàm phép nuôi khí dưỡng tâm: không đường nào thẳng bằng lễ, không điều gì quan trọng bằng có thầy, không gì thần diệu bằng một lòng ưa thích."
+  ],
+  [
+    2,
+    "道雖邇，不行不至；事雖小，不為不成",
+    "Đạo dù gần, không làm thì không tới; việc dù nhỏ, không làm thì không thành."
+  ],
+  [
+    2,
+    "故蹞步而不休，跛鼈千里；累土而不輟，丘山崇成",
+    "Nên dù bước từng bước không nghỉ, con ba ba què cũng đi được ngàn dặm; chất đất không ngừng, gò núi cũng thành cao."
+  ],
+  [
+    2,
+    "君子貧窮而志廣，富貴而體恭",
+    "Quân tử nghèo khó mà chí vẫn rộng, giàu sang mà thân vẫn cung kính."
+  ],
+  [
+    2,
+    "怒不過奪，喜不過予",
+    "Giận không quá đến mức đoạt lấy, mừng không quá đến mức ban cho."
+  ],
+  [
+    1,
+    "積善成德，而神明自得，聖心備焉",
+    "Tích lũy điều thiện thành đức, thì thần minh tự đạt, tâm bậc thánh được đầy đủ."
+  ],
+  [
+    2,
+    "故非我而當者，吾師也；是我而當者，吾友也",
+    "Kẻ nói điều đúng mà không tán thành ta là thầy ta; kẻ nói điều đúng như ta là bạn ta."
+  ]
 ]
