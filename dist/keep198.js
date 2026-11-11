@@ -205,7 +205,7 @@ function zenPaintQuickNoteTabs(){
 
 }
 // v1.19.3: "Ghim công việc" ở thanh bên, cùng kiểu "Ghi chú ghim nhanh": hiện tối đa 3 việc (ô màu theo dự án, tên việc, tên dự án, nút bỏ ghim) và nút xem tất cả.
-// Ít hơn hoặc đủ 3 việc: nút "Tất cả công việc" mở trang Tất cả công việc. Nhiều hơn 3: nút "Xem tất cả (N)" mở rộng ngay tại chỗ, bấm lại để thu gọn.
+// Ít hơn hoặc đủ 3 việc: không có nút phụ (v1.66.0 đã gỡ trang Tất cả công việc). Nhiều hơn 3: nút "Xem tất cả (N)" mở rộng ngay tại chỗ, bấm lại để thu gọn.
 let zenPinsExpanded=false;
 function zenPaintPinnedTasks(){
  const section=document.querySelector('#side-pinned-tasks');if(!section)return;
@@ -214,7 +214,7 @@ function zenPaintPinnedTasks(){
  const more=items.length>3;if(!more)zenPinsExpanded=false;
  const shown=more&&zenPinsExpanded?items:items.slice(0,3);
  const rows=shown.map(({p,t})=>{const color=/^#[0-9a-f]{6}$/i.test(p.color||'')?p.color:'#7950c8',title=t.title||'Việc không tên';return '<div class="zen-pin-task-item" style="--task-color:'+color+'"><button type="button" data-zen-task-shortcut="'+esc(p.id)+'|'+esc(t.id)+'" title="Mở việc '+esc(title)+'"><span class="zen-pin-task-badge" aria-hidden="true">'+svgIcon('tasks')+'</span><span class="zen-pin-task-text"><span class="zen-pin-task-title">'+esc(title)+'</span><small>'+esc(p.name)+'</small></span></button><button type="button" data-zen-task-unpin="'+esc(p.id)+'|'+esc(t.id)+'" aria-label="Bỏ ghim '+esc(title)+'" title="Bỏ ghim"><svg class="ui-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div>';}).join('');
- const all=more?'<button type="button" class="zen-pin-task-all" data-zen-pins-toggle aria-expanded="'+zenPinsExpanded+'">'+(zenPinsExpanded?'Thu gọn':'Xem tất cả ('+items.length+')')+' <span aria-hidden="true">'+(zenPinsExpanded?'↑':'↓')+'</span></button>':'<button type="button" class="zen-pin-task-all" data-view="tasks">Tất cả công việc <span aria-hidden="true">→</span></button>';
+ const all=more?'<button type="button" class="zen-pin-task-all" data-zen-pins-toggle aria-expanded="'+zenPinsExpanded+'">'+(zenPinsExpanded?'Thu gọn':'Xem tất cả ('+items.length+')')+' <span aria-hidden="true">'+(zenPinsExpanded?'↑':'↓')+'</span></button>':'';
  section.innerHTML='<div class="navlabel"><span>'+svgIcon('pin')+'Ghim công việc</span><small aria-label="'+items.length+' công việc đã ghim">'+items.length+'</small></div><div class="zen-pin-task-list'+(zenPinsExpanded?' is-expanded':'')+'">'+rows+'</div>'+all;
 }
 // v1.19.3: khôi phục nút ghim ở góc thẻ công việc (đã gỡ ở v1.18.4).

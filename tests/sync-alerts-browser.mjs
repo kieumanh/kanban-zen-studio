@@ -92,7 +92,7 @@ const OLD_WORD = /trên máy(?! chủ| tính)/i;
 
 async function wording(cfg) {
   const { context, page } = await h.open(cfg.width, { touch: cfg.touch });
-  for (const view of ['dashboard', 'projects', 'tasks', 'calendar', 'gantt', 'notes', 'resources', 'archive', 'trash', 'focus', 'versions']) {
+  for (const view of ['dashboard', 'projects', 'budget', 'calendar', 'gantt', 'notes', 'resources', 'archive', 'trash', 'focus', 'versions']) {
     await h.show(page, view).catch(() => {});
     const text = await page.evaluate(() => document.body.innerText);
     const hit = text.match(OLD_WORD);

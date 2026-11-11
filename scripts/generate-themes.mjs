@@ -18,6 +18,7 @@ export const SOURCES = [
   'task-list',
   'experience',
   'habits',
+  'budget',
   'studio-zen',
 ];
 

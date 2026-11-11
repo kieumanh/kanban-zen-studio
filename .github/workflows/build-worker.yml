@@ -74,7 +74,6 @@ jobs:
           node tests/theme-toggle-browser.mjs
           node tests/notifications-ui-browser.mjs
           node tests/quick-notes-browser.mjs
-          node tests/task-chips-browser.mjs
           node tests/checklist-browser.mjs
           node tests/focus-button-browser.mjs
           node tests/focus-hover-browser.mjs
@@ -132,6 +131,7 @@ jobs:
           node tests/top-tools-compact-browser.mjs
           node tests/habit-today-align-browser.mjs
           node tests/task-editor-compact-browser.mjs
+          node tests/budget-browser.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:

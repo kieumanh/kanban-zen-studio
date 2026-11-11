@@ -129,7 +129,7 @@ try {
     // Rời trang rồi vào lại: mở ở bảng tuần.
     await page.click('[data-hb-mode=report]');
     await page.waitForSelector('[data-hb-report]');
-    await h.show(page, 'tasks');
+    await h.show(page, 'budget');
     await h.show(page, 'habits');
     assert.equal(await page.locator('.hb-list').count(), 1, 'vào lại mở ở bảng tuần');
     await page.context().close();

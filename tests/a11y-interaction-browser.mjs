@@ -201,7 +201,7 @@ try {
     const closeDialogs = async () => {
       await page.evaluate(() => { for (const d of document.querySelectorAll('dialog[open]')) d.close(); });
     };
-    for (const v of ['dashboard', 'projects', 'tasks', 'calendar', 'gantt', 'notes', 'resources', 'archive', 'trash', 'focus']) {
+    for (const v of ['dashboard', 'projects', 'budget', 'calendar', 'gantt', 'notes', 'resources', 'archive', 'trash', 'focus']) {
       await show(page, v);
       await scanTargets(page, tag(v), touch);
     }

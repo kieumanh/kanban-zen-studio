@@ -196,7 +196,7 @@ try {
       'dashboard',
       'projects',
       'calendar',
-      'tasks',
+      'budget',
       'archive',
       'trash',
     ]) {

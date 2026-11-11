@@ -104,7 +104,7 @@ try {
     assert.ok(m.h <= m.lineHeight * 2.2, `tên dự án cao ${m.h}px ở ${width}px, không được vỡ thành nhiều dòng`);
     assert.ok(m.scrollW <= m.vw, `trang tràn ngang ${m.scrollW}px trong khung ${m.vw}px ở ${width}px (bảng dự án)`);
     assert.ok(m.percents.length > 0 && m.percents.every((h) => h < 24), `phần trăm tiến độ trên tab bị bẻ dòng ở ${width}px: ${m.percents}`);
-    for (const view of ['dashboard', 'calendar', 'gantt', 'tasks']) {
+    for (const view of ['dashboard', 'calendar', 'gantt', 'budget']) {
       await show(page, view);
       const v = await measure(page);
       assert.ok(v.scrollW <= v.vw, `trang tràn ngang ${v.scrollW}px trong khung ${v.vw}px ở ${width}px (${view})`);

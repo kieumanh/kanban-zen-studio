@@ -163,6 +163,31 @@ function validDate(value) {
   const d = new Date(value + 'T12:00:00Z');
   return Number.isFinite(d.getTime()) && d.toISOString().slice(0, 10) === value;
 }
+// v1.66.0: sổ thu chi của dự án (Phân bổ tài nguyên). Cùng quy tắc với dist/budget.js validLedger.
+function validLedger(l) {
+  if (l === undefined) return true;
+  if (!Array.isArray(l) || l.length > 5000) return false;
+  const ids = new Set();
+  return l.every(
+    (e) =>
+      e &&
+      typeof e.id === 'string' &&
+      /^[A-Za-z0-9_-]{1,99}$/.test(e.id) &&
+      !ids.has(e.id) &&
+      !!ids.add(e.id) &&
+      (e.type === 'in' || e.type === 'out') &&
+      Number.isInteger(e.amount) &&
+      e.amount > 0 &&
+      e.amount <= 1e12 &&
+      typeof e.category === 'string' &&
+      e.category.length <= 40 &&
+      typeof e.note === 'string' &&
+      e.note.length <= 200 &&
+      typeof e.date === 'string' &&
+      /^\d{4}-\d{2}-\d{2}$/.test(e.date) &&
+      validDate(e.date),
+  );
+}
 function validContent(d) {
   const ids = new Set(),
     notes = d.notes ?? [];
@@ -634,6 +659,7 @@ export function validWorkspace(d) {
                 l.name.trim() &&
                 /^#[a-f0-9]{6}$/i.test(l.color),
             ))) &&
+        validLedger(p.ledger) &&
         Array.isArray(p.tasks) &&
         p.tasks.length <= 2000 &&
         p.tasks.every(

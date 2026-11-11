@@ -138,7 +138,7 @@ try {
     };
 
     // 1. Mọi màn hình chính (trừ nhật ký phát triển, xem ghi chú đầu tệp).
-    for (const v of ['dashboard', 'projects', 'tasks', 'calendar', 'gantt', 'notes', 'resources', 'archive', 'trash', 'focus']) {
+    for (const v of ['dashboard', 'projects', 'budget', 'calendar', 'gantt', 'notes', 'resources', 'archive', 'trash', 'focus']) {
       await show(page, v);
       await scan(page, tag('màn hình ' + v));
     }

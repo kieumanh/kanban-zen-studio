@@ -1,4 +1,4 @@
-// v1.20.0: "Việc hằng ngày" — bảng thói quen theo tuần dưới mục "Tất cả công việc".
+// v1.20.0: "Việc hằng ngày" — bảng thói quen theo tuần dưới mục "Phân bổ tài nguyên" (trước v1.66.0 là "Tất cả công việc").
 // Kiểm tra: vị trí trong menu, thêm/sửa/xóa (xóa có xác nhận, có thể giữ lại), dấu tích có hiệu ứng và đồng bộ màu,
 // chuỗi ngày + vòng tiến độ, chuyển tuần, lưu lên máy chủ giả (qua flatten/inflate/validWorkspace thật) và còn nguyên sau khi tải lại,
 // không tràn ngang và nút ≥44px ở 390/820/1440px, tôn trọng giảm chuyển động.
@@ -20,14 +20,14 @@ async function waitServer(page, server, test, what) {
   assert.ok(test(habitsOnServer(server)), 'máy chủ chưa nhận: ' + what);
 }
 try {
-  // 1) Menu: nằm ngay dưới "Tất cả công việc"; trống thì có gợi ý.
+  // 1) Menu: nằm ngay dưới "Phân bổ tài nguyên"; trống thì có gợi ý.
   {
     const { page, server } = await h.open(1440);
     // v1.24.0: chờ mục menu được thêm sau khi render (trước đây đọc thứ tự ngay nên đôi khi thiếu "habits"). Không nới khẳng định.
     await page.waitForSelector('.sidebar [data-view=habits]');
     const order = await page.evaluate(() => [...document.querySelectorAll('.sidebar nav [data-view], .sidebar .nav[data-view]')].map((b) => b.dataset.view));
-    const i = order.indexOf('tasks');
-    assert.equal(order[i + 1], 'habits', 'mục Việc hằng ngày phải nằm ngay dưới Tất cả công việc: ' + order.join(','));
+    const i = order.indexOf('budget');
+    assert.equal(order[i + 1], 'habits', 'mục Việc hằng ngày phải nằm ngay dưới Phân bổ tài nguyên: ' + order.join(','));
     assert.equal((await page.locator('.sidebar [data-view=habits]').innerText()).trim(), 'Việc hằng ngày');
     await page.click('.sidebar [data-view=habits]');
     await page.waitForFunction(() => view === 'habits' && document.querySelector('#main h1')?.textContent === 'Việc hằng ngày');
@@ -179,8 +179,8 @@ try {
       await page.click('#menu');
       await settle(page, 500);
       assert.ok(await page.locator('.sidebar.open [data-view=habits]').isVisible(), 'mục menu hiện trong ngăn kéo điện thoại');
-      await page.click('.sidebar.open [data-view=tasks]');
-      await page.waitForFunction(() => view === 'tasks');
+      await page.click('.sidebar.open [data-view=budget]');
+      await page.waitForFunction(() => view === 'budget');
       await page.click('#menu');
       await settle(page, 500);
       await page.click('.sidebar.open [data-view=habits]');

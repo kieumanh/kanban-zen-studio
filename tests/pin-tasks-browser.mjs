@@ -1,5 +1,5 @@
 // Hồi quy v1.19.3: nút ghim trở lại trên thẻ công việc; mục "Ghim công việc" ở thanh bên nằm TRÊN "Ghi chú ghim nhanh",
-// hiện tối đa 3 việc, có nút xem tất cả (mở rộng khi quá 3 việc, về "Tất cả công việc" khi ít hơn), bỏ ghim được; không tràn ở 390/820/1440px.
+// hiện tối đa 3 việc, có nút xem tất cả (mở rộng khi quá 3 việc; từ v1.66.0 không còn nút phụ khi có ≤ 3 việc vì đã gỡ trang Tất cả công việc), bỏ ghim được; không tràn ở 390/820/1440px.
 import assert from 'node:assert/strict';
 import { startHarness, makeProject } from './lib/browser-harness.mjs';
 
@@ -90,7 +90,7 @@ try {
     await page.locator('#side-pinned-tasks .zen-pin-task-all').click();
     await page.waitForFunction(() => document.querySelectorAll('#side-pinned-tasks .zen-pin-task-item').length === 3);
 
-    // 4. Bỏ ghim bằng nút ×: việc không mất, chỉ bỏ cờ ghim; còn ≤ 3 việc thì nút đổi thành "Tất cả công việc".
+    // 4. Bỏ ghim bằng nút ×: việc không mất, chỉ bỏ cờ ghim; còn ≤ 3 việc thì không còn nút xem tất cả (và không còn nút sang "Tất cả công việc").
     await page.locator('#side-pinned-tasks .zen-pin-task-all').click(); // mở rộng để thấy cả 5 việc rồi bỏ ghim 2 việc cuối
     await page.waitForFunction(() => document.querySelectorAll('#side-pinned-tasks .zen-pin-task-item').length === 5);
     await page.locator('#side-pinned-tasks [data-zen-task-unpin="p1|p1t5"]').evaluate((b) => b.click());
@@ -98,18 +98,16 @@ try {
     await page.locator('#side-pinned-tasks [data-zen-task-unpin="p1|p1t3"]').evaluate((b) => b.click());
     await page.waitForFunction(() => project('p1').tasks.filter((t) => t.pinned).length === 3);
     assert.equal(await page.evaluate(() => project('p1').tasks.length), 8, 'bỏ ghim không được làm mất việc' + at);
-    await page.waitForFunction(() => /^Tất cả công việc/.test(document.querySelector('#side-pinned-tasks .zen-pin-task-all')?.textContent.trim() ?? ''));
+    await page.waitForFunction(() => !document.querySelector('#side-pinned-tasks .zen-pin-task-all'));
     assert.equal(await rows(page), 3, 'còn 3 việc ghim' + at);
+    assert.equal(await page.locator('#side-pinned-tasks').innerText().then((t) => t.includes('Tất cả công việc')), false, 'không còn nút Tất cả công việc' + at);
 
-    // 5. Bấm tên việc mở đúng việc; "Tất cả công việc" sang trang Tất cả công việc.
+    // 5. Bấm tên việc mở đúng việc.
     await openSidebar(page, width);
     await page.locator('#side-pinned-tasks [data-zen-task-shortcut]').first().click();
     await page.waitForSelector('dialog[open]');
     await page.evaluate(() => document.querySelector('dialog[open] .modal-close, dialog[open] [aria-label="Đóng"]')?.click());
     await page.evaluate(() => document.querySelectorAll('dialog[open]').forEach((d) => d.close()));
-    await openSidebar(page, width);
-    await page.locator('#side-pinned-tasks .zen-pin-task-all').click();
-    await page.waitForFunction(() => view === 'tasks');
 
     // 6. Bỏ ghim hết thì khung ẩn đi.
     await page.evaluate(() => {

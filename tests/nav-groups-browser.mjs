@@ -21,7 +21,7 @@ try {
         moreOpen: document.querySelector('.nav-more').open,
         moreItems: [...document.querySelectorAll('.nav-more [data-view]')].map((b) => b.dataset.view),
         afterNotes: document.querySelector('[data-view=notes]').nextElementSibling.dataset.view,
-        habitsAfterTasks: order[order.indexOf('tasks') + 1],
+        habitsAfterTasks: order[order.indexOf('budget') + 1],
         all: order.sort(),
         summaryH: document.querySelector('.nav-more-summary').getBoundingClientRect().height,
         versions: !!document.querySelector('.sidebar .side-bottom [data-view=versions]'),
@@ -32,7 +32,7 @@ try {
     assert.equal(s.moreOpen, false, '"Thêm" mặc định thu gọn' + at);
     assert.deepEqual(s.moreItems, ['archive', 'trash'], 'Lưu trữ và Thùng rác nằm trong "Thêm"' + at);
     assert.equal(s.afterNotes, 'resources', 'Tài nguyên nằm cùng nhóm Ý tưởng' + at);
-    assert.equal(s.habitsAfterTasks, 'habits', 'thứ tự cũ: Việc hằng ngày ngay dưới Tất cả công việc' + at);
+    assert.equal(s.habitsAfterTasks, 'habits', 'thứ tự: Việc hằng ngày ngay dưới Phân bổ tài nguyên' + at);
     assert.ok(s.all.includes('archive') && s.all.includes('trash') && s.all.includes('focus') && s.versions, 'không mất mục nào' + at);
     assert.ok(s.summaryH >= 44, '"Thêm" chạm được ≥44px' + at + ': ' + s.summaryH);
     assert.equal(s.overflow, false, 'không tràn ngang' + at);

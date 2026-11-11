@@ -1,5 +1,5 @@
 /*  v1.16.0 — chế độ tối (chọn bằng thuộc tính data-theme="dark" trên <html>, đặt bởi theme.js).
-   Sinh tự động bằng scripts/generate-themes.mjs từ 10 tệp CSS nguồn. KHÔNG sửa tay: sửa bộ sinh rồi chạy "node scripts/generate-themes.mjs".  */
+   Sinh tự động bằng scripts/generate-themes.mjs từ 11 tệp CSS nguồn. KHÔNG sửa tay: sửa bộ sinh rồi chạy "node scripts/generate-themes.mjs".  */
 :root[data-theme=dark] {
     --bg: #151219;
     --paper: #1b181f;
@@ -2815,6 +2815,199 @@
 }
 :root[data-theme=dark] .hb-grip:focus-visible {
     outline: 3px solid color-mix(in srgb,var(--brand-purple) 55%,#302b36)
+}
+:root[data-theme=dark] .bg-hint {
+    color: var(--muted, #c8bed2)
+}
+:root[data-theme=dark] .bg-scope span {
+    color: var(--muted, #c8bed2)
+}
+:root[data-theme=dark] .bg-scope select {
+    border: 1px solid var(--line, #3d3843);
+    background: var(--paper, #1b181f);
+    color: var(--ink, #dcd3ec)
+}
+:root[data-theme=dark] .bg-scope select:focus-visible {
+    outline: 3px solid var(--ink, #bbb3c9)
+}
+:root[data-theme=dark] .bg-actions .bg-add-in {
+    color: #a3d9bc;
+    border-color: #32463c;
+    background: #17141b
+}
+:root[data-theme=dark] .bg-card {
+    border: 1px solid var(--line, #3d3843);
+    background: var(--paper, #1b181f)
+}
+:root[data-theme=dark] .bg-card small {
+    color: var(--muted, #c8bed2)
+}
+:root[data-theme=dark] .bg-card strong {
+    color: var(--ink, #dcd3ec)
+}
+:root[data-theme=dark] .bg-card .bg-out {
+    color: #ffabc8
+}
+:root[data-theme=dark] .bg-card .bg-in {
+    color: #a3d9bc
+}
+:root[data-theme=dark] .bg-card-net.is-gain strong {
+    color: #a3d9bc
+}
+:root[data-theme=dark] .bg-card-net.is-loss strong {
+    color: #ffabc8
+}
+:root[data-theme=dark] .bg-card-net.is-even strong {
+    color: #d9c3fb
+}
+:root[data-theme=dark] .bg-badge {
+    color: #d9c3fb;
+    background: #1c1821
+}
+:root[data-theme=dark] .bg-badge.is-gain {
+    color: #a3d9bc;
+    background: #131017
+}
+:root[data-theme=dark] .bg-badge.is-loss {
+    color: #ffabc8;
+    background: #120f16
+}
+:root[data-theme=dark] .bg-badge.is-none {
+    color: var(--muted, #c8bed2);
+    background: #120f16
+}
+:root[data-theme=dark] .bg-recovery-track {
+    background: #1c1821
+}
+:root[data-theme=dark] .bg-recovery small {
+    color: var(--muted, #c8bed2)
+}
+:root[data-theme=dark] .bg-panel h2 small {
+    color: var(--muted, #c8bed2)
+}
+:root[data-theme=dark] .bg-seg {
+    border: 1px solid var(--line, #3d3843);
+    background: var(--paper, #1b181f)
+}
+:root[data-theme=dark] .bg-seg button {
+    color: var(--muted, #c8bed2)
+}
+:root[data-theme=dark] .bg-seg button[aria-pressed='true'] {
+    color: #ffffff
+}
+:root[data-theme=dark] .bg-seg button:focus-visible {
+    outline: 3px solid var(--ink, #bbb3c9)
+}
+:root[data-theme=dark] .bg-donut-wrap {
+    color: var(--ink, #dcd3ec)
+}
+:root[data-theme=dark] .bg-donut-empty {
+    border: 2px dashed var(--line, #3d3843);
+    color: var(--muted, #c8bed2)
+}
+:root[data-theme=dark] .bg-donut-center small {
+    color: var(--muted, #c8bed2)
+}
+:root[data-theme=dark] .bg-donut-center strong {
+    color: var(--ink, #dcd3ec)
+}
+:root[data-theme=dark] .bg-legend-name {
+    color: var(--ink, #dcd3ec)
+}
+:root[data-theme=dark] .bg-legend-val {
+    color: var(--ink, #dcd3ec)
+}
+:root[data-theme=dark] .bg-legend-pct {
+    color: var(--muted, #c8bed2)
+}
+:root[data-theme=dark] .bg-empty-note, :root[data-theme=dark] .bg-empty p {
+    color: var(--muted, #c8bed2)
+}
+:root[data-theme=dark] .bg-project {
+    border: 1px solid var(--line, #3d3843);
+    border-left: 4px solid var(--bg-proj, #845cd6);
+    background: var(--paper, #1b181f);
+    color: var(--ink, #dcd3ec)
+}
+:root[data-theme=dark] .bg-project:focus-visible {
+    outline: 3px solid var(--ink, #bbb3c9)
+}
+:root[data-theme=dark] .bg-project-line {
+    color: var(--muted, #c8bed2)
+}
+:root[data-theme=dark] .bg-project-line b {
+    color: #d9c3fb
+}
+:root[data-theme=dark] .bg-project-line b.is-gain {
+    color: #a3d9bc
+}
+:root[data-theme=dark] .bg-project-line b.is-loss {
+    color: #ffabc8
+}
+:root[data-theme=dark] .bg-mini {
+    background: #1c1821
+}
+:root[data-theme=dark] .bg-entry {
+    border-top: 1px solid var(--line, #3d3843)
+}
+:root[data-theme=dark] .bg-entry-kind {
+    color: #ffabc8;
+    background: #120f16
+}
+:root[data-theme=dark] .bg-entry.is-in .bg-entry-kind {
+    color: #a3d9bc;
+    background: #131017
+}
+:root[data-theme=dark] .bg-entry-main small {
+    color: var(--muted, #c8bed2)
+}
+:root[data-theme=dark] .bg-entry-amount {
+    color: #ffabc8
+}
+:root[data-theme=dark] .bg-entry.is-in .bg-entry-amount {
+    color: #a3d9bc
+}
+:root[data-theme=dark] .bg-form-project {
+    color: var(--muted, #c8bed2)
+}
+:root[data-theme=dark] .bg-type-opt {
+    border: 1px solid var(--line, #3d3843)
+}
+:root[data-theme=dark] .bg-type-opt.is-out:has(input:checked) {
+    color: #ffabc8;
+    border-color: #b44371;
+    background: #120f16
+}
+:root[data-theme=dark] .bg-type-opt.is-in:has(input:checked) {
+    color: #a3d9bc;
+    border-color: #94c5aa;
+    background: #131017
+}
+:root[data-theme=dark] .bg-type-opt:has(input:focus-visible) {
+    outline: 3px solid var(--ink, #bbb3c9)
+}
+:root[data-theme=dark] .bg-cat-chip {
+    border: 1px solid var(--line, #3d3843);
+    background: var(--paper, #1b181f);
+    color: var(--ink, #dcd3ec)
+}
+:root[data-theme=dark] .bg-cat-chip:hover {
+    border-color: #845cd6
+}
+:root[data-theme=dark] .bg-cat-chip:focus-visible {
+    outline: 3px solid var(--ink, #bbb3c9)
+}
+:root[data-theme=dark] .bg-confirm-delete {
+    color: #fcafb2;
+    border-color: #503c3f;
+    background: #19151d
+}
+:root[data-theme=dark] .sr-chip {
+    color: #d9c3fb;
+    background: #1c1821
+}
+:root[data-theme=dark] .sr-empty p {
+    color: var(--muted, #c8bed2)
 }
 :root[data-theme=dark] {
     --muted: #ccc2d7;

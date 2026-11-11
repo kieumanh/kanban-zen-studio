@@ -1,10 +1,11 @@
-// Hồi quy v1.15.42: danh sách việc gọn (màn hình "Tất cả việc"). Đo ở 390px (cảm ứng) / 820px (cảm ứng) / 1180–1181px / 1440px:
+// Hồi quy v1.15.42, chỉnh ở v1.66.0: danh sách việc gọn. Từ v1.66.0 không còn trang "Tất cả công việc"; danh sách này là trang kết quả khi gõ vào ô tìm kiếm.
+// Đo ở 390px (cảm ứng) / 820px (cảm ứng) / 1180–1181px / 1440px:
 //  1. mỗi hàng việc thấp: ≤150px ở 390px, 820px và 1180px (trước 309px và 114–163px; hàng có tên dài tối đa hai dòng), ≤64px ở 1181px trở lên (trước 98px), kể cả hàng có tên rất dài; không tràn ngang;
 //  2. không còn nhãn "Hạn chót" lặp ở từng hàng; việc quá hạn ghi "Quá hạn" đúng một lần, cạnh tên dự án; tên dự án nằm trong ô tên việc, không còn cột Dự án;
-//  3. việc đã xong nằm cuối ở thứ tự mặc định và sau khi đổi sang "Tên A–Z", "Hạn gần nhất"; việc xong gạch ngang và dùng màu chữ phụ;
-//  4. ô chọn hàng có giải thích (tiêu đề, mô tả đọc được, dòng chú thích nhìn thấy được);
+//  3. việc đã xong nằm cuối; việc xong gạch ngang và dùng màu chữ phụ;
 //  5. ngày và ưu tiên là chip: ≥44px cao khi cảm ứng, ≤36px khi chuột; nhãn đọc-được kèm giá trị hiện tại; ngày vẫn hiện đúng dd/mm/yyyy; đổi ưu tiên vẫn lưu;
-//  6. lọc bằng ô tìm vẫn ẩn được hàng (hàng có thuộc tính hidden không được hiện lại bởi bố cục lưới).
+//  7. (v1.66.0) đã gỡ bộ lọc, sắp xếp, chọn nhiều việc, nút việc mới và chip thời hạn; xóa ô tìm kiếm thì về Tổng quan.
+// Các mục 4 (giải thích ô chọn) và 6 (lọc trong danh sách) thuộc tính năng đã gỡ nên không còn.
 import { createServer } from 'node:http';
 import assert from 'node:assert/strict';
 import { flatten, inflate } from '../dist/modules/delta.mjs';
@@ -170,15 +171,10 @@ async function open(width, touch = false) {
   return { context, page };
 }
 
-async function show(page, name) {
-  const ready = (name) => document.querySelector('#main h1') && view === name;
-  await page.evaluate((name) => go(name, 'p1'), name);
-  await page
-    .waitForFunction(ready, name, { timeout: 10000 })
-    .catch(async () => {
-      await page.evaluate((name) => go(name, 'p1'), name);
-      await page.waitForFunction(ready, name, { timeout: 10000 });
-    });
+// Danh sách việc chỉ còn xuất hiện làm kết quả tìm kiếm. "công việc" khớp thẻ của mọi việc nên cho đủ hàng.
+async function search(page, text = 'công việc') {
+  await page.fill('#search', text);
+  await page.waitForFunction(() => view === 'tasks' && document.querySelector('#main .task-table tbody tr[data-task]'), null, { timeout: 10000 });
   await page.waitForTimeout(250);
 }
 
@@ -213,7 +209,7 @@ const fail = (cfg, msg) =>
 
 for (const cfg of configs) {
   const { context, page } = await open(cfg.w, cfg.touch);
-  await show(page, 'tasks');
+  await search(page);
   const rows = await rowsInfo(page);
   if (rows.length < 20) fail(cfg, `chỉ thấy ${rows.length} hàng việc, cần ≥20`);
 
@@ -297,22 +293,8 @@ for (const cfg of configs) {
     const first = list.findIndex((r) => r.done);
     return first < 0 || list.slice(first).every((r) => r.done);
   };
-  await page.evaluate(() => {
-    document.querySelector('.wf-filter-panel').open = true;
-  });
-  for (const mode of ['default', 'title', 'due']) {
-    await page.evaluate((mode) => {
-      const s = document.querySelector('.wf-sort');
-      s.value = mode;
-      s.onchange({ target: s });
-    }, mode);
-    const list = await rowsInfo(page);
-    if (!doneLast(list))
-      fail(
-        cfg,
-        `kiểu sắp xếp "${mode}": còn việc chưa xong nằm sau việc đã xong`,
-      );
-  }
+  if (!doneLast(await rowsInfo(page)))
+    fail(cfg, 'còn việc chưa xong nằm sau việc đã xong');
   const doneStyle = await page.evaluate(() => {
     const t = document.querySelector('#main .zen-row-done .zen-row-title');
     if (!t) return null;
@@ -328,28 +310,6 @@ for (const cfg of configs) {
       cfg,
       `việc xong phải gạch ngang và không làm mờ bằng opacity (${JSON.stringify(doneStyle)})`,
     );
-
-  // 4. giải thích ô chọn
-  const select = await page.evaluate(() => {
-    const cb = document.querySelector(
-      '#main .task-table tbody tr[data-task] input[type=checkbox]',
-    );
-    const hint = document.getElementById(
-      cb?.getAttribute('aria-describedby') || '',
-    );
-    const visible = hint?.checkVisibility();
-    return {
-      title: cb?.title,
-      label: cb?.getAttribute('aria-label'),
-      hint: hint?.textContent.trim(),
-      visible,
-      size: hint && parseFloat(getComputedStyle(hint).fontSize),
-    };
-  });
-  if (!select.title || !select.hint || !select.visible || select.size < 12)
-    fail(cfg, `ô chọn thiếu giải thích: ${JSON.stringify(select)}`);
-  if (select.label && !/^Chọn /.test(select.label))
-    fail(cfg, 'nhãn ô chọn phải bắt đầu bằng "Chọn "');
 
   // 5. chip ngày / ưu tiên
   const chips = await page.evaluate(() => {
@@ -415,28 +375,20 @@ for (const cfg of configs) {
   if (saved !== 'q3')
     fail(cfg, `đổi ưu tiên bằng chip không lưu (được ${saved})`);
 
-  // 6. lọc bằng ô tìm vẫn ẩn được hàng
-  await page.evaluate(() => {
-    document.querySelector('.wf-filter-panel').open = true;
-  });
-  await page.locator('.wf-filter-body input[type=search]').fill('Việc số 3');
-  await page.waitForTimeout(200);
-  const filtered = await page.evaluate(() => {
-    const all = [
-      ...document.querySelectorAll('#main .task-table tbody tr[data-task]'),
-    ];
-    return {
-      total: all.length,
-      shown: all.filter((r) => r.checkVisibility()).length,
-      hiddenButVisible: all.filter(
-        (r) => r.hidden && getComputedStyle(r).display !== 'none',
-      ).length,
-    };
-  });
-  if (!filtered.shown || filtered.shown >= filtered.total)
-    fail(cfg, `ô tìm không thu hẹp danh sách (${JSON.stringify(filtered)})`);
-  if (filtered.hiddenButVisible)
-    fail(cfg, `${filtered.hiddenButVisible} hàng có hidden vẫn hiện ra`);
+  // 7. đã gỡ các tính năng của trang cũ
+  const gone = await page.evaluate(() => ({
+    tools: document.querySelectorAll('.wf-list-tools, .wf-filter-panel, .wf-bulk-tools, #filter-project, #filter-status, #filter-priority, #dashboard-due-filter').length,
+    chips: document.querySelectorAll('.zen-task-chips').length,
+    create: document.querySelectorAll('.all-tasks-create, [data-global-task]').length,
+    checkboxes: document.querySelectorAll('#main .task-table tbody input[type=checkbox]').length,
+    navTasks: document.querySelectorAll('.sidebar [data-view="tasks"]').length,
+  }));
+  if (gone.tools || gone.chips || gone.create || gone.checkboxes || gone.navTasks)
+    fail(cfg, `còn tính năng đã gỡ của trang Tất cả công việc: ${JSON.stringify(gone)}`);
+  await page.fill('#search', '');
+  await page.waitForFunction(() => view === 'dashboard', null, { timeout: 10000 }).catch(() => {});
+  const back = await page.evaluate(() => view);
+  if (back !== 'dashboard') fail(cfg, `xóa ô tìm kiếm phải về Tổng quan (đang ở ${back})`);
 
   console.log(
     `${problems.some((p) => p.startsWith(cfg.w + 'px')) ? 'FAIL' : 'PASS'} danh sách việc ở ${cfg.w}px${cfg.touch ? ' cảm ứng' : ''}: ${rows.length} hàng, cao ${Math.min(...rows.map((r) => r.h))}–${Math.max(...rows.map((r) => r.h))}px`,
@@ -450,5 +402,5 @@ if (problems.length) {
   process.exit(1);
 }
 console.log(
-  '\nPASS danh sách việc gọn: hàng thấp, một nhãn quá hạn, việc xong xuống cuối, ô chọn có giải thích, chip ngày và ưu tiên, lọc vẫn ẩn hàng',
+  '\nPASS danh sách việc gọn: hàng thấp, một nhãn quá hạn, việc xong xuống cuối, chip ngày và ưu tiên, đã gỡ tính năng của trang Tất cả công việc',
 );

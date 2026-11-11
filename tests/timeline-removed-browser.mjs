@@ -77,7 +77,7 @@ try {
       'undefined',
       'workTimeline còn tồn tại' + at,
     );
-    for (const v of ['dashboard', 'projects', 'tasks', 'calendar', 'gantt']) {
+    for (const v of ['dashboard', 'projects', 'budget', 'calendar', 'gantt']) {
       await h.show(page, v);
       const text = await page.evaluate(
         () =>

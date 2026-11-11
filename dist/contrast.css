@@ -2817,6 +2817,199 @@
 :root[data-contrast=high] .hb-grip:focus-visible {
     outline: 3px solid color-mix(in srgb,var(--brand-purple) 55%,#161616)
 }
+:root[data-contrast=high] .bg-hint {
+    color: var(--muted, #060606)
+}
+:root[data-contrast=high] .bg-scope span {
+    color: var(--muted, #060606)
+}
+:root[data-contrast=high] .bg-scope select {
+    border: 1px solid var(--line, #171519);
+    background: var(--paper, #ffffff);
+    color: var(--ink, #060606)
+}
+:root[data-contrast=high] .bg-scope select:focus-visible {
+    outline: 3px solid var(--ink, #060606)
+}
+:root[data-contrast=high] .bg-actions .bg-add-in {
+    color: #060606;
+    border-color: #111814;
+    background: #ffffff
+}
+:root[data-contrast=high] .bg-card {
+    border: 1px solid var(--line, #171519);
+    background: var(--paper, #ffffff)
+}
+:root[data-contrast=high] .bg-card small {
+    color: var(--muted, #060606)
+}
+:root[data-contrast=high] .bg-card strong {
+    color: var(--ink, #060606)
+}
+:root[data-contrast=high] .bg-card .bg-out {
+    color: #060606
+}
+:root[data-contrast=high] .bg-card .bg-in {
+    color: #060606
+}
+:root[data-contrast=high] .bg-card-net.is-gain strong {
+    color: #060606
+}
+:root[data-contrast=high] .bg-card-net.is-loss strong {
+    color: #060606
+}
+:root[data-contrast=high] .bg-card-net.is-even strong {
+    color: #060606
+}
+:root[data-contrast=high] .bg-badge {
+    color: #060606;
+    background: #ffffff
+}
+:root[data-contrast=high] .bg-badge.is-gain {
+    color: #060606;
+    background: #ffffff
+}
+:root[data-contrast=high] .bg-badge.is-loss {
+    color: #060606;
+    background: #ffffff
+}
+:root[data-contrast=high] .bg-badge.is-none {
+    color: var(--muted, #060606);
+    background: #ffffff
+}
+:root[data-contrast=high] .bg-recovery-track {
+    background: #ffffff
+}
+:root[data-contrast=high] .bg-recovery small {
+    color: var(--muted, #060606)
+}
+:root[data-contrast=high] .bg-panel h2 small {
+    color: var(--muted, #060606)
+}
+:root[data-contrast=high] .bg-seg {
+    border: 1px solid var(--line, #171519);
+    background: var(--paper, #ffffff)
+}
+:root[data-contrast=high] .bg-seg button {
+    color: var(--muted, #060606)
+}
+:root[data-contrast=high] .bg-seg button[aria-pressed='true'] {
+    color: #ffffff
+}
+:root[data-contrast=high] .bg-seg button:focus-visible {
+    outline: 3px solid var(--ink, #060606)
+}
+:root[data-contrast=high] .bg-donut-wrap {
+    color: var(--ink, #060606)
+}
+:root[data-contrast=high] .bg-donut-empty {
+    border: 2px dashed var(--line, #171519);
+    color: var(--muted, #060606)
+}
+:root[data-contrast=high] .bg-donut-center small {
+    color: var(--muted, #060606)
+}
+:root[data-contrast=high] .bg-donut-center strong {
+    color: var(--ink, #060606)
+}
+:root[data-contrast=high] .bg-legend-name {
+    color: var(--ink, #060606)
+}
+:root[data-contrast=high] .bg-legend-val {
+    color: var(--ink, #060606)
+}
+:root[data-contrast=high] .bg-legend-pct {
+    color: var(--muted, #060606)
+}
+:root[data-contrast=high] .bg-empty-note, :root[data-contrast=high] .bg-empty p {
+    color: var(--muted, #060606)
+}
+:root[data-contrast=high] .bg-project {
+    border: 1px solid var(--line, #171519);
+    border-left: 4px solid var(--bg-proj, #18102b);
+    background: var(--paper, #ffffff);
+    color: var(--ink, #060606)
+}
+:root[data-contrast=high] .bg-project:focus-visible {
+    outline: 3px solid var(--ink, #060606)
+}
+:root[data-contrast=high] .bg-project-line {
+    color: var(--muted, #060606)
+}
+:root[data-contrast=high] .bg-project-line b {
+    color: #060606
+}
+:root[data-contrast=high] .bg-project-line b.is-gain {
+    color: #060606
+}
+:root[data-contrast=high] .bg-project-line b.is-loss {
+    color: #060606
+}
+:root[data-contrast=high] .bg-mini {
+    background: #ffffff
+}
+:root[data-contrast=high] .bg-entry {
+    border-top: 1px solid var(--line, #171519)
+}
+:root[data-contrast=high] .bg-entry-kind {
+    color: #060606;
+    background: #ffffff
+}
+:root[data-contrast=high] .bg-entry.is-in .bg-entry-kind {
+    color: #060606;
+    background: #ffffff
+}
+:root[data-contrast=high] .bg-entry-main small {
+    color: var(--muted, #060606)
+}
+:root[data-contrast=high] .bg-entry-amount {
+    color: #060606
+}
+:root[data-contrast=high] .bg-entry.is-in .bg-entry-amount {
+    color: #060606
+}
+:root[data-contrast=high] .bg-form-project {
+    color: var(--muted, #060606)
+}
+:root[data-contrast=high] .bg-type-opt {
+    border: 1px solid var(--line, #171519)
+}
+:root[data-contrast=high] .bg-type-opt.is-out:has(input:checked) {
+    color: #060606;
+    border-color: #260c16;
+    background: #ffffff
+}
+:root[data-contrast=high] .bg-type-opt.is-in:has(input:checked) {
+    color: #060606;
+    border-color: #060606;
+    background: #ffffff
+}
+:root[data-contrast=high] .bg-type-opt:has(input:focus-visible) {
+    outline: 3px solid var(--ink, #060606)
+}
+:root[data-contrast=high] .bg-cat-chip {
+    border: 1px solid var(--line, #171519);
+    background: var(--paper, #ffffff);
+    color: var(--ink, #060606)
+}
+:root[data-contrast=high] .bg-cat-chip:hover {
+    border-color: #18102b
+}
+:root[data-contrast=high] .bg-cat-chip:focus-visible {
+    outline: 3px solid var(--ink, #060606)
+}
+:root[data-contrast=high] .bg-confirm-delete {
+    color: #060606;
+    border-color: #1b1415;
+    background: #ffffff
+}
+:root[data-contrast=high] .sr-chip {
+    color: #060606;
+    background: #ffffff
+}
+:root[data-contrast=high] .sr-empty p {
+    color: var(--muted, #060606)
+}
 :root[data-contrast=high] {
     --muted: #060606;
     --text-muted: #060606
@@ -6272,6 +6465,199 @@
 }
 :root[data-theme=dark][data-contrast=high] .hb-grip:focus-visible {
     outline: 3px solid color-mix(in srgb,var(--brand-purple) 55%,#cecece)
+}
+:root[data-theme=dark][data-contrast=high] .bg-hint {
+    color: var(--muted, #f5f5f5)
+}
+:root[data-theme=dark][data-contrast=high] .bg-scope span {
+    color: var(--muted, #f5f5f5)
+}
+:root[data-theme=dark][data-contrast=high] .bg-scope select {
+    border: 1px solid var(--line, #cecece);
+    background: var(--paper, #030303);
+    color: var(--ink, #f5f5f5)
+}
+:root[data-theme=dark][data-contrast=high] .bg-scope select:focus-visible {
+    outline: 3px solid var(--ink, #cecece)
+}
+:root[data-theme=dark][data-contrast=high] .bg-actions .bg-add-in {
+    color: #f5f5f5;
+    border-color: #cecece;
+    background: #030303
+}
+:root[data-theme=dark][data-contrast=high] .bg-card {
+    border: 1px solid var(--line, #cecece);
+    background: var(--paper, #030303)
+}
+:root[data-theme=dark][data-contrast=high] .bg-card small {
+    color: var(--muted, #f5f5f5)
+}
+:root[data-theme=dark][data-contrast=high] .bg-card strong {
+    color: var(--ink, #f5f5f5)
+}
+:root[data-theme=dark][data-contrast=high] .bg-card .bg-out {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .bg-card .bg-in {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .bg-card-net.is-gain strong {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .bg-card-net.is-loss strong {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .bg-card-net.is-even strong {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .bg-badge {
+    color: #f5f5f5;
+    background: #030303
+}
+:root[data-theme=dark][data-contrast=high] .bg-badge.is-gain {
+    color: #f5f5f5;
+    background: #030303
+}
+:root[data-theme=dark][data-contrast=high] .bg-badge.is-loss {
+    color: #f5f5f5;
+    background: #030303
+}
+:root[data-theme=dark][data-contrast=high] .bg-badge.is-none {
+    color: var(--muted, #f5f5f5);
+    background: #030303
+}
+:root[data-theme=dark][data-contrast=high] .bg-recovery-track {
+    background: #030303
+}
+:root[data-theme=dark][data-contrast=high] .bg-recovery small {
+    color: var(--muted, #f5f5f5)
+}
+:root[data-theme=dark][data-contrast=high] .bg-panel h2 small {
+    color: var(--muted, #f5f5f5)
+}
+:root[data-theme=dark][data-contrast=high] .bg-seg {
+    border: 1px solid var(--line, #cecece);
+    background: var(--paper, #030303)
+}
+:root[data-theme=dark][data-contrast=high] .bg-seg button {
+    color: var(--muted, #f5f5f5)
+}
+:root[data-theme=dark][data-contrast=high] .bg-seg button[aria-pressed='true'] {
+    color: #ffffff
+}
+:root[data-theme=dark][data-contrast=high] .bg-seg button:focus-visible {
+    outline: 3px solid var(--ink, #cecece)
+}
+:root[data-theme=dark][data-contrast=high] .bg-donut-wrap {
+    color: var(--ink, #f5f5f5)
+}
+:root[data-theme=dark][data-contrast=high] .bg-donut-empty {
+    border: 2px dashed var(--line, #cecece);
+    color: var(--muted, #f5f5f5)
+}
+:root[data-theme=dark][data-contrast=high] .bg-donut-center small {
+    color: var(--muted, #f5f5f5)
+}
+:root[data-theme=dark][data-contrast=high] .bg-donut-center strong {
+    color: var(--ink, #f5f5f5)
+}
+:root[data-theme=dark][data-contrast=high] .bg-legend-name {
+    color: var(--ink, #f5f5f5)
+}
+:root[data-theme=dark][data-contrast=high] .bg-legend-val {
+    color: var(--ink, #f5f5f5)
+}
+:root[data-theme=dark][data-contrast=high] .bg-legend-pct {
+    color: var(--muted, #f5f5f5)
+}
+:root[data-theme=dark][data-contrast=high] .bg-empty-note, :root[data-theme=dark][data-contrast=high] .bg-empty p {
+    color: var(--muted, #f5f5f5)
+}
+:root[data-theme=dark][data-contrast=high] .bg-project {
+    border: 1px solid var(--line, #cecece);
+    border-left: 4px solid var(--bg-proj, #cecece);
+    background: var(--paper, #030303);
+    color: var(--ink, #f5f5f5)
+}
+:root[data-theme=dark][data-contrast=high] .bg-project:focus-visible {
+    outline: 3px solid var(--ink, #cecece)
+}
+:root[data-theme=dark][data-contrast=high] .bg-project-line {
+    color: var(--muted, #f5f5f5)
+}
+:root[data-theme=dark][data-contrast=high] .bg-project-line b {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .bg-project-line b.is-gain {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .bg-project-line b.is-loss {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .bg-mini {
+    background: #030303
+}
+:root[data-theme=dark][data-contrast=high] .bg-entry {
+    border-top: 1px solid var(--line, #cecece)
+}
+:root[data-theme=dark][data-contrast=high] .bg-entry-kind {
+    color: #f5f5f5;
+    background: #030303
+}
+:root[data-theme=dark][data-contrast=high] .bg-entry.is-in .bg-entry-kind {
+    color: #f5f5f5;
+    background: #030303
+}
+:root[data-theme=dark][data-contrast=high] .bg-entry-main small {
+    color: var(--muted, #f5f5f5)
+}
+:root[data-theme=dark][data-contrast=high] .bg-entry-amount {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .bg-entry.is-in .bg-entry-amount {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .bg-form-project {
+    color: var(--muted, #f5f5f5)
+}
+:root[data-theme=dark][data-contrast=high] .bg-type-opt {
+    border: 1px solid var(--line, #cecece)
+}
+:root[data-theme=dark][data-contrast=high] .bg-type-opt.is-out:has(input:checked) {
+    color: #f5f5f5;
+    border-color: #cecece;
+    background: #030303
+}
+:root[data-theme=dark][data-contrast=high] .bg-type-opt.is-in:has(input:checked) {
+    color: #f5f5f5;
+    border-color: #cecece;
+    background: #030303
+}
+:root[data-theme=dark][data-contrast=high] .bg-type-opt:has(input:focus-visible) {
+    outline: 3px solid var(--ink, #cecece)
+}
+:root[data-theme=dark][data-contrast=high] .bg-cat-chip {
+    border: 1px solid var(--line, #cecece);
+    background: var(--paper, #030303);
+    color: var(--ink, #f5f5f5)
+}
+:root[data-theme=dark][data-contrast=high] .bg-cat-chip:hover {
+    border-color: #cecece
+}
+:root[data-theme=dark][data-contrast=high] .bg-cat-chip:focus-visible {
+    outline: 3px solid var(--ink, #cecece)
+}
+:root[data-theme=dark][data-contrast=high] .bg-confirm-delete {
+    color: #f5f5f5;
+    border-color: #cecece;
+    background: #030303
+}
+:root[data-theme=dark][data-contrast=high] .sr-chip {
+    color: #f5f5f5;
+    background: #030303
+}
+:root[data-theme=dark][data-contrast=high] .sr-empty p {
+    color: var(--muted, #f5f5f5)
 }
 :root[data-theme=dark][data-contrast=high] {
     --muted: #f5f5f5;

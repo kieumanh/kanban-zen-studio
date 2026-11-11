@@ -1,5 +1,5 @@
 'use strict';
-// v1.20.0: "Việc hằng ngày" — bảng theo dõi thói quen theo tuần, nằm dưới mục "Tất cả công việc".
+// v1.20.0: "Việc hằng ngày" — bảng theo dõi thói quen theo tuần, nằm dưới mục "Phân bổ tài nguyên" (trước v1.66.0 là "Tất cả công việc").
 // Dữ liệu: data.dailyHabits = [{id,name,icon,color,createdAt,done:['YYYY-MM-DD',...]}], mỗi việc là một bản ghi riêng khi đồng bộ.
 (function () {
   const COLORS = ['#7950c8', '#b8467f', '#b5552a', '#2e7d5b', '#3a6fb0', '#8a5a14'];
@@ -257,7 +257,7 @@
   }
 
   function addNav() {
-    const anchor = document.querySelector('.sidebar [data-view="tasks"]');
+    const anchor = document.querySelector('.sidebar [data-view="budget"]');
     let b = document.querySelector('.sidebar [data-view="habits"]');
     if (!b) {
       b = document.createElement('button');
@@ -266,7 +266,7 @@
       b.dataset.view = 'habits';
       b.innerHTML = '<span>' + svgIcon('habits') + '</span>Việc hằng ngày';
     }
-    // v1.21.1: luôn đặt ngay dưới "Tất cả công việc", bất kể mục "Chế độ tập trung" được chèn lúc nào.
+    // v1.21.1: luôn đặt ngay dưới "Phân bổ tài nguyên", bất kể mục "Chế độ tập trung" được chèn lúc nào.
     if (anchor && anchor.nextElementSibling !== b) anchor.after(b);
     b.classList.toggle('active', view === 'habits');
   }
