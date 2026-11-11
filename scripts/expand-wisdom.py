@@ -79,6 +79,10 @@ for item in read("scripts/guiguzi-excerpts.json"):
 for item in read("scripts/osho-excerpts.json"):
     additions.append(dict(item, kind="excerpt", sourceChecked=item.get("sourceChecked", False), batch=item.get("batch", "osho-2026-11-10")))
 
+# Đợt web v1.61.0: câu trích từ trang bên thứ ba có ghi nguồn; luôn là "tham khảo" (sourceChecked=False).
+for item in read("scripts/web-excerpts.json"):
+    additions.append(dict(item, kind="excerpt", sourceChecked=False, batch="web-2026-11-11"))
+
 seen_vi = {norm(x["vi"]) for x in q}
 seen_text = {(x["author"], norm(x.get("text", ""))) for x in q}
 skipped = []
