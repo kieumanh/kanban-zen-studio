@@ -3012,6 +3012,51 @@
 :root[data-theme=dark] #finance-settings-status {
     color: var(--muted, #c8bed2)
 }
+:root[data-theme=dark] .bg-trend-bars {
+    border-bottom: 1px solid var(--line, #3d3843)
+}
+:root[data-theme=dark] .bg-trend-col small {
+    color: var(--muted, #c8bed2)
+}
+:root[data-theme=dark] .bg-trend-col.is-now small {
+    color: var(--ink, #dcd3ec)
+}
+:root[data-theme=dark] .bg-trend-net {
+    color: var(--ink, #dcd3ec)
+}
+:root[data-theme=dark] .bg-trend-net.is-gain {
+    color: #a3d9bc
+}
+:root[data-theme=dark] .bg-trend-net.is-loss {
+    color: #ffabc8
+}
+:root[data-theme=dark] .bg-trend-net.is-none {
+    color: var(--muted, #c8bed2)
+}
+:root[data-theme=dark] .bg-trend-key {
+    color: var(--muted, #c8bed2)
+}
+:root[data-theme=dark] .bg-insights li {
+    border: 1px dashed var(--line, #3d3843)
+}
+:root[data-theme=dark] .bg-insights li > span {
+    color: var(--muted, #c8bed2)
+}
+:root[data-theme=dark] .bg-insights li > b {
+    color: var(--ink, #dcd3ec)
+}
+:root[data-theme=dark] .bg-insights li > b.is-loss {
+    color: #ffabc8
+}
+:root[data-theme=dark] .bg-insights li > b.is-gain {
+    color: #a3d9bc
+}
+:root[data-theme=dark] .bg-insights li > small {
+    color: var(--muted, #c8bed2)
+}
+:root[data-theme=dark] .bg-net-neg, :root[data-theme=dark] .bg-net-pos {
+    background: #1b1720
+}
 :root[data-theme=dark] {
     --muted: #ccc2d7;
     --text-muted: #ccc2d7
