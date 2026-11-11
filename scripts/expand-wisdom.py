@@ -83,6 +83,18 @@ for item in read("scripts/osho-excerpts.json"):
 for item in read("scripts/web-excerpts.json"):
     additions.append(dict(item, kind="excerpt", sourceChecked=False, batch="web-2026-11-11"))
 
+# Đợt nguồn công khai v1.62.0 (CBETA, Toàn Đường thi, Project Gutenberg): mỗi câu phải có nguyên văn trong tệp nguồn.
+_public_cache = {}
+for item in read("scripts/public-source-excerpts.json"):
+    if item["sourceFile"] not in _public_cache:
+        _public_cache[item["sourceFile"]] = (ROOT / item["sourceFile"]).read_text()
+    _src = _public_cache[item["sourceFile"]]
+    if item["language"] == "zh":
+        assert "".join(item["text"].split()) in "".join(_src.split()), item["text"]
+    else:
+        assert " ".join(item["text"].split()) in " ".join(_src.split()), item["text"]
+    additions.append(dict(item, kind="excerpt", sourceChecked=True, batch="public-sources-2026-11-11"))
+
 seen_vi = {norm(x["vi"]) for x in q}
 seen_text = {(x["author"], norm(x.get("text", ""))) for x in q}
 skipped = []
