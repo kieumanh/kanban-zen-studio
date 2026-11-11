@@ -132,3 +132,32 @@
   .sr-page .page-heading { flex-wrap: wrap; gap: 10px; }
   .sr-clear { width: 100%; }
 }
+
+/* Nút mở cài đặt báo cáo email thu chi hằng tuần */
+.bg-email-btn { min-height: 44px; border-radius: 14px; white-space: nowrap; align-self: flex-start; }
+@media (max-width: 600px) {
+  .bg-page .page-heading { flex-wrap: wrap; gap: 10px; }
+  .bg-email-btn { width: 100%; }
+}
+
+/* Cài đặt báo cáo thu chi: cùng bố cục với "Tổng kết tuần" (bật/tắt, ngày gửi, giờ gửi trên một hàng); vùng chạm 44px trên cảm ứng.
+   Không dùng lớp weekly-settings để khỏi thừa kế các !important của phần đó. */
+.account-dialog .finance-settings .report-setting-controls { display: flex; align-items: center; justify-content: space-between; gap: 12px 14px; flex-wrap: wrap; min-width: 0; padding: 12px 0; margin-top: 10px; border-bottom: 1px solid var(--line); }
+.account-dialog .finance-settings .report-setting-controls .settings-toggle { margin: 0; }
+.account-dialog .finance-settings label.report-hour { display: flex; align-items: center; gap: 8px; margin: 0; color: var(--muted); font-size: 12px; }
+.account-dialog .finance-settings .report-hour select { box-sizing: border-box; width: auto; min-width: 0; max-width: 100%; min-height: 36px; margin: 0; padding: 6px 10px; }
+.finance-settings { background: var(--paper); padding: 18px; border-radius: 12px; margin-top: 18px; }
+.finance-settings .subtext { font-size: 12px; line-height: 1.7; margin: 0; }
+.finance-settings select { border: 1px solid var(--line); border-radius: 8px; background: var(--paper); color: var(--ink); }
+.finance-settings .help-actions { margin-top: 14px; gap: 8px; }
+.finance-settings .help-actions .btn { padding: 8px 13px; }
+#finance-settings-status { margin: 8px 0 0; min-height: 1.4em; font-size: 12px; color: var(--muted, #7c7088); }
+@media (max-width: 700px) {
+  .finance-settings { padding: 15px; }
+}
+@media (pointer: coarse), (max-width: 700px) {
+  .account-dialog .finance-settings .report-setting-controls { display: grid; justify-content: stretch; }
+  .account-dialog .finance-settings label.report-hour { display: grid; grid-template-columns: 78px minmax(0, 1fr); width: 100%; }
+  .account-dialog .finance-settings .report-hour select { width: 100%; min-height: 44px; font-size: 16px; padding-inline: 12px; }
+  .finance-settings .help-actions .btn { min-height: 44px; }
+}

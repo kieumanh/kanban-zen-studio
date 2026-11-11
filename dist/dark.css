@@ -3009,6 +3009,9 @@
 :root[data-theme=dark] .sr-empty p {
     color: var(--muted, #c8bed2)
 }
+:root[data-theme=dark] #finance-settings-status {
+    color: var(--muted, #c8bed2)
+}
 :root[data-theme=dark] {
     --muted: #ccc2d7;
     --text-muted: #ccc2d7

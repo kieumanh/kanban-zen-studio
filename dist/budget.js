@@ -176,7 +176,7 @@
   function page() {
     const p = select();
     const intro = p ? 'Ghi chi và thu hồi của “' + esc(p.name) + '”.' : 'Ghi chi và thu hồi cho từng dự án để biết nên tiếp tục hay tạm dừng.';
-    return '<div class="bg-page">' + heading('PHÂN BỔ TÀI NGUYÊN', 'Đầu tư theo dự án', intro) + (contentReadOnly ? '<p class="bg-hint">Bản chia sẻ chỉ có quyền xem: không thêm hoặc sửa được khoản nào.</p>' : '') + scopeSelect() + (p ? detail(p) : overview()) + '</div>';
+    return '<div class="bg-page">' + heading('PHÂN BỔ TÀI NGUYÊN', 'Đầu tư theo dự án', intro, '<button type="button" class="btn bg-email-btn" data-bg-email>Báo cáo email hằng tuần</button>') + (contentReadOnly ? '<p class="bg-hint">Bản chia sẻ chỉ có quyền xem: không thêm hoặc sửa được khoản nào.</p>' : '') + scopeSelect() + (p ? detail(p) : overview()) + '</div>';
   }
 
   // ---- Điều hướng ------------------------------------------------------------------------------------------------------

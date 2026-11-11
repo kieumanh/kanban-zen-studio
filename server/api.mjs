@@ -58,6 +58,7 @@ import {
   reminderReport,
   weeklyReport,
 } from './reports.mjs';
+import { financeReport, validFinanceSettings } from './finance-report.mjs';
 export const ORIGIN = 'https://kanban.huongthiennature.com',
   enc = new TextEncoder();
 const hex = (b) =>
@@ -635,6 +636,7 @@ export function validWorkspace(d) {
     str = (x, n) => typeof x === 'string' && x.length <= n;
   return (
     validExtras(d) &&
+    validFinanceSettings(d.financeReport) &&
     d.projects.every(
       (p) =>
         id(p.id) &&
@@ -1259,6 +1261,13 @@ export async function api(request, env) {
           reportDate(),
           previous ? JSON.parse(previous.data) : null,
         ),
+      );
+    }
+    // v1.67.0: bản xem trước báo cáo thu chi tuần (cùng nội dung email), chỉ đọc dữ liệu của chính tài khoản.
+    if (path === '/api/finance-report' && request.method === 'GET') {
+      const w = await workspaceRow(db, u.id);
+      return json(
+        financeReport(w ? JSON.parse(w.data) : { projects: [] }, reportDate()),
       );
     }
     if (path === '/api/preferences' && request.method === 'PUT') {

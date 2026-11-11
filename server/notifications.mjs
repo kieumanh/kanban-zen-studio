@@ -15,6 +15,7 @@ import {
   reminderReport,
   weeklyReport,
 } from './reports.mjs';
+import { financeReport } from './finance-report.mjs';
 const b64 = (b) =>
   btoa(String.fromCharCode(...new Uint8Array(b)))
     .replace(/=/g, '')
@@ -211,10 +212,36 @@ export async function notificationDaily(env, now = new Date()) {
       );
     }
   }
+  // v1.67.0: báo cáo thu chi tuần. Cài đặt (bật/tắt, ngày, giờ) nằm trong bản ghi gốc của dữ liệu người dùng
+  // (workspace.financeReport) nên không cần bảng hay cột mới. Chỉ gửi khi đã có ít nhất một khoản thu chi.
+  const financeUsers = (
+    await db
+      .prepare(
+        "SELECT e.user_id FROM workspace_entities e JOIN users u ON u.id=e.user_id WHERE u.verified=1 AND e.entity_key='root:root' AND json_extract(e.data,'$.financeReport.enabled')=1 AND json_extract(e.data,'$.financeReport.hour')=? AND json_extract(e.data,'$.financeReport.day')=?",
+      )
+      .bind(hour, weekday)
+      .all()
+  ).results;
+  for (const u of financeUsers) {
+    try {
+      const latest = await readWorkspace(db, u.user_id);
+      if (!latest) continue;
+      const report = financeReport(latest.data, day);
+      if (report.hasData)
+        await queueNotification(db, u.user_id, day, 'finance', report);
+    } catch (e) {
+      console.log(
+        JSON.stringify({
+          event: 'finance_report_prepare_failed',
+          message: String(e.message).slice(0, 150),
+        }),
+      );
+    }
+  }
   const jobs = (
     await db
       .prepare(
-        "SELECT j.*,u.email FROM notification_jobs j JOIN users u ON u.id=j.user_id LEFT JOIN notification_preferences n ON n.user_id=u.id WHERE (j.day=? OR (j.channel LIKE 'note:%' AND j.day>=?)) AND j.status='pending' AND j.lease_until<? AND j.attempts<4 AND u.verified=1 AND ((j.channel='email' AND u.email_reminders=1) OR (j.channel='weekly' AND n.weekly_reports=1) OR j.channel LIKE 'note:%') LIMIT 20",
+        "SELECT j.*,u.email FROM notification_jobs j JOIN users u ON u.id=j.user_id LEFT JOIN notification_preferences n ON n.user_id=u.id WHERE (j.day=? OR (j.channel LIKE 'note:%' AND j.day>=?)) AND j.status='pending' AND j.lease_until<? AND j.attempts<4 AND u.verified=1 AND ((j.channel='email' AND u.email_reminders=1) OR (j.channel='weekly' AND n.weekly_reports=1) OR (j.channel='finance' AND EXISTS(SELECT 1 FROM workspace_entities e WHERE e.user_id=j.user_id AND e.entity_key='root:root' AND json_extract(e.data,'$.financeReport.enabled')=1)) OR j.channel LIKE 'note:%') LIMIT 20",
       )
       .bind(day, shiftDay(day, -2), now.getTime())
       .all()
@@ -321,7 +348,9 @@ async function queueNotification(db, userId, day, channel, report) {
     ' để xem và cập nhật.' +
     (channel.startsWith('note:')
       ? ''
-      : '\nTắt hoặc đổi giờ gửi trong Settings → Thông báo.');
+      : channel === 'finance'
+        ? '\nTắt hoặc đổi ngày giờ gửi trong Cài đặt → Báo cáo thu chi tuần.'
+        : '\nTắt hoặc đổi giờ gửi trong Settings → Thông báo.');
   await db
     .prepare(
       'INSERT OR IGNORE INTO notification_jobs(user_id,day,channel,subject,body,snapshot,html) VALUES(?,?,?,?,?,?,?)',

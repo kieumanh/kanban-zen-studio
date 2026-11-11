@@ -270,6 +270,11 @@
     "text/javascript; charset=utf-8"
   ],
   [
+    "/finance-report.js",
+    "finance-report.js",
+    "text/javascript; charset=utf-8"
+  ],
+  [
     "/habits.css",
     "habits.css",
     "text/css; charset=utf-8"

@@ -3010,6 +3010,9 @@
 :root[data-contrast=high] .sr-empty p {
     color: var(--muted, #060606)
 }
+:root[data-contrast=high] #finance-settings-status {
+    color: var(--muted, #060606)
+}
 :root[data-contrast=high] {
     --muted: #060606;
     --text-muted: #060606
@@ -6657,6 +6660,9 @@
     background: #030303
 }
 :root[data-theme=dark][data-contrast=high] .sr-empty p {
+    color: var(--muted, #f5f5f5)
+}
+:root[data-theme=dark][data-contrast=high] #finance-settings-status {
     color: var(--muted, #f5f5f5)
 }
 :root[data-theme=dark][data-contrast=high] {
