@@ -8,6 +8,7 @@ import {
   passwordMatches,
 } from './api.mjs';
 import { weeklyReport, reportDate } from './reports.mjs';
+import { financeReport } from './finance-report.mjs';
 const SHARE_DAYS = [1, 3, 5, 7, 10, 15, 30];
 async function reportTokenHash(token) {
   return Array.from(
@@ -94,6 +95,8 @@ export async function reportShareOwner(request, env, u) {
     !['public', 'password'].includes(values.mode)
   )
     fail('Chọn thời hạn và chế độ chia sẻ hợp lệ.');
+  if (values.kind !== undefined && !['tasks', 'finance'].includes(values.kind))
+    fail('Loại báo cáo không hợp lệ.');
   if (
     values.mode === 'password' &&
     (typeof values.password !== 'string' ||
@@ -111,17 +114,28 @@ export async function reportShareOwner(request, env, u) {
   if (active.total >= 30)
     fail('Tối đa 30 link đang hoạt động. Thu hồi link cũ để tạo thêm.');
   const w = await workspaceRow(db, u.id),
-    previous = await db
+    workspace = w ? JSON.parse(w.data) : { projects: [] };
+  let report;
+  if (values.kind === 'finance') {
+    // Báo cáo thu chi dùng lại bảng report_shares: chỉ lưu bản chụp HTML, không cần lược đồ mới.
+    report = financeReport(workspace, reportDate(), { shared: true });
+    if (!report.hasData)
+      fail(
+        'Chưa có khoản thu chi nào để chia sẻ. Hãy ghi khoản thu hoặc chi trong Phân bổ tài nguyên trước.',
+      );
+  } else {
+    const previous = await db
       .prepare(
         'SELECT data FROM report_snapshots WHERE user_id=? ORDER BY day DESC LIMIT 1',
       )
       .bind(u.id)
       .first();
-  const report = weeklyReport(
-    w ? JSON.parse(w.data) : { projects: [] },
-    reportDate(),
-    previous ? JSON.parse(previous.data) : null,
-  );
+    report = weeklyReport(
+      workspace,
+      reportDate(),
+      previous ? JSON.parse(previous.data) : null,
+    );
+  }
   if (new TextEncoder().encode(report.html).length > 1000000)
     fail('Báo cáo vượt giới hạn chia sẻ. Hãy xuất PDF.', 413);
   const token = Array.from(crypto.getRandomValues(new Uint8Array(32)), (v) =>

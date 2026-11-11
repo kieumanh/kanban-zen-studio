@@ -2,6 +2,7 @@
 // v1.67.0: báo cáo thu chi tài chính hằng tuần qua email. Cài đặt (bật/tắt, ngày, giờ) nằm trong Cài đặt, ngay dưới "Tổng kết tuần",
 // cùng kiểu với email tổng kết công việc. Cài đặt lưu trong dữ liệu người dùng (data.financeReport) và đồng bộ như mọi dữ liệu khác;
 // máy chủ gửi theo lịch (server/notifications.mjs) và chỉ gửi khi đã có ít nhất một khoản thu chi.
+// v1.68.0: thêm link chia sẻ web (dùng lại hộp chia sẻ của báo cáo tuần với kind=finance).
 (function () {
   const DAYS = ['Chủ nhật', 'Thứ hai', 'Thứ ba', 'Thứ tư', 'Thứ năm', 'Thứ sáu', 'Thứ bảy'];
   const DEFAULTS = { enabled: false, day: 0, hour: 9 };
@@ -46,7 +47,7 @@
       Array.from({ length: 24 }, (_, h) => '<option value="' + h + '"' + (h === s.hour ? ' selected' : '') + '>' + hourText(h) + '</option>').join('') +
       '</select></label>' +
       '</div>' +
-      '<div class="help-actions"><button type="button" class="btn primary" id="save-finance-settings">Lưu</button><button type="button" class="btn" id="preview-finance-report">Xem báo cáo & PDF</button></div>' +
+      '<div class="help-actions"><button type="button" class="btn primary" id="save-finance-settings">Lưu</button><button type="button" class="btn" id="preview-finance-report">Xem báo cáo & PDF</button><button type="button" class="btn" id="share-finance-link">Xuất link chia sẻ</button></div>' +
       '<p id="finance-settings-status" role="status"></p>' +
       '</section>'
     );
@@ -114,7 +115,7 @@
     dialog.setAttribute('aria-label', 'Xem trước báo cáo thu chi tuần');
     dialog.innerHTML =
       '<div class="report-dialog-toolbar"><div><strong>Báo cáo thu chi tuần</strong><small>Bản xem trước giống nội dung email</small></div><div>' +
-      '<button type="button" class="btn" id="print-finance-report" disabled>' + svgIcon('download') + 'In / Lưu PDF</button>' +
+      '<button type="button" class="btn" id="share-finance-preview">Chia sẻ web</button><button type="button" class="btn" id="print-finance-report" disabled>' + svgIcon('download') + 'In / Lưu PDF</button>' +
       '<button type="button" class="icon-btn" id="close-weekly-report" aria-label="Đóng báo cáo">×</button></div></div>' +
       '<p class="report-print-hint">Để xuất PDF: chọn “Lưu dưới dạng PDF” trong hộp thoại in.</p>' +
       '<p id="finance-preview-status" role="status">Đang chuẩn bị báo cáo…</p>' +
@@ -147,6 +148,8 @@
     const save = event.target.closest('#save-finance-settings');
     if (save) return saveSettings(save);
     if (event.target.closest('#preview-finance-report')) return openFinanceReport();
+    // Chia sẻ web dùng chung hộp chia sẻ của báo cáo tuần, chỉ khác loại báo cáo.
+    if (event.target.closest('#share-finance-link, #share-finance-preview')) return openReportShare('finance');
     // Từ trang Phân bổ tài nguyên: mở Cài đặt và mở sẵn phần báo cáo thu chi.
     if (event.target.closest('[data-bg-email]')) {
       openNext = true;

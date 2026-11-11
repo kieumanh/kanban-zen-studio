@@ -109,7 +109,7 @@ function financeCategories(entries, type) {
     .sort((a, b) => b.value - a.value || a.name.localeCompare(b.name, 'vi'));
 }
 
-export function financeReport(workspace, day) {
+export function financeReport(workspace, day, { shared = false } = {}) {
   const from = shiftDay(day, -6),
     prevFrom = shiftDay(day, -13),
     prevTo = shiftDay(day, -7),
@@ -190,7 +190,7 @@ export function financeReport(workspace, day) {
     summary,
     hasData: summary.hasData,
   };
-  report.html = financeReportHTML(report);
+  report.html = financeReportHTML(report, shared);
   return report;
 }
 
@@ -201,12 +201,14 @@ function financeBadge(status) {
 function financeStat(label, value, color) {
   return `<td width="50%" style="padding:12px 14px;border:1px solid #eee8f3;border-radius:10px;background:#faf8fc;vertical-align:top"><span style="display:block;font-size:12px;color:#74677e">${label}</span><strong style="display:block;margin-top:3px;font-size:17px;line-height:1.35;color:${color};overflow-wrap:anywhere">${reportEscape(value)}</strong></td>`;
 }
-export function financeReportHTML(report) {
+export function financeReportHTML(report, shared = false) {
   const s = report.summary,
     head = `<p style="font-size:11px;letter-spacing:2px;color:#887491;margin:0 0 10px">ZEN STUDIO · NHÌN LẠI MỖI TUẦN</p><h1 style="font-size:27px;line-height:1.35;margin:0 0 8px">Bức tranh thu chi</h1><p style="font-size:13px;color:#74677e;margin:0 0 24px">${reportEscape(financeDate(s.from))} → ${reportEscape(financeDate(s.to))}</p>`,
-    foot = `<p style="margin-top:28px;padding-top:16px;border-top:1px solid #e7e1ec;font-size:12px;color:#74677e">Mở <a href="https://kanban.huongthiennature.com/">Kanban Zen Studio</a> để xem chi tiết và ghi thêm khoản thu chi. Đổi ngày giờ hoặc tắt email trong Cài đặt → Báo cáo thu chi tuần.</p>`,
+    foot = shared
+      ? `<p style="margin-top:28px;padding-top:16px;border-top:1px solid #e7e1ec;font-size:12px;color:#74677e">Báo cáo chỉ xem, được chia sẻ từ Kanban Zen Studio. Số liệu giữ nguyên tại thời điểm tạo link.</p>`
+      : `<p style="margin-top:28px;padding-top:16px;border-top:1px solid #e7e1ec;font-size:12px;color:#74677e">Mở <a href="https://kanban.huongthiennature.com/">Kanban Zen Studio</a> để xem chi tiết và ghi thêm khoản thu chi. Đổi ngày giờ hoặc tắt email trong Cài đặt → Báo cáo thu chi tuần.</p>`,
     wrap = (inner) =>
-      `<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${reportEscape(report.subject)}</title><style>${REPORT_STYLE}</style></head><body><main class="report-sheet" style="max-width:680px;margin:0 auto;padding:32px;background:#ffffff;border:1px solid #e7e1ec">${inner}</main></body></html>`;
+      `<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${reportEscape(report.subject)}</title><style>${REPORT_STYLE}</style></head><body><main class="report-sheet" data-report-kind="finance" style="max-width:680px;margin:0 auto;padding:32px;background:#ffffff;border:1px solid #e7e1ec">${inner}</main></body></html>`;
   if (!s.hasData)
     return wrap(
       head +
