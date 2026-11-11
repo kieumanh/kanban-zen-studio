@@ -1,12 +1,12 @@
 {
   "target": 2222,
-  "totalEntries": 2157,
-  "sourcedExcerpts": 2112,
+  "totalEntries": 2267,
+  "sourcedExcerpts": 2222,
   "editorialReflections": 45,
-  "remaining": 110,
-  "sourceMatchedNewBatch": 1635,
+  "remaining": 0,
+  "sourceMatchedNewBatch": 1745,
   "allTranslationsHumanReviewed": false,
-  "complete": false,
+  "complete": true,
   "countsByAuthor": {
     "Phật Thích Ca · Kinh Pháp Cú": 392,
     "Lão Tử": 89,
@@ -52,11 +52,22 @@
     "Adi Shankara": 9,
     "Tam tổ Tăng Xán": 25,
     "Vĩnh Gia Huyền Giác": 33,
-    "Hoàng Bá Hy Vận": 19,
+    "Hoàng Bá Hy Vận": 26,
     "Lâm Tế Nghĩa Huyền": 19,
     "Bồ Đề Đạt Ma": 8,
     "Nhị tổ Huệ Khả": 16,
-    "Vô Môn Huệ Khai": 1
+    "Vô Môn Huệ Khai": 1,
+    "Mã Tổ Đạo Nhất": 8,
+    "Bách Trượng Hoài Hải": 13,
+    "Thạch Đầu Hy Thiên": 9,
+    "Dược Sơn Duy Nghiễm": 6,
+    "Động Sơn Lương Giới": 5,
+    "Vân Môn Văn Yển": 8,
+    "Nam Tuyền Phổ Nguyện": 15,
+    "Đại Châu Huệ Hải": 18,
+    "Đức Sơn Tuyên Giám": 7,
+    "Nham Đầu Toàn Hoát": 8,
+    "Tuyết Phong Nghĩa Tồn": 6
   },
   "note": "Có nguồn không đồng nghĩa với đã thẩm định toàn bộ bản dịch. Dữ liệu cũ cần tiếp tục rà soát. Không tính đoạn thô hoặc lời biên soạn vào mục tiêu trích đoạn."
 }
