@@ -859,6 +859,8 @@
     '.gh-glossary', '.gh-tip-bubble',
     // v1.97.0: danh hiệu, con dấu, nghi thức Đột phá đã viết sẵn giọng giang hồ (giangho-fx.js)
     '.gh-rank', '.gh-stamp', '.gh-overlay-seal', 'dialog.gr-breakthrough',
+    // v1.98.0: ngày âm, tiết khí (giangho-lunar.js)
+    '.gh-lunar', '.gh-lunar-span', '.gh-lunar-line',
     // Nội dung người dùng: dự án, tab dự án, việc đã ghim, ghi chú nhanh, kết quả bảng lệnh
     '.side-project', '#side-projects', '#side-pinned-tasks', '.tab:not(.tab-home)', '.sidebar-note', '.studio-palette [role=listbox]',
     // Tên cột (người dùng đặt), trạng thái theo cột, ô chọn cột / dự án

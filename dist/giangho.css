@@ -13408,3 +13408,78 @@
     transition: none;
   }
 }
+
+/* ---- v1.98.0 (Âm Lịch): ngày âm, tiết khí (dist/giangho-lunar.js) -------------------------------------------------------------- */
+:root[data-style=giangho] .month-cell .gh-lunar {
+  display: block;
+  margin: -2px 0 4px;
+  font-size: 12px;
+  line-height: 1.2;
+  text-align: center;
+  color: #6b5444;
+}
+:root[data-style=giangho] .month-cell .gh-lunar.is-first {
+  color: var(--gh-seal-text);
+  font-weight: 700;
+}
+:root[data-style=giangho] .month-cell .gh-term {
+  display: block;
+  overflow: hidden;
+  color: var(--gh-seal-text);
+  font-weight: 600;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+:root[data-style=giangho] .month-controls h2 .gh-lunar-span {
+  display: block;
+  margin-top: 2px;
+  font-family: var(--sans, inherit);
+  font-size: 13px;
+  font-weight: 500;
+  color: #6b5444;
+}
+:root[data-style=giangho] .zen-ma-date .gh-lunar {
+  margin-left: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #6b5444;
+}
+:root[data-style=giangho] .page-heading .gh-lunar-line {
+  margin: 8px 0 0;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: #6b5444;
+}
+:root[data-style=giangho] .page-heading .gh-lunar-line b {
+  color: var(--gh-seal-text);
+  font-weight: 700;
+}
+:root[data-style=giangho][data-theme=dark] .month-cell .gh-lunar,
+:root[data-style=giangho][data-theme=dark] .month-controls h2 .gh-lunar-span,
+:root[data-style=giangho][data-theme=dark] .zen-ma-date .gh-lunar,
+:root[data-style=giangho][data-theme=dark] .page-heading .gh-lunar-line {
+  color: #cbb9a6;
+}
+:root[data-style=giangho][data-theme=dark] .month-cell .gh-lunar.is-first,
+:root[data-style=giangho][data-theme=dark] .month-cell .gh-term {
+  color: var(--gh-seal-text);
+}
+@media (max-width: 700px) {
+  :root[data-style=giangho] .month-cell .gh-lunar {
+    margin: -4px 0 2px;
+    font-size: 12px;
+  }
+  :root[data-style=giangho] .month-cell .gh-term {
+    display: none;
+  }
+  :root[data-style=giangho] .month-cell .gh-lunar.has-term::after {
+    content: '';
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    margin-left: 2px;
+    border-radius: 50%;
+    background: var(--gh-seal);
+    vertical-align: middle;
+  }
+}
