@@ -238,7 +238,123 @@
     'Tìm ghi chú theo tiêu đề…': 'Truy tìm quyển theo tiêu đề…',
   }))
     add(k, v);
-  for (const [k, v] of Object.entries(GROUPS)) add(k, { to: v, in: '.work-legend, .stat-label, .wf-today-plan h2, .dashboard-plan-part h3' });
+  for (const [k, v] of Object.entries(GROUPS)) add(k, { to: v, in: '.work-legend, .stat-label, .wf-today-plan h2, .dashboard-plan-part h3, .wf-focus-group > h2' });
+
+  // ---- v1.89.0 (Nhật Khóa): Hoàng lịch, Bế quan, Nhật khóa ------------------------------------------------------------------
+  const HB_LEVEL = { 'Xuất sắc': 'Thâm hậu', 'Tốt': 'Vững vàng', 'Đang hình thành': 'Đang thành hình', 'Cần nâng đỡ': 'Cần khổ luyện' };
+  for (const [k, v] of Object.entries(HB_LEVEL)) add(k, { to: v, in: '.hb-level' });
+  for (const [k, v] of Object.entries({
+    // Hoàng lịch
+    'Danh sách': { to: 'Liệt kê', in: '.zen-cal-mode' },
+    'Hạn': { to: 'Kỳ hạn', in: '.zen-event-kind' },
+    'Chạm vào công việc để xem chi tiết. Công việc chưa đặt ngày nằm ở mục Chưa lên lịch bên dưới.': 'Chạm vào nhiệm vụ để xem tường tận. Nhiệm vụ chưa định ngày nằm ở mục Chưa định ngày bên dưới.',
+    'Chưa lên lịch': { to: 'Chưa định ngày', in: '.zen-unscheduled' },
+    'Mọi công việc đã có lịch hoặc hạn.': 'Mọi nhiệm vụ đã có ngày hoặc kỳ hạn.',
+    'Kiểu hiển thị lịch': 'Kiểu hiển thị Hoàng lịch',
+    'Chưa có công việc trong ngày này.': 'Chưa có nhiệm vụ trong ngày này.',
+    // Bế quan
+    'Gợi ý 3 việc quan trọng': '3 nhiệm vụ trọng yếu',
+    'Đến hạn hôm nay': { to: 'Tới kỳ hôm nay', in: '.wf-focus-group' },
+    'Tập trung →': 'Bế quan →',
+    'Không có công việc trong nhóm này.': 'Không có nhiệm vụ trong nhóm này.',
+    'DỰ ÁN ĐANG LÀM': 'ĐẠI SỰ ĐANG HÀNH',
+    'Thoát tập trung': 'Xuất quan',
+    'Thoát chế độ tập trung': 'Xuất quan',
+    'Đồng hồ tập trung · tùy chọn': 'Nén hương bế quan · tùy chọn',
+    '25 phút tập trung, rồi chủ động nghỉ 5 phút.': '25 phút nhập định, rồi chủ động nghỉ 5 phút.',
+    'Bắt đầu': { to: 'Nhập định', in: '.studio-pomodoro' },
+    'Bắt đầu lại': { to: 'Nhập định lại', in: '.studio-pomodoro' },
+    'Tạm dừng': { to: 'Tạm nghỉ', in: '.studio-pomodoro' },
+    'Đã hoàn tất phiên tập trung. Hãy nghỉ ngơi một chút.': 'Đã viên mãn một nén hương bế quan. Hãy nghỉ ngơi chốc lát.',
+    'ĐANG TẬP TRUNG': 'ĐANG BẾ QUAN',
+    'Checklist': { to: 'Chiêu thức', in: '.wf-focus-checklist-heading' },
+    'Chỉnh sửa công việc': 'Chỉnh sửa nhiệm vụ',
+    'Ghi chú liên quan': 'Tàng thư liên quan',
+    'Ghi chú': { to: 'Tàng thư', in: '.zen-focus-notes h2' },
+    'Chưa có ghi chú liên kết. Bạn có thể tạo ghi chú và liên kết với công việc này.': 'Chưa có quyển nào liên kết. Các hạ có thể chép quyển mới và liên kết với nhiệm vụ này.',
+    'Quản lý ghi chú liên kết': 'Quản lý quyển liên kết',
+    '+ Viết ghi chú': '+ Chép quyển',
+    'Tìm ghi chú': 'Truy tìm quyển',
+    'Nhập tên ghi chú…': 'Nhập tên quyển…',
+    'Kết thúc phiên tập trung?': 'Xuất quan?',
+    'Bạn đã hoàn thành được một phần công việc. Hãy chọn tiếp tục ở lại hoặc kết thúc phiên này.': 'Các hạ đã luyện được một phần nhiệm vụ. Hãy chọn ở lại bế quan hoặc xuất quan.',
+    'Ở lại': { to: 'Ở lại bế quan', in: '.zen-focus-exit-actions' },
+    'Thoát': { to: 'Xuất quan', in: '.zen-focus-exit-actions' },
+    // Nhật khóa
+    'Hôm nay chưa có việc nào được tích.': 'Hôm nay chưa luyện môn nhật khóa nào.',
+    'Bắt đầu bằng một việc nhỏ nhất.': 'Khởi đầu bằng môn nhỏ nhất.',
+    'việc hôm nay': { to: 'nhật khóa hôm nay', in: '.hb-summary' },
+    'Hoàn thành hôm nay': 'Công thành hôm nay',
+    'Hôm nay bạn đã hoàn thành tất cả. Nhẹ nhõm thật.': 'Hôm nay các hạ đã luyện đủ mọi môn. Thân tâm nhẹ nhõm.',
+    'Tiến độ tuần này': 'Tiến cảnh tuần này',
+    'Tiến độ tuần': 'Tiến cảnh tuần',
+    'Chưa có việc nào trong tuần này': 'Chưa có môn nhật khóa nào trong tuần này',
+    'Bảng tuần': 'Bảng luyện tuần',
+    'Giữ một ô ngày để ghi chú cảm nhận.': 'Giữ một ô ngày để ghi lại tâm đắc.',
+    'Chưa có chuỗi': 'Chưa có chuỗi khổ luyện',
+    'Chưa gắn dự án': 'Chưa gắn đại sự',
+    'Dự án đã xóa': 'Đại sự đã xóa',
+    'Dự án liên quan': 'Đại sự liên quan',
+    'Nghỉ hôm nay': 'Hưu tức hôm nay',
+    'Bỏ nghỉ hôm nay': 'Thôi hưu tức hôm nay',
+    'Xem lịch sử': { to: 'Xem công phu', in: '.hb-row, .hb-page, #main' },
+    'Gợi ý bắt đầu hôm nay': 'Gợi ý khởi đầu hôm nay',
+    'Bảng việc hằng ngày': 'Bảng nhật khóa',
+    'Tiến độ cộng gộp của tất cả việc trong tuần': 'Tiến cảnh cộng gộp của mọi môn nhật khóa trong tuần',
+    'Chưa có việc hằng ngày nào': 'Chưa có môn nhật khóa nào',
+    'Bắt đầu bằng một việc thật nhỏ. Bạn có thể chọn gợi ý bên dưới hoặc tự thêm.': 'Khởi đầu bằng một môn thật nhỏ. Các hạ có thể chọn gợi ý bên dưới hoặc tự thêm.',
+    'VIỆC HẰNG NGÀY': 'NHẬT KHÓA',
+    'Thêm việc hằng ngày': 'Thêm nhật khóa',
+    'Chỉnh sửa việc hằng ngày': 'Chỉnh sửa nhật khóa',
+    'Tên việc của bạn': 'Tên môn nhật khóa',
+    'Tên việc': { to: 'Tên môn', in: '.hb-form' },
+    'Số lần trong tuần': 'Số buổi luyện mỗi tuần',
+    'Mỗi ngày (7 lần)': 'Mỗi ngày (7 buổi)',
+    'Không gắn dự án': 'Không gắn đại sự',
+    'Không nhắc việc này. Chọn giờ để bật nhắc.': 'Không nhắc môn này. Chọn giờ để bật truyền thư.',
+    'Xóa việc này': 'Xóa môn này',
+    'Giảm số lần trong tuần': 'Giảm số buổi mỗi tuần',
+    'Tăng số lần trong tuần': 'Tăng số buổi mỗi tuần',
+    'Cảm nhận': { to: 'Tâm đắc', in: 'dialog' },
+    'Một câu ngắn về việc này…': 'Một câu ngắn về buổi luyện này…',
+    'Đã lưu ghi chú.': 'Đã ghi tâm đắc vào sổ.',
+    'Đã xóa ghi chú.': 'Đã xóa tâm đắc.',
+    'Đã cập nhật việc hằng ngày.': 'Đã cập nhật nhật khóa.',
+    'Đã thêm việc hằng ngày.': 'Đã thêm nhật khóa.',
+    'Đã xóa việc hằng ngày.': 'Đã xóa nhật khóa.',
+    'Đã đổi thứ tự việc.': 'Đã đổi thứ tự nhật khóa.',
+    'Xóa việc hằng ngày?': 'Xóa nhật khóa?',
+    'Mở việc hằng ngày →': 'Mở Nhật khóa →',
+    'Đến giờ nhắc việc': 'Truyền thư: tới giờ luyện',
+    // Chiến báo nhật khóa
+    'Báo cáo việc hằng ngày': 'Chiến báo nhật khóa',
+    'Biểu đồ, đánh giá và đề xuất cải thiện từ chính dữ liệu tích của bạn.': 'Biểu đồ, luận bàn và bí kíp cải thiện từ chính công phu của các hạ.',
+    'Tỷ lệ hoàn thành': 'Tỷ lệ công thành',
+    'Lượt đã tích': 'Lượt đã luyện',
+    'Chuỗi hiện tại': 'Chuỗi khổ luyện hiện tại',
+    'Chuỗi dài nhất': 'Chuỗi khổ luyện dài nhất',
+    'Đánh giá': { to: 'Luận bàn', in: '.hb-assess-head' },
+    'Đề xuất cải thiện': 'Bí kíp cải thiện',
+    'Nhận xét tự động, tính từ dữ liệu tích của bạn.': 'Lời luận tự động, tính từ công phu của các hạ.',
+    'Xu hướng hoàn thành mỗi ngày': 'Xu hướng công thành mỗi ngày',
+    'Theo từng việc': 'Theo từng môn',
+    'Khoảng thời gian báo cáo': 'Khoảng thời gian chiến báo',
+    'Tỷ lệ hoàn thành theo thứ trong tuần': 'Tỷ lệ công thành theo thứ trong tuần',
+    'Bản đồ nhiệt 13 tuần gần nhất: màu càng đậm càng hoàn thành nhiều': 'Bản đồ nhiệt 13 tuần gần nhất: màu càng đậm càng công thành nhiều',
+    'Bạn chưa có việc hằng ngày nào.': 'Các hạ chưa có môn nhật khóa nào.',
+    'Chưa có lượt tích nào để đánh giá.': 'Chưa có buổi luyện nào để luận bàn.',
+    'Thêm một việc thật nhỏ (ví dụ 2 phút mỗi ngày) rồi quay lại xem báo cáo sau vài ngày.': 'Thêm một môn thật nhỏ (ví dụ 2 phút mỗi ngày) rồi quay lại xem chiến báo sau vài ngày.',
+    'Hãy tích vài ngày liên tiếp, báo cáo sẽ hiện nhận xét và đề xuất phù hợp với bạn.': 'Hãy luyện vài ngày liên tiếp, chiến báo sẽ hiện lời luận và bí kíp hợp với các hạ.',
+    'Bạn đã rất đều. Có thể nâng nhẹ thử thách: tăng thời lượng khoảng 10% hoặc thêm một việc nhỏ mới.': 'Các hạ đã luyện rất đều. Có thể nâng nhẹ thử thách: tăng thời lượng khoảng 10% hoặc thêm một môn nhỏ mới.',
+    'Chọn một việc dễ nhất và chỉ tập trung vào nó trong 7 ngày tới, rồi mở rộng dần.': 'Chọn một môn dễ nhất và chỉ chuyên tâm vào nó trong 7 ngày tới, rồi mở rộng dần.',
+    'Mỗi cuối tuần xem lại báo cáo này 2 phút, chọn một điều nhỏ để điều chỉnh cho tuần sau.': 'Mỗi cuối tuần xem lại chiến báo này 2 phút, chọn một điều nhỏ để điều chỉnh cho tuần sau.',
+    'Ghi lại một dòng lý do bạn duy trì được, để dùng làm điểm tựa khi chững lại.': 'Ghi lại một dòng lý do các hạ giữ được nhịp, làm điểm tựa khi chững lại.',
+    'Đặt mỗi việc vào một khung giờ cố định trong ngày để nó thành nhịp quen thuộc.': 'Đặt mỗi môn vào một khung giờ cố định trong ngày để thành nếp.',
+    'Hãy tích hôm nay để bắt đầu': 'Hãy luyện hôm nay để khởi đầu',
+    'Chưa có dữ liệu để báo cáo': 'Chưa có công phu để làm chiến báo',
+    'Hãy thêm vài việc hằng ngày và tích trong vài ngày, báo cáo sẽ xuất hiện ở đây.': 'Hãy thêm vài môn nhật khóa và luyện trong vài ngày, chiến báo sẽ hiện ở đây.',
+  }))
+    add(k, v);
 
   // Mẫu có phần thay đổi: [biểu thức, chữ mới hoặc hàm, vùng (tùy chọn), chữ bắt buộc có (lọc nhanh trước khi thử biểu thức)].
   const bell = (s) =>
@@ -281,6 +397,34 @@
     [/^Hoàn thành mục (\d+)$/, 'Công thành chiêu $1', MAIN, 'Hoàn thành mục'],
     [/^Nội dung mục (\d+)$/, 'Nội dung chiêu $1', MAIN, 'Nội dung mục'],
     [/^Bỏ mục (\d+)$/, 'Bỏ chiêu $1', MAIN, 'Bỏ mục'],
+    // v1.89.0
+    [/^Lịch tháng (\d+\/\d+)( dạng danh sách)?$/, 'Hoàng lịch tháng $1$2', MAIN, 'Lịch tháng'],
+    [/^Lịch ngày (.+)$/, 'Sự vụ trong ngày $1', '.zen-day-agenda', 'Lịch ngày'],
+    [/^(\d+)% hoàn thành · Đổi lịch trong chi tiết$/, '$1% công thành · Đổi ngày trong chi tiết', MAIN, 'Đổi lịch'],
+    [/^(\d+)% hoàn thành$/, '$1% công thành', MAIN, '% hoàn thành'],
+    [/^(.+) · Hạn (\d\d-\d\d)$/, '$1 · Kỳ hạn $2', '.wf-focus-task-meta', ' · Hạn '],
+    [/^(\d+)\/(\d+) mục hoàn thành$/, '$1/$2 chiêu công thành', MAIN, 'mục hoàn thành'],
+    [/^Còn (\d+) lượt cần làm tuần này · đã làm (\d+)\/(\d+)$/, 'Còn $1 lượt cần luyện tuần này · đã luyện $2/$3', MAIN, 'lượt cần làm'],
+    [/^Đã đủ mục tiêu tuần này · đã làm (\d+)\/(\d+)$/, 'Đã đủ chỉ tiêu tuần này · đã luyện $1/$2', MAIN, 'Đã đủ mục tiêu'],
+    [/^Tuần mới: bắt đầu bằng 1 lượt · (.+)$/, (s, rest) => 'Tuần mới: khởi đầu bằng 1 lượt · ' + rest.replace('đã làm', 'đã luyện'), MAIN, 'Tuần mới'],
+    [/^Chuỗi (\d+) ngày$/, 'Khổ luyện liền $1 ngày', MAIN, 'Chuỗi '],
+    [/^(\d+) lần mỗi tuần$/, '$1 buổi mỗi tuần', MAIN, 'lần mỗi tuần'],
+    [/^Sẽ nhắc lúc (.+) \(giờ Việt Nam\)\.$/, 'Sẽ truyền thư lúc $1 (giờ Việt Nam).', MAIN, 'Sẽ nhắc lúc'],
+    [/^Để trống rồi lưu để xóa ghi chú\. Tối đa (\d+) ký tự\.$/, 'Để trống rồi lưu để xóa tâm đắc. Tối đa $1 ký tự.', MAIN, 'Để trống'],
+    [/^Trong (\d+) ngày qua bạn hoàn thành (\d+)% \((\d+)\/(\d+) lượt theo mục tiêu tuần\)\.$/, 'Trong $1 ngày qua các hạ công thành $2% ($3/$4 lượt theo chỉ tiêu tuần).', MAIN, 'ngày qua bạn'],
+    [/^(Tăng|Giảm) (\d+) điểm phần trăm so với (\d+) ngày trước đó\.( Bạn đang đi đúng hướng\.)?$/, (s, d, n, m, ok) => d + ' ' + n + ' điểm phần trăm so với ' + m + ' ngày trước đó.' + (ok ? ' Các hạ đang đi đúng đường.' : ''), MAIN, 'điểm phần trăm'],
+    [/^Nhịp độ ổn định so với (\d+) ngày trước đó\.$/, 'Nhịp luyện ổn định so với $1 ngày trước đó.', MAIN, 'Nhịp độ'],
+    [/^“(.+)” là việc bạn giữ tốt nhất \((\d+)%\)\.$/, '“$1” là môn các hạ giữ vững nhất ($2%).', MAIN, 'giữ tốt nhất'],
+    [/^“(.+)” còn thấp nhất \((\d+)%\)\.$/, '“$1” còn yếu nhất ($2%).', MAIN, 'còn thấp nhất'],
+    [/^(.+) là ngày bạn làm tốt nhất \((\d+)%\), (.+) dễ bỏ lỡ nhất \((\d+)%\)\.$/, '$1 là ngày các hạ luyện tốt nhất ($2%), $3 dễ lơi nhất ($4%).', MAIN, 'làm tốt nhất'],
+    [/^Chuỗi (\d+) ngày liên tiếp của “(.+)” rất đáng quý\.$/, 'Khổ luyện liền $1 ngày môn “$2”, thật đáng quý.', MAIN, 'liên tiếp của'],
+    [/^“(.+)” đã (\d+) ngày chưa được tích\.$/, '“$1” đã $2 ngày chưa luyện.', MAIN, 'chưa được tích'],
+    [/^Thu nhỏ “(.+)” thành phiên bản 2 phút để dễ bắt đầu, rồi tăng dần khi đã đều\.$/, 'Thu nhỏ “$1” thành bản 2 phút để dễ khởi luyện, rồi tăng dần khi đã đều.', MAIN, 'Thu nhỏ'],
+    [/^Chuẩn bị trước cho (.+): đặt nhắc, hoặc tạm giảm bớt việc vào ngày này\.$/, 'Chuẩn bị trước cho $1: đặt truyền thư, hoặc tạm bớt môn vào ngày này.', MAIN, 'Chuẩn bị trước'],
+    [/^Bạn đang theo dõi (\d+) việc\. Thử giữ 3–5 việc cốt lõi trong vài tuần, vững rồi hãy thêm\.$/, 'Các hạ đang luyện $1 môn. Thử giữ 3–5 môn cốt lõi trong vài tuần, vững rồi hãy thêm.', MAIN, 'đang theo dõi'],
+    [/^Áp dụng quy tắc “không bỏ hai ngày liên tiếp”: hôm nay chỉ cần tích bản nhỏ nhất của “(.+)”\.$/, 'Giữ tâm pháp “không bỏ hai ngày liên tiếp”: hôm nay chỉ cần luyện bản nhỏ nhất của “$1”.', MAIN, 'không bỏ hai ngày'],
+    [/^Biểu đồ đường: tỷ lệ hoàn thành mỗi ngày trong (\d+) ngày qua, hiện tại (\d+)%$/, 'Biểu đồ đường: tỷ lệ công thành mỗi ngày trong $1 ngày qua, hiện tại $2%', MAIN, 'Biểu đồ đường'],
+    [/^(\d\d\/\d\d): chưa có việc$/, '$1: chưa luyện môn nào', MAIN, 'chưa có việc'],
   ];
   // Nội dung người dùng và vùng không đổi chữ.
   const SKIP = [
@@ -291,7 +435,11 @@
     '.wf-column-name', '.studio-column-tabs', '.wf-state-choices', 'select[name=col]', 'select[name=project]', '.task-project-picker summary', '.task-project-choice-copy strong',
     // Tên và mô tả việc, dự án, từ khóa, nhãn
     '.task-card h3', '.task-name', '.work-task-row strong', '.project-card h3', '.project-card > p', '.tag', '.wf-card-keywords > :not(.matrix-chip)', '.wf-comment', '.wf-comment-text', '.task-next-step > :not(span:first-child)', '.dashboard-progress-row strong', '.gantt-labels li', '.gantt-bar-label', '.project-note-picker label',
+    // Nhật khóa, Bế quan, Hoàng lịch: tên việc / môn, tên dự án, ghi chú cảm nhận
+    '.hb-name', '.hb-text > strong', '.hb-suggest', '.hb-hbars li > span', '.hb-hist-notes', '.wf-focus-card strong', '.wf-focus-card > small', '.wf-focus-task-heading h1', '.wf-focus-header h2', '.wf-focus-note-options button', '.zen-ma-body strong', '.zen-agenda-task strong', '.zen-agenda-task span:first-of-type',
   ].join(', ');
+  // Phần tử mà chữ NẰM TRỰC TIẾP bên trong là nội dung người dùng (phần tử con như nhãn "Hạn", mức cấp bách vẫn được đổi).
+  const DIRECT_SKIP = 'button.month-event';
   const ATTRS = ['aria-label', 'title', 'placeholder'];
   const ATTR_SEL = ATTRS.map((a) => '[' + a + ']').join(',');
 
@@ -333,7 +481,7 @@
   }
   function doText(node) {
     const el = node.parentElement;
-    if (!el || (el.tagName === 'OPTION' && !el.hasAttribute('value'))) return;
+    if (!el || (el.tagName === 'OPTION' && !el.hasAttribute('value')) || el.matches(DIRECT_SKIP)) return;
     const cur = node.nodeValue;
     if (textMine.get(node) === cur) return;
     const out = convert(cur, el);
