@@ -343,5 +343,10 @@
     "/growth-notify.js",
     "growth-notify.js",
     "text/javascript; charset=utf-8"
+  ],
+  [
+    "/giangho-lex.js",
+    "giangho-lex.js",
+    "text/javascript; charset=utf-8"
   ]
 ]

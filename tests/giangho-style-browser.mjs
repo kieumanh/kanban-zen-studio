@@ -1,7 +1,7 @@
 // v1.86.0 (Chu Mặc): công tắc Phong cách trong Cài đặt → Giao diện (Thiền / Giang hồ) và họa tiết Giang hồ cho toàn ứng dụng.
 // Kiểm ở 390 (chạm), 820 (chạm), 1440 px: mặc định là Thiền; chọn Giang hồ thì đổi ngay (son, giấy dó, chữ có chân), lưu trên thiết bị và giữ sau
 // khi tải lại (đặt trước khi vẽ, không chớp); bảng lệnh cũng đổi được; về Thiền thì trả lại như cũ; nền tối và tương phản cao vẫn đúng;
-// các màn hình chính không tràn ngang, không lỗi trang. Chữ và dữ liệu không đổi.
+// các màn hình chính không tràn ngang, không lỗi trang. Dữ liệu không đổi. (Chữ giang hồ từ v1.87.0: xem tests/giangho-lex-browser.mjs.)
 import assert from 'node:assert/strict';
 import { startHarness } from './lib/browser-harness.mjs';
 
@@ -113,7 +113,8 @@ try {
         assert.equal(await noOverflow(page), true, 'không tràn ngang: ' + v + at);
       }
       await h.show(page, 'dashboard');
-      assert.match(await page.locator('#main h1').innerText(), /Chào/, 'chữ chưa đổi ở bản này' + at);
+      // v1.86.0 chỉ đổi màu nên tiêu đề còn "Chào…"; từ v1.87.0 bộ chuyển ngữ đổi sang lời chào giang hồ.
+      assert.match(await page.locator('#main h1').innerText(), /các hạ/, 'tiêu đề theo giọng giang hồ (v1.87.0)' + at);
       assert.deepEqual(errors, [], 'không lỗi trang' + at);
       await context.close();
     }

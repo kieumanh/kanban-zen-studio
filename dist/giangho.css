@@ -12639,3 +12639,35 @@
     background-image: none;
   }
 }
+/* v1.87.0 (Nhập Môn): tên mục hai dòng do bộ chuyển ngữ (dist/giangho-lex.js) dựng: tên giang hồ + nghĩa thường bên dưới. */
+:root[data-style=giangho] .gh-nav {
+  display: inline-flex;
+  flex-direction: column;
+  min-width: 0;
+  line-height: 1.18;
+}
+:root[data-style=giangho] .gh-nav-name,
+:root[data-style=giangho] .gh-nav-plain {
+  display: block;
+}
+:root[data-style=giangho] .gh-nav-name {
+  font-family: var(--gh-serif);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+:root[data-style=giangho] .gh-nav-plain {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted);
+}
+:root[data-style=giangho] .view-mode .gh-nav {
+  align-items: center;
+  text-align: center;
+}
+:root[data-style=giangho] .view-mode .gh-nav-name {
+  font-size: 12.5px;
+}
+:root[data-style=giangho] .sidebar .view-mode .gh-nav {
+  gap: 1px;
+}
