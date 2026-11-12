@@ -2,6 +2,7 @@
 // v1.83.0 (Kiếm Ảnh): nhân vật phong cách kiếm hiệp, chibi, vẽ bằng SVG — không dùng ảnh ngoài, không mô phỏng nhân vật có sẵn.
 //   Nam: thiếu hiệp áo thanh lam, ngọc quan cài trâm, tóc buộc đuôi cao với dải lụa đỏ, kiếm đeo sau lưng, ngọc bội bên hông.
 //   Nữ: nữ hiệp áo trắng khoác đỏ son, búi tóc cao cài trâm bộ dao, lụa khoác (phi bạch) bay quanh vai, kiếm tua đỏ bên hông.
+// v1.84.0: tên tư thế đổi sang Hán Việt (Đàm tiếu, Luyện kiếm, Thái cực, Tọa thiền).
 // Bốn tư thế (giữ nguyên mã để dữ liệu và lựa chọn cũ vẫn đúng): talk = cười nói (nam cầm quạt), martial = luyện kiếm (vung kiếm, có vệt kiếm khí),
 // taichi = thái cực (vòng âm dương xoay sau lưng), zen = tọa thiền trên đá (khí tụ, hạt sáng bay lên).
 // Hoạt họa nằm trong growth.css; mọi chuyển động phụ (tóc, dải lụa, ngọc bội, tay áo) lệch pha nhau cho mềm và tự nhiên.
@@ -21,12 +22,12 @@
     },
   };
   const POSES = [
-    { id: 'talk', label: 'Cười nói' },
-    { id: 'martial', label: 'Tập võ' },
-    { id: 'taichi', label: 'Đi quyền' },
-    { id: 'zen', label: 'Ngồi thiền' },
+    { id: 'talk', label: 'Đàm tiếu' },
+    { id: 'martial', label: 'Luyện kiếm' },
+    { id: 'taichi', label: 'Thái cực' },
+    { id: 'zen', label: 'Tọa thiền' },
   ];
-  const HERO_LABEL = { nam: 'Nhân vật nam', nu: 'Nhân vật nữ' };
+  const HERO_LABEL = { nam: 'Thiếu hiệp', nu: 'Nữ hiệp' };
 
   // ---- Phía sau thân: đuôi tóc, dải lụa, kiếm sau lưng, lụa khoác -------------------------------------------------------
   function back(h, c, p) {

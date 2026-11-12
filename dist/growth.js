@@ -17,34 +17,34 @@
     { id: 'nghiep', name: 'Nghiệp quả', sub: 'Phước đức · thiện hạnh', color: '#b0892a', icon: 'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z M12 3a4.5 4.5 0 0 0 0 9 4.5 4.5 0 0 1 0 9',
       means: 'Việc thiện, lời nói đúng, giúp người không đòi đáp, hóa giải điều chưa tròn.',
       ideas: ['Giúp ai đó một việc nhỏ', 'Giữ đúng lời đã hứa', 'Cho đi, quyên góp, làm từ thiện', 'Xin lỗi hoặc hóa giải một hiềm khích'] },
-    { id: 'tai', name: 'Tài lộc', sub: 'Tiền bạc · của cải', color: '#2e7d5b', icon: 'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z M14.6 9.3c-.6-.8-1.5-1.3-2.6-1.3-1.5 0-2.6.8-2.6 2 0 2.7 5.2 1.4 5.2 4.1 0 1.2-1.1 2-2.6 2-1.1 0-2.1-.5-2.7-1.4 M12 6.5V8 M12 16v1.5',
+    { id: 'tai', name: 'Tài lộc', sub: 'Ngân lượng · gia sản', color: '#2e7d5b', icon: 'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z M14.6 9.3c-.6-.8-1.5-1.3-2.6-1.3-1.5 0-2.6.8-2.6 2 0 2.7 5.2 1.4 5.2 4.1 0 1.2-1.1 2-2.6 2-1.1 0-2.1-.5-2.7-1.4 M12 6.5V8 M12 16v1.5',
       means: 'Thu nhập, tiết kiệm, đầu tư, nợ nần và kỷ luật chi tiêu.',
       ideas: ['Ghi chép thu chi', 'Hoàn thành việc tạo ra thu nhập', 'Tiết kiệm hoặc trả bớt nợ', 'Học một kiến thức tài chính'] },
-    { id: 'tam', name: 'Tâm cảnh', sub: 'Tinh thần · bình an', color: '#7950c8', icon: 'M12 21c-5-2-8-6-8-11 3 0 6 1 8 4 2-3 5-4 8-4 0 5-3 9-8 11z M12 14V6',
+    { id: 'tam', name: 'Tâm cảnh', sub: 'Tâm pháp · an định', color: '#7950c8', icon: 'M12 21c-5-2-8-6-8-11 3 0 6 1 8 4 2-3 5-4 8-4 0 5-3 9-8 11z M12 14V6',
       means: 'Sự an định trong tâm, thiền, cảm xúc ổn, ngủ nghỉ và buông bỏ lo âu.',
       ideas: ['Ngồi thiền hoặc thở có ý thức', 'Viết nhật ký, gọi tên cảm xúc', 'Dành thời gian yên tĩnh', 'Buông một việc không cần ôm'] },
-    { id: 'duyen', name: 'Nhân duyên', sub: 'Mối quan hệ', color: '#d65380', icon: 'M12 20s-8-4.6-8-10.5A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 8 2.5C20 15.4 12 20 12 20z',
+    { id: 'duyen', name: 'Nhân duyên', sub: 'Thân hữu · đồng môn', color: '#d65380', icon: 'M12 20s-8-4.6-8-10.5A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 8 2.5C20 15.4 12 20 12 20z',
       means: 'Gia đình, bạn bè, đồng nghiệp, cộng đồng và sự kết nối chân thành.',
       ideas: ['Gọi hoặc nhắn hỏi thăm người thân', 'Dành thời gian trọn vẹn cho gia đình', 'Cảm ơn hoặc động viên ai đó', 'Tham gia một hoạt động cộng đồng'] },
-    { id: 'than', name: 'Thể lực', sub: 'Sức khỏe · thân thể', color: '#c8553d', icon: 'M13 3 6 13h5l-1 8 8-11h-5z',
+    { id: 'than', name: 'Thể lực', sub: 'Gân cốt · khí huyết', color: '#c8553d', icon: 'M13 3 6 13h5l-1 8 8-11h-5z',
       means: 'Vận động, ăn uống, giấc ngủ và chăm sóc cơ thể.',
       ideas: ['Đi bộ, tập võ, vận động', 'Ngủ đủ và đúng giờ', 'Ăn uống lành mạnh', 'Khám sức khỏe định kỳ'] },
-    { id: 'tri', name: 'Trí tuệ', sub: 'Học hỏi · hiểu biết', color: '#3a6fb0', icon: 'M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z M4 19V5 M9 7h6',
+    { id: 'tri', name: 'Trí tuệ', sub: 'Kinh thư · kiến văn', color: '#3a6fb0', icon: 'M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z M4 19V5 M9 7h6',
       means: 'Học hỏi, đọc sách, kỹ năng mới và khả năng nhìn lại chính mình.',
       ideas: ['Đọc một chương sách', 'Học một khóa hoặc bài mới', 'Luyện một kỹ năng', 'Viết lại điều đã học được'] },
-    { id: 'nghe', name: 'Sự nghiệp', sub: 'Công việc · sứ mệnh', color: '#2f7f9d', icon: 'M4 21V4 M4 5h12l-2 4 2 4H4',
+    { id: 'nghe', name: 'Sự nghiệp', sub: 'Đại nghiệp · sứ mệnh', color: '#2f7f9d', icon: 'M4 21V4 M4 5h12l-2 4 2 4H4',
       means: 'Tiến độ công việc chính, dự án, đóng góp chuyên môn và sứ mệnh nghề nghiệp.',
       ideas: ['Hoàn thành việc quan trọng của dự án', 'Giải quyết việc tồn đọng', 'Hoàn thiện một sản phẩm', 'Chia sẻ chuyên môn cho người khác'] },
-    { id: 'vui', name: 'An vui', sub: 'Niềm vui · sáng tạo · nghỉ ngơi', color: '#e07a2e', icon: 'M12 3v3 M12 18v3 M3 12h3 M18 12h3 M5.6 5.6l2.1 2.1 M16.3 16.3l2.1 2.1 M18.4 5.6l-2.1 2.1 M7.7 16.3l-2.1 2.1 M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z',
+    { id: 'vui', name: 'An vui', sub: 'Tiêu dao · sáng tạo · nghỉ ngơi', color: '#e07a2e', icon: 'M12 3v3 M12 18v3 M3 12h3 M18 12h3 M5.6 5.6l2.1 2.1 M16.3 16.3l2.1 2.1 M18.4 5.6l-2.1 2.1 M7.7 16.3l-2.1 2.1 M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z',
       means: 'Niềm vui sống, sở thích, sáng tạo, nghỉ ngơi và nếp sống gọn gàng.',
       ideas: ['Làm một việc mình yêu thích', 'Sáng tạo hoặc thử điều mới', 'Dọn dẹp, sắp xếp chỗ ở', 'Nghỉ ngơi trọn vẹn, đi chơi'] },
   ];
-  const HEROES = { nam: { label: 'Nam', title: 'Thiếu hiệp' }, nu: { label: 'Nữ', title: 'Tiên tử' } };
+  const HEROES = { nam: { label: 'Nam', title: 'Thiếu hiệp', desc: 'Kiếm khách áo lam' }, nu: { label: 'Nữ', title: 'Nữ hiệp', desc: 'Hồng y kiếm khách' } };
   const REALMS = [
-    { at: 0, name: 'Phàm nhân' }, { at: 10, name: 'Luyện khí' }, { at: 30, name: 'Trúc cơ' },
-    { at: 80, name: 'Kết đan' }, { at: 160, name: 'Nguyên anh' }, { at: 300, name: 'Hóa thần' },
+    { at: 0, name: 'Vô danh tiểu tốt' }, { at: 10, name: 'Tam lưu cao thủ' }, { at: 30, name: 'Nhị lưu cao thủ' },
+    { at: 80, name: 'Nhất lưu cao thủ' }, { at: 160, name: 'Tuyệt đỉnh cao thủ' }, { at: 300, name: 'Võ lâm chí tôn' },
   ];
-  const SOURCE_LABEL = { task: 'Hoàn thành việc', habit: 'Đủ 7 ngày tích lũy', archive: 'Tổng hợp điểm cũ' };
+  const SOURCE_LABEL = { task: 'Hoàn thành nhiệm vụ', habit: 'Khổ luyện đủ 7 ngày', archive: 'Tổng hợp công phu cũ' };
   Object.assign(iconPaths, { growth: 'M8 3h8l5 5v8l-5 5H8l-5-5V8z M12 8l3 4-3 4-3-4z' });
   AXES.forEach((a) => (iconPaths['gr-' + a.id] = a.icon));
 
@@ -143,7 +143,7 @@
       const dy = sn < -0.5 ? -14 : sn > 0.5 ? 6 : -6;
       return '<text class="gr-label" x="' + x.toFixed(1) + '" y="' + (y + dy).toFixed(1) + '" text-anchor="' + anchor + '">' + esc(a.name) + '</text><text class="gr-value" x="' + x.toFixed(1) + '" y="' + (y + dy + 16).toFixed(1) + '" text-anchor="' + anchor + '">' + fmt(vals[i]) + '</text>';
     }).join('');
-    const label = 'Biểu đồ mạng nhện 8 chỉ số: ' + AXES.map((a, i) => a.name + ' ' + fmt(vals[i])).join(', ') + '. Thang đo tối đa ' + tier + ' điểm.';
+    const label = 'Bát phương đồ 8 mạch: ' + AXES.map((a, i) => a.name + ' ' + fmt(vals[i])).join(', ') + '. Thang tối đa ' + tier + ' điểm.';
     return '<svg class="gr-radar" viewBox="0 0 400 384" role="img" aria-label="' + esc(label) + '">' + rings + spokes + '<polygon class="gr-area" points="' + area + '"/>' + dots + labels + '<text class="gr-scale" x="' + (CX + 7) + '" y="' + (CY - R - 5) + '">' + tier + '</text></svg>';
   }
 
@@ -161,80 +161,80 @@
   function pickPanel() {
     const cur = growth();
     const cards = Object.entries(HEROES).map(([id, h]) =>
-      '<label class="gr-card' + (pickHero === id ? ' is-on' : '') + '"><input type="radio" name="gr-hero" value="' + id + '"' + (pickHero === id ? ' checked' : '') + ' aria-label="Nhân vật ' + h.label.toLowerCase() + ': ' + h.title + '"><span class="gr-card-art">' + zenHero.svg(id, 'talk') + '</span><strong>' + h.title + '</strong><small>Nhân vật ' + h.label.toLowerCase() + '</small></label>').join('');
-    return '<section class="panel gr-start" aria-labelledby="gr-pick-title"><h2 id="gr-pick-title">' + (cur ? 'Đổi nhân vật đồng hành' : 'Chọn nhân vật đồng hành') + '</h2>' +
-      '<p class="help-copy">Nhân vật sẽ đồng hành cùng bạn và cho thấy nội lực của bạn qua từng việc hoàn thành. Điểm đã tích lũy được giữ nguyên khi đổi nhân vật.</p>' +
-      '<div class="gr-pick" role="radiogroup" aria-label="Chọn nhân vật">' + cards + '</div>' +
-      '<label class="field gr-name">Tên gọi của nhân vật (không bắt buộc)<input type="text" maxlength="30" data-gr-name placeholder="' + HEROES[pickHero].title + '" value="' + esc(cur?.name || '') + '"></label>' +
-      '<div class="gr-start-actions"><button type="button" class="btn primary" data-gr-confirm>' + (cur ? 'Lưu nhân vật' : 'Bắt đầu hành trình') + '</button>' + (cur ? '<button type="button" class="btn" data-gr-cancel>Hủy</button>' : '') + '</div></section>' + axesGuide();
+      '<label class="gr-card' + (pickHero === id ? ' is-on' : '') + '"><input type="radio" name="gr-hero" value="' + id + '"' + (pickHero === id ? ' checked' : '') + ' aria-label="Hiệp khách ' + h.label.toLowerCase() + ': ' + h.title + '"><span class="gr-card-art">' + zenHero.svg(id, 'talk') + '</span><strong>' + h.title + '</strong><small>' + h.desc + '</small></label>').join('');
+    return '<section class="panel gr-start" aria-labelledby="gr-pick-title"><h2 id="gr-pick-title">' + (cur ? 'Đổi hiệp khách đồng hành' : 'Chọn hiệp khách đồng hành') + '</h2>' +
+      '<p class="help-copy">Hiệp khách sẽ cùng các hạ hành tẩu giang hồ; mỗi việc hoàn thành là thêm một phần công lực. Đổi hiệp khách không làm mất tu vi đã luyện.</p>' +
+      '<div class="gr-pick" role="radiogroup" aria-label="Chọn hiệp khách">' + cards + '</div>' +
+      '<label class="field gr-name">Danh hiệu giang hồ (không bắt buộc)<input type="text" maxlength="30" data-gr-name placeholder="' + HEROES[pickHero].title + '" value="' + esc(cur?.name || '') + '"></label>' +
+      '<div class="gr-start-actions"><button type="button" class="btn primary" data-gr-confirm>' + (cur ? 'Lưu hiệp khách' : 'Bước vào giang hồ') + '</button>' + (cur ? '<button type="button" class="btn" data-gr-cancel>Hủy</button>' : '') + '</div></section>' + axesGuide();
   }
   function axesGuide() {
-    return '<section class="panel gr-guide"><h2>8 chỉ số của một đời người</h2><p class="help-copy">Mỗi chỉ số bắt đầu từ 0. Hoàn thành việc để cộng điểm cho chỉ số bạn vừa bồi bổ. Biểu đồ nối 8 điểm lại sẽ cho thấy bạn đang mạnh ở đâu và cần chăm thêm ở đâu.</p><ul class="gr-guide-list">' +
+    return '<section class="panel gr-guide"><h2>Bát mạch của một đời người</h2><p class="help-copy">Mỗi mạch khởi đầu từ 0. Hoàn thành việc để dồn công lực vào mạch vừa bồi bổ. Nối 8 điểm lại thành Bát phương đồ: thấy ngay mạch nào thâm hậu, mạch nào cần khổ luyện.</p><ul class="gr-guide-list">' +
       AXES.map((a) => '<li style="--c:' + a.color + '"><span class="gr-guide-ico">' + iconSvg('gr-' + a.id, 20) + '</span><div><strong>' + a.name + '</strong> <small>' + a.sub + '</small><p>' + a.means + '</p></div></li>').join('') + '</ul></section>';
   }
   function bubbleText(pose, s) {
     const t = earnedTotal(), ex = extremes(s);
     const lines = {
-      talk: [t === 0 ? 'Hoàn thành một việc để cộng điểm đầu tiên nhé!' : ex.low.name + ' đang thấp nhất, một việc nhỏ cũng đủ bồi bổ.', t === 0 ? 'Chào bạn! Mình sẽ đồng hành cùng bạn.' : ex.top.name + ' là thế mạnh của bạn lúc này!', 'Mỗi việc xong là một viên gạch cho cảnh giới mới.'],
-      martial: ['Hà! Hà! Rèn thân, luyện ý!', 'Một đấm một việc, xong là có điểm!'],
-      taichi: ['Nhu thắng cương, chậm mà chắc.', 'Thở đều, tay mềm, tâm vững.'],
-      zen: ['Hít vào… thở ra… tâm yên.', 'Ngồi yên một chút cũng là tích lũy.'],
+      talk: [t === 0 ? 'Hoàn thành một việc là có phần công lực đầu tiên!' : ex.low.name + ' đang yếu nhất, một việc nhỏ cũng đủ bồi bổ.', t === 0 ? 'Tại hạ xin ra mắt, nguyện cùng các hạ hành tẩu giang hồ.' : ex.top.name + ' là sở trường của các hạ lúc này!', 'Tích tiểu thành đại, mỗi việc xong là một bước tới cảnh giới mới.'],
+      martial: ['Kiếm xuất như long! Một nhát, một việc.', 'Luyện kiếm trăm lần, ra tay một lần là xong việc!'],
+      taichi: ['Dĩ nhu khắc cương, chậm mà chắc.', 'Khí trầm đan điền, tay mềm, tâm vững.'],
+      zen: ['Tĩnh tâm vận khí… hít vào… thở ra.', 'Tọa thiền một khắc cũng là tu luyện.'],
     };
     const list = lines[pose] || lines.talk;
     return list[msgIndex % list.length];
   }
   function stage(s) {
     const g = growth(), r = realmOf(earnedTotal());
-    const chips = [{ id: 'auto', label: 'Tự động' }, ...zenHero.POSES].map((p) => '<button type="button" class="gr-chip' + (poseMode === p.id ? ' is-on' : '') + '" data-gr-pose="' + p.id + '" aria-pressed="' + (poseMode === p.id) + '">' + p.label + '</button>').join('');
-    return '<section class="panel gr-stage" aria-label="Nhân vật đồng hành"><div class="gr-stage-bg">' + zenHero.scene() + '<p class="gr-bubble" id="gr-bubble" role="status">' + esc(bubbleText(poseNow, s)) + '</p><div class="gr-figure" id="gr-figure">' + zenHero.svg(g.hero, poseNow) + '</div></div>' +
-      '<div class="gr-poses" role="group" aria-label="Tư thế nhân vật">' + chips + '</div>' +
-      '<div class="gr-realm"><div><span class="gr-realm-name">' + r.name + '</span><small>' + fmt(earnedTotal()) + ' điểm tích lũy' + (r.next ? ' · còn ' + fmt(r.need) + ' điểm tới ' + r.next : ' · cảnh giới cao nhất') + '</small></div><div class="progress" role="progressbar" aria-label="Tiến tới cảnh giới kế tiếp" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + r.pct + '"><span style="width:' + r.pct + '%"></span></div></div></section>';
+    const chips = [{ id: 'auto', label: 'Tùy hứng' }, ...zenHero.POSES].map((p) => '<button type="button" class="gr-chip' + (poseMode === p.id ? ' is-on' : '') + '" data-gr-pose="' + p.id + '" aria-pressed="' + (poseMode === p.id) + '">' + p.label + '</button>').join('');
+    return '<section class="panel gr-stage" aria-label="Hiệp khách đồng hành"><div class="gr-stage-bg">' + zenHero.scene() + '<p class="gr-bubble" id="gr-bubble" role="status">' + esc(bubbleText(poseNow, s)) + '</p><div class="gr-figure" id="gr-figure">' + zenHero.svg(g.hero, poseNow) + '</div></div>' +
+      '<div class="gr-poses" role="group" aria-label="Thế võ của hiệp khách">' + chips + '</div>' +
+      '<div class="gr-realm"><div><span class="gr-realm-name">' + r.name + '</span><small>' + fmt(earnedTotal()) + ' điểm tu vi' + (r.next ? ' · còn ' + fmt(r.need) + ' điểm tới ' + r.next : ' · đã đạt cảnh giới tối cao') + '</small></div><div class="progress" role="progressbar" aria-label="Tiến tới cảnh giới kế tiếp" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + r.pct + '"><span style="width:' + r.pct + '%"></span></div></div></section>';
   }
   function axisRows(s) {
     const tier = tierOf(Math.max(...s));
-    return '<section class="panel gr-axes"><h2>Điểm từng chỉ số <small>Thang đo 0–' + tier + '</small></h2><ul class="gr-axis-list">' +
+    return '<section class="panel gr-axes"><h2>Bát mạch tu vi <small>Thang 0–' + tier + '</small></h2><ul class="gr-axis-list">' +
       AXES.map((a, i) => '<li style="--c:' + a.color + '"><span class="gr-axis-ico">' + iconSvg('gr-' + a.id, 18) + '</span><div class="gr-axis-main"><div class="gr-axis-head"><strong>' + a.name + '</strong><b>' + fmt(s[i]) + '</b></div><div class="progress" aria-hidden="true"><span style="width:' + Math.min(100, (s[i] / tier) * 100).toFixed(1) + '%"></span></div><small>' + a.sub + '</small></div></li>').join('') + '</ul></section>';
   }
   function history() {
     const g = growth(), rows = [...g.log].reverse().slice(0, 12);
     const short = (d) => d.slice(8, 10) + '/' + d.slice(5, 7);
-    if (!rows.length) return '<section class="panel gr-history"><h2>Lịch sử cộng điểm</h2><p class="help-copy">Chưa có lần cộng nào. Hoàn thành một việc, bảng cộng điểm sẽ hiện ra trước lời chúc mừng.</p></section>';
-    return '<section class="panel gr-history"><h2>Lịch sử cộng điểm <small>12 lần gần nhất</small></h2><ul class="gr-history-list">' + rows.map((e) =>
+    if (!rows.length) return '<section class="panel gr-history"><h2>Công phu lục</h2><p class="help-copy">Chưa có lần vận công nào. Hoàn thành một việc, bảng vận công sẽ hiện ra trước lời chúc mừng.</p></section>';
+    return '<section class="panel gr-history"><h2>Công phu lục <small>12 lần gần nhất</small></h2><ul class="gr-history-list">' + rows.map((e) =>
       '<li><div><strong>' + esc(e.n || SOURCE_LABEL[e.s]) + '</strong><small>' + short(e.d) + ' · ' + SOURCE_LABEL[e.s] + '</small></div><span class="gr-chips">' + e.p.map((v, i) => (v ? '<i style="--c:' + AXES[i].color + '">' + AXES[i].name + ' +' + fmt(v * STEP) + '</i>' : '')).join('') + '</span></li>').join('') + '</ul></section>';
   }
   const dateShort = (d) => d.slice(8, 10) + '/' + d.slice(5, 7) + (d.slice(0, 4) === today().slice(0, 4) ? '' : '/' + d.slice(0, 4));
   function wallet(s) {
     const cell = (id, label, v) => '<div data-wallet="' + id + '"><small>' + label + '</small><b>' + fmt(v) + '</b></div>';
-    return '<div class="gr-wallet" role="group" aria-label="Điểm hiện có, đã tích lũy và đã quy đổi">' + cell('left', 'Điểm hiện có', total(s)) + cell('earned', 'Đã tích lũy', earnedTotal()) + cell('spent', 'Đã quy đổi', spentTotal()) + '</div>';
+    return '<div class="gr-wallet" role="group" aria-label="Tu vi hiện có, đã tu luyện và đã đổi bảo vật">' + cell('left', 'Tu vi hiện có', total(s)) + cell('earned', 'Đã tu luyện', earnedTotal()) + cell('spent', 'Đã đổi bảo vật', spentTotal()) + '</div>';
   }
   const spendPoints = (e) => e.p.reduce((a, b) => a + b, 0) * STEP;
   const spendChips = (e) => '<span class="gr-chips">' + e.p.map((v, i) => (v ? '<i style="--c:' + AXES[i].color + '">' + AXES[i].name + ' −' + fmt(v * STEP) + '</i>' : '')).join('') + '</span>';
   let spendAll = false;
   function spendPanel() {
     const g = growth(), list = [...(g.spend || [])].reverse(), rows = spendAll ? list : list.slice(0, 10);
-    const head = '<h2>Quy đổi điểm <small>' + (list.length ? list.length + ' lần' : 'chưa có lần nào') + '</small></h2>';
-    if (!list.length) return '<section class="panel gr-spend" aria-label="Quy đổi điểm">' + head + '<p class="help-copy">Chưa có lần quy đổi nào. Bấm “Sử dụng điểm” để ghi lại vật phẩm bạn đã mua hoặc quy đổi; điểm sẽ được trừ khỏi biểu đồ.</p></section>';
+    const head = '<h2>Sổ bảo vật <small>' + (list.length ? list.length + ' lần' : 'chưa có lần nào') + '</small></h2>';
+    if (!list.length) return '<section class="panel gr-spend" aria-label="Sổ bảo vật">' + head + '<p class="help-copy">Chưa có lần quy đổi nào. Bấm “Đổi bảo vật” để ghi lại món đã mua hoặc quy đổi bằng tu vi; điểm sẽ được trừ khỏi Bát phương đồ.</p></section>';
     const item = (e) => '<li class="gr-spend-item' + (e.x ? ' is-void' : '') + '" data-spend="' + esc(e.id) + '"><div class="gr-spend-main"><div class="gr-spend-title"><strong>' + esc(e.n) + '</strong>' + (e.x ? '<em class="gr-void-tag">Đã hủy</em>' : '') + '</div><small>' + dateShort(e.d) + ' · ' + (e.x ? 'đã hoàn ' : 'trừ ') + fmt(spendPoints(e)) + ' điểm' + (e.note ? ' · ' + esc(e.note) : '') + '</small></div>' + spendChips(e) +
       '<div class="gr-spend-act">' + (e.x
         ? '<button type="button" class="btn" data-gr-spend-restore="' + esc(e.id) + '">Khôi phục</button><button type="button" class="btn" data-gr-spend-del="' + esc(e.id) + '">Xóa hẳn</button>'
         : '<button type="button" class="btn" data-gr-spend-edit="' + esc(e.id) + '">Sửa</button><button type="button" class="btn" data-gr-spend-void="' + esc(e.id) + '">Hủy quy đổi</button>') + '</div></li>';
-    return '<section class="panel gr-spend" aria-label="Quy đổi điểm">' + head + '<p class="help-copy">Nhập sai? Bấm Sửa để chỉnh lại, hoặc Hủy quy đổi để hoàn điểm về biểu đồ (có thể khôi phục).</p><ul class="gr-spend-list">' + rows.map(item).join('') + '</ul>' +
+    return '<section class="panel gr-spend" aria-label="Sổ bảo vật">' + head + '<p class="help-copy">Ghi nhầm? Bấm Sửa để chỉnh lại, hoặc Hủy quy đổi để hoàn tu vi về Bát phương đồ (có thể khôi phục).</p><ul class="gr-spend-list">' + rows.map(item).join('') + '</ul>' +
       (list.length > 10 ? '<button type="button" class="btn" data-gr-spend-more aria-expanded="' + spendAll + '">' + (spendAll ? 'Thu gọn' : 'Xem tất cả ' + list.length + ' lần') + '</button>' : '') + '</section>';
   }
   function page() {
     const g = growth();
-    const intro = 'Hoàn thành việc để bồi bổ 8 chỉ số quan trọng của đời người. Mỗi lần cộng 0,5 điểm.';
-    if (!g) return '<div class="gr-page">' + heading('ĐIỂM TÍCH LŨY', 'Hành trình nội lực', intro) + pickPanel() + '</div>';
-    if (changing) return '<div class="gr-page">' + heading('ĐIỂM TÍCH LŨY', 'Hành trình nội lực', intro) + pickPanel() + '</div>';
+    const intro = 'Hoàn thành việc để bồi bổ bát mạch của đời người. Mỗi lần vận công được 0,5 điểm.';
+    if (!g) return '<div class="gr-page">' + heading('GIANG HỒ TU LUYỆN', 'Hành tẩu giang hồ', intro) + pickPanel() + '</div>';
+    if (changing) return '<div class="gr-page">' + heading('GIANG HỒ TU LUYỆN', 'Hành tẩu giang hồ', intro) + pickPanel() + '</div>';
     if (reporting) return reportPage();
     const s = scores(), r = realmOf(earnedTotal()), ex = extremes(s);
-    const sub = 'Cảnh giới ' + r.name + ' · ' + fmt(total(s)) + ' điểm' + (spentTotal() ? ' hiện có' : '');
+    const sub = 'Cảnh giới ' + r.name + ' · ' + fmt(total(s)) + ' điểm tu vi' + (spentTotal() ? ' hiện có' : '');
     const summary = total(s) === 0
-      ? earnedTotal() === 0 ? 'Tất cả chỉ số đang ở 0. Hoàn thành một việc để bắt đầu.' : 'Điểm hiện có đang ở 0 sau khi quy đổi. Hoàn thành việc để tích lũy tiếp.'
-      : 'Mạnh nhất: <strong>' + ex.top.name + '</strong> (' + fmt(ex.mx) + ') · Cần bồi bổ nhất: <strong>' + ex.low.name + '</strong> (' + fmt(ex.mn) + ')';
-    return '<div class="gr-page">' + heading('ĐIỂM TÍCH LŨY', 'Nội lực của ' + esc(heroName()), sub, '<div class="gr-head-actions"><button type="button" class="btn primary" data-gr-spend>Sử dụng điểm</button><button type="button" class="btn" data-gr-report>Xem báo cáo tiến độ</button><button type="button" class="btn" data-gr-change>Đổi nhân vật</button></div>') +
-      '<div class="gr-grid">' + stage(s) + '<section class="panel gr-radar-panel" aria-label="Biểu đồ nội lực"><h2>Biểu đồ nội lực</h2><div class="gr-radar-wrap" id="gr-radar">' + radar(s) + '</div><p class="gr-summary">' + summary + '</p>' + wallet(s) + '</section></div>' +
-      axisRows(s) + history() + spendPanel() + '<section class="panel gr-how"><h2>Cách tích điểm</h2><ul class="gr-how-list"><li>Mỗi việc hoàn thành cho bạn <strong>2 lần cộng</strong> (1 điểm). Bảng cộng điểm hiện ra trước lời chúc mừng.</li><li>Mỗi lần bấm nút <strong>+</strong> thêm 0,5 điểm vào chỉ số bạn chọn; dồn cả hai lần vào một chỉ số cũng được.</li><li>Mỗi việc chỉ được cộng điểm một lần.</li><li>Bấm <strong>Sử dụng điểm</strong> để ghi lại vật phẩm đã mua hoặc quy đổi; điểm bị trừ khỏi biểu đồ. Nhập sai thì sửa hoặc hủy quy đổi để hoàn điểm. Cảnh giới tính theo tổng điểm đã tích lũy nên không tụt khi quy đổi.</li></ul></section></div>';
+      ? earnedTotal() === 0 ? 'Bát mạch đều ở 0. Hoàn thành một việc để khai mạch.' : 'Tu vi hiện có đang ở 0 sau khi đổi bảo vật. Hoàn thành việc để tu luyện tiếp.'
+      : 'Sở trường: <strong>' + ex.top.name + '</strong> (' + fmt(ex.mx) + ') · Cần khổ luyện: <strong>' + ex.low.name + '</strong> (' + fmt(ex.mn) + ')';
+    return '<div class="gr-page">' + heading('GIANG HỒ TU LUYỆN', 'Tu vi của ' + esc(heroName()), sub, '<div class="gr-head-actions"><button type="button" class="btn primary" data-gr-spend>Đổi bảo vật</button><button type="button" class="btn" data-gr-report>Xem báo cáo tu luyện</button><button type="button" class="btn" data-gr-change>Đổi hiệp khách</button></div>') +
+      '<div class="gr-grid">' + stage(s) + '<section class="panel gr-radar-panel" aria-label="Bát phương đồ nội lực"><h2>Bát phương đồ</h2><div class="gr-radar-wrap" id="gr-radar">' + radar(s) + '</div><p class="gr-summary">' + summary + '</p>' + wallet(s) + '</section></div>' +
+      axisRows(s) + history() + spendPanel() + '<section class="panel gr-how"><h2>Tâm pháp tu luyện</h2><ul class="gr-how-list"><li>Mỗi việc hoàn thành cho các hạ <strong>2 lần vận công</strong> (1 điểm). Bảng vận công hiện ra trước lời chúc mừng.</li><li>Mỗi lần bấm <strong>+</strong> dồn 0,5 điểm vào mạch đã chọn; dồn cả hai lần vào một mạch cũng được.</li><li>Mỗi việc chỉ được vận công một lần.</li><li>Bấm <strong>Đổi bảo vật</strong> để ghi lại món đã mua hoặc quy đổi; tu vi bị trừ khỏi Bát phương đồ. Ghi nhầm thì sửa hoặc hủy quy đổi để hoàn điểm. Cảnh giới tính theo tổng tu vi đã luyện nên không tụt khi đổi bảo vật.</li></ul></section></div>';
   }
 
   // ---- Hoạt họa nhân vật --------------------------------------------------------------------------------------------------
@@ -332,7 +332,7 @@
       const cur = s[i], extra = award.add[i] * STEP;
       return '<div class="gr-col" style="--c:' + a.color + '"><span class="gr-col-val">' + fmt(cur + extra) + (extra ? '<em>+' + fmt(extra) + '</em>' : '') + '</span>' +
         '<div class="gr-bar" aria-hidden="true"><i class="gr-bar-now" style="height:' + ((cur / tier) * 100).toFixed(1) + '%"></i><i class="gr-bar-add" style="height:' + ((extra / tier) * 100).toFixed(1) + '%;bottom:' + ((cur / tier) * 100).toFixed(1) + '%"></i></div>' +
-        '<button type="button" class="gr-plus" data-gr-plus="' + i + '" aria-label="Cộng 0,5 điểm cho ' + a.name + '"' + (award.spent >= award.steps ? ' disabled' : '') + '>' + iconSvg('gr-' + a.id, 18) + '<b aria-hidden="true">+</b></button>' +
+        '<button type="button" class="gr-plus" data-gr-plus="' + i + '" aria-label="Dồn 0,5 điểm vào ' + a.name + '"' + (award.spent >= award.steps ? ' disabled' : '') + '>' + iconSvg('gr-' + a.id, 18) + '<b aria-hidden="true">+</b></button>' +
         '<span class="gr-col-name">' + a.name + '</span></div>';
     }).join('');
   }
@@ -340,7 +340,7 @@
     if (!award) return;
     const left = award.steps - award.spent;
     award.el.querySelector('.gr-cols').innerHTML = awardColumns();
-    award.el.querySelector('.gr-budget').innerHTML = left ? 'Còn <b>' + left + '</b> lần cộng · mỗi lần +' + fmt(STEP) + ' điểm' : 'Đã chia đủ <b>' + fmt(award.steps * STEP) + '</b> điểm. Bấm Lưu lại để ghi nhận.';
+    award.el.querySelector('.gr-budget').innerHTML = left ? 'Còn <b>' + left + '</b> lần vận công · mỗi lần +' + fmt(STEP) + ' điểm' : 'Đã dồn đủ <b>' + fmt(award.steps * STEP) + '</b> điểm. Bấm Lưu công lực để ghi nhận.';
     award.el.querySelector('[data-gr-save]').disabled = award.spent === 0;
     award.el.querySelector('[data-gr-undo]').disabled = award.spent === 0;
     const live = award.el.querySelector('.gr-live');
@@ -358,7 +358,7 @@
       if (!wfSave(() => { data.growth.log.push(entry); data.growth.spend ||= []; compact(); })) return notify('Chưa lưu được điểm. Hãy thử lại.');
       const realmAfter = realmOf(earnedTotal()).name;
       // Thông báo điểm nghiệp (bật mặc định, tắt ở Cài đặt → Thông báo): lên cảnh giới mới; với việc hằng ngày còn báo số điểm vừa cộng.
-      if (growth()?.notify !== false) toastText = realmAfter !== realmBefore ? 'Chúc mừng! ' + heroName() + ' đã lên cảnh giới ' + realmAfter + '.' : a.source !== 'task' ? 'Đã cộng ' + fmt(a.spent * STEP) + ' điểm vào Điểm tích lũy.' : '';
+      if (growth()?.notify !== false) toastText = realmAfter !== realmBefore ? 'Chúc mừng! ' + heroName() + ' đã đột phá, đạt cảnh giới ' + realmAfter + '.' : a.source !== 'task' ? 'Đã dồn ' + fmt(a.spent * STEP) + ' điểm công lực vào Điểm tích lũy.' : '';
     }
     award = null;
     a.el.close();
@@ -381,9 +381,9 @@
     d.id = 'growth-award';
     d.className = 'gr-award';
     d.setAttribute('aria-labelledby', 'gr-award-title');
-    d.innerHTML = '<form method="dialog" class="gr-award-form"><header><span class="eyebrow">ĐIỂM TÍCH LŨY</span><h2 id="gr-award-title">Bồi bổ nội lực</h2><p class="help-copy">' + (opt.lead ? esc(opt.lead) + ' ' : opt.title ? 'Bạn vừa hoàn thành “' + esc(opt.title) + '”. ' : '') + (opt.intro || 'Chọn chỉ số bạn muốn cộng điểm.') + '</p></header>' +
-      '<p class="gr-budget" aria-live="polite"></p><div class="gr-cols" role="group" aria-label="Biểu đồ 8 chỉ số"></div><p class="gr-live sr-only" role="status" aria-live="polite"></p>' +
-      '<footer class="gr-award-foot"><button type="button" class="btn ghost" data-gr-undo>Hoàn tác</button><span class="gr-grow"></span><button type="button" class="btn" data-gr-skip>Bỏ qua</button><button type="button" class="btn primary" data-gr-save>Lưu lại</button></footer></form>';
+    d.innerHTML = '<form method="dialog" class="gr-award-form"><header><span class="eyebrow">GIANG HỒ TU LUYỆN</span><h2 id="gr-award-title">Vận công bồi bổ</h2><p class="help-copy">' + (opt.lead ? esc(opt.lead) + ' ' : opt.title ? 'Các hạ vừa hoàn thành “' + esc(opt.title) + '”. ' : '') + (opt.intro || 'Chọn mạch muốn dồn công lực.') + '</p></header>' +
+      '<p class="gr-budget" aria-live="polite"></p><div class="gr-cols" role="group" aria-label="Bát mạch"></div><p class="gr-live sr-only" role="status" aria-live="polite"></p>' +
+      '<footer class="gr-award-foot"><button type="button" class="btn ghost" data-gr-undo>Hoàn tác</button><span class="gr-grow"></span><button type="button" class="btn" data-gr-skip>Để sau</button><button type="button" class="btn primary" data-gr-save>Lưu công lực</button></footer></form>';
     document.body.append(d);
     award = { source: opt.source, key: opt.key, title: opt.title, steps: opt.steps, spent: 0, add: Array(8).fill(0), stack: [], last: null, el: d, then: opt.then };
     d.addEventListener('cancel', (e) => {
@@ -418,7 +418,7 @@
     if (!g || contentReadOnly || g.log.some((e) => e.k === key)) return;
     setTimeout(() => {
       if (award || !growth() || growth().log.some((e) => e.k === key)) return;
-      openAward({ source: 'habit', key, title: h.name + ' · ' + n + ' ngày liền', lead: 'Tuyệt vời! “' + h.name + '” đã đủ ' + n + ' ngày tích lũy liền.', steps: HABIT_STEPS });
+      openAward({ source: 'habit', key, title: h.name + ' · ' + n + ' ngày liền', lead: 'Hảo công phu! “' + h.name + '” đã khổ luyện đủ ' + n + ' ngày liền.', steps: HABIT_STEPS });
     }, 600);
   }
 
@@ -447,17 +447,17 @@
     return n;
   }
   function levelOf(v, mean) {
-    if (v <= 0) return { id: 'none', label: 'Chưa bắt đầu' };
-    if (v >= mean * 1.25) return { id: 'high', label: 'Mạnh' };
-    if (v >= mean * 0.75) return { id: 'mid', label: 'Vững' };
-    return { id: 'low', label: 'Cần chăm' };
+    if (v <= 0) return { id: 'none', label: 'Chưa khai mạch' };
+    if (v >= mean * 1.25) return { id: 'high', label: 'Thâm hậu' };
+    if (v >= mean * 0.75) return { id: 'mid', label: 'Vững vàng' };
+    return { id: 'low', label: 'Cần khổ luyện' };
   }
   // Độ cân bằng 0–100: 100 khi 8 chỉ số bằng nhau; càng lệch càng thấp (độ lệch chuẩn so với trung bình).
   function balanceOf(s) {
     const mean = total(s) / 8;
     if (!mean) return { pct: 0, label: '' };
     const sd = Math.sqrt(s.reduce((a, v) => a + (v - mean) ** 2, 0) / 8), pct = Math.max(0, Math.round((1 - sd / mean) * 100));
-    return { pct, label: pct >= 75 ? 'Cân bằng tốt' : pct >= 45 ? 'Hơi lệch' : 'Lệch rõ' };
+    return { pct, label: pct >= 75 ? 'Âm dương điều hòa' : pct >= 45 ? 'Hơi thiên lệch' : 'Thiên lệch rõ' };
   }
   function buildReport(t) {
     t = t || today();
@@ -472,17 +472,17 @@
   function tipsOf(rep) {
     const tips = [];
     if (rep.earned === 0) {
-      tips.push({ kind: 'start', title: 'Bắt đầu từ một việc nhỏ', text: 'Hoàn thành một việc bất kỳ rồi chia 1 điểm cho chỉ số bạn vừa bồi bổ. Chỉ cần vài việc là biểu đồ bắt đầu có hình dạng.', ideas: ['Ghi lại một khoản chi hôm nay (Tài lộc)', 'Nhắn hỏi thăm một người thân (Nhân duyên)', 'Đi bộ 10 phút (Thể lực)'] });
+      tips.push({ kind: 'start', title: 'Khởi bước từ việc nhỏ', text: 'Hoàn thành một việc bất kỳ rồi dồn 1 điểm vào mạch vừa bồi bổ. Chỉ cần vài việc là Bát phương đồ bắt đầu thành hình.', ideas: ['Ghi lại một khoản chi hôm nay (Tài lộc)', 'Nhắn hỏi thăm một người thân (Nhân duyên)', 'Đi bộ 10 phút (Thể lực)'] });
       return tips;
     }
     const { last, prev } = rep.week;
-    if (last === 0) tips.push({ kind: 'trend', title: 'Tuần này chưa cộng điểm', text: '7 ngày qua chưa có lần cộng nào' + (prev ? ' (7 ngày trước: ' + fmt(prev) + ' điểm)' : '') + '. Chọn việc nhỏ nhất và hoàn thành nó để giữ đà.' });
-    else if (last > prev) tips.push({ kind: 'trend', title: 'Đà đang tốt', text: '7 ngày qua bạn cộng ' + fmt(last) + ' điểm, nhiều hơn 7 ngày trước (' + fmt(prev) + ' điểm). Hãy giữ nhịp này.' });
-    else if (last < prev) tips.push({ kind: 'trend', title: 'Đà chậm lại', text: '7 ngày qua bạn cộng ' + fmt(last) + ' điểm, ít hơn 7 ngày trước (' + fmt(prev) + ' điểm). Một việc nhỏ mỗi ngày là đủ để lấy lại nhịp.' });
-    else tips.push({ kind: 'trend', title: 'Nhịp đều', text: '7 ngày qua bạn cộng ' + fmt(last) + ' điểm, bằng 7 ngày trước.' });
+    if (last === 0) tips.push({ kind: 'trend', title: 'Tuần này chưa vận công', text: '7 ngày qua chưa có lần vận công nào' + (prev ? ' (7 ngày trước: ' + fmt(prev) + ' điểm)' : '') + '. Chọn việc nhỏ nhất và hoàn thành nó để giữ đà.' });
+    else if (last > prev) tips.push({ kind: 'trend', title: 'Công lực đang tăng', text: '7 ngày qua các hạ luyện được ' + fmt(last) + ' điểm, nhiều hơn 7 ngày trước (' + fmt(prev) + ' điểm). Hãy giữ nhịp này.' });
+    else if (last < prev) tips.push({ kind: 'trend', title: 'Công lực chững lại', text: '7 ngày qua các hạ luyện được ' + fmt(last) + ' điểm, ít hơn 7 ngày trước (' + fmt(prev) + ' điểm). Một việc nhỏ mỗi ngày là đủ để lấy lại nhịp.' });
+    else tips.push({ kind: 'trend', title: 'Công lực đều đặn', text: '7 ngày qua các hạ luyện được ' + fmt(last) + ' điểm, bằng 7 ngày trước.' });
     const ex = rep.extremes;
-    if (rep.total > 0 && rep.balance.pct < 45) tips.push({ kind: 'balance', title: 'Cân bằng lại', text: 'Điểm đang dồn vào ' + ex.top.name + ' (' + fmt(ex.mx) + ') trong khi ' + ex.low.name + ' mới ' + fmt(ex.mn) + '. Trong 3 việc kế tiếp, thử dành ít nhất 1 lần cộng cho ' + ex.low.name + '.' });
-    if (rep.realm.next && rep.realm.need <= 5) tips.push({ kind: 'realm', title: 'Sắp lên cảnh giới', text: 'Còn ' + fmt(rep.realm.need) + ' điểm nữa là tới ' + rep.realm.next + '.' });
+    if (rep.total > 0 && rep.balance.pct < 45) tips.push({ kind: 'balance', title: 'Điều hòa âm dương', text: 'Công lực đang dồn vào ' + ex.top.name + ' (' + fmt(ex.mx) + ') trong khi ' + ex.low.name + ' mới ' + fmt(ex.mn) + '. Trong 3 việc kế tiếp, thử dành ít nhất 1 lần vận công cho ' + ex.low.name + '.' });
+    if (rep.realm.next && rep.realm.need <= 5) tips.push({ kind: 'realm', title: 'Sắp đột phá cảnh giới', text: 'Còn ' + fmt(rep.realm.need) + ' điểm nữa là tới ' + rep.realm.next + '.' });
     rep.weak.forEach((i) => {
       const a = AXES[i], v = rep.scores[i];
       tips.push({ kind: 'weak', axis: a.id, color: a.color, title: 'Bồi bổ ' + a.name, text: a.means + ' Hiện ' + fmt(v) + ' điểm' + (v < rep.mean ? ', thấp hơn mức trung bình ' + fmt1(rep.mean) + '.' : '.'), ideas: a.ideas.slice(0, 3) });
@@ -495,23 +495,23 @@
   }
   function reportPage() {
     const rep = buildReport(), r = rep.realm, s = rep.scores, t = rep.t;
-    const head = heading('ĐIỂM TÍCH LŨY', 'Báo cáo tiến độ', 'Cập nhật ' + t.slice(8, 10) + '/' + t.slice(5, 7) + ' · ' + esc(heroName()), '<div class="gr-head-actions"><button type="button" class="btn" data-gr-back>← Quay lại</button></div>');
+    const head = heading('GIANG HỒ TU LUYỆN', 'Báo cáo tu luyện', 'Cập nhật ' + t.slice(8, 10) + '/' + t.slice(5, 7) + ' · ' + esc(heroName()), '<div class="gr-head-actions"><button type="button" class="btn" data-gr-back>← Quay lại</button></div>');
     const tips = tipsOf(rep);
-    if (rep.earned === 0) return '<div class="gr-page gr-report">' + head + '<section class="panel gr-empty"><h2>Chưa có điểm để đánh giá</h2><p class="help-copy">Báo cáo sẽ có đánh giá từng chỉ số và đề xuất cải thiện sau lần cộng điểm đầu tiên.</p></section><section class="panel gr-tips"><h2>Gợi ý bắt đầu</h2><div class="gr-tip-list">' + tips.map(tipCard).join('') + '</div></section></div>';
+    if (rep.earned === 0) return '<div class="gr-page gr-report">' + head + '<section class="panel gr-empty"><h2>Chưa có điểm tu vi để luận bàn</h2><p class="help-copy">Báo cáo sẽ luận từng mạch và đưa bí kíp cải thiện sau lần vận công đầu tiên.</p></section><section class="panel gr-tips"><h2>Bí kíp nhập môn</h2><div class="gr-tip-list">' + tips.map(tipCard).join('') + '</div></section></div>';
     const tile = (id, label, value, sub) => '<div class="gr-tile" data-tile="' + id + '"><small>' + label + '</small><strong>' + value + '</strong><span>' + sub + '</span></div>';
     const tiles = '<div class="gr-tiles">' +
-      tile('total', rep.spent ? 'Điểm hiện có' : 'Tổng điểm', fmt(rep.total) + ' điểm', rep.entries + ' lần cộng' + (rep.spent ? ' · đã quy đổi ' + fmt(rep.spent) : '')) +
-      tile('realm', 'Cảnh giới', r.name, r.next ? 'Còn ' + fmt(r.need) + ' điểm tới ' + r.next : 'Cảnh giới cao nhất') +
+      tile('total', rep.spent ? 'Tu vi hiện có' : 'Tổng tu vi', fmt(rep.total) + ' điểm', rep.entries + ' lần vận công' + (rep.spent ? ' · đã đổi bảo vật ' + fmt(rep.spent) : '')) +
+      tile('realm', 'Cảnh giới', r.name, r.next ? 'Còn ' + fmt(r.need) + ' điểm tới ' + r.next : 'Cảnh giới tối cao') +
       tile('week', '7 ngày qua', '+' + fmt(rep.week.last) + ' điểm', '7 ngày trước đó: ' + fmt(rep.week.prev) + ' điểm') +
-      tile('streak', 'Chuỗi ngày', rep.streak + ' ngày', 'liên tiếp có cộng điểm') + '</div>';
+      tile('streak', 'Khổ luyện liền mạch', rep.streak + ' ngày', 'liên tiếp có vận công') + '</div>';
     const tier = tierOf(Math.max(...s));
     const rows = rep.rows.map((x, i) => '<li class="gr-eval-row" data-axis="' + x.axis.id + '" style="--c:' + x.axis.color + '"><span class="gr-axis-ico">' + iconSvg('gr-' + x.axis.id, 18) + '</span><div class="gr-axis-main"><div class="gr-axis-head"><strong>' + x.axis.name + '</strong><span class="gr-level is-' + x.level.id + '">' + x.level.label + '</span><b class="gr-eval-score">' + fmt(x.score) + '</b></div><div class="progress" aria-hidden="true"><span style="width:' + Math.min(100, (x.score / tier) * 100).toFixed(1) + '%"></span></div><small>' + (rep.week.byAxis[i] ? '+' + fmt(rep.week.byAxis[i]) + ' điểm trong 7 ngày qua' : 'Chưa có điểm trong 7 ngày qua') + '</small></div></li>').join('');
-    const bal = !rep.total ? '<p class="gr-balance">Điểm hiện có đang ở 0 vì đã quy đổi hết. Tích lũy thêm để đánh giá độ cân bằng.</p>' : '<p class="gr-balance">Độ cân bằng: <strong>' + rep.balance.label + '</strong> (' + rep.balance.pct + '%). ' + (rep.balance.pct >= 75 ? '8 chỉ số đang khá đều nhau.' : rep.balance.pct >= 45 ? 'Có vài chỉ số nhỉnh hơn hẳn các chỉ số còn lại.' : 'Điểm đang dồn vào vài chỉ số; hình nhện còn lệch.') + '</p>';
+    const bal = !rep.total ? '<p class="gr-balance">Tu vi hiện có đang ở 0 vì đã đổi hết bảo vật. Tu luyện thêm để luận độ cân bằng.</p>' : '<p class="gr-balance">Độ cân bằng: <strong>' + rep.balance.label + '</strong> (' + rep.balance.pct + '%). ' + (rep.balance.pct >= 75 ? 'Bát mạch đang khá đều nhau.' : rep.balance.pct >= 45 ? 'Có vài mạch nhỉnh hơn hẳn các mạch còn lại.' : 'Công lực đang dồn vào vài mạch; Bát phương đồ còn lệch.') + '</p>';
     const notes = tips.filter((x) => x.kind !== 'weak'), weak = tips.filter((x) => x.kind === 'weak');
     return '<div class="gr-page gr-report">' + head + tiles +
-      '<div class="gr-rep-grid"><section class="panel gr-radar-panel" aria-label="Hình dạng nội lực"><h2>Hình dạng nội lực</h2><div class="gr-radar-wrap">' + radar(s) + '</div><p class="gr-summary">Mạnh nhất: <strong>' + rep.extremes.top.name + '</strong> (' + fmt(rep.extremes.mx) + ') · Cần bồi bổ nhất: <strong>' + rep.extremes.low.name + '</strong> (' + fmt(rep.extremes.mn) + ')</p></section>' +
-      '<section class="panel gr-eval"><h2>Đánh giá từng chỉ số</h2>' + bal + '<ul class="gr-eval-list">' + rows + '</ul></section></div>' +
-      '<section class="panel gr-tips"><h2>Đề xuất cải thiện</h2><div class="gr-tip-list">' + notes.map(tipCard).join('') + '</div><h3 class="gr-tips-sub">Việc nên bồi bổ trước</h3><div class="gr-tip-list">' + weak.map(tipCard).join('') + '</div><p class="help-copy">Đề xuất dựa trên điểm bạn tự cộng nên chỉ mang tính gợi ý.</p></section></div>';
+      '<div class="gr-rep-grid"><section class="panel gr-radar-panel" aria-label="Bát phương đồ"><h2>Bát phương đồ</h2><div class="gr-radar-wrap">' + radar(s) + '</div><p class="gr-summary">Sở trường: <strong>' + rep.extremes.top.name + '</strong> (' + fmt(rep.extremes.mx) + ') · Cần khổ luyện: <strong>' + rep.extremes.low.name + '</strong> (' + fmt(rep.extremes.mn) + ')</p></section>' +
+      '<section class="panel gr-eval"><h2>Luận từng mạch</h2>' + bal + '<ul class="gr-eval-list">' + rows + '</ul></section></div>' +
+      '<section class="panel gr-tips"><h2>Bí kíp cải thiện</h2><div class="gr-tip-list">' + notes.map(tipCard).join('') + '</div><h3 class="gr-tips-sub">Mạch nên khổ luyện trước</h3><div class="gr-tip-list">' + weak.map(tipCard).join('') + '</div><p class="help-copy">Bí kíp dựa trên điểm các hạ tự cộng nên chỉ mang tính gợi ý.</p></section></div>';
   }
   // Cho các phần sau (đủ 7 ngày tích lũy, báo cáo) dùng chung.
   function openReport() {
@@ -584,7 +584,7 @@
       row.querySelector('.progress span').style.width = (sd.avail[i] ? Math.max(0, left) / sd.avail[i] * 100 : 0).toFixed(1) + '%';
     });
     const sum = p.reduce((a, b) => a + b, 0), have = sd.avail.reduce((a, b) => a + b, 0);
-    sd.sum.innerHTML = 'Quy đổi <b>' + fmt(sum * STEP) + '</b> điểm · Điểm hiện có sau khi trừ: <b>' + fmt(Math.max(0, have - sum) * STEP) + '</b>';
+    sd.sum.innerHTML = 'Quy đổi <b>' + fmt(sum * STEP) + '</b> điểm · Tu vi hiện có sau khi trừ: <b>' + fmt(Math.max(0, have - sum) * STEP) + '</b>';
     sd.msg.textContent = '';
   }
   function openSpend(id) {
@@ -595,7 +595,7 @@
     if (id && !old) return;
     if (!old && (g.spend || []).length >= SPEND_MAX) return notify('Sổ quy đổi đã đầy (' + SPEND_MAX + ' lần). Hãy xóa hẳn bớt các lần đã hủy.');
     const avail = balancesHalf(old?.id);
-    if (!old && !avail.some((v) => v > 0)) return notify('Chưa có điểm để quy đổi. Hoàn thành việc để tích lũy trước.');
+    if (!old && !avail.some((v) => v > 0)) return notify('Chưa có điểm để quy đổi. Hoàn thành việc để tu luyện trước.');
     closeSpend();
     if (award) closeAward(false);
     const d = document.createElement('dialog');
@@ -604,14 +604,14 @@
     d.setAttribute('aria-labelledby', 'gr-spend-title');
     const rows = AXES.map((a, i) => '<li class="gr-spend-row" style="--c:' + a.color + '"><span class="gr-axis-ico">' + iconSvg('gr-' + a.id, 18) + '</span><div class="gr-axis-main"><div class="gr-axis-head"><strong>' + a.name + '</strong><small class="gr-spend-left"></small></div><div class="progress" aria-hidden="true"><span></span></div></div>' +
       '<input type="number" inputmode="decimal" min="0" max="' + avail[i] * STEP + '" step="0.5" data-gr-spend-axis="' + i + '" placeholder="0" aria-label="Điểm trừ ở ' + a.name + ', đang có ' + fmt(avail[i] * STEP) + '" value="' + (old && old.p[i] ? old.p[i] * STEP : '') + '"></li>').join('');
-    d.innerHTML = '<form class="gr-award-form gr-spend-form" novalidate><header><span class="eyebrow">ĐIỂM TÍCH LŨY</span><h2 id="gr-spend-title">' + (old ? 'Sửa lần quy đổi' : 'Sử dụng điểm') + '</h2><p class="help-copy">Ghi lại vật phẩm bạn đã mua hoặc quy đổi. Điểm sẽ được trừ khỏi các chỉ số bạn chọn và biểu đồ co lại tương ứng.</p></header>' +
-      '<div class="gr-spend-fields"><label class="field gr-spend-name">Vật phẩm / nội dung quy đổi<input type="text" name="n" maxlength="120" autocomplete="off" placeholder="Ví dụ: tai nghe mới, bữa tối ngoài, một ngày nghỉ" value="' + esc(old?.n || '') + '"></label>' +
+    d.innerHTML = '<form class="gr-award-form gr-spend-form" novalidate><header><span class="eyebrow">GIANG HỒ TU LUYỆN</span><h2 id="gr-spend-title">' + (old ? 'Sửa lần quy đổi' : 'Đổi bảo vật') + '</h2><p class="help-copy">Ghi lại bảo vật các hạ đã mua hoặc quy đổi. Tu vi sẽ bị trừ khỏi các mạch đã chọn và Bát phương đồ co lại tương ứng.</p></header>' +
+      '<div class="gr-spend-fields"><label class="field gr-spend-name">Bảo vật / nội dung quy đổi<input type="text" name="n" maxlength="120" autocomplete="off" placeholder="Ví dụ: tai nghe mới, bữa tối ngoài, một ngày nghỉ" value="' + esc(old?.n || '') + '"></label>' +
       '<label class="field">Ngày quy đổi<input type="date" name="d" max="' + today() + '" value="' + esc(old?.d || today()) + '"></label>' +
       '<label class="field gr-spend-note">Ghi chú (không bắt buộc)<textarea name="note" rows="2" maxlength="300" placeholder="Nơi mua, giá tiền, lý do thưởng cho bản thân…">' + esc(old?.note || '') + '</textarea></label></div>' +
-      '<section class="gr-spend-split" aria-labelledby="gr-spend-split-title"><h3 id="gr-spend-split-title">Trừ điểm ở các chỉ số</h3>' +
-      '<div class="gr-spend-quick"><label class="field">Tổng điểm cần chia<input type="number" inputmode="decimal" min="0" step="0.5" data-gr-spend-quick placeholder="0"></label><button type="button" class="btn" data-gr-spend-split>Chia theo tỷ lệ</button></div><p class="help-copy gr-spend-hint">Chia nhanh theo tỷ lệ điểm đang có ở từng chỉ số; sau đó bạn vẫn chỉnh được từng ô.</p>' +
+      '<section class="gr-spend-split" aria-labelledby="gr-spend-split-title"><h3 id="gr-spend-split-title">Trừ tu vi ở từng mạch</h3>' +
+      '<div class="gr-spend-quick"><label class="field">Tổng điểm cần chia<input type="number" inputmode="decimal" min="0" step="0.5" data-gr-spend-quick placeholder="0"></label><button type="button" class="btn" data-gr-spend-split>Chia theo tỷ lệ</button></div><p class="help-copy gr-spend-hint">Chia nhanh theo tỷ lệ tu vi đang có ở từng mạch; sau đó vẫn chỉnh được từng ô.</p>' +
       '<ul class="gr-spend-rows">' + rows + '</ul><p class="gr-spend-sum" aria-live="polite"></p></section>' +
-      '<p class="gr-spend-msg" role="alert"></p><footer class="gr-award-foot"><button type="button" class="btn" data-gr-spend-close>Đóng</button><span class="gr-grow"></span><button type="submit" class="btn primary">' + (old ? 'Lưu thay đổi' : 'Lưu quy đổi') + '</button></footer></form>';
+      '<p class="gr-spend-msg" role="alert"></p><footer class="gr-award-foot"><button type="button" class="btn" data-gr-spend-close>Đóng</button><span class="gr-grow"></span><button type="submit" class="btn primary">' + (old ? 'Lưu thay đổi' : 'Ghi vào sổ bảo vật') + '</button></footer></form>';
     document.body.append(d);
     const form = d.querySelector('form');
     spendDlg = { el: d, form, id: old?.id || '', avail, rows: [...d.querySelectorAll('.gr-spend-row')], inputs: [...d.querySelectorAll('[data-gr-spend-axis]')], sum: d.querySelector('.gr-spend-sum'), msg: d.querySelector('.gr-spend-msg') };
@@ -643,7 +643,7 @@
       sd.msg.textContent = t;
     };
     if (!isHalfInt(want) || want <= 0) return warn('Hãy nhập tổng điểm quy đổi (bậc 0,5), rồi bấm Chia theo tỷ lệ.');
-    if (want > have) return warn('Bạn chỉ còn ' + fmt(have * STEP) + ' điểm để quy đổi.');
+    if (want > have) return warn('Các hạ chỉ còn ' + fmt(have * STEP) + ' điểm để quy đổi.');
     const out = splitShare(sd.avail, Math.round(want));
     sd.inputs.forEach((inp, i) => (inp.value = out[i] ? String(out[i] / 2) : ''));
     paintSpend();
@@ -689,7 +689,7 @@
     closeSpend();
     if (view === 'growth') render();
     const points = fmt(p.reduce((a, b) => a + b, 0) * STEP);
-    notify(editing ? 'Đã cập nhật lần quy đổi “' + name + '” (' + points + ' điểm).' : 'Đã quy đổi ' + points + ' điểm cho “' + name + '”. Điểm hiện có: ' + fmt(total(scores())) + '.');
+    notify(editing ? 'Đã cập nhật lần quy đổi “' + name + '” (' + points + ' điểm).' : 'Đã quy đổi ' + points + ' điểm cho “' + name + '”. Tu vi hiện có: ' + fmt(total(scores())) + '.');
   }
   const spendById = (id) => (growth()?.spend || []).find((e) => e.id === id);
   function voidSpend(id) {
@@ -698,7 +698,7 @@
     const name = e.n, points = fmt(spendPoints(e));
     if (!wfSave(() => { data.growth.spend.find((x) => x.id === id).x = true; })) return;
     if (view === 'growth') render();
-    notify('Đã hủy quy đổi “' + name + '”, hoàn lại ' + points + ' điểm vào biểu đồ.');
+    notify('Đã hủy quy đổi “' + name + '”, hoàn lại ' + points + ' điểm vào Bát phương đồ.');
   }
   function restoreSpend(id) {
     const e = spendById(id);
@@ -715,7 +715,7 @@
     if (!e || !e.x || contentReadOnly) return contentReadOnly ? notify('Bản chia sẻ chỉ có quyền xem.') : undefined;
     modal('<div class="bg-confirm"><h2>Xóa hẳn lần quy đổi?</h2><p>“' + esc(e.n) + '” đã được hủy và hoàn điểm, nên điểm hiện có không đổi. Dòng này sẽ bị xóa khỏi sổ quy đổi và không hoàn tác được.</p><div class="bg-confirm-actions"><button type="button" class="btn" data-gr-spend-del-no>Giữ lại</button><button type="button" class="btn bg-confirm-delete" data-gr-spend-del-ok="' + esc(e.id) + '">Xóa hẳn</button></div></div>', null, true);
     const eyebrow = document.querySelector('#modal-eyebrow');
-    if (eyebrow) eyebrow.textContent = 'ĐIỂM TÍCH LŨY';
+    if (eyebrow) eyebrow.textContent = 'GIANG HỒ TU LUYỆN';
     document.querySelector('[data-gr-spend-del-no]')?.focus();
   }
   document.addEventListener('click', (e) => {

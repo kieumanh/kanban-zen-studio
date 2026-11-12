@@ -3173,6 +3173,15 @@
 :root[data-theme=dark] .gr-spend-msg {
     color: #fcb3a7
 }
+:root[data-theme=dark] .gr-chip.is-on {
+    color: #ffffff
+}
+:root[data-theme=dark] .gr-realm-name {
+    color: #ffffff
+}
+:root[data-theme=dark] .gr-area {
+    fill: rgba(251,173,178,0.16)
+}
 :root[data-theme=dark] {
     --muted: #ccc2d7;
     --text-muted: #ccc2d7

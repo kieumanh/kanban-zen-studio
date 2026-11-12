@@ -3174,6 +3174,15 @@
 :root[data-contrast=high] .gr-spend-msg {
     color: #060606
 }
+:root[data-contrast=high] .gr-chip.is-on {
+    color: #ffffff
+}
+:root[data-contrast=high] .gr-realm-name {
+    color: #ffffff
+}
+:root[data-contrast=high] .gr-area {
+    fill: rgba(6,6,6,0.16)
+}
 :root[data-contrast=high] {
     --muted: #060606;
     --text-muted: #060606
@@ -6986,6 +6995,15 @@
 }
 :root[data-theme=dark][data-contrast=high] .gr-spend-msg {
     color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .gr-chip.is-on {
+    color: #ffffff
+}
+:root[data-theme=dark][data-contrast=high] .gr-realm-name {
+    color: #ffffff
+}
+:root[data-theme=dark][data-contrast=high] .gr-area {
+    fill: rgba(245,245,245,0.16)
 }
 :root[data-theme=dark][data-contrast=high] {
     --muted: #f5f5f5;

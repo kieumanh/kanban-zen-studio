@@ -308,3 +308,43 @@ dialog.gr-spend-dlg{max-width:680px}
 .nf-push{display:grid;gap:8px;padding-top:4px}
 .nf-push small{font-size:12px;color:var(--muted)}
 .nf-push-row{display:flex;flex-wrap:wrap;gap:8px}
+
+/* ---- v1.84.0 (Giang Hồ Hành): họa tiết kiếm hiệp cho riêng mục Điểm tích lũy ------------------------------------------------
+   Nền giấy dó, viền nâu nhạt, dấu triện son trước tiêu đề, tường vân ở góc khung, cảnh giới như ấn son, nút chính màu son.
+   Giao diện tối / tương phản cao: khung tự theo màu của chủ đề (quy tắc chủ đề có độ ưu tiên cao hơn), họa tiết dịu lại hoặc ẩn. */
+.gr-page,dialog.gr-award{--gr-paper:#fdf8ef;--gr-line:#e8dcc6;--gr-ink:#3a2a21;--gr-seal:#b8344a;--gr-seal-text:#a32c40;--gr-gold:#b58a3a;--gr-orn:#c9a76a;--gr-wash:#f6eedf;--zen-primary-gradient:linear-gradient(135deg,#c2413f,#8f2336);--zen-text-accent:var(--gr-seal-text)}
+.gr-page .panel{position:relative;isolation:isolate;background:var(--gr-paper);border-color:var(--gr-line)}
+.gr-page .panel:after{content:'';position:absolute;top:12px;right:14px;z-index:-1;width:64px;height:34px;background:var(--gr-orn);opacity:.32;pointer-events:none;
+ -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 34' fill='none' stroke='%23000' stroke-width='2.2' stroke-linecap='round'%3E%3Cpath d='M4 28h52c5 0 6-7 1-8 1-6-6-9-10-5-1-7-11-9-15-3-4-4-11-2-11 4-6-1-9 5-6 8'/%3E%3Cpath d='M22 20c1-4 6-4 7 0-1 3-5 3-5 0M40 15c2-3 6-2 6 1s-4 3-4 1'/%3E%3Cpath d='M10 33h30'/%3E%3C/svg%3E") no-repeat center/contain;
+ mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 34' fill='none' stroke='%23000' stroke-width='2.2' stroke-linecap='round'%3E%3Cpath d='M4 28h52c5 0 6-7 1-8 1-6-6-9-10-5-1-7-11-9-15-3-4-4-11-2-11 4-6-1-9 5-6 8'/%3E%3Cpath d='M22 20c1-4 6-4 7 0-1 3-5 3-5 0M40 15c2-3 6-2 6 1s-4 3-4 1'/%3E%3Cpath d='M10 33h30'/%3E%3C/svg%3E") no-repeat center/contain}
+.gr-page .panel>h2,dialog.gr-award h2{font-family:var(--serif);letter-spacing:.01em}
+.gr-page .panel>h2:before,dialog.gr-award header h2:before{content:'';display:inline-block;width:9px;height:9px;margin:0 12px 0 3px;vertical-align:.2em;border-radius:2px;background:var(--gr-seal);transform:rotate(45deg);box-shadow:0 0 0 2px var(--gr-paper),0 0 0 3px color-mix(in srgb,var(--gr-seal) 45%,transparent)}
+.gr-page .eyebrow,dialog.gr-award .eyebrow{letter-spacing:.14em}
+.gr-page h1{font-family:var(--serif)}
+.gr-page .btn.primary:hover,dialog.gr-award .btn.primary:hover{filter:brightness(1.06)}
+.gr-stage-bg{box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--gr-gold) 35%,transparent)}
+.gr-bubble{font-family:var(--serif);border-color:color-mix(in srgb,var(--gr-gold) 55%,var(--line));background:var(--gr-paper)}
+.gr-bubble:after{background:var(--gr-paper);border-color:color-mix(in srgb,var(--gr-gold) 55%,var(--line))}
+.gr-chip{border-color:color-mix(in srgb,var(--gr-gold) 45%,var(--line));background:var(--gr-paper)}
+.gr-chip:hover{background:var(--gr-wash)}
+.gr-chip.is-on{background:var(--gr-seal);border-color:var(--gr-seal);color:#fff}
+.gr-realm-name{display:inline-block;padding:3px 12px 4px;border-radius:8px;background:var(--gr-seal);color:#fff;font-size:19px;box-shadow:inset 0 0 0 2px #ffffff40}
+.gr-realm .progress>span,.gr-tile[data-tile=realm] strong{background-color:var(--gr-seal)}
+.gr-tile[data-tile=realm] strong{background:none;color:var(--gr-seal)}
+.gr-realm .progress>span{background:linear-gradient(90deg,var(--gr-gold),var(--gr-seal))}
+.gr-ring{stroke:var(--gr-line)}
+.gr-ring-outer{stroke:var(--gr-gold);stroke-width:1.6}
+.gr-spoke{stroke:var(--gr-line);stroke-dasharray:3 4}
+.gr-area{fill:rgba(184,52,74,.16);stroke:var(--gr-seal)}
+.gr-wallet>div,.gr-tile,.gr-tip{background:var(--gr-paper);border-color:var(--gr-line)}
+.gr-wallet [data-wallet=left] b,.gr-budget b,.gr-spend-sum b{color:var(--gr-seal)}
+.gr-budget,.gr-spend-sum{background:var(--gr-wash)}
+.gr-how-list li:before{border-radius:1px;background:var(--gr-seal);transform:rotate(45deg)}
+.gr-card{border-color:var(--gr-line);background:var(--gr-paper)}
+.gr-card.is-on{border-color:var(--gr-seal);background:var(--gr-wash)}
+.gr-card strong{font-family:var(--serif)}
+dialog.gr-award{background:var(--gr-paper);border-top:4px solid var(--gr-seal)}
+.gr-spend-dlg .gr-award-foot{background:var(--gr-paper)}
+:root[data-theme=dark] .gr-page,:root[data-theme=dark] dialog.gr-award{--gr-paper:#241f2b;--gr-line:#3d3448;--gr-ink:#efe6d8;--gr-seal:#c94a5e;--gr-seal-text:#f0a3b0;--gr-gold:#c9a24a;--gr-orn:#c9a24a;--gr-wash:#2e2736}
+:root[data-contrast=high] .gr-page .panel:after{display:none}
+:root[data-contrast=high] .gr-page,:root[data-contrast=high] dialog.gr-award{--gr-paper:#fff;--gr-line:#000;--gr-seal:#8f1d2f;--gr-seal-text:#7a1526;--gr-gold:#000;--gr-wash:#fff}

@@ -164,7 +164,7 @@ try {
       await page.waitForSelector('[data-gr-tip-open]');
       const text = (await page.locator('[data-gr-tip-open]').innerText()).replace(/\s+/g, ' ');
       assert.match(text, /Gợi ý cải thiện tuần này/, 'tiêu đề gợi ý' + at);
-      assert.match(text, /Đà đang tốt · Nên bồi bổ Tài lộc: ghi chép thu chi\./, 'nội dung lấy từ báo cáo tiến độ' + at);
+      assert.match(text, /Công lực đang tăng · Nên bồi bổ Tài lộc: ghi chép thu chi\./, 'nội dung lấy từ báo cáo tiến độ' + at);
       assert.equal(await noOverflow(page), true, 'hộp thông báo không tràn ngang' + at);
       await closeDialog(page);
       assert.doesNotMatch(await bellLabel(page), /gợi ý cải thiện tuần này/, 'mở chuông một lần thì hết chấm' + at);
@@ -208,7 +208,7 @@ try {
       await page.waitForSelector('.completion-card');
       await wait(300);
       const toast = await page.locator('#toast').textContent();
-      if (expectToast) assert.match(toast, /đã lên cảnh giới Luyện khí/, 'lên cảnh giới thì báo' + at);
+      if (expectToast) assert.match(toast, /đã đột phá, đạt cảnh giới Tam lưu cao thủ/, 'lên cảnh giới thì báo' + at);
       else assert.doesNotMatch(toast, /Luyện khí/, 'tắt thông báo điểm nghiệp thì không báo' + at);
       assert.equal(await page.evaluate(() => data.growth.log.length), 2, 'điểm vẫn được ghi dù tắt thông báo' + at);
       await context.close();

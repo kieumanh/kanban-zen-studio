@@ -31,7 +31,7 @@
   bell.onclick = () => {
     baseBellClick?.();
     if (!tipPending()) return;
-    document.querySelector('#editor-body .notice-list')?.insertAdjacentHTML('afterbegin', '<button type="button" class="notice-item" data-gr-tip-open><strong>' + svgIcon('growth') + ' Gợi ý cải thiện tuần này</strong><span>' + esc(tipSummary()) + '</span><small>Bấm để xem báo cáo tiến độ</small></button>');
+    document.querySelector('#editor-body .notice-list')?.insertAdjacentHTML('afterbegin', '<button type="button" class="notice-item" data-gr-tip-open><strong>' + svgIcon('growth') + ' Gợi ý cải thiện tuần này</strong><span>' + esc(tipSummary()) + '</span><small>Bấm để xem báo cáo tu luyện</small></button>');
     localWrite(tipKey('dot'), '1');
     refreshBell();
   };
@@ -88,10 +88,10 @@
     if (window.zenGrowth.started()) {
       const g = window.zenGrowth.growth(), ro = typeof contentReadOnly !== 'undefined' && contentReadOnly;
       gr.insertAdjacentHTML('beforeend', '<p class="help-copy">Đồng bộ theo tài khoản, áp dụng cho mọi thiết bị.</p>' +
-        check('nf-growth-notify', g.notify !== false, 'Thông báo điểm nghiệp: báo số điểm vừa cộng và khi nhân vật lên cảnh giới mới.', ro) +
-        check('nf-growth-tips', g.tips !== false, 'Gợi ý cải thiện hằng tuần: mỗi tuần một gợi ý trong chuông thông báo, dựa trên chỉ số đang thấp nhất.', ro) + '<p class="nf-status" role="status"></p>');
+        check('nf-growth-notify', g.notify !== false, 'Thông báo điểm nghiệp: báo số điểm vừa cộng và khi hiệp khách đột phá cảnh giới mới.', ro) +
+        check('nf-growth-tips', g.tips !== false, 'Gợi ý cải thiện hằng tuần: mỗi tuần một bí kíp trong chuông thông báo, dựa trên mạch đang yếu nhất.', ro) + '<p class="nf-status" role="status"></p>');
     } else {
-      gr.insertAdjacentHTML('beforeend', '<p class="help-copy">Chọn nhân vật ở mục Điểm tích lũy để bật thông báo điểm nghiệp và gợi ý cải thiện hằng tuần.</p><div><button type="button" class="btn" data-nf-open-growth>Mở Điểm tích lũy</button></div>');
+      gr.insertAdjacentHTML('beforeend', '<p class="help-copy">Chọn hiệp khách ở mục Điểm tích lũy để bật thông báo điểm nghiệp và gợi ý cải thiện hằng tuần.</p><div><button type="button" class="btn" data-nf-open-growth>Mở Điểm tích lũy</button></div>');
     }
     wrap.append(task, habit, gr);
     content.append(wrap);

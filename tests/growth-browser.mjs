@@ -81,11 +81,11 @@ try {
       assert.deepEqual(state.labels, ['Nghiệp quả', 'Tài lộc', 'Tâm cảnh', 'Nhân duyên', 'Thể lực', 'Trí tuệ', 'Sự nghiệp', 'An vui'], 'đủ 8 chỉ số theo thứ tự' + at);
       assert.deepEqual(state.values, Array(8).fill('0'), 'cả 8 chỉ số bắt đầu bằng 0' + at);
       assert.match(state.h1, /Tiểu Liên/, 'tên nhân vật hiện ở tiêu đề' + at);
-      assert.deepEqual(state.chips, ['Tự động', 'Cười nói', 'Tập võ', 'Đi quyền', 'Ngồi thiền'], 'có bốn tư thế và chế độ tự động' + at);
-      assert.equal(state.realm, 'Phàm nhân', 'bắt đầu ở cảnh giới đầu' + at);
+      assert.deepEqual(state.chips, ['Tùy hứng', 'Đàm tiếu', 'Luyện kiếm', 'Thái cực', 'Tọa thiền'], 'có bốn tư thế và chế độ tự động' + at);
+      assert.equal(state.realm, 'Vô danh tiểu tốt', 'bắt đầu ở cảnh giới đầu' + at);
       assert.equal(await noOverflow(page), true, 'trang điểm không tràn ngang' + at);
       // Chuyển tư thế: nhân vật đổi theo.
-      for (const [label, pose] of [['Tập võ', 'martial'], ['Đi quyền', 'taichi'], ['Ngồi thiền', 'zen'], ['Cười nói', 'talk']]) {
+      for (const [label, pose] of [['Luyện kiếm', 'martial'], ['Thái cực', 'taichi'], ['Tọa thiền', 'zen'], ['Đàm tiếu', 'talk']]) {
         await page.click('.gr-chip:has-text("' + label + '")');
         await page.waitForSelector('#gr-figure svg.gr-hero[data-pose="' + pose + '"]');
       }
@@ -130,7 +130,7 @@ try {
       assert.ok(Math.min(...info.plus) >= (touch ? 44 : 36), 'nút + đủ cao' + at + ' ' + info.plus);
       assert.ok(Math.min(...info.plusW) >= (touch ? 36 : 36), 'nút + đủ rộng' + at + ' ' + info.plusW);
       assert.ok(info.left >= -0.5 && info.right <= width + 0.5 && info.top >= -0.5 && info.bottom <= (touch ? 844 : 900) + 0.5, 'bảng nằm trong màn hình' + at + ' ' + JSON.stringify(info));
-      assert.match(info.budget, /Còn 2 lần cộng/, 'mỗi việc được 2 lần cộng' + at);
+      assert.match(info.budget, /Còn 2 lần vận công/, 'mỗi việc được 2 lần cộng' + at);
       assert.equal(info.saveDisabled, true, 'chưa cộng thì chưa Lưu được' + at);
       assert.match(info.intro, /Gửi báo cáo tuần/, 'nhắc tên việc vừa xong' + at);
       assert.equal(info.modal, true, 'bảng là hộp thoại modal' + at);
@@ -139,11 +139,11 @@ try {
       await page.click('[data-gr-plus="0"]');
       assert.equal((await page.locator('#growth-award .gr-col').nth(0).locator('.gr-col-val').innerText()).replace(/\s+/g, ''), '1,5+0,5', 'cột Nghiệp quả hiện điểm mới và phần cộng thêm' + at);
       await page.click('[data-gr-undo]');
-      assert.match(await page.locator('.gr-budget').innerText(), /Còn 2 lần cộng/, 'hoàn tác trả lại lần cộng' + at);
+      assert.match(await page.locator('.gr-budget').innerText(), /Còn 2 lần vận công/, 'hoàn tác trả lại lần cộng' + at);
       // Cộng 1 vào Nghiệp quả và 1 vào An vui → hết lần, các nút + khác bị khóa.
       await page.click('[data-gr-plus="0"]');
       await page.click('[data-gr-plus="7"]');
-      assert.match(await page.locator('.gr-budget').innerText(), /Đã chia đủ 1 điểm/, 'hết 2 lần cộng' + at);
+      assert.match(await page.locator('.gr-budget').innerText(), /Đã dồn đủ 1 điểm/, 'hết 2 lần cộng' + at);
       assert.equal(await page.locator('#growth-award .gr-plus:not([disabled])').count(), 0, 'hết lần thì khóa các nút +' + at);
       assert.equal(await page.locator('[data-gr-save]').isDisabled(), false, 'đã cộng thì được Lưu' + at);
       await page.click('[data-gr-save]');
@@ -161,7 +161,7 @@ try {
       await h.show(page, 'growth');
       const vals = await page.evaluate(() => [...document.querySelectorAll('.gr-radar .gr-value')].map((n) => n.textContent));
       assert.deepEqual(vals, ['1,5', '0', '0,5', '0', '0', '0', '0,5', '0,5'], 'biểu đồ cộng đúng điểm' + at);
-      assert.match(await page.locator('.gr-summary').innerText(), /Mạnh nhất:\s*Nghiệp quả.*Cần bồi bổ nhất:\s*Tài lộc/, 'tóm tắt mạnh yếu' + at);
+      assert.match(await page.locator('.gr-summary').innerText(), /Sở trường:\s*Nghiệp quả.*Cần khổ luyện:\s*Tài lộc/, 'tóm tắt mạnh yếu' + at);
       assert.equal(await page.locator('.gr-history-list li').count(), 3, 'lịch sử có 3 lần cộng' + at);
       assert.equal(await noOverflow(page), true, 'trang điểm không tràn ngang' + at);
       // Việc đã được cộng điểm thì không hỏi lần nữa: đưa về Đang làm rồi hoàn thành lại.
