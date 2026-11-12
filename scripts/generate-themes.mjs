@@ -19,6 +19,7 @@ export const SOURCES = [
   'experience',
   'habits',
   'budget',
+  'growth',
   'studio-zen',
 ];
 

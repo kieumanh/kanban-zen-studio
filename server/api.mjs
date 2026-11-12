@@ -59,6 +59,7 @@ import {
   weeklyReport,
 } from './reports.mjs';
 import { financeReport, validFinanceSettings } from './finance-report.mjs';
+import { validGrowth } from './growth.mjs';
 import { clientEvent } from './client-events.mjs';
 export const ORIGIN = 'https://kanban.huongthiennature.com',
   enc = new TextEncoder();
@@ -638,6 +639,7 @@ export function validWorkspace(d) {
   return (
     validExtras(d) &&
     validFinanceSettings(d.financeReport) &&
+    validGrowth(d.growth) &&
     d.projects.every(
       (p) =>
         id(p.id) &&

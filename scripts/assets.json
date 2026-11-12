@@ -318,5 +318,20 @@
     "/contrast.css",
     "contrast.css",
     "text/css; charset=utf-8"
+  ],
+  [
+    "/growth-art.js",
+    "growth-art.js",
+    "text/javascript; charset=utf-8"
+  ],
+  [
+    "/growth.js",
+    "growth.js",
+    "text/javascript; charset=utf-8"
+  ],
+  [
+    "/growth.css",
+    "growth.css",
+    "text/css; charset=utf-8"
   ]
 ]

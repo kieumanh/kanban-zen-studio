@@ -1,5 +1,5 @@
 /*  v1.16.0 — chế độ tối (chọn bằng thuộc tính data-theme="dark" trên <html>, đặt bởi theme.js).
-   Sinh tự động bằng scripts/generate-themes.mjs từ 11 tệp CSS nguồn. KHÔNG sửa tay: sửa bộ sinh rồi chạy "node scripts/generate-themes.mjs".  */
+   Sinh tự động bằng scripts/generate-themes.mjs từ 12 tệp CSS nguồn. KHÔNG sửa tay: sửa bộ sinh rồi chạy "node scripts/generate-themes.mjs".  */
 :root[data-theme=dark] {
     --bg: #151219;
     --paper: #1b181f;
@@ -3091,6 +3091,54 @@
 }
 :root[data-theme=dark] .bg-be-key-dot {
     border: 3px solid #94c5aa
+}
+:root[data-theme=dark] .gr-stage-bg {
+    background: radial-gradient(ellipse at 50% 100%,#211b2b 0,transparent 62%),linear-gradient(180deg,#141118,#1d1823)
+}
+:root[data-theme=dark] .gr-stage-bg:before {
+    background: radial-gradient(ellipse at 20% 100%,#2e243d 0,transparent 55%),radial-gradient(ellipse at 80% 100%,#271d30 0,transparent 50%)
+}
+:root[data-theme=dark] .gr-chip:hover {
+    background: #130f16
+}
+:root[data-theme=dark] .gr-chip.is-on {
+    border-color: #845cd6;
+    color: #ffffff
+}
+:root[data-theme=dark] .gr-realm-name {
+    color: #e8bf91
+}
+:root[data-theme=dark] .gr-ring-outer {
+    stroke: #b2a8c0
+}
+:root[data-theme=dark] .gr-area {
+    fill: rgba(202,184,254,0.2);
+    stroke: #cab8fe
+}
+:root[data-theme=dark] .gr-dot {
+    stroke: #ffffff
+}
+:root[data-theme=dark] .gr-card:focus-within {
+    outline: 3px solid #a674d6
+}
+:root[data-theme=dark] .gr-card.is-on {
+    border-color: #845cd6;
+    background: #141118
+}
+:root[data-theme=dark] dialog.gr-award::backdrop {
+    background: rgba(48,37,28,0.533)
+}
+:root[data-theme=dark] .gr-budget {
+    background: #141118
+}
+:root[data-theme=dark] .gr-budget b {
+    color: #cab8fe
+}
+:root[data-theme=dark] .gr-col-val em {
+    color: #9cd4b7
+}
+:root[data-theme=dark] .gr-bar .gr-bar-add {
+    background: repeating-linear-gradient(45deg,var(--c) 0 5px,color-mix(in srgb,var(--c) 55%,#1b181f) 5px 10px)
 }
 :root[data-theme=dark] {
     --muted: #ccc2d7;
