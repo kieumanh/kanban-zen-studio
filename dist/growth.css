@@ -348,3 +348,34 @@ dialog.gr-award{background:var(--gr-paper);border-top:4px solid var(--gr-seal)}
 :root[data-theme=dark] .gr-page,:root[data-theme=dark] dialog.gr-award{--gr-paper:#241f2b;--gr-line:#3d3448;--gr-ink:#efe6d8;--gr-seal:#c94a5e;--gr-seal-text:#f0a3b0;--gr-gold:#c9a24a;--gr-orn:#c9a24a;--gr-wash:#2e2736}
 :root[data-contrast=high] .gr-page .panel:after{display:none}
 :root[data-contrast=high] .gr-page,:root[data-contrast=high] dialog.gr-award{--gr-paper:#fff;--gr-line:#000;--gr-seal:#8f1d2f;--gr-seal-text:#7a1526;--gr-gold:#000;--gr-wash:#fff}
+
+/* ---- v1.85.0 (Bách Cấp): 100 cấp, 10 cảnh giới × 10 trọng ------------------------------------------------------------------
+   Ấn son cảnh giới + dòng "Cấp n/100 · Đệ … trọng", thanh tiến tới cấp kế tiếp, thang 10 cảnh giới; bảng thang 100 cấp trong Tâm pháp. */
+.gr-realm{gap:6px}
+.gr-realm>div.gr-realm-top{display:flex;align-items:center;justify-content:flex-start;gap:8px 12px;flex-wrap:wrap}
+.gr-rank{font:600 14px/1.3 var(--serif);color:var(--gr-ink,var(--ink))}
+.gr-rank b{font-size:17px;color:var(--gr-seal-text)}
+.gr-realm small.gr-realm-ahead{display:block;font-size:12.5px;color:var(--muted)}
+.gr-realm .progress{width:100%;max-width:none;height:7px;margin:2px 0 0;background:color-mix(in srgb,var(--gr-gold) 22%,var(--gr-paper))}
+.gr-ladder{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:4px;margin:2px 0 0;padding:0;list-style:none}
+.gr-ladder li{height:6px;border-radius:3px;background:var(--gr-line)}
+.gr-ladder li.is-done{background:var(--gr-seal)}
+.gr-ladder li.is-now{background:linear-gradient(90deg,var(--gr-seal),var(--gr-gold))}
+.gr-scale{margin-top:12px;border-top:1px dashed var(--gr-line);padding-top:10px}
+.gr-scale>summary{display:inline-flex;align-items:center;min-height:36px;padding:4px 12px;border:1px solid color-mix(in srgb,var(--gr-gold) 45%,var(--line));border-radius:999px;background:var(--gr-paper);font-size:13px;font-weight:600;color:var(--gr-seal-text);cursor:pointer;list-style:none}
+.gr-scale>summary::-webkit-details-marker{display:none}
+.gr-scale>summary:before{content:'';flex:none;width:6px;height:6px;margin:0 10px 0 2px;border:solid currentColor;border-width:0 2px 2px 0;transform:rotate(-45deg);transition:transform .2s}
+.gr-scale[open]>summary:before{transform:rotate(45deg)}
+.gr-scale-wrap{margin-top:10px;overflow-x:auto}
+.gr-scale table{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}
+.gr-scale th,.gr-scale td{padding:7px 8px;border-bottom:1px solid var(--gr-line);text-align:left;white-space:nowrap}
+.gr-scale thead th{font-size:12px;font-weight:600;color:var(--muted)}
+.gr-scale tbody th{font-family:var(--serif);font-weight:600;color:var(--gr-ink,var(--ink))}
+.gr-scale td:nth-child(n+3){text-align:right}
+.gr-scale thead th:nth-child(n+3){text-align:right}
+.gr-scale tr.is-now th,.gr-scale tr.is-now td{background:var(--gr-wash);color:var(--gr-seal-text);font-weight:700}
+@media (max-width:700px){
+ .gr-scale table{font-size:12px}
+ .gr-scale th,.gr-scale td{padding:6px 5px}
+ .gr-rank{font-size:13px}
+}

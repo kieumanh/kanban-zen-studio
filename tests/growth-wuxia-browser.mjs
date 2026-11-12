@@ -112,7 +112,7 @@ try {
       const OLD = /Nhân vật|Biểu đồ|Sử dụng điểm|Điểm hiện có|Phàm nhân|Trúc cơ|Cách tích điểm|Lịch sử cộng điểm|Điểm từng chỉ số|Tự động|Cười nói|Tập võ|Đi quyền|Ngồi thiền|Tiên tử/;
       const pageText = await page.locator('#main').innerText();
       assert.doesNotMatch(pageText, OLD, 'trang không còn từ ngữ cũ' + at);
-      for (const t of ['GIANG HỒ TU LUYỆN', 'Tu vi của Nữ hiệp', 'Bát phương đồ', 'Bát mạch tu vi', 'Công phu lục', 'Tâm pháp tu luyện', 'Đổi bảo vật', 'Đổi hiệp khách', 'Nhị lưu cao thủ'])
+      for (const t of ['GIANG HỒ TU LUYỆN', 'Tu vi của Nữ hiệp', 'Bát phương đồ', 'Bát mạch tu vi', 'Công phu lục', 'Tâm pháp tu luyện', 'Đổi bảo vật', 'Đổi hiệp khách', 'Tam lưu cao thủ'])
         assert.ok(pageText.includes(t), 'có chữ “' + t + '”' + at);
       assert.deepEqual(await page.evaluate(() => [...document.querySelectorAll('.gr-chip')].map((n) => n.textContent)), ['Tùy hứng', 'Đàm tiếu', 'Luyện kiếm', 'Thái cực', 'Tọa thiền'], 'thế võ Hán Việt' + at);
       const look = await page.evaluate(() => ({

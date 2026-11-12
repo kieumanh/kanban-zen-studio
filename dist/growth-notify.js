@@ -2,7 +2,7 @@
 // v1.80.0: gom các loại thông báo về MỘT nhóm "Thông báo" trong Cài đặt (một cột, xếp dọc): Công việc · Việc hằng ngày · Điểm tích lũy.
 // - Công việc: giữ nguyên email nhắc việc và lịch gửi; hai nút thông báo trình duyệt được chuyển về đây.
 // - Việc hằng ngày: hai công tắc (nhắc đến giờ từng việc; nhắc nhẹ khi hôm nay chưa tích việc nào), lưu trên thiết bị này, thiếu = bật như trước.
-// - Điểm tích lũy: "thông báo điểm nghiệp" (data.growth.notify: báo khi cộng điểm / lên cảnh giới) và "gợi ý cải thiện hằng tuần"
+// - Điểm tích lũy: "thông báo điểm nghiệp" (data.growth.notify: báo khi cộng điểm / lên cấp / lên cảnh giới) và "gợi ý cải thiện hằng tuần"
 //   (data.growth.tips: mỗi tuần một gợi ý trong chuông thông báo). Cả hai thiếu = bật; chỉ có khi đã chọn nhân vật.
 // Tệp này nạp sau studio-zen.js vì studio-zen.js ghi đè hẳn refreshBell.
 (function () {
@@ -88,7 +88,7 @@
     if (window.zenGrowth.started()) {
       const g = window.zenGrowth.growth(), ro = typeof contentReadOnly !== 'undefined' && contentReadOnly;
       gr.insertAdjacentHTML('beforeend', '<p class="help-copy">Đồng bộ theo tài khoản, áp dụng cho mọi thiết bị.</p>' +
-        check('nf-growth-notify', g.notify !== false, 'Thông báo điểm nghiệp: báo số điểm vừa cộng và khi hiệp khách đột phá cảnh giới mới.', ro) +
+        check('nf-growth-notify', g.notify !== false, 'Thông báo điểm nghiệp: báo số điểm vừa cộng, khi hiệp khách lên cấp và khi đột phá cảnh giới mới.', ro) +
         check('nf-growth-tips', g.tips !== false, 'Gợi ý cải thiện hằng tuần: mỗi tuần một bí kíp trong chuông thông báo, dựa trên mạch đang yếu nhất.', ro) + '<p class="nf-status" role="status"></p>');
     } else {
       gr.insertAdjacentHTML('beforeend', '<p class="help-copy">Chọn hiệp khách ở mục Điểm tích lũy để bật thông báo điểm nghiệp và gợi ý cải thiện hằng tuần.</p><div><button type="button" class="btn" data-nf-open-growth>Mở Điểm tích lũy</button></div>');

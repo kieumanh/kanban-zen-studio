@@ -196,8 +196,9 @@ try {
     }
 
     // 5. Thông báo điểm nghiệp: lên cảnh giới mới thì báo; tắt thì im.
+    // v1.85.0: 11 điểm (cấp 10) + 1 điểm = 12 điểm = cấp 11, bước vào cảnh giới Tam lưu cao thủ.
     for (const [notify, expectToast] of [[undefined, true], [false, false]]) {
-      const g = growth({ log: [entry('big', 1, [19, 0, 0, 0, 0, 0, 0, 0], 'Việc lớn')], ...(notify === false ? { notify: false } : {}) });
+      const g = growth({ log: [entry('big', 1, [22, 0, 0, 0, 0, 0, 0, 0], 'Việc lớn')], ...(notify === false ? { notify: false } : {}) });
       const { context, page } = await h.open(width, { touch, workspace: seed(g)() });
       await h.show(page, 'board');
       await page.evaluate(() => moveTask(project('p1'), project('p1').tasks[0], 'Done'));
@@ -209,7 +210,7 @@ try {
       await wait(300);
       const toast = await page.locator('#toast').textContent();
       if (expectToast) assert.match(toast, /đã đột phá, đạt cảnh giới Tam lưu cao thủ/, 'lên cảnh giới thì báo' + at);
-      else assert.doesNotMatch(toast, /Luyện khí/, 'tắt thông báo điểm nghiệp thì không báo' + at);
+      else assert.doesNotMatch(toast, /đột phá|lên cấp/, 'tắt thông báo điểm nghiệp thì không báo' + at);
       assert.equal(await page.evaluate(() => data.growth.log.length), 2, 'điểm vẫn được ghi dù tắt thông báo' + at);
       await context.close();
     }

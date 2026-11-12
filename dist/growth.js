@@ -40,10 +40,15 @@
       ideas: ['Làm một việc mình yêu thích', 'Sáng tạo hoặc thử điều mới', 'Dọn dẹp, sắp xếp chỗ ở', 'Nghỉ ngơi trọn vẹn, đi chơi'] },
   ];
   const HEROES = { nam: { label: 'Nam', title: 'Thiếu hiệp', desc: 'Kiếm khách áo lam' }, nu: { label: 'Nữ', title: 'Nữ hiệp', desc: 'Hồng y kiếm khách' } };
-  const REALMS = [
-    { at: 0, name: 'Vô danh tiểu tốt' }, { at: 10, name: 'Tam lưu cao thủ' }, { at: 30, name: 'Nhị lưu cao thủ' },
-    { at: 80, name: 'Nhất lưu cao thủ' }, { at: 160, name: 'Tuyệt đỉnh cao thủ' }, { at: 300, name: 'Võ lâm chí tôn' },
-  ];
+  // 100 cấp (v1.85.0): 10 cảnh giới × 10 trọng. Cảnh giới sau tốn gấp đôi cảnh giới trước: 1, 2, 4 … 512 điểm cho mỗi cấp,
+  // cộng dồn tới cấp 100 là 10.230 điểm. Tính theo tổng điểm đã tu luyện (không trừ phần đổi bảo vật) nên cấp không bao giờ tụt.
+  const REALMS = ['Sơ nhập giang hồ', 'Tam lưu cao thủ', 'Nhị lưu cao thủ', 'Nhất lưu cao thủ', 'Tuyệt đỉnh cao thủ', 'Tiên thiên cao thủ', 'Tông sư', 'Đại tông sư', 'Thiên nhân hợp nhất', 'Võ lâm chí tôn'];
+  const NO_REALM = 'Vô danh tiểu tốt';
+  const NUM_HV = ['nhất', 'nhị', 'tam', 'tứ', 'ngũ', 'lục', 'thất', 'bát', 'cửu', 'thập'];
+  const LEVEL_MAX = 100, PER_REALM = 10;
+  const levelCost = (n) => 2 ** Math.floor((n - 1) / PER_REALM);
+  const LEVEL_AT = [0];
+  for (let n = 1; n <= LEVEL_MAX; n++) LEVEL_AT[n] = LEVEL_AT[n - 1] + levelCost(n);
   const SOURCE_LABEL = { task: 'Hoàn thành nhiệm vụ', habit: 'Khổ luyện đủ 7 ngày', archive: 'Tổng hợp công phu cũ' };
   Object.assign(iconPaths, { growth: 'M8 3h8l5 5v8l-5 5H8l-5-5V8z M12 8l3 4-3 4-3-4z' });
   AXES.forEach((a) => (iconPaths['gr-' + a.id] = a.icon));
@@ -90,7 +95,11 @@
   // ---- Mô hình ------------------------------------------------------------------------------------------------------------
   const growth = () => (data.growth && validGrowth(data.growth) ? data.growth : null);
   const started = () => !!growth();
-  const fmt = (n) => String(Math.round(n * 2) / 2).replace('.', ',');
+  const thousands = (v) => String(v).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  const fmt = (n) => {
+    const [i, d] = String(Math.round(n * 2) / 2).split('.');
+    return thousands(i) + (d ? ',' + d : '');
+  };
   const tierOf = (mx) => TIERS.find((t) => mx <= t) || Math.ceil(mx / 1000) * 1000;
   // Điểm đã tích lũy (cộng dồn từ sổ cái), điểm đã quy đổi (các lần chưa hủy) và điểm hiện có = đã cộng − đã quy đổi, không âm.
   function earnedScores() {
@@ -111,11 +120,23 @@
   const total = (s) => s.reduce((a, b) => a + b, 0);
   const earnedTotal = () => total(earnedScores());
   const spentTotal = () => total(spentScores());
+  const realmIndex = (lv) => (lv ? Math.ceil(lv / PER_REALM) : 0); // 0 = chưa nhập cấp
+  // Cấp, cảnh giới và trọng của tổng điểm t. need/pct: tới cấp kế tiếp; next/needRealm: tới cảnh giới kế tiếp.
   function realmOf(t) {
-    let i = 0;
-    REALMS.forEach((r, k) => { if (t >= r.at) i = k; });
-    const next = REALMS[i + 1];
-    return { name: REALMS[i].name, next: next ? next.name : '', need: next ? next.at - t : 0, pct: next ? Math.round(((t - REALMS[i].at) / (next.at - REALMS[i].at)) * 100) : 100 };
+    let level = 0;
+    while (level < LEVEL_MAX && t >= LEVEL_AT[level + 1]) level++;
+    const ri = realmIndex(level), top = level === LEVEL_MAX, nextRealmAt = ri < REALMS.length ? LEVEL_AT[ri * PER_REALM + 1] : 0;
+    return {
+      level, realm: ri, top, name: ri ? REALMS[ri - 1] : NO_REALM, tier: level ? 'Đệ ' + NUM_HV[(level - 1) % PER_REALM] + ' trọng' : '',
+      need: top ? 0 : LEVEL_AT[level + 1] - t, pct: top ? 100 : Math.min(99, Math.floor(((t - LEVEL_AT[level]) / levelCost(level + 1)) * 100)),
+      breakthrough: !top && realmIndex(level + 1) !== ri, next: nextRealmAt ? REALMS[ri] : '', needRealm: nextRealmAt ? nextRealmAt - t : 0,
+    };
+  }
+  // Thang 100 cấp: mỗi cảnh giới một dòng, dòng hiện tại được tô.
+  function scaleTable(r) {
+    return '<details class="gr-scale"><summary>Xem thang 100 cấp</summary><div class="gr-scale-wrap"><table><thead><tr><th scope="col">Cảnh giới</th><th scope="col">Cấp</th><th scope="col">Mỗi cấp</th><th scope="col">Tổng tu vi</th></tr></thead><tbody>' +
+      REALMS.map((name, i) => '<tr' + (i + 1 === r.realm ? ' class="is-now" aria-current="true"' : '') + '><th scope="row">' + name + '</th><td>' + (i * PER_REALM + 1) + '–' + (i + 1) * PER_REALM + '</td><td>' + thousands(2 ** i) + '</td><td>' + thousands(LEVEL_AT[i * PER_REALM + 1]) + '–' + thousands(LEVEL_AT[(i + 1) * PER_REALM]) + '</td></tr>').join('') +
+      '</tbody></table></div></details>';
   }
   function extremes(s) {
     const mx = Math.max(...s), mn = Math.min(...s);
@@ -188,7 +209,15 @@
     const chips = [{ id: 'auto', label: 'Tùy hứng' }, ...zenHero.POSES].map((p) => '<button type="button" class="gr-chip' + (poseMode === p.id ? ' is-on' : '') + '" data-gr-pose="' + p.id + '" aria-pressed="' + (poseMode === p.id) + '">' + p.label + '</button>').join('');
     return '<section class="panel gr-stage" aria-label="Hiệp khách đồng hành"><div class="gr-stage-bg">' + zenHero.scene() + '<p class="gr-bubble" id="gr-bubble" role="status">' + esc(bubbleText(poseNow, s)) + '</p><div class="gr-figure" id="gr-figure">' + zenHero.svg(g.hero, poseNow) + '</div></div>' +
       '<div class="gr-poses" role="group" aria-label="Thế võ của hiệp khách">' + chips + '</div>' +
-      '<div class="gr-realm"><div><span class="gr-realm-name">' + r.name + '</span><small>' + fmt(earnedTotal()) + ' điểm tu vi' + (r.next ? ' · còn ' + fmt(r.need) + ' điểm tới ' + r.next : ' · đã đạt cảnh giới tối cao') + '</small></div><div class="progress" role="progressbar" aria-label="Tiến tới cảnh giới kế tiếp" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + r.pct + '"><span style="width:' + r.pct + '%"></span></div></div></section>';
+      realmBlock(r) + '</section>';
+  }
+  function realmBlock(r) {
+    const ahead = r.top ? 'đã đạt cấp tối cao' : !r.level ? 'còn ' + fmt(r.need) + ' điểm để nhập cấp 1' : 'còn ' + fmt(r.need) + ' điểm lên cấp ' + (r.level + 1) + (r.breakthrough ? ' · đột phá ' + r.next : '');
+    const ladder = REALMS.map((name, i) => '<li class="' + (i + 1 < r.realm ? 'is-done' : i + 1 === r.realm ? 'is-now' : '') + '" title="' + name + '"></li>').join('');
+    return '<div class="gr-realm"><div class="gr-realm-top"><span class="gr-realm-name">' + r.name + '</span><span class="gr-rank">' + (r.level ? '<b>Cấp ' + r.level + '</b>/100 · ' + r.tier : 'Chưa nhập cấp') + '</span></div>' +
+      '<small class="gr-realm-ahead">' + fmt(earnedTotal()) + ' điểm tu vi · ' + ahead + '</small>' +
+      '<div class="progress" role="progressbar" aria-label="' + (r.top ? 'Đã đạt cấp 100' : 'Tiến tới cấp ' + (r.level + 1)) + '" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + r.pct + '"><span style="width:' + r.pct + '%"></span></div>' +
+      '<ol class="gr-ladder" role="img" aria-label="Cảnh giới ' + r.realm + ' trên 10">' + ladder + '</ol></div>';
   }
   function axisRows(s) {
     const tier = tierOf(Math.max(...s));
@@ -228,13 +257,13 @@
     if (changing) return '<div class="gr-page">' + heading('GIANG HỒ TU LUYỆN', 'Hành tẩu giang hồ', intro) + pickPanel() + '</div>';
     if (reporting) return reportPage();
     const s = scores(), r = realmOf(earnedTotal()), ex = extremes(s);
-    const sub = 'Cảnh giới ' + r.name + ' · ' + fmt(total(s)) + ' điểm tu vi' + (spentTotal() ? ' hiện có' : '');
+    const sub = (r.level ? 'Cấp ' + r.level + ' · ' : '') + r.name + ' · ' + fmt(total(s)) + ' điểm tu vi' + (spentTotal() ? ' hiện có' : '');
     const summary = total(s) === 0
       ? earnedTotal() === 0 ? 'Bát mạch đều ở 0. Hoàn thành một việc để khai mạch.' : 'Tu vi hiện có đang ở 0 sau khi đổi bảo vật. Hoàn thành việc để tu luyện tiếp.'
       : 'Sở trường: <strong>' + ex.top.name + '</strong> (' + fmt(ex.mx) + ') · Cần khổ luyện: <strong>' + ex.low.name + '</strong> (' + fmt(ex.mn) + ')';
     return '<div class="gr-page">' + heading('GIANG HỒ TU LUYỆN', 'Tu vi của ' + esc(heroName()), sub, '<div class="gr-head-actions"><button type="button" class="btn primary" data-gr-spend>Đổi bảo vật</button><button type="button" class="btn" data-gr-report>Xem báo cáo tu luyện</button><button type="button" class="btn" data-gr-change>Đổi hiệp khách</button></div>') +
       '<div class="gr-grid">' + stage(s) + '<section class="panel gr-radar-panel" aria-label="Bát phương đồ nội lực"><h2>Bát phương đồ</h2><div class="gr-radar-wrap" id="gr-radar">' + radar(s) + '</div><p class="gr-summary">' + summary + '</p>' + wallet(s) + '</section></div>' +
-      axisRows(s) + history() + spendPanel() + '<section class="panel gr-how"><h2>Tâm pháp tu luyện</h2><ul class="gr-how-list"><li>Mỗi việc hoàn thành cho các hạ <strong>2 lần vận công</strong> (1 điểm). Bảng vận công hiện ra trước lời chúc mừng.</li><li>Mỗi lần bấm <strong>+</strong> dồn 0,5 điểm vào mạch đã chọn; dồn cả hai lần vào một mạch cũng được.</li><li>Mỗi việc chỉ được vận công một lần.</li><li>Bấm <strong>Đổi bảo vật</strong> để ghi lại món đã mua hoặc quy đổi; tu vi bị trừ khỏi Bát phương đồ. Ghi nhầm thì sửa hoặc hủy quy đổi để hoàn điểm. Cảnh giới tính theo tổng tu vi đã luyện nên không tụt khi đổi bảo vật.</li></ul></section></div>';
+      axisRows(s) + history() + spendPanel() + '<section class="panel gr-how"><h2>Tâm pháp tu luyện</h2><ul class="gr-how-list"><li>Mỗi việc hoàn thành cho các hạ <strong>2 lần vận công</strong> (1 điểm). Bảng vận công hiện ra trước lời chúc mừng.</li><li>Mỗi lần bấm <strong>+</strong> dồn 0,5 điểm vào mạch đã chọn; dồn cả hai lần vào một mạch cũng được.</li><li>Mỗi việc chỉ được vận công một lần.</li><li>Bấm <strong>Đổi bảo vật</strong> để ghi lại món đã mua hoặc quy đổi; tu vi bị trừ khỏi Bát phương đồ. Ghi nhầm thì sửa hoặc hủy quy đổi để hoàn điểm. Cấp và cảnh giới tính theo tổng tu vi đã luyện nên không tụt khi đổi bảo vật.</li><li><strong>100 cấp</strong> chia 10 cảnh giới, mỗi cảnh giới 10 trọng. Cảnh giới sau tốn gấp đôi cảnh giới trước: 1 điểm mỗi cấp ở Sơ nhập giang hồ, 2 điểm ở Tam lưu cao thủ… 512 điểm ở Võ lâm chí tôn; cấp 100 cần 10.230 điểm.</li></ul>' + scaleTable(r) + '</section></div>';
   }
 
   // ---- Hoạt họa nhân vật --------------------------------------------------------------------------------------------------
@@ -354,11 +383,17 @@
       const entry = { id: uid(), d: today(), s: a.source, k: a.key, n: String(a.title || '').slice(0, 120), p: a.add.slice() };
       if (!a.key) delete entry.k;
       if (!entry.n) delete entry.n;
-      const realmBefore = realmOf(earnedTotal()).name;
+      const before = realmOf(earnedTotal());
       if (!wfSave(() => { data.growth.log.push(entry); data.growth.spend ||= []; compact(); })) return notify('Chưa lưu được điểm. Hãy thử lại.');
-      const realmAfter = realmOf(earnedTotal()).name;
-      // Thông báo điểm nghiệp (bật mặc định, tắt ở Cài đặt → Thông báo): lên cảnh giới mới; với việc hằng ngày còn báo số điểm vừa cộng.
-      if (growth()?.notify !== false) toastText = realmAfter !== realmBefore ? 'Chúc mừng! ' + heroName() + ' đã đột phá, đạt cảnh giới ' + realmAfter + '.' : a.source !== 'task' ? 'Đã dồn ' + fmt(a.spent * STEP) + ' điểm công lực vào Điểm tích lũy.' : '';
+      const after = realmOf(earnedTotal());
+      // Thông báo điểm nghiệp (bật mặc định, tắt ở Cài đặt → Thông báo): lên cấp, đột phá cảnh giới mới; với việc hằng ngày còn báo số điểm vừa cộng.
+      if (growth()?.notify !== false) {
+        const parts = [];
+        if (a.source !== 'task') parts.push('Đã dồn ' + fmt(a.spent * STEP) + ' điểm công lực vào Điểm tích lũy.');
+        if (after.realm !== before.realm) parts.push('Chúc mừng! ' + heroName() + ' đã đột phá, đạt cảnh giới ' + after.name + ' (cấp ' + after.level + ').');
+        else if (after.level > before.level) parts.push('Chúc mừng! ' + heroName() + ' lên cấp ' + after.level + ' · ' + after.name + ', ' + after.tier.toLowerCase() + '.');
+        toastText = parts.join(' ');
+      }
     }
     award = null;
     a.el.close();
@@ -482,7 +517,7 @@
     else tips.push({ kind: 'trend', title: 'Công lực đều đặn', text: '7 ngày qua các hạ luyện được ' + fmt(last) + ' điểm, bằng 7 ngày trước.' });
     const ex = rep.extremes;
     if (rep.total > 0 && rep.balance.pct < 45) tips.push({ kind: 'balance', title: 'Điều hòa âm dương', text: 'Công lực đang dồn vào ' + ex.top.name + ' (' + fmt(ex.mx) + ') trong khi ' + ex.low.name + ' mới ' + fmt(ex.mn) + '. Trong 3 việc kế tiếp, thử dành ít nhất 1 lần vận công cho ' + ex.low.name + '.' });
-    if (rep.realm.next && rep.realm.need <= 5) tips.push({ kind: 'realm', title: 'Sắp đột phá cảnh giới', text: 'Còn ' + fmt(rep.realm.need) + ' điểm nữa là tới ' + rep.realm.next + '.' });
+    if (rep.realm.next && rep.realm.needRealm <= 5) tips.push({ kind: 'realm', title: 'Sắp đột phá cảnh giới', text: 'Còn ' + fmt(rep.realm.needRealm) + ' điểm nữa là tới ' + rep.realm.next + '.' });
     rep.weak.forEach((i) => {
       const a = AXES[i], v = rep.scores[i];
       tips.push({ kind: 'weak', axis: a.id, color: a.color, title: 'Bồi bổ ' + a.name, text: a.means + ' Hiện ' + fmt(v) + ' điểm' + (v < rep.mean ? ', thấp hơn mức trung bình ' + fmt1(rep.mean) + '.' : '.'), ideas: a.ideas.slice(0, 3) });
@@ -501,7 +536,7 @@
     const tile = (id, label, value, sub) => '<div class="gr-tile" data-tile="' + id + '"><small>' + label + '</small><strong>' + value + '</strong><span>' + sub + '</span></div>';
     const tiles = '<div class="gr-tiles">' +
       tile('total', rep.spent ? 'Tu vi hiện có' : 'Tổng tu vi', fmt(rep.total) + ' điểm', rep.entries + ' lần vận công' + (rep.spent ? ' · đã đổi bảo vật ' + fmt(rep.spent) : '')) +
-      tile('realm', 'Cảnh giới', r.name, r.next ? 'Còn ' + fmt(r.need) + ' điểm tới ' + r.next : 'Cảnh giới tối cao') +
+      tile('realm', 'Cảnh giới', r.name, r.top ? 'Cấp 100/100 · cấp tối cao' : (r.level ? 'Cấp ' + r.level + '/100' : 'Chưa nhập cấp') + ' · còn ' + fmt(r.need) + ' điểm lên cấp ' + (r.level + 1)) +
       tile('week', '7 ngày qua', '+' + fmt(rep.week.last) + ' điểm', '7 ngày trước đó: ' + fmt(rep.week.prev) + ' điểm') +
       tile('streak', 'Khổ luyện liền mạch', rep.streak + ' ngày', 'liên tiếp có vận công') + '</div>';
     const tier = tierOf(Math.max(...s));
@@ -519,7 +554,7 @@
     reporting = true;
     go('growth');
   }
-  window.zenGrowth = { AXES, started, scores, earnedScores, spentScores, total, realmOf, extremes, fmt, openAward, growth, STEP, iconSvg, habitStreak, buildReport, tipsOf, openReport, heroName, openSpend };
+  window.zenGrowth = { AXES, started, scores, earnedScores, spentScores, total, realmOf, REALMS, LEVEL_AT, extremes, fmt, openAward, growth, STEP, iconSvg, habitStreak, buildReport, tipsOf, openReport, heroName, openSpend };
 
   // ---- Sử dụng điểm (v1.81.0) ---------------------------------------------------------------------------------------------
   // Form ghi vật phẩm đã mua / quy đổi và số điểm trừ ở từng chỉ số. Mỗi lần quy đổi là một dòng trong data.growth.spend;

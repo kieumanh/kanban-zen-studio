@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import { startHarness } from './lib/browser-harness.mjs';
 
 const day = (n) => new Date(Date.now() + n * 864e5).toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
-// Đã tích lũy (nửa điểm → điểm): Nghiệp quả 10 · Tài lộc 6 · Tâm cảnh 4 · Sự nghiệp 8 · Tinh thần 2 = 30 điểm (cảnh giới Nhị lưu cao thủ).
+// Đã tích lũy (nửa điểm → điểm): Nghiệp quả 10 · Tài lộc 6 · Tâm cảnh 4 · Sự nghiệp 8 · Tinh thần 2 = 30 điểm (cấp 20, cảnh giới Tam lưu cao thủ).
 const GROWTH = {
   v: 1,
   hero: 'nam',
@@ -51,7 +51,7 @@ try {
       const { context, page } = await h.open(width, { touch, workspace: seed() });
       await h.show(page, 'growth');
       assert.deepEqual(await wallet(page), { left: '30', earned: '30', spent: '0' }, 'ví điểm lúc đầu' + at);
-      assert.equal(await page.locator('.gr-realm-name').innerText(), 'Nhị lưu cao thủ', 'đủ 30 điểm là Nhị lưu cao thủ' + at);
+      assert.equal(await page.locator('.gr-realm-name').innerText(), 'Tam lưu cao thủ', 'đủ 30 điểm là cấp 20, Tam lưu cao thủ' + at);
       assert.match(await page.locator('.gr-spend').innerText(), /Chưa có lần quy đổi nào/, 'mục quy đổi trống' + at);
       assert.ok((await page.locator('[data-gr-spend]').boundingBox()).height >= minBtn, 'nút Sử dụng điểm đủ lớn' + at);
       assert.equal(await noOverflow(page), true, 'trang không tràn ngang' + at);
@@ -115,7 +115,7 @@ try {
       assert.match(await toast(page), /Đã quy đổi 12 điểm cho “Tai nghe mới”.*Tu vi hiện có: 18/, 'thông báo sau khi quy đổi' + at);
       assert.deepEqual(await radarValues(page), ['6', '3,5', '2,5', '0', '0', '0', '5', '1'], 'biểu đồ chính bị trừ đúng từng chỉ số' + at);
       assert.deepEqual(await wallet(page), { left: '18', earned: '30', spent: '12' }, 'ví điểm sau khi quy đổi' + at);
-      assert.equal(await page.locator('.gr-realm-name').innerText(), 'Nhị lưu cao thủ', 'cảnh giới không tụt khi quy đổi' + at);
+      assert.equal(await page.locator('.gr-realm-name').innerText(), 'Tam lưu cao thủ', 'cảnh giới không tụt khi quy đổi' + at);
       const axisScores = await page.evaluate(() => [...document.querySelectorAll('.gr-axis-head b')].map((n) => n.textContent));
       assert.deepEqual(axisScores, ['6', '3,5', '2,5', '0', '0', '0', '5', '1'], 'thanh điểm từng chỉ số bị trừ' + at);
       const item = page.locator('.gr-spend-item');
@@ -264,7 +264,7 @@ try {
       const { context, page } = await h.open(width, { touch, workspace: withSpend(all)() });
       await h.show(page, 'growth');
       assert.deepEqual(await radarValues(page), Array(8).fill('0'), 'quy đổi hết thì 8 chỉ số về 0' + at);
-      assert.equal(await page.locator('.gr-realm-name').innerText(), 'Nhị lưu cao thủ', 'quy đổi hết vẫn giữ cảnh giới' + at);
+      assert.equal(await page.locator('.gr-realm-name').innerText(), 'Tam lưu cao thủ', 'quy đổi hết vẫn giữ cảnh giới' + at);
       assert.match(await page.locator('.gr-summary').innerText(), /đang ở 0 sau khi đổi bảo vật/, 'tóm tắt khi hết điểm' + at);
       await page.click('[data-gr-spend]');
       assert.match(await toast(page), /Chưa có điểm để quy đổi/, 'hết điểm thì không mở form' + at);
@@ -273,7 +273,7 @@ try {
       await page.waitForSelector('.gr-report');
       const tiles = await page.evaluate(() => Object.fromEntries([...document.querySelectorAll('.gr-tile')].map((t) => [t.dataset.tile, t.textContent.replace(/\s+/g, ' ').trim()])));
       assert.match(tiles.total, /Tu vi hiện có.*0 điểm.*đã đổi bảo vật 30/, 'ô tổng điểm trong báo cáo' + at);
-      assert.match(tiles.realm, /Nhị lưu cao thủ/, 'báo cáo giữ cảnh giới' + at);
+      assert.match(tiles.realm, /Tam lưu cao thủ/, 'báo cáo giữ cảnh giới' + at);
       assert.match(await page.locator('.gr-balance').innerText(), /đã đổi hết bảo vật/, 'báo cáo giải thích điểm về 0' + at);
       assert.equal(await page.locator('[data-tip="balance"]').count(), 0, 'không gợi ý cân bằng khi điểm bằng 0' + at);
       await context.close();
@@ -287,7 +287,7 @@ try {
       await page.waitForSelector('.gr-report');
       const tiles = await page.evaluate(() => Object.fromEntries([...document.querySelectorAll('.gr-tile')].map((t) => [t.dataset.tile, t.textContent.replace(/\s+/g, ' ').trim()])));
       assert.match(tiles.total, /Tu vi hiện có.*18 điểm.*3 lần vận công · đã đổi bảo vật 12/, 'điểm hiện có trong báo cáo' + at);
-      assert.match(tiles.realm, /Nhị lưu cao thủ.*Còn 50 điểm tới Nhất lưu cao thủ/, 'cảnh giới theo điểm đã tích lũy' + at);
+      assert.match(tiles.realm, /Tam lưu cao thủ.*Cấp 20\/100 · còn 4 điểm lên cấp 21/, 'cảnh giới theo điểm đã tích lũy' + at);
       assert.equal(await noOverflow(page), true, 'báo cáo không tràn ngang' + at);
       await context.close();
     }

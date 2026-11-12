@@ -137,7 +137,7 @@ try {
       assert.match(await page.locator('#main h1').innerText(), /Báo cáo tu luyện/, 'tiêu đề báo cáo' + at);
       const tiles = await page.evaluate(() => Object.fromEntries([...document.querySelectorAll('.gr-tile')].map((t) => [t.dataset.tile, t.textContent.replace(/\s+/g, ' ').trim()])));
       assert.match(tiles.total, /6,5 điểm/, 'tổng 6,5 điểm' + at);
-      assert.match(tiles.realm, /Vô danh tiểu tốt/, 'cảnh giới' + at);
+      assert.match(tiles.realm, /Sơ nhập giang hồ.*Cấp 6\/100/, 'cảnh giới và cấp (6,5 điểm = cấp 6)' + at);
       assert.match(tiles.week, /\+4,5 điểm/, '7 ngày qua cộng 4,5 điểm' + at);
       assert.match(tiles.week, /1 điểm/, 'so với 7 ngày trước 1 điểm' + at);
       assert.match(tiles.streak, /1 ngày/, 'chuỗi ngày có cộng điểm' + at);
