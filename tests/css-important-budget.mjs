@@ -8,8 +8,9 @@ const BUDGET = 844;
 const dist = path.join(import.meta.dirname, '..', 'dist');
 let total = 0;
 const perFile = {};
-// dark.css và contrast.css do scripts/generate-themes.mjs sinh ra và sao chép `!important` của nguồn (để thắng đúng như bản sáng), nên không tính vào nợ.
-const GENERATED = new Set(['dark.css', 'contrast.css']);
+// dark.css, contrast.css và giangho.css (v1.86.0) do scripts/generate-themes.mjs sinh ra và sao chép `!important` của nguồn (để thắng đúng như bản sáng),
+// nên không tính vào nợ. Phần họa tiết viết tay chép vào cuối giangho.css bị bộ sinh cấm dùng `!important` (tests/giangho-generated.mjs kiểm).
+const GENERATED = new Set(['dark.css', 'contrast.css', 'giangho.css']);
 for (const file of fs.readdirSync(dist).filter((f) => f.endsWith('.css') && !GENERATED.has(f))) {
   const css = fs.readFileSync(path.join(dist, file), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
   const n = (css.match(/!important/g) || []).length;

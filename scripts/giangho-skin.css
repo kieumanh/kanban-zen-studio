@@ -1,0 +1,139 @@
+
+/* ---- Họa tiết Giang hồ viết tay (v1.86.0 · Chu Mặc) ------------------------------------------------------------------------
+   Chép nguyên vào cuối dist/giangho.css bởi scripts/generate-themes.mjs. Quy tắc: không dùng !important (thắng bằng độ ưu tiên
+   và thứ tự), mọi bộ chọn bắt đầu bằng :root[data-style=giangho] để phong cách Thiền không đổi. */
+:root[data-style=giangho] {
+  --gh-paper: #fbf6ec;
+  --gh-paper-2: #f3eadb;
+  --gh-ink: #2f241c;
+  --gh-seal: #b8344a;
+  --gh-seal-text: #a32c40;
+  --gh-gold: #b58a3a;
+  --gh-line: #e3d5bd;
+  --gh-serif: 'Noto Serif', 'Tinos', 'Times New Roman', Georgia, serif;
+  --serif: var(--gh-serif);
+  --zen-primary-gradient: linear-gradient(110deg, #a8283c, #c2413f 60%, #ad5a2c);
+}
+:root[data-style=giangho][data-theme=dark] {
+  --gh-paper: #241e19;
+  --gh-paper-2: #2c251f;
+  --gh-ink: #efe6d8;
+  --gh-seal: #c94a5e;
+  --gh-seal-text: #f0a3b0;
+  --gh-gold: #c9a24a;
+  --gh-line: #40352b;
+  --zen-primary-gradient: linear-gradient(110deg, #a8283c, #c2413f 60%, #ad5a2c);
+}
+
+/* Nền giấy dó, quầng vàng nhạt và dãy núi mực ở góc dưới phải (đứng yên khi cuộn). */
+:root[data-style=giangho] body {
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 880 320'%3E%3Ccircle cx='700' cy='82' r='38' fill='%23b8344a' fill-opacity='.09'/%3E%3Cpath fill='%233a2a21' fill-opacity='.045' d='M0 320V214c58-14 104-52 164-46 52 5 84-46 136-58 54-12 86 36 136 38 52 2 92-60 158-70 62-9 100 48 150 54 46 5 86-22 136-26v214z'/%3E%3Cpath fill='%233a2a21' fill-opacity='.06' d='M0 320v-58c76-12 118-44 186-38 60 5 98-34 160-30 70 5 100 44 170 40 78-4 118-46 196-40 66 5 108 34 168 30v96z'/%3E%3Cpath fill='none' stroke='%233a2a21' stroke-opacity='.07' stroke-width='2' stroke-linecap='round' d='M560 150c40-6 70 4 96-6M600 170c30-4 52 2 72-4'/%3E%3C/svg%3E"),
+    radial-gradient(1100px 560px at 88% -12%, rgba(201, 167, 106, 0.14), transparent 62%),
+    radial-gradient(900px 520px at -8% 112%, rgba(184, 52, 74, 0.06), transparent 60%);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: right bottom, 0 0, 0 0;
+  background-size: min(64vw, 900px) auto, auto, auto;
+}
+:root[data-style=giangho][data-theme=dark] body {
+  /* Nền tối chỉ giữ dãy núi: quầng màu làm chữ phía trên khó đọc hơn. */
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 880 320'%3E%3Ccircle cx='700' cy='82' r='38' fill='%23efe6d8' fill-opacity='.10'/%3E%3Cpath fill='%23efe6d8' fill-opacity='.045' d='M0 320V214c58-14 104-52 164-46 52 5 84-46 136-58 54-12 86 36 136 38 52 2 92-60 158-70 62-9 100 48 150 54 46 5 86-22 136-26v214z'/%3E%3Cpath fill='%23efe6d8' fill-opacity='.06' d='M0 320v-58c76-12 118-44 186-38 60 5 98-34 160-30 70 5 100 44 170 40 78-4 118-46 196-40 66 5 108 34 168 30v96z'/%3E%3Cpath fill='none' stroke='%23efe6d8' stroke-opacity='.07' stroke-width='2' stroke-linecap='round' d='M560 150c40-6 70 4 96-6M600 170c30-4 52 2 72-4'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: right bottom;
+  background-size: min(64vw, 900px) auto;
+}
+/* Biểu tượng dự án trong ô chọn dự án (màu do người dùng chọn): làm sáng như dark.css để đủ tương phản trên nền tối. */
+:root[data-style=giangho][data-theme=dark] .task-project-current-icon,
+:root[data-style=giangho][data-theme=dark] .task-project-choice-icon {
+  color: color-mix(in srgb, var(--project-choice-color, #7950c8) 50%, white);
+}
+/* Biểu tượng: chuyển sắc son → vàng đồng. */
+:root[data-style=giangho] .brandmark stop:nth-child(1) { stop-color: #8f2336; }
+:root[data-style=giangho] .brandmark stop:nth-child(2) { stop-color: #c2413f; }
+:root[data-style=giangho] .brandmark stop:nth-child(3) { stop-color: #c9a24a; }
+/* Thanh bên: viền đôi vàng đồng như mép cuộn thư; mục đang chọn có vạch son. */
+:root[data-style=giangho] .sidebar {
+  box-shadow: inset -1px 0 0 var(--gh-line), inset -5px 0 0 var(--gh-paper), inset -6px 0 0 color-mix(in srgb, var(--gh-gold) 30%, transparent);
+}
+:root[data-style=giangho] .sidebar .nav.active {
+  box-shadow: inset 3px 0 0 var(--gh-seal);
+}
+/* Thanh trên: chỉ vàng mảnh phía dưới. */
+:root[data-style=giangho] .topbar {
+  box-shadow: 0 1px 0 var(--gh-line), 0 3px 0 -1px color-mix(in srgb, var(--gh-gold) 22%, transparent);
+}
+/* Tiêu đề trang: chữ có chân, nét bút son → vàng bên dưới. */
+:root[data-style=giangho] #main h1 {
+  font-family: var(--gh-serif);
+  letter-spacing: 0.005em;
+}
+:root[data-style=giangho] #main h1::after {
+  content: '';
+  display: block;
+  width: 58px;
+  height: 3px;
+  margin-top: 10px;
+  border-radius: 3px;
+  background: linear-gradient(90deg, var(--gh-seal), var(--gh-gold));
+}
+:root[data-style=giangho] #main .eyebrow {
+  letter-spacing: 0.14em;
+}
+/* Tiêu đề khung: dấu triện son hình thoi (vẽ bằng nền để không chen vào bố cục flex của tiêu đề). */
+:root[data-style=giangho] #main :is(.panel, .section-head, .wf-focus-group, .bg-chart-head, .month-controls) > h2 {
+  font-family: var(--gh-serif);
+}
+:root[data-style=giangho] #main :is(.panel, .section-head, .wf-focus-group, .bg-chart-head) > h2 {
+  padding-left: 22px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='3.6' y='3.6' width='8.8' height='8.8' rx='1.8' transform='rotate(45 8 8)' fill='none' stroke='%23b8344a' stroke-opacity='.45'/%3E%3Crect x='5' y='5' width='6' height='6' rx='1.2' transform='rotate(45 8 8)' fill='%23b8344a'/%3E%3C/svg%3E") no-repeat 0 50% / 16px 16px;
+}
+:root[data-style=giangho][data-theme=dark] #main :is(.panel, .section-head, .wf-focus-group, .bg-chart-head) > h2 {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='3.6' y='3.6' width='8.8' height='8.8' rx='1.8' transform='rotate(45 8 8)' fill='none' stroke='%23e0697c' stroke-opacity='.45'/%3E%3Crect x='5' y='5' width='6' height='6' rx='1.2' transform='rotate(45 8 8)' fill='%23e0697c'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: 0 50%;
+  background-size: 16px 16px;
+}
+/* Tường vân bên cạnh tên ứng dụng trên thanh bên. */
+:root[data-style=giangho] .sidebar {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 34' fill='none' stroke='%23c9a76a' stroke-width='2.2' stroke-linecap='round'%3E%3Cpath d='M4 28h52c5 0 6-7 1-8 1-6-6-9-10-5-1-7-11-9-15-3-4-4-11-2-11 4-6-1-9 5-6 8'/%3E%3Cpath d='M22 20c1-4 6-4 7 0-1 3-5 3-5 0M40 15c2-3 6-2 6 1s-4 3-4 1'/%3E%3Cpath d='M10 33h30'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px top 30px;
+  background-size: 46px 25px;
+}
+:root[data-style=giangho][data-theme=dark] .sidebar {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 34' fill='none' stroke='%238a6f3e' stroke-width='2.2' stroke-linecap='round'%3E%3Cpath d='M4 28h52c5 0 6-7 1-8 1-6-6-9-10-5-1-7-11-9-15-3-4-4-11-2-11 4-6-1-9 5-6 8'/%3E%3Cpath d='M22 20c1-4 6-4 7 0-1 3-5 3-5 0M40 15c2-3 6-2 6 1s-4 3-4 1'/%3E%3Cpath d='M10 33h30'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px top 30px;
+  background-size: 46px 25px;
+}
+/* Hộp thoại: viền son phía trên. */
+:root[data-style=giangho] dialog[open] {
+  border-top: 4px solid var(--gh-seal);
+}
+:root[data-style=giangho] dialog[open] :is(h2, h3) {
+  font-family: var(--gh-serif);
+}
+/* Thanh cuộn, vùng chọn chữ, dấu focus. */
+:root[data-style=giangho] {
+  scrollbar-color: color-mix(in srgb, var(--gh-gold) 55%, transparent) transparent;
+  accent-color: var(--gh-seal);
+}
+:root[data-style=giangho] ::selection {
+  background: rgba(184, 52, 74, 0.2);
+}
+:root[data-style=giangho] :focus-visible {
+  outline-color: var(--gh-seal);
+}
+/* Tương phản cao: bỏ họa tiết nền và tường vân để chữ rõ nhất. */
+:root[data-style=giangho][data-contrast=high] body,
+:root[data-style=giangho][data-contrast=high] .sidebar {
+  background-image: none;
+}
+@media (prefers-reduced-transparency: reduce) {
+  :root[data-style=giangho] body {
+    background-image: none;
+  }
+}

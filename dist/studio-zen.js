@@ -112,6 +112,8 @@
     list.push({label:'Cài đặt',run:()=>accountPanel()});
     // v1.16.0: đổi giao diện từ bảng lệnh.
     if(window.zenTheme){[['Giao diện sáng','light'],['Giao diện tối','dark'],['Giao diện theo hệ thống','system']].forEach(([label,value])=>list.push({label,hint:'Màu sắc',run:()=>{window.zenTheme.setTheme(value);notify('Đã chọn: '+label.toLocaleLowerCase('vi')+'.');}}));list.push({label:'Bật / tắt tương phản cao',hint:'Màu sắc',run:()=>{const high=window.zenTheme.state().high;window.zenTheme.setContrast(high?'normal':'high');notify(high?'Đã tắt tương phản cao.':'Đã bật tương phản cao.');}});}
+    // v1.86.0: đổi phong cách Thiền / Giang hồ từ bảng lệnh.
+    if(window.zenTheme?.setStyle)[['Phong cách Giang hồ','giangho'],['Phong cách Thiền','zen']].forEach(([label,value])=>list.push({label,hint:'Phong cách',run:()=>{window.zenTheme.setStyle(value);notify('Đã chọn: '+label.toLocaleLowerCase('vi')+'.');}}));
     visibleProjects().forEach(p=>list.push({label:'Dự án · '+p.name,run:()=>go('projects',p.id)}));
     allTasks().filter(t=>!t.archived&&!t.project.archived).forEach(t=>list.push({label:t.title,hint:t.project.name+' · '+columnDisplayName(t.project,t.col),run:()=>taskDetail(t.project,t)}));
     return list;
@@ -647,6 +649,9 @@
     dark: '<path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/>',
     normal: '<circle cx="12" cy="12" r="8"/>',
     high: '<circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16z" fill="currentColor"/>',
+    // v1.86.0: phong cách Thiền (hoa sen) và Giang hồ (thanh kiếm).
+    zen: '<path d="M12 20c-4 0-7-2.5-8-6 3 0 5.5 1 8 3.5 2.5-2.5 5-3.5 8-3.5-1 3.5-4 6-8 6z M12 16.5C10 14 9.5 10.5 12 6c2.5 4.5 2 8 0 10.5z"/>',
+    giangho: '<path d="M19.5 3.5 10 13 M19.5 3.5l-1 3.5-7 7 M19.5 3.5 16 4.5 M7.5 12.5l4 4 M9.5 14.5l-5 5 M5 17l2 2"/>',
   };
   const CHECK = '<svg class="zen-theme-tick" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.2 4.2L19 7.5"/></svg>';
   const svgOf = (key) => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + (ICONS[key] || '') + '</svg>';
@@ -713,6 +718,8 @@
       help,
       choices('zen-theme', 'Màu giao diện', [['system', 'Theo hệ thống', 'Theo thiết bị', 'system'], ['light', 'Sáng', 'Nền sáng', 'light'], ['dark', 'Tối', 'Nền tối', 'dark']], read('zen-theme'), (v) => window.zenTheme.setTheme(v)),
       choices('zen-contrast', 'Độ tương phản', [['system', 'Theo hệ thống', 'Theo thiết bị', 'system'], ['normal', 'Thường', 'Màu dịu, như mặc định', 'normal'], ['high', 'Cao', 'Viền và chữ rõ hơn', 'high']], read('zen-contrast'), (v) => window.zenTheme.setContrast(v)),
+      // v1.86.0: phong cách Thiền (tím hồng, như trước) hoặc Giang hồ (son, giấy dó, họa tiết kiếm hiệp). Lưu trên thiết bị này.
+      choices('zen-style', 'Phong cách', [['zen', 'Thiền', 'Tím hồng, nhẹ nhàng', 'zen'], ['giangho', 'Giang hồ', 'Son đỏ, giấy dó, kiếm hiệp', 'giangho']], read('zen-style') === 'giangho' ? 'giangho' : 'zen', (v) => window.zenTheme.setStyle(v)),
     );
     const anchor = body.querySelector('h3.settings-section');
     if (anchor) anchor.before(section);

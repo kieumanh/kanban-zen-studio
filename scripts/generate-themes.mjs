@@ -139,6 +139,54 @@ const HC_DARK = {
   },
 };
 
+// ---- v1.86.0: phong cách Giang hồ (data-style="giangho" trên <html>) ---------------------------------------------------
+// Đổi họ màu thương hiệu (tím, hồng) sang son, nền trắng / tím nhạt sang giấy dó, chữ tím đậm sang mực nâu. Giữ nguyên độ sáng
+// (nên giữ tương phản của bản gốc) và giữ nguyên các màu mang nghĩa (xanh lá, xanh dương, cam, vàng, đỏ cảnh báo).
+const GH_SEAL = 20; // son
+const GH_PAPER = 82; // giấy dó
+const GH_INK = 55; // mực nâu
+const GH_GOLD = 78; // vàng đồng nhạt cho viền
+const isBrandHue = (h) => h >= 275 || h <= 12;
+function ghRemap(role, L, C, h, dark = false) {
+  // Cùng độ sáng OKLab, sắc nâu ấm có độ chói WCAG cao hơn sắc tím một chút: chữ tầm trung đậm thêm (nền sáng) hoặc sáng thêm (nền tối)
+  // để tương phản không thấp hơn bản Thiền.
+  if (role === 'text' && !dark && L > 0.3 && L < 0.85) L -= 0.05;
+  if (role === 'text' && dark && L > 0.5 && L < 0.95)
+    L = Math.min(0.97, L + 0.03);
+  const hue = ((h % 360) + 360) % 360;
+  const brand = isBrandHue(hue) && C >= 0.012;
+  if (!brand && C >= 0.012) return [L, C, h]; // màu mang nghĩa: giữ
+  if (role === 'text') {
+    if (brand && C >= 0.07) return [L, Math.min(C, 0.17), GH_SEAL];
+    return [L, Math.min(C, 0.035), GH_INK];
+  }
+  if (role === 'bg') {
+    if (L >= 0.9)
+      return [
+        L >= 0.985 ? L - 0.004 : L,
+        clamp(C * 0.8 + 0.008, 0.01, 0.035),
+        GH_PAPER,
+      ];
+    if (brand && C >= 0.05) return [L, Math.min(C, 0.17), GH_SEAL];
+    return [L, Math.min(C, 0.04), 70];
+  }
+  if (L >= 0.8) return [L - 0.01, clamp(C + 0.012, 0.015, 0.05), GH_GOLD];
+  if (brand && C >= 0.05) return [L, Math.min(C, 0.15), GH_SEAL];
+  return [L, Math.min(C, 0.04), 60];
+}
+const SAME = {
+  text: (L, C, h) => [L, C, h],
+  bg: (L, C, h) => [L, C, h],
+  border: (L, C, h) => [L, C, h],
+};
+const ghTable = (base, dark = false) => ({
+  text: (L, C, h) => ghRemap('text', ...base.text(L, C, h), dark),
+  bg: (L, C, h) => ghRemap('bg', ...base.bg(L, C, h), dark),
+  border: (L, C, h) => ghRemap('border', ...base.border(L, C, h), dark),
+});
+const GH = ghTable(SAME);
+const GH_DARK = ghTable(DARK, true);
+
 // ---- Phân tích giá trị ----------------------------------------------------------------------------------------------
 const COLOR_RE =
   /#[0-9a-fA-F]{8}\b|#[0-9a-fA-F]{6}\b|#[0-9a-fA-F]{4}\b|#[0-9a-fA-F]{3}\b|rgba?\([^)]*\)|\bwhite\b|\bblack\b/g;
@@ -218,8 +266,25 @@ const roleOf = (prop) => {
   return null;
 };
 
-function mapValue(prop, value, table) {
-  const role = roleOf(prop);
+// Giang hồ đổi cả bóng đổ (quầng tím) và vài biến màu thương hiệu mà bản tối không cần đổi. Biến thương hiệu tính như nền
+// (bản tối giữ màu đậm, như dark.css vốn không đổi các biến này) để chữ trắng trên huy hiệu vẫn đọc được.
+const GH_ROLE_BY_VAR = {
+  '--orange': 'bg',
+  '--brand-purple': 'bg',
+  '--brand-pink': 'bg',
+  '--motif-glow': 'bg',
+  '--tab-edge': 'border',
+  '--zen-done-fill': 'bg',
+  '--bg-color': 'bg',
+};
+const ghRoleOf = (prop) => {
+  const p = prop.toLowerCase();
+  if (GH_ROLE_BY_VAR[p]) return GH_ROLE_BY_VAR[p];
+  if (p === 'box-shadow' || p === 'text-shadow') return 'border';
+  return roleOf(p);
+};
+
+function mapValue(prop, value, table, role = roleOf(prop)) {
   if (!role) return value;
   return value.replace(COLOR_RE, (token) => mapColor(token, role, table));
 }
@@ -238,7 +303,11 @@ function prefixSelector(selector, prefix) {
   return `${prefix.root} ${s}`;
 }
 
-function build(table, prefix, title) {
+// opts.all: phát lại MỌI khai báo màu (kể cả không đổi, kể cả var(...)) để bản sao có tiền tố giữ đúng thứ tự ưu tiên của nguồn.
+// Cần cho Giang hồ vì bảng này giữ nguyên nhiều màu: nếu chỉ phát phần đổi, bản sao của một quy tắc chung có tiền tố sẽ thắng
+// quy tắc riêng hơn (không có bản sao) ở nguồn. opts.roleOf: cách xác định vai trò màu riêng.
+function build(table, prefix, title, opts = {}) {
+  const role = opts.roleOf || roleOf;
   const out = postcss.root();
   out.append(
     postcss.comment({
@@ -264,8 +333,9 @@ function build(table, prefix, title) {
           const changed = [];
           node.each((d) => {
             if (d.type !== 'decl') return;
-            const next = mapValue(d.prop, d.value, table);
-            if (next !== d.value)
+            const r = role(d.prop);
+            const next = mapValue(d.prop, d.value, table, r);
+            if (next !== d.value || (opts.all && r))
               changed.push(
                 postcss.decl({
                   prop: d.prop,
@@ -335,6 +405,31 @@ const DARK_EXTRA = `
 }
 `;
 
+// Họa tiết viết tay: không được dùng !important (không tính vào ngân sách nên phải thắng bằng độ ưu tiên) và mọi bộ chọn phải
+// nằm dưới tiền tố :root[data-style=giangho] để phong cách Thiền không bị ảnh hưởng.
+export function checkSkin(css) {
+  const tree = postcss.parse(css, { from: 'scripts/giangho-skin.css' });
+  tree.walkDecls((d) => {
+    if (d.important)
+      throw new Error(
+        'giangho-skin.css: không dùng !important (' +
+          d.parent.selector +
+          ' { ' +
+          d.prop +
+          ' })',
+      );
+  });
+  tree.walkRules((r) => {
+    if (r.parent?.type === 'atrule' && /keyframes/.test(r.parent.name)) return;
+    for (const sel of r.selectors)
+      if (!sel.trim().startsWith(':root[data-style=giangho]'))
+        throw new Error(
+          'giangho-skin.css: bộ chọn thiếu tiền tố :root[data-style=giangho]: ' +
+            sel,
+        );
+  });
+}
+
 export function generate() {
   const dark = build(
     DARK,
@@ -358,13 +453,35 @@ export function generate() {
     strip(hcDark.css) +
     `/* v1.16.2 — nút "Làm mới" ở Chế độ tập trung: quy tắc cũ (.focus-check-updates, nền trắng, chữ tím) đã bị quy tắc nút chính ghi đè ở chế độ thường, nhưng bản sao có tiền tố chủ đề lại nặng hơn nên thắng và làm nút trắng chữ trắng. Đặt lại nền nút chính. */\n:root[data-contrast=high] button.focus-check-updates,\n:root[data-contrast=high] button.focus-check-updates:hover,\n:root[data-theme=dark][data-contrast=high] button.focus-check-updates,\n:root[data-theme=dark][data-contrast=high] button.focus-check-updates:hover {\n  background: var(--zen-primary-gradient) !important;\n  color: #fff !important;\n}\n` +
     `/* Dấu focus dày, rõ ở cả hai nền. */\n:root[data-contrast=high] :focus-visible {\n  outline: 3px solid #000;\n  outline-offset: 2px;\n}\n:root[data-theme=dark][data-contrast=high] :focus-visible {\n  outline-color: #fff;\n}\n`;
+  const gh = build(
+    GH,
+    { root: ':root[data-style=giangho]' },
+    'v1.86.0 — phong cách Giang hồ.',
+    { all: true, roleOf: ghRoleOf },
+  );
+  const ghDark = build(
+    GH_DARK,
+    { root: ':root[data-style=giangho][data-theme=dark]' },
+    'v1.86.0 — phong cách Giang hồ, nền tối.',
+    { all: true, roleOf: ghRoleOf },
+  );
+  const skin = readFileSync(root + 'scripts/giangho-skin.css', 'utf8');
+  checkSkin(skin);
+  const giangho =
+    '/* v1.86.0 — phong cách Giang hồ (chọn ở Cài đặt → Giao diện → Phong cách; theme.js đặt data-style="giangho" trên <html>).\n   Phần đầu sinh tự động bằng scripts/generate-themes.mjs từ CSS nguồn (bản sáng rồi bản tối); phần cuối chép nguyên từ\n   scripts/giangho-skin.css (họa tiết viết tay). KHÔNG sửa tay tệp này. */\n' +
+    "@import url('https://fonts.googleapis.com/css2?family=Noto+Serif:wght@600;700&display=swap');\n" +
+    strip(gh.css) +
+    strip(ghDark.css) +
+    skin;
   return {
     'dist/dark.css':
       dark.css +
       '\n:root[data-theme=dark] {\n  color-scheme: dark;\n}\n' +
       DARK_EXTRA,
     'dist/contrast.css': contrast,
+    'dist/giangho.css': giangho,
     stats: {
+      giangho: [gh.rules + ghDark.rules, gh.decls + ghDark.decls],
       dark: [dark.rules, dark.decls],
       hcLight: [hcLight.rules, hcLight.decls],
       hcDark: [hcDark.rules, hcDark.decls],

@@ -30,7 +30,7 @@ try {
         bg: getComputedStyle(el).backgroundColor,
         sub: !!el.querySelector('.zen-theme-text small'),
       });
-      const sideBySide = grp('zen-theme').concat(grp('zen-contrast')).map(info);
+      const sideBySide = grp('zen-theme').concat(grp('zen-contrast'), grp('zen-style')).map(info);
       const panel = document.querySelector('#editor .settings-theme').getBoundingClientRect();
       const outside = [...document.querySelectorAll('#editor .settings-theme .zen-theme-choice, #editor .settings-theme .zen-theme-list')].filter((el) => {
         const r = el.getBoundingClientRect();
@@ -38,7 +38,8 @@ try {
       }).length;
       return { count: rows.length, items: sideBySide, outside, overflow: document.documentElement.scrollWidth > innerWidth };
     });
-    assert.equal(s.count, 6, 'sáu lựa chọn (3 màu + 3 tương phản)' + at);
+    // v1.86.0: thêm nhóm Phong cách (Thiền / Giang hồ), cùng kiểu dòng chọn có icon, mô tả và dấu tích.
+    assert.equal(s.count, 8, 'tám lựa chọn (3 màu + 3 tương phản + 2 phong cách)' + at);
     for (const it of s.items) {
       assert.ok(it.h >= 44, `ô chọn cao ${it.h}px` + at);
       assert.ok(it.icon, 'thiếu icon' + at);
@@ -46,7 +47,7 @@ try {
       assert.ok(it.sub, 'thiếu mô tả ngắn' + at);
     }
     const checked = s.items.filter((i) => i.checked);
-    assert.equal(checked.length, 2, 'mỗi nhóm đúng một lựa chọn đang chọn' + at);
+    assert.equal(checked.length, 3, 'mỗi nhóm đúng một lựa chọn đang chọn' + at);
     for (const c of checked) {
       assert.notEqual(c.tickColor, 'rgba(0, 0, 0, 0)', 'dấu tích của ô đang chọn phải hiện' + at);
       assert.notEqual(c.bg, 'rgba(0, 0, 0, 0)', 'ô đang chọn phải được tô nổi' + at);

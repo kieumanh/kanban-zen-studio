@@ -1,6 +1,6 @@
 // Hồi quy v1.16.0: chế độ tối và tương phản cao đạt cùng chuẩn với chế độ sáng (xem tests/a11y-contrast-browser.mjs, v1.15.40).
 // Quét mọi chữ đang hiển thị ở 390/820/1440px trên các màn hình, hộp thoại và menu chính, trong ba chế độ do hệ điều hành yêu cầu:
-// tối (prefers-color-scheme: dark), tối + tương phản cao, sáng + tương phản cao. Tiêu chuẩn: cỡ chữ >= 12px; tương phản chữ/nền >= 4,5:1
+// tối (prefers-color-scheme: dark), tối + tương phản cao, sáng + tương phản cao; từ v1.86.0 thêm phong cách Giang hồ sáng và tối. Tiêu chuẩn: cỡ chữ >= 12px; tương phản chữ/nền >= 4,5:1
 // (3:1 cho chữ lớn và ký hiệu một ký tự); placeholder >= 4,5:1; viền ô nhập >= 3:1. Quét bảng lệnh sau khi hộp thoại đã hiện đủ (không còn mờ dần).
 import { createServer } from 'node:http';
 import assert from 'node:assert/strict';
@@ -52,7 +52,7 @@ const project = (id, name, color, count, extra = {}) => ({
 });
 const seed = { schema: 1, projects: [project('p1', 'Khóa tu mùa thu', '#7950c8', 14), project('p2', 'Hương Thiền Nature — Website', '#c764a2', 8), project('p3', 'Sổ nợ An Tâm', '#e78c56', 6), project('p4', 'Dự án đã cất', '#44aa88', 3, { archived: true })], notes: [] };
 
-async function open(width, touch = false, mode = {}) {
+async function open(width, touch = false, { style, ...mode } = {}) {
   const context = await browser.newContext({ ...mode, viewport: { width, height: width < 700 ? 844 : 900 }, timezoneId: 'Asia/Ho_Chi_Minh', ...(touch ? { hasTouch: true, isMobile: true } : {}) });
   const page = await context.newPage();
   let workspace = structuredClone(seed),
@@ -61,6 +61,8 @@ async function open(width, touch = false, mode = {}) {
     const prev = new Date(Date.parse(day + 'T00:00:00Z') - 86400000).toISOString().slice(0, 10);
     for (const d of [day, prev]) for (let i = 0; i < 4; i++) localStorage.setItem('zen-welcome:qa:' + d + ':' + i, 'seen');
   }, { day });
+  // v1.86.0: phong cách Giang hồ (lưu trên thiết bị như sáng/tối).
+  if (style) await context.addInitScript((style) => localStorage.setItem('zen-style', style), style);
   await page.route('**/api/**', async (route) => {
     const req = route.request(),
       path = new URL(req.url()).pathname.slice(5);
@@ -216,6 +218,9 @@ const MODES = [
   { label: 'tối', colorScheme: 'dark' },
   { label: 'tối + tương phản cao', colorScheme: 'dark', contrast: 'more' },
   { label: 'sáng + tương phản cao', colorScheme: 'light', contrast: 'more' },
+  // v1.86.0: phong cách Giang hồ, sáng và tối, cùng chuẩn.
+  { label: 'giang hồ sáng', colorScheme: 'light', style: 'giangho' },
+  { label: 'giang hồ tối', colorScheme: 'dark', style: 'giangho' },
 ];
 const groups = new Map();
 async function scan(page, label) {
@@ -231,8 +236,9 @@ async function scan(page, label) {
 
 try {
   for (const mode of MODES) for (const [width, touch] of [[390, true], [820, false], [1440, false]]) {
-    const { context, page } = await open(width, touch, { colorScheme: mode.colorScheme, ...(mode.contrast ? { contrast: mode.contrast } : {}) });
+    const { context, page } = await open(width, touch, { colorScheme: mode.colorScheme, ...(mode.contrast ? { contrast: mode.contrast } : {}), ...(mode.style ? { style: mode.style } : {}) });
     await page.waitForFunction((m) => document.documentElement.dataset.theme === m, mode.colorScheme);
+    assert.equal(await page.evaluate(() => document.documentElement.dataset.style || ''), mode.style || '', `[${mode.label}] thuộc tính data-style phải khớp phong cách đã chọn`);
     assert.equal(await page.evaluate(() => document.documentElement.dataset.contrast || ''), mode.contrast ? 'high' : '', `[${mode.label}] thuộc tính data-contrast phải khớp yêu cầu của hệ điều hành`);
     const tag = (s) => '[' + mode.label + '] ' + width + 'px ' + s;
     const closeDialogs = async () => {

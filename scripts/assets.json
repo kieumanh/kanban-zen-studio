@@ -310,6 +310,11 @@
     "text/javascript; charset=utf-8"
   ],
   [
+    "/giangho.css",
+    "giangho.css",
+    "text/css; charset=utf-8"
+  ],
+  [
     "/dark.css",
     "dark.css",
     "text/css; charset=utf-8"
