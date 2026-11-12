@@ -33,10 +33,35 @@ jobs:
         run: node scripts/build.mjs
       - name: Run tests
         run: npm test
+      # v1.74.0: bước này từng đỏ 3 lần liên tiếp chỉ vì máy chủ GitHub không phân giải được tên miền kho apt
+      # ("Temporary failure resolving azure.archive.ubuntu.com"), trước khi bất kỳ test hay bước triển khai nào chạy.
+      # Chỉ thêm thử lại có giới hạn quanh phần CÀI ĐẶT; không đổi test nào, không bỏ qua test nào.
+      # Lỗi thật ở bước kiểm tra phía sau vẫn làm đỏ như cũ; hết 4 lần thử vẫn lỗi thì bước này vẫn đỏ.
+      - name: Install Playwright package
+        run: |
+          for attempt in 1 2 3 4; do
+            npm install --no-save --package-lock=false playwright && exit 0
+            echo "npm install attempt $attempt failed" >&2
+            [ "$attempt" = 4 ] && exit 1
+            sleep $((attempt * 15))
+          done
+      - name: Read Playwright version
+        id: playwright
+        run: echo "version=$(node -p "require('playwright/package.json').version")" >> "$GITHUB_OUTPUT"
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ steps.playwright.outputs.version }}
       - name: Install responsive browser check
         run: |
-          npm install --no-save --package-lock=false playwright
-          npx playwright install --with-deps chromium
+          echo 'Acquire::Retries "5";' | sudo tee /etc/apt/apt.conf.d/80-retries >/dev/null
+          for attempt in 1 2 3 4; do
+            npx playwright install --with-deps chromium && exit 0
+            echo "playwright install attempt $attempt failed" >&2
+            [ "$attempt" = 4 ] && exit 1
+            sleep $((attempt * 20))
+          done
       - name: Verify established workflows on mobile tablet desktop
         run: |
           node tests/workflow111-browser.mjs
