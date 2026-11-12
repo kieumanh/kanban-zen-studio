@@ -5311,6 +5311,69 @@
     border-color: var(--gr-seal);
     box-shadow: inset 3px 0 0 var(--gr-seal)
 }
+:root[data-style=giangho] .gr-path-now {
+    border: 1px solid color-mix(in srgb,var(--gr-gold) 45%,var(--gr-line));
+    background: var(--gr-wash)
+}
+:root[data-style=giangho] .gr-path-now-text p {
+    color: var(--gr-ink,var(--ink))
+}
+:root[data-style=giangho] .gr-path-now-text strong {
+    color: var(--gr-seal-text)
+}
+:root[data-style=giangho] .gr-path-now-text .progress {
+    background: color-mix(in srgb,var(--gr-gold) 22%,var(--gr-paper))
+}
+:root[data-style=giangho] .gr-path-now-text .progress>span {
+    background: linear-gradient(90deg,var(--gr-gold),var(--gr-seal))
+}
+:root[data-style=giangho] .gr-path:before {
+    background: var(--gr-line)
+}
+:root[data-style=giangho] .gr-path-node {
+    border: 2px solid var(--gr-line);
+    background: var(--gr-paper);
+    color: var(--gr-ink,var(--ink))
+}
+:root[data-style=giangho] .gr-path-realm.is-done .gr-path-node {
+    border-color: var(--gr-seal);
+    background: var(--gr-seal);
+    color: #ffffff
+}
+:root[data-style=giangho] .gr-path-realm.is-now .gr-path-node {
+    border-color: var(--gr-seal);
+    color: var(--gr-seal-text);
+    box-shadow: 0 0 0 4px color-mix(in srgb,var(--gr-seal) 18%,transparent)
+}
+:root[data-style=giangho] .gr-path-head strong {
+    color: var(--gr-ink,var(--ink))
+}
+:root[data-style=giangho] .gr-path-head em {
+    background: var(--gr-wash);
+    color: var(--gr-ink,var(--ink))
+}
+:root[data-style=giangho] .gr-path-realm.is-now .gr-path-head em {
+    background: var(--gr-seal);
+    color: #ffffff
+}
+:root[data-style=giangho] .gr-segs i {
+    background: var(--gr-line)
+}
+:root[data-style=giangho] .gr-segs i.on {
+    background: var(--gr-seal)
+}
+:root[data-style=giangho] .gr-here {
+    border: 1px solid color-mix(in srgb,var(--gr-gold) 60%,var(--gr-line));
+    background: color-mix(in srgb,var(--gr-gold) 18%,var(--gr-paper));
+    color: var(--gr-seal-text)
+}
+:root[data-style=giangho] .gr-ch.is-now.is-locked>div {
+    border-color: var(--gr-seal);
+    box-shadow: inset 3px 0 0 var(--gr-seal)
+}
+:root[data-style=giangho] .gr-ch.is-done .gr-ch-no {
+    border-color: var(--gr-seal)
+}
 :root[data-style=giangho] {
     --muted: #685345;
     --text-muted: #685345
@@ -11654,6 +11717,69 @@
 :root[data-style=giangho][data-theme=dark] .gr-ch.is-now>button {
     border-color: var(--gr-seal);
     box-shadow: inset 3px 0 0 var(--gr-seal)
+}
+:root[data-style=giangho][data-theme=dark] .gr-path-now {
+    border: 1px solid color-mix(in srgb,var(--gr-gold) 45%,var(--gr-line));
+    background: var(--gr-wash)
+}
+:root[data-style=giangho][data-theme=dark] .gr-path-now-text p {
+    color: var(--gr-ink,var(--ink))
+}
+:root[data-style=giangho][data-theme=dark] .gr-path-now-text strong {
+    color: var(--gr-seal-text)
+}
+:root[data-style=giangho][data-theme=dark] .gr-path-now-text .progress {
+    background: color-mix(in srgb,var(--gr-gold) 22%,var(--gr-paper))
+}
+:root[data-style=giangho][data-theme=dark] .gr-path-now-text .progress>span {
+    background: linear-gradient(90deg,var(--gr-gold),var(--gr-seal))
+}
+:root[data-style=giangho][data-theme=dark] .gr-path:before {
+    background: var(--gr-line)
+}
+:root[data-style=giangho][data-theme=dark] .gr-path-node {
+    border: 2px solid var(--gr-line);
+    background: var(--gr-paper);
+    color: var(--gr-ink,var(--ink))
+}
+:root[data-style=giangho][data-theme=dark] .gr-path-realm.is-done .gr-path-node {
+    border-color: var(--gr-seal);
+    background: var(--gr-seal);
+    color: #ffffff
+}
+:root[data-style=giangho][data-theme=dark] .gr-path-realm.is-now .gr-path-node {
+    border-color: var(--gr-seal);
+    color: var(--gr-seal-text);
+    box-shadow: 0 0 0 4px color-mix(in srgb,var(--gr-seal) 18%,transparent)
+}
+:root[data-style=giangho][data-theme=dark] .gr-path-head strong {
+    color: var(--gr-ink,var(--ink))
+}
+:root[data-style=giangho][data-theme=dark] .gr-path-head em {
+    background: var(--gr-wash);
+    color: var(--gr-ink,var(--ink))
+}
+:root[data-style=giangho][data-theme=dark] .gr-path-realm.is-now .gr-path-head em {
+    background: var(--gr-seal);
+    color: #ffffff
+}
+:root[data-style=giangho][data-theme=dark] .gr-segs i {
+    background: var(--gr-line)
+}
+:root[data-style=giangho][data-theme=dark] .gr-segs i.on {
+    background: var(--gr-seal)
+}
+:root[data-style=giangho][data-theme=dark] .gr-here {
+    border: 1px solid color-mix(in srgb,var(--gr-gold) 60%,var(--gr-line));
+    background: color-mix(in srgb,var(--gr-gold) 18%,var(--gr-paper));
+    color: var(--gr-seal-text)
+}
+:root[data-style=giangho][data-theme=dark] .gr-ch.is-now.is-locked>div {
+    border-color: var(--gr-seal);
+    box-shadow: inset 3px 0 0 var(--gr-seal)
+}
+:root[data-style=giangho][data-theme=dark] .gr-ch.is-done .gr-ch-no {
+    border-color: var(--gr-seal)
 }
 :root[data-style=giangho][data-theme=dark] {
     --muted: #e1ccbf;

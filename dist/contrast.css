@@ -3195,6 +3195,12 @@
 :root[data-contrast=high] .gr-ch.is-new .gr-ch-no {
     color: #ffffff
 }
+:root[data-contrast=high] .gr-path-realm.is-done .gr-path-node {
+    color: #ffffff
+}
+:root[data-contrast=high] .gr-path-realm.is-now .gr-path-head em {
+    color: #ffffff
+}
 :root[data-contrast=high] {
     --muted: #060606;
     --text-muted: #060606
@@ -7027,6 +7033,12 @@
     color: #ffffff
 }
 :root[data-theme=dark][data-contrast=high] .gr-ch.is-new .gr-ch-no {
+    color: #ffffff
+}
+:root[data-theme=dark][data-contrast=high] .gr-path-realm.is-done .gr-path-node {
+    color: #ffffff
+}
+:root[data-theme=dark][data-contrast=high] .gr-path-realm.is-now .gr-path-head em {
     color: #ffffff
 }
 :root[data-theme=dark][data-contrast=high] {

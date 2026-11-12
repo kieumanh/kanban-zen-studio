@@ -312,25 +312,69 @@
       if (!reader) open(list);
     }, 900);
   }
-  // ---- Khung "Truyện ký giang hồ" trong trang Tu vi ----------------------------------------------------------------------------
+  // ---- Lộ trình tu luyện (v1.93.0) ------------------------------------------------------------------------------------------------
+  // Trang Tu vi: dòng thời gian 100 cấp = 10 cảnh giới × 2 chặng (mỗi chặng 5 cấp, cuối chặng là một chương truyện ký).
+  // Khối "đang ở đây" cho biết hiệp khách ở chặng nào, đã qua mấy cấp của chặng, còn bao nhiêu điểm tới chương kế.
+  // Mỗi chặng là một mục .gr-ch: chặng đã qua bấm để đọc chương; chặng hiện tại và chặng sau hiện "Mở ở cấp N".
+  const STAGES = 20, PER_STAGE = 5;
+  const stageOf = (lv) => Math.min(STAGES, Math.floor(lv / PER_STAGE) + 1); // chặng đang đi (cấp 100: chặng cuối, đã trọn)
+  function chapterItem(c, lv) {
+    const isOpen = unlocked(c), fresh = isOpen && !seen(c.lv), k = c.lv / PER_STAGE;
+    const tag = !isOpen ? 'Mở ở cấp ' + c.lv : fresh ? 'Chưa đọc' : 'Đã đọc';
+    const here = c.lv && lv < 100 && stageOf(lv) === k;
+    const filled = c.lv ? Math.max(0, Math.min(PER_STAGE, lv - (c.lv - PER_STAGE))) : 0;
+    const segs = c.lv ? '<span class="gr-segs" aria-hidden="true">' + Array.from({ length: PER_STAGE }, (_, i) => '<i' + (i < filled ? ' class="on"' : '') + '></i>').join('') + '</span>' : '';
+    const sub = c.lv ? 'Chặng ' + k + ' · cấp ' + (c.lv - PER_STAGE + 1) + '–' + c.lv : 'Khai cuộc · ngày bước vào giang hồ';
+    const inner = '<span class="gr-ch-no">' + (c.lv ? k : '✦') + '</span><span class="gr-ch-main">' + (here ? '<b class="gr-here">Đang ở đây</b>' : '') + '<strong>' + esc(c.title) + '</strong><small>' + sub + '</small>' + segs + '</span>' +
+      '<em class="gr-ch-tag">' + tag + '</em>';
+    const state = c.lv && lv >= c.lv ? ' is-done' : '';
+    return '<li class="gr-ch' + state + (isOpen ? '' : ' is-locked') + (fresh ? ' is-new' : '') + (here ? ' is-now' : '') + '"' + (here ? ' aria-current="step"' : '') + '>' +
+      (isOpen ? '<button type="button" data-gr-story="' + c.lv + '" aria-label="Đọc ' + esc(number(c)) + ': ' + esc(c.title) + (fresh ? ' (chưa đọc)' : '') + '">' + inner + '</button>' : '<div aria-disabled="true">' + inner + '</div>') + '</li>';
+  }
+  // Dấu đã đọc của tài khoản tải không đồng bộ: khung có thể dựng trước khi tải xong, nên tải xong thì vẽ lại riêng khung này
+  // (mỗi tài khoản thử một lần, không lặp lại khi máy chủ lỗi).
+  let receiptsTried = null;
+  function ensureReceipts() {
+    const owner = currentUser?.id;
+    if (!owner || typeof loadReadReceipts !== 'function' || receiptsTried === owner) return;
+    if (typeof readReceiptLoaded !== 'undefined' && readReceiptLoaded && readReceiptOwner === owner) return;
+    receiptsTried = owner;
+    loadReadReceipts().then((ok) => {
+      const box = document.querySelector('.gr-path-panel');
+      if (ok && box && view === 'growth' && currentUser?.id === owner) box.outerHTML = panel();
+    });
+  }
   function panel() {
     if (!started()) return '';
-    const lv = level(), open_ = CHAPTERS.filter(unlocked), unread = open_.filter((c) => !seen(c.lv));
+    queueMicrotask(ensureReceipts);
+    const g = G(), t = earned(), lv = level(), r = g.realmOf(t), name = esc(g.heroName());
+    const open_ = CHAPTERS.filter(unlocked), unread = open_.filter((c) => !seen(c.lv));
     const next = CHAPTERS.find((c) => !unlocked(c));
-    const need = next ? Math.max(0, G().LEVEL_AT[next.lv] - earned()) : 0;
+    const need = next ? Math.max(0, g.LEVEL_AT[next.lv] - t) : 0;
     const lead = next
-      ? 'Chương kế: <strong>' + esc(number(next)) + ' · ' + esc(next.title) + '</strong> mở ở cấp ' + next.lv + ' (còn ' + G().fmt(need) + ' điểm tu vi).'
+      ? 'Chương kế: <strong>' + esc(number(next)) + ' · ' + esc(next.title) + '</strong> mở ở cấp ' + next.lv + ' (còn ' + g.fmt(need) + ' điểm tu vi).'
       : 'Các hạ đã mở trọn 20 chương. Đọc lại bất cứ lúc nào.';
-    const item = (c) => {
-      const isOpen = unlocked(c), fresh = isOpen && !seen(c.lv);
-      const tag = !isOpen ? 'Mở ở cấp ' + c.lv : fresh ? 'Chưa đọc' : 'Đã đọc';
-      const inner = '<span class="gr-ch-no">' + (c.lv ? c.lv / 5 : '✦') + '</span><span class="gr-ch-main"><strong>' + esc(c.title) + '</strong><small>' + (c.lv ? 'Cấp ' + c.lv + ' · ' + esc(realmName(c.lv)) : 'Khai cuộc') + '</small></span><em class="gr-ch-tag">' + tag + '</em>';
-      return '<li class="gr-ch' + (isOpen ? '' : ' is-locked') + (fresh ? ' is-new' : '') + (c.lv && c.lv <= lv && lv < c.lv + 5 ? ' is-now' : '') + '">' +
-        (isOpen ? '<button type="button" data-gr-story="' + c.lv + '" aria-label="Đọc ' + esc(number(c)) + ': ' + esc(c.title) + (fresh ? ' (chưa đọc)' : '') + '">' + inner + '</button>' : '<div aria-disabled="true">' + inner + '</div>') + '</li>';
-    };
-    return '<section class="panel gr-story-panel" aria-labelledby="gr-story-panel-title"><h2 id="gr-story-panel-title">Truyện ký giang hồ <small>' + open_.length + '/' + CHAPTERS.length + ' chương</small></h2>' +
-      '<p class="help-copy">Cứ mỗi 5 cấp, hiệp khách kể thêm một chặng hành trình vượt khó. ' + lead + (unread.length ? ' Còn ' + unread.length + ' chương chưa đọc.' : '') + '</p><ol class="gr-ch-list">' + CHAPTERS.map(item).join('') + '</ol></section>';
+    // Khối "đang ở đây".
+    const done = lv >= 100, k = stageOf(lv), from = (k - 1) * PER_STAGE, to = k * PER_STAGE;
+    const pct = done ? 100 : Math.max(0, Math.min(99, Math.floor(((t - g.LEVEL_AT[from]) / (g.LEVEL_AT[to] - g.LEVEL_AT[from])) * 100)));
+    const where = done ? name + ' đã đi trọn <strong>20 chặng</strong>, cấp 100 · Võ lâm chí tôn' : name + ' đang ở <strong>chặng ' + k + '/20</strong> · tiến về “' + esc(byLv(to).title) + '”';
+    const sub = done ? 'Hành trình trọn vẹn. Đỉnh núi chỉ là chỗ để thấy con đường tiếp theo.' : (lv ? 'Cấp ' + lv + ' · ' + esc(r.name) + ' · ' + esc(r.tier.toLowerCase()) : 'Chưa nhập cấp') + ' · đã qua ' + (lv - from) + '/5 cấp của chặng · còn ' + g.fmt(Math.max(0, g.LEVEL_AT[to] - t)) + ' điểm tới chương ' + k;
+    const nowBlock = '<div class="gr-path-now"><span class="gr-path-hero" aria-hidden="true">' + zenHero.svg(hero(), done ? 'zen' : 'martial') + '</span><div class="gr-path-now-text"><p>' + where + '</p><small>' + sub + '</small>' +
+      '<div class="progress" role="progressbar" aria-label="' + (done ? 'Đã đi trọn lộ trình' : 'Tiến trình chặng ' + k + ' (cấp ' + (from + 1) + '–' + to + ')') + '" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + pct + '"><span style="width:' + pct + '%"></span></div></div></div>';
+    // 10 cảnh giới, mỗi cảnh giới hai chặng.
+    const curRealm = done ? 11 : Math.ceil(k / 2);
+    const realms = g.REALMS.map((rn, i) => {
+      const n = i + 1, state = n < curRealm ? 'is-done' : n === curRealm ? 'is-now' : 'is-todo';
+      const label = state === 'is-done' ? 'Đã qua' : state === 'is-now' ? 'Đang tu luyện' : 'Chưa tới';
+      const a = (n - 1) * 10 + 1, b = n * 10;
+      return '<li class="gr-path-realm ' + state + '"' + (state === 'is-now' ? ' aria-current="true"' : '') + '><span class="gr-path-node" aria-hidden="true">' + (state === 'is-done' ? '✓' : n) + '</span><div class="gr-path-body">' +
+        '<div class="gr-path-head"><strong>' + esc(rn) + '</strong><small>Cấp ' + a + '–' + b + ' · ' + g.fmt(2 ** i) + ' điểm mỗi cấp · tu vi ' + g.fmt(g.LEVEL_AT[a]) + '–' + g.fmt(g.LEVEL_AT[b]) + '</small><em>' + label + '</em></div>' +
+        '<ol class="gr-ch-list">' + chapterItem(byLv(n * 10 - 5), lv) + chapterItem(byLv(n * 10), lv) + '</ol></div></li>';
+    }).join('');
+    return '<section class="panel gr-story-panel gr-path-panel" aria-labelledby="gr-story-panel-title"><h2 id="gr-story-panel-title">Lộ trình tu luyện <small>' + (done ? 'Trọn 20 chặng' : 'Chặng ' + k + '/20') + ' · ' + open_.length + '/' + CHAPTERS.length + ' chương</small></h2>' + nowBlock +
+      '<p class="help-copy">100 cấp chia 10 cảnh giới, mỗi cảnh giới hai chặng. Cuối mỗi chặng, hiệp khách kể một chương truyện ký. ' + lead + (unread.length ? ' Còn ' + unread.length + ' chương chưa đọc.' : '') + '</p>' +
+      '<ol class="gr-ch-list gr-path-start">' + chapterItem(byLv(0), lv) + '</ol><ol class="gr-path">' + realms + '</ol></section>';
   }
 
-  window.zenStory = { CHAPTERS, open, crossed, panel, seen, fill, isOpen: () => !!reader };
+  window.zenStory = { CHAPTERS, open, crossed, panel, seen, fill, stageOf, isOpen: () => !!reader };
 })();

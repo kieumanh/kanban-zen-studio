@@ -3194,6 +3194,12 @@
 :root[data-theme=dark] .gr-ch.is-new .gr-ch-no {
     color: #ffffff
 }
+:root[data-theme=dark] .gr-path-realm.is-done .gr-path-node {
+    color: #ffffff
+}
+:root[data-theme=dark] .gr-path-realm.is-now .gr-path-head em {
+    color: #ffffff
+}
 :root[data-theme=dark] {
     --muted: #ccc2d7;
     --text-muted: #ccc2d7
