@@ -847,27 +847,55 @@
     if ((hit.in && !el.closest(hit.in)) || (hit.when && !hit.when())) return null;
     return typeof hit.to === 'function' ? hit.to(core) : hit.to;
   }
+  // v1.94.0 (Khinh Công): nhớ các chuỗi chắc chắn không đổi ở bất kỳ vùng nào (không phải cụm từ, không khớp mẫu nào) để lần dựng
+  // sau khỏi dò lại gần trăm mẫu cho cùng một tên việc, tên dự án… Đếm việc đã làm trong stats để test giữ được mức này.
+  const MISS = new Set();
+  const stats = { batches: 0, roots: 0, texts: 0, attrs: 0, misses: 0, ms: 0 };
   function lookup(core, el) {
+    if (MISS.has(core)) {
+      stats.misses++;
+      return null;
+    }
     const hit = PHRASES.get(core);
-    if (hit !== undefined) {
+    let candidate = hit !== undefined;
+    if (candidate) {
       const out = pick(hit, core, el);
       if (out != null) return out;
     }
     for (const [re, to, scope, quick] of PATTERNS) {
-      if ((quick && !core.includes(quick)) || !re.test(core) || (scope && !el.closest(scope))) continue;
+      if ((quick && !core.includes(quick)) || !re.test(core)) continue;
+      candidate = true;
+      if (scope && !el.closest(scope)) continue;
       return core.replace(re, to);
     }
+    if (!candidate) {
+      if (MISS.size > 20000) MISS.clear();
+      MISS.add(core);
+    }
     return null;
+  }
+  // v1.94.0: phần tử có nằm trong vùng SKIP không — nhớ theo từng phần tử trong một lượt quét (anh em dùng chung tổ tiên), mỗi phần tử
+  // chỉ khớp bộ chọn SKIP một lần thay vì dò cả chuỗi tổ tiên cho mỗi chữ. Bộ nhớ làm mới mỗi lượt vì trang đổi giữa các lượt.
+  let skipMemo = new WeakMap();
+  function inSkip(el) {
+    if (!el || el === document.body || el === root) return false;
+    let v = skipMemo.get(el);
+    if (v === undefined) {
+      v = el.matches(SKIP) || inSkip(el.parentElement);
+      skipMemo.set(el, v);
+    }
+    return v;
   }
   function convert(value, el) {
     const core = value.trim();
     // v1.91.0: 200 → 400 ký tự cho các câu dài của Cơ quan, Nhập môn (lời nhắn sau khi ghi danh) và tóm tắt Truyền thư.
     if (!core || core.length > 400) return null;
     const out = lookup(core, el);
-    if (out == null || out === core || el.closest(SKIP)) return null;
+    if (out == null || out === core || inSkip(el)) return null;
     return value.replace(core, () => out);
   }
   function doText(node) {
+    stats.texts++;
     const el = node.parentElement;
     if (!el || (el.tagName === 'OPTION' && !el.hasAttribute('value')) || el.matches(DIRECT_SKIP)) return;
     const cur = node.nodeValue;
@@ -879,6 +907,7 @@
     node.nodeValue = out;
   }
   function doAttrs(el) {
+    stats.attrs++;
     for (const a of ATTRS) {
       const v = el.getAttribute(a);
       if (!v) continue;
@@ -918,15 +947,23 @@
     box.append(main, small);
     label.replaceWith(box);
   }
+  // v1.94.0: một lượt duyệt cho cả chữ, thuộc tính và nút mục (trước đây ba lượt: hai querySelectorAll và một TreeWalker).
+  const isNav = (el) => (el.classList.contains('nav') || el.classList.contains('view-mode')) && el.matches(NAV_SEL);
+  const hasAttrs = (el) => el.hasAttribute('aria-label') || el.hasAttribute('title') || el.hasAttribute('placeholder');
+  function visit(el) {
+    if (isNav(el)) doNav(el);
+    if (hasAttrs(el)) doAttrs(el);
+  }
   function scan(node) {
+    stats.roots++;
     if (node.nodeType === 3) return doText(node);
     if (node.nodeType !== 1) return;
-    if (node.matches(NAV_SEL)) doNav(node);
-    node.querySelectorAll(NAV_SEL).forEach(doNav);
-    const walk = document.createTreeWalker(node, NodeFilter.SHOW_TEXT);
-    for (let t = walk.nextNode(); t; t = walk.nextNode()) doText(t);
-    if (node.matches(ATTR_SEL)) doAttrs(node);
-    node.querySelectorAll(ATTR_SEL).forEach(doAttrs);
+    visit(node);
+    const walk = document.createTreeWalker(node, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT);
+    for (let n = walk.nextNode(); n; n = walk.nextNode()) {
+      if (n.nodeType === 3) doText(n);
+      else visit(n);
+    }
   }
   function restore() {
     document.querySelectorAll('.gh-nav').forEach((box) => box.replaceWith(document.createTextNode(box.dataset.ghText)));
@@ -955,24 +992,39 @@
       observer.takeRecords();
       return;
     }
+    stats.batches++;
+    const t0 = performance.now();
+    skipMemo = new WeakMap();
+    // v1.94.0: gom mọi nút vừa thêm trong lượt rồi chỉ quét các gốc: một lần dựng bảng sinh hàng nghìn bản ghi, cây con thêm chồng lên
+    // nhau nên trước đây cùng một phần trang bị quét lại ~4 lần. Nút đã rời trang và nút nằm trong một nút khác cùng lượt được bỏ qua.
+    const added = new Set();
     for (const m of list) {
       if (m.type === 'childList') {
         // Ứng dụng có thể đặt lại chữ bên trong một nút mục (innerHTML): dựng lại nhãn hai dòng cho chính nút đó.
         const nav = m.target.nodeType === 1 && m.target.closest(NAV_SEL);
         if (nav) doNav(nav);
-        m.addedNodes.forEach(scan);
+        for (const n of m.addedNodes) added.add(n);
       }
       else if (m.type === 'characterData') {
+        if (!m.target.isConnected) continue;
         const nav = m.target.parentElement?.closest(NAV_SEL);
         if (nav && !m.target.parentElement.closest('.gh-nav')) doNav(nav);
         else doText(m.target);
       }
       else if (m.type === 'attributes') doAttrs(m.target);
     }
+    for (const n of added) {
+      if (!n.isConnected) continue;
+      let p = n.parentNode;
+      while (p && p !== document.body && !added.has(p)) p = p.parentNode;
+      if (!p || p === document.body) scan(n);
+    }
     observer.takeRecords(); // bỏ các thay đổi do chính bộ chuyển ngữ vừa làm
+    stats.ms += performance.now() - t0;
   }
   function sync() {
     if (active() && !observer && document.body) {
+      skipMemo = new WeakMap();
       scan(document.body);
       observer = new MutationObserver(onMutations);
       observer.observe(document.body, { subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ATTRS });
@@ -984,5 +1036,5 @@
   }
   document.addEventListener('zen-theme', sync);
   sync();
-  window.zenGiangHo = { active, convert: (s, el = document.body) => convert(s, el), rescan: () => active() && scan(document.body), NAV, PHRASES, PATTERNS };
+  window.zenGiangHo = { active, convert: (s, el = document.body) => convert(s, el), rescan: () => active() && ((skipMemo = new WeakMap()), scan(document.body)), NAV, PHRASES, PATTERNS, stats };
 })();

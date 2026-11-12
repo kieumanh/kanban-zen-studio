@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 import { stripModuleSyntax, validateAssets } from './build-utils.mjs';
 import { createHash } from 'node:crypto';
 import { Script } from 'node:vm';
+import { GH_FONT_FILES } from './generate-themes.mjs';
 const root = fileURLToPath(new URL('../', import.meta.url));
 const { version } = JSON.parse(readFileSync(root + 'package.json', 'utf8'));
 const assets = JSON.parse(readFileSync(root + 'scripts/assets.json', 'utf8'));
@@ -20,6 +21,13 @@ const files = Object.fromEntries(
     },
   ]),
 );
+// v1.94.0: phông Noto Serif tự lưu cho phong cách Giang hồ (tệp nhị phân, có trong bộ nhớ đệm ngoại tuyến).
+for (const name of GH_FONT_FILES)
+  files['/fonts/' + name] = {
+    body: readFileSync(root + 'dist/fonts/' + name).toString('base64'),
+    type: 'font/woff2',
+    binary: true,
+  };
 const shell = Object.keys(files).filter(
   (url) => url !== '/sw.js' && !url.startsWith('/report'),
 );
@@ -45,7 +53,7 @@ ${stripModuleSyntax(readFileSync(root + 'server/workspace-store.mjs', 'utf8'))}
 ${stripModuleSyntax(readFileSync(root + 'server/auth.mjs', 'utf8'))}
 ${stripModuleSyntax(readFileSync(root + 'server/sketches.mjs', 'utf8'))}
 ${stripModuleSyntax(readFileSync(root + 'server/notifications.mjs', 'utf8'))}
-${stripModuleSyntax(readFileSync(root + 'server/task-workflow.mjs', 'utf8'))}\n${stripModuleSyntax(readFileSync(root + 'server/api.mjs', 'utf8'))}\n${stripModuleSyntax(readFileSync(root + 'server/report-sharing.mjs', 'utf8'))}\n${stripModuleSyntax(readFileSync(root + 'server/resources.mjs', 'utf8'))}\n${stripModuleSyntax(readFileSync(root + 'server/reports.mjs', 'utf8'))}\n${stripModuleSyntax(readFileSync(root + 'server/finance-report.mjs', 'utf8'))}\n${stripModuleSyntax(readFileSync(root + 'server/growth.mjs', 'utf8'))}\n${stripModuleSyntax(readFileSync(root + 'server/client-events.mjs', 'utf8'))}\n${stripModuleSyntax(readFileSync(root + 'server/storage.mjs', 'utf8'))}\nconst files=${JSON.stringify(files)};\nexport default {async scheduled(event,env,ctx){ctx.waitUntil(daily(env));},async fetch(request,env){const path=new URL(request.url).pathname;if(path.startsWith('/api/'))return api(request,env);if(path==='/health')return Response.json({ok:true,version:${JSON.stringify(version)}});if(!['GET','HEAD'].includes(request.method))return new Response('Method not allowed',{status:405,headers:{Allow:'GET, HEAD'}});const file=files[path];if(!file)return new Response('Not found',{status:404});return new Response(request.method==='HEAD'?null:file.binary?Uint8Array.from(atob(file.body),c=>c.charCodeAt(0)):file.body,{headers:{'Content-Type':file.type,'Cache-Control':'no-cache','X-Content-Type-Options':'nosniff','Referrer-Policy':'strict-origin-when-cross-origin','Permissions-Policy':'camera=(), microphone=(), geolocation=()','X-Frame-Options':'SAMEORIGIN','Content-Security-Policy':"default-src 'self'; media-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'"}});}};\n`;
+${stripModuleSyntax(readFileSync(root + 'server/task-workflow.mjs', 'utf8'))}\n${stripModuleSyntax(readFileSync(root + 'server/api.mjs', 'utf8'))}\n${stripModuleSyntax(readFileSync(root + 'server/report-sharing.mjs', 'utf8'))}\n${stripModuleSyntax(readFileSync(root + 'server/resources.mjs', 'utf8'))}\n${stripModuleSyntax(readFileSync(root + 'server/reports.mjs', 'utf8'))}\n${stripModuleSyntax(readFileSync(root + 'server/finance-report.mjs', 'utf8'))}\n${stripModuleSyntax(readFileSync(root + 'server/growth.mjs', 'utf8'))}\n${stripModuleSyntax(readFileSync(root + 'server/client-events.mjs', 'utf8'))}\n${stripModuleSyntax(readFileSync(root + 'server/storage.mjs', 'utf8'))}\nconst files=${JSON.stringify(files)};\nexport default {async scheduled(event,env,ctx){ctx.waitUntil(daily(env));},async fetch(request,env){const path=new URL(request.url).pathname;if(path.startsWith('/api/'))return api(request,env);if(path==='/health')return Response.json({ok:true,version:${JSON.stringify(version)}});if(!['GET','HEAD'].includes(request.method))return new Response('Method not allowed',{status:405,headers:{Allow:'GET, HEAD'}});const file=files[path];if(!file)return new Response('Not found',{status:404});return new Response(request.method==='HEAD'?null:file.binary?Uint8Array.from(atob(file.body),c=>c.charCodeAt(0)):file.body,{headers:{'Content-Type':file.type,'Cache-Control':'no-cache','X-Content-Type-Options':'nosniff','Referrer-Policy':'strict-origin-when-cross-origin','Permissions-Policy':'camera=(), microphone=(), geolocation=()','X-Frame-Options':'SAMEORIGIN','Content-Security-Policy':"default-src 'self'; media-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'"}});}};\n`;
 new Script(source.slice(0, source.indexOf('\nexport default')));
 writeFileSync(root + 'worker.mjs', source);
 console.log(

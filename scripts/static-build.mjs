@@ -5,6 +5,7 @@ export function buildStaticAssets(files, root, version, source) {
   rmSync(out, { recursive: true, force: true });
   mkdirSync(out + 'static', { recursive: true });
   mkdirSync(out + 'modules', { recursive: true });
+  mkdirSync(out + 'fonts', { recursive: true });
   const mapping = {};
   for (const [url, file] of Object.entries(files)) {
     if (!/\.(js|css)$/.test(url) || url === '/sw.js') continue;
@@ -28,7 +29,7 @@ export function buildStaticAssets(files, root, version, source) {
   }
   const shell = Object.keys(files)
     .filter(
-      (u) => u !== '/sw.js' && !u.startsWith('/report') && !files[u].binary,
+      (u) => u !== '/sw.js' && !u.startsWith('/report') && (!files[u].binary || u.startsWith('/fonts/')),
     )
     .concat(Object.values(mapping).filter((u) => !u.includes('/report.')));
   const swSource = files['/sw.js'].body
@@ -53,8 +54,10 @@ export function buildStaticAssets(files, root, version, source) {
   X-Frame-Options: SAMEORIGIN
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=()
-  Content-Security-Policy: default-src 'self'; media-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'
+  Content-Security-Policy: default-src 'self'; media-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'
 /static/*
+  Cache-Control: public, max-age=31536000, immutable
+/fonts/*
   Cache-Control: public, max-age=31536000, immutable
 /sw.js
   Cache-Control: no-cache

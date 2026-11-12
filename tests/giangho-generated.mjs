@@ -2,7 +2,7 @@
 // 1. dist/giangho.css đúng là bản sinh từ CSS nguồn + scripts/giangho-skin.css; mọi bộ chọn nằm dưới :root[data-style=giangho] để phong cách Thiền
 //    không đổi; màu tím thương hiệu không còn; màu mang nghĩa (xanh lá) giữ nguyên.
 // 2. Họa tiết viết tay không dùng !important và không có bộ chọn thiếu tiền tố (bộ sinh từ chối).
-// 3. Tệp được nạp trước studio-zen.css và có đăng ký tài sản.
+// 3. Tệp được nạp trước studio-zen.css và có đăng ký tài sản. Phông Noto Serif tự lưu, không @import Google Fonts (v1.94.0).
 // 4. theme.js: mặc định Thiền; setStyle('giangho') đặt data-style và lưu trên thiết bị; setStyle('zen') xóa cả hai.
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
@@ -24,7 +24,21 @@ tree.walkRules((r) => {
   for (const sel of r.selectors) assert.ok(sel.trim().startsWith(':root[data-style=giangho]'), 'giangho.css: bộ chọn thiếu tiền tố: ' + sel);
 });
 assert.ok(rules > 1000, 'bộ sinh phải phát ra hàng nghìn quy tắc (sáng + tối), có ' + rules);
-tree.walkAtRules('import', (a) => assert.match(a.params, /fonts\.googleapis\.com\/css2\?family=Noto\+Serif/, 'chỉ nạp phông chữ có chân Noto Serif'));
+// v1.94.0: phông Noto Serif tự lưu (dist/fonts), không còn @import Google Fonts chặn hiển thị.
+tree.walkAtRules('import', (a) => assert.fail('giangho.css không còn @import: ' + a.params));
+const faces = [];
+tree.walkAtRules('font-face', (a) => faces.push(Object.fromEntries(a.nodes.map((d) => [d.prop, d.value]))));
+assert.equal(faces.length, 4, 'bốn @font-face: Latin + tiếng Việt, đậm 600 và 700');
+for (const f of faces) {
+  assert.equal(f['font-family'], "'Noto Serif'", 'phông Noto Serif');
+  assert.equal(f['font-display'], 'swap', 'hiện chữ ngay bằng phông dự phòng trong lúc tải');
+  const file = f.src.match(/^url\('\/fonts\/(noto-serif-(latin|vietnamese)-(600|700)\.v1\.woff2)'\) format\('woff2'\)$/);
+  assert.ok(file, 'tệp phông tự lưu: ' + f.src);
+  assert.equal(file[3], f['font-weight'], 'đúng độ đậm');
+  assert.ok(readFileSync(new URL('../dist/fonts/' + file[1], import.meta.url)).length > 4000, 'có tệp phông ' + file[1]);
+  assert.match(f['unicode-range'], file[2] === 'vietnamese' ? /U\+1EA0-1EF9/ : /U\+0000-00FF/, 'đúng dải ký tự');
+}
+assert.doesNotMatch(css, /fonts\.googleapis/, 'không gọi Google Fonts');
 // Phần sinh (không tính họa tiết viết tay, nơi màu dự án mặc định #7950c8 chỉ là giá trị dự phòng của màu người dùng chọn).
 const mapped = css.slice(0, css.length - read('scripts/giangho-skin.css').length);
 const purple = mapped.match(/#7950c8|#6e3fa0|#a8468a/i);

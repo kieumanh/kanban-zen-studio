@@ -33,8 +33,10 @@
     root.setAttribute('data-theme', s.dark ? 'dark' : 'light');
     if (s.high) root.setAttribute('data-contrast', 'high');
     else root.removeAttribute('data-contrast');
-    if (s.style === 'giangho') root.setAttribute('data-style', 'giangho');
-    else root.removeAttribute('data-style');
+    if (s.style === 'giangho') {
+      root.setAttribute('data-style', 'giangho');
+      preloadFonts();
+    } else root.removeAttribute('data-style');
     var meta = document.querySelector('meta[name=theme-color]');
     if (meta) meta.setAttribute('content', s.style === 'giangho' ? (s.dark ? '#1c1814' : '#f3ecdf') : s.dark ? '#151219' : '#f7f3fc');
     // v1.17.0: báo cho nút chuyển sáng/tối trên thanh trên cùng cập nhật biểu tượng (đổi từ Cài đặt, từ nút hoặc theo hệ thống).
@@ -42,6 +44,22 @@
       document.dispatchEvent(new CustomEvent('zen-theme', { detail: s }));
     } catch (e) {}
     return s;
+  }
+  // v1.94.0 (Khinh Công): phong cách Giang hồ thì tải sớm phông Noto Serif đậm 600 (tiêu đề) song song với CSS, khỏi đợi trình duyệt
+  // đọc xong giangho.css mới biết cần phông. Phong cách Thiền không tải.
+  var fontsQueued = false;
+  function preloadFonts() {
+    if (fontsQueued || !document.head) return;
+    fontsQueued = true;
+    ['noto-serif-vietnamese-600.v1.woff2', 'noto-serif-latin-600.v1.woff2'].forEach(function (name) {
+      var link = document.createElement('link');
+      link.rel = 'preload';
+      link.as = 'font';
+      link.type = 'font/woff2';
+      link.crossOrigin = 'anonymous';
+      link.href = '/fonts/' + name;
+      document.head.appendChild(link);
+    });
   }
   function set(key, value) {
     try {

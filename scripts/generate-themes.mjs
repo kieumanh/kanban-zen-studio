@@ -407,6 +407,23 @@ const DARK_EXTRA = `
 
 // Họa tiết viết tay: không được dùng !important (không tính vào ngân sách nên phải thắng bằng độ ưu tiên) và mọi bộ chọn phải
 // nằm dưới tiền tố :root[data-style=giangho] để phong cách Thiền không bị ảnh hưởng.
+// v1.94.0 (Khinh Công): phông chữ có chân Noto Serif tự lưu trên máy chủ của ứng dụng (dist/fonts, giấy phép SIL OFL 1.1) thay cho
+// @import Google Fonts: bỏ một yêu cầu bên thứ ba chặn hiển thị (trước đây cả người dùng Thiền cũng phải chờ), không lộ địa chỉ IP
+// ra ngoài, dùng được khi mất mạng. Chỉ bộ chữ Latin + tiếng Việt, đậm 600/700; trình duyệt chỉ tải tệp khi trang thật sự dùng chữ đó.
+const GH_FONT_RANGES = {
+  vietnamese: 'U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB',
+  latin: 'U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD',
+};
+export const GH_FONT_FILES = ['600', '700'].flatMap((w) => ['vietnamese', 'latin'].map((sub) => 'noto-serif-' + sub + '-' + w + '.v1.woff2'));
+const GH_FONTS = ['600', '700']
+  .flatMap((w) =>
+    ['vietnamese', 'latin'].map(
+      (sub) =>
+        "@font-face {\n  font-family: 'Noto Serif';\n  font-style: normal;\n  font-weight: " + w + ";\n  font-display: swap;\n  src: url('/fonts/noto-serif-" + sub + '-' + w + ".v1.woff2') format('woff2');\n  unicode-range: " + GH_FONT_RANGES[sub] + ';\n}\n',
+    ),
+  )
+  .join('');
+
 export function checkSkin(css) {
   const tree = postcss.parse(css, { from: 'scripts/giangho-skin.css' });
   tree.walkDecls((d) => {
@@ -469,7 +486,7 @@ export function generate() {
   checkSkin(skin);
   const giangho =
     '/* v1.86.0 — phong cách Giang hồ (chọn ở Cài đặt → Giao diện → Phong cách; theme.js đặt data-style="giangho" trên <html>).\n   Phần đầu sinh tự động bằng scripts/generate-themes.mjs từ CSS nguồn (bản sáng rồi bản tối); phần cuối chép nguyên từ\n   scripts/giangho-skin.css (họa tiết viết tay). KHÔNG sửa tay tệp này. */\n' +
-    "@import url('https://fonts.googleapis.com/css2?family=Noto+Serif:wght@600;700&display=swap');\n" +
+    GH_FONTS +
     strip(gh.css) +
     strip(ghDark.css) +
     skin;
