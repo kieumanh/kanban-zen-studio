@@ -1913,3 +1913,31 @@ dialog[open] button[aria-label^="Đóng"],
 @media(min-width:701px){
  #tabs .tab[data-project]:not(.pinned):not(.tab-home){flex-basis:196px;width:196px;max-width:228px}
 }
+
+/* v1.82.0: rà soát 390/820/1440 px — vùng chạm tối thiểu 40px cho các nút nhỏ trên thiết bị cảm ứng (điện thoại, máy tính bảng) và màn hình hẹp.
+   Chuột trên máy tính để bàn giữ kích thước gọn như cũ. Chỉ nâng kích thước tối thiểu, không đổi màu hay vị trí. */
+@media (pointer: coarse), (max-width: 700px) {
+  .btn.task-next,
+  .zen-task-pin,
+  .zen-card-pin,
+  .wf-grip,
+  .wf-column-name,
+  button[aria-label^='Thêm việc vào cột'],
+  .zen-wysiwyg-toolbar button,
+  .zen-format-tools button,
+  .zen-format-tools summary,
+  .note-keyword,
+  .gr-chip,
+  .topbar .avatar,
+  #top-tools-trigger {
+    min-width: 40px;
+    min-height: 40px;
+  }
+  .settings-toggle {
+    min-height: 40px;
+    align-items: center;
+  }
+  .account-dialog .weekly-settings .report-hour select {
+    min-height: 44px !important;
+  }
+}
