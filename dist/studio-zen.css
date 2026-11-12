@@ -1904,3 +1904,12 @@ dialog[open] button[aria-label^="Đóng"],
   #editor.wf-task-editor .zen-task-section { padding: 12px; }
   #editor.wf-task-editor input.wf-task-title { font-size: 20px !important; min-height: 52px; padding: 10px 14px; }
 }
+
+/* v1.77.0: thanh tab dự án gọn. Vẫn đủ chữ (không dấu …); phần trăm xuống dòng riêng nhỏ gọn thay vì chiếm bề ngang của tên,
+   nên tên dài còn ~3 dòng thay vì 5–6. Chấm màu bị ẩn vì viền trên của tab đã mang màu dự án. */
+#tabs .tab[data-project]:not(.pinned):not(.tab-home){flex-direction:column;flex-basis:176px;width:176px;min-width:148px;max-width:204px;gap:3px;padding:8px 12px}
+#tabs .tab[data-project]:not(.pinned):not(.tab-home) .dot{display:none}
+#tabs .tab[data-project]:not(.pinned):not(.tab-home)>span{flex:0 0 auto;min-width:0;font-size:11px;line-height:1.2}
+@media(min-width:701px){
+ #tabs .tab[data-project]:not(.pinned):not(.tab-home){flex-basis:196px;width:196px;max-width:228px}
+}
