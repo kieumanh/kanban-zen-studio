@@ -275,6 +275,16 @@
     "text/javascript; charset=utf-8"
   ],
   [
+    "/error-report.js",
+    "error-report.js",
+    "text/javascript; charset=utf-8"
+  ],
+  [
+    "/diagnostics.js",
+    "diagnostics.js",
+    "text/javascript; charset=utf-8"
+  ],
+  [
     "/habits.css",
     "habits.css",
     "text/css; charset=utf-8"

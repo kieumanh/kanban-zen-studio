@@ -59,6 +59,7 @@ import {
   weeklyReport,
 } from './reports.mjs';
 import { financeReport, validFinanceSettings } from './finance-report.mjs';
+import { clientEvent } from './client-events.mjs';
 export const ORIGIN = 'https://kanban.huongthiennature.com',
   enc = new TextEncoder();
 const hex = (b) =>
@@ -782,6 +783,11 @@ export async function api(request, env) {
       if (!row) fail('Liên kết hết hạn hoặc đã thu hồi.', 404);
       return json({ data: JSON.parse(row.data) });
     }
+    // v1.73.0: lỗi script phía trình duyệt + dấu dùng tính năng (ẩn danh) -> một dòng nhật ký; không ghi D1. Xem server/client-events.mjs.
+    if (path === '/api/client-event' && request.method === 'POST') {
+      await clientEvent(request, env, ip, limited, hash);
+      return json({ ok: true });
+    }
     if (path === '/api/me') {
       const u = await session(request, env);
 
@@ -789,7 +795,25 @@ export async function api(request, env) {
         .prepare('SELECT name,birthday,avatar FROM profiles WHERE user_id=?')
         .bind(u.id)
         .first();
-      return json({ user: { ...u, ...(profile || {}) } });
+      // v1.73.0: email báo cáo/nhắc việc gần đây gửi lỗi -> hiện trong Cài đặt (không kèm nội dung lỗi). Không bao giờ làm hỏng /api/me.
+      let mailIssue;
+      try {
+        mailIssue =
+          (await db
+            .prepare(
+              "SELECT channel,day,attempts FROM notification_jobs WHERE user_id=? AND status='pending' AND last_error<>'' AND channel IN ('email','weekly','finance') AND day>=? ORDER BY day DESC LIMIT 1",
+            )
+            .bind(
+              u.id,
+              new Date(Date.now() - 3 * 86400000).toISOString().slice(0, 10),
+            )
+            .first()) || undefined;
+      } catch {
+        mailIssue = undefined;
+      }
+      return json({
+        user: { ...u, ...(profile || {}), ...(mailIssue ? { mailIssue } : {}) },
+      });
     }
     if (path === '/api/push-key') {
       await session(request, env);

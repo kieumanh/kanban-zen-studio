@@ -16,6 +16,7 @@ import {
   weeklyReport,
 } from './reports.mjs';
 import { financeReport } from './finance-report.mjs';
+import { scrubClientText } from './client-events.mjs';
 const b64 = (b) =>
   btoa(String.fromCharCode(...new Uint8Array(b)))
     .replace(/=/g, '')
@@ -321,8 +322,14 @@ export async function notificationDaily(env, now = new Date()) {
           job.channel,
         )
         .run();
+      // v1.73.0: kèm lý do (đã làm sạch: bỏ email, mã dài) và số lần thử, để đọc được trong Workers Logs.
       console.log(
-        JSON.stringify({ event: 'report_send_failed', channel: job.channel }),
+        JSON.stringify({
+          event: 'report_send_failed',
+          channel: job.channel,
+          attempts: (job.attempts || 0) + 1,
+          reason: scrubClientText(e.message, 120),
+        }),
       );
     }
   }

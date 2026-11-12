@@ -138,6 +138,7 @@ jobs:
           node tests/finance-share-browser.mjs
           node tests/perf-dates-browser.mjs
           node tests/dashboard-context-browser.mjs
+          node tests/diagnostics-browser.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:
