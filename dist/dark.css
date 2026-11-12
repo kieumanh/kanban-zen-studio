@@ -3140,6 +3140,24 @@
 :root[data-theme=dark] .gr-bar .gr-bar-add {
     background: repeating-linear-gradient(45deg,var(--c) 0 5px,color-mix(in srgb,var(--c) 55%,#1b181f) 5px 10px)
 }
+:root[data-theme=dark] .gr-level.is-high {
+    background: #110e15;
+    border-color: #345241
+}
+:root[data-theme=dark] .gr-level.is-mid {
+    background: #120f16;
+    border-color: #444861
+}
+:root[data-theme=dark] .gr-level.is-low {
+    background: #131017;
+    border-color: #56411d
+}
+:root[data-theme=dark] .gr-level.is-none {
+    background: #131017
+}
+:root[data-theme=dark] .gr-tip {
+    border-left: 4px solid var(--c,#845cd6)
+}
 :root[data-theme=dark] {
     --muted: #ccc2d7;
     --text-muted: #ccc2d7

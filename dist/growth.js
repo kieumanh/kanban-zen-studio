@@ -6,6 +6,7 @@
 (function () {
   const STEP = 0.5; // mỗi lần bấm + cộng 0,5 điểm
   const TASK_STEPS = 2; // mỗi việc hoàn thành được 2 lần cộng (1 điểm) để phân bổ
+  const HABIT_STEPS = 6; // một việc hằng ngày đủ 7 ngày liền được 6 lần cộng (3 điểm)
   const LOG_MAX = 3000;
   const TIERS = [5, 10, 20, 40, 80, 160, 320, 640, 1280, 2560, 5120];
   // Thứ tự các chỉ số là cố định (chỉ số p[i] trong sổ cái); không đổi thứ tự sau khi đã phát hành.
@@ -122,6 +123,7 @@
   // ---- Trang Điểm tích lũy ------------------------------------------------------------------------------------------------
   let pickHero = 'nam';
   let changing = false;
+  let reporting = false; // đang xem báo cáo tiến độ
   let poseMode = 'auto'; // 'auto' hoặc một tư thế cố định
   let poseNow = 'talk';
   let poseTimer = 0;
@@ -178,12 +180,13 @@
     const intro = 'Hoàn thành việc để bồi bổ 8 chỉ số quan trọng của đời người. Mỗi lần cộng 0,5 điểm.';
     if (!g) return '<div class="gr-page">' + heading('ĐIỂM TÍCH LŨY', 'Hành trình nội lực', intro) + pickPanel() + '</div>';
     if (changing) return '<div class="gr-page">' + heading('ĐIỂM TÍCH LŨY', 'Hành trình nội lực', intro) + pickPanel() + '</div>';
+    if (reporting) return reportPage();
     const s = scores(), r = realmOf(total(s)), ex = extremes(s);
     const sub = 'Cảnh giới ' + r.name + ' · ' + fmt(total(s)) + ' điểm';
     const summary = total(s) === 0
       ? 'Tất cả chỉ số đang ở 0. Hoàn thành một việc để bắt đầu.'
       : 'Mạnh nhất: <strong>' + ex.top.name + '</strong> (' + fmt(ex.mx) + ') · Cần bồi bổ nhất: <strong>' + ex.low.name + '</strong> (' + fmt(ex.mn) + ')';
-    return '<div class="gr-page">' + heading('ĐIỂM TÍCH LŨY', 'Nội lực của ' + esc(heroName()), sub, '<div class="gr-head-actions"><button type="button" class="btn" data-gr-change>Đổi nhân vật</button></div>') +
+    return '<div class="gr-page">' + heading('ĐIỂM TÍCH LŨY', 'Nội lực của ' + esc(heroName()), sub, '<div class="gr-head-actions"><button type="button" class="btn primary" data-gr-report>Xem báo cáo tiến độ</button><button type="button" class="btn" data-gr-change>Đổi nhân vật</button></div>') +
       '<div class="gr-grid">' + stage(s) + '<section class="panel gr-radar-panel" aria-label="Biểu đồ nội lực"><h2>Biểu đồ nội lực</h2><div class="gr-radar-wrap" id="gr-radar">' + radar(s) + '</div><p class="gr-summary">' + summary + '</p></section></div>' +
       axisRows(s) + history() + '<section class="panel gr-how"><h2>Cách tích điểm</h2><ul class="gr-how-list"><li>Mỗi việc hoàn thành cho bạn <strong>2 lần cộng</strong> (1 điểm). Bảng cộng điểm hiện ra trước lời chúc mừng.</li><li>Mỗi lần bấm nút <strong>+</strong> thêm 0,5 điểm vào chỉ số bạn chọn; dồn cả hai lần vào một chỉ số cũng được.</li><li>Mỗi việc chỉ được cộng điểm một lần.</li></ul></section></div>';
   }
@@ -203,7 +206,7 @@
   }
   function tick() {
     poseTimer = 0;
-    if (view !== 'growth' || !growth() || changing) return;
+    if (view !== 'growth' || !growth() || changing || reporting) return;
     if (!document.hidden && !document.querySelector('dialog[open]')) {
       msgIndex++;
       if (poseMode === 'auto' && !reduced()) {
@@ -215,7 +218,7 @@
     poseTimer = setTimeout(tick, 4500);
   }
   function startTimer() {
-    if (poseTimer || !growth() || changing) return;
+    if (poseTimer || !growth() || changing || reporting) return;
     poseTimer = setTimeout(tick, 4500);
   }
 
@@ -240,8 +243,10 @@
     if (view !== 'growth') {
       stopTimer();
       changing = false;
+      reporting = false;
       return;
     }
+    if (reporting) stopTimer();
     if (growth() && !document.querySelector('#gr-figure')) poseNow = poseMode === 'auto' ? 'talk' : poseMode;
     $('#crumb').textContent = 'Điểm tích lũy';
     $('#main').innerHTML = page();
@@ -279,6 +284,7 @@
       if (!a.key) delete entry.k;
       if (!entry.n) delete entry.n;
       if (!wfSave(() => { data.growth.log.push(entry); compact(); })) return notify('Chưa lưu được điểm. Hãy thử lại.');
+      if (a.source !== 'task') notify('Đã cộng ' + fmt(a.spent * STEP) + ' điểm vào Điểm tích lũy.');
     }
     award = null;
     a.el.close();
@@ -300,7 +306,7 @@
     d.id = 'growth-award';
     d.className = 'gr-award';
     d.setAttribute('aria-labelledby', 'gr-award-title');
-    d.innerHTML = '<form method="dialog" class="gr-award-form"><header><span class="eyebrow">ĐIỂM TÍCH LŨY</span><h2 id="gr-award-title">Bồi bổ nội lực</h2><p class="help-copy">' + (opt.title ? 'Bạn vừa hoàn thành “' + esc(opt.title) + '”. ' : '') + (opt.intro || 'Chọn chỉ số bạn muốn cộng điểm.') + '</p></header>' +
+    d.innerHTML = '<form method="dialog" class="gr-award-form"><header><span class="eyebrow">ĐIỂM TÍCH LŨY</span><h2 id="gr-award-title">Bồi bổ nội lực</h2><p class="help-copy">' + (opt.lead ? esc(opt.lead) + ' ' : opt.title ? 'Bạn vừa hoàn thành “' + esc(opt.title) + '”. ' : '') + (opt.intro || 'Chọn chỉ số bạn muốn cộng điểm.') + '</p></header>' +
       '<p class="gr-budget" aria-live="polite"></p><div class="gr-cols" role="group" aria-label="Biểu đồ 8 chỉ số"></div><p class="gr-live sr-only" role="status" aria-live="polite"></p>' +
       '<footer class="gr-award-foot"><button type="button" class="btn ghost" data-gr-undo>Hoàn tác</button><span class="gr-grow"></span><button type="button" class="btn" data-gr-skip>Bỏ qua</button><button type="button" class="btn primary" data-gr-save>Lưu lại</button></footer></form>';
     document.body.append(d);
@@ -331,8 +337,109 @@
     if (!g || contentReadOnly || !task || task.col !== 'Done' || Date.now() - ctx.at > 3000 || g.log.some((e) => e.k === 'task:' + task.id)) return baseCelebrate.apply(this, args);
     openAward({ source: 'task', key: 'task:' + task.id, title: task.title, steps: TASK_STEPS, then: () => baseCelebrate.apply(window, args) });
   };
+  // Việc hằng ngày vừa đủ chuỗi 7, 14, 21… ngày liền (habits.js gọi sau khi tích): hỏi điểm một lần cho mỗi việc mỗi ngày.
+  function habitStreak(h, n) {
+    const g = growth(), key = ('habit:' + h.id + ':' + today()).slice(0, 120);
+    if (!g || contentReadOnly || g.log.some((e) => e.k === key)) return;
+    setTimeout(() => {
+      if (award || !growth() || growth().log.some((e) => e.k === key)) return;
+      openAward({ source: 'habit', key, title: h.name + ' · ' + n + ' ngày liền', lead: 'Tuyệt vời! “' + h.name + '” đã đủ ' + n + ' ngày tích lũy liền.', steps: HABIT_STEPS });
+    }, 600);
+  }
+
+  // ---- Báo cáo tiến độ ----------------------------------------------------------------------------------------------------
+  const DAY_MS = 864e5;
+  const dayShift = (d, n) => new Date(new Date(d + 'T12:00:00Z').getTime() + n * DAY_MS).toISOString().slice(0, 10);
+  const daysAgo = (t, d) => Math.round((new Date(t + 'T12:00:00Z') - new Date(d + 'T12:00:00Z')) / DAY_MS);
+  const fmt1 = (n) => String(Math.round(n * 10) / 10).replace('.', ',');
+  const realLog = (g) => g.log.filter((e) => e.s !== 'archive');
+  function windowSums(g, t) {
+    const last = Array(8).fill(0), prev = Array(8).fill(0);
+    for (const e of realLog(g)) {
+      const ago = daysAgo(t, e.d), bucket = ago >= 0 && ago < 7 ? last : ago >= 7 && ago < 14 ? prev : null;
+      if (bucket) e.p.forEach((v, i) => (bucket[i] += v * STEP));
+    }
+    return { last, prev };
+  }
+  // Số ngày liên tiếp (tính tới hôm nay, hoặc hôm qua nếu hôm nay chưa có) có ít nhất một lần cộng điểm.
+  function activeStreak(g, t) {
+    const days = new Set(realLog(g).map((e) => e.d));
+    let d = days.has(t) ? t : dayShift(t, -1), n = 0;
+    while (days.has(d)) {
+      n++;
+      d = dayShift(d, -1);
+    }
+    return n;
+  }
+  function levelOf(v, mean) {
+    if (v <= 0) return { id: 'none', label: 'Chưa bắt đầu' };
+    if (v >= mean * 1.25) return { id: 'high', label: 'Mạnh' };
+    if (v >= mean * 0.75) return { id: 'mid', label: 'Vững' };
+    return { id: 'low', label: 'Cần chăm' };
+  }
+  // Độ cân bằng 0–100: 100 khi 8 chỉ số bằng nhau; càng lệch càng thấp (độ lệch chuẩn so với trung bình).
+  function balanceOf(s) {
+    const mean = total(s) / 8;
+    if (!mean) return { pct: 0, label: '' };
+    const sd = Math.sqrt(s.reduce((a, v) => a + (v - mean) ** 2, 0) / 8), pct = Math.max(0, Math.round((1 - sd / mean) * 100));
+    return { pct, label: pct >= 75 ? 'Cân bằng tốt' : pct >= 45 ? 'Hơi lệch' : 'Lệch rõ' };
+  }
+  function buildReport(t) {
+    t = t || today();
+    const g = growth(), s = scores(), tot = total(s), mean = tot / 8, w = windowSums(g, t);
+    return {
+      t, scores: s, total: tot, mean, realm: realmOf(tot), extremes: extremes(s), balance: balanceOf(s), entries: realLog(g).length,
+      week: { last: total(w.last), prev: total(w.prev), byAxis: w.last }, streak: activeStreak(g, t),
+      rows: AXES.map((a, i) => ({ axis: a, score: s[i], level: levelOf(s[i], mean) })),
+      weak: AXES.map((_, i) => i).sort((x, y) => s[x] - s[y] || x - y).slice(0, 3),
+    };
+  }
+  function tipsOf(rep) {
+    const tips = [];
+    if (rep.total === 0) {
+      tips.push({ kind: 'start', title: 'Bắt đầu từ một việc nhỏ', text: 'Hoàn thành một việc bất kỳ rồi chia 1 điểm cho chỉ số bạn vừa bồi bổ. Chỉ cần vài việc là biểu đồ bắt đầu có hình dạng.', ideas: ['Ghi lại một khoản chi hôm nay (Tài lộc)', 'Nhắn hỏi thăm một người thân (Nhân duyên)', 'Đi bộ 10 phút (Thể lực)'] });
+      return tips;
+    }
+    const { last, prev } = rep.week;
+    if (last === 0) tips.push({ kind: 'trend', title: 'Tuần này chưa cộng điểm', text: '7 ngày qua chưa có lần cộng nào' + (prev ? ' (7 ngày trước: ' + fmt(prev) + ' điểm)' : '') + '. Chọn việc nhỏ nhất và hoàn thành nó để giữ đà.' });
+    else if (last > prev) tips.push({ kind: 'trend', title: 'Đà đang tốt', text: '7 ngày qua bạn cộng ' + fmt(last) + ' điểm, nhiều hơn 7 ngày trước (' + fmt(prev) + ' điểm). Hãy giữ nhịp này.' });
+    else if (last < prev) tips.push({ kind: 'trend', title: 'Đà chậm lại', text: '7 ngày qua bạn cộng ' + fmt(last) + ' điểm, ít hơn 7 ngày trước (' + fmt(prev) + ' điểm). Một việc nhỏ mỗi ngày là đủ để lấy lại nhịp.' });
+    else tips.push({ kind: 'trend', title: 'Nhịp đều', text: '7 ngày qua bạn cộng ' + fmt(last) + ' điểm, bằng 7 ngày trước.' });
+    const ex = rep.extremes;
+    if (rep.balance.pct < 45) tips.push({ kind: 'balance', title: 'Cân bằng lại', text: 'Điểm đang dồn vào ' + ex.top.name + ' (' + fmt(ex.mx) + ') trong khi ' + ex.low.name + ' mới ' + fmt(ex.mn) + '. Trong 3 việc kế tiếp, thử dành ít nhất 1 lần cộng cho ' + ex.low.name + '.' });
+    if (rep.realm.next && rep.realm.need <= 5) tips.push({ kind: 'realm', title: 'Sắp lên cảnh giới', text: 'Còn ' + fmt(rep.realm.need) + ' điểm nữa là tới ' + rep.realm.next + '.' });
+    rep.weak.forEach((i) => {
+      const a = AXES[i], v = rep.scores[i];
+      tips.push({ kind: 'weak', axis: a.id, color: a.color, title: 'Bồi bổ ' + a.name, text: a.means + ' Hiện ' + fmt(v) + ' điểm' + (v < rep.mean ? ', thấp hơn mức trung bình ' + fmt1(rep.mean) + '.' : '.'), ideas: a.ideas.slice(0, 3) });
+    });
+    return tips;
+  }
+  function tipCard(t) {
+    return '<article class="gr-tip" data-tip="' + t.kind + '"' + (t.axis ? ' data-axis="' + t.axis + '" style="--c:' + t.color + '"' : '') + '><h3>' + esc(t.title) + '</h3><p>' + esc(t.text) + '</p>' +
+      (t.ideas ? '<ul>' + t.ideas.map((x) => '<li>' + esc(x) + '</li>').join('') + '</ul>' : '') + '</article>';
+  }
+  function reportPage() {
+    const rep = buildReport(), r = rep.realm, s = rep.scores, t = rep.t;
+    const head = heading('ĐIỂM TÍCH LŨY', 'Báo cáo tiến độ', 'Cập nhật ' + t.slice(8, 10) + '/' + t.slice(5, 7) + ' · ' + esc(heroName()), '<div class="gr-head-actions"><button type="button" class="btn" data-gr-back>← Quay lại</button></div>');
+    const tips = tipsOf(rep);
+    if (rep.total === 0) return '<div class="gr-page gr-report">' + head + '<section class="panel gr-empty"><h2>Chưa có điểm để đánh giá</h2><p class="help-copy">Báo cáo sẽ có đánh giá từng chỉ số và đề xuất cải thiện sau lần cộng điểm đầu tiên.</p></section><section class="panel gr-tips"><h2>Gợi ý bắt đầu</h2><div class="gr-tip-list">' + tips.map(tipCard).join('') + '</div></section></div>';
+    const tile = (id, label, value, sub) => '<div class="gr-tile" data-tile="' + id + '"><small>' + label + '</small><strong>' + value + '</strong><span>' + sub + '</span></div>';
+    const tiles = '<div class="gr-tiles">' +
+      tile('total', 'Tổng điểm', fmt(rep.total) + ' điểm', rep.entries + ' lần cộng') +
+      tile('realm', 'Cảnh giới', r.name, r.next ? 'Còn ' + fmt(r.need) + ' điểm tới ' + r.next : 'Cảnh giới cao nhất') +
+      tile('week', '7 ngày qua', '+' + fmt(rep.week.last) + ' điểm', '7 ngày trước đó: ' + fmt(rep.week.prev) + ' điểm') +
+      tile('streak', 'Chuỗi ngày', rep.streak + ' ngày', 'liên tiếp có cộng điểm') + '</div>';
+    const tier = tierOf(Math.max(...s));
+    const rows = rep.rows.map((x, i) => '<li class="gr-eval-row" data-axis="' + x.axis.id + '" style="--c:' + x.axis.color + '"><span class="gr-axis-ico">' + iconSvg('gr-' + x.axis.id, 18) + '</span><div class="gr-axis-main"><div class="gr-axis-head"><strong>' + x.axis.name + '</strong><span class="gr-level is-' + x.level.id + '">' + x.level.label + '</span><b class="gr-eval-score">' + fmt(x.score) + '</b></div><div class="progress" aria-hidden="true"><span style="width:' + Math.min(100, (x.score / tier) * 100).toFixed(1) + '%"></span></div><small>' + (rep.week.byAxis[i] ? '+' + fmt(rep.week.byAxis[i]) + ' điểm trong 7 ngày qua' : 'Chưa có điểm trong 7 ngày qua') + '</small></div></li>').join('');
+    const bal = '<p class="gr-balance">Độ cân bằng: <strong>' + rep.balance.label + '</strong> (' + rep.balance.pct + '%). ' + (rep.balance.pct >= 75 ? '8 chỉ số đang khá đều nhau.' : rep.balance.pct >= 45 ? 'Có vài chỉ số nhỉnh hơn hẳn các chỉ số còn lại.' : 'Điểm đang dồn vào vài chỉ số; hình nhện còn lệch.') + '</p>';
+    const notes = tips.filter((x) => x.kind !== 'weak'), weak = tips.filter((x) => x.kind === 'weak');
+    return '<div class="gr-page gr-report">' + head + tiles +
+      '<div class="gr-rep-grid"><section class="panel gr-radar-panel" aria-label="Hình dạng nội lực"><h2>Hình dạng nội lực</h2><div class="gr-radar-wrap">' + radar(s) + '</div><p class="gr-summary">Mạnh nhất: <strong>' + rep.extremes.top.name + '</strong> (' + fmt(rep.extremes.mx) + ') · Cần bồi bổ nhất: <strong>' + rep.extremes.low.name + '</strong> (' + fmt(rep.extremes.mn) + ')</p></section>' +
+      '<section class="panel gr-eval"><h2>Đánh giá từng chỉ số</h2>' + bal + '<ul class="gr-eval-list">' + rows + '</ul></section></div>' +
+      '<section class="panel gr-tips"><h2>Đề xuất cải thiện</h2><div class="gr-tip-list">' + notes.map(tipCard).join('') + '</div><h3 class="gr-tips-sub">Việc nên bồi bổ trước</h3><div class="gr-tip-list">' + weak.map(tipCard).join('') + '</div><p class="help-copy">Đề xuất dựa trên điểm bạn tự cộng nên chỉ mang tính gợi ý.</p></section></div>';
+  }
   // Cho các phần sau (đủ 7 ngày tích lũy, báo cáo) dùng chung.
-  window.zenGrowth = { AXES, started, scores, total, realmOf, extremes, fmt, openAward, growth, STEP, iconSvg };
+  window.zenGrowth = { AXES, started, scores, total, realmOf, extremes, fmt, openAward, growth, STEP, iconSvg, habitStreak, buildReport, tipsOf };
 
   // ---- Thao tác -----------------------------------------------------------------------------------------------------------
   document.addEventListener('change', (e) => {
@@ -344,7 +451,7 @@
     if (n) n.placeholder = HEROES[pickHero].title;
   });
   document.addEventListener('click', (e) => {
-    const t = e.target.closest?.('[data-gr-plus],[data-gr-undo],[data-gr-skip],[data-gr-save],[data-gr-confirm],[data-gr-cancel],[data-gr-change],[data-gr-pose]');
+    const t = e.target.closest?.('[data-gr-plus],[data-gr-undo],[data-gr-skip],[data-gr-save],[data-gr-confirm],[data-gr-cancel],[data-gr-change],[data-gr-pose],[data-gr-report],[data-gr-back]');
     if (!t) return;
     if (t.dataset.grPlus !== undefined) {
       if (!award || award.spent >= award.steps) return;
@@ -368,6 +475,12 @@
     }
     if (t.hasAttribute('data-gr-skip')) return closeAward(false);
     if (t.hasAttribute('data-gr-save')) return closeAward(true);
+    if (t.hasAttribute('data-gr-report') || t.hasAttribute('data-gr-back')) {
+      reporting = t.hasAttribute('data-gr-report');
+      stopTimer();
+      render();
+      return window.scrollTo({ top: 0, left: 0 });
+    }
     if (t.hasAttribute('data-gr-change')) {
       pickHero = growth()?.hero || 'nam';
       changing = true;

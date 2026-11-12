@@ -385,6 +385,7 @@
       const h = find(t.dataset.hbToggle), d = t.dataset.hbDate;
       if (!h || d > today()) return;
       const had = h.done.includes(d);
+      const streakBefore = had ? 0 : streak(h);
       if (!wfSave(() => { h.done = had ? h.done.filter((x) => x !== d) : h.done.concat(d).sort(); })) return render();
       t.classList.toggle('is-done', !had);
       t.setAttribute('aria-checked', String(!had));
@@ -395,6 +396,9 @@
         t.addEventListener('animationend', () => t.classList.remove('hb-pop'), { once: true });
       }
       if (!had && d === today()) document.querySelector('.hb-nudge')?.remove();
+      // v1.79.0: đủ chuỗi 7, 14, 21… ngày liền thì mở bảng cộng điểm tích lũy (chỉ khi đã chọn nhân vật).
+      const streakAfter = had ? 0 : streak(h);
+      if (streakAfter > streakBefore && streakAfter >= 7 && streakAfter % 7 === 0) window.zenGrowth?.habitStreak?.(h, streakAfter);
       return paintStats(!had && d === today());
     }
     if (t.dataset.hbMode) {
