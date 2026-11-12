@@ -158,6 +158,7 @@ jobs:
           node tests/growth-levels-browser.mjs
           node tests/giangho-style-browser.mjs
           node tests/giangho-lex-browser.mjs
+          node tests/giangho-work-browser.mjs
           node tests/device-audit-browser.mjs
           node tests/gantt-edge-route-browser.mjs
           node tests/note-paste-lines-browser.mjs
