@@ -152,6 +152,7 @@ jobs:
           node tests/project-tab-compact-browser.mjs
           node tests/growth-browser.mjs
           node tests/growth-report-browser.mjs
+          node tests/growth-notify-browser.mjs
           node tests/gantt-edge-route-browser.mjs
           node tests/note-paste-lines-browser.mjs
           node tests/topbar-center-browser.mjs

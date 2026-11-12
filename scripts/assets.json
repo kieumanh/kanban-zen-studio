@@ -333,5 +333,10 @@
     "/growth.css",
     "growth.css",
     "text/css; charset=utf-8"
+  ],
+  [
+    "/growth-notify.js",
+    "growth-notify.js",
+    "text/javascript; charset=utf-8"
   ]
 ]

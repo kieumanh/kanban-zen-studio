@@ -54,10 +54,11 @@
   function validGrowth(g) {
     if (g === undefined) return true;
     if (!g || typeof g !== 'object' || Array.isArray(g)) return false;
-    if (!Object.keys(g).every((k) => ['v', 'hero', 'name', 'since', 'log', 'notify'].includes(k))) return false;
+    if (!Object.keys(g).every((k) => ['v', 'hero', 'name', 'since', 'log', 'notify', 'tips'].includes(k))) return false;
     if (g.v !== 1 || !['nam', 'nu'].includes(g.hero) || !isDate(g.since)) return false;
     if (g.name !== undefined && (typeof g.name !== 'string' || g.name.length > 30)) return false;
     if (g.notify !== undefined && typeof g.notify !== 'boolean') return false;
+    if (g.tips !== undefined && typeof g.tips !== 'boolean') return false;
     if (!Array.isArray(g.log) || g.log.length > LOG_MAX) return false;
     const seen = new Set();
     return g.log.every(
@@ -279,18 +280,23 @@
   function closeAward(commit) {
     const a = award;
     if (!a) return;
+    let toastText = '';
     if (commit && a.spent > 0) {
       const entry = { id: uid(), d: today(), s: a.source, k: a.key, n: String(a.title || '').slice(0, 120), p: a.add.slice() };
       if (!a.key) delete entry.k;
       if (!entry.n) delete entry.n;
+      const realmBefore = realmOf(total(scores())).name;
       if (!wfSave(() => { data.growth.log.push(entry); compact(); })) return notify('Chưa lưu được điểm. Hãy thử lại.');
-      if (a.source !== 'task') notify('Đã cộng ' + fmt(a.spent * STEP) + ' điểm vào Điểm tích lũy.');
+      const realmAfter = realmOf(total(scores())).name;
+      // Thông báo điểm nghiệp (bật mặc định, tắt ở Cài đặt → Thông báo): lên cảnh giới mới; với việc hằng ngày còn báo số điểm vừa cộng.
+      if (growth()?.notify !== false) toastText = realmAfter !== realmBefore ? 'Chúc mừng! ' + heroName() + ' đã lên cảnh giới ' + realmAfter + '.' : a.source !== 'task' ? 'Đã cộng ' + fmt(a.spent * STEP) + ' điểm vào Điểm tích lũy.' : '';
     }
     award = null;
     a.el.close();
     a.el.remove();
     if (view === 'growth') render();
     if (typeof a.then === 'function') a.then();
+    if (toastText) notify(toastText);
   }
   // Giữ sổ cái trong giới hạn: gộp các dòng cũ nhất thành một dòng "tổng hợp".
   function compact() {
@@ -439,7 +445,12 @@
       '<section class="panel gr-tips"><h2>Đề xuất cải thiện</h2><div class="gr-tip-list">' + notes.map(tipCard).join('') + '</div><h3 class="gr-tips-sub">Việc nên bồi bổ trước</h3><div class="gr-tip-list">' + weak.map(tipCard).join('') + '</div><p class="help-copy">Đề xuất dựa trên điểm bạn tự cộng nên chỉ mang tính gợi ý.</p></section></div>';
   }
   // Cho các phần sau (đủ 7 ngày tích lũy, báo cáo) dùng chung.
-  window.zenGrowth = { AXES, started, scores, total, realmOf, extremes, fmt, openAward, growth, STEP, iconSvg, habitStreak, buildReport, tipsOf };
+  function openReport() {
+    changing = false;
+    reporting = true;
+    go('growth');
+  }
+  window.zenGrowth = { AXES, started, scores, total, realmOf, extremes, fmt, openAward, growth, STEP, iconSvg, habitStreak, buildReport, tipsOf, openReport, heroName };
 
   // ---- Thao tác -----------------------------------------------------------------------------------------------------------
   document.addEventListener('change', (e) => {
@@ -499,6 +510,7 @@
         data.growth = { v: 1, hero: pickHero, since: cur?.since || today(), log: cur?.log || [] };
         if (name) data.growth.name = name;
         if (cur?.notify !== undefined) data.growth.notify = cur.notify;
+        if (cur?.tips !== undefined) data.growth.tips = cur.tips;
       });
       if (!ok) return notify('Chưa lưu được. Hãy thử lại.');
       changing = false;

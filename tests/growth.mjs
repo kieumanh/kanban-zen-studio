@@ -23,6 +23,8 @@ assert.equal(validGrowth(undefined), true);
 assert.equal(validWorkspace(workspace()), true, 'không có growth → không đổi dữ liệu cũ');
 assert.equal(validWorkspace(workspace(growth({ log: [] }))), true, 'sổ rỗng hợp lệ');
 assert.equal(validWorkspace(workspace(growth({ hero: 'nu', name: 'Tiểu Liên', notify: true }))), true);
+assert.equal(validWorkspace(workspace(growth({ notify: false, tips: false }))), true, 'hai cờ thông báo (điểm nghiệp, gợi ý hằng tuần) hợp lệ');
+assert.equal(validWorkspace(workspace(growth({ tips: true }))), true);
 assert.equal(validWorkspace(workspace(growth({ log: [entry(), entry({ id: 'g2', s: 'habit', k: 'habit:2026-11-09', n: undefined, p: [0, 0, 6, 0, 0, 0, 0, 0] }), entry({ id: 'a1', s: 'archive', k: undefined })] }))), true, 'ba nguồn điểm hợp lệ');
 
 // 2. Từ chối dữ liệu sai — mỗi trường hợp phải bị chặn.
@@ -38,6 +40,7 @@ const bad = {
   'tên quá dài': growth({ name: 'x'.repeat(31) }),
   'tên không phải chuỗi': growth({ name: 7 }),
   'cờ thông báo không phải boolean': growth({ notify: 'có' }),
+  'cờ gợi ý không phải boolean': growth({ tips: 1 }),
   'trường lạ': growth({ gold: 999 }),
   'sổ không phải mảng': growth({ log: {} }),
   'sổ quá dài': growth({ log: Array.from({ length: GROWTH_LOG_MAX + 1 }, (_, i) => entry({ id: 'x' + i })) }),

@@ -1,4 +1,5 @@
 // v1.78.0: "Điểm tích lũy" — 8 chỉ số cuộc sống của người dùng, cộng dần mỗi lần hoàn thành việc.
+// notify = báo khi cộng điểm / lên cảnh giới; tips = gợi ý cải thiện hằng tuần (v1.80.0); thiếu = bật.
 // Dữ liệu nằm ngay trong dữ liệu người dùng (workspace.growth): không thêm bảng hay cột nào vào cơ sở dữ liệu.
 // Sổ cái chỉ-thêm: log = [{id, d:'YYYY-MM-DD', s:'task'|'habit'|'archive', k?:khóa chống cộng trùng, n?:tên việc, p:[8 số nguyên]}]
 // p tính theo đơn vị nửa điểm (1 = 0,5 điểm) theo thứ tự 8 chỉ số; điểm từng chỉ số = tổng p của sổ cái.
@@ -16,7 +17,7 @@ export function validGrowth(g) {
   if (!g || typeof g !== 'object' || Array.isArray(g)) return false;
   if (
     !Object.keys(g).every((k) =>
-      ['v', 'hero', 'name', 'since', 'log', 'notify'].includes(k),
+      ['v', 'hero', 'name', 'since', 'log', 'notify', 'tips'].includes(k),
     )
   )
     return false;
@@ -28,6 +29,7 @@ export function validGrowth(g) {
   )
     return false;
   if (g.notify !== undefined && typeof g.notify !== 'boolean') return false;
+  if (g.tips !== undefined && typeof g.tips !== 'boolean') return false;
   if (!Array.isArray(g.log) || g.log.length > GROWTH_LOG_MAX) return false;
   const seen = new Set();
   return g.log.every(

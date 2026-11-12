@@ -62,7 +62,7 @@
   }
   let mode = 'week';
   let range = 30;
-  window.zenHabits = { list, today: () => today(), addDays, toDate, mondayOf, short, streak, goalOf, weekStats, SHORT, LONG, esc: (s) => esc(s) };
+  window.zenHabits = { list, today: () => today(), addDays, toDate, mondayOf, short, streak, goalOf, weekStats, SHORT, LONG, esc: (s) => esc(s), notifyKey: (k) => habitNotifyKey(k), notifyOn: (k) => habitNotifyOn(k) };
 
   iconPaths.habits = 'M4 12a8 8 0 0 1 14-5.3L20 9 M20 4v5h-5 M20 12a8 8 0 0 1-14 5.3L4 15 M4 20v-5h5 M9.5 12l2 2 3.5-4';
   const flame = '<svg class="hb-flame" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3c1 3.5 5 5.5 5 10a5 5 0 0 1-10 0c0-2 1-3.2 2-4.2 0 2 1 3 2 3 0-3 0-5.8 1-8.8z"/></svg>';
@@ -146,7 +146,11 @@
   const nowHM = () => new Date().toLocaleTimeString('en-GB', { timeZone: 'Asia/Ho_Chi_Minh', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' });
   const reminderKey = (h) => 'zen-habit-seen:' + (currentUser?.id || '') + ':' + h.id + ':' + today() + ':' + h.remindTime;
   let dueSig = '';
+  // v1.80.0: Cài đặt → Thông báo có hai công tắc cho việc hằng ngày (lưu trên thiết bị này; thiếu = bật như trước).
+  const habitNotifyKey = (kind) => 'zen-habit-notify:' + (currentUser?.id || '') + ':' + kind;
+  const habitNotifyOn = (kind) => localRead(habitNotifyKey(kind)) !== '0';
   function dueHabitReminders() {
+    if (!habitNotifyOn('due')) return [];
     const t = today(), now = nowHM();
     return list().filter((h) => h.remindTime && h.remindTime <= now && !h.done.includes(t) && !(h.rest || []).includes(t) && localRead(reminderKey(h)) !== '1');
   }
@@ -208,7 +212,7 @@
     const t = today(), hs = list();
     if (!hs.length || week() !== mondayOf(t) || todayDone() > 0) return '';
     if (hs.every((h) => (h.rest || []).includes(t))) return '';
-    if (localRead(nudgeKey()) === '1') return '';
+    if (localRead(nudgeKey()) === '1' || !habitNotifyOn('nudge')) return '';
     return '<section class="hb-nudge" role="status" aria-label="Gợi ý bắt đầu hôm nay"><p><strong>Hôm nay chưa có việc nào được tích.</strong><span>Bắt đầu bằng một việc nhỏ nhất.</span></p><button type="button" class="btn hb-nudge-close" data-hb-nudge-close>Đóng</button></section>';
   }
   function page() {
