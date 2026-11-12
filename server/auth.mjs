@@ -117,7 +117,13 @@ export async function authAPI(request, env, path, ip) {
     }
     if (path === '/api/login') {
       if (password.length > 128) fail('Email hoặc mật khẩu chưa đúng.', 401);
-      await limited(db, 'login:' + (await hash(email)), 10);
+      // v1.75.0: giới hạn thử mật khẩu theo CẶP (IP, email) thay vì chỉ theo email. Trước đây 10 lần sai từ bất kỳ đâu khóa
+      // đăng nhập của chính chủ 15 phút (kẻ xấu chỉ cần gửi 10 mật khẩu sai là khóa được người khác). Nay kẻ xấu chỉ tự khóa mình;
+      // chủ tài khoản từ IP khác vẫn đăng nhập được. Thêm trần theo email cho tấn công phân tán (nhiều IP) ở ngưỡng cao hơn nhiều,
+      // và trần theo IP cho mọi đường xác thực vẫn nằm ở trên (35 lần/15 phút).
+      const pairKey = 'login:' + (await hash(ip + '|' + email));
+      await limited(db, pairKey, 10);
+      await limited(db, 'login-email:' + (await hash(email)), 60);
       const u = await db
         .prepare('SELECT * FROM users WHERE email=?')
         .bind(email)
@@ -144,6 +150,13 @@ export async function authAPI(request, env, path, ip) {
             .run();
         } catch {}
       }
+      // Đăng nhập đúng thì xóa bộ đếm của cặp (IP, email) này: người dùng gõ sai vài lần rồi đúng không bị tính dồn.
+      try {
+        await db
+          .prepare('DELETE FROM rate_limits WHERE key=?')
+          .bind(pairKey)
+          .run();
+      } catch {}
       const token = random(),
         remembered = b.rememberDevice === true,
         expires = Date.now() + (remembered ? 30 * 86400000 : 600000);
