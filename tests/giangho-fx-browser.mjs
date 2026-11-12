@@ -128,10 +128,20 @@ try {
       const start = await burn();
       assert.ok(start.burn === 0 && !start.lit && start.visible, 'nén hương nguyên, chưa cháy: ' + JSON.stringify(start) + at);
       await page.locator('.studio-pomodoro [data-studio=timer]').click();
-      await page.clock.runFor(150000);
-      const mid = await burn();
-      assert.ok(mid.burn > 0.09 && mid.burn < 0.11 && mid.lit, 'cháy dần theo thời gian, đốm lửa sáng: ' + JSON.stringify(mid) + at);
-      await page.waitForFunction((h0) => document.querySelector('.gh-incense-stick').getBoundingClientRect().height < h0 - 3, start.h);
+      // Tua ngắn như các bài đồng hồ khác (tua dài làm mọi bộ hẹn giờ của ứng dụng chạy dồn, dễ vỡ trên máy CI).
+      await page.clock.runFor(2100);
+      await page.clock.runFor(2100);
+      const lit = await burn();
+      assert.ok(lit.burn > 0 && lit.burn < 0.01 && lit.lit, 'đang đếm: đốm lửa sáng, bắt đầu cháy: ' + JSON.stringify(lit) + at);
+      // Tỉ lệ cháy theo thời gian còn lại: 12:30 / 25:00 → cháy một nửa, que hương ngắn đi.
+      const half = await page.evaluate(() => {
+        document.querySelector('.studio-pomodoro output').textContent = '12:30';
+        window.zenFx.incense();
+        const s = document.querySelector('.gh-incense');
+        return { burn: Number(s.style.getPropertyValue('--burn')) };
+      });
+      assert.equal(half.burn, 0.5, 'cháy theo thời gian đã qua' + at);
+      await page.waitForFunction((h0) => document.querySelector('.gh-incense-stick').getBoundingClientRect().height < h0 - 10, start.h);
       await page.locator('.studio-pomodoro [data-studio=timer]').click();
       await page.clock.runFor(2100);
       assert.equal((await burn()).lit, false, 'tạm nghỉ thì tắt đốm lửa' + at);
