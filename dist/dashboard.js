@@ -87,6 +87,7 @@ const dashboardRenderBefore=render;
 render=function(){rememberDashboardProject();dashboardRenderBefore();if(view==='dashboard'){
  const main=$('#main'),plan=main.querySelector('.wf-today-plan'),headingNode=main.querySelector('.page-heading');
  if(plan&&headingNode)headingNode.after(plan);
+ if(headingNode)headingNode.classList.add('dashboard-heading');
  main.querySelector('.version-preview')?.remove();
  }};
 function refreshDashboardPlan(){
@@ -102,7 +103,16 @@ function refreshDashboardPlan(){
   {title:'Đang thực hiện',items:doing,filter:'doing',button:'Xem việc đang làm'}
  ];
  section.setAttribute('aria-label','Việc cần ưu tiên');
- section.innerHTML=lists.map(group=>'<article class="panel"><h2>'+group.title+' <small>'+group.items.length+' việc</small></h2>'+(group.parts?group.parts.map(([title,items])=>'<div class="dashboard-plan-part"><h3>'+title+' <small>'+items.length+'</small></h3>'+(workTaskList(items,3)||'<p class="subtext">Không có công việc cần chú ý.</p>')+'<button type="button" class="text-btn" data-dashboard-filter="'+(title==='Quá hạn'?'overdue':'upcoming')+'">Mở danh sách '+title.toLocaleLowerCase('vi')+' →</button></div>').join(''):((workTaskList(group.items,4)||'<p class="subtext">Không có công việc trong nhóm này.</p>')+'<button type="button" class="text-btn" data-dashboard-filter="'+group.filter+'">'+group.button+' →</button>'))+'</article>').join('');
+// v1.72.0: Tổng quan theo ngữ cảnh. Nhóm rỗng không chiếm chỗ và không có nút dẫn tới danh sách rỗng:
+//  - "Cần làm hôm nay" rỗng thu thành một dòng (xuống cuối, cả chiều ngang) thay vì một thẻ cao bằng hai thẻ còn lại;
+//  - phần "Quá hạn"/"Sắp đến hạn"/"Đang thực hiện" không có việc chỉ còn một dòng chữ, bỏ nút "Mở danh sách" cho danh sách trống.
+ section.classList.toggle('has-empty-today',!todayTasks.length);
+ section.innerHTML=lists.map(group=>{
+  if(group.filter==='today'&&!group.items.length)return '<article class="panel plan-empty-today"><h2>'+group.title+' <small>0 việc</small></h2><p class="subtext">Hôm nay chưa có việc nào đến hạn.</p></article>';
+  const empty=text=>'<p class="subtext">'+text+'</p>';
+  const body=group.parts?group.parts.map(([title,items])=>'<div class="dashboard-plan-part"><h3>'+title+' <small>'+items.length+'</small></h3>'+(items.length?workTaskList(items,3)+'<button type="button" class="text-btn" data-dashboard-filter="'+(title==='Quá hạn'?'overdue':'upcoming')+'">Mở danh sách '+title.toLocaleLowerCase('vi')+' →</button>':empty('Không có việc '+title.split(' · ')[0].toLocaleLowerCase('vi')+'.'))+'</div>').join(''):(group.items.length?workTaskList(group.items,4)+'<button type="button" class="text-btn" data-dashboard-filter="'+group.filter+'">'+group.button+' →</button>':empty('Không có công việc trong nhóm này.'));
+  return '<article class="panel"><h2>'+group.title+' <small>'+group.items.length+' việc</small></h2>'+body+'</article>';
+ }).join('');
 }
 const dashboardPlanRenderBefore=render;
 render=function(){dashboardPlanRenderBefore();if(view==='dashboard')refreshDashboardPlan();};

@@ -79,3 +79,18 @@
  #editor.task-editor .modal-foot{bottom:calc(-1 * env(safe-area-inset-bottom));}
 }
 @media(prefers-reduced-motion:reduce){.task-card.wf-task-card{transition:none!important}}
+
+/* v1.72.0 · Tổng quan theo ngữ cảnh: nhóm rỗng thu gọn, đầu trang điện thoại gọn */
+.wf-today-plan.has-empty-today{grid-template-columns:repeat(2,minmax(0,1fr))}
+.wf-today-plan .plan-empty-today{grid-column:1/-1;order:3;display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;min-height:0;padding:12px 16px}
+.wf-today-plan .plan-empty-today h2{margin:0;font-size:14px}
+.wf-today-plan .plan-empty-today p{margin:0;font-size:12px}
+@media(max-width:700px){
+ .wf-today-plan.has-empty-today{grid-template-columns:1fr}
+ .wf-today-plan .plan-empty-today{padding:10px 14px}
+ .page-heading.dashboard-heading{display:flex;flex-direction:row;align-items:center;justify-content:space-between;gap:12px;margin:12px 0 12px}
+ .page-heading.dashboard-heading .eyebrow,.page-heading.dashboard-heading .subtext{display:none}
+ .page-heading.dashboard-heading h1{margin:0;font-size:22px;line-height:1.25}
+ .page-heading.dashboard-heading>.btn{flex:none;min-height:44px;white-space:nowrap}
+ .dashboard-projects .project-card h3{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+}
