@@ -1,42 +1,102 @@
 /* v1.78.0: Điểm tích lũy — nhân vật chibi, biểu đồ nhện 8 chỉ số, form cộng điểm. Màu lấy từ biến của giao diện để sáng/tối/tương phản đều đúng. */
 
-/* ---- Nhân vật và hoạt họa ---------------------------------------------------------------------------------------------- */
+/* ---- Nhân vật và hoạt họa (v1.83.0 · Kiếm Ảnh) --------------------------------------------------------------------------
+   Mỗi tư thế có một chuyển động chính; tóc, dải lụa, ngọc bội, lụa khoác, tua kiếm lắc theo nhịp riêng, lệch pha để mềm như vải thật.
+   Đổi tư thế thì hình mới hiện dần, hình cũ mờ đi (is-enter / is-leave), không vẽ lại giật cục. Giảm chuyển động: đứng yên hoàn toàn. */
 .gr-hero{display:block;width:100%;height:auto;overflow:visible}
-.gr-hero .gr-head{transform-origin:100px 112px;animation:gr-nod 3.4s ease-in-out infinite}
-.gr-hero .gr-eyes{transform-origin:100px 83px;animation:gr-blink 4.6s infinite}
-.gr-hero .gr-mouth{transform-origin:100px 97px;animation:gr-talk .45s ease-in-out infinite alternate}
+.gr-figure>.gr-hero{grid-area:1/1}
+.gr-hero.is-enter{animation:gr-enter .6s cubic-bezier(.2,.8,.2,1) both}
+.gr-hero.is-leave{animation:gr-leave .42s ease-in both;pointer-events:none}
+.gr-hero .gr-head{transform-origin:100px 116px;animation:gr-nod 4.2s cubic-bezier(.45,0,.55,1) infinite}
+.gr-hero .gr-eyes{transform-origin:100px 85px;animation:gr-blink 5.2s infinite}
+.gr-hero .gr-mouth{transform-origin:100px 99px;animation:gr-talk .42s ease-in-out infinite alternate}
 .gr-hero .gr-arm{transform-origin:0 0}
-.gr-hero .gr-arm-rest-l{transform:rotate(9deg)}
-.gr-hero .gr-wave{transform:rotate(-128deg);animation:gr-wave .9s ease-in-out infinite alternate}
-.gr-hero .gr-punch-l{transform:rotate(38deg);animation:gr-punch-l 1.3s ease-in-out infinite}
-.gr-hero .gr-punch-r{transform:rotate(-38deg);animation:gr-punch-r 1.3s ease-in-out infinite .65s}
-.gr-hero .gr-cloud-l{transform:rotate(70deg);animation:gr-cloud-l 5.2s ease-in-out infinite}
-.gr-hero .gr-cloud-r{transform:rotate(-70deg);animation:gr-cloud-r 5.2s ease-in-out infinite}
-.gr-hero .gr-zen-l{transform:rotate(-28deg)}
-.gr-hero .gr-zen-r{transform:rotate(28deg)}
-.gr-hero[data-pose=talk] .gr-body{animation:gr-bob 2.2s ease-in-out infinite}
-.gr-hero[data-pose=martial] .gr-body{animation:gr-stomp 1.3s ease-in-out infinite}
-.gr-hero .gr-sway{transform-origin:100px 200px;animation:gr-sway 5.2s ease-in-out infinite}
-.gr-hero .gr-breathe{transform-origin:100px 160px;animation:gr-breathe 4.6s ease-in-out infinite}
-.gr-hero .gr-aura{transform-origin:100px 118px;animation:gr-aura 4.6s ease-in-out infinite}
-.gr-hero .gr-petal{transform-origin:center;animation:gr-petal 5.4s linear infinite;opacity:0}
-.gr-hero .gr-petal-1{animation-delay:1.1s}.gr-hero .gr-petal-2{animation-delay:2.2s}.gr-hero .gr-petal-3{animation-delay:3.3s}.gr-hero .gr-petal-4{animation-delay:4.3s}
-@keyframes gr-nod{0%,100%{transform:rotate(-1.6deg)}50%{transform:rotate(2deg) translateY(1px)}}
-@keyframes gr-blink{0%,92%,100%{transform:scaleY(1)}95%{transform:scaleY(.1)}}
+.gr-hero .gr-tail{transform-origin:108px 40px;animation:gr-tail 3.6s cubic-bezier(.45,0,.55,1) infinite}
+.gr-hero .gr-ribbon{transform-origin:106px 38px;animation:gr-ribbon 2.4s cubic-bezier(.45,0,.55,1) infinite}
+.gr-hero .gr-lock-l{transform-origin:66px 74px;animation:gr-lock 3.8s cubic-bezier(.45,0,.55,1) infinite}
+.gr-hero .gr-lock-r{transform-origin:134px 74px;animation:gr-lock 3.8s cubic-bezier(.45,0,.55,1) infinite -1.9s}
+.gr-hero .gr-pendant{transform-origin:116px 159px;animation:gr-swing 2.8s cubic-bezier(.45,0,.55,1) infinite}
+.gr-hero .gr-bodao{transform-origin:138px 15px;animation:gr-swing 2.2s cubic-bezier(.45,0,.55,1) infinite -.6s}
+.gr-hero .gr-swordtassel{transform-box:fill-box;transform-origin:50% 0;animation:gr-swing 2.6s cubic-bezier(.45,0,.55,1) infinite -1.2s}
+.gr-hero .gr-hilt-tassel{transform-box:fill-box;transform-origin:100% 100%;animation:gr-swing 1.8s cubic-bezier(.45,0,.55,1) infinite}
+.gr-hero .gr-scarf{transform-origin:100px 106px;animation:gr-scarf 4.4s cubic-bezier(.45,0,.55,1) infinite}
+.gr-hero .gr-sash{transform-origin:100px 150px;animation:gr-swing 3.2s cubic-bezier(.45,0,.55,1) infinite -.8s}
+/* cười nói: nam phe phẩy quạt, nữ vẫy tay */
+.gr-hero .gr-arm-rest-l{transform:rotate(10deg)}
+.gr-hero .gr-fanning{transform:rotate(-128deg);animation:gr-fanning 1.6s cubic-bezier(.45,0,.55,1) infinite}
+.gr-hero .gr-wave{transform:rotate(-128deg);animation:gr-wave 1.1s cubic-bezier(.45,0,.55,1) infinite alternate}
+.gr-hero[data-pose=talk] .gr-body{animation:gr-bob 2.6s cubic-bezier(.45,0,.55,1) infinite}
+/* luyện kiếm: vung kiếm chém xuống, vệt kiếm khí hiện theo lưỡi kiếm rồi tan */
+.gr-hero .gr-cut{transform:rotate(-165deg);animation:gr-cut 1.9s cubic-bezier(.6,0,.3,1) infinite}
+.gr-hero .gr-sword-hand{transform:rotate(100deg);animation:gr-sword-hand 1.9s cubic-bezier(.6,0,.3,1) infinite}
+.gr-hero .gr-slash{stroke-dasharray:100 200;stroke-dashoffset:100;opacity:0;animation:gr-slash 1.9s cubic-bezier(.6,0,.3,1) infinite}
+.gr-hero .gr-slash-2{animation-delay:.04s}
+.gr-hero .gr-lunge{transform-origin:100px 210px;animation:gr-lunge 1.9s cubic-bezier(.6,0,.3,1) infinite}
+/* thái cực: hai tay vẽ vòng, đồ âm dương xoay chậm sau lưng */
+.gr-hero .gr-cloud-l{transform:rotate(70deg);animation:gr-cloud-l 6s cubic-bezier(.45,0,.55,1) infinite}
+.gr-hero .gr-cloud-r{transform:rotate(-70deg);animation:gr-cloud-r 6s cubic-bezier(.45,0,.55,1) infinite}
+.gr-hero .gr-sway{transform-origin:100px 206px;animation:gr-sway 6s cubic-bezier(.45,0,.55,1) infinite}
+.gr-hero .gr-taiji{transform-origin:100px 128px;animation:gr-spin 16s linear infinite}
+.gr-hero .gr-qi-swirl{transform-origin:100px 128px;animation:gr-spin 9s linear infinite reverse}
+/* tọa thiền: thở sâu, khí tụ thành vòng, hạt sáng bay lên */
+.gr-hero .gr-zen-l{transform:rotate(-30deg)}
+.gr-hero .gr-zen-r{transform:rotate(30deg)}
+.gr-hero .gr-breathe{transform-origin:100px 190px;animation:gr-breathe 5s cubic-bezier(.45,0,.55,1) infinite}
+.gr-hero .gr-aura{transform-origin:100px 120px;animation:gr-aura 5s cubic-bezier(.45,0,.55,1) infinite}
+.gr-hero .gr-mote{transform-box:fill-box;transform-origin:center;opacity:0;animation:gr-mote 6s cubic-bezier(.3,0,.6,1) infinite}
+.gr-hero .gr-mote-1{animation-delay:1s}.gr-hero .gr-mote-2{animation-delay:2s}.gr-hero .gr-mote-3{animation-delay:3s}.gr-hero .gr-mote-4{animation-delay:4s}.gr-hero .gr-mote-5{animation-delay:5s}
+@keyframes gr-enter{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes gr-leave{from{opacity:1}to{opacity:0;transform:translateY(-6px) scale(1.02)}}
+@keyframes gr-nod{0%,100%{transform:rotate(-1.4deg)}50%{transform:rotate(1.8deg) translateY(1px)}}
+@keyframes gr-blink{0%,93%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}
 @keyframes gr-talk{from{transform:scaleY(.25)}to{transform:scaleY(1)}}
+@keyframes gr-tail{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(5deg)}}
+@keyframes gr-ribbon{0%,100%{transform:rotate(-4deg) skewY(0)}50%{transform:rotate(9deg) skewY(-4deg)}}
+@keyframes gr-lock{0%,100%{transform:rotate(-2.5deg)}50%{transform:rotate(2.5deg)}}
+@keyframes gr-swing{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(7deg)}}
+@keyframes gr-scarf{0%,100%{transform:translateY(0) scaleX(1)}50%{transform:translateY(-3px) scaleX(1.04)}}
+@keyframes gr-fanning{0%,100%{transform:rotate(-122deg)}50%{transform:rotate(-142deg)}}
 @keyframes gr-wave{from{transform:rotate(-112deg)}to{transform:rotate(-148deg)}}
-@keyframes gr-punch-l{0%,55%,100%{transform:rotate(38deg)}22%{transform:rotate(92deg)}}
-@keyframes gr-punch-r{0%,55%,100%{transform:rotate(-38deg)}22%{transform:rotate(-92deg)}}
+@keyframes gr-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@keyframes gr-cut{0%,16%{transform:rotate(-165deg)}34%,58%{transform:rotate(-35deg)}100%{transform:rotate(-165deg)}}
+@keyframes gr-sword-hand{0%,16%{transform:rotate(112deg)}34%,58%{transform:rotate(92deg)}100%{transform:rotate(112deg)}}
+@keyframes gr-slash{0%,18%{stroke-dashoffset:100;opacity:0}21%{opacity:.95}34%{stroke-dashoffset:0;opacity:.9}56%,100%{stroke-dashoffset:0;opacity:0}}
+@keyframes gr-lunge{0%,16%,100%{transform:translate(0,0)}34%,58%{transform:translate(4px,3px) rotate(1.5deg)}}
 @keyframes gr-cloud-l{0%,100%{transform:rotate(112deg)}50%{transform:rotate(26deg)}}
 @keyframes gr-cloud-r{0%,100%{transform:rotate(-26deg)}50%{transform:rotate(-112deg)}}
-@keyframes gr-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
-@keyframes gr-stomp{0%,100%{transform:translateY(0)}20%{transform:translateY(3px)}}
-@keyframes gr-sway{0%,100%{transform:translateX(-7px) rotate(-2.5deg)}50%{transform:translateX(7px) rotate(2.5deg)}}
-@keyframes gr-breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.035)}}
-@keyframes gr-aura{0%,100%{transform:scale(.94);opacity:.8}50%{transform:scale(1.06);opacity:1}}
-@keyframes gr-petal{0%{transform:translateY(0) rotate(0);opacity:0}15%{opacity:.9}100%{transform:translateY(-150px) rotate(160deg);opacity:0}}
+@keyframes gr-sway{0%,100%{transform:translateX(-6px) rotate(-2deg)}50%{transform:translateX(6px) rotate(2deg)}}
+@keyframes gr-spin{to{transform:rotate(360deg)}}
+@keyframes gr-breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.03,1.04)}}
+@keyframes gr-aura{0%,100%{transform:scale(.92);opacity:.75}50%{transform:scale(1.07);opacity:1}}
+@keyframes gr-mote{0%{transform:translateY(0) scale(.6);opacity:0}15%{opacity:.95}100%{transform:translateY(-130px) scale(1.1);opacity:0}}
+
+/* ---- Phông sơn thủy của sân khấu: núi mực, mây trôi, sương, cành tùng, chim bay, cánh đào rơi ---------------------------- */
+.gr-stage-bg{--sc-sky1:#fbf4e8;--sc-sky2:#f1e7f6;--sc-sun:#ec8a6c;--sc-cloud:#ffffffcc;--sc-far:#d9d0e4;--sc-mid:#bdb2cf;--sc-near:#a79bbd;--sc-mist:#ffffffb8;--sc-trunk:#4a4058;--sc-needle:#5d7466;--sc-bird:#4a4058;--sc-petal:#f29bb2}
+.gr-scene{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+.gr-sc-sun{fill:var(--sc-sun);opacity:.5}
+.gr-sc-cloud ellipse{fill:var(--sc-cloud)}
+.gr-sc-far{fill:var(--sc-far)}
+.gr-sc-mid{fill:var(--sc-mid);opacity:.85}
+.gr-sc-near{fill:var(--sc-near);opacity:.75}
+.gr-sc-mist rect{fill:var(--sc-mist)}
+.gr-sc-trunk{stroke:var(--sc-trunk)}
+.gr-sc-needle ellipse{fill:var(--sc-needle);opacity:.92}
+.gr-sc-birds path{fill:none;stroke:var(--sc-bird);stroke-width:1.6;stroke-linecap:round}
+.gr-sc-petal{fill:var(--sc-petal);opacity:0}
+.gr-scene .gr-drift-a{animation:gr-drift 38s ease-in-out infinite alternate}
+.gr-scene .gr-drift-b{animation:gr-drift 52s ease-in-out infinite alternate-reverse}
+.gr-scene .gr-sc-pine{transform-origin:0 44px;animation:gr-pine 7s cubic-bezier(.45,0,.55,1) infinite}
+.gr-scene .gr-sc-birds{animation:gr-birds 46s linear infinite}
+.gr-scene .gr-sc-petal{transform-box:fill-box;transform-origin:center;animation:gr-fall 13s linear infinite}
+.gr-scene .gr-fall-1{animation-delay:-2.2s;animation-duration:15s}.gr-scene .gr-fall-2{animation-delay:-5s}.gr-scene .gr-fall-3{animation-delay:-7.4s;animation-duration:16s}.gr-scene .gr-fall-4{animation-delay:-9.6s}.gr-scene .gr-fall-5{animation-delay:-11.5s;animation-duration:14s}
+@keyframes gr-drift{from{transform:translateX(-26px)}to{transform:translateX(26px)}}
+@keyframes gr-pine{0%,100%{transform:rotate(0)}50%{transform:rotate(1.6deg)}}
+@keyframes gr-birds{from{transform:translateX(-260px)}to{transform:translateX(320px)}}
+@keyframes gr-fall{0%{transform:translate(0,0) rotate(0);opacity:0}8%{opacity:.85}85%{opacity:.7}100%{transform:translate(-70px,340px) rotate(300deg);opacity:0}}
+:root[data-theme=dark] .gr-stage-bg{--sc-sky1:#2a2433;--sc-sky2:#1f1a27;--sc-sun:#efe0b0;--sc-cloud:#ffffff1f;--sc-far:#3a3349;--sc-mid:#312a3f;--sc-near:#2a2437;--sc-mist:#ffffff14;--sc-trunk:#8c80a0;--sc-needle:#5f7a6a;--sc-bird:#b8acc9;--sc-petal:#e58aa3}
 @media (prefers-reduced-motion:reduce){
- .gr-hero[data-pose] .gr-head,.gr-hero[data-pose] .gr-eyes,.gr-hero[data-pose] .gr-mouth,.gr-hero[data-pose] .gr-arm,.gr-hero[data-pose] .gr-body,.gr-hero[data-pose] .gr-aura,.gr-hero[data-pose] .gr-petal{animation:none}
+ .gr-figure .gr-hero[data-pose] *,.gr-stage .gr-scene *,.gr-figure .gr-hero{animation:none}
+ .gr-figure .gr-hero .gr-slash,.gr-stage .gr-sc-petal,.gr-figure .gr-hero .gr-mote{opacity:0}
 }
 
 /* ---- Trang Điểm tích lũy ------------------------------------------------------------------------------------------------ */
@@ -48,10 +108,11 @@
 .gr-page .panel h2{font-size:22px;margin-bottom:12px}
 .gr-page .panel h2 small{display:inline;margin-left:8px;font-size:12px}
 .gr-stage{display:flex;flex-direction:column;gap:14px}
-.gr-stage-bg{position:relative;flex:1 1 auto;border-radius:16px;min-height:320px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:56px 12px 12px;overflow:hidden;background:radial-gradient(ellipse at 50% 100%,#e9defa 0,transparent 62%),linear-gradient(180deg,#f6f0ff,#efe6fb)}
-.gr-stage-bg:before{content:'';position:absolute;inset:auto -10% 0 -10%;height:46%;background:radial-gradient(ellipse at 20% 100%,#d8c8f1 0,transparent 55%),radial-gradient(ellipse at 80% 100%,#e5d6f6 0,transparent 50%);pointer-events:none}
-.gr-figure{position:relative;width:min(68%,300px)}
+.gr-stage-bg{position:relative;isolation:isolate;flex:1 1 auto;border-radius:16px;min-height:340px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding:60px 12px 10px;overflow:hidden;background:linear-gradient(180deg,var(--sc-sky1),var(--sc-sky2))}
+.gr-figure{position:relative;z-index:1;display:grid;width:min(66%,290px)}
 .gr-bubble{position:absolute;top:12px;left:50%;transform:translateX(-50%);max-width:calc(100% - 24px);padding:9px 14px;border-radius:14px;background:var(--paper);border:1px solid var(--line);color:var(--ink);font-size:13px;font-weight:600;line-height:1.5;text-align:center;box-shadow:0 4px 14px #7950c81a;z-index:1}
+.gr-bubble.is-new{animation:gr-bubble .5s cubic-bezier(.2,.8,.2,1)}
+@keyframes gr-bubble{from{opacity:0;transform:translate(-50%,6px)}to{opacity:1;transform:translateX(-50%)}}
 .gr-bubble:after{content:'';position:absolute;left:50%;bottom:-7px;width:12px;height:12px;background:var(--paper);border-right:1px solid var(--line);border-bottom:1px solid var(--line);transform:translateX(-50%) rotate(45deg)}
 .gr-poses{display:flex;flex-wrap:wrap;gap:6px;justify-content:center}
 .gr-chip{min-height:36px;padding:6px 12px;border:1px solid var(--line);border-radius:999px;background:var(--paper);font-size:12px;font-weight:600;color:var(--ink)}
@@ -166,8 +227,8 @@ dialog.gr-award::backdrop{background:#30251c88}
 }
 @media (max-width:700px){
  .gr-page{gap:14px}
- .gr-stage-bg{min-height:270px}
- .gr-figure{width:min(60%,210px)}
+ .gr-stage-bg{min-height:310px;padding-top:86px}
+ .gr-figure{width:min(58%,206px)}
  .gr-chip{min-height:40px}
  .gr-pick{gap:10px}
  .gr-history-list li{flex-direction:column;gap:6px}

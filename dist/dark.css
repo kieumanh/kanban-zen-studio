@@ -3092,12 +3092,6 @@
 :root[data-theme=dark] .bg-be-key-dot {
     border: 3px solid #94c5aa
 }
-:root[data-theme=dark] .gr-stage-bg {
-    background: radial-gradient(ellipse at 50% 100%,#211b2b 0,transparent 62%),linear-gradient(180deg,#141118,#1d1823)
-}
-:root[data-theme=dark] .gr-stage-bg:before {
-    background: radial-gradient(ellipse at 20% 100%,#2e243d 0,transparent 55%),radial-gradient(ellipse at 80% 100%,#271d30 0,transparent 50%)
-}
 :root[data-theme=dark] .gr-chip:hover {
     background: #130f16
 }

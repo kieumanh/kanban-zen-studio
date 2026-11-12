@@ -186,7 +186,7 @@
   function stage(s) {
     const g = growth(), r = realmOf(earnedTotal());
     const chips = [{ id: 'auto', label: 'Tự động' }, ...zenHero.POSES].map((p) => '<button type="button" class="gr-chip' + (poseMode === p.id ? ' is-on' : '') + '" data-gr-pose="' + p.id + '" aria-pressed="' + (poseMode === p.id) + '">' + p.label + '</button>').join('');
-    return '<section class="panel gr-stage" aria-label="Nhân vật đồng hành"><div class="gr-stage-bg"><p class="gr-bubble" id="gr-bubble" role="status">' + esc(bubbleText(poseNow, s)) + '</p><div class="gr-figure" id="gr-figure">' + zenHero.svg(g.hero, poseNow) + '</div></div>' +
+    return '<section class="panel gr-stage" aria-label="Nhân vật đồng hành"><div class="gr-stage-bg">' + zenHero.scene() + '<p class="gr-bubble" id="gr-bubble" role="status">' + esc(bubbleText(poseNow, s)) + '</p><div class="gr-figure" id="gr-figure">' + zenHero.svg(g.hero, poseNow) + '</div></div>' +
       '<div class="gr-poses" role="group" aria-label="Tư thế nhân vật">' + chips + '</div>' +
       '<div class="gr-realm"><div><span class="gr-realm-name">' + r.name + '</span><small>' + fmt(earnedTotal()) + ' điểm tích lũy' + (r.next ? ' · còn ' + fmt(r.need) + ' điểm tới ' + r.next : ' · cảnh giới cao nhất') + '</small></div><div class="progress" role="progressbar" aria-label="Tiến tới cảnh giới kế tiếp" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + r.pct + '"><span style="width:' + r.pct + '%"></span></div></div></section>';
   }
@@ -239,12 +239,36 @@
 
   // ---- Hoạt họa nhân vật --------------------------------------------------------------------------------------------------
   const reduced = () => window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+  // v1.83.0: chỉ vẽ lại nhân vật khi đổi tư thế hoặc đổi nhân vật (hoạt họa đang chạy không bị ngắt mỗi lần đổi lời thoại);
+  // hình mới hiện dần đè lên hình cũ đang mờ đi. Hình mới đứng trước trong DOM nên '#gr-figure svg.gr-hero' luôn là hình hiện tại.
   function paintFigure() {
     const g = growth(), fig = document.querySelector('#gr-figure');
     if (!g || !fig || view !== 'growth') return;
-    fig.innerHTML = zenHero.svg(g.hero, poseNow);
+    const cur = fig.querySelector('svg.gr-hero:not(.is-leave)');
+    if (!cur || cur.dataset.pose !== poseNow || cur.dataset.hero !== g.hero) {
+      const tpl = document.createElement('template');
+      tpl.innerHTML = zenHero.svg(g.hero, poseNow);
+      const next = tpl.content.firstElementChild;
+      fig.querySelectorAll('svg.is-leave').forEach((n) => n.remove());
+      if (cur && !reduced()) {
+        next.classList.add('is-enter');
+        cur.classList.add('is-leave');
+        cur.setAttribute('aria-hidden', 'true');
+        cur.removeAttribute('role');
+        setTimeout(() => cur.remove(), 450);
+      } else if (cur) cur.remove();
+      fig.prepend(next);
+    }
     const bubble = document.querySelector('#gr-bubble');
-    if (bubble) bubble.textContent = bubbleText(poseNow, scores());
+    const text = bubbleText(poseNow, scores());
+    if (bubble && bubble.textContent !== text) {
+      bubble.textContent = text;
+      if (!reduced()) {
+        bubble.classList.remove('is-new');
+        void bubble.offsetWidth;
+        bubble.classList.add('is-new');
+      }
+    }
   }
   function stopTimer() {
     clearTimeout(poseTimer);
@@ -789,7 +813,14 @@
       poseMode = t.dataset.grPose;
       if (poseMode !== 'auto') poseNow = poseMode;
       msgIndex++;
-      render();
+      // v1.83.0: không dựng lại cả trang — chỉ đổi nút đang chọn và chuyển tư thế mượt.
+      if (!document.querySelector('#gr-figure')) return render();
+      document.querySelectorAll('.gr-chip[data-gr-pose]').forEach((b) => {
+        const on = b.dataset.grPose === poseMode;
+        b.classList.toggle('is-on', on);
+        b.setAttribute('aria-pressed', String(on));
+      });
+      paintFigure();
     }
   });
 })();

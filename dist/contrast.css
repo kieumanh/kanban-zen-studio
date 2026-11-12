@@ -3093,12 +3093,6 @@
 :root[data-contrast=high] .bg-be-key-dot {
     border: 3px solid #060606
 }
-:root[data-contrast=high] .gr-stage-bg {
-    background: radial-gradient(ellipse at 50% 100%,#ffffff 0,transparent 62%),linear-gradient(180deg,#ffffff,#ffffff)
-}
-:root[data-contrast=high] .gr-stage-bg:before {
-    background: radial-gradient(ellipse at 20% 100%,#ffffff 0,transparent 55%),radial-gradient(ellipse at 80% 100%,#ffffff 0,transparent 50%)
-}
 :root[data-contrast=high] .gr-chip:hover {
     background: #ffffff
 }
@@ -6911,12 +6905,6 @@
 }
 :root[data-theme=dark][data-contrast=high] .bg-be-key-dot {
     border: 3px solid #cecece
-}
-:root[data-theme=dark][data-contrast=high] .gr-stage-bg {
-    background: radial-gradient(ellipse at 50% 100%,#030303 0,transparent 62%),linear-gradient(180deg,#030303,#030303)
-}
-:root[data-theme=dark][data-contrast=high] .gr-stage-bg:before {
-    background: radial-gradient(ellipse at 20% 100%,#030303 0,transparent 55%),radial-gradient(ellipse at 80% 100%,#030303 0,transparent 50%)
 }
 :root[data-theme=dark][data-contrast=high] .gr-chip:hover {
     background: #030303
