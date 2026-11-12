@@ -5435,6 +5435,46 @@
 :root[data-style=giangho] .gr-bt-next {
     color: var(--gr-seal-text)
 }
+:root[data-style=giangho] .gr-ach-head b {
+    color: #921933
+}
+:root[data-style=giangho] .gr-page .gr-ach-panel .gr-ach-group, :root[data-style=giangho] .gr-ach-group {
+    color: #5d4637
+}
+:root[data-style=giangho] .gr-ach {
+    border: 1px solid #e8dcc6;
+    background: #fffbf5
+}
+:root[data-style=giangho] .gr-ach.is-done {
+    border-color: #d9b25c;
+    background: #fdf3dc
+}
+:root[data-style=giangho] .gr-ach-seal {
+    background: #efe7da;
+    color: #6e5c49
+}
+:root[data-style=giangho] .gr-ach.is-done .gr-ach-seal {
+    background: #b8344a;
+    color: #fff6e3
+}
+:root[data-style=giangho] .gr-ach-body strong {
+    color: #2d1e15
+}
+:root[data-style=giangho] .gr-ach-body small {
+    color: #5d4637
+}
+:root[data-style=giangho] .gr-ach-bar {
+    background: #efe7da
+}
+:root[data-style=giangho] .gr-ach-bar i {
+    background: #b58a3a
+}
+:root[data-style=giangho] .gr-ach-state {
+    color: #6b4c0b
+}
+:root[data-style=giangho] .gr-ach.is-done .gr-ach-state {
+    color: #921933
+}
 :root[data-style=giangho] {
     --muted: #685345;
     --text-muted: #685345
@@ -11917,6 +11957,46 @@
 }
 :root[data-style=giangho][data-theme=dark] .gr-bt-next {
     color: var(--gr-seal-text)
+}
+:root[data-style=giangho][data-theme=dark] .gr-ach-head b {
+    color: #fdc2c4
+}
+:root[data-style=giangho][data-theme=dark] .gr-page .gr-ach-panel .gr-ach-group, :root[data-style=giangho][data-theme=dark] .gr-ach-group {
+    color: #e5d0c2
+}
+:root[data-style=giangho][data-theme=dark] .gr-ach {
+    border: 1px solid #433c30;
+    background: #1e1811
+}
+:root[data-style=giangho][data-theme=dark] .gr-ach.is-done {
+    border-color: #dfb862;
+    background: #17120c
+}
+:root[data-style=giangho][data-theme=dark] .gr-ach-seal {
+    background: #211a13;
+    color: #dcccbc
+}
+:root[data-style=giangho][data-theme=dark] .gr-ach.is-done .gr-ach-seal {
+    background: #b8344a;
+    color: #fff6e3
+}
+:root[data-style=giangho][data-theme=dark] .gr-ach-body strong {
+    color: #efdfd6
+}
+:root[data-style=giangho][data-theme=dark] .gr-ach-body small {
+    color: #e5d0c2
+}
+:root[data-style=giangho][data-theme=dark] .gr-ach-bar {
+    background: #211a13
+}
+:root[data-style=giangho][data-theme=dark] .gr-ach-bar i {
+    background: #b58a3a
+}
+:root[data-style=giangho][data-theme=dark] .gr-ach-state {
+    color: #e9cea3
+}
+:root[data-style=giangho][data-theme=dark] .gr-ach.is-done .gr-ach-state {
+    color: #fdc2c4
 }
 :root[data-style=giangho][data-theme=dark] {
     --muted: #e1ccbf;

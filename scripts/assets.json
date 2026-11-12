@@ -368,5 +368,10 @@
     "/giangho-lunar.js",
     "giangho-lunar.js",
     "text/javascript; charset=utf-8"
+  ],
+  [
+    "/giangho-ach.js",
+    "giangho-ach.js",
+    "text/javascript; charset=utf-8"
   ]
 ]

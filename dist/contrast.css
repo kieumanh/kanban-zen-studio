@@ -3207,6 +3207,39 @@
 :root[data-contrast=high] .gr-bt-hero {
     background: radial-gradient(circle,#ffffff 0,#ffffff 62%,transparent 64%)
 }
+:root[data-contrast=high] .gr-ach-head b {
+    color: #060606
+}
+:root[data-contrast=high] .gr-page .gr-ach-panel .gr-ach-group, :root[data-contrast=high] .gr-ach-group {
+    color: #060606
+}
+:root[data-contrast=high] .gr-ach {
+    border: 1px solid #181611;
+    background: #ffffff
+}
+:root[data-contrast=high] .gr-ach.is-done {
+    border-color: #1d1503;
+    background: #ffffff
+}
+:root[data-contrast=high] .gr-ach-seal {
+    background: #ffffff;
+    color: #060606
+}
+:root[data-contrast=high] .gr-ach-body strong {
+    color: #060606
+}
+:root[data-contrast=high] .gr-ach-body small {
+    color: #060606
+}
+:root[data-contrast=high] .gr-ach-bar {
+    background: #ffffff
+}
+:root[data-contrast=high] .gr-ach-state {
+    color: #060606
+}
+:root[data-contrast=high] .gr-ach.is-done .gr-ach-state {
+    color: #060606
+}
 :root[data-contrast=high] {
     --muted: #060606;
     --text-muted: #060606
@@ -7069,6 +7102,39 @@
 }
 :root[data-theme=dark][data-contrast=high] .gr-bt-hero {
     background: radial-gradient(circle,#030303 0,#030303 62%,transparent 64%)
+}
+:root[data-theme=dark][data-contrast=high] .gr-ach-head b {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .gr-page .gr-ach-panel .gr-ach-group, :root[data-theme=dark][data-contrast=high] .gr-ach-group {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .gr-ach {
+    border: 1px solid #cecece;
+    background: #030303
+}
+:root[data-theme=dark][data-contrast=high] .gr-ach.is-done {
+    border-color: #cecece;
+    background: #030303
+}
+:root[data-theme=dark][data-contrast=high] .gr-ach-seal {
+    background: #030303;
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .gr-ach-body strong {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .gr-ach-body small {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .gr-ach-bar {
+    background: #030303
+}
+:root[data-theme=dark][data-contrast=high] .gr-ach-state {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .gr-ach.is-done .gr-ach-state {
+    color: #f5f5f5
 }
 :root[data-theme=dark][data-contrast=high] {
     --muted: #f5f5f5;

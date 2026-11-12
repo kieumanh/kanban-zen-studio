@@ -3206,6 +3206,39 @@
 :root[data-theme=dark] .gr-bt-hero {
     background: radial-gradient(circle,#16131a 0,#231a09 62%,transparent 64%)
 }
+:root[data-theme=dark] .gr-ach-head b {
+    color: #fbb3b7
+}
+:root[data-theme=dark] .gr-page .gr-ach-panel .gr-ach-group, :root[data-theme=dark] .gr-ach-group {
+    color: #dbc6b9
+}
+:root[data-theme=dark] .gr-ach {
+    border: 1px solid #433c30;
+    background: #1b181f
+}
+:root[data-theme=dark] .gr-ach.is-done {
+    border-color: #dfb862;
+    background: #141118
+}
+:root[data-theme=dark] .gr-ach-seal {
+    background: #1e1a23;
+    color: #d2c2b2
+}
+:root[data-theme=dark] .gr-ach-body strong {
+    color: #e5d5cc
+}
+:root[data-theme=dark] .gr-ach-body small {
+    color: #dbc6b9
+}
+:root[data-theme=dark] .gr-ach-bar {
+    background: #1e1a23
+}
+:root[data-theme=dark] .gr-ach-state {
+    color: #e0c599
+}
+:root[data-theme=dark] .gr-ach.is-done .gr-ach-state {
+    color: #fbb3b7
+}
 :root[data-theme=dark] {
     --muted: #ccc2d7;
     --text-muted: #ccc2d7

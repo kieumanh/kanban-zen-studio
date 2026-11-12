@@ -501,3 +501,21 @@ dialog.gr-breakthrough.is-still .gr-bt-ring{opacity:.5;transform:scale(.9)}
 dialog.gr-breakthrough.is-still .gr-bt-ring.is-2{transform:scale(1.05);opacity:.35}
 dialog.gr-breakthrough.is-still .gr-bt-ring.is-3{display:none}
 @media (prefers-reduced-motion:reduce){.gr-bt-ring,.gr-bt-hero{animation:none}.gr-bt-ring.is-3{display:none}}
+/* v1.99.0 (Bảng Vàng): thành tựu trong trang Tu vi (giangho-ach.js). Màu tối / tương phản cao sinh tự động. */
+.gr-ach-head p{margin:4px 0 0}
+.gr-ach-head b{color:#a32c40}
+.gr-page .gr-ach-panel .gr-ach-group,.gr-ach-group{margin:16px 0 8px;font-family:inherit;line-height:1.4;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#6b5444}
+.gr-ach-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px;margin:0;padding:0;list-style:none}
+.gr-ach{display:flex;align-items:flex-start;gap:12px;min-width:0;padding:12px 14px;border:1px solid #e8dcc6;border-radius:16px;background:#fffdf8}
+.gr-ach.is-done{border-color:#d9b25c;background:#fdf3dc}
+.gr-ach-seal{flex:0 0 auto;display:grid;place-items:center;width:40px;height:40px;border-radius:50%;background:#efe7da;color:#7d6a57}
+.gr-ach-seal svg{width:24px;height:24px}
+.gr-ach.is-done .gr-ach-seal{background:#b8344a;color:#fff6e3}
+.gr-ach-body{display:grid;gap:3px;flex:1 1 auto;min-width:0}
+.gr-ach-body strong{font-size:14px;line-height:1.35;color:#3a2a21}
+.gr-ach-body small{font-size:12px;line-height:1.45;color:#6b5444}
+.gr-ach-bar{display:block;height:6px;margin-top:4px;overflow:hidden;border-radius:99px;background:#efe7da}
+.gr-ach-bar i{display:block;height:100%;border-radius:inherit;background:#b58a3a}
+.gr-ach-state{font-size:12px;font-style:normal;font-weight:700;color:#7a5a1e}
+.gr-ach.is-done .gr-ach-state{color:#a32c40}
+@media (max-width:700px){.gr-ach-list{grid-template-columns:1fr}}
