@@ -356,6 +356,106 @@
   }))
     add(k, v);
 
+  // ---- v1.90.0 (Tàng Bảo): Tàng thư, Ngân khố, Bảo khố ------------------------------------------------------------------------
+  for (const [k, v] of Object.entries({
+    // Tàng thư
+    'Ghim ghi chú': 'Ghim quyển',
+    'GHI CHÚ MỚI': 'CHÉP QUYỂN MỚI',
+    'CHỈNH SỬA GHI CHÚ': 'CHỈNH SỬA QUYỂN',
+    'Đưa lên đầu danh sách Ghi chú': 'Đưa lên đầu Tàng thư',
+    'Ghim nhanh ở menu': 'Ghim nhanh ở thanh bên',
+    'Truy cập từ menu · tối đa 3 ghi chú': 'Mở từ thanh bên · tối đa 3 quyển',
+    'Các bước cần làm': 'Các chiêu cần luyện',
+    'Thêm mục checklist': 'Thêm chiêu',
+    '＋ Thêm mục': '＋ Thêm chiêu',
+    'Mục checklist được lưu tự động khi thêm hoặc thay đổi.': 'Chiêu được lưu tự động khi thêm hoặc thay đổi.',
+    'Checklist': { to: 'Chiêu thức', in: '.note-type-field' },
+    'Nhãn ghi chú': 'Nhãn quyển',
+    'Nhắc tôi': 'Nhắc tại hạ',
+    'Bật lịch nhắc cho ghi chú': 'Bật truyền thư nhắc cho quyển này',
+    'Gửi email nhắc ghi chú này': 'Gửi email nhắc quyển này',
+    'Hệ thống kiểm tra mỗi 5 phút. Bỏ chọn bật lịch nhắc hoặc hoàn tất checklist để ngừng nhắc.': 'Hệ thống kiểm tra mỗi 5 phút. Bỏ chọn truyền thư nhắc hoặc công thành chiêu thức để ngừng nhắc.',
+    '✦ Họa tiết ghi chú': '✦ Họa tiết quyển',
+    'Chọn họa tiết trang trí tinh tế cho thẻ ghi chú.': 'Chọn họa tiết trang trí tinh tế cho thẻ quyển.',
+    'Liên kết với dự án': 'Liên kết với đại sự',
+    'Chưa liên kết. Chọn dự án để ghi chú xuất hiện tại dự án đó.': 'Chưa liên kết. Chọn đại sự để quyển xuất hiện tại đại sự đó.',
+    'Vị trí ghim ghi chú': 'Vị trí ghim quyển',
+    'Ghim nhanh ghi chú': 'Ghim nhanh quyển',
+    'Nội dung ghi chú': 'Nội dung quyển',
+    'Viết ghi chú…': 'Chép vào quyển…',
+    'Nội dung ghi chú được định dạng trực tiếp': 'Nội dung quyển được định dạng trực tiếp',
+    'Việc nhỏ tiếp theo…': 'Chiêu nhỏ tiếp theo…',
+    'Tùy chọn ghi chú': 'Tùy chọn quyển',
+    'Tìm dự án để liên kết': 'Truy tìm đại sự để liên kết',
+    'Tìm dự án…': 'Truy tìm đại sự…',
+    // Ngân khố
+    'Đã chi': { to: 'Đã xuất ngân', in: '.bg-card' },
+    'Đã thu hồi': { to: 'Đã thu ngân', in: '.bg-card' },
+    'Thu hồi vốn': { to: 'Hồi vốn', in: '.bg-card' },
+    'Chi nhiều nhất': 'Xuất ngân nhiều nhất',
+    'Lãi nhiều nhất': 'Lời nhiều nhất',
+    'Biểu đồ hòa vốn': 'Đồ hòa vốn',
+    'tất cả dự án': { to: 'mọi đại sự', in: '.bg-panel' },
+    'Chi cộng dồn': 'Xuất ngân cộng dồn',
+    'Thu hồi cộng dồn': 'Thu ngân cộng dồn',
+    'Dòng tiền theo tháng': 'Ngân lưu theo tháng',
+    'Chi': { to: 'Xuất ngân', in: '.bg-trend-key' },
+    'Thu': { to: 'Thu ngân', in: '.bg-trend-key' },
+    'Chi theo dự án': 'Xuất ngân theo đại sự',
+    'Tổng chi': 'Tổng xuất ngân',
+    'Tình trạng từng dự án': 'Tình trạng từng đại sự',
+    'Chọn dự án để xem phân bổ tài nguyên': 'Chọn đại sự để xem Ngân khố',
+    'Sắp xếp dự án': 'Sắp xếp đại sự',
+    'Ghi khoản chi (đầu tư) và khoản thu (thu hồi) của dự án này.': 'Ghi khoản xuất ngân (đầu tư) và thu ngân (hồi vốn) của đại sự này.',
+    '+ Chi': '+ Xuất ngân',
+    '+ Thu': '+ Thu ngân',
+    'Hạng mục chi lớn nhất': 'Hạng mục xuất ngân lớn nhất',
+    'thu và chi cộng dồn': 'thu ngân và xuất ngân cộng dồn',
+    'Quay lại tất cả dự án': 'Quay lại mọi đại sự',
+    'Điều hướng Phân bổ tài nguyên': 'Điều hướng Ngân khố',
+    'Lọc khoản thu chi': 'Lọc khoản thu ngân, xuất ngân',
+    'Khoản thu': 'Khoản thu ngân',
+    'Khoản chi': 'Khoản xuất ngân',
+    'Thêm khoản chi': 'Thêm khoản xuất ngân',
+    'Thêm khoản thu': 'Thêm khoản thu ngân',
+    'Sửa khoản chi': 'Sửa khoản xuất ngân',
+    'Sửa khoản thu': 'Sửa khoản thu ngân',
+    'Chi · đầu tư': 'Xuất ngân · đầu tư',
+    'Thu · thu hồi': 'Thu ngân · hồi vốn',
+    'Số tiền (₫)': 'Số ngân lượng (₫)',
+    // Bảo khố
+    'Gồm Thùng rác và tệp đang tải · Chỉ bạn xem được': 'Gồm Phế tích và tệp đang tải · Chỉ các hạ xem được',
+    'Chưa có tệp phù hợp. Chọn “Tải tệp lên” để lưu ngay tại đây, hoặc thêm tệp trong dự án và ghi chú.': 'Chưa có tệp phù hợp. Chọn “Cất vào bảo khố” để lưu ngay tại đây, hoặc thêm tệp trong đại sự và tàng thư.',
+    'Chưa có khoản thu chi nào trong 6 tháng gần đây.': 'Chưa có khoản thu ngân, xuất ngân nào trong 6 tháng gần đây.',
+    'Chưa có khoản thu chi nào để vẽ biểu đồ hòa vốn.': 'Chưa có khoản thu ngân, xuất ngân nào để vẽ đồ hòa vốn.',
+    'Đã thu hồi đủ vốn': 'Đã thu ngân đủ vốn',
+    'Chưa có dự án': { to: 'Chưa có đại sự', in: MAIN },
+    'Tạo một dự án để bắt đầu ghi chi và thu hồi.': 'Khởi một đại sự để bắt đầu ghi xuất ngân và thu ngân.',
+    'Chọn dự án để ghi khoản đầu tiên': 'Chọn đại sự để ghi khoản đầu tiên',
+    'Chưa có khoản chi nào ở dự án nào.': 'Chưa có khoản xuất ngân nào ở đại sự nào.',
+    'Bấm “+ Chi” khi bỏ tiền vào dự án, “+ Thu” khi thu hồi được tiền.': 'Bấm “+ Xuất ngân” khi bỏ tiền vào đại sự, “+ Thu ngân” khi thu hồi được tiền.',
+    'Đã ghi khoản chi.': 'Đã ghi khoản xuất ngân.',
+    'Đã ghi khoản thu.': 'Đã ghi khoản thu ngân.',
+    'Viết ghi chú tại đây…': 'Chép vào quyển tại đây…',
+    'Nội dung ghi chú tối đa 10.000 ký tự.': 'Nội dung quyển tối đa 10.000 ký tự.',
+    'GHI CHÚ KHÁC': 'QUYỂN KHÁC',
+    'Ưu tiên ở đầu danh sách Ghi chú': 'Ưu tiên ở đầu Tàng thư',
+    'Bỏ ghim ghi chú': 'Bỏ ghim quyển',
+    'Menu truy cập nhanh chỉ ghim tối đa 3 ghi chú.': 'Thanh bên chỉ ghim nhanh tối đa 3 quyển.',
+    'Gỡ liên kết khỏi ghi chú': 'Gỡ liên kết khỏi quyển',
+    'Định dạng văn bản ghi chú': 'Định dạng văn bản quyển',
+    'Ghi chú ghim nhanh': 'Quyển ghim nhanh',
+    'Ghi chú không tên': 'Quyển không tên',
+    'Tất cả ghi chú': 'Mọi quyển',
+    'Đã bỏ ghi chú khỏi menu truy cập nhanh.': 'Đã bỏ quyển khỏi thanh bên.',
+    'Chọn ngày và giờ nhắc ghi chú.': 'Chọn ngày và giờ nhắc quyển này.',
+    'Chưa có ghi chú phù hợp.': 'Chưa có quyển phù hợp.',
+    'Nhắc ghi chú': 'Nhắc quyển',
+    'Ghi chú đã đặt lịch': 'Quyển đã hẹn nhắc',
+  }))
+    add(k, v);
+  const money = (s) => s.replace(/đã chi/g, 'đã xuất ngân').replace(/đã thu hồi/g, 'đã thu ngân').replace(/ chi /g, ' xuất ').replace(/số đã chi/g, 'số đã xuất ngân');
+
   // Mẫu có phần thay đổi: [biểu thức, chữ mới hoặc hàm, vùng (tùy chọn), chữ bắt buộc có (lọc nhanh trước khi thử biểu thức)].
   const bell = (s) =>
     'Truyền thư' +
@@ -425,6 +525,20 @@
     [/^Áp dụng quy tắc “không bỏ hai ngày liên tiếp”: hôm nay chỉ cần tích bản nhỏ nhất của “(.+)”\.$/, 'Giữ tâm pháp “không bỏ hai ngày liên tiếp”: hôm nay chỉ cần luyện bản nhỏ nhất của “$1”.', MAIN, 'không bỏ hai ngày'],
     [/^Biểu đồ đường: tỷ lệ hoàn thành mỗi ngày trong (\d+) ngày qua, hiện tại (\d+)%$/, 'Biểu đồ đường: tỷ lệ công thành mỗi ngày trong $1 ngày qua, hiện tại $2%', MAIN, 'Biểu đồ đường'],
     [/^(\d\d\/\d\d): chưa có việc$/, '$1: chưa luyện môn nào', MAIN, 'chưa có việc'],
+    // v1.90.0
+    [/^Sửa ghi chú (.+)$/, 'Sửa quyển $1', MAIN, 'Sửa ghi chú'],
+    [/^Xếp từ dự án (lỗ nhiều nhất|lãi nhiều nhất|đã chi nhiều nhất) lên trước\. Chọn một dự án để ghi thu, chi và xem chi tiết\.$/, (s, k) => 'Xếp từ đại sự ' + ({ 'lỗ nhiều nhất': 'lỗ nhiều nhất', 'lãi nhiều nhất': 'lời nhiều nhất', 'đã chi nhiều nhất': 'xuất ngân nhiều nhất' })[k] + ' lên trước. Chọn một đại sự để ghi thu ngân, xuất ngân và xem tường tận.', MAIN, 'Xếp từ dự án'],
+    [/^Xóa ghi chú (.+)$/, 'Xóa quyển $1', MAIN, 'Xóa ghi chú'],
+    [/^Còn thiếu (.+) để hòa vốn · đã thu hồi (\d+)% số đã chi$/, 'Còn thiếu $1 để hòa vốn · đã thu ngân $2% số đã xuất ngân', MAIN, 'để hòa vốn'],
+    [/^Đã thu hồi (\d+)% số tiền đã chi$/, 'Đã thu ngân $1% số đã xuất ngân', MAIN, 'Đã thu hồi'],
+    [/^Chi (.+) · Thu (.+)$/, 'Xuất $1 · Thu $2', MAIN, ' · Thu '],
+    [/^Chi (\S.*₫)$/, 'Xuất $1', '.bg-project-line', 'Chi '],
+    [/^Thu hồi (\d+)%$/, 'Hồi vốn $1%', MAIN, 'Thu hồi '],
+    [/^(.+) · (\d+)% tổng chi$/, '$1 · $2% tổng xuất ngân', MAIN, 'tổng chi'],
+    [/^Biểu đồ hòa vốn (.+)$/, (s, rest) => 'Đồ hòa vốn ' + money(rest), MAIN, 'Biểu đồ hòa vốn'],
+    [/^Dòng tiền 6 tháng gần đây: (.+)$/, (s, rest) => 'Ngân lưu 6 tháng gần đây: ' + rest.replace(/ chi /g, ' xuất ngân ').replace(/ thu /g, ' thu ngân '), MAIN, 'Dòng tiền'],
+    [/^Chi theo dự án: (.+)$/, 'Xuất ngân theo đại sự: $1', MAIN, 'Chi theo dự án:'],
+    [/^Chi theo hạng mục: (.+)$/, 'Xuất ngân theo hạng mục: $1', MAIN, 'Chi theo hạng mục:'],
   ];
   // Nội dung người dùng và vùng không đổi chữ.
   const SKIP = [
@@ -436,6 +550,9 @@
     // Tên và mô tả việc, dự án, từ khóa, nhãn
     '.task-card h3', '.task-name', '.work-task-row strong', '.project-card h3', '.project-card > p', '.tag', '.wf-card-keywords > :not(.matrix-chip)', '.wf-comment', '.wf-comment-text', '.task-next-step > :not(span:first-child)', '.dashboard-progress-row strong', '.gantt-labels li', '.gantt-bar-label', '.project-note-picker label',
     // Nhật khóa, Bế quan, Hoàng lịch: tên việc / môn, tên dự án, ghi chú cảm nhận
+    // Tàng thư, Ngân khố, Bảo khố: tiêu đề / nội dung / nhóm quyển, đại sự để liên kết, hạng mục và ghi chú khoản thu chi, gợi ý hạng mục
+    // (bấm gợi ý là chép chữ vào ô nhập nên phải giữ nguyên), tên tệp
+    '.keep-card h3', '.keep-card > small', '.keep-card .zen-formatted', '.note-label-filters', '.wf-project-choices', '.bg-project-name', '.bg-entry-main', '.bg-cat-chip', '.resource-card', '.resource-name', '.file-name',
     '.hb-name', '.hb-text > strong', '.hb-suggest', '.hb-hbars li > span', '.hb-hist-notes', '.wf-focus-card strong', '.wf-focus-card > small', '.wf-focus-task-heading h1', '.wf-focus-header h2', '.wf-focus-note-options button', '.zen-ma-body strong', '.zen-agenda-task strong', '.zen-agenda-task span:first-of-type',
   ].join(', ');
   // Phần tử mà chữ NẰM TRỰC TIẾP bên trong là nội dung người dùng (phần tử con như nhãn "Hạn", mức cấp bách vẫn được đổi).
