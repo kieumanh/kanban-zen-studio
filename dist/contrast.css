@@ -3183,6 +3183,18 @@
 :root[data-contrast=high] .gr-area {
     fill: rgba(6,6,6,0.16)
 }
+:root[data-contrast=high] dialog.gr-story::backdrop {
+    background: rgba(48,37,28,0.6)
+}
+:root[data-contrast=high] .gr-story-seal {
+    color: #ffffff
+}
+:root[data-contrast=high] .gr-ch.is-new .gr-ch-tag {
+    color: #ffffff
+}
+:root[data-contrast=high] .gr-ch.is-new .gr-ch-no {
+    color: #ffffff
+}
 :root[data-contrast=high] {
     --muted: #060606;
     --text-muted: #060606
@@ -7004,6 +7016,18 @@
 }
 :root[data-theme=dark][data-contrast=high] .gr-area {
     fill: rgba(245,245,245,0.16)
+}
+:root[data-theme=dark][data-contrast=high] dialog.gr-story::backdrop {
+    background: rgba(48,37,28,0.6)
+}
+:root[data-theme=dark][data-contrast=high] .gr-story-seal {
+    color: #ffffff
+}
+:root[data-theme=dark][data-contrast=high] .gr-ch.is-new .gr-ch-tag {
+    color: #ffffff
+}
+:root[data-theme=dark][data-contrast=high] .gr-ch.is-new .gr-ch-no {
+    color: #ffffff
 }
 :root[data-theme=dark][data-contrast=high] {
     --muted: #f5f5f5;

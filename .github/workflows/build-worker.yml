@@ -156,6 +156,7 @@ jobs:
           node tests/growth-spend-browser.mjs
           node tests/growth-wuxia-browser.mjs
           node tests/growth-levels-browser.mjs
+          node tests/growth-story-browser.mjs
           node tests/giangho-style-browser.mjs
           node tests/giangho-lex-browser.mjs
           node tests/giangho-work-browser.mjs

@@ -263,7 +263,7 @@
       : 'Sở trường: <strong>' + ex.top.name + '</strong> (' + fmt(ex.mx) + ') · Cần khổ luyện: <strong>' + ex.low.name + '</strong> (' + fmt(ex.mn) + ')';
     return '<div class="gr-page">' + heading('GIANG HỒ TU LUYỆN', 'Tu vi của ' + esc(heroName()), sub, '<div class="gr-head-actions"><button type="button" class="btn primary" data-gr-spend>Đổi bảo vật</button><button type="button" class="btn" data-gr-report>Xem báo cáo tu luyện</button><button type="button" class="btn" data-gr-change>Đổi hiệp khách</button></div>') +
       '<div class="gr-grid">' + stage(s) + '<section class="panel gr-radar-panel" aria-label="Bát phương đồ nội lực"><h2>Bát phương đồ</h2><div class="gr-radar-wrap" id="gr-radar">' + radar(s) + '</div><p class="gr-summary">' + summary + '</p>' + wallet(s) + '</section></div>' +
-      axisRows(s) + history() + spendPanel() + '<section class="panel gr-how"><h2>Tâm pháp tu luyện</h2><ul class="gr-how-list"><li>Mỗi việc hoàn thành cho các hạ <strong>2 lần vận công</strong> (1 điểm). Bảng vận công hiện ra trước lời chúc mừng.</li><li>Mỗi lần bấm <strong>+</strong> dồn 0,5 điểm vào mạch đã chọn; dồn cả hai lần vào một mạch cũng được.</li><li>Mỗi việc chỉ được vận công một lần.</li><li>Bấm <strong>Đổi bảo vật</strong> để ghi lại món đã mua hoặc quy đổi; tu vi bị trừ khỏi Bát phương đồ. Ghi nhầm thì sửa hoặc hủy quy đổi để hoàn điểm. Cấp và cảnh giới tính theo tổng tu vi đã luyện nên không tụt khi đổi bảo vật.</li><li><strong>100 cấp</strong> chia 10 cảnh giới, mỗi cảnh giới 10 trọng. Cảnh giới sau tốn gấp đôi cảnh giới trước: 1 điểm mỗi cấp ở Sơ nhập giang hồ, 2 điểm ở Tam lưu cao thủ… 512 điểm ở Võ lâm chí tôn; cấp 100 cần 10.230 điểm.</li></ul>' + scaleTable(r) + '</section></div>';
+      (window.zenStory ? window.zenStory.panel() : '') + axisRows(s) + history() + spendPanel() + '<section class="panel gr-how"><h2>Tâm pháp tu luyện</h2><ul class="gr-how-list"><li>Mỗi việc hoàn thành cho các hạ <strong>2 lần vận công</strong> (1 điểm). Bảng vận công hiện ra trước lời chúc mừng.</li><li>Mỗi lần bấm <strong>+</strong> dồn 0,5 điểm vào mạch đã chọn; dồn cả hai lần vào một mạch cũng được.</li><li>Mỗi việc chỉ được vận công một lần.</li><li>Bấm <strong>Đổi bảo vật</strong> để ghi lại món đã mua hoặc quy đổi; tu vi bị trừ khỏi Bát phương đồ. Ghi nhầm thì sửa hoặc hủy quy đổi để hoàn điểm. Cấp và cảnh giới tính theo tổng tu vi đã luyện nên không tụt khi đổi bảo vật.</li><li><strong>100 cấp</strong> chia 10 cảnh giới, mỗi cảnh giới 10 trọng. Cảnh giới sau tốn gấp đôi cảnh giới trước: 1 điểm mỗi cấp ở Sơ nhập giang hồ, 2 điểm ở Tam lưu cao thủ… 512 điểm ở Võ lâm chí tôn; cấp 100 cần 10.230 điểm.</li></ul>' + scaleTable(r) + '</section></div>';
   }
 
   // ---- Hoạt họa nhân vật --------------------------------------------------------------------------------------------------
@@ -379,6 +379,7 @@
     const a = award;
     if (!a) return;
     let toastText = '';
+    let crossing = null;
     if (commit && a.spent > 0) {
       const entry = { id: uid(), d: today(), s: a.source, k: a.key, n: String(a.title || '').slice(0, 120), p: a.add.slice() };
       if (!a.key) delete entry.k;
@@ -386,6 +387,7 @@
       const before = realmOf(earnedTotal());
       if (!wfSave(() => { data.growth.log.push(entry); data.growth.spend ||= []; compact(); })) return notify('Chưa lưu được điểm. Hãy thử lại.');
       const after = realmOf(earnedTotal());
+      crossing = [before.level, after.level];
       // Thông báo điểm nghiệp (bật mặc định, tắt ở Cài đặt → Thông báo): lên cấp, đột phá cảnh giới mới; với việc hằng ngày còn báo số điểm vừa cộng.
       if (growth()?.notify !== false) {
         const parts = [];
@@ -401,6 +403,8 @@
     if (view === 'growth') render();
     if (typeof a.then === 'function') a.then();
     if (toastText) notify(toastText);
+    // v1.92.0: vượt mốc 5 cấp thì mở chương truyện ký tương ứng (growth-story.js).
+    if (crossing && crossing[1] > crossing[0]) window.zenStory?.crossed(crossing[0], crossing[1]);
   }
   // Giữ sổ cái trong giới hạn: gộp các dòng cũ nhất thành một dòng "tổng hợp".
   function compact() {

@@ -808,7 +808,7 @@
   ];
   // Nội dung người dùng và vùng không đổi chữ.
   const SKIP = [
-    'script', 'style', 'textarea', 'input', '[contenteditable]', '.gh-nav', '.gr-page', '.gr-award',
+    'script', 'style', 'textarea', 'input', '[contenteditable]', '.gh-nav', '.gr-page', '.gr-award', 'dialog.gr-story',
     // Nội dung người dùng: dự án, tab dự án, việc đã ghim, ghi chú nhanh, kết quả bảng lệnh
     '.side-project', '#side-projects', '#side-pinned-tasks', '.tabs', '.tab', '.sidebar-note', '.studio-palette [role=listbox]',
     // Tên cột (người dùng đặt), trạng thái theo cột, ô chọn cột / dự án
