@@ -78,7 +78,7 @@ try {
         realm: document.querySelector('.gr-realm-name').textContent,
       }));
       assert.equal(state.hero, 'nu', 'đã chọn nhân vật nữ' + at);
-      assert.deepEqual(state.labels, ['Nghiệp quả', 'Tài lộc', 'Tâm cảnh', 'Nhân duyên', 'Thể lực', 'Trí tuệ', 'Sự nghiệp', 'An vui'], 'đủ 8 chỉ số theo thứ tự' + at);
+      assert.deepEqual(state.labels, ['Nghiệp quả', 'Tài lộc', 'Tâm cảnh', 'Nhân duyên', 'Thể lực', 'Trí tuệ', 'Sự nghiệp', 'Tinh thần'], 'đủ 8 chỉ số theo thứ tự' + at);
       assert.deepEqual(state.values, Array(8).fill('0'), 'cả 8 chỉ số bắt đầu bằng 0' + at);
       assert.match(state.h1, /Tiểu Liên/, 'tên nhân vật hiện ở tiêu đề' + at);
       assert.deepEqual(state.chips, ['Tùy hứng', 'Đàm tiếu', 'Luyện kiếm', 'Thái cực', 'Tọa thiền'], 'có bốn tư thế và chế độ tự động' + at);
@@ -140,7 +140,7 @@ try {
       assert.equal((await page.locator('#growth-award .gr-col').nth(0).locator('.gr-col-val').innerText()).replace(/\s+/g, ''), '1,5+0,5', 'cột Nghiệp quả hiện điểm mới và phần cộng thêm' + at);
       await page.click('[data-gr-undo]');
       assert.match(await page.locator('.gr-budget').innerText(), /Còn 2 lần vận công/, 'hoàn tác trả lại lần cộng' + at);
-      // Cộng 1 vào Nghiệp quả và 1 vào An vui → hết lần, các nút + khác bị khóa.
+      // Cộng 1 vào Nghiệp quả và 1 vào Tinh thần → hết lần, các nút + khác bị khóa.
       await page.click('[data-gr-plus="0"]');
       await page.click('[data-gr-plus="7"]');
       assert.match(await page.locator('.gr-budget').innerText(), /Đã dồn đủ 1 điểm/, 'hết 2 lần cộng' + at);
@@ -156,7 +156,7 @@ try {
       assert.equal(added.k, 'task:p1t2', 'khóa chống cộng trùng theo mã việc' + at);
       assert.equal(added.n, 'Gửi báo cáo tuần');
       assert.match(added.d, /^\d{4}-\d{2}-\d{2}$/);
-      // Trang điểm: Nghiệp quả 1 + 0,5 = 1,5; Tâm cảnh 0,5; Sự nghiệp 0,5; An vui 0,5.
+      // Trang điểm: Nghiệp quả 1 + 0,5 = 1,5; Tâm cảnh 0,5; Sự nghiệp 0,5; Tinh thần 0,5.
       await page.evaluate(() => document.querySelector('.completion-close')?.click());
       await h.show(page, 'growth');
       const vals = await page.evaluate(() => [...document.querySelectorAll('.gr-radar .gr-value')].map((n) => n.textContent));

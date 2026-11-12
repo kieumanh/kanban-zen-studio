@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import { startHarness } from './lib/browser-harness.mjs';
 
 const day = (n) => new Date(Date.now() + n * 864e5).toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
-// Đã tích lũy (nửa điểm → điểm): Nghiệp quả 10 · Tài lộc 6 · Tâm cảnh 4 · Sự nghiệp 8 · An vui 2 = 30 điểm (cảnh giới Trúc cơ).
+// Đã tích lũy (nửa điểm → điểm): Nghiệp quả 10 · Tài lộc 6 · Tâm cảnh 4 · Sự nghiệp 8 · Tinh thần 2 = 30 điểm (cảnh giới Nhị lưu cao thủ).
 const GROWTH = {
   v: 1,
   hero: 'nam',

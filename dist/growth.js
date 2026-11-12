@@ -35,7 +35,7 @@
     { id: 'nghe', name: 'Sự nghiệp', sub: 'Đại nghiệp · sứ mệnh', color: '#2f7f9d', icon: 'M4 21V4 M4 5h12l-2 4 2 4H4',
       means: 'Tiến độ công việc chính, dự án, đóng góp chuyên môn và sứ mệnh nghề nghiệp.',
       ideas: ['Hoàn thành việc quan trọng của dự án', 'Giải quyết việc tồn đọng', 'Hoàn thiện một sản phẩm', 'Chia sẻ chuyên môn cho người khác'] },
-    { id: 'vui', name: 'An vui', sub: 'Tiêu dao · sáng tạo · nghỉ ngơi', color: '#e07a2e', icon: 'M12 3v3 M12 18v3 M3 12h3 M18 12h3 M5.6 5.6l2.1 2.1 M16.3 16.3l2.1 2.1 M18.4 5.6l-2.1 2.1 M7.7 16.3l-2.1 2.1 M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z',
+    { id: 'vui', name: 'Tinh thần', sub: 'Tiêu dao · sáng tạo · nghỉ ngơi', color: '#e07a2e', icon: 'M12 3v3 M12 18v3 M3 12h3 M18 12h3 M5.6 5.6l2.1 2.1 M16.3 16.3l2.1 2.1 M18.4 5.6l-2.1 2.1 M7.7 16.3l-2.1 2.1 M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z',
       means: 'Niềm vui sống, sở thích, sáng tạo, nghỉ ngơi và nếp sống gọn gàng.',
       ideas: ['Làm một việc mình yêu thích', 'Sáng tạo hoặc thử điều mới', 'Dọn dẹp, sắp xếp chỗ ở', 'Nghỉ ngơi trọn vẹn, đi chơi'] },
   ];
