@@ -114,7 +114,13 @@
     if(window.zenTheme){[['Giao diện sáng','light'],['Giao diện tối','dark'],['Giao diện theo hệ thống','system']].forEach(([label,value])=>list.push({label,hint:'Màu sắc',run:()=>{window.zenTheme.setTheme(value);notify('Đã chọn: '+label.toLocaleLowerCase('vi')+'.');}}));list.push({label:'Bật / tắt tương phản cao',hint:'Màu sắc',run:()=>{const high=window.zenTheme.state().high;window.zenTheme.setContrast(high?'normal':'high');notify(high?'Đã tắt tương phản cao.':'Đã bật tương phản cao.');}});}
     // v1.86.0: đổi phong cách Thiền / Giang hồ từ bảng lệnh.
     if(window.zenTheme?.setStyle)[['Phong cách Giang hồ','giangho'],['Phong cách Thiền','zen']].forEach(([label,value])=>list.push({label,hint:'Phong cách',run:()=>{window.zenTheme.setStyle(value);notify('Đã chọn: '+label.toLocaleLowerCase('vi')+'.');}}));
+    // v1.96.0 (Chú Giải): Bảng chú giải; khi đang ở Giang hồ thì thêm công tắc lời lẽ giang hồ (Giang hồ nhẹ).
+    if(window.zenGuide)list.push({label:'Bảng chú giải Giang hồ',hint:'Tên giang hồ và nghĩa thường',run:()=>window.zenGuide.glossary()});
+    if(window.zenTheme?.setWords&&window.zenTheme.state().style==='giangho')list.push({label:'Bật / tắt lời lẽ giang hồ',hint:'Phong cách',run:()=>{const on=!window.zenTheme.state().words;window.zenTheme.setWords(on);notify(on?'Đã bật lời lẽ giang hồ.':'Đã chọn Giang hồ nhẹ: giữ họa tiết, chữ quen thuộc.');}});
     visibleProjects().forEach(p=>list.push({label:'Dự án · '+p.name,run:()=>go('projects',p.id)}));
+    // v1.96.0: Khẩu quyết hai chiều. Bật lời lẽ giang hồ thì lệnh của ứng dụng mang tên giang hồ, nghĩa thường nằm ở dòng gợi ý; gõ
+    // "cài đặt" hay "cơ quan" đều ra. Tên việc (thêm ngay dưới đây) là nội dung người dùng nên không đổi.
+    const gh=window.zenGiangHo;if(gh?.active?.()&&gh.command)list.forEach(c=>{const hit=gh.command(c.label);if(hit){c.label=hit[0];c.hint=hit[1]+(c.hint?' · '+c.hint:'');}});
     allTasks().filter(t=>!t.archived&&!t.project.archived).forEach(t=>list.push({label:t.title,hint:t.project.name+' · '+columnDisplayName(t.project,t.col),run:()=>taskDetail(t.project,t)}));
     return list;
   }

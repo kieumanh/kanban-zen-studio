@@ -1,12 +1,13 @@
 'use strict';
-// v1.87.0 (Nhập Môn): bộ chuyển ngữ Giang hồ. Chỉ chạy khi <html data-style="giangho"> (Cài đặt → Giao diện → Phong cách).
+// v1.87.0 (Nhập Môn): bộ chuyển ngữ Giang hồ. Chỉ chạy khi <html data-style="giangho"> (Cài đặt → Giao diện → Phong cách)
+// và không chọn Giang hồ nhẹ (v1.96.0: data-gh-words="off" giữ họa tiết, chữ quen thuộc).
 // Đổi CHỮ GIAO DIỆN theo bảng thuật ngữ đã duyệt (claude/thuat-ngu-giang-ho): tên mục thanh bên hai dòng (tên giang hồ + nghĩa thường),
 // thanh trên, tiêu đề trang, bảng lệnh. Không đụng nội dung của người dùng: ô nhập, vùng soạn thảo, tên dự án / việc / ghi chú… (SKIP),
 // và chỉ đổi khi cả chuỗi khớp nguyên văn (hoặc khớp một mẫu có phần thay đổi). Về phong cách Thiền thì trả lại đúng chữ cũ.
 // Nạp sau cùng: bộ quan sát được tạo sau các bộ quan sát của ứng dụng nên luôn chạy sau chúng trong cùng một lượt.
 (() => {
   const root = document.documentElement;
-  const active = () => root.dataset.style === 'giangho';
+  const active = () => root.dataset.style === 'giangho' && root.dataset.ghWords !== 'off';
 
   // ---- Bảng chữ ------------------------------------------------------------------------------------------------------------
   // Tên mục: [tên giang hồ, dòng nghĩa thường] — dùng cho nút thanh bên / nút chế độ xem (hai dòng) và cho chữ một dòng ở thanh trên, tiêu đề.
@@ -854,6 +855,8 @@
   // Nội dung người dùng và vùng không đổi chữ.
   const SKIP = [
     'script', 'style', 'textarea', 'input', '[contenteditable]', '.gh-nav', '.gr-page', '.gr-award', 'dialog.gr-story',
+    // v1.96.0: Bảng chú giải và bong bóng nghĩa thường cố ý ghi cả hai nghĩa
+    '.gh-glossary', '.gh-tip-bubble',
     // Nội dung người dùng: dự án, tab dự án, việc đã ghim, ghi chú nhanh, kết quả bảng lệnh
     '.side-project', '#side-projects', '#side-pinned-tasks', '.tab:not(.tab-home)', '.sidebar-note', '.studio-palette [role=listbox]',
     // Tên cột (người dùng đặt), trạng thái theo cột, ô chọn cột / dự án
@@ -939,6 +942,23 @@
     if (out == null || out === core || inSkip(el)) return null;
     return value.replace(core, () => out);
   }
+  // v1.96.0 (Chú Giải): nghĩa thường. Chữ ngắn được đổi trong tiêu đề, nút, nhãn… thì phần tử đó mang title "Nghĩa thường: <chữ cũ>"
+  // (rê chuột trên máy tính; trình đọc màn hình đọc thành mô tả) và data-gh-tip (giangho-guide.js: nhấn giữ trên màn hình chạm).
+  // Không đè title sẵn có của ứng dụng; bỏ qua nút thanh bên (đã có dòng nghĩa thường) và khi chữ mới đã chứa chữ cũ.
+  const TIP_SEL = 'h1, h2, h3, h4, legend, summary, button, a, label, th, [role=tab], .btn, .eyebrow, .nav-group-label, .view-group-label';
+  const tipMine = new WeakMap(); // Element → title bộ chuyển ngữ đã đặt
+  function tip(el, core, out) {
+    if (core.length > 36 || out.toLocaleLowerCase('vi').includes(core.toLocaleLowerCase('vi'))) return;
+    const host = el.closest(TIP_SEL);
+    if (!host || host.closest(NAV_SEL) || host.textContent.length > 80) return;
+    const cur = host.getAttribute('title');
+    if (cur != null && tipMine.get(host) !== cur) return;
+    const t = 'Nghĩa thường: ' + core;
+    if (cur === t) return;
+    tipMine.set(host, t);
+    host.setAttribute('title', t);
+    host.setAttribute('data-gh-tip', core);
+  }
   function doText(node) {
     stats.texts++;
     const el = node.parentElement;
@@ -950,12 +970,13 @@
     textOrig.set(node, cur);
     textMine.set(node, out);
     node.nodeValue = out;
+    tip(el, cur.trim(), out.trim());
   }
   function doAttrs(el) {
     stats.attrs++;
     for (const a of ATTRS) {
       const v = el.getAttribute(a);
-      if (!v) continue;
+      if (!v || (a === 'title' && tipMine.get(el) === v)) continue;
       const rec = attrOrig.get(el) || {};
       if (rec[a] && rec[a].out === v) continue;
       // Thuộc tính của ô nhập (placeholder, nhãn) là chữ giao diện nên được đổi; chỉ bỏ qua vùng nội dung người dùng.
@@ -1024,6 +1045,11 @@
       for (const a in rec) if (el.getAttribute(a) === rec[a].out) el.setAttribute(a, rec[a].orig);
       attrOrig.delete(el);
     });
+    document.querySelectorAll('[data-gh-tip]').forEach((el) => {
+      if (el.getAttribute('title') === tipMine.get(el)) el.removeAttribute('title');
+      el.removeAttribute('data-gh-tip');
+      tipMine.delete(el);
+    });
   }
 
   // ---- Bật / tắt theo phong cách -------------------------------------------------------------------------------------------
@@ -1081,5 +1107,17 @@
   }
   document.addEventListener('zen-theme', sync);
   sync();
-  window.zenGiangHo = { active, convert: (s, el = document.body) => convert(s, el), rescan: () => active() && ((skipMemo = new WeakMap()), scan(document.body)), NAV, PHRASES, PATTERNS, stats };
+  // v1.96.0 (Chú Giải): Khẩu quyết hai chiều. Bảng lệnh (studio-zen.js) hỏi tên giang hồ của một lệnh: trả [tên giang hồ, nghĩa thường]
+  // hoặc null. Chỉ dùng cho lệnh của ứng dụng, không cho tên việc do người dùng đặt.
+  const COMMANDS = {
+    'Tạo công việc mới': 'Khởi nhiệm vụ mới',
+    'Tìm kiếm toàn bộ nội dung': 'Truy tìm khắp giang hồ',
+  };
+  const command = (label) => {
+    if (COMMANDS[label]) return [COMMANDS[label], label];
+    if (NAV[label]) return [NAV[label][0], label];
+    if (label.startsWith('Dự án · ')) return ['Đại sự · ' + label.slice(8), 'Dự án'];
+    return null;
+  };
+  window.zenGiangHo = { active, convert: (s, el = document.body) => convert(s, el), rescan: () => active() && ((skipMemo = new WeakMap()), scan(document.body)), command, NAV, PHRASES, PATTERNS, stats };
 })();

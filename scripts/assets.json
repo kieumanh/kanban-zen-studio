@@ -353,5 +353,10 @@
     "/giangho-lex.js",
     "giangho-lex.js",
     "text/javascript; charset=utf-8"
+  ],
+  [
+    "/giangho-guide.js",
+    "giangho-guide.js",
+    "text/javascript; charset=utf-8"
   ]
 ]

@@ -21,6 +21,7 @@ const ALLOW = [
   /clipboard checklist/, // tên emoji (tiếng Anh) trong bảng biểu tượng
   /^Ghi chú$/, // ô "Ghi chú" của một khoản thu chi (lời ghi kèm), không phải một quyển Tàng thư
   /ám hiệu \(mật khẩu\)/i, // ô mật khẩu ghi "Ám hiệu (mật khẩu)" để giữ nghĩa cho mọi người (v1.91.0)
+  /^@title: Nghĩa thường: /, // v1.96.0: title nghĩa thường cố ý ghi chữ cũ (rê chuột / trình đọc màn hình)
 ];
 const vn = (back) => new Date(Date.parse('2026-11-12T09:00:00+07:00') - back * 86400000 + 7 * 3600000).toISOString().slice(0, 10);
 const neutral = (p) => {

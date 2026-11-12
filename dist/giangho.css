@@ -6440,6 +6440,52 @@
 :root[data-style=giangho] #editor.wf-task-editor .priority-choice:has(input:focus-visible) {
     outline: 3px solid currentColor
 }
+:root[data-style=giangho] .gh-glossary h2 small {
+    color: var(--zen-text-muted)
+}
+:root[data-style=giangho] .gh-glossary-group h3 {
+    color: var(--zen-text-muted)
+}
+:root[data-style=giangho] .gh-glossary-group ul {
+    border: 1px solid var(--line)
+}
+:root[data-style=giangho] .gh-glossary-group li {
+    border-top: 1px solid var(--line)
+}
+:root[data-style=giangho] .gh-glossary-group li:first-child {
+    border-top: 0
+}
+:root[data-style=giangho] .gh-glossary-group li b {
+    color: #97132f
+}
+:root[data-style=giangho] .gh-glossary-group li small {
+    color: var(--zen-text-muted)
+}
+:root[data-style=giangho] .gh-tip-bubble {
+    background: #2f2417;
+    color: #ffffff;
+    box-shadow: 0 8px 24px rgba(39,20,5,0.28)
+}
+:root[data-style=giangho] .gh-style-extra .gh-words-row {
+    border-bottom: 0
+}
+:root[data-style=giangho] .gh-style-extra .gh-words-row small {
+    color: var(--zen-text-muted)
+}
+:root[data-style=giangho] .gh-intro {
+    border-color: #ecd3d3;
+    background: #fdf8ee
+}
+:root[data-style=giangho] .gh-intro-icon {
+    background: #f8e3e3;
+    color: #97132f
+}
+:root[data-style=giangho] .gh-intro-copy strong {
+    color: #362417
+}
+:root[data-style=giangho] .gh-intro-copy p {
+    color: var(--zen-text-muted)
+}
 :root[data-style=giangho][data-theme=dark] {
     --bg: #18130c;
     --paper: #1e1811;
@@ -12846,6 +12892,52 @@
 }
 :root[data-style=giangho][data-theme=dark] #editor.wf-task-editor .priority-choice:has(input:focus-visible) {
     outline: 3px solid currentColor
+}
+:root[data-style=giangho][data-theme=dark] .gh-glossary h2 small {
+    color: var(--zen-text-muted)
+}
+:root[data-style=giangho][data-theme=dark] .gh-glossary-group h3 {
+    color: var(--zen-text-muted)
+}
+:root[data-style=giangho][data-theme=dark] .gh-glossary-group ul {
+    border: 1px solid var(--line)
+}
+:root[data-style=giangho][data-theme=dark] .gh-glossary-group li {
+    border-top: 1px solid var(--line)
+}
+:root[data-style=giangho][data-theme=dark] .gh-glossary-group li:first-child {
+    border-top: 0
+}
+:root[data-style=giangho][data-theme=dark] .gh-glossary-group li b {
+    color: #ffc0c1
+}
+:root[data-style=giangho][data-theme=dark] .gh-glossary-group li small {
+    color: var(--zen-text-muted)
+}
+:root[data-style=giangho][data-theme=dark] .gh-tip-bubble {
+    background: #2f2417;
+    color: #ffffff;
+    box-shadow: 0 8px 24px rgba(198,180,166,0.28)
+}
+:root[data-style=giangho][data-theme=dark] .gh-style-extra .gh-words-row {
+    border-bottom: 0
+}
+:root[data-style=giangho][data-theme=dark] .gh-style-extra .gh-words-row small {
+    color: var(--zen-text-muted)
+}
+:root[data-style=giangho][data-theme=dark] .gh-intro {
+    border-color: #473d35;
+    background: #1a150f
+}
+:root[data-style=giangho][data-theme=dark] .gh-intro-icon {
+    background: #211a12;
+    color: #ffc0c1
+}
+:root[data-style=giangho][data-theme=dark] .gh-intro-copy strong {
+    color: #f3dbcb
+}
+:root[data-style=giangho][data-theme=dark] .gh-intro-copy p {
+    color: var(--zen-text-muted)
 }
 
 /* ---- Họa tiết Giang hồ viết tay (v1.86.0 · Chu Mặc) ------------------------------------------------------------------------

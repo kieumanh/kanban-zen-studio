@@ -3839,6 +3839,23 @@
 :root[data-theme=dark] #editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row {
     color: var(--ink, #dcd3ec)
 }
+:root[data-theme=dark] .gh-glossary-group li b {
+    color: #feb2b4
+}
+:root[data-theme=dark] .gh-tip-bubble {
+    color: #ffffff
+}
+:root[data-theme=dark] .gh-intro {
+    border-color: #413d48;
+    background: #18141c
+}
+:root[data-theme=dark] .gh-intro-icon {
+    background: #1d1923;
+    color: #feb2b4
+}
+:root[data-theme=dark] .gh-intro-copy strong {
+    color: #edcdd2
+}
 
 :root[data-theme=dark] {
   color-scheme: dark;

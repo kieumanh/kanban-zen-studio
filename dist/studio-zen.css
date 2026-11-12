@@ -1941,3 +1941,186 @@ dialog[open] button[aria-label^="Đóng"],
     min-height: 44px !important;
   }
 }
+
+/* v1.96.0 (Chú Giải): Bảng chú giải Giang hồ, bong bóng nghĩa thường (nhấn giữ), công tắc lời lẽ giang hồ trong Cài đặt → Giao diện,
+   lời mời thử phong cách ở cuối Tổng quan. Màu tối / tương phản cao sinh tự động (scripts/generate-themes.mjs). */
+.gh-glossary h2 small {
+  display: block;
+  margin-top: 2px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--zen-text-muted);
+}
+.gh-glossary-back {
+  margin: 0 0 10px;
+  min-height: 40px;
+}
+.gh-glossary-search {
+  display: grid;
+  gap: 6px;
+  margin: 14px 0 4px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.gh-glossary-search input {
+  min-height: 44px;
+  border-radius: 12px;
+}
+.gh-glossary-group {
+  margin-top: 16px;
+}
+.gh-glossary-group h3 {
+  margin: 0 0 6px;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--zen-text-muted);
+}
+.gh-glossary-group ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.gh-glossary-group li {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 12px;
+  align-items: baseline;
+  padding: 10px 14px;
+  border-top: 1px solid var(--line);
+  font-size: 14px;
+}
+.gh-glossary-group li:first-child {
+  border-top: 0;
+}
+.gh-glossary-group li[hidden],
+.gh-glossary-group[hidden],
+.gh-glossary-empty[hidden] {
+  display: none;
+}
+.gh-glossary-group li b {
+  font-weight: 700;
+  color: #a8283c;
+}
+.gh-glossary-group li small {
+  display: block;
+  margin-top: 2px;
+  font-size: 12px;
+  color: var(--zen-text-muted);
+}
+.gh-glossary-empty {
+  margin-top: 16px;
+}
+@media (min-width: 900px) {
+  .gh-glossary-dialog {
+    width: min(640px, calc(100vw - 32px));
+  }
+}
+.gh-tip-bubble {
+  position: fixed;
+  z-index: 2147483000;
+  max-width: min(280px, calc(100vw - 16px));
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: #2b2230;
+  color: #fff;
+  font-size: 13px;
+  line-height: 1.4;
+  box-shadow: 0 8px 24px rgba(30, 20, 40, 0.28);
+  pointer-events: none;
+}
+.gh-tip-bubble b {
+  font-weight: 700;
+}
+.gh-style-extra {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 16px;
+  margin: 10px 0 4px;
+}
+.gh-style-extra[hidden] {
+  display: none;
+}
+.gh-style-extra .gh-words-row {
+  flex: 1 1 260px;
+  margin: 0;
+  border-bottom: 0;
+}
+.gh-style-extra .gh-words-row strong {
+  display: block;
+}
+.gh-style-extra .gh-words-row small {
+  display: block;
+  margin-top: 2px;
+  color: var(--zen-text-muted);
+}
+.gh-style-extra .gh-glossary-open {
+  min-height: 44px;
+}
+.gh-intro {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 18px;
+  border-radius: 18px;
+  border-color: #ecd3d3;
+  background: #fdf7f4;
+}
+.gh-intro-icon {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #f8e3e3;
+  color: #a8283c;
+}
+.gh-intro-icon svg {
+  width: 24px;
+  height: 24px;
+}
+.gh-intro-copy {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.gh-intro-copy strong {
+  display: block;
+  font-size: 15px;
+  color: #4a2a30;
+}
+.gh-intro-copy p {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--zen-text-muted);
+}
+.gh-intro-actions {
+  display: flex;
+  gap: 8px;
+  flex: 0 0 auto;
+}
+.gh-intro-actions .btn {
+  min-height: 44px;
+}
+@media (max-width: 700px) {
+  .gh-intro {
+    flex-wrap: wrap;
+  }
+  .gh-intro-copy {
+    flex-basis: calc(100% - 58px);
+  }
+  .gh-intro-actions {
+    flex-basis: 100%;
+  }
+  .gh-intro-actions .btn {
+    flex: 1 1 0;
+  }
+  .gh-glossary-group li {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+}
