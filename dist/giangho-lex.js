@@ -688,6 +688,44 @@
     'Công việc mới chưa được lưu.': 'Nhiệm vụ mới chưa được ghi vào sổ.',
   }))
     add(k, { to: v, in: NOTE });
+  // ---- v1.95.0 (Bổ Khuyết): chỗ còn sót sau đánh giá v1.91.0 và trang Bí kíp nhập môn ------------------------------------------
+  const HELP = 'dialog';
+  for (const [k, v] of [
+    ['dự án', { to: 'đại sự', in: '.home-project-total' }],
+    ['Tổng quan', { to: 'Tổng đàn', in: '.tab-home' }],
+    ['Thêm', { to: 'Hậu viện', in: '.nav-more-summary' }],
+    ['Công việc cần chú ý', { to: 'Nhiệm vụ cần chú ý', in: 'h2:has(~ .due-work-tabs)' }],
+    ['Đăng xuất', { to: 'Hạ sơn', in: '#editor-form:has([data-confirm=signout]) .modal-foot' }],
+    ['Tổng kết tuần', { to: 'Chiến báo tuần', in: '.report-dialog-toolbar' }],
+  ])
+    add(k, v);
+  for (const [k, v] of Object.entries({
+    'Đang ẩn vì Thẻ gọn. Tắt Thẻ gọn để hiện checklist.': 'Đang ẩn vì Thẻ gọn. Tắt Thẻ gọn để hiện chiêu thức.',
+    'Các dự án': 'Các đại sự',
+    'Thêm tab dự án': 'Thêm tab đại sự',
+    'Ý tưởng, Công việc, Gia đình…': 'Kế sách, Nhiệm vụ, Gia đình…',
+    'Emoji Unicode · Hình hiển thị theo thiết bị của bạn.': 'Emoji Unicode · Hình hiển thị theo thiết bị của các hạ.',
+    'Bản xem trước giống nội dung email': 'Bản xem trước giống thư gửi qua email',
+    'Chia sẻ web': { to: 'Phát lệnh bài', in: '.report-dialog-toolbar' },
+    'Đóng báo cáo': 'Đóng chiến báo',
+    'Xem trước tổng kết tuần': 'Xem trước chiến báo tuần',
+    // Bí kíp nhập môn (Cài đặt → Hướng dẫn sử dụng)
+    'Mỗi việc rõ hơn, mỗi ngày nhẹ hơn': { to: 'Mỗi nhiệm vụ rõ hơn, mỗi ngày nhẹ hơn', in: HELP },
+    'Ghi lại điều cần nhớ. Chọn điều cần làm. Dành chỗ cho sự tập trung.': 'Chép lại điều cần nhớ. Chọn nhiệm vụ cần làm. Dành chỗ cho bế quan.',
+    'Bắt đầu từ một việc nhỏ': { to: 'Khởi đầu từ một nhiệm vụ nhỏ', in: HELP },
+    'Chọn một dự án, nhìn việc đang làm và bước tiếp theo. Tiến độ là lời nhắc để điều chỉnh nhịp, không phải thước đo sự bận rộn.': 'Chọn một đại sự, xem nhiệm vụ đang hành và chiêu kế tiếp. Tiến cảnh là lời nhắc để điều chỉnh nhịp, không phải thước đo sự bận rộn.',
+    'Sắp xếp theo cách của bạn': { to: 'Bày trận theo ý các hạ', in: HELP },
+    'Kéo tay nắm để đổi thứ tự việc, checklist và ghi chú. Điện thoại dùng cùng tay nắm; bàn phím dùng Alt + ↑/↓. Kéo việc sang cột khác để đổi trạng thái.': 'Kéo tay nắm để đổi thứ tự nhiệm vụ, chiêu thức và quyển. Điện thoại dùng cùng tay nắm; bàn phím dùng Alt + ↑/↓. Kéo nhiệm vụ sang cột khác để đổi trạng thái.',
+    'Viết rõ, làm gọn': { to: 'Viết rõ, ra chiêu gọn', in: HELP },
+    'Tên việc nói lên kết quả cần đạt. Dùng định dạng trong mô tả để chia ý; checklist giữ từng bước cụ thể. Nút Thêm lưu nội dung đang chỉnh và mở tiếp danh sách.': 'Tên nhiệm vụ nói lên kết quả cần đạt. Dùng định dạng trong mô tả để chia ý; chiêu thức giữ từng bước cụ thể. Nút Thêm lưu nội dung đang chỉnh và mở tiếp danh sách.',
+    'Ghi lại khi ý tưởng đến': { to: 'Chép ngay khi kế sách đến', in: HELP },
+    'Ghi chú tự lưu sau khi dừng gõ một nhịp, kể cả tiêu đề, liên kết và checklist. Xem trạng thái lưu trong khung. Ghim điều cần nhớ, kéo thả để sắp xếp; chọn Xong khi muốn đóng.': 'Quyển tự ghi vào sổ sau khi dừng gõ một nhịp, kể cả tiêu đề, liên kết và chiêu thức. Xem trạng thái lưu trong khung. Ghim điều cần nhớ, kéo thả để sắp xếp; chọn Xong khi muốn đóng.',
+    'Giữ lại, rồi nhẹ nhàng bước tiếp': { to: 'Phong ấn, rồi nhẹ nhàng bước tiếp', in: HELP },
+    'Lưu trữ dự án hoặc việc để tạm ẩn và có thể mở lại. Chuyển khi đổi dự án; Sao chép khi muốn tạo việc tương tự. Thùng rác giữ mục đã xóa 30 ngày.': 'Phong ấn đại sự hoặc nhiệm vụ để tạm ẩn, giải ấn khi cần. Dời sang đại sự khác khi đổi chỗ; Sao chép khi muốn tạo nhiệm vụ tương tự. Phế tích giữ mục đã xóa 30 ngày.',
+    'Để công việc được tiếp nối': { to: 'Để nhiệm vụ được tiếp nối', in: HELP },
+    'Biểu tượng đồng bộ cho biết bản trên thiết bị đã gửi lên hay đang chờ. Khi mất mạng, tiếp tục ghi chép; nếu báo lỗi, giữ bản nháp và mở Cài đặt để kiểm tra. Xuất JSON định kỳ cho những điều quan trọng.': 'Biểu tượng đồng bộ cho biết bản trên thiết bị đã thông mạch hay đang chờ. Khi ẩn cư (mất mạng), cứ tiếp tục ghi chép; nếu báo lỗi, giữ bản nháp và mở Cơ quan để kiểm tra. Xuất JSON định kỳ cho những điều quan trọng.',
+  }))
+    add(k, v);
   const money = (s) => s.replace(/đã chi/g, 'đã xuất ngân').replace(/đã thu hồi/g, 'đã thu ngân').replace(/ chi /g, ' xuất ').replace(/số đã chi/g, 'số đã xuất ngân');
 
   // Mẫu có phần thay đổi: [biểu thức, chữ mới hoặc hàm, vùng (tùy chọn), chữ bắt buộc có (lọc nhanh trước khi thử biểu thức)].
@@ -800,17 +838,24 @@
     [/^Trạng thái đồng bộ: (.+)$/, (s, rest) => 'Trạng thái đồng bộ: ' + syncWords(rest), SYNC, 'Trạng thái đồng bộ: '],
     [/^(Đang gửi dữ liệu lên máy chủ|Dữ liệu đã được máy chủ xác nhận|Dữ liệu hiện vẫn được giữ trên thiết bị) · (.+)$/, (s, a, b) => syncWords(a) + ' · ' + syncWords(b), SYNC, ' · '],
     [/^Lần đồng bộ thành công gần nhất: (.+)$/, 'Lần thông mạch gần nhất: $1', '#sync-last-time', 'Lần đồng bộ thành công'],
-    [/^Tài khoản · (.+)$/, 'Danh tính · $1', '.topbar', 'Tài khoản · '],
+    [/^Tài khoản · (.+)$/, 'Danh tính · $1', '.topbar, .sidebar', 'Tài khoản · '],
     [/^Mở cài đặt tài khoản của (.+)$/, 'Mở Cơ quan của $1', '.topbar', 'Mở cài đặt tài khoản của '],
     [/^Đã tải lên (\d+) tệp vào Tài nguyên\.$/, 'Đã cất $1 tệp vào Bảo khố.', NOTE, 'Đã tải lên'],
     [/^Đã bật email nhắc hằng ngày và tổng kết Chủ nhật lúc (.+)$/, 'Đã bật email nhắc hằng ngày và chiến báo Chủ nhật lúc $1', NOTE, 'tổng kết Chủ nhật'],
     [/^Tổng kết được gửi vào (.+)$/, 'Chiến báo được gửi vào $1', NOTE, 'Tổng kết được gửi'],
+    // v1.95.0
+    [/^(Quá hạn|Sắp đến hạn) · (\d+)$/, (s, k, n) => (k === 'Quá hạn' ? 'Lỡ hẹn' : 'Sắp tới kỳ') + ' · ' + n, '.due-work-tabs', ' · '],
+    [/^Mở dự án (.+)$/, 'Mở đại sự $1', MAIN, 'Mở dự án '],
+    [/^(\d+) dự án$/, '$1 đại sự', MAIN, ' dự án'],
+    [/^Hoàn thành (.+)$/, 'Công thành chiêu $1', '.card-check-control', 'Hoàn thành '],
+    [/^(\d{4}-\d\d-\d\d), (\d+) công việc$/, '$1, $2 nhiệm vụ', MAIN, ' công việc'],
+    [/^(\d+) dự án đang chạy · Về tổng quan$/, '$1 đại sự đang vận hành · Về Tổng đàn', '.tab-home', 'dự án đang chạy'],
   ];
   // Nội dung người dùng và vùng không đổi chữ.
   const SKIP = [
     'script', 'style', 'textarea', 'input', '[contenteditable]', '.gh-nav', '.gr-page', '.gr-award', 'dialog.gr-story',
     // Nội dung người dùng: dự án, tab dự án, việc đã ghim, ghi chú nhanh, kết quả bảng lệnh
-    '.side-project', '#side-projects', '#side-pinned-tasks', '.tabs', '.tab', '.sidebar-note', '.studio-palette [role=listbox]',
+    '.side-project', '#side-projects', '#side-pinned-tasks', '.tab:not(.tab-home)', '.sidebar-note', '.studio-palette [role=listbox]',
     // Tên cột (người dùng đặt), trạng thái theo cột, ô chọn cột / dự án
     '.wf-column-name', '.studio-column-tabs', '.wf-state-choices', 'select[name=col]', 'select[name=project]', '.task-project-picker summary', '.task-project-choice-copy strong',
     // Tên và mô tả việc, dự án, từ khóa, nhãn
