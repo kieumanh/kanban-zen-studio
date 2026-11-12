@@ -966,13 +966,31 @@
     host.setAttribute('title', t);
     host.setAttribute('data-gh-tip', core);
   }
+  // v2.1.0 (Danh Trận): tên cột mặc định theo giang hồ, tùy chọn (Cài đặt → Giao diện, data-gh-columns="on", mặc định tắt). Chỉ đổi
+  // chữ hiển thị khi tên cột trùng đúng tên mặc định; tên cột là dữ liệu nên đổi tên cột vẫn đọc từ dữ liệu, không ghi gì.
+  const COLS = { 'Ý tưởng': 'Kế sách', 'Việc cần làm': 'Chờ xuất chiêu', 'Đang thực hiện': 'Đang hành sự', 'Hoàn thành': 'Công thành' };
+  const COL_TEXT = '.wf-column-name, .studio-column-tabs button, .wf-state-choice, .zen-state-select-secondary option';
+  const COL_ATTR = '.column-title .icon-btn, .task-next';
+  const columnsOn = () => root.dataset.ghColumns === 'on';
+  const colText = (s) => {
+    const m = /^(Ý tưởng|Việc cần làm|Đang thực hiện|Hoàn thành)( · \d+)?$/.exec(s);
+    return m ? COLS[m[1]] + (m[2] || '') : null;
+  };
+  const colAttr = (s) => {
+    const m = /^(.* (?:cột|sang) )(Ý tưởng|Việc cần làm|Đang thực hiện|Hoàn thành)$/.exec(s);
+    return m ? m[1] + COLS[m[2]] : null;
+  };
   function doText(node) {
     stats.texts++;
     const el = node.parentElement;
     if (!el || (el.tagName === 'OPTION' && !el.hasAttribute('value')) || el.matches(DIRECT_SKIP)) return;
     const cur = node.nodeValue;
     if (textMine.get(node) === cur) return;
-    const out = convert(cur, el);
+    let out = convert(cur, el);
+    if (columnsOn() && el.closest(COL_TEXT)) {
+      const c = colText(cur.trim());
+      if (c) out = cur.replace(cur.trim(), () => c);
+    }
     if (out == null) return;
     textOrig.set(node, cur);
     textMine.set(node, out);
@@ -988,7 +1006,8 @@
       if (rec[a] && rec[a].out === v) continue;
       // Thuộc tính của ô nhập (placeholder, nhãn) là chữ giao diện nên được đổi; chỉ bỏ qua vùng nội dung người dùng.
       const host = el.matches('input, textarea, select') ? el.parentElement || el : el;
-      const out = convert(v, host);
+      let out = convert(v, host);
+      if (columnsOn() && el.matches(COL_ATTR)) out = colAttr(out ?? v) ?? out;
       if (out == null) continue;
       rec[a] = { orig: v, out };
       attrOrig.set(el, rec);
@@ -1100,7 +1119,15 @@
     observer.takeRecords(); // bỏ các thay đổi do chính bộ chuyển ngữ vừa làm
     stats.ms += performance.now() - t0;
   }
+  let columnsWas = columnsOn();
   function sync() {
+    // v2.1.0: bật / tắt tên cột giang hồ khi đang Giang hồ thì trả chữ gốc rồi quét lại cả trang.
+    if (active() && observer && columnsWas !== columnsOn()) {
+      observer.disconnect();
+      observer = null;
+      restore();
+    }
+    columnsWas = columnsOn();
     if (active() && !observer && document.body) {
       skipMemo = new WeakMap();
       scan(document.body);

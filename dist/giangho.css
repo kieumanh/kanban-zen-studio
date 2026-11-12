@@ -6536,10 +6536,10 @@
     color: #ffffff;
     box-shadow: 0 8px 24px rgba(39,20,5,0.28)
 }
-:root[data-style=giangho] .gh-style-extra .gh-words-row, :root[data-style=giangho] .gh-style-extra .gh-fx-row {
+:root[data-style=giangho] .gh-style-extra .gh-words-row, :root[data-style=giangho] .gh-style-extra .gh-columns-row, :root[data-style=giangho] .gh-style-extra .gh-fx-row {
     border-bottom: 0
 }
-:root[data-style=giangho] .gh-style-extra .gh-fx-row small, :root[data-style=giangho] .gh-style-extra .gh-words-row small {
+:root[data-style=giangho] .gh-style-extra .gh-fx-row small, :root[data-style=giangho] .gh-style-extra .gh-columns-row small, :root[data-style=giangho] .gh-style-extra .gh-words-row small {
     color: var(--zen-text-muted)
 }
 :root[data-style=giangho] .gh-intro {
@@ -13059,10 +13059,10 @@
     color: #ffffff;
     box-shadow: 0 8px 24px rgba(198,180,166,0.28)
 }
-:root[data-style=giangho][data-theme=dark] .gh-style-extra .gh-words-row, :root[data-style=giangho][data-theme=dark] .gh-style-extra .gh-fx-row {
+:root[data-style=giangho][data-theme=dark] .gh-style-extra .gh-words-row, :root[data-style=giangho][data-theme=dark] .gh-style-extra .gh-columns-row, :root[data-style=giangho][data-theme=dark] .gh-style-extra .gh-fx-row {
     border-bottom: 0
 }
-:root[data-style=giangho][data-theme=dark] .gh-style-extra .gh-fx-row small, :root[data-style=giangho][data-theme=dark] .gh-style-extra .gh-words-row small {
+:root[data-style=giangho][data-theme=dark] .gh-style-extra .gh-fx-row small, :root[data-style=giangho][data-theme=dark] .gh-style-extra .gh-columns-row small, :root[data-style=giangho][data-theme=dark] .gh-style-extra .gh-words-row small {
     color: var(--zen-text-muted)
 }
 :root[data-style=giangho][data-theme=dark] .gh-intro {

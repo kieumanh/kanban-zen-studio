@@ -117,6 +117,8 @@
     // v1.96.0 (Chú Giải): Bảng chú giải; khi đang ở Giang hồ thì thêm công tắc lời lẽ giang hồ (Giang hồ nhẹ).
     if(window.zenGuide)list.push({label:'Bảng chú giải Giang hồ',hint:'Tên giang hồ và nghĩa thường',run:()=>window.zenGuide.glossary()});
     if(window.zenTheme?.setWords&&window.zenTheme.state().style==='giangho')list.push({label:'Bật / tắt lời lẽ giang hồ',hint:'Phong cách',run:()=>{const on=!window.zenTheme.state().words;window.zenTheme.setWords(on);notify(on?'Đã bật lời lẽ giang hồ.':'Đã chọn Giang hồ nhẹ: giữ họa tiết, chữ quen thuộc.');}});
+    // v2.1.0 (Danh Trận): tên cột mặc định theo giang hồ.
+    if(window.zenTheme?.setColumns&&window.zenTheme.state().style==='giangho')list.push({label:'Bật / tắt tên cột giang hồ',hint:'Phong cách',run:()=>{const on=!window.zenTheme.state().columns;window.zenTheme.setColumns(on);notify(on?'Đã đổi tên cột mặc định sang giang hồ.':'Tên cột trở lại như cũ.');}});
     // v1.97.0 (Ấn Son): bật / tắt ấn son công thành, nén hương bế quan.
     if(window.zenTheme?.setFx&&window.zenTheme.state().style==='giangho')list.push({label:'Bật / tắt hiệu ứng ấn son, nén hương',hint:'Phong cách',run:()=>{const on=!window.zenTheme.state().fx;window.zenTheme.setFx(on);notify(on?'Đã bật hiệu ứng ấn son, nén hương.':'Đã tắt hiệu ứng ấn son, nén hương.');}});
     visibleProjects().forEach(p=>list.push({label:'Dự án · '+p.name,run:()=>go('projects',p.id)}));

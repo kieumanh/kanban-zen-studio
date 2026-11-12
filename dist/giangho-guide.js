@@ -223,6 +223,11 @@
     if (input) input.checked = s.words !== false;
     const fx = box.querySelector('#gh-fx');
     if (fx) fx.checked = s.fx !== false;
+    const cols = box.querySelector('#gh-columns');
+    if (cols) {
+      cols.checked = !!s.columns;
+      cols.disabled = s.words === false; // tên cột giang hồ là chữ, nên cần bật Lời lẽ giang hồ
+    }
   }
   if (typeof accountPanel === 'function') {
     const base = accountPanel;
@@ -236,6 +241,8 @@
           '<label class="check-row gh-words-row"><input type="checkbox" id="gh-words"><span><strong>Lời lẽ giang hồ</strong><small>Tắt để giữ họa tiết mà chữ vẫn quen thuộc (Giang hồ nhẹ).</small></span></label>' +
           // v1.97.0 (Ấn Son): công tắc hiệu ứng (giangho-fx.js).
           (window.zenTheme.setFx ? '<label class="check-row gh-fx-row"><input type="checkbox" id="gh-fx"><span><strong>Hiệu ứng ấn son, nén hương</strong><small>Con dấu son khi công thành, nén hương cháy khi bế quan. Luôn đứng yên nếu thiết bị bật giảm chuyển động.</small></span></label>' : '') +
+          // v2.1.0 (Danh Trận): tên cột mặc định theo giang hồ, mặc định tắt.
+          (window.zenTheme.setColumns ? '<label class="check-row gh-columns-row"><input type="checkbox" id="gh-columns"><span><strong>Tên cột giang hồ</strong><small>Cột còn tên mặc định hiện thành Kế sách · Chờ xuất chiêu · Đang hành sự · Công thành. Tên cột trong dữ liệu giữ nguyên.</small></span></label>' : '') +
           '<button type="button" class="btn gh-glossary-open">Bảng chú giải</button>';
         set.after(box);
         // v2.0.0 (Truyền Âm): phong cách đi theo tài khoản.
@@ -250,6 +257,10 @@
         box.querySelector('#gh-fx')?.addEventListener('change', (e) => {
           window.zenTheme.setFx(e.target.checked);
           if (typeof notify === 'function') notify(e.target.checked ? 'Đã bật hiệu ứng ấn son, nén hương.' : 'Đã tắt hiệu ứng ấn son, nén hương.');
+        });
+        box.querySelector('#gh-columns')?.addEventListener('change', (e) => {
+          window.zenTheme.setColumns(e.target.checked);
+          if (typeof notify === 'function') notify(e.target.checked ? 'Đã đổi tên cột mặc định sang giang hồ.' : 'Tên cột trở lại như cũ.');
         });
         box.querySelector('.gh-glossary-open').onclick = () => glossary({ back: true });
         paintExtra();
