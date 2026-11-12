@@ -2,12 +2,15 @@
 // v1.78.0: "Điểm tích lũy" — 8 chỉ số quan trọng của một đời người, cộng dần khi hoàn thành việc.
 // Dữ liệu: data.growth = {v:1, hero:'nam'|'nu', name?, since, log:[{id,d,s,k?,n?,p:[8 số nguyên]}]} (cùng quy tắc với server/growth.mjs).
 // p tính theo nửa điểm; điểm từng chỉ số = tổng p của sổ cái / 2. Sổ cái chỉ-thêm nên hai thiết bị cùng cộng điểm vẫn gộp được theo id.
+// v1.81.0: data.growth.spend = [{id, d, n, note?, p:[8 số nguyên], x?:true}] — sổ quy đổi. Điểm hiện có của từng chỉ số = đã cộng − đã quy đổi (không âm);
+// cảnh giới tính theo tổng điểm đã tích lũy nên không tụt khi quy đổi. Sửa/hủy/khôi phục chỉ đổi đúng dòng quy đổi đó.
 // Chưa chọn nhân vật (chưa có data.growth) thì mọi thứ ở đây im lặng: không hỏi điểm khi xong việc.
 (function () {
   const STEP = 0.5; // mỗi lần bấm + cộng 0,5 điểm
   const TASK_STEPS = 2; // mỗi việc hoàn thành được 2 lần cộng (1 điểm) để phân bổ
   const HABIT_STEPS = 6; // một việc hằng ngày đủ 7 ngày liền được 6 lần cộng (3 điểm)
   const LOG_MAX = 3000;
+  const SPEND_MAX = 500;
   const TIERS = [5, 10, 20, 40, 80, 160, 320, 640, 1280, 2560, 5120];
   // Thứ tự các chỉ số là cố định (chỉ số p[i] trong sổ cái); không đổi thứ tự sau khi đã phát hành.
   const AXES = [
@@ -54,19 +57,29 @@
   function validGrowth(g) {
     if (g === undefined) return true;
     if (!g || typeof g !== 'object' || Array.isArray(g)) return false;
-    if (!Object.keys(g).every((k) => ['v', 'hero', 'name', 'since', 'log', 'notify', 'tips'].includes(k))) return false;
+    if (!Object.keys(g).every((k) => ['v', 'hero', 'name', 'since', 'log', 'notify', 'tips', 'spend'].includes(k))) return false;
     if (g.v !== 1 || !['nam', 'nu'].includes(g.hero) || !isDate(g.since)) return false;
     if (g.name !== undefined && (typeof g.name !== 'string' || g.name.length > 30)) return false;
     if (g.notify !== undefined && typeof g.notify !== 'boolean') return false;
     if (g.tips !== undefined && typeof g.tips !== 'boolean') return false;
     if (!Array.isArray(g.log) || g.log.length > LOG_MAX) return false;
+    const points = (p) => Array.isArray(p) && p.length === 8 && p.every((x) => Number.isInteger(x) && x >= 0 && x <= 1000000) && p.some((x) => x > 0);
     const seen = new Set();
-    return g.log.every(
+    const logOk = g.log.every(
       (e) =>
         !!e && typeof e === 'object' && !Array.isArray(e) && Object.keys(e).every((k) => ['id', 'd', 's', 'k', 'n', 'p'].includes(k)) && typeof e.id === 'string' && /^[A-Za-z0-9_-]{1,99}$/.test(e.id) &&
         !seen.has(e.id) && !!seen.add(e.id) && isDate(e.d) && ['task', 'habit', 'archive'].includes(e.s) &&
-        (e.k === undefined || (typeof e.k === 'string' && e.k.length <= 120)) && (e.n === undefined || (typeof e.n === 'string' && e.n.length <= 120)) &&
-        Array.isArray(e.p) && e.p.length === 8 && e.p.every((x) => Number.isInteger(x) && x >= 0 && x <= 1000000) && e.p.some((x) => x > 0),
+        (e.k === undefined || (typeof e.k === 'string' && e.k.length <= 120)) && (e.n === undefined || (typeof e.n === 'string' && e.n.length <= 120)) && points(e.p),
+    );
+    if (!logOk) return false;
+    if (g.spend === undefined) return true;
+    if (!Array.isArray(g.spend) || g.spend.length > SPEND_MAX) return false;
+    const spent = new Set();
+    return g.spend.every(
+      (e) =>
+        !!e && typeof e === 'object' && !Array.isArray(e) && Object.keys(e).every((k) => ['id', 'd', 'n', 'note', 'p', 'x'].includes(k)) && typeof e.id === 'string' && /^[A-Za-z0-9_-]{1,99}$/.test(e.id) &&
+        !spent.has(e.id) && !!spent.add(e.id) && isDate(e.d) && typeof e.n === 'string' && e.n.length >= 1 && e.n.length <= 120 &&
+        (e.note === undefined || (typeof e.note === 'string' && e.note.length <= 300)) && (e.x === undefined || e.x === true) && points(e.p),
     );
   }
   const validBeforeGrowth = valid;
@@ -79,12 +92,25 @@
   const started = () => !!growth();
   const fmt = (n) => String(Math.round(n * 2) / 2).replace('.', ',');
   const tierOf = (mx) => TIERS.find((t) => mx <= t) || Math.ceil(mx / 1000) * 1000;
-  function scores() {
+  // Điểm đã tích lũy (cộng dồn từ sổ cái), điểm đã quy đổi (các lần chưa hủy) và điểm hiện có = đã cộng − đã quy đổi, không âm.
+  function earnedScores() {
     const s = Array(8).fill(0), g = growth();
     if (g) for (const e of g.log) for (let i = 0; i < 8; i++) s[i] += e.p[i];
     return s.map((v) => v * STEP);
   }
+  const activeSpend = (g) => (g && g.spend ? g.spend.filter((e) => !e.x) : []);
+  function spentScores() {
+    const s = Array(8).fill(0);
+    for (const e of activeSpend(growth())) for (let i = 0; i < 8; i++) s[i] += e.p[i];
+    return s.map((v) => v * STEP);
+  }
+  function scores() {
+    const earned = earnedScores(), spent = spentScores();
+    return earned.map((v, i) => Math.max(0, v - spent[i]));
+  }
   const total = (s) => s.reduce((a, b) => a + b, 0);
+  const earnedTotal = () => total(earnedScores());
+  const spentTotal = () => total(spentScores());
   function realmOf(t) {
     let i = 0;
     REALMS.forEach((r, k) => { if (t >= r.at) i = k; });
@@ -147,7 +173,7 @@
       AXES.map((a) => '<li style="--c:' + a.color + '"><span class="gr-guide-ico">' + iconSvg('gr-' + a.id, 20) + '</span><div><strong>' + a.name + '</strong> <small>' + a.sub + '</small><p>' + a.means + '</p></div></li>').join('') + '</ul></section>';
   }
   function bubbleText(pose, s) {
-    const t = total(s), ex = extremes(s);
+    const t = earnedTotal(), ex = extremes(s);
     const lines = {
       talk: [t === 0 ? 'Hoàn thành một việc để cộng điểm đầu tiên nhé!' : ex.low.name + ' đang thấp nhất, một việc nhỏ cũng đủ bồi bổ.', t === 0 ? 'Chào bạn! Mình sẽ đồng hành cùng bạn.' : ex.top.name + ' là thế mạnh của bạn lúc này!', 'Mỗi việc xong là một viên gạch cho cảnh giới mới.'],
       martial: ['Hà! Hà! Rèn thân, luyện ý!', 'Một đấm một việc, xong là có điểm!'],
@@ -158,11 +184,11 @@
     return list[msgIndex % list.length];
   }
   function stage(s) {
-    const g = growth(), r = realmOf(total(s));
+    const g = growth(), r = realmOf(earnedTotal());
     const chips = [{ id: 'auto', label: 'Tự động' }, ...zenHero.POSES].map((p) => '<button type="button" class="gr-chip' + (poseMode === p.id ? ' is-on' : '') + '" data-gr-pose="' + p.id + '" aria-pressed="' + (poseMode === p.id) + '">' + p.label + '</button>').join('');
     return '<section class="panel gr-stage" aria-label="Nhân vật đồng hành"><div class="gr-stage-bg"><p class="gr-bubble" id="gr-bubble" role="status">' + esc(bubbleText(poseNow, s)) + '</p><div class="gr-figure" id="gr-figure">' + zenHero.svg(g.hero, poseNow) + '</div></div>' +
       '<div class="gr-poses" role="group" aria-label="Tư thế nhân vật">' + chips + '</div>' +
-      '<div class="gr-realm"><div><span class="gr-realm-name">' + r.name + '</span><small>' + fmt(total(s)) + ' điểm' + (r.next ? ' · còn ' + fmt(r.need) + ' điểm tới ' + r.next : ' · cảnh giới cao nhất') + '</small></div><div class="progress" role="progressbar" aria-label="Tiến tới cảnh giới kế tiếp" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + r.pct + '"><span style="width:' + r.pct + '%"></span></div></div></section>';
+      '<div class="gr-realm"><div><span class="gr-realm-name">' + r.name + '</span><small>' + fmt(earnedTotal()) + ' điểm tích lũy' + (r.next ? ' · còn ' + fmt(r.need) + ' điểm tới ' + r.next : ' · cảnh giới cao nhất') + '</small></div><div class="progress" role="progressbar" aria-label="Tiến tới cảnh giới kế tiếp" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + r.pct + '"><span style="width:' + r.pct + '%"></span></div></div></section>';
   }
   function axisRows(s) {
     const tier = tierOf(Math.max(...s));
@@ -176,20 +202,39 @@
     return '<section class="panel gr-history"><h2>Lịch sử cộng điểm <small>12 lần gần nhất</small></h2><ul class="gr-history-list">' + rows.map((e) =>
       '<li><div><strong>' + esc(e.n || SOURCE_LABEL[e.s]) + '</strong><small>' + short(e.d) + ' · ' + SOURCE_LABEL[e.s] + '</small></div><span class="gr-chips">' + e.p.map((v, i) => (v ? '<i style="--c:' + AXES[i].color + '">' + AXES[i].name + ' +' + fmt(v * STEP) + '</i>' : '')).join('') + '</span></li>').join('') + '</ul></section>';
   }
+  const dateShort = (d) => d.slice(8, 10) + '/' + d.slice(5, 7) + (d.slice(0, 4) === today().slice(0, 4) ? '' : '/' + d.slice(0, 4));
+  function wallet(s) {
+    const cell = (id, label, v) => '<div data-wallet="' + id + '"><small>' + label + '</small><b>' + fmt(v) + '</b></div>';
+    return '<div class="gr-wallet" role="group" aria-label="Điểm hiện có, đã tích lũy và đã quy đổi">' + cell('left', 'Điểm hiện có', total(s)) + cell('earned', 'Đã tích lũy', earnedTotal()) + cell('spent', 'Đã quy đổi', spentTotal()) + '</div>';
+  }
+  const spendPoints = (e) => e.p.reduce((a, b) => a + b, 0) * STEP;
+  const spendChips = (e) => '<span class="gr-chips">' + e.p.map((v, i) => (v ? '<i style="--c:' + AXES[i].color + '">' + AXES[i].name + ' −' + fmt(v * STEP) + '</i>' : '')).join('') + '</span>';
+  let spendAll = false;
+  function spendPanel() {
+    const g = growth(), list = [...(g.spend || [])].reverse(), rows = spendAll ? list : list.slice(0, 10);
+    const head = '<h2>Quy đổi điểm <small>' + (list.length ? list.length + ' lần' : 'chưa có lần nào') + '</small></h2>';
+    if (!list.length) return '<section class="panel gr-spend" aria-label="Quy đổi điểm">' + head + '<p class="help-copy">Chưa có lần quy đổi nào. Bấm “Sử dụng điểm” để ghi lại vật phẩm bạn đã mua hoặc quy đổi; điểm sẽ được trừ khỏi biểu đồ.</p></section>';
+    const item = (e) => '<li class="gr-spend-item' + (e.x ? ' is-void' : '') + '" data-spend="' + esc(e.id) + '"><div class="gr-spend-main"><div class="gr-spend-title"><strong>' + esc(e.n) + '</strong>' + (e.x ? '<em class="gr-void-tag">Đã hủy</em>' : '') + '</div><small>' + dateShort(e.d) + ' · ' + (e.x ? 'đã hoàn ' : 'trừ ') + fmt(spendPoints(e)) + ' điểm' + (e.note ? ' · ' + esc(e.note) : '') + '</small></div>' + spendChips(e) +
+      '<div class="gr-spend-act">' + (e.x
+        ? '<button type="button" class="btn" data-gr-spend-restore="' + esc(e.id) + '">Khôi phục</button><button type="button" class="btn" data-gr-spend-del="' + esc(e.id) + '">Xóa hẳn</button>'
+        : '<button type="button" class="btn" data-gr-spend-edit="' + esc(e.id) + '">Sửa</button><button type="button" class="btn" data-gr-spend-void="' + esc(e.id) + '">Hủy quy đổi</button>') + '</div></li>';
+    return '<section class="panel gr-spend" aria-label="Quy đổi điểm">' + head + '<p class="help-copy">Nhập sai? Bấm Sửa để chỉnh lại, hoặc Hủy quy đổi để hoàn điểm về biểu đồ (có thể khôi phục).</p><ul class="gr-spend-list">' + rows.map(item).join('') + '</ul>' +
+      (list.length > 10 ? '<button type="button" class="btn" data-gr-spend-more aria-expanded="' + spendAll + '">' + (spendAll ? 'Thu gọn' : 'Xem tất cả ' + list.length + ' lần') + '</button>' : '') + '</section>';
+  }
   function page() {
     const g = growth();
     const intro = 'Hoàn thành việc để bồi bổ 8 chỉ số quan trọng của đời người. Mỗi lần cộng 0,5 điểm.';
     if (!g) return '<div class="gr-page">' + heading('ĐIỂM TÍCH LŨY', 'Hành trình nội lực', intro) + pickPanel() + '</div>';
     if (changing) return '<div class="gr-page">' + heading('ĐIỂM TÍCH LŨY', 'Hành trình nội lực', intro) + pickPanel() + '</div>';
     if (reporting) return reportPage();
-    const s = scores(), r = realmOf(total(s)), ex = extremes(s);
-    const sub = 'Cảnh giới ' + r.name + ' · ' + fmt(total(s)) + ' điểm';
+    const s = scores(), r = realmOf(earnedTotal()), ex = extremes(s);
+    const sub = 'Cảnh giới ' + r.name + ' · ' + fmt(total(s)) + ' điểm' + (spentTotal() ? ' hiện có' : '');
     const summary = total(s) === 0
-      ? 'Tất cả chỉ số đang ở 0. Hoàn thành một việc để bắt đầu.'
+      ? earnedTotal() === 0 ? 'Tất cả chỉ số đang ở 0. Hoàn thành một việc để bắt đầu.' : 'Điểm hiện có đang ở 0 sau khi quy đổi. Hoàn thành việc để tích lũy tiếp.'
       : 'Mạnh nhất: <strong>' + ex.top.name + '</strong> (' + fmt(ex.mx) + ') · Cần bồi bổ nhất: <strong>' + ex.low.name + '</strong> (' + fmt(ex.mn) + ')';
-    return '<div class="gr-page">' + heading('ĐIỂM TÍCH LŨY', 'Nội lực của ' + esc(heroName()), sub, '<div class="gr-head-actions"><button type="button" class="btn primary" data-gr-report>Xem báo cáo tiến độ</button><button type="button" class="btn" data-gr-change>Đổi nhân vật</button></div>') +
-      '<div class="gr-grid">' + stage(s) + '<section class="panel gr-radar-panel" aria-label="Biểu đồ nội lực"><h2>Biểu đồ nội lực</h2><div class="gr-radar-wrap" id="gr-radar">' + radar(s) + '</div><p class="gr-summary">' + summary + '</p></section></div>' +
-      axisRows(s) + history() + '<section class="panel gr-how"><h2>Cách tích điểm</h2><ul class="gr-how-list"><li>Mỗi việc hoàn thành cho bạn <strong>2 lần cộng</strong> (1 điểm). Bảng cộng điểm hiện ra trước lời chúc mừng.</li><li>Mỗi lần bấm nút <strong>+</strong> thêm 0,5 điểm vào chỉ số bạn chọn; dồn cả hai lần vào một chỉ số cũng được.</li><li>Mỗi việc chỉ được cộng điểm một lần.</li></ul></section></div>';
+    return '<div class="gr-page">' + heading('ĐIỂM TÍCH LŨY', 'Nội lực của ' + esc(heroName()), sub, '<div class="gr-head-actions"><button type="button" class="btn primary" data-gr-spend>Sử dụng điểm</button><button type="button" class="btn" data-gr-report>Xem báo cáo tiến độ</button><button type="button" class="btn" data-gr-change>Đổi nhân vật</button></div>') +
+      '<div class="gr-grid">' + stage(s) + '<section class="panel gr-radar-panel" aria-label="Biểu đồ nội lực"><h2>Biểu đồ nội lực</h2><div class="gr-radar-wrap" id="gr-radar">' + radar(s) + '</div><p class="gr-summary">' + summary + '</p>' + wallet(s) + '</section></div>' +
+      axisRows(s) + history() + spendPanel() + '<section class="panel gr-how"><h2>Cách tích điểm</h2><ul class="gr-how-list"><li>Mỗi việc hoàn thành cho bạn <strong>2 lần cộng</strong> (1 điểm). Bảng cộng điểm hiện ra trước lời chúc mừng.</li><li>Mỗi lần bấm nút <strong>+</strong> thêm 0,5 điểm vào chỉ số bạn chọn; dồn cả hai lần vào một chỉ số cũng được.</li><li>Mỗi việc chỉ được cộng điểm một lần.</li><li>Bấm <strong>Sử dụng điểm</strong> để ghi lại vật phẩm đã mua hoặc quy đổi; điểm bị trừ khỏi biểu đồ. Nhập sai thì sửa hoặc hủy quy đổi để hoàn điểm. Cảnh giới tính theo tổng điểm đã tích lũy nên không tụt khi quy đổi.</li></ul></section></div>';
   }
 
   // ---- Hoạt họa nhân vật --------------------------------------------------------------------------------------------------
@@ -285,9 +330,9 @@
       const entry = { id: uid(), d: today(), s: a.source, k: a.key, n: String(a.title || '').slice(0, 120), p: a.add.slice() };
       if (!a.key) delete entry.k;
       if (!entry.n) delete entry.n;
-      const realmBefore = realmOf(total(scores())).name;
-      if (!wfSave(() => { data.growth.log.push(entry); compact(); })) return notify('Chưa lưu được điểm. Hãy thử lại.');
-      const realmAfter = realmOf(total(scores())).name;
+      const realmBefore = realmOf(earnedTotal()).name;
+      if (!wfSave(() => { data.growth.log.push(entry); data.growth.spend ||= []; compact(); })) return notify('Chưa lưu được điểm. Hãy thử lại.');
+      const realmAfter = realmOf(earnedTotal()).name;
       // Thông báo điểm nghiệp (bật mặc định, tắt ở Cài đặt → Thông báo): lên cảnh giới mới; với việc hằng ngày còn báo số điểm vừa cộng.
       if (growth()?.notify !== false) toastText = realmAfter !== realmBefore ? 'Chúc mừng! ' + heroName() + ' đã lên cảnh giới ' + realmAfter + '.' : a.source !== 'task' ? 'Đã cộng ' + fmt(a.spent * STEP) + ' điểm vào Điểm tích lũy.' : '';
     }
@@ -392,9 +437,9 @@
   }
   function buildReport(t) {
     t = t || today();
-    const g = growth(), s = scores(), tot = total(s), mean = tot / 8, w = windowSums(g, t);
+    const g = growth(), s = scores(), tot = total(s), mean = tot / 8, w = windowSums(g, t), earned = earnedTotal();
     return {
-      t, scores: s, total: tot, mean, realm: realmOf(tot), extremes: extremes(s), balance: balanceOf(s), entries: realLog(g).length,
+      t, scores: s, total: tot, earned, spent: spentTotal(), mean, realm: realmOf(earned), extremes: extremes(s), balance: balanceOf(s), entries: realLog(g).length,
       week: { last: total(w.last), prev: total(w.prev), byAxis: w.last }, streak: activeStreak(g, t),
       rows: AXES.map((a, i) => ({ axis: a, score: s[i], level: levelOf(s[i], mean) })),
       weak: AXES.map((_, i) => i).sort((x, y) => s[x] - s[y] || x - y).slice(0, 3),
@@ -402,7 +447,7 @@
   }
   function tipsOf(rep) {
     const tips = [];
-    if (rep.total === 0) {
+    if (rep.earned === 0) {
       tips.push({ kind: 'start', title: 'Bắt đầu từ một việc nhỏ', text: 'Hoàn thành một việc bất kỳ rồi chia 1 điểm cho chỉ số bạn vừa bồi bổ. Chỉ cần vài việc là biểu đồ bắt đầu có hình dạng.', ideas: ['Ghi lại một khoản chi hôm nay (Tài lộc)', 'Nhắn hỏi thăm một người thân (Nhân duyên)', 'Đi bộ 10 phút (Thể lực)'] });
       return tips;
     }
@@ -412,7 +457,7 @@
     else if (last < prev) tips.push({ kind: 'trend', title: 'Đà chậm lại', text: '7 ngày qua bạn cộng ' + fmt(last) + ' điểm, ít hơn 7 ngày trước (' + fmt(prev) + ' điểm). Một việc nhỏ mỗi ngày là đủ để lấy lại nhịp.' });
     else tips.push({ kind: 'trend', title: 'Nhịp đều', text: '7 ngày qua bạn cộng ' + fmt(last) + ' điểm, bằng 7 ngày trước.' });
     const ex = rep.extremes;
-    if (rep.balance.pct < 45) tips.push({ kind: 'balance', title: 'Cân bằng lại', text: 'Điểm đang dồn vào ' + ex.top.name + ' (' + fmt(ex.mx) + ') trong khi ' + ex.low.name + ' mới ' + fmt(ex.mn) + '. Trong 3 việc kế tiếp, thử dành ít nhất 1 lần cộng cho ' + ex.low.name + '.' });
+    if (rep.total > 0 && rep.balance.pct < 45) tips.push({ kind: 'balance', title: 'Cân bằng lại', text: 'Điểm đang dồn vào ' + ex.top.name + ' (' + fmt(ex.mx) + ') trong khi ' + ex.low.name + ' mới ' + fmt(ex.mn) + '. Trong 3 việc kế tiếp, thử dành ít nhất 1 lần cộng cho ' + ex.low.name + '.' });
     if (rep.realm.next && rep.realm.need <= 5) tips.push({ kind: 'realm', title: 'Sắp lên cảnh giới', text: 'Còn ' + fmt(rep.realm.need) + ' điểm nữa là tới ' + rep.realm.next + '.' });
     rep.weak.forEach((i) => {
       const a = AXES[i], v = rep.scores[i];
@@ -428,16 +473,16 @@
     const rep = buildReport(), r = rep.realm, s = rep.scores, t = rep.t;
     const head = heading('ĐIỂM TÍCH LŨY', 'Báo cáo tiến độ', 'Cập nhật ' + t.slice(8, 10) + '/' + t.slice(5, 7) + ' · ' + esc(heroName()), '<div class="gr-head-actions"><button type="button" class="btn" data-gr-back>← Quay lại</button></div>');
     const tips = tipsOf(rep);
-    if (rep.total === 0) return '<div class="gr-page gr-report">' + head + '<section class="panel gr-empty"><h2>Chưa có điểm để đánh giá</h2><p class="help-copy">Báo cáo sẽ có đánh giá từng chỉ số và đề xuất cải thiện sau lần cộng điểm đầu tiên.</p></section><section class="panel gr-tips"><h2>Gợi ý bắt đầu</h2><div class="gr-tip-list">' + tips.map(tipCard).join('') + '</div></section></div>';
+    if (rep.earned === 0) return '<div class="gr-page gr-report">' + head + '<section class="panel gr-empty"><h2>Chưa có điểm để đánh giá</h2><p class="help-copy">Báo cáo sẽ có đánh giá từng chỉ số và đề xuất cải thiện sau lần cộng điểm đầu tiên.</p></section><section class="panel gr-tips"><h2>Gợi ý bắt đầu</h2><div class="gr-tip-list">' + tips.map(tipCard).join('') + '</div></section></div>';
     const tile = (id, label, value, sub) => '<div class="gr-tile" data-tile="' + id + '"><small>' + label + '</small><strong>' + value + '</strong><span>' + sub + '</span></div>';
     const tiles = '<div class="gr-tiles">' +
-      tile('total', 'Tổng điểm', fmt(rep.total) + ' điểm', rep.entries + ' lần cộng') +
+      tile('total', rep.spent ? 'Điểm hiện có' : 'Tổng điểm', fmt(rep.total) + ' điểm', rep.entries + ' lần cộng' + (rep.spent ? ' · đã quy đổi ' + fmt(rep.spent) : '')) +
       tile('realm', 'Cảnh giới', r.name, r.next ? 'Còn ' + fmt(r.need) + ' điểm tới ' + r.next : 'Cảnh giới cao nhất') +
       tile('week', '7 ngày qua', '+' + fmt(rep.week.last) + ' điểm', '7 ngày trước đó: ' + fmt(rep.week.prev) + ' điểm') +
       tile('streak', 'Chuỗi ngày', rep.streak + ' ngày', 'liên tiếp có cộng điểm') + '</div>';
     const tier = tierOf(Math.max(...s));
     const rows = rep.rows.map((x, i) => '<li class="gr-eval-row" data-axis="' + x.axis.id + '" style="--c:' + x.axis.color + '"><span class="gr-axis-ico">' + iconSvg('gr-' + x.axis.id, 18) + '</span><div class="gr-axis-main"><div class="gr-axis-head"><strong>' + x.axis.name + '</strong><span class="gr-level is-' + x.level.id + '">' + x.level.label + '</span><b class="gr-eval-score">' + fmt(x.score) + '</b></div><div class="progress" aria-hidden="true"><span style="width:' + Math.min(100, (x.score / tier) * 100).toFixed(1) + '%"></span></div><small>' + (rep.week.byAxis[i] ? '+' + fmt(rep.week.byAxis[i]) + ' điểm trong 7 ngày qua' : 'Chưa có điểm trong 7 ngày qua') + '</small></div></li>').join('');
-    const bal = '<p class="gr-balance">Độ cân bằng: <strong>' + rep.balance.label + '</strong> (' + rep.balance.pct + '%). ' + (rep.balance.pct >= 75 ? '8 chỉ số đang khá đều nhau.' : rep.balance.pct >= 45 ? 'Có vài chỉ số nhỉnh hơn hẳn các chỉ số còn lại.' : 'Điểm đang dồn vào vài chỉ số; hình nhện còn lệch.') + '</p>';
+    const bal = !rep.total ? '<p class="gr-balance">Điểm hiện có đang ở 0 vì đã quy đổi hết. Tích lũy thêm để đánh giá độ cân bằng.</p>' : '<p class="gr-balance">Độ cân bằng: <strong>' + rep.balance.label + '</strong> (' + rep.balance.pct + '%). ' + (rep.balance.pct >= 75 ? '8 chỉ số đang khá đều nhau.' : rep.balance.pct >= 45 ? 'Có vài chỉ số nhỉnh hơn hẳn các chỉ số còn lại.' : 'Điểm đang dồn vào vài chỉ số; hình nhện còn lệch.') + '</p>';
     const notes = tips.filter((x) => x.kind !== 'weak'), weak = tips.filter((x) => x.kind === 'weak');
     return '<div class="gr-page gr-report">' + head + tiles +
       '<div class="gr-rep-grid"><section class="panel gr-radar-panel" aria-label="Hình dạng nội lực"><h2>Hình dạng nội lực</h2><div class="gr-radar-wrap">' + radar(s) + '</div><p class="gr-summary">Mạnh nhất: <strong>' + rep.extremes.top.name + '</strong> (' + fmt(rep.extremes.mx) + ') · Cần bồi bổ nhất: <strong>' + rep.extremes.low.name + '</strong> (' + fmt(rep.extremes.mn) + ')</p></section>' +
@@ -450,7 +495,229 @@
     reporting = true;
     go('growth');
   }
-  window.zenGrowth = { AXES, started, scores, total, realmOf, extremes, fmt, openAward, growth, STEP, iconSvg, habitStreak, buildReport, tipsOf, openReport, heroName };
+  window.zenGrowth = { AXES, started, scores, earnedScores, spentScores, total, realmOf, extremes, fmt, openAward, growth, STEP, iconSvg, habitStreak, buildReport, tipsOf, openReport, heroName, openSpend };
+
+  // ---- Sử dụng điểm (v1.81.0) ---------------------------------------------------------------------------------------------
+  // Form ghi vật phẩm đã mua / quy đổi và số điểm trừ ở từng chỉ số. Mỗi lần quy đổi là một dòng trong data.growth.spend;
+  // nhập sai thì Sửa (chỉnh lại tên, ngày, ghi chú, điểm), Hủy quy đổi (hoàn điểm, giữ dòng để Khôi phục) hoặc Xóa hẳn dòng đã hủy.
+  let spendDlg = null;
+  // Số dư từng chỉ số (nửa điểm), không kể lần quy đổi skipId (đang sửa); không âm.
+  function balancesHalf(skipId) {
+    const g = growth(), out = Array(8).fill(0);
+    for (const e of g.log) e.p.forEach((v, i) => (out[i] += v));
+    for (const e of activeSpend(g)) if (e.id !== skipId) e.p.forEach((v, i) => (out[i] -= v));
+    return out.map((v) => Math.max(0, v));
+  }
+  const toHalf = (txt) => {
+    const t = String(txt).trim().replace(',', '.');
+    if (t === '') return 0;
+    const n = Number(t);
+    return Number.isFinite(n) ? n * 2 : NaN;
+  };
+  const isHalfInt = (h) => Number.isFinite(h) && h >= 0 && Math.abs(h - Math.round(h)) < 1e-9;
+  // Chia `want` nửa điểm cho 8 chỉ số theo tỷ lệ số dư (phần dư chia cho chỉ số lẻ lớn nhất trước), không vượt số dư từng chỉ số.
+  function splitShare(avail, want) {
+    const sum = avail.reduce((a, b) => a + b, 0);
+    if (!sum || want <= 0) return Array(8).fill(0);
+    want = Math.min(want, sum);
+    const raw = avail.map((a) => (a * want) / sum), out = raw.map(Math.floor);
+    let rest = want - out.reduce((a, b) => a + b, 0);
+    raw.map((v, i) => [v - Math.floor(v), i]).sort((a, b) => b[0] - a[0] || a[1] - b[1]).forEach(([, i]) => {
+      if (rest > 0 && out[i] < avail[i]) {
+        out[i]++;
+        rest--;
+      }
+    });
+    return out;
+  }
+  function closeSpend() {
+    if (!spendDlg) return;
+    const d = spendDlg.el;
+    spendDlg = null;
+    if (d.open) d.close();
+    d.remove();
+  }
+  function readSpend() {
+    const p = [], bad = [];
+    spendDlg.inputs.forEach((inp, i) => {
+      const h = toHalf(inp.value);
+      if (isHalfInt(h)) p.push(Math.round(h));
+      else {
+        p.push(0);
+        bad.push(i);
+      }
+    });
+    return { p, bad };
+  }
+  function paintSpend() {
+    const sd = spendDlg;
+    if (!sd) return;
+    const { p, bad } = readSpend();
+    sd.rows.forEach((row, i) => {
+      const left = sd.avail[i] - p[i], off = bad.includes(i) || left < 0;
+      row.classList.toggle('is-over', off);
+      row.querySelector('.gr-spend-left').textContent = bad.includes(i) ? 'chưa đúng' : left < 0 ? 'vượt số dư ' + fmt(sd.avail[i] * STEP) : 'có ' + fmt(sd.avail[i] * STEP) + (p[i] ? ' → còn ' + fmt(left * STEP) : '');
+      row.querySelector('.progress span').style.width = (sd.avail[i] ? Math.max(0, left) / sd.avail[i] * 100 : 0).toFixed(1) + '%';
+    });
+    const sum = p.reduce((a, b) => a + b, 0), have = sd.avail.reduce((a, b) => a + b, 0);
+    sd.sum.innerHTML = 'Quy đổi <b>' + fmt(sum * STEP) + '</b> điểm · Điểm hiện có sau khi trừ: <b>' + fmt(Math.max(0, have - sum) * STEP) + '</b>';
+    sd.msg.textContent = '';
+  }
+  function openSpend(id) {
+    if (contentReadOnly) return notify('Bản chia sẻ chỉ có quyền xem.');
+    const g = growth();
+    if (!g) return;
+    const old = id ? (g.spend || []).find((e) => e.id === id && !e.x) : null;
+    if (id && !old) return;
+    if (!old && (g.spend || []).length >= SPEND_MAX) return notify('Sổ quy đổi đã đầy (' + SPEND_MAX + ' lần). Hãy xóa hẳn bớt các lần đã hủy.');
+    const avail = balancesHalf(old?.id);
+    if (!old && !avail.some((v) => v > 0)) return notify('Chưa có điểm để quy đổi. Hoàn thành việc để tích lũy trước.');
+    closeSpend();
+    if (award) closeAward(false);
+    const d = document.createElement('dialog');
+    d.id = 'growth-spend';
+    d.className = 'gr-award gr-spend-dlg';
+    d.setAttribute('aria-labelledby', 'gr-spend-title');
+    const rows = AXES.map((a, i) => '<li class="gr-spend-row" style="--c:' + a.color + '"><span class="gr-axis-ico">' + iconSvg('gr-' + a.id, 18) + '</span><div class="gr-axis-main"><div class="gr-axis-head"><strong>' + a.name + '</strong><small class="gr-spend-left"></small></div><div class="progress" aria-hidden="true"><span></span></div></div>' +
+      '<input type="number" inputmode="decimal" min="0" max="' + avail[i] * STEP + '" step="0.5" data-gr-spend-axis="' + i + '" placeholder="0" aria-label="Điểm trừ ở ' + a.name + ', đang có ' + fmt(avail[i] * STEP) + '" value="' + (old && old.p[i] ? old.p[i] * STEP : '') + '"></li>').join('');
+    d.innerHTML = '<form class="gr-award-form gr-spend-form" novalidate><header><span class="eyebrow">ĐIỂM TÍCH LŨY</span><h2 id="gr-spend-title">' + (old ? 'Sửa lần quy đổi' : 'Sử dụng điểm') + '</h2><p class="help-copy">Ghi lại vật phẩm bạn đã mua hoặc quy đổi. Điểm sẽ được trừ khỏi các chỉ số bạn chọn và biểu đồ co lại tương ứng.</p></header>' +
+      '<div class="gr-spend-fields"><label class="field gr-spend-name">Vật phẩm / nội dung quy đổi<input type="text" name="n" maxlength="120" autocomplete="off" placeholder="Ví dụ: tai nghe mới, bữa tối ngoài, một ngày nghỉ" value="' + esc(old?.n || '') + '"></label>' +
+      '<label class="field">Ngày quy đổi<input type="date" name="d" max="' + today() + '" value="' + esc(old?.d || today()) + '"></label>' +
+      '<label class="field gr-spend-note">Ghi chú (không bắt buộc)<textarea name="note" rows="2" maxlength="300" placeholder="Nơi mua, giá tiền, lý do thưởng cho bản thân…">' + esc(old?.note || '') + '</textarea></label></div>' +
+      '<section class="gr-spend-split" aria-labelledby="gr-spend-split-title"><h3 id="gr-spend-split-title">Trừ điểm ở các chỉ số</h3>' +
+      '<div class="gr-spend-quick"><label class="field">Tổng điểm cần chia<input type="number" inputmode="decimal" min="0" step="0.5" data-gr-spend-quick placeholder="0"></label><button type="button" class="btn" data-gr-spend-split>Chia theo tỷ lệ</button></div><p class="help-copy gr-spend-hint">Chia nhanh theo tỷ lệ điểm đang có ở từng chỉ số; sau đó bạn vẫn chỉnh được từng ô.</p>' +
+      '<ul class="gr-spend-rows">' + rows + '</ul><p class="gr-spend-sum" aria-live="polite"></p></section>' +
+      '<p class="gr-spend-msg" role="alert"></p><footer class="gr-award-foot"><button type="button" class="btn" data-gr-spend-close>Đóng</button><span class="gr-grow"></span><button type="submit" class="btn primary">' + (old ? 'Lưu thay đổi' : 'Lưu quy đổi') + '</button></footer></form>';
+    document.body.append(d);
+    const form = d.querySelector('form');
+    spendDlg = { el: d, form, id: old?.id || '', avail, rows: [...d.querySelectorAll('.gr-spend-row')], inputs: [...d.querySelectorAll('[data-gr-spend-axis]')], sum: d.querySelector('.gr-spend-sum'), msg: d.querySelector('.gr-spend-msg') };
+    d.addEventListener('cancel', (e) => {
+      e.preventDefault();
+      closeSpend();
+    });
+    form.addEventListener('input', paintSpend);
+    form.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && e.target.matches?.('[data-gr-spend-quick]')) {
+        e.preventDefault();
+        splitSpend();
+      }
+    });
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      saveSpend();
+    });
+    paintSpend();
+    d.showModal();
+    form.elements.n.focus();
+  }
+  function splitSpend() {
+    const sd = spendDlg;
+    if (!sd) return;
+    const want = toHalf(sd.el.querySelector('[data-gr-spend-quick]').value), have = sd.avail.reduce((a, b) => a + b, 0);
+    const warn = (t) => {
+      paintSpend();
+      sd.msg.textContent = t;
+    };
+    if (!isHalfInt(want) || want <= 0) return warn('Hãy nhập tổng điểm quy đổi (bậc 0,5), rồi bấm Chia theo tỷ lệ.');
+    if (want > have) return warn('Bạn chỉ còn ' + fmt(have * STEP) + ' điểm để quy đổi.');
+    const out = splitShare(sd.avail, Math.round(want));
+    sd.inputs.forEach((inp, i) => (inp.value = out[i] ? String(out[i] / 2) : ''));
+    paintSpend();
+  }
+  function saveSpend() {
+    const sd = spendDlg;
+    if (!sd) return;
+    const f = sd.form, name = f.elements.n.value.trim(), note = f.elements.note.value.trim(), day = f.elements.d.value;
+    const fail = (text, el) => {
+      sd.msg.textContent = text;
+      (el || f.elements.n).focus();
+    };
+    if (!name) return fail('Hãy ghi vật phẩm hoặc nội dung đã quy đổi.');
+    if (name.length > 120) return fail('Tên vật phẩm tối đa 120 ký tự.');
+    if (!isDate(day)) return fail('Hãy chọn ngày quy đổi.', f.elements.d);
+    if (day > today()) return fail('Ngày quy đổi không được ở tương lai.', f.elements.d);
+    if (note.length > 300) return fail('Ghi chú tối đa 300 ký tự.', f.elements.note);
+    const { p, bad } = readSpend();
+    if (bad.length) return fail('Điểm ở ' + AXES[bad[0]].name + ' chưa đúng. Hãy nhập số từ 0 trở lên, theo bậc 0,5.', sd.inputs[bad[0]]);
+    const avail = balancesHalf(sd.id || undefined), over = p.findIndex((v, i) => v > avail[i]);
+    if (over >= 0) return fail(AXES[over].name + ' chỉ còn ' + fmt(avail[over] * STEP) + ' điểm, chưa đủ để trừ ' + fmt(p[over] * STEP) + '.', sd.inputs[over]);
+    const first = p.findIndex((v) => v > 0);
+    if (first < 0) return fail('Hãy nhập số điểm quy đổi ở ít nhất một chỉ số.', sd.inputs[0]);
+    const editing = !!sd.id;
+    const ok = wfSave(() => {
+      const g = data.growth;
+      g.spend ||= [];
+      if (editing) {
+        const e = g.spend.find((x) => x.id === sd.id);
+        if (!e || e.x) throw Error('Lần quy đổi này không còn để sửa.');
+        e.n = name;
+        e.d = day;
+        e.p = p;
+        if (note) e.note = note;
+        else delete e.note;
+      } else {
+        const e = { id: uid(), d: day, n: name, p };
+        if (note) e.note = note;
+        g.spend.push(e);
+      }
+    });
+    if (!ok) return;
+    closeSpend();
+    if (view === 'growth') render();
+    const points = fmt(p.reduce((a, b) => a + b, 0) * STEP);
+    notify(editing ? 'Đã cập nhật lần quy đổi “' + name + '” (' + points + ' điểm).' : 'Đã quy đổi ' + points + ' điểm cho “' + name + '”. Điểm hiện có: ' + fmt(total(scores())) + '.');
+  }
+  const spendById = (id) => (growth()?.spend || []).find((e) => e.id === id);
+  function voidSpend(id) {
+    const e = spendById(id);
+    if (!e || e.x || contentReadOnly) return contentReadOnly ? notify('Bản chia sẻ chỉ có quyền xem.') : undefined;
+    const name = e.n, points = fmt(spendPoints(e));
+    if (!wfSave(() => { data.growth.spend.find((x) => x.id === id).x = true; })) return;
+    if (view === 'growth') render();
+    notify('Đã hủy quy đổi “' + name + '”, hoàn lại ' + points + ' điểm vào biểu đồ.');
+  }
+  function restoreSpend(id) {
+    const e = spendById(id);
+    if (!e || !e.x || contentReadOnly) return contentReadOnly ? notify('Bản chia sẻ chỉ có quyền xem.') : undefined;
+    const bal = balancesHalf(), short = e.p.findIndex((v, i) => v > bal[i]);
+    if (short >= 0) return notify('Chưa đủ điểm ở ' + AXES[short].name + ' để khôi phục (đang có ' + fmt(bal[short] * STEP) + ', cần ' + fmt(e.p[short] * STEP) + ').');
+    const name = e.n, points = fmt(spendPoints(e));
+    if (!wfSave(() => { delete data.growth.spend.find((x) => x.id === id).x; })) return;
+    if (view === 'growth') render();
+    notify('Đã khôi phục quy đổi “' + name + '”, trừ lại ' + points + ' điểm.');
+  }
+  function askDeleteSpend(id) {
+    const e = spendById(id);
+    if (!e || !e.x || contentReadOnly) return contentReadOnly ? notify('Bản chia sẻ chỉ có quyền xem.') : undefined;
+    modal('<div class="bg-confirm"><h2>Xóa hẳn lần quy đổi?</h2><p>“' + esc(e.n) + '” đã được hủy và hoàn điểm, nên điểm hiện có không đổi. Dòng này sẽ bị xóa khỏi sổ quy đổi và không hoàn tác được.</p><div class="bg-confirm-actions"><button type="button" class="btn" data-gr-spend-del-no>Giữ lại</button><button type="button" class="btn bg-confirm-delete" data-gr-spend-del-ok="' + esc(e.id) + '">Xóa hẳn</button></div></div>', null, true);
+    const eyebrow = document.querySelector('#modal-eyebrow');
+    if (eyebrow) eyebrow.textContent = 'ĐIỂM TÍCH LŨY';
+    document.querySelector('[data-gr-spend-del-no]')?.focus();
+  }
+  document.addEventListener('click', (e) => {
+    const t = e.target.closest?.('[data-gr-spend],[data-gr-spend-edit],[data-gr-spend-void],[data-gr-spend-restore],[data-gr-spend-del],[data-gr-spend-del-ok],[data-gr-spend-del-no],[data-gr-spend-more],[data-gr-spend-split],[data-gr-spend-close]');
+    if (!t) return;
+    const d = t.dataset;
+    if (d.grSpend !== undefined) return openSpend();
+    if (d.grSpendEdit) return openSpend(d.grSpendEdit);
+    if (d.grSpendVoid) return voidSpend(d.grSpendVoid);
+    if (d.grSpendRestore) return restoreSpend(d.grSpendRestore);
+    if (d.grSpendDel) return askDeleteSpend(d.grSpendDel);
+    if (d.grSpendDelNo !== undefined) return $('#editor').close();
+    if (d.grSpendDelOk) {
+      const id = d.grSpendDelOk;
+      if (!wfSave(() => { data.growth.spend = data.growth.spend.filter((x) => x.id !== id); })) return;
+      $('#editor').close();
+      if (view === 'growth') render();
+      return notify('Đã xóa lần quy đổi đã hủy.');
+    }
+    if (d.grSpendMore !== undefined) {
+      spendAll = !spendAll;
+      return render();
+    }
+    if (d.grSpendSplit !== undefined) return splitSpend();
+    if (d.grSpendClose !== undefined) closeSpend();
+  });
 
   // ---- Thao tác -----------------------------------------------------------------------------------------------------------
   document.addEventListener('change', (e) => {
@@ -507,7 +774,7 @@
       const name = (document.querySelector('[data-gr-name]')?.value || '').trim().slice(0, 30);
       const ok = wfSave(() => {
         const cur = data.growth;
-        data.growth = { v: 1, hero: pickHero, since: cur?.since || today(), log: cur?.log || [] };
+        data.growth = { v: 1, hero: pickHero, since: cur?.since || today(), log: cur?.log || [], spend: cur?.spend || [] };
         if (name) data.growth.name = name;
         if (cur?.notify !== undefined) data.growth.notify = cur.notify;
         if (cur?.tips !== undefined) data.growth.tips = cur.tips;

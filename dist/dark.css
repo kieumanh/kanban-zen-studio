@@ -3158,6 +3158,27 @@
 :root[data-theme=dark] .gr-tip {
     border-left: 4px solid var(--c,#845cd6)
 }
+:root[data-theme=dark] .gr-wallet [data-wallet=left] b {
+    color: #cab8fe
+}
+:root[data-theme=dark] .gr-void-tag {
+    background: #131017
+}
+:root[data-theme=dark] .gr-spend-row.is-over input {
+    border-color: #c4382e
+}
+:root[data-theme=dark] .gr-spend-row.is-over .gr-spend-left {
+    color: #fcb3a7
+}
+:root[data-theme=dark] .gr-spend-sum {
+    background: #141118
+}
+:root[data-theme=dark] .gr-spend-sum b {
+    color: #cab8fe
+}
+:root[data-theme=dark] .gr-spend-msg {
+    color: #fcb3a7
+}
 :root[data-theme=dark] {
     --muted: #ccc2d7;
     --text-muted: #ccc2d7

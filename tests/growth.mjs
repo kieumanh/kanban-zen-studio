@@ -4,7 +4,7 @@ import assert from 'node:assert/strict';
 import vm from 'node:vm';
 import { readFileSync } from 'node:fs';
 import { validWorkspace } from '../server/api.mjs';
-import { validGrowth, GROWTH_AXIS_COUNT, GROWTH_LOG_MAX } from '../server/growth.mjs';
+import { validGrowth, GROWTH_AXIS_COUNT, GROWTH_LOG_MAX, GROWTH_SPEND_MAX } from '../server/growth.mjs';
 import { flatten, inflate, changesBetween } from '../dist/modules/delta.mjs';
 
 assert.equal(GROWTH_AXIS_COUNT, 8, 'đúng 8 chỉ số');
@@ -100,5 +100,76 @@ assert.equal(validWorkspace(merged), true, 'bản gộp vẫn hợp lệ');
 const sum = merged.growth.log.reduce((t, e) => t + e.p.reduce((x, y) => x + y, 0), 0);
 assert.equal(sum, 2 + 2 + 2, 'tổng nửa điểm = 2 + 2 + 2, không mất không nhân đôi');
 assert.deepEqual(merge(base, a, structuredClone(a)).growth.log, a.growth.log, 'cùng một lần cộng ở hai nơi chỉ giữ một dòng');
+
+
+// 5. v1.81.0 — sổ quy đổi điểm (spend): dữ liệu cũ không có spend vẫn hợp lệ; máy chủ chặn dòng sai; lưu và gộp theo id.
+const spend = (over = {}) => ({ id: 's1', d: '2026-11-12', n: 'Tai nghe mới', p: [0, 4, 0, 0, 0, 0, 0, 0], ...over });
+assert.equal(GROWTH_SPEND_MAX, 500);
+assert.equal(validWorkspace(workspace(growth({ spend: [] }))), true, 'sổ quy đổi rỗng hợp lệ');
+assert.equal(validWorkspace(workspace(growth({ spend: [spend(), spend({ id: 's2', note: 'Mua ở cửa hàng gần nhà', p: [1, 0, 0, 0, 0, 0, 0, 3], x: true })] }))), true, 'có ghi chú và dòng đã hủy vẫn hợp lệ');
+const badSpend = {
+  'spend không phải mảng': growth({ spend: {} }),
+  'spend là null': growth({ spend: null }),
+  'quá nhiều lần quy đổi': growth({ spend: Array.from({ length: GROWTH_SPEND_MAX + 1 }, (_, i) => spend({ id: 'x' + i })) }),
+  'dòng không phải đối tượng': growth({ spend: ['x'] }),
+  'dòng có trường lạ': growth({ spend: [spend({ refund: 1 })] }),
+  'id trùng': growth({ spend: [spend(), spend()] }),
+  'id sai ký tự': growth({ spend: [spend({ id: 'a b' })] }),
+  'id quá dài': growth({ spend: [spend({ id: 'a'.repeat(100) })] }),
+  'ngày không có thật': growth({ spend: [spend({ d: '2026-02-30' })] }),
+  'thiếu tên vật phẩm': growth({ spend: [(({ n, ...rest }) => rest)(spend())] }),
+  'tên rỗng': growth({ spend: [spend({ n: '' })] }),
+  'tên quá dài': growth({ spend: [spend({ n: 'n'.repeat(121) })] }),
+  'tên không phải chuỗi': growth({ spend: [spend({ n: 5 })] }),
+  'ghi chú quá dài': growth({ spend: [spend({ note: 'g'.repeat(301) })] }),
+  'ghi chú không phải chuỗi': growth({ spend: [spend({ note: 1 })] }),
+  'cờ hủy là false': growth({ spend: [spend({ x: false })] }),
+  'cờ hủy là chuỗi': growth({ spend: [spend({ x: 'có' })] }),
+  'thiếu mảng điểm': growth({ spend: [(({ p, ...rest }) => rest)(spend())] }),
+  'mảng điểm thiếu chỉ số': growth({ spend: [spend({ p: [1, 0, 0] })] }),
+  'điểm âm': growth({ spend: [spend({ p: [-1, 0, 0, 0, 0, 0, 0, 1] })] }),
+  'điểm lẻ': growth({ spend: [spend({ p: [0.5, 0, 0, 0, 0, 0, 0, 0] })] }),
+  'điểm quá lớn': growth({ spend: [spend({ p: [1000001, 0, 0, 0, 0, 0, 0, 0] })] }),
+  'dòng toàn số 0': growth({ spend: [spend({ p: [0, 0, 0, 0, 0, 0, 0, 0] })] }),
+};
+for (const [name, g] of Object.entries(badSpend)) {
+  assert.equal(validGrowth(g), false, 'validGrowth phải từ chối quy đổi: ' + name);
+  assert.equal(validWorkspace(workspace(g)), false, 'validWorkspace phải từ chối quy đổi: ' + name);
+}
+assert.equal(validGrowth(growth({ spend: Array.from({ length: GROWTH_SPEND_MAX }, (_, i) => spend({ id: 'x' + i })) })), true, 'đúng giới hạn sổ quy đổi vẫn hợp lệ');
+// Máy chủ không so số dư: hai thiết bị cùng quy đổi lúc chưa đồng bộ vẫn phải lưu được (giao diện chặn vượt số dư và hiển thị không âm).
+assert.equal(validGrowth(growth({ log: [entry({ p: [0, 1, 0, 0, 0, 0, 0, 0] })], spend: [spend({ p: [0, 9, 0, 0, 0, 0, 0, 0] })] })), true, 'không so số dư ở máy chủ');
+
+// Lưu qua gói thay đổi: spend nằm trong mục gốc cùng growth, đọc lại đúng từng dòng; thêm một lần quy đổi chỉ đổi một mục gốc.
+const withSpend = workspace(growth({ spend: [spend(), spend({ id: 's2', n: 'Bữa tối', p: [0, 0, 2, 0, 0, 0, 0, 0], note: 'Thưởng tuần', x: true })] }));
+assert.deepEqual(Object.keys(flatten(withSpend)).filter((k) => !k.startsWith('project:') && !k.startsWith('note:')), ['root:root'], 'spend đi cùng mục gốc, không sinh loại mục mới');
+assert.deepEqual(inflate(flatten(withSpend)).growth, withSpend.growth, 'đọc lại đúng từng dòng quy đổi');
+const spendChange = changesBetween(workspace(growth({ spend: [] })), withSpend);
+assert.equal(spendChange.length, 1);
+assert.equal(spendChange[0].key, 'root:root');
+
+// Hai thiết bị: quy đổi khác nhau giữ đủ cả hai; một bên hủy, một bên sửa ghi chú cùng dòng thì gộp được; cùng sửa một trường khác nhau thì báo xung đột (không ghi đè lặng lẽ).
+const baseS = workspace(growth({ spend: [spend()] }));
+const devA = structuredClone(baseS);
+devA.growth.spend.push(spend({ id: 'from-a', n: 'Sách', p: [0, 0, 0, 0, 0, 2, 0, 0] }));
+const devB = structuredClone(baseS);
+devB.growth.spend.push(spend({ id: 'from-b', n: 'Cà phê', p: [0, 0, 0, 0, 0, 0, 0, 1] }));
+const mergedS = merge(baseS, devA, devB);
+assert.deepEqual(mergedS.growth.spend.map((e) => e.id).sort(), ['from-a', 'from-b', 's1'], 'cả hai lần quy đổi đều còn');
+assert.equal(validWorkspace(mergedS), true, 'bản gộp quy đổi vẫn hợp lệ');
+const voidA = structuredClone(baseS);
+voidA.growth.spend[0].x = true;
+const noteB = structuredClone(baseS);
+noteB.growth.spend[0].note = 'Đã sửa ghi chú';
+const mergedV = merge(baseS, voidA, noteB).growth.spend[0];
+assert.equal(mergedV.x, true, 'lần hủy được giữ');
+assert.equal(mergedV.note, 'Đã sửa ghi chú', 'lần sửa ghi chú được giữ');
+const renameA = structuredClone(baseS);
+renameA.growth.spend[0].n = 'Tên A';
+const renameB = structuredClone(baseS);
+renameB.growth.spend[0].n = 'Tên B';
+assert.throws(() => merge(baseS, renameA, renameB), /Chỉnh sửa cùng nội dung/, 'cùng sửa một trường khác nhau thì báo xung đột');
+assert.deepEqual(merge(baseS, devA, structuredClone(devA)).growth.spend, devA.growth.spend, 'cùng một lần quy đổi ở hai nơi chỉ giữ một dòng');
+// Đổi nhân vật/tên không làm mất sổ quy đổi: giao diện giữ nguyên spend khi lưu lại growth (kiểm ở tests/growth-spend-browser.mjs).
 
 console.log('growth ok');

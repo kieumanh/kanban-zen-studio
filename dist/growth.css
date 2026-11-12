@@ -132,7 +132,7 @@ dialog.gr-award::backdrop{background:#30251c88}
 .gr-plus:active:not(:disabled){transform:scale(.94)}
 .gr-plus:disabled{opacity:.4;cursor:not-allowed}
 .gr-col-name{font-size:10px;font-weight:700;text-align:center;line-height:1.2;overflow-wrap:anywhere;min-height:24px}
-.gr-award-foot{display:flex;align-items:center;gap:8px;margin-top:14px;padding-top:12px;border-top:1px solid var(--line)}
+.gr-award-foot{display:flex;align-items:center;gap:8px;margin-top:14px;padding:12px 0 0;border-top:1px solid var(--line)}
 .gr-grow{flex:1}
 /* báo cáo tiến độ */
 .gr-tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
@@ -176,6 +176,63 @@ dialog.gr-award::backdrop{background:#30251c88}
  .gr-label,.gr-value{font-size:15px}
  .gr-tile{padding:12px}
  .gr-tile strong{font-size:19px}
+}
+
+/* ---- Sử dụng điểm (v1.81.0): ví điểm, sổ quy đổi, form quy đổi ----------------------------------------------------------------- */
+.gr-wallet{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;width:100%;margin-top:12px}
+.gr-wallet>div{display:grid;gap:2px;padding:8px 10px;border:1px solid var(--line);border-radius:12px;text-align:center;background:var(--paper);min-width:0}
+.gr-wallet small{font-size:11px;font-weight:700;color:var(--muted)}
+.gr-wallet b{font-size:18px;color:var(--ink)}
+.gr-wallet [data-wallet=left] b{color:#7950c8}
+.gr-spend-list{list-style:none;margin:0;padding:0}
+.gr-spend-item{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1.5fr) auto;gap:8px 14px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.gr-spend-item:last-child{border-bottom:0}
+.gr-spend-main{min-width:0;display:grid;gap:2px}
+.gr-spend-title{display:flex;align-items:center;gap:8px;flex-wrap:wrap;min-width:0}
+.gr-spend-title strong{overflow-wrap:anywhere}
+.gr-spend-main small{overflow-wrap:anywhere}
+.gr-spend-item .gr-chips{justify-content:flex-start}
+.gr-void-tag{font-style:normal;font-size:11px;font-weight:700;padding:2px 9px;border-radius:999px;background:#f3f0f6;border:1px solid var(--line);color:var(--muted)}
+.gr-spend-item.is-void .gr-spend-title strong{text-decoration:line-through;color:var(--muted)}
+.gr-spend-item.is-void .gr-chips{opacity:.6}
+.gr-spend-act{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.gr-spend-act .btn,.gr-spend>.btn{min-height:36px;padding:6px 12px}
+.gr-spend>.btn{margin-top:12px}
+.gr-spend>.help-copy{margin:-4px 0 6px}
+dialog.gr-spend-dlg{max-width:680px}
+.gr-spend-fields{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:12px;margin:12px 0 4px}
+.gr-spend-fields .field{margin:0;min-width:0}
+.gr-spend-note{grid-column:1/-1}
+.gr-spend-fields input,.gr-spend-fields textarea,.gr-spend-quick input,.gr-spend-row input{display:block;width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;margin-top:6px;font:inherit;font-size:16px;background:var(--paper);color:var(--ink);min-height:44px}
+.gr-spend-fields textarea{resize:vertical;min-height:64px}
+.gr-spend-split{margin-top:10px}
+.gr-spend-split h3{font:700 16px/1.3 var(--serif);margin:6px 0 8px;color:var(--ink)}
+.gr-spend-quick{display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap;margin-bottom:10px}
+.gr-spend-quick .field{flex:0 1 200px;margin:0;font-size:13px}
+.gr-spend-hint{margin:-2px 0 10px;font-size:12px}
+.gr-spend-quick .btn{min-height:44px}
+.gr-spend-rows{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 22px}
+.gr-spend-row{display:grid;grid-template-columns:auto minmax(0,1fr) 92px;gap:10px;align-items:center}
+.gr-spend-row input{margin:0;text-align:right}
+.gr-spend-row .gr-axis-head{display:flex;flex-wrap:wrap;justify-content:space-between;gap:2px 8px;align-items:baseline}
+.gr-spend-left{font-size:11px;color:var(--muted);font-weight:600}
+.gr-spend-row.is-over input{border-color:#b3261e;box-shadow:0 0 0 1px #b3261e}
+.gr-spend-row.is-over .gr-spend-left{color:#b3261e}
+.gr-spend-sum{margin:12px 0 0;padding:8px 12px;border-radius:10px;background:#f6f0ff;color:var(--ink);font-size:13px;text-align:center}
+.gr-spend-sum b{font-size:16px;color:#7950c8}
+.gr-spend-msg{margin:10px 0 0;font-size:13px;font-weight:700;color:#b3261e}
+.gr-spend-msg:empty{display:none}
+.gr-spend-dlg .gr-award-foot{position:sticky;bottom:-16px;margin-bottom:-4px;padding:12px 0 4px;background:var(--paper)}
+@media (max-width:900px){
+ .gr-spend-item{grid-template-columns:minmax(0,1fr)}
+ .gr-spend-act{justify-content:flex-start}
+}
+@media (max-width:700px){
+ .gr-spend-rows{grid-template-columns:minmax(0,1fr)}
+ .gr-spend-fields{grid-template-columns:minmax(0,1fr)}
+ .gr-wallet b{font-size:16px}
+ .gr-spend-act .btn,.gr-spend>.btn{min-height:40px}
+ .gr-spend-row{grid-template-columns:auto minmax(0,1fr) 84px;gap:8px}
 }
 
 /* Cài đặt → Thông báo: một cột, xếp dọc Công việc · Việc hằng ngày · Điểm tích lũy */
