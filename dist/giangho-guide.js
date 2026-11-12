@@ -238,6 +238,11 @@
           (window.zenTheme.setFx ? '<label class="check-row gh-fx-row"><input type="checkbox" id="gh-fx"><span><strong>Hiệu ứng ấn son, nén hương</strong><small>Con dấu son khi công thành, nén hương cháy khi bế quan. Luôn đứng yên nếu thiết bị bật giảm chuyển động.</small></span></label>' : '') +
           '<button type="button" class="btn gh-glossary-open">Bảng chú giải</button>';
         set.after(box);
+        // v2.0.0 (Truyền Âm): phong cách đi theo tài khoản.
+        const note = document.createElement('p');
+        note.className = 'help-copy gh-style-sync';
+        note.textContent = 'Phong cách đi theo tài khoản: đổi ở đây thì các thiết bị khác cũng đổi theo khi mở. Email nhắc hạn và chiến báo tuần dùng giọng giang hồ khi chọn Giang hồ.';
+        set.after(note);
         box.querySelector('#gh-words').addEventListener('change', (e) => {
           window.zenTheme.setWords(e.target.checked);
           if (typeof notify === 'function') notify(e.target.checked ? 'Đã bật lời lẽ giang hồ.' : 'Đã chọn Giang hồ nhẹ: giữ họa tiết, chữ quen thuộc.');

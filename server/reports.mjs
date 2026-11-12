@@ -55,40 +55,84 @@ export function reminderReport(workspace, day) {
     )
     .sort((a, b) => taskDeadline(a).localeCompare(taskDeadline(b)));
   if (!tasks.length) return null;
-  const overdue = tasks.filter((t) => t.category === 'overdue').length;
+  const overdue = tasks.filter((t) => t.category === 'overdue').length,
+    v = voiceOf(workspace);
   return {
-    html: reminderReportHTML(tasks, day),
-    subject: 'Nhắc hạn công việc · ' + day,
+    html: reminderReportHTML(tasks, day, v),
+    subject: v.subject + day,
     text:
-      `Bạn có ${overdue} việc quá hạn và ${tasks.length - overdue} việc đến hạn hôm nay hoặc trong 3 ngày tới.\n\n` +
+      v.intro(overdue, tasks.length - overdue) +
+      '\n\n' +
       tasks
         .slice(0, 80)
         .map(
           (t) =>
-            `• ${t.category === 'overdue' ? 'QUÁ HẠN' : taskDeadline(t) === day ? 'HÔM NAY' : 'SẮP HẠN'} · ${oneLine(t.title)}\n  ${oneLine(t.projectName)} · Hạn ${taskDeadline(t)}`,
+            `• ${t.category === 'overdue' ? v.tags[0] : taskDeadline(t) === day ? v.tags[1] : v.tags[2]} · ${oneLine(t.title)}\n  ${oneLine(t.projectName)} · ${v.due} ${taskDeadline(t)}`,
         )
         .join('\n') +
-      (tasks.length > 80
-        ? `\nCòn ${tasks.length - 80} việc khác trong ứng dụng.`
-        : ''),
+      (tasks.length > 80 ? '\n' + v.more(tasks.length - 80) : ''),
   };
 }
-export function reminderReportHTML(tasks, day) {
+// v2.0.0 (Truyền Âm): giọng của email theo phong cách người dùng chọn (workspace.style). Chỉ đổi chữ khung; tên việc, tên dự án giữ
+// nguyên. 'giangho-nhe' (Giang hồ nhẹ) và người dùng chưa chọn giữ giọng thường.
+const VOICES = {
+  zen: {
+    subject: 'Nhắc hạn công việc · ',
+    title: 'Nhắc hạn công việc',
+    brand: 'KANBAN ZEN STUDIO',
+    h1: 'Một nhịp nhìn lại công việc',
+    intro: (late, soon) =>
+      `Bạn có ${late} việc quá hạn và ${soon} việc đến hạn hôm nay hoặc trong 3 ngày tới.`,
+    introHTML: (late, soon) =>
+      `Bạn có <strong>${late} việc quá hạn</strong> và <strong>${soon} việc đến hạn hôm nay hoặc trong 3 ngày tới</strong>.`,
+    tags: ['QUÁ HẠN', 'HÔM NAY', 'SẮP HẠN'],
+    groups: ['Quá hạn', 'Hôm nay', 'Sắp đến hạn'],
+    due: 'Hạn',
+    more: (n) => `Còn ${n} việc khác trong ứng dụng.`,
+    foot: 'Điều chỉnh giờ gửi hoặc tắt email trong Cài đặt → Thông báo.',
+    weeklySubject: 'Tổng kết tuần · Bức tranh công việc · ',
+    weeklyEyebrow: 'ZEN STUDIO · NHÌN LẠI MỖI TUẦN',
+    weeklyTitle: 'Bức tranh công việc',
+    weeklyLine: 'BỨC TRANH CÔNG VIỆC',
+  },
+  giangho: {
+    subject: 'Truyền thư kỳ hạn · ',
+    title: 'Truyền thư kỳ hạn',
+    brand: 'KANBAN ZEN STUDIO · GIANG HỒ',
+    h1: 'Một nhịp soát lại nhiệm vụ',
+    intro: (late, soon) =>
+      `Các hạ có ${late} nhiệm vụ lỡ hẹn và ${soon} nhiệm vụ tới kỳ hôm nay hoặc trong 3 ngày tới.`,
+    introHTML: (late, soon) =>
+      `Các hạ có <strong>${late} nhiệm vụ lỡ hẹn</strong> và <strong>${soon} nhiệm vụ tới kỳ hôm nay hoặc trong 3 ngày tới</strong>.`,
+    tags: ['LỠ HẸN', 'HÔM NAY', 'SẮP TỚI KỲ'],
+    groups: ['Lỡ hẹn', 'Hôm nay', 'Sắp tới kỳ'],
+    due: 'Kỳ hạn',
+    more: (n) => `Còn ${n} nhiệm vụ khác trong ứng dụng.`,
+    foot: 'Đổi giờ gửi hoặc tắt thư trong Cơ quan → Thông báo.',
+    weeklySubject: 'Chiến báo tuần · Bức tranh đại sự · ',
+    weeklyEyebrow: 'ZEN STUDIO · CHIẾN BÁO MỖI TUẦN',
+    weeklyTitle: 'Chiến báo đại sự',
+    weeklyLine: 'CHIẾN BÁO ĐẠI SỰ',
+  },
+};
+export const voiceOf = (workspace) =>
+  workspace?.style === 'giangho' ? VOICES.giangho : VOICES.zen;
+export function reminderReportHTML(tasks, day, v = VOICES.zen) {
   const shown = tasks.slice(0, 80),
     groups = [
-      ['Quá hạn', '#b63850', (t) => taskDeadline(t) < day],
-      ['Hôm nay', '#9c5919', (t) => taskDeadline(t) === day],
-      ['Sắp đến hạn', '#67439b', (t) => taskDeadline(t) > day],
+      [v.groups[0], '#b63850', (t) => taskDeadline(t) < day],
+      [v.groups[1], '#9c5919', (t) => taskDeadline(t) === day],
+      [v.groups[2], '#67439b', (t) => taskDeadline(t) > day],
     ];
   const sections = groups
     .map(([label, color, match]) => {
       const items = shown.filter(match);
       if (!items.length) return '';
-      return `<tr><td style="padding:22px 0 0"><h2 style="margin:0 0 10px;font-size:17px;line-height:1.4;color:${color}">${label} · ${items.length}</h2><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse">${items.map((t) => `<tr><td style="padding:12px 14px;border:1px solid #e9e1ef;border-left:3px solid ${color};background:#fcfafd"><strong style="display:block;font-size:15px;line-height:1.5;color:#30243e;overflow-wrap:anywhere">${reportEscape(oneLine(t.title))}</strong><span style="display:block;margin-top:4px;color:#695b72;font-size:13px;line-height:1.5">${reportEscape(oneLine(t.projectName))} · Hạn ${reportEscape(taskDeadline(t).split('-').reverse().join('/'))}</span></td></tr><tr><td style="height:6px;font-size:1px;line-height:6px">&nbsp;</td></tr>`).join('')}</table></td></tr>`;
+      return `<tr><td style="padding:22px 0 0"><h2 style="margin:0 0 10px;font-size:17px;line-height:1.4;color:${color}">${label} · ${items.length}</h2><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse">${items.map((t) => `<tr><td style="padding:12px 14px;border:1px solid #e9e1ef;border-left:3px solid ${color};background:#fcfafd"><strong style="display:block;font-size:15px;line-height:1.5;color:#30243e;overflow-wrap:anywhere">${reportEscape(oneLine(t.title))}</strong><span style="display:block;margin-top:4px;color:#695b72;font-size:13px;line-height:1.5">${reportEscape(oneLine(t.projectName))} · ${v.due} ${reportEscape(taskDeadline(t).split('-').reverse().join('/'))}</span></td></tr><tr><td style="height:6px;font-size:1px;line-height:6px">&nbsp;</td></tr>`).join('')}</table></td></tr>`;
     })
     .join('');
   const late = tasks.filter((t) => taskDeadline(t) < day).length;
-  return `<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Nhắc hạn công việc</title></head><body style="margin:0;padding:0;background:#f5f2f9;color:#30243e;font-family:Arial,sans-serif"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f5f2f9"><tr><td align="center" style="padding:20px 12px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:#ffffff;border:1px solid #e9e1ef;border-radius:16px"><tr><td style="padding:25px 22px"><p style="margin:0 0 10px;color:#70469b;font-size:12px;font-weight:bold;letter-spacing:1px">KANBAN ZEN STUDIO</p><h1 style="margin:0;font-size:25px;line-height:1.3">Một nhịp nhìn lại công việc</h1><p style="margin:12px 0 0;color:#695b72;font-size:15px;line-height:1.6">Bạn có <strong>${late} việc quá hạn</strong> và <strong>${tasks.length - late} việc đến hạn hôm nay hoặc trong 3 ngày tới</strong>.</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0">${sections}</table>${tasks.length > 80 ? `<p style="font-size:13px;color:#695b72">Còn ${tasks.length - 80} việc khác trong ứng dụng.</p>` : ''}<table role="presentation" cellpadding="0" cellspacing="0" style="margin-top:22px"><tr><td bgcolor="#7950c8" style="border-radius:9px"><a href="https://kanban.huongthiennature.com/" style="display:inline-block;padding:13px 20px;color:#fff;text-decoration:none;font-weight:bold;font-size:14px">Mở Kanban Zen Studio →</a></td></tr></table><p style="margin:25px 0 0;padding-top:16px;border-top:1px solid #e9e1ef;color:#695b72;font-size:12px;line-height:1.6">Điều chỉnh giờ gửi hoặc tắt email trong Cài đặt → Thông báo.</p></td></tr></table></td></tr></table></body></html>`;
+  return `<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${v.title}</title></head><body style="margin:0;padding:0;background:#f5f2f9;color:#30243e;font-family:Arial,sans-serif"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f5f2f9"><tr><td align="center" style="padding:20px 12px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:#ffffff;border:1px solid #e9e1ef;border-radius:16px"><tr><td style="padding:25px 22px"><p style="margin:0 0 10px;color:#70469b;font-size:12px;font-weight:bold;letter-spacing:1px">${v.brand}</p><h1 style="margin:0;font-size:25px;line-height:1.3">${v.h1}</h1><p style="margin:12px 0 0;color:#695b72;font-size:15px;line-height:1.6">${v.introHTML(late, tasks.length - late)}</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0">${sections}</table>${tasks.length > 80 ? `<p style="font-size:13px;color:#695b72">${v.more(tasks.length - 80)}</p>` : ''}<table role="presentation" cellpadding="0" cellspacing="0" style="margin-top:22px"><tr><td bgcolor="#7950c8" style="border-radius:9px"><a href="https://kanban.huongthiennature.com/" style="display:inline-block;padding:13px 20px;color:#fff;text-decoration:none;font-weight:bold;font-size:14px">Mở Kanban Zen Studio →</a></td></tr></table><p style="margin:25px 0 0;padding-top:16px;border-top:1px solid #e9e1ef;color:#695b72;font-size:12px;line-height:1.6">${v.foot}</p></td></tr></table></td></tr></table></body></html>`;
 }
 export function weeklyReport(workspace, day, previous = null) {
   const projects = (workspace.projects || []).filter((p) => !p.archived),
@@ -105,8 +149,9 @@ export function weeklyReport(workspace, day, previous = null) {
     })),
   };
   const next = shiftDay(day, 7),
+    voice = voiceOf(workspace),
     lines = [
-      `BỨC TRANH CÔNG VIỆC · ${shiftDay(day, -6)} → ${day}`,
+      `${voice.weeklyLine} · ${shiftDay(day, -6)} → ${day}`,
       `${projects.length} dự án hoạt động · ${tasks.length} công việc · ${reportProgress(tasks)}% tiến độ`,
       `Hoàn thành: ${counts.done} · Đang xây dựng: ${counts.doing} · Chưa làm: ${counts.todo} · Quá hạn: ${counts.overdue}`,
       previous
@@ -212,7 +257,8 @@ export function weeklyReport(workspace, day, previous = null) {
     })),
   };
   const report = {
-    subject: 'Tổng kết tuần · Bức tranh công việc · ' + day,
+    subject: voice.weeklySubject + day,
+    voice: voice === VOICES.giangho ? 'giangho' : 'zen',
     text: lines.join('\n'),
     snapshot,
     summary,
@@ -308,5 +354,5 @@ export function weeklyReportHTML(report) {
         return `<p class="report-body-copy">${reportEscape(line)}</p>`;
       })
       .join('');
-  return `<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${reportEscape(report.subject)}</title><style>${REPORT_STYLE}</style></head><body><main class="report-sheet" style="max-width:680px;margin:0 auto;padding:32px;background:#ffffff;border:1px solid #e7e1ec"><p style="font-size:11px;letter-spacing:2px;color:#887491;margin:0 0 10px">ZEN STUDIO · NHÌN LẠI MỖI TUẦN</p><h1 style="font-size:27px;line-height:1.35;margin:0 0 8px">Bức tranh công việc</h1><p style="font-size:13px;color:#74677e;margin:0 0 24px">${reportEscape(lines[0].replace('BỨC TRANH CÔNG VIỆC · ', ''))}</p><table role="presentation" width="100%"><tr><td><strong style="font-size:30px">${s.progress}%</strong><br><span style="font-size:12px;color:#74677e">Tiến độ tổng thể</span></td><td align="right" style="font-size:14px">${s.projects.length} dự án<br>${s.total} công việc</td></tr></table>${reportBar(s.progress, '#8054bf')}<h2 style="font-size:17px;margin:24px 0 10px">Phân bố công việc</h2>${donut}<table class="report-distribution" cellpadding="0" cellspacing="0" aria-label="Phân bố công việc theo trạng thái">${distribution}</table>${content}<div id="report-task-data" hidden>${reportEscape(JSON.stringify(s.tasks || []))}</div><p style="margin-top:28px;padding-top:16px;border-top:1px solid #e7e1ec;font-size:12px;color:#74677e">Mở <a href="https://kanban.huongthiennature.com/">Kanban Zen Studio</a> để cập nhật công việc. Đổi giờ hoặc tắt email trong Settings → Tổng kết tuần.</p></main></body></html>`;
+  return `<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${reportEscape(report.subject)}</title><style>${REPORT_STYLE}</style></head><body><main class="report-sheet" style="max-width:680px;margin:0 auto;padding:32px;background:#ffffff;border:1px solid #e7e1ec"><p style="font-size:11px;letter-spacing:2px;color:#887491;margin:0 0 10px">${(VOICES[report.voice] || VOICES.zen).weeklyEyebrow}</p><h1 style="font-size:27px;line-height:1.35;margin:0 0 8px">${(VOICES[report.voice] || VOICES.zen).weeklyTitle}</h1><p style="font-size:13px;color:#74677e;margin:0 0 24px">${reportEscape(lines[0].replace('BỨC TRANH CÔNG VIỆC · ', ''))}</p><table role="presentation" width="100%"><tr><td><strong style="font-size:30px">${s.progress}%</strong><br><span style="font-size:12px;color:#74677e">Tiến độ tổng thể</span></td><td align="right" style="font-size:14px">${s.projects.length} dự án<br>${s.total} công việc</td></tr></table>${reportBar(s.progress, '#8054bf')}<h2 style="font-size:17px;margin:24px 0 10px">Phân bố công việc</h2>${donut}<table class="report-distribution" cellpadding="0" cellspacing="0" aria-label="Phân bố công việc theo trạng thái">${distribution}</table>${content}<div id="report-task-data" hidden>${reportEscape(JSON.stringify(s.tasks || []))}</div><p style="margin-top:28px;padding-top:16px;border-top:1px solid #e7e1ec;font-size:12px;color:#74677e">Mở <a href="https://kanban.huongthiennature.com/">Kanban Zen Studio</a> để cập nhật công việc. Đổi giờ hoặc tắt email trong Settings → Tổng kết tuần.</p></main></body></html>`;
 }

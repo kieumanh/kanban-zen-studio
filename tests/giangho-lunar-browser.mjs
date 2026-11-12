@@ -29,7 +29,9 @@ try {
     const { context, page } = await h.open(width, { touch, now: NOW, setup: GH });
     const errors = [];
     page.on('pageerror', (e) => errors.push(e.message));
-    const before = await page.evaluate(() => JSON.stringify(data));
+    // v2.0.0: đổi phong cách được lưu vào data.style (Truyền Âm) nên so dữ liệu bỏ khóa này.
+    const work = () => page.evaluate(() => JSON.stringify({ ...data, style: undefined }));
+    const before = await work();
     // 1. Thuật toán.
     if (width === 1440) {
       const got = await page.evaluate(() => {
@@ -91,7 +93,7 @@ try {
     await page.waitForFunction(() => !document.querySelector('.gh-lunar, .gh-lunar-span'));
     await h.show(page, 'dashboard');
     assert.equal(await page.locator('.gh-lunar-line').count(), 0, 'Thiền không có dòng âm lịch' + at);
-    assert.equal(await page.evaluate(() => JSON.stringify(data)), before, 'dữ liệu không đổi' + at);
+    assert.equal(await work(), before, 'dữ liệu làm việc không đổi' + at);
     assert.deepEqual(errors, [], 'không lỗi trang' + at);
     await context.close();
   }

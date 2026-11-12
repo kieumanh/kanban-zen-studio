@@ -710,6 +710,9 @@
     'Chia sẻ web': { to: 'Phát lệnh bài', in: '.report-dialog-toolbar' },
     'Đóng báo cáo': 'Đóng chiến báo',
     'Xem trước tổng kết tuần': 'Xem trước chiến báo tuần',
+    // v2.0.0 (Truyền Âm)
+    'Phong cách đi theo tài khoản: đổi ở đây thì các thiết bị khác cũng đổi theo khi mở. Email nhắc hạn và chiến báo tuần dùng giọng giang hồ khi chọn Giang hồ.':
+      'Phong cách đi theo danh tính: đổi ở đây thì các thiết bị khác cũng đổi theo khi mở. Thư nhắc kỳ hạn và chiến báo tuần dùng giọng giang hồ khi chọn Giang hồ.',
     // Bí kíp nhập môn (Cài đặt → Hướng dẫn sử dụng)
     'Mỗi việc rõ hơn, mỗi ngày nhẹ hơn': { to: 'Mỗi nhiệm vụ rõ hơn, mỗi ngày nhẹ hơn', in: HELP },
     'Ghi lại điều cần nhớ. Chọn điều cần làm. Dành chỗ cho sự tập trung.': 'Chép lại điều cần nhớ. Chọn nhiệm vụ cần làm. Dành chỗ cho bế quan.',

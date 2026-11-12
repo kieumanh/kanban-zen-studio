@@ -639,6 +639,9 @@ export function validWorkspace(d) {
   return (
     validExtras(d) &&
     validFinanceSettings(d.financeReport) &&
+    // v2.0.0 (Truyền Âm): phong cách theo tài khoản (tùy chọn; chỉ có khi người dùng tự đổi phong cách).
+    (d.style === undefined ||
+      ['zen', 'giangho', 'giangho-nhe'].includes(d.style)) &&
     validGrowth(d.growth) &&
     d.projects.every(
       (p) =>
