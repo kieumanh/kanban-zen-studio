@@ -29,7 +29,10 @@ export function buildStaticAssets(files, root, version, source) {
   }
   const shell = Object.keys(files)
     .filter(
-      (u) => u !== '/sw.js' && !u.startsWith('/report') && (!files[u].binary || u.startsWith('/fonts/')),
+      (u) =>
+        u !== '/sw.js' &&
+        !u.startsWith('/report') &&
+        (!files[u].binary || u.startsWith('/fonts/')),
     )
     .concat(Object.values(mapping).filter((u) => !u.includes('/report.')));
   const swSource = files['/sw.js'].body
