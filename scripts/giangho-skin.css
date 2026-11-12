@@ -51,9 +51,13 @@
   color: color-mix(in srgb, var(--project-choice-color, #7950c8) 50%, white);
 }
 /* Biểu tượng: chuyển sắc son → vàng đồng. */
-:root[data-style=giangho] .brandmark stop:nth-child(1) { stop-color: #8f2336; }
-:root[data-style=giangho] .brandmark stop:nth-child(2) { stop-color: #c2413f; }
-:root[data-style=giangho] .brandmark stop:nth-child(3) { stop-color: #c9a24a; }
+/* v1.91.0: cả biểu tượng ở màn hình Nhập môn (đăng nhập). */
+:root[data-style=giangho] .brandmark stop:nth-child(1),
+:root[data-style=giangho] .auth-logo stop:nth-child(1) { stop-color: #8f2336; }
+:root[data-style=giangho] .brandmark stop:nth-child(2),
+:root[data-style=giangho] .auth-logo stop:nth-child(2) { stop-color: #c2413f; }
+:root[data-style=giangho] .brandmark stop:nth-child(3),
+:root[data-style=giangho] .auth-logo stop:nth-child(3) { stop-color: #c9a24a; }
 /* Thanh bên: viền đôi vàng đồng như mép cuộn thư; mục đang chọn có vạch son. */
 :root[data-style=giangho] .sidebar {
   box-shadow: inset -1px 0 0 var(--gh-line), inset -5px 0 0 var(--gh-paper), inset -6px 0 0 color-mix(in srgb, var(--gh-gold) 30%, transparent);

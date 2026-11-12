@@ -454,18 +454,265 @@
     'Ghi chú đã đặt lịch': 'Quyển đã hẹn nhắc',
   }))
     add(k, v);
+
+  // ---- v1.91.0 (Cơ Quan): Cơ quan (cài đặt), nhập môn, truyền thư, Phong ấn, Phế tích, trạng thái đồng bộ, thông báo nhanh ----------
+  // Giữ nguyên theo bảng thuật ngữ: nhóm Giao diện (để luôn tìm được công tắc Phong cách), Dữ liệu & đồng bộ, Cài đặt ứng dụng,
+  // các nút Xóa / Xóa dữ liệu / Xóa vĩnh viễn, và mọi câu đòi nhập lại mật khẩu.
+  const SETTINGS = '.wf-settings';
+  const NOTE = '#toast, [role=status]';
+  const AUTH = '#auth-screen';
+  const SYNC = '#save-state, #zen-sync-feedback';
+  for (const [k, v] of [
+    // Cơ quan: tiêu đề và tên nhóm
+    ['Cài đặt', { to: 'Cơ quan', in: 'h2:has(~ .wf-settings-group)' }],
+    ['Tài khoản của bạn', { to: 'Danh tính của các hạ', in: 'h2:has(~ .wf-settings-group)' }],
+    ['Hồ sơ', { to: 'Hành trạng', in: SETTINGS + ' summary' }],
+    ['Tài khoản & bảo mật', { to: 'Danh tính & phòng vệ', in: SETTINGS }],
+    ['Thông báo', { to: 'Truyền thư', in: SETTINGS + ' summary, h2:has(~ .notice-list)' }],
+    ['Tổng kết tuần', { to: 'Chiến báo tuần', in: SETTINGS + ' summary' }],
+    ['Hướng dẫn', { to: 'Bí kíp nhập môn', in: SETTINGS + ' summary' }],
+    ['Phiên đăng nhập', { to: 'Phiên nhập môn', in: SETTINGS }],
+    // Truyền thư trong Cơ quan: ba khối Nhiệm vụ · Nhật khóa · Tu vi
+    ['Công việc', { to: 'Nhiệm vụ', in: '.nf-block > h4' }],
+    ['Việc hằng ngày', { to: 'Nhật khóa', in: '.nf-block > h4' }],
+    ['Điểm tích lũy', { to: 'Tu vi', in: '.nf-block > h4' }],
+    // Hành trạng
+    ['Hồ sơ cá nhân', { to: 'Hành trạng cá nhân', in: SETTINGS }],
+    ['Tên hiển thị', { to: 'Danh xưng', in: SETTINGS }],
+    ['Ảnh đại diện', { to: 'Chân dung', in: SETTINGS }],
+    ['Xóa ảnh', { to: 'Xóa chân dung', in: SETTINGS }],
+    // Phiên nhập môn
+    ['Đăng xuất', { to: 'Hạ sơn', in: '.settings-signout' }],
+    // Truyền thư (hộp thoại chuông)
+    ['Quá hạn', { to: 'Lỡ hẹn', in: '.notice-group' }],
+    ['Sắp đến hạn', { to: 'Sắp tới kỳ', in: '.notice-group' }],
+    ['Quan trọng', { to: 'Trọng yếu', in: '.notice-group, .notice-tag' }],
+    ['quá hạn', { to: 'lỡ hẹn', in: '.notice-stats' }],
+    ['sắp đến hạn', { to: 'sắp tới kỳ', in: '.notice-stats' }],
+    ['quan trọng', { to: 'trọng yếu', in: '.notice-stats' }],
+    ['Xem chi tiết', { to: 'Xem tường tận', in: '.release-actions' }],
+    ['Đến giờ nhắc việc', { to: 'Tới giờ luyện nhật khóa', in: '.notice-item' }],
+    // Phong ấn
+    ['Xem dự án', { to: 'Xem đại sự', in: '.archive-projects' }],
+    ['Khôi phục', { to: 'Giải ấn', in: '.wf-archive-row, [data-project-archive]' }],
+    ['Lưu trữ', { to: 'Phong ấn', in: '[data-project-archive]' }],
+    ['Dọn sạch Thùng rác', { to: 'Dọn sạch Phế tích', in: 'dialog' }],
+    // Phế tích: loại mục trên thẻ
+    ['Công việc', { to: 'Nhiệm vụ', in: '.recycle-name > small:first-child' }],
+    ['Ghi chú', { to: 'Quyển', in: '.recycle-name > small:first-child' }],
+    ['Dự án', { to: 'Đại sự', in: '.recycle-name > small:first-child' }],
+    ['Mục checklist', { to: 'Chiêu', in: '.recycle-name > small:first-child' }],
+    // Trạng thái đồng bộ (viên trạng thái ở thanh trên, khung báo lỗi bên dưới)
+    ['Ngoại tuyến', { to: 'Ẩn cư', in: SYNC }],
+    ['Chưa kết nối được', { to: 'Chưa thông mạch được', in: SYNC }],
+    ['Chưa đồng bộ được', { to: 'Chưa thông mạch được', in: SYNC }],
+    // Nhập môn (màn hình đăng nhập)
+    ['Ý tưởng', { to: 'Kế sách', in: '.auth-mini' }],
+    ['Đang làm', { to: 'Đang hành', in: '.auth-mini' }],
+    ['Hoàn thành ✓', { to: 'Công thành ✓', in: '.auth-mini' }],
+    ['Mật khẩu', { to: 'Ám hiệu (mật khẩu)', in: AUTH }],
+    ['Đăng nhập', { to: 'Nhập môn', in: AUTH }],
+    ['Tạo tài khoản', { to: 'Ghi danh', in: AUTH }],
+    ['Quên mật khẩu', { to: 'Quên ám hiệu', in: AUTH }],
+    ['Mật khẩu mới', { to: 'Ám hiệu mới', in: AUTH }],
+    ['Lưu mật khẩu', { to: 'Lưu ám hiệu', in: AUTH }],
+    ['Hiện mật khẩu', { to: 'Hiện ám hiệu (mật khẩu)', in: AUTH }],
+    ['Ẩn mật khẩu', { to: 'Ẩn ám hiệu (mật khẩu)', in: AUTH }],
+    // Thông báo nhanh và dòng trạng thái: "Đã lưu" → "Đã ghi vào sổ"
+    ['Đã lưu.', { to: 'Đã ghi vào sổ.', in: NOTE }],
+  ])
+    add(k, v);
+  for (const [k, v] of Object.entries({
+    // Cơ quan
+    'Thông tin được lưu riêng theo tài khoản của bạn.': 'Thông tin cất riêng theo danh tính của các hạ.',
+    'Lưu hồ sơ': 'Lưu hành trạng',
+    'Đồng bộ tự động khi chỉnh sửa. Thiết bị khác nhận cập nhật sau khoảng 10 giây khi đang mở; kết nối lại sẽ gửi dữ liệu chờ.': 'Tự đồng bộ khi chỉnh sửa. Thiết bị khác nhận tin sau khoảng 10 giây khi đang mở; thông mạch lại sẽ gửi dữ liệu còn chờ.',
+    'Email hằng ngày: nhắc trước hạn 3 ngày, đến hạn hôm nay và quá hạn.': 'Email hằng ngày: nhắc trước kỳ hạn 3 ngày, tới kỳ hôm nay và lỡ hẹn.',
+    'Hằng ngày khi còn việc cần nhắc': 'Hằng ngày khi còn nhiệm vụ cần nhắc',
+    'Giờ Việt Nam. Email liệt kê tên công việc, dự án và hạn hoàn thành. Dự án đã lưu trữ không được nhắc.': 'Giờ Việt Nam. Email liệt kê tên nhiệm vụ, đại sự và kỳ hạn công thành. Đại sự đã phong ấn không bị nhắc.',
+    'Lưu lịch thông báo': 'Lưu lịch truyền thư',
+    'Nhắc hạn trong ứng dụng': 'Nhắc kỳ hạn trong ứng dụng',
+    'Hiện thanh nhắc việc quá hạn ở đầu trang và báo thêm khi có việc mới đến hạn.': 'Hiện thanh nhắc nhiệm vụ lỡ hẹn ở đầu trang và báo thêm khi có nhiệm vụ mới tới kỳ.',
+    'Thông báo trình duyệt (chỉ thiết bị này)': 'Truyền thư trên trình duyệt (chỉ thiết bị này)',
+    'Bật thông báo trình duyệt': 'Bật truyền thư trên trình duyệt',
+    'Tắt thông báo thiết bị này': 'Tắt truyền thư trên thiết bị này',
+    'Áp dụng cho thiết bị này. Giờ nhắc riêng của từng việc đặt khi thêm hoặc chỉnh sửa việc.': 'Áp dụng cho thiết bị này. Giờ nhắc riêng của từng môn đặt khi thêm hoặc chỉnh sửa môn.',
+    'Nhắc đến giờ của từng việc (khung nhắc ở trang Việc hằng ngày và chấm trên chuông).': 'Nhắc khi tới giờ luyện từng môn (khung nhắc ở trang Nhật khóa và chấm trên chuông truyền thư).',
+    'Nhắc nhẹ khi hôm nay chưa tích việc nào.': 'Nhắc nhẹ khi hôm nay chưa luyện môn nào.',
+    'Chọn hiệp khách ở mục Điểm tích lũy để bật thông báo điểm nghiệp và gợi ý cải thiện hằng tuần.': 'Chọn hiệp khách ở mục Tu vi để bật truyền thư điểm nghiệp và gợi ý cải thiện hằng tuần.',
+    'Mở Điểm tích lũy': 'Mở Tu vi',
+    'Tiến độ dự án và những việc nên ưu tiên cho tuần tới.': 'Tiến cảnh đại sự và những nhiệm vụ nên ưu tiên cho tuần tới.',
+    'Email tổng kết hằng tuần': 'Email chiến báo hằng tuần',
+    'Xem báo cáo & PDF': 'Xem chiến báo & PDF',
+    'Xuất link chia sẻ': 'Phát lệnh bài',
+    'Báo cáo thu chi tuần': 'Chiến báo ngân khố tuần',
+    'Tổng chi, tổng thu hồi và lãi/lỗ của từng dự án. Email chỉ được gửi khi đã có ít nhất một khoản thu chi trong Phân bổ tài nguyên.': 'Tổng xuất ngân, tổng thu ngân và lãi/lỗ của từng đại sự. Email chỉ được gửi khi đã có ít nhất một khoản thu chi trong Ngân khố.',
+    'Email báo cáo thu chi hằng tuần': 'Email chiến báo ngân khố hằng tuần',
+    'Ngày gửi tổng kết': 'Ngày gửi chiến báo tuần',
+    'Giờ gửi tổng kết, giờ Việt Nam': 'Giờ gửi chiến báo tuần, giờ Việt Nam',
+    'Ngày gửi báo cáo thu chi': 'Ngày gửi chiến báo ngân khố',
+    'Giờ gửi báo cáo thu chi, giờ Việt Nam': 'Giờ gửi chiến báo ngân khố, giờ Việt Nam',
+    'Chưa ghi nhận lần đồng bộ thành công trên thiết bị này.': 'Thiết bị này chưa ghi nhận lần thông mạch thành công nào.',
+    'Hoàn tác lần xóa': 'Thu chiêu, lấy lại lần xóa',
+    'Thông báo cần được bạn cho phép. Trình duyệt có thể giới hạn thông báo khi bị đóng hoàn toàn. Email nhắc việc có thể tắt bất cứ lúc nào.': 'Truyền thư cần các hạ cho phép. Trình duyệt có thể hạn chế truyền thư khi bị đóng hẳn. Email nhắc nhiệm vụ có thể tắt bất cứ lúc nào.',
+    'Hướng dẫn sử dụng': 'Mở bí kíp nhập môn',
+    'Tự khóa sau 10 phút không thao tác. Bạn có thể chọn ghi nhớ thiết bị ở lần đăng nhập tiếp theo.': 'Tự khóa sau 10 phút không thao tác. Các hạ có thể chọn ghi nhớ thiết bị ở lần nhập môn tiếp theo.',
+    'Đăng xuất tài khoản?': 'Hạ sơn?',
+    'Đồng bộ các thay đổi trước khi rời không gian làm việc.': 'Các thay đổi chưa đồng bộ sẽ được gửi lên trước. Các hạ sẽ phải nhập môn lại.',
+    // Truyền thư
+    'Công việc đang hoạt động · đến hạn trong 3 ngày · tệp mới từ thiết bị khác.': 'Nhiệm vụ đang vận hành · tới kỳ trong 3 ngày · tệp mới từ thiết bị khác.',
+    'Xác nhận đã đọc tất cả': 'Xác nhận đã đọc hết truyền thư',
+    'Bạn đã xem hết thông báo': 'Các hạ đã đọc hết truyền thư',
+    'Việc mới đến hạn sẽ hiện ở đây.': 'Nhiệm vụ mới tới kỳ sẽ hiện ở đây.',
+    'Chưa có thông báo.': 'Chưa có truyền thư.',
+    'Đã xem thông báo tệp': 'Đã xem truyền thư về tệp',
+    'Bấm để xem báo cáo tu luyện': 'Bấm để xem chiến báo tu luyện',
+    'Mở việc hằng ngày →': 'Mở Nhật khóa →',
+    'Có bản cập nhật mới. Tải lại trang để nhận tính năng mới nhất.': 'Có biên niên mới. Tải lại trang để nhận bí kíp mới nhất.',
+    // Phong ấn
+    'Khôi phục để làm tiếp': 'Giải ấn để làm tiếp',
+    'Chưa có dự án lưu trữ.': 'Chưa có đại sự nào bị phong ấn.',
+    'Công việc đã lưu trữ': 'Nhiệm vụ đã phong ấn',
+    'Việc giữ nguyên dữ liệu và được tạm ẩn khỏi các góc nhìn đang làm.': 'Nhiệm vụ giữ nguyên dữ liệu, tạm ẩn khỏi các thế trận đang hành.',
+    'Lưu trữ dự án?': 'Phong ấn đại sự?',
+    'sẽ được chuyển vào Lưu trữ. Trạng thái, checklist và tệp được giữ nguyên để khôi phục sau. Dự án sẽ ngừng nhắc hạn.': 'sẽ được phong ấn. Trạng thái, chiêu thức và tệp được giữ nguyên để giải ấn sau. Đại sự sẽ ngừng nhắc kỳ hạn.',
+    'Khôi phục dự án?': 'Giải ấn đại sự?',
+    'Bạn có chắc muốn khôi phục': 'Các hạ muốn giải ấn',
+    'để tiếp tục làm việc?': 'để tiếp tục hành sự?',
+    'Lưu trữ đã chọn': 'Phong ấn đã chọn',
+    'Chọn để chuyển trạng thái hoặc lưu trữ nhiều việc cùng lúc': 'Chọn để chuyển trạng thái hoặc phong ấn nhiều nhiệm vụ cùng lúc',
+    'Ô vuông: chọn nhiều việc để đổi trạng thái hoặc lưu trữ.': 'Ô vuông: chọn nhiều nhiệm vụ để đổi trạng thái hoặc phong ấn.',
+    // Phế tích
+    'Tự dọn sau 30 ngày. Xóa vĩnh viễn sẽ không thể khôi phục.': 'Phế tích tự dọn sau 30 ngày. Xóa vĩnh viễn sẽ không thể khôi phục.',
+    'Mục trong Thùng rác': 'Mục trong Phế tích',
+    'Dự án, ghi chú và công việc': 'Đại sự, tàng thư và nhiệm vụ',
+    'Kiểu xem Thùng rác': 'Kiểu xem Phế tích',
+    'Không có dữ liệu trong nhóm này.': 'Nhóm này trống trơn.',
+    'Dọn sạch Thùng rác?': 'Dọn sạch Phế tích?',
+    'Thao tác này không thể hoàn tác. Các mục đã chọn sẽ không còn trong Thùng rác.': 'Thao tác này không thể hoàn tác. Các mục đã chọn sẽ không còn trong Phế tích.',
+    'Chuyển tệp vào Thùng rác?': 'Chuyển tệp vào Phế tích?',
+    'Bạn có thể khôi phục lần xóa gần nhất trong Settings. Nên xuất bản sao trước khi xóa dữ liệu quan trọng.': 'Các hạ có thể thu chiêu, lấy lại lần xóa gần nhất trong Cơ quan. Nên xuất bản sao trước khi xóa dữ liệu quan trọng.',
+    // Trạng thái đồng bộ
+    'Chưa kết nối được máy chủ · Đã lưu trên thiết bị': 'Chưa thông mạch với máy chủ · Đã lưu trên thiết bị',
+    'Bản nháp vẫn ở thiết bị, chưa mất dữ liệu.': 'Bản nháp vẫn ở thiết bị, dữ liệu vẹn toàn.',
+    'Bản trên thiết bị của bạn được giữ nguyên, chưa bị ghi đè.': 'Bản trên thiết bị của các hạ được giữ nguyên, chưa bị ghi đè.',
+    // Nhập môn
+    'KHÔNG GIAN LÀM VIỆC CÁ NHÂN': 'GIANG HỒ RIÊNG CỦA CÁC HẠ',
+    'Gọn công việc.': 'Gọn nhiệm vụ.',
+    'Từ ý tưởng đầu tiên đến công việc hoàn thành.': 'Từ kế sách đầu tiên đến nhiệm vụ công thành.',
+    'Mọi dự án của bạn, luôn ở cùng một nơi.': 'Mọi đại sự của các hạ, quy về một mối.',
+    'CHÀO MỪNG BẠN': 'HOAN NGHÊNH CÁC HẠ',
+    'Trở lại không gian của bạn': 'Trở lại giang hồ của các hạ',
+    'Quên mật khẩu?': 'Quên ám hiệu?',
+    'Giữ đăng nhập 30 ngày trên máy này. Bỏ chọn nếu đây là máy dùng chung.': 'Giữ nhập môn 30 ngày trên máy này. Bỏ chọn nếu đây là máy dùng chung.',
+    'Mật khẩu từ 10 ký tự. Không dùng lại mật khẩu ở nơi khác.': 'Ám hiệu từ 10 ký tự. Đừng dùng lại ám hiệu ở nơi khác.',
+    'Dữ liệu riêng theo tài khoản · Đồng bộ giữa thiết bị': 'Dữ liệu riêng theo danh tính · Đồng bộ giữa thiết bị',
+    'Email hoặc mật khẩu chưa đúng.': 'Email hoặc ám hiệu chưa đúng.',
+    'Email đã được xác minh. Bạn có thể đăng nhập.': 'Email đã được xác minh. Các hạ có thể nhập môn.',
+    'Vui lòng xác minh email trước khi đăng nhập. Bạn có thể gửi lại email xác minh.': 'Hãy xác minh email trước khi nhập môn. Các hạ có thể gửi lại email xác minh.',
+    'Đã đặt lại mật khẩu. Vui lòng đăng nhập.': 'Đã đặt lại ám hiệu. Mời các hạ nhập môn.',
+    'Phiên đăng nhập đã hết hạn.': 'Phiên nhập môn đã hết hạn.',
+    'Vui lòng đăng nhập.': 'Mời các hạ nhập môn.',
+    'Yêu cầu đăng ký đã được tiếp nhận. Hãy kiểm tra hộp thư đến và Thư rác để tìm email “Xác minh email Zen Studio”, rồi mở liên kết và bấm “Xác minh email” để hoàn tất. Nếu email đã có tài khoản, hãy đăng nhập hoặc dùng Quên mật khẩu.': 'Đơn ghi danh đã được tiếp nhận. Hãy kiểm tra hộp thư đến và Thư rác để tìm email “Xác minh email Zen Studio”, rồi mở liên kết và bấm “Xác minh email” để hoàn tất. Nếu email đã có danh tính, hãy nhập môn hoặc dùng Quên ám hiệu.',
+  }))
+    add(k, v);
+  // Thông báo nhanh (góc màn hình) và dòng trạng thái: giọng giang hồ nhưng vẫn nói rõ chuyện gì và cách sửa.
+  for (const [k, v] of Object.entries({
+    'Đã lưu công việc': 'Đã ghi nhiệm vụ vào sổ.',
+    'Đã lưu dự án.': 'Đã ghi đại sự vào sổ.',
+    'Đã lưu dự án. Một ý tưởng đang lớn lên!': 'Đã ghi đại sự vào sổ. Một kế sách đang thành hình!',
+    'Đã lưu cài đặt email.': 'Đã ghi cài đặt email vào sổ.',
+    'Đã lưu tùy chọn nhắc hạn.': 'Đã ghi tùy chọn nhắc kỳ hạn vào sổ.',
+    'Đã lưu giới hạn việc mỗi cột.': 'Đã ghi giới hạn nhiệm vụ mỗi cột vào sổ.',
+    'Đã lưu trữ dự án.': 'Đã phong ấn đại sự.',
+    'Đã khôi phục dự án.': 'Đã giải ấn đại sự.',
+    'Đã lưu trữ các công việc đã chọn.': 'Đã phong ấn các nhiệm vụ đã chọn.',
+    'Đã chuyển trạng thái các công việc đã chọn.': 'Đã chuyển trạng thái các nhiệm vụ đã chọn.',
+    'Đã xóa. Có thể hoàn tác trong Settings.': 'Đã xóa. Có thể thu chiêu trong Cơ quan.',
+    'Đã khôi phục dữ liệu trước lần xóa gần nhất.': 'Đã thu chiêu, lấy lại dữ liệu trước lần xóa gần nhất.',
+    'Đã chuyển tệp vào Thùng rác.': 'Đã chuyển tệp vào Phế tích.',
+    'Thùng rác đang trống.': 'Phế tích trống trơn.',
+    'Đã đổi thứ tự việc.': 'Đã đổi thứ tự nhật khóa.',
+    'Đã liên kết ghi chú.': 'Đã liên kết quyển.',
+    'Đã liên kết ghi chú với công việc.': 'Đã liên kết quyển với nhiệm vụ.',
+    'Đã bỏ liên kết; ghi chú vẫn được giữ.': 'Đã bỏ liên kết; quyển vẫn được giữ.',
+    'Đã bỏ liên kết. Ghi chú vẫn được giữ.': 'Đã bỏ liên kết. Quyển vẫn được giữ.',
+    'Đã hoàn tất phiên tập trung. Hãy nghỉ ngơi một chút.': 'Đã xuất quan. Các hạ nghỉ ngơi dưỡng sức chốc lát.',
+    'Đã hoàn tác lịch.': 'Đã thu chiêu, trả lại ngày cũ.',
+    'Đã cập nhật lịch công việc.': 'Đã cập nhật ngày giờ nhiệm vụ.',
+    'Đã bật thông báo nhắc việc hằng ngày trên thiết bị này.': 'Đã bật truyền thư nhắc nhật khóa trên thiết bị này.',
+    'Đã tắt thông báo trên thiết bị này.': 'Đã tắt truyền thư trên thiết bị này.',
+    'Đã tắt email tổng kết.': 'Đã tắt email chiến báo tuần.',
+    'Đã hợp nhất. Các nội dung khác nhau được giữ thành bản sao để bạn đối chiếu.': 'Đã hợp nhất. Các nội dung khác nhau được giữ thành bản sao để các hạ đối chiếu.',
+    'Phiên đăng nhập hết hạn. Bản nháp vẫn ở trên thiết bị.': 'Phiên nhập môn hết hạn. Bản nháp vẫn ở trên thiết bị.',
+    'Còn dữ liệu chưa đồng bộ. Hãy xuất JSON hoặc chờ đồng bộ trước khi đăng xuất.': 'Còn dữ liệu chưa đồng bộ. Hãy xuất JSON hoặc chờ đồng bộ trước khi hạ sơn.',
+    'Chưa lưu được. Hãy thử lại.': 'Chưa ghi vào sổ được. Hãy thử lại.',
+    'Chưa lưu được thay đổi.': 'Chưa ghi được thay đổi vào sổ.',
+    'Chưa lưu được xác nhận. Kiểm tra kết nối rồi thử lại.': 'Chưa ghi được xác nhận. Kiểm tra thông mạch rồi thử lại.',
+    'Chưa lưu được trạng thái đã đọc. Hãy thử lại.': 'Chưa ghi được dấu đã đọc truyền thư. Hãy thử lại.',
+    'Chưa lấy được dữ liệu máy chủ. Bản chỉnh sửa của bạn vẫn được giữ.': 'Chưa lấy được dữ liệu máy chủ. Bản chỉnh sửa của các hạ vẫn được giữ.',
+    'Hãy kiểm tra nội dung trước khi lưu.': 'Các hạ xem lại nội dung rồi hãy lưu.',
+    'Tên công việc không được để trống.': 'Tên nhiệm vụ không được để trống.',
+    'Tạo dự án trước khi thêm công việc.': 'Khởi đại sự trước khi thêm nhiệm vụ.',
+    'Việc này đã tồn tại.': 'Nhiệm vụ này đã có.',
+    'Dự án đã tồn tại.': 'Đại sự này đã có.',
+    'Ghi chú đã tồn tại.': 'Quyển này đã có.',
+    'Tối đa 100 dự án.': 'Tối đa 100 đại sự.',
+    'Tối đa 100 dự án. Hãy xuất bản sao và lưu trữ các dự án cũ.': 'Tối đa 100 đại sự. Hãy xuất bản sao và phong ấn các đại sự cũ.',
+    'Tối đa 2.000 việc mỗi dự án.': 'Tối đa 2.000 nhiệm vụ mỗi đại sự.',
+    'Tối đa 20 cột mỗi dự án.': 'Tối đa 20 cột mỗi đại sự.',
+    'Tối đa 200 mục checklist.': 'Tối đa 200 chiêu.',
+    'Tối đa 200 mục checklist mỗi việc.': 'Tối đa 200 chiêu mỗi nhiệm vụ.',
+    'Tối đa 200 mục checklist, mỗi mục tối đa 300 ký tự.': 'Tối đa 200 chiêu, mỗi chiêu tối đa 300 ký tự.',
+    'Tối đa 500 ghi chú.': 'Tối đa 500 quyển.',
+    'Nội dung checklist không được để trống.': 'Nội dung chiêu không được để trống.',
+    'Nội dung mục không được để trống. Dùng nút × để xóa mục.': 'Nội dung chiêu không được để trống. Dùng nút × để bỏ chiêu.',
+    'Mỗi công việc tối đa 20 từ khóa.': 'Mỗi nhiệm vụ tối đa 20 từ khóa.',
+    'Tối đa 5 từ khóa dự án. Hãy bỏ các từ khóa không cần thiết.': 'Tối đa 5 từ khóa đại sự. Hãy bỏ các từ khóa không cần thiết.',
+    'Kiểm tra tên và khoảng thời gian công việc.': 'Kiểm tra tên và khoảng thời gian nhiệm vụ.',
+    'Công việc đã thay đổi hoặc bị xóa trên thiết bị khác. Hãy mở lại dự án.': 'Nhiệm vụ đã thay đổi hoặc bị xóa trên thiết bị khác. Hãy mở lại đại sự.',
+    'Một dự án không có trạng thái này. Hãy chọn lại các công việc phù hợp.': 'Một đại sự không có trạng thái này. Hãy chọn lại các nhiệm vụ phù hợp.',
+    'Ghi chú đã bị xóa trên thiết bị khác. Nội dung đang nhập được giữ để bạn sao chép.': 'Quyển đã bị xóa trên thiết bị khác. Nội dung đang nhập được giữ để các hạ sao chép.',
+    'Ghi chú đang được sửa cùng lúc trên thiết bị khác. Hãy giữ nội dung đang nhập trước khi mở lại.': 'Quyển đang được sửa cùng lúc trên thiết bị khác. Hãy giữ nội dung đang nhập trước khi mở lại.',
+    'Cần đồng bộ dự án trước khi gửi tệp.': 'Cần đồng bộ đại sự trước khi gửi tệp.',
+    'Hãy tạo ít nhất một dự án hoặc ghi chú trước khi tải tệp.': 'Hãy khởi ít nhất một đại sự hoặc chép một quyển trước khi cất tệp.',
+    'Lịch đã thay đổi tiếp; hãy mở công việc để kiểm tra.': 'Ngày giờ đã thay đổi tiếp; hãy mở nhiệm vụ để kiểm tra.',
+    'Lịch vừa thay đổi trên thiết bị khác. Hãy kéo lại.': 'Ngày giờ vừa thay đổi trên thiết bị khác. Hãy kéo lại.',
+    'Chưa có điểm để quy đổi. Hoàn thành việc để tu luyện trước.': 'Chưa có điểm để quy đổi. Hoàn thành nhiệm vụ để tu luyện trước.',
+    'Đang ngoại tuyến. Kết nối mạng rồi thử lại; Thùng rác chưa bị xóa.': 'Đang ẩn cư. Thông mạch rồi thử lại; Phế tích chưa bị xóa.',
+    'Đang ngoại tuyến. Dữ liệu trên thiết bị vẫn được giữ.': 'Đang ẩn cư. Dữ liệu trên thiết bị vẫn vẹn toàn.',
+    'Dữ liệu có xung đột. Mở Cài đặt → Dữ liệu để xử lý trước khi dọn rác.': 'Dữ liệu có xung đột. Mở Cơ quan → Dữ liệu để xử lý trước khi dọn Phế tích.',
+    'Chưa đồng bộ được dữ liệu. Mở Cài đặt → Đồng bộ ngay để xem chi tiết.': 'Chưa thông mạch được. Mở Cơ quan → Đồng bộ ngay để xem tường tận.',
+    'Chưa gửi được thay đổi. Bản trên thiết bị đã lưu; kết nối lại để hoàn tất đồng bộ.': 'Chưa gửi được thay đổi. Bản trên thiết bị đã lưu; thông mạch lại để hoàn tất đồng bộ.',
+    'Có thay đổi chưa lưu · Chọn Lưu để xác nhận.': 'Có thay đổi chưa ghi vào sổ · Chọn Lưu để xác nhận.',
+    'Công việc mới chưa được lưu.': 'Nhiệm vụ mới chưa được ghi vào sổ.',
+  }))
+    add(k, { to: v, in: NOTE });
   const money = (s) => s.replace(/đã chi/g, 'đã xuất ngân').replace(/đã thu hồi/g, 'đã thu ngân').replace(/ chi /g, ' xuất ').replace(/số đã chi/g, 'số đã xuất ngân');
 
   // Mẫu có phần thay đổi: [biểu thức, chữ mới hoặc hàm, vùng (tùy chọn), chữ bắt buộc có (lọc nhanh trước khi thử biểu thức)].
-  const bell = (s) =>
-    'Truyền thư' +
+  // Câu tóm tắt của chuông (nhãn nút ở thanh trên, dòng đầu hộp thoại Truyền thư): đổi từng cụm, giữ nguyên các con số.
+  const noticeWords = (s) =>
     s
-      .slice('Thông báo'.length)
-      .replace(' việc cần chú ý', ' nhiệm vụ cần chú ý')
+      .replace(/([Kk])hông có việc quá hạn hay đến hạn/g, '$1hông có nhiệm vụ lỡ hẹn hay tới kỳ')
+      .replace(/(\d+) việc cần chú ý/g, '$1 nhiệm vụ cần chú ý')
+      .replace(/Còn (\d+) việc quan trọng chưa tới hạn/g, 'Còn $1 nhiệm vụ trọng yếu chưa tới kỳ')
       .replace(/ quá hạn/g, ' lỡ hẹn')
+      .replace(/ đến hạn trong 3 ngày/g, ' tới kỳ trong 3 ngày')
       .replace(/sắp đến hạn/g, 'sắp tới kỳ')
       .replace(/đến hạn hôm nay/g, 'tới kỳ hôm nay')
-      .replace(/phiên bản mới/g, 'biên niên mới');
+      .replace(/phiên bản mới/g, 'biên niên mới')
+      .replace(/(\d+) nhắc ghi chú/g, '$1 nhắc quyển')
+      .replace(/(\d+) việc đến giờ nhắc/g, '$1 môn nhật khóa tới giờ luyện');
+  const bell = (s) => 'Truyền thư' + noticeWords(s.slice('Thông báo'.length));
+  // Trạng thái đồng bộ: "đồng bộ thành công" = thông mạch, "ngoại tuyến" = ẩn cư.
+  const SYNC_WORDS = {
+    'Ngoại tuyến · Bạn vẫn có thể chỉnh sửa': 'Ẩn cư · Các hạ vẫn chỉnh sửa được, sẽ đồng bộ khi thông mạch.',
+    'Chưa kết nối được máy chủ · Đã lưu trên thiết bị': 'Chưa thông mạch với máy chủ · Đã lưu trên thiết bị',
+    'Dữ liệu đã được máy chủ xác nhận': 'Đã thông mạch, dữ liệu vẹn toàn',
+    'Chưa ghi nhận lần đồng bộ thành công trên thiết bị này': 'Thiết bị này chưa ghi nhận lần thông mạch thành công nào',
+  };
+  const syncWords = (s) => SYNC_WORDS[s] || s.replace(/^Đã đồng bộ lúc/, 'Đã thông mạch lúc').replace(/^Chưa đồng bộ được/, 'Chưa thông mạch được');
   const PATTERNS = [
     [/^Thông báo · .+$/, bell, '.topbar', 'Thông báo · '],
     [/^(Lịch|Gantt) · (.+)$/, (s, a, b) => (currentView() === VIEW_OF[a] ? NAV[a][0] + ' · ' + b : s), '#crumb', ' · '],
@@ -539,6 +786,25 @@
     [/^Dòng tiền 6 tháng gần đây: (.+)$/, (s, rest) => 'Ngân lưu 6 tháng gần đây: ' + rest.replace(/ chi /g, ' xuất ngân ').replace(/ thu /g, ' thu ngân '), MAIN, 'Dòng tiền'],
     [/^Chi theo dự án: (.+)$/, 'Xuất ngân theo đại sự: $1', MAIN, 'Chi theo dự án:'],
     [/^Chi theo hạng mục: (.+)$/, 'Xuất ngân theo hạng mục: $1', MAIN, 'Chi theo hạng mục:'],
+    // v1.91.0
+    [/^(?:\d+ việc cần chú ý: |Không có việc quá hạn hay đến hạn\.).*$/, (s) => noticeWords(s), '.notice-summary', 'việc'],
+    [/^(Mới · )?Phiên bản (\d+\.\d+\.\d+)$/, (s, fresh, v) => (fresh || '') + 'Biên niên v' + v + releaseName(v), '.notice-item', 'Phiên bản '],
+    [/^(.+) · (\d\d\/\d\d\/\d{4}) · quá hạn (\d+) ngày$/, '$1 · $2 · lỡ hẹn $3 ngày', '.notice-item small', ' · quá hạn '],
+    [/^Hiện thêm (\d+) việc$/, 'Hiện thêm $1 nhiệm vụ', '.notice-more', 'Hiện thêm'],
+    [/^(\d+)\/(\d+) việc hoàn thành · (\d+)% tiến độ$/, '$1/$2 nhiệm vụ công thành · $3% tiến cảnh', '.archive-projects', 'việc hoàn thành'],
+    [/^(\d+) công việc · Lưu trữ$/, '$1 nhiệm vụ · Phong ấn', MAIN, ' · Lưu trữ'],
+    [/^(Công việc|Ghi chú|Dự án|Mục checklist) · (\d+)$/, (s, k, n) => ({ 'Công việc': 'Nhiệm vụ', 'Ghi chú': 'Quyển', 'Dự án': 'Đại sự', 'Mục checklist': 'Chiêu' })[k] + ' · ' + n, '.recycle-filters', ' · '],
+    [/^Xóa (công việc|dự án|ghi chú)\?$/, (s, k) => 'Xóa ' + ({ 'công việc': 'nhiệm vụ', 'dự án': 'đại sự', 'ghi chú': 'quyển' })[k] + '?', 'dialog h2', 'Xóa '],
+    [/^Đã đồng bộ lúc (\d\d:\d\d)$/, 'Đã thông mạch lúc $1', SYNC, 'Đã đồng bộ lúc'],
+    [/^Chưa đồng bộ được · (.+)$/, 'Chưa thông mạch được · $1', SYNC, 'Chưa đồng bộ được · '],
+    [/^Trạng thái đồng bộ: (.+)$/, (s, rest) => 'Trạng thái đồng bộ: ' + syncWords(rest), SYNC, 'Trạng thái đồng bộ: '],
+    [/^(Đang gửi dữ liệu lên máy chủ|Dữ liệu đã được máy chủ xác nhận|Dữ liệu hiện vẫn được giữ trên thiết bị) · (.+)$/, (s, a, b) => syncWords(a) + ' · ' + syncWords(b), SYNC, ' · '],
+    [/^Lần đồng bộ thành công gần nhất: (.+)$/, 'Lần thông mạch gần nhất: $1', '#sync-last-time', 'Lần đồng bộ thành công'],
+    [/^Tài khoản · (.+)$/, 'Danh tính · $1', '.topbar', 'Tài khoản · '],
+    [/^Mở cài đặt tài khoản của (.+)$/, 'Mở Cơ quan của $1', '.topbar', 'Mở cài đặt tài khoản của '],
+    [/^Đã tải lên (\d+) tệp vào Tài nguyên\.$/, 'Đã cất $1 tệp vào Bảo khố.', NOTE, 'Đã tải lên'],
+    [/^Đã bật email nhắc hằng ngày và tổng kết Chủ nhật lúc (.+)$/, 'Đã bật email nhắc hằng ngày và chiến báo Chủ nhật lúc $1', NOTE, 'tổng kết Chủ nhật'],
+    [/^Tổng kết được gửi vào (.+)$/, 'Chiến báo được gửi vào $1', NOTE, 'Tổng kết được gửi'],
   ];
   // Nội dung người dùng và vùng không đổi chữ.
   const SKIP = [
@@ -554,6 +820,10 @@
     // (bấm gợi ý là chép chữ vào ô nhập nên phải giữ nguyên), tên tệp
     '.keep-card h3', '.keep-card > small', '.keep-card .zen-formatted', '.note-label-filters', '.wf-project-choices', '.bg-project-name', '.bg-entry-main', '.bg-cat-chip', '.resource-card', '.resource-name', '.file-name',
     '.hb-name', '.hb-text > strong', '.hb-suggest', '.hb-hbars li > span', '.hb-hist-notes', '.wf-focus-card strong', '.wf-focus-card > small', '.wf-focus-task-heading h1', '.wf-focus-header h2', '.wf-focus-note-options button', '.zen-ma-body strong', '.zen-agenda-task strong', '.zen-agenda-task span:first-of-type',
+    // Phong ấn, Phế tích, Truyền thư: tên đại sự / nhiệm vụ / mục đã xóa, tên người nhận trong hộp xác nhận, tiêu đề việc trong chuông
+    '.archive-projects h3', '.wf-archive-row .text-btn', '.recycle-name h3', '.recycle-select', '.help-copy:has(~ .purge-warning)', 'dialog .help-copy > strong', '.notice-item:not(.release-notice) > span:not(.notice-tag):not(.notice-detail-link)',
+    // Dòng trạng thái trong hộp thoại nhiệm vụ: ứng dụng tự đặt lại chữ mỗi khi hộp thoại đổi (studio-zen.js mirror), không đổi để khỏi giằng co.
+    '.zen-task-save-status',
   ].join(', ');
   // Phần tử mà chữ NẰM TRỰC TIẾP bên trong là nội dung người dùng (phần tử con như nhãn "Hạn", mức cấp bách vẫn được đổi).
   const DIRECT_SKIP = 'button.month-event';
@@ -591,7 +861,8 @@
   }
   function convert(value, el) {
     const core = value.trim();
-    if (!core || core.length > 200) return null;
+    // v1.91.0: 200 → 400 ký tự cho các câu dài của Cơ quan, Nhập môn (lời nhắn sau khi ghi danh) và tóm tắt Truyền thư.
+    if (!core || core.length > 400) return null;
     const out = lookup(core, el);
     if (out == null || out === core || el.closest(SKIP)) return null;
     return value.replace(core, () => out);
@@ -675,7 +946,15 @@
 
   // ---- Bật / tắt theo phong cách -------------------------------------------------------------------------------------------
   let observer = null;
+  // v1.91.0: chốt an toàn. Nếu một đoạn mã của ứng dụng cứ thấy chữ khác là đặt lại (bộ quan sát giằng co với bộ chuyển ngữ), vòng
+  // vi tác vụ không bao giờ nhường cho setTimeout; quá 200 lượt liền thì ngừng đổi chữ tới tác vụ kế tiếp để trang không bị treo.
+  let burst = 0;
   function onMutations(list) {
+    if (++burst === 1) setTimeout(() => (burst = 0));
+    if (burst > 200) {
+      observer.takeRecords();
+      return;
+    }
     for (const m of list) {
       if (m.type === 'childList') {
         // Ứng dụng có thể đặt lại chữ bên trong một nút mục (innerHTML): dựng lại nhãn hai dòng cho chính nút đó.

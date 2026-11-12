@@ -161,6 +161,7 @@ jobs:
           node tests/giangho-work-browser.mjs
           node tests/giangho-daily-browser.mjs
           node tests/giangho-treasure-browser.mjs
+          node tests/giangho-settings-browser.mjs
           node tests/device-audit-browser.mjs
           node tests/gantt-edge-route-browser.mjs
           node tests/note-paste-lines-browser.mjs

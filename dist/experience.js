@@ -41,9 +41,8 @@ accountPanel = function (...args) {
   const body = document.querySelector('#editor-body');
   if (!body?.classList.contains('wf-settings')) return result;
   const moveSessionToEnd = () => {
-    const session = [...body.querySelectorAll('.wf-settings-group')].find((group) =>
-      group.querySelector(':scope > summary')?.textContent.trim() === 'Phiên đăng nhập'
-    );
+    // v1.91.0: nhận nhóm phiên đăng nhập theo nội dung (.settings-signout), không theo chữ tiêu đề — phong cách Giang hồ đổi chữ này.
+    const session = [...body.querySelectorAll('.wf-settings-group')].find((group) => group.querySelector('.settings-signout'));
     if (session) {
       session.open = true;
       session.classList.add('wf-settings-session');
