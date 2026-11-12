@@ -36,3 +36,5 @@ Do not retry an outdated run after a newer release; rerun the current main workf
 - .github/workflows/build-worker.yml
 - scripts/verify-production.mjs
 - wrangler.jsonc
+
+Khôi phục dữ liệu (D1 Time Travel): xem `docs/d1-backup-restore.md`.
