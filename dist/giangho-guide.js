@@ -221,6 +221,8 @@
     box.hidden = s.style !== 'giangho';
     const input = box.querySelector('#gh-words');
     if (input) input.checked = s.words !== false;
+    const fx = box.querySelector('#gh-fx');
+    if (fx) fx.checked = s.fx !== false;
   }
   if (typeof accountPanel === 'function') {
     const base = accountPanel;
@@ -232,11 +234,17 @@
         box.className = 'gh-style-extra';
         box.innerHTML =
           '<label class="check-row gh-words-row"><input type="checkbox" id="gh-words"><span><strong>Lời lẽ giang hồ</strong><small>Tắt để giữ họa tiết mà chữ vẫn quen thuộc (Giang hồ nhẹ).</small></span></label>' +
+          // v1.97.0 (Ấn Son): công tắc hiệu ứng (giangho-fx.js).
+          (window.zenTheme.setFx ? '<label class="check-row gh-fx-row"><input type="checkbox" id="gh-fx"><span><strong>Hiệu ứng ấn son, nén hương</strong><small>Con dấu son khi công thành, nén hương cháy khi bế quan. Luôn đứng yên nếu thiết bị bật giảm chuyển động.</small></span></label>' : '') +
           '<button type="button" class="btn gh-glossary-open">Bảng chú giải</button>';
         set.after(box);
         box.querySelector('#gh-words').addEventListener('change', (e) => {
           window.zenTheme.setWords(e.target.checked);
           if (typeof notify === 'function') notify(e.target.checked ? 'Đã bật lời lẽ giang hồ.' : 'Đã chọn Giang hồ nhẹ: giữ họa tiết, chữ quen thuộc.');
+        });
+        box.querySelector('#gh-fx')?.addEventListener('change', (e) => {
+          window.zenTheme.setFx(e.target.checked);
+          if (typeof notify === 'function') notify(e.target.checked ? 'Đã bật hiệu ứng ấn son, nén hương.' : 'Đã tắt hiệu ứng ấn son, nén hương.');
         });
         box.querySelector('.gh-glossary-open').onclick = () => glossary({ back: true });
         paintExtra();

@@ -380,6 +380,7 @@
     if (!a) return;
     let toastText = '';
     let crossing = null;
+    let breakthroughTo = null;
     if (commit && a.spent > 0) {
       const entry = { id: uid(), d: today(), s: a.source, k: a.key, n: String(a.title || '').slice(0, 120), p: a.add.slice() };
       if (!a.key) delete entry.k;
@@ -393,6 +394,9 @@
         const parts = [];
         if (a.source !== 'task') parts.push('Đã dồn ' + fmt(a.spent * STEP) + ' điểm công lực vào Điểm tích lũy.');
         if (after.realm !== before.realm) parts.push('Chúc mừng! ' + heroName() + ' đã đột phá, đạt cảnh giới ' + after.name + ' (cấp ' + after.level + ').');
+        // v1.97.0 (Ấn Son): đột phá sang cảnh giới mới (từ Tam lưu cao thủ, cấp 11 trở lên) thì mở thêm nghi thức Đột phá
+        // (giangho-fx.js); câu chúc vẫn ở thông báo. Bước vào Sơ nhập giang hồ ở điểm đầu tiên là khởi đầu, không phải đột phá.
+        if (after.realm !== before.realm && after.realm >= 2 && window.zenFx?.breakthrough) breakthroughTo = after;
         else if (after.level > before.level) parts.push('Chúc mừng! ' + heroName() + ' lên cấp ' + after.level + ' · ' + after.name + ', ' + after.tier.toLowerCase() + '.');
         toastText = parts.join(' ');
       }
@@ -403,8 +407,11 @@
     if (view === 'growth') render();
     if (typeof a.then === 'function') a.then();
     if (toastText) notify(toastText);
-    // v1.92.0: vượt mốc 5 cấp thì mở chương truyện ký tương ứng (growth-story.js).
-    if (crossing && crossing[1] > crossing[0]) window.zenStory?.crossed(crossing[0], crossing[1]);
+    window.zenFx?.rank();
+    // v1.92.0: vượt mốc 5 cấp thì mở chương truyện ký tương ứng (growth-story.js); v1.97.0: sau nghi thức Đột phá nếu có.
+    const story = () => crossing && crossing[1] > crossing[0] && window.zenStory?.crossed(crossing[0], crossing[1]);
+    if (breakthroughTo) window.zenFx.breakthrough(breakthroughTo, story);
+    else story();
   }
   // Giữ sổ cái trong giới hạn: gộp các dòng cũ nhất thành một dòng "tổng hợp".
   function compact() {

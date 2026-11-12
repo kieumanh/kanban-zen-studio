@@ -2045,14 +2045,17 @@ dialog[open] button[aria-label^="Đóng"],
 .gh-style-extra[hidden] {
   display: none;
 }
-.gh-style-extra .gh-words-row {
+.gh-style-extra .gh-words-row,
+.gh-style-extra .gh-fx-row {
   flex: 1 1 260px;
   margin: 0;
   border-bottom: 0;
 }
+.gh-style-extra .gh-fx-row strong,
 .gh-style-extra .gh-words-row strong {
   display: block;
 }
+.gh-style-extra .gh-fx-row small,
 .gh-style-extra .gh-words-row small {
   display: block;
   margin-top: 2px;

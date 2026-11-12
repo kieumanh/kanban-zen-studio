@@ -477,3 +477,27 @@ dialog.gr-story::backdrop{background:#30251c99}
 .gr-path-start{grid-template-columns:minmax(0,520px)}
 .gr-here{justify-self:start;margin-bottom:3px}
 @media (max-width:900px){.gr-path .gr-ch-list{grid-template-columns:1fr}}
+/* v1.97.0 (Ấn Son): nghi thức Đột phá khi bước sang cảnh giới mới (giangho-fx.js). Cùng bảng màu với Truyện ký; giảm chuyển động thì đứng yên. */
+dialog.gr-breakthrough{--gr-paper:#fdf8ef;--gr-line:#e8dcc6;--gr-ink:#3a2a21;--gr-seal:#b8344a;--gr-seal-text:#a32c40;--gr-gold:#b58a3a;--zen-primary-gradient:linear-gradient(135deg,#c2413f,#8f2336);max-width:420px;width:calc(100% - 24px);max-height:calc(100dvh - 24px);overflow:auto;padding:22px 22px 20px;border:1px solid var(--gr-line);border-top:4px solid var(--gr-seal);border-radius:22px;background:var(--gr-paper);color:var(--gr-ink);text-align:center}
+:root[data-theme=dark] dialog.gr-breakthrough{--gr-paper:#241f2b;--gr-line:#3d3448;--gr-ink:#efe6d8;--gr-seal:#c94a5e;--gr-seal-text:#f0a3b0;--gr-gold:#c9a24a}
+:root[data-contrast=high] dialog.gr-breakthrough{--gr-paper:#fff;--gr-line:#000;--gr-ink:#000;--gr-seal:#8f1d2f;--gr-seal-text:#7a1526;--gr-gold:#000}
+dialog.gr-breakthrough::backdrop{background:#30251cb3}
+.gr-bt-stage{position:relative;display:grid;place-items:center;height:168px;margin:0 auto 6px}
+.gr-bt-ring{position:absolute;left:50%;top:50%;width:150px;height:150px;margin:-75px 0 0 -75px;border:2px solid var(--gr-gold);border-radius:50%;opacity:0;animation:gr-bt-ring 2.4s ease-out infinite}
+.gr-bt-ring.is-2{animation-delay:.8s;border-color:var(--gr-seal)}
+.gr-bt-ring.is-3{animation-delay:1.6s}
+.gr-bt-hero{position:relative;width:132px;height:132px;display:grid;place-items:center;border-radius:50%;background:radial-gradient(circle,#fff6e3 0,#f6e7cc 62%,transparent 64%);animation:gr-bt-rise .9s cubic-bezier(.2,.9,.25,1.1) both}
+:root[data-theme=dark] .gr-bt-hero{background:radial-gradient(circle,#3a3040 0,#2e2736 62%,transparent 64%)}
+.gr-bt-hero svg{width:118px;height:118px}
+dialog.gr-breakthrough .eyebrow{display:block;margin:0;letter-spacing:.18em;font-size:12px;font-weight:700;color:var(--gr-seal-text)}
+dialog.gr-breakthrough h2{margin:6px 0 8px;font-family:'Noto Serif','Tinos','Times New Roman',Georgia,serif;font-size:26px;line-height:1.2;color:var(--gr-ink)}
+.gr-bt-text{margin:0 0 6px;font-size:15px;line-height:1.5}
+.gr-bt-next{margin:0 0 16px;font-size:13px;color:var(--gr-seal-text)}
+dialog.gr-breakthrough .btn{min-height:44px;min-width:200px}
+@keyframes gr-bt-ring{0%{opacity:.85;transform:scale(.55)}100%{opacity:0;transform:scale(1.25)}}
+@keyframes gr-bt-rise{0%{opacity:0;transform:translateY(14px) scale(.9)}100%{opacity:1;transform:none}}
+dialog.gr-breakthrough.is-still .gr-bt-ring,dialog.gr-breakthrough.is-still .gr-bt-hero{animation:none}
+dialog.gr-breakthrough.is-still .gr-bt-ring{opacity:.5;transform:scale(.9)}
+dialog.gr-breakthrough.is-still .gr-bt-ring.is-2{transform:scale(1.05);opacity:.35}
+dialog.gr-breakthrough.is-still .gr-bt-ring.is-3{display:none}
+@media (prefers-reduced-motion:reduce){.gr-bt-ring,.gr-bt-hero{animation:none}.gr-bt-ring.is-3{display:none}}

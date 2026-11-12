@@ -4,6 +4,7 @@
 //   zen-contrast: 'system' (mặc định) | 'normal' | 'high'
 //   zen-style:    'zen' (mặc định, phong cách Thiền) | 'giangho' (v1.86.0, phong cách Giang hồ → data-style="giangho")
 //   zen-gh-words: (mặc định: bật lời lẽ giang hồ) | 'off' (v1.96.0, Giang hồ nhẹ: giữ họa tiết, chữ quen thuộc → data-gh-words="off")
+//   zen-gh-fx:    (mặc định: bật) | 'off' (v1.97.0, tắt ấn son công thành và nén hương bế quan → data-gh-fx="off")
 // 'system' theo `prefers-color-scheme` / `prefers-contrast` của hệ điều hành và tự cập nhật khi người dùng đổi.
 (function () {
   var root = document.documentElement;
@@ -22,11 +23,13 @@
     var contrast = read('zen-contrast', ['normal', 'high']);
     var style = read('zen-style', ['giangho']) === 'giangho' ? 'giangho' : 'zen';
     var words = read('zen-gh-words', ['off']) !== 'off';
+    var fx = read('zen-gh-fx', ['off']) !== 'off';
     return {
       theme: theme,
       contrast: contrast,
       style: style,
       words: words,
+      fx: fx,
       dark: theme === 'dark' || (theme === 'system' && !!dark && dark.matches),
       high: contrast === 'high' || (contrast === 'system' && !!more && more.matches),
     };
@@ -42,6 +45,8 @@
     } else root.removeAttribute('data-style');
     if (s.style === 'giangho' && !s.words) root.setAttribute('data-gh-words', 'off');
     else root.removeAttribute('data-gh-words');
+    if (s.style === 'giangho' && !s.fx) root.setAttribute('data-gh-fx', 'off');
+    else root.removeAttribute('data-gh-fx');
     var meta = document.querySelector('meta[name=theme-color]');
     if (meta) meta.setAttribute('content', s.style === 'giangho' ? (s.dark ? '#1c1814' : '#f3ecdf') : s.dark ? '#151219' : '#f7f3fc');
     // v1.17.0: báo cho nút chuyển sáng/tối trên thanh trên cùng cập nhật biểu tượng (đổi từ Cài đặt, từ nút hoặc theo hệ thống).
@@ -92,6 +97,10 @@
     // v1.96.0 (Chú Giải): bật (mặc định, xóa khóa) / tắt lời lẽ giang hồ. Chỉ có tác dụng khi phong cách là Giang hồ.
     setWords: function (on) {
       return set('zen-gh-words', on ? 'system' : 'off');
+    },
+    // v1.97.0 (Ấn Son): bật (mặc định, xóa khóa) / tắt hiệu ứng ấn son, nén hương của Giang hồ.
+    setFx: function (on) {
+      return set('zen-gh-fx', on ? 'system' : 'off');
     },
   };
 })();

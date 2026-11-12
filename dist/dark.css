@@ -3200,6 +3200,12 @@
 :root[data-theme=dark] .gr-path-realm.is-now .gr-path-head em {
     color: #ffffff
 }
+:root[data-theme=dark] dialog.gr-breakthrough::backdrop {
+    background: rgba(48,37,28,0.702)
+}
+:root[data-theme=dark] .gr-bt-hero {
+    background: radial-gradient(circle,#16131a 0,#231a09 62%,transparent 64%)
+}
 :root[data-theme=dark] {
     --muted: #ccc2d7;
     --text-muted: #ccc2d7

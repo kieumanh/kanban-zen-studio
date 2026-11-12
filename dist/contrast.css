@@ -3201,6 +3201,12 @@
 :root[data-contrast=high] .gr-path-realm.is-now .gr-path-head em {
     color: #ffffff
 }
+:root[data-contrast=high] dialog.gr-breakthrough::backdrop {
+    background: rgba(48,37,28,0.702)
+}
+:root[data-contrast=high] .gr-bt-hero {
+    background: radial-gradient(circle,#ffffff 0,#ffffff 62%,transparent 64%)
+}
 :root[data-contrast=high] {
     --muted: #060606;
     --text-muted: #060606
@@ -7057,6 +7063,12 @@
 }
 :root[data-theme=dark][data-contrast=high] .gr-path-realm.is-now .gr-path-head em {
     color: #ffffff
+}
+:root[data-theme=dark][data-contrast=high] dialog.gr-breakthrough::backdrop {
+    background: rgba(48,37,28,0.702)
+}
+:root[data-theme=dark][data-contrast=high] .gr-bt-hero {
+    background: radial-gradient(circle,#030303 0,#030303 62%,transparent 64%)
 }
 :root[data-theme=dark][data-contrast=high] {
     --muted: #f5f5f5;

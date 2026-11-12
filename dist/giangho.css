@@ -5405,6 +5405,36 @@
 :root[data-style=giangho] .gr-ch.is-done .gr-ch-no {
     border-color: var(--gr-seal)
 }
+:root[data-style=giangho] dialog.gr-breakthrough {
+    border: 1px solid var(--gr-line);
+    border-top: 4px solid var(--gr-seal);
+    background: var(--gr-paper);
+    color: var(--gr-ink)
+}
+:root[data-style=giangho] dialog.gr-breakthrough::backdrop {
+    background: rgba(48,37,28,0.702)
+}
+:root[data-style=giangho] .gr-bt-ring {
+    border: 2px solid var(--gr-gold)
+}
+:root[data-style=giangho] .gr-bt-ring.is-2 {
+    border-color: var(--gr-seal)
+}
+:root[data-style=giangho] .gr-bt-hero {
+    background: radial-gradient(circle,#fff6e3 0,#f6e7cc 62%,transparent 64%)
+}
+:root[data-style=giangho][data-theme=dark] .gr-bt-hero {
+    background: radial-gradient(circle,#3f3223 0,#34281b 62%,transparent 64%)
+}
+:root[data-style=giangho] dialog.gr-breakthrough .eyebrow {
+    color: var(--gr-seal-text)
+}
+:root[data-style=giangho] dialog.gr-breakthrough h2 {
+    color: var(--gr-ink)
+}
+:root[data-style=giangho] .gr-bt-next {
+    color: var(--gr-seal-text)
+}
 :root[data-style=giangho] {
     --muted: #685345;
     --text-muted: #685345
@@ -6466,10 +6496,10 @@
     color: #ffffff;
     box-shadow: 0 8px 24px rgba(39,20,5,0.28)
 }
-:root[data-style=giangho] .gh-style-extra .gh-words-row {
+:root[data-style=giangho] .gh-style-extra .gh-words-row, :root[data-style=giangho] .gh-style-extra .gh-fx-row {
     border-bottom: 0
 }
-:root[data-style=giangho] .gh-style-extra .gh-words-row small {
+:root[data-style=giangho] .gh-style-extra .gh-fx-row small, :root[data-style=giangho] .gh-style-extra .gh-words-row small {
     color: var(--zen-text-muted)
 }
 :root[data-style=giangho] .gh-intro {
@@ -11858,6 +11888,36 @@
 :root[data-style=giangho][data-theme=dark] .gr-ch.is-done .gr-ch-no {
     border-color: var(--gr-seal)
 }
+:root[data-style=giangho][data-theme=dark] dialog.gr-breakthrough {
+    border: 1px solid var(--gr-line);
+    border-top: 4px solid var(--gr-seal);
+    background: var(--gr-paper);
+    color: var(--gr-ink)
+}
+:root[data-style=giangho][data-theme=dark] dialog.gr-breakthrough::backdrop {
+    background: rgba(48,37,28,0.702)
+}
+:root[data-style=giangho][data-theme=dark] .gr-bt-ring {
+    border: 2px solid var(--gr-gold)
+}
+:root[data-style=giangho][data-theme=dark] .gr-bt-ring.is-2 {
+    border-color: var(--gr-seal)
+}
+:root[data-style=giangho][data-theme=dark] .gr-bt-hero {
+    background: radial-gradient(circle,#19140e 0,#231a09 62%,transparent 64%)
+}
+:root[data-style=giangho][data-theme=dark][data-theme=dark] .gr-bt-hero {
+    background: radial-gradient(circle,#3f3223 0,#34281b 62%,transparent 64%)
+}
+:root[data-style=giangho][data-theme=dark] dialog.gr-breakthrough .eyebrow {
+    color: var(--gr-seal-text)
+}
+:root[data-style=giangho][data-theme=dark] dialog.gr-breakthrough h2 {
+    color: var(--gr-ink)
+}
+:root[data-style=giangho][data-theme=dark] .gr-bt-next {
+    color: var(--gr-seal-text)
+}
 :root[data-style=giangho][data-theme=dark] {
     --muted: #e1ccbf;
     --text-muted: #e1ccbf
@@ -12919,10 +12979,10 @@
     color: #ffffff;
     box-shadow: 0 8px 24px rgba(198,180,166,0.28)
 }
-:root[data-style=giangho][data-theme=dark] .gh-style-extra .gh-words-row {
+:root[data-style=giangho][data-theme=dark] .gh-style-extra .gh-words-row, :root[data-style=giangho][data-theme=dark] .gh-style-extra .gh-fx-row {
     border-bottom: 0
 }
-:root[data-style=giangho][data-theme=dark] .gh-style-extra .gh-words-row small {
+:root[data-style=giangho][data-theme=dark] .gh-style-extra .gh-fx-row small, :root[data-style=giangho][data-theme=dark] .gh-style-extra .gh-words-row small {
     color: var(--zen-text-muted)
 }
 :root[data-style=giangho][data-theme=dark] .gh-intro {
@@ -13113,4 +13173,238 @@
 }
 :root[data-style=giangho] .sidebar .view-mode .gh-nav {
   gap: 1px;
+}
+
+/* ---- v1.97.0 (Ấn Son): con dấu son công thành, nén hương bế quan, danh hiệu trên thanh bên, ấn chương ------------------------
+   Dấu và nén hương do dist/giangho-fx.js chèn; tắt ở Cài đặt → Giao diện (data-gh-fx="off"). Giảm chuyển động: đứng yên. */
+:root[data-style=giangho] .task-card {
+  position: relative;
+}
+:root[data-style=giangho] .gh-stamp,
+:root[data-style=giangho] .gh-overlay-seal {
+  display: grid;
+  place-items: center;
+  border: 2px solid var(--gh-seal);
+  border-radius: 8px;
+  color: var(--gh-seal);
+  background: rgba(255, 250, 242, 0.86);
+  font-family: var(--gh-serif);
+  font-weight: 700;
+  line-height: 1.05;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  box-shadow: inset 0 0 0 3px rgba(255, 250, 242, 0.86), inset 0 0 0 4px var(--gh-seal);
+}
+:root[data-style=giangho] .gh-stamp {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 3;
+  width: 58px;
+  height: 58px;
+  font-size: 12px;
+  transform: rotate(-12deg);
+  pointer-events: none;
+  animation: gh-stamp 0.62s cubic-bezier(0.2, 0.9, 0.25, 1.15) both;
+}
+:root[data-style=giangho] .gh-stamp.is-fading {
+  opacity: 0;
+  transition: opacity 0.6s ease;
+}
+:root[data-style=giangho] .gh-overlay-seal {
+  flex: 0 0 auto;
+  width: 64px;
+  height: 64px;
+  font-size: 13px;
+  transform: rotate(-8deg);
+  animation: gh-stamp 0.7s cubic-bezier(0.2, 0.9, 0.25, 1.15) 0.1s both;
+}
+:root[data-style=giangho] .completion-overlay.gh-sealed .completion-fireworks,
+:root[data-style=giangho] .completion-overlay.gh-sealed .completion-icon {
+  display: none;
+}
+:root[data-style=giangho] .gh-stamp.is-still,
+:root[data-style=giangho] .completion-overlay.is-still .gh-overlay-seal {
+  animation: none;
+}
+@keyframes gh-stamp {
+  0% {
+    opacity: 0;
+    transform: scale(2.1) rotate(-24deg);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(0.92) rotate(-10deg);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) rotate(-12deg);
+  }
+}
+:root[data-style=giangho][data-theme=dark] .gh-stamp,
+:root[data-style=giangho][data-theme=dark] .gh-overlay-seal {
+  background: rgba(36, 30, 25, 0.9);
+  box-shadow: inset 0 0 0 3px rgba(36, 30, 25, 0.9), inset 0 0 0 4px var(--gh-seal);
+}
+
+/* Nén hương: que hương đứng cạnh đồng hồ, phần đã cháy (--burn 0…1) thành tro, đốm lửa và khói khi đang đếm. */
+:root[data-style=giangho] .studio-pomodoro output:has(+ .gh-incense) {
+  display: inline-block;
+  vertical-align: bottom;
+}
+:root[data-style=giangho] .studio-pomodoro output + .gh-incense {
+  position: relative;
+  display: inline-block;
+  width: 22px;
+  height: 54px;
+  margin: 0 0 8px 14px;
+  vertical-align: bottom;
+}
+:root[data-style=giangho] .gh-incense-pot {
+  position: absolute;
+  left: 1px;
+  right: 1px;
+  bottom: 0;
+  height: 9px;
+  border-radius: 3px 3px 8px 8px;
+  background: var(--gh-gold);
+}
+:root[data-style=giangho] .gh-incense-stick {
+  position: absolute;
+  left: 50%;
+  bottom: 8px;
+  width: 3px;
+  height: calc((1 - var(--burn, 0)) * 38px + 2px);
+  margin-left: -1.5px;
+  border-radius: 2px;
+  background: #8a5a3c;
+  transition: height 0.9s linear;
+}
+:root[data-style=giangho] .gh-incense-ember {
+  position: absolute;
+  top: -2px;
+  left: -1px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #c2413f;
+  opacity: 0.35;
+}
+:root[data-style=giangho] .gh-incense.is-lit .gh-incense-ember {
+  opacity: 1;
+  box-shadow: 0 0 6px 2px rgba(232, 108, 64, 0.55);
+}
+:root[data-style=giangho] .gh-incense.is-out .gh-incense-ember {
+  opacity: 0;
+}
+:root[data-style=giangho] .gh-incense-smoke {
+  position: absolute;
+  left: 50%;
+  bottom: calc((1 - var(--burn, 0)) * 38px + 12px);
+  width: 10px;
+  height: 18px;
+  margin-left: -5px;
+  border-radius: 50%;
+  border-left: 2px solid rgba(120, 104, 92, 0.45);
+  opacity: 0;
+}
+:root[data-style=giangho] .gh-incense.is-lit .gh-incense-smoke {
+  animation: gh-smoke 2.4s ease-out infinite;
+}
+@keyframes gh-smoke {
+  0% {
+    opacity: 0;
+    transform: translateY(4px) scaleX(0.6);
+  }
+  30% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-14px) scaleX(1.3) rotate(8deg);
+  }
+}
+
+/* Danh hiệu trên thanh bên: ấn tròn có vòng tiến cảnh, cảnh giới · trọng. */
+:root[data-style=giangho] .side-bottom > .gh-rank {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 52px;
+  margin: 0 0 8px;
+  padding: 8px 10px;
+  border: 1px solid var(--gh-line);
+  border-radius: 14px;
+  background: var(--gh-paper);
+  color: var(--gh-ink);
+  text-align: left;
+  cursor: pointer;
+}
+:root[data-style=giangho] .side-bottom > .gh-rank:hover,
+:root[data-style=giangho] .side-bottom > .gh-rank:focus-visible {
+  border-color: var(--gh-seal);
+}
+:root[data-style=giangho] .gh-rank-seal {
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: conic-gradient(var(--gh-seal) calc(var(--gh-rank-pct, 0) * 1%), var(--gh-line) 0);
+}
+:root[data-style=giangho] .gh-rank-seal b {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--gh-paper);
+  color: var(--gh-seal-text);
+  font-family: var(--gh-serif);
+  font-size: 13px;
+}
+:root[data-style=giangho] .gh-rank-text {
+  min-width: 0;
+}
+:root[data-style=giangho] .gh-rank-text strong {
+  display: block;
+  font-family: var(--gh-serif);
+  font-size: 13px;
+  line-height: 1.25;
+}
+:root[data-style=giangho] .gh-rank-text small {
+  display: block;
+  margin-top: 1px;
+  font-size: 11.5px;
+  line-height: 1.3;
+  color: var(--zen-text-muted, #6b5a4c);
+}
+
+/* Ấn chương: ảnh đại diện mặc định (chữ viết tắt) thành con dấu vuông bo góc, viền son kép trên nền giấy. Màu chữ giữ theo quy tắc
+   tương phản sẵn có của ứng dụng (studio-zen.css ép màu chữ ảnh đại diện), nên nền là giấy sáng / mực tối thay vì nền son. */
+:root[data-style=giangho] .avatar:not(.has-photo) {
+  border: 2px solid var(--gh-seal);
+  border-radius: 10px;
+  background: #fbe9e4;
+  font-family: var(--gh-serif);
+  font-weight: 700;
+  box-shadow: inset 0 0 0 2px #fbe9e4, inset 0 0 0 3px var(--gh-seal);
+}
+:root[data-style=giangho][data-theme=dark] .avatar:not(.has-photo) {
+  background: #2c1f1d;
+  box-shadow: inset 0 0 0 2px #2c1f1d, inset 0 0 0 3px var(--gh-seal);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root[data-style=giangho] .gh-stamp,
+  :root[data-style=giangho] .gh-overlay-seal,
+  :root[data-style=giangho] .gh-incense.is-lit .gh-incense-smoke {
+    animation: none;
+  }
+  :root[data-style=giangho] .gh-incense-stick {
+    transition: none;
+  }
 }
