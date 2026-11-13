@@ -105,7 +105,9 @@ try {
     // 6. Các màn hình chính ở Giang hồ: không tràn ngang, không lỗi; nội dung chữ giữ nguyên.
     {
       const gh = ({ context }) => context.addInitScript(() => localStorage.setItem('zen-style', 'giangho'));
-      const { context, page } = await h.open(width, { touch, setup: gh });
+      // Lời chào theo giờ trong ngày (sáng/trưa/chiều/tối); giờ sáng cố định để kiểm "các hạ" không phụ thuộc giờ chạy thử
+      // (CI chạy vào buổi chiều giờ Việt Nam sẽ ra "Nắng chiều còn dài…", không có chữ "các hạ").
+      const { context, page } = await h.open(width, { touch, now: '2026-11-12T09:00:00+07:00', setup: gh });
       const errors = [];
       page.on('pageerror', (e) => errors.push(e.message));
       for (const v of VIEWS) {
