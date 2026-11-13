@@ -3,6 +3,9 @@
 //  - mỗi cấp một tên; cấp 100 thành Thần, trên Thần thêm 3 cấp tới Thần Vương (cấp 103);
 //  - vượt một đại cấp (9 → 10, 19 → 20 … 99 → 100) khó hơn mức thường: ải đột phá tốn ≥ 3 lần cấp thường của cảnh giới trước;
 //  - giảm 20% điểm cần tích lũy: cấp 100 = 8.184 điểm (80% của 10.230), không mốc nào cao hơn thang cũ nên không ai tụt cấp.
+// v2.10.0 (Thiên Môn), theo yêu cầu mới của chủ dự án: từ cấp 90 trở đi, cấp sau khó gấp đôi cấp trước; ải cấp 100 khó nhất.
+//  - cấp 91 tốn 4 điểm, rồi 8, 16 … 1.024 (cấp 99), cấp 100 tốn 2.048 điểm (bằng cả chín cấp trước cộng lại);
+//  - tổng tới cấp 100 = 8.180 điểm (không cao hơn 8.184 của v2.5.0), vẫn đi hết trong 3–4 năm; không mốc nào cao hơn thang v2.5.0.
 // Kiểm ở 390 (chạm), 820, 1440 px: cách tính cấp, khối cấp trên trang (ấn cảnh giới, "Cấp n/100 · danh xưng", thanh tiến, thang
 // 11 cảnh giới), bảng thang và danh xưng 103 cấp, báo cáo, thông báo lên cấp / đột phá, nghi thức thành Thần, không tràn ngang.
 import assert from 'node:assert/strict';
@@ -43,27 +46,39 @@ try {
       const cost = (n) => g.LEVEL_AT[n] - g.LEVEL_AT[n - 1];
       const old = [0];
       for (let n = 1; n <= 100; n++) old[n] = old[n - 1] + 2 ** Math.floor((n - 1) / 10); // thang v1.85.0
+      // Thang v2.5.0: cấp thường theo cảnh giới, ải ở cấp 10, 20 … 100, thần cấp 2.048.
+      const N25 = [0.5, 1, 2.5, 5, 10.5, 21, 42.5, 85, 170.5, 341, 2048], G25 = [3.5, 7, 9.5, 19, 33.5, 67, 129.5, 259, 513.5, 1027], v25 = [0];
+      for (let n = 1; n <= 103; n++) v25[n] = v25[n - 1] + (n % 10 === 0 && n <= 100 ? G25[n / 10 - 1] : N25[Math.min(10, Math.floor(n / 10))]);
       return {
         len: g.LEVEL_AT.length, at: [1, 9, 10, 11, 19, 20, 30, 90, 99, 100, 101, 103].map((n) => g.LEVEL_AT[n]), realms: g.REALMS,
         names: { len: g.LEVEL_NAMES.length, unique: new Set(g.LEVEL_NAMES.slice(1)).size, empty: g.LEVEL_NAMES.slice(1).filter((x) => !x).length, god: g.LEVEL_NAMES.slice(100) },
         demoted: Array.from({ length: 100 }, (_, i) => i + 1).filter((n) => g.LEVEL_AT[n] > old[n]),
-        gates: Array.from({ length: 10 }, (_, i) => (i + 1) * 10).map((n) => +(cost(n) / cost(n - 1)).toFixed(2)),
-        normal: Array.from({ length: 10 }, (_, i) => i * 10 + 5).map(cost),
+        demoted25: Array.from({ length: 103 }, (_, i) => i + 1).filter((n) => g.LEVEL_AT[n] > v25[n]),
+        same25: Array.from({ length: 90 }, (_, i) => i + 1).every((n) => g.LEVEL_AT[n] === v25[n]),
+        gates: Array.from({ length: 9 }, (_, i) => (i + 1) * 10).map((n) => +(cost(n) / cost(n - 1)).toFixed(2)),
+        normal: Array.from({ length: 9 }, (_, i) => i * 10 + 5).map(cost),
+        doubling: Array.from({ length: 10 }, (_, i) => 91 + i).map(cost),
+        hardest: Math.max(...Array.from({ length: 100 }, (_, i) => cost(i + 1))) === cost(100) && Array.from({ length: 99 }, (_, i) => cost(i + 1)).every((c) => c < cost(100)),
         god: [101, 102, 103].map(cost),
-        r0: r(0), r05: r(0.5), r75: r(7.5), r8: r(8), r30: r(30), r99: r(8183.5), r100: r(8184), r103: r(14328), rBig: r(1e7),
+        r0: r(0), r05: r(0.5), r75: r(7.5), r8: r(8), r30: r(30), r99: r(8179.5), r100: r(8180), r103: r(14324), rBig: r(1e7),
         need: [g.realmOf(17).need, g.realmOf(17).needRealm, g.realmOf(17).next, g.realmOf(17).breakthrough, g.realmOf(24).breakthrough],
-        god100: [g.realmOf(8184).god, g.realmOf(8183.5).god, g.realmOf(8184).top],
-        top: [g.realmOf(14328).top, g.realmOf(14328).need, g.realmOf(14328).pct, g.realmOf(14328).next],
+        god100: [g.realmOf(8180).god, g.realmOf(8179.5).god, g.realmOf(8180).top],
+        top: [g.realmOf(14324).top, g.realmOf(14324).need, g.realmOf(14324).pct, g.realmOf(14324).next],
         pct: [g.realmOf(5.5).pct, g.realmOf(30).pct, g.realmOf(17 + 3.5).pct],
         label: [g.levelLabel(37), g.levelLabel(100), g.levelLabel(102)],
       };
     });
     assert.equal(m.len, 104, 'đủ mốc cho cấp 0–103');
-    assert.deepEqual(m.at, [0.5, 4.5, 8, 9, 17, 24, 56, 4088, 7157, 8184, 10232, 14328], 'mốc cộng dồn: cấp 100 = 8.184 điểm, cấp 103 = 14.328 điểm');
-    assert.equal(m.at[9], 10230 * 0.8, 'cấp 100 giảm đúng 20% so với thang cũ (10.230)');
+    assert.deepEqual(m.at, [0.5, 4.5, 8, 9, 17, 24, 56, 4088, 6132, 8180, 10228, 14324], 'mốc cộng dồn: cấp 100 = 8.180 điểm, cấp 103 = 14.324 điểm');
+    assert.ok(m.at[9] <= 10230 * 0.8, 'cấp 100 không vượt mức đã giảm 20% so với thang cũ (10.230)');
     assert.deepEqual(m.demoted, [], 'không mốc nào cao hơn thang cũ: không ai tụt cấp');
-    assert.ok(m.gates.every((x) => x >= 3), 'ải đột phá (cấp 10, 20 … 100) tốn ≥ 3 lần cấp thường trước nó: ' + m.gates.join(', '));
-    assert.deepEqual(m.normal, [0.5, 1, 2.5, 5, 10.5, 21, 42.5, 85, 170.5, 341], 'điểm mỗi cấp thường theo cảnh giới');
+    assert.deepEqual(m.demoted25, [], 'không mốc nào cao hơn thang v2.5.0: không ai tụt cấp');
+    assert.equal(m.same25, true, 'cấp 1–90 giữ nguyên thang v2.5.0');
+    assert.ok(m.gates.every((x) => x >= 3), 'ải đột phá (cấp 10, 20 … 90) tốn ≥ 3 lần cấp thường trước nó: ' + m.gates.join(', '));
+    assert.deepEqual(m.normal, [0.5, 1, 2.5, 5, 10.5, 21, 42.5, 85, 170.5], 'điểm mỗi cấp thường theo cảnh giới (1–9)');
+    assert.deepEqual(m.doubling, [4, 8, 16, 32, 64, 128, 256, 512, 1024, 2048], 'từ cấp 91, mỗi cấp gấp đôi cấp trước; cấp 100 = 2.048');
+    assert.equal(m.doubling[9], m.doubling.slice(0, 9).reduce((a, b) => a + b, 0) + 4, 'cấp 100 bằng cả chín cấp trước cộng lại (cộng 4)');
+    assert.equal(m.hardest, true, 'ải cấp 100 là cấp tốn nhiều điểm nhất của cõi người');
     assert.deepEqual(m.god, [2048, 2048, 2048], 'mỗi thần cấp 2.048 điểm');
     assert.deepEqual(m.realms, REALMS, '11 cảnh giới theo thứ tự');
     assert.deepEqual(m.names, { len: 104, unique: 103, empty: 0, god: ['Thành Thần', 'Thượng Thần', 'Thần Quân', 'Thần Vương'] }, 'mỗi cấp một danh xưng riêng; cấp 100–103 tới Thần Vương');
@@ -73,8 +88,8 @@ try {
     assert.deepEqual(m.r8, [10, 2, 'Tam lưu cao thủ', 'Phá Quan Nhập Lưu'], '8 điểm: qua ải, cấp 10 mở cảnh giới thứ hai');
     assert.deepEqual(m.r30, [22, 3, 'Nhị lưu cao thủ', 'Chưởng Phong Sơ Hiện'], '30 điểm: cấp 22');
     assert.deepEqual(m.r99, [99, 10, 'Võ lâm chí tôn', 'Nhân Gian Cực Cảnh'], 'thiếu nửa điểm: cấp 99');
-    assert.deepEqual(m.r100, [100, 11, 'Thần cảnh', 'Thành Thần'], '8.184 điểm: cấp 100, thành Thần');
-    assert.deepEqual(m.r103, [103, 11, 'Thần cảnh', 'Thần Vương'], '14.328 điểm: cấp 103, Thần Vương');
+    assert.deepEqual(m.r100, [100, 11, 'Thần cảnh', 'Thành Thần'], '8.180 điểm: cấp 100, thành Thần');
+    assert.deepEqual(m.r103, [103, 11, 'Thần cảnh', 'Thần Vương'], '14.324 điểm: cấp 103, Thần Vương');
     assert.deepEqual(m.rBig, [103, 11, 'Thần cảnh', 'Thần Vương'], 'không vượt quá cấp 103');
     assert.deepEqual(m.need, [7, 7, 'Nhị lưu cao thủ', true, false], 'cấp 19: còn 7 điểm qua ải cấp 20 (Nhị lưu cao thủ); cấp 20 lên 21 không đột phá');
     assert.deepEqual(m.god100, [true, false, false], 'cấp 100 là Thần nhưng chưa phải cấp tối cao');
@@ -110,7 +125,8 @@ try {
       assert.deepEqual(b.bar, ['Tiến tới cấp 23', '40'], 'thanh tiến tới cấp kế tiếp' + at);
       assert.deepEqual(b.ladder, ['Cảnh giới 3 trên 11', ['is-done', 'is-done', 'is-now', ...Array(8).fill('-')]], 'thang 11 cảnh giới' + at);
       assert.match(b.sub, /Cấp 22 · Nhị lưu cao thủ · 30 điểm tu vi/, 'dòng phụ dưới tiêu đề' + at);
-      assert.match(b.sub, /Cấp 10, 20 … 100 là ải đột phá/, 'Tâm pháp tu luyện nêu ải đột phá' + at);
+      assert.match(b.sub, /Cấp 10, 20 … 90 là ải đột phá/, 'Tâm pháp tu luyện nêu ải đột phá' + at);
+      assert.match(b.sub, /Từ cấp 91, mỗi cấp tốn gấp đôi cấp trước: 4, 8, 16 … 1\.024 điểm ở cấp 99\. Cấp 100 là ải nặng nhất: 2\.048 điểm/, 'Tâm pháp tu luyện nêu thang gấp đôi' + at);
       // Bảng thang: đóng sẵn, mở ra thấy 11 dòng (ải đột phá ghi dưới điểm mỗi cấp), dòng hiện tại được tô; danh xưng 103 cấp.
       assert.equal(await page.locator('details.gr-scale table').isVisible(), false, 'bảng thang đóng sẵn' + at);
       const sum = await page.locator('details.gr-scale>summary').boundingBox();
@@ -130,8 +146,8 @@ try {
       assert.equal(t.rows.length, 11, 'bảng có 11 cảnh giới' + at);
       assert.equal(t.rows[0], 'Sơ nhập giang hồ1–90,50,5–4,5', 'dòng đầu' + at);
       assert.equal(t.rows[1], 'Tam lưu cao thủ10–191ải 3,58–17', 'dòng hai: ải đột phá cấp 10' + at);
-      assert.equal(t.rows[9], 'Võ lâm chí tôn90–99341ải 513,54.088–7.157', 'dòng Võ lâm chí tôn' + at);
-      assert.equal(t.rows[10], 'Thần cảnh100–1032.048ải 1.0278.184–14.328', 'dòng Thần cảnh' + at);
+      assert.equal(t.rows[9], 'Võ lâm chí tôn90–994–1.024gấp đôi mỗi cấpải 513,54.088–6.132', 'dòng Võ lâm chí tôn: gấp đôi mỗi cấp' + at);
+      assert.equal(t.rows[10], 'Thần cảnh100–1032.048ải 2.0488.180–14.324', 'dòng Thần cảnh' + at);
       assert.equal(t.now, 'Nhị lưu cao thủ', 'tô dòng cảnh giới hiện tại' + at);
       assert.equal(t.fits, true, 'bảng vừa khung, không phải cuộn ngang' + at);
       assert.equal(t.names.length, 103, 'đủ danh xưng 103 cấp' + at);
@@ -152,10 +168,12 @@ try {
     // 3. Trước ải, cấp 100, thần cấp, cấp 103 và 0 điểm.
     for (const [half, rank, ahead] of [
       [34, 'Cấp 19/100 · Tam Lưu Viên Mãn', '17 điểm tu vi · còn 7 điểm lên cấp 20 · đột phá Nhị lưu cao thủ'],
-      [16367, 'Cấp 99/100 · Nhân Gian Cực Cảnh', '8.183,5 điểm tu vi · còn 0,5 điểm lên cấp 100 · đột phá thành Thần'],
-      [16368, 'Cấp 100/100 · Thành Thần', '8.184 điểm tu vi · còn 2.048 điểm lên cấp 101'],
-      [20464, 'Thần cấp 1/3 · Thượng Thần', '10.232 điểm tu vi · còn 2.048 điểm lên cấp 102'],
-      [28656, 'Thần cấp 3/3 · Thần Vương', '14.328 điểm tu vi · đã đạt Thần Vương, cấp tối cao'],
+      [8184, 'Cấp 91/100 · Lôi Đình Vạn Quân', '4.092 điểm tu vi · còn 8 điểm lên cấp 92'],
+      [12264, 'Cấp 99/100 · Nhân Gian Cực Cảnh', '6.132 điểm tu vi · còn 2.048 điểm lên cấp 100 · đột phá thành Thần'],
+      [16359, 'Cấp 99/100 · Nhân Gian Cực Cảnh', '8.179,5 điểm tu vi · còn 0,5 điểm lên cấp 100 · đột phá thành Thần'],
+      [16360, 'Cấp 100/100 · Thành Thần', '8.180 điểm tu vi · còn 2.048 điểm lên cấp 101'],
+      [20456, 'Thần cấp 1/3 · Thượng Thần', '10.228 điểm tu vi · còn 2.048 điểm lên cấp 102'],
+      [28648, 'Thần cấp 3/3 · Thần Vương', '14.324 điểm tu vi · đã đạt Thần Vương, cấp tối cao'],
       [0, 'Chưa nhập cấp', '0 điểm tu vi · còn 0,5 điểm để nhập cấp 1'],
     ]) {
       const { context, page } = await h.open(width, { touch, workspace: seed(growth(half))() });
@@ -180,7 +198,7 @@ try {
     }
     // 5. Qua ải cấp 100: nghi thức thành Thần.
     {
-      const { context, page } = await h.open(width, { touch, workspace: seed(growth(16366))() }); // 8.183 → 8.184 điểm
+      const { context, page } = await h.open(width, { touch, workspace: seed(growth(16358))() }); // 8.179 → 8.180 điểm
       await award(page);
       await page.waitForSelector('dialog.gr-breakthrough[open]');
       const bt = await page.evaluate(() => {

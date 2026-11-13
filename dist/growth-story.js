@@ -405,7 +405,7 @@
       const n = i + 1, x = g.realmInfo(n), state = n < curRealm ? 'is-done' : n === curRealm ? 'is-now' : 'is-todo';
       const label = state === 'is-done' ? 'Đã qua' : state === 'is-now' ? 'Đang tu luyện' : 'Chưa tới';
       const list = STORY.filter((c) => realmAt(c.lv) === n);
-      const head = 'Cấp ' + x.from + '–' + x.to + (x.gate ? ' · ải đột phá ' + g.fmt(x.gate) : '') + ' · ' + g.fmt(x.cost) + ' điểm mỗi cấp · tu vi ' + g.fmt(x.at) + '–' + g.fmt(x.end);
+      const head = 'Cấp ' + x.from + '–' + x.to + (x.gate ? ' · ải đột phá ' + g.fmt(x.gate) : '') + ' · ' + (x.costTo ? 'mỗi cấp gấp đôi cấp trước, ' + g.fmt(x.cost) + ' → ' + g.fmt(x.costTo) + ' điểm' : g.fmt(x.cost) + ' điểm mỗi cấp') + ' · tu vi ' + g.fmt(x.at) + '–' + g.fmt(x.end);
       return '<li class="gr-path-realm ' + state + '"' + (state === 'is-now' ? ' aria-current="true"' : '') + '><span class="gr-path-node" aria-hidden="true">' + (state === 'is-done' ? '✓' : n) + '</span><div class="gr-path-body">' +
         '<div class="gr-path-head"><strong>' + esc(rn) + '</strong><small>' + head + '</small><em>' + label + '</em></div>' +
         (list.length ? '<ol class="gr-ch-list">' + list.map((c) => chapterItem(c, lv)).join('') + '</ol>' : '') + '</div></li>';
