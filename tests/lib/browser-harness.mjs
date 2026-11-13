@@ -69,11 +69,16 @@ export async function startHarness({ seed = defaultSeed, executablePath = proces
     if (now) await page.clock.install({ time: new Date(now) });
     // state.mode: 'ok' | 'server500' | 'reject400' | 'conflict409' (kết quả của PUT/POST lưu dữ liệu).
     const state = { workspace: structuredClone(workspace || seed()), revision: 1, mode: 'ok', meDelay, receiptsMode, receiptsSeed, receipts: [] };
+    // v2.13.1 (Lịch Chuẩn): bài cố định đồng hồ (now) phải đánh dấu lời chào theo ngày của đồng hồ ấy, không chỉ theo ngày thật;
+    // nếu không, từ hai ngày sau mốc cố định, hộp thoại chào sẽ hiện ra và chặn mọi thao tác.
+    const pinned = now ? new Date(now).toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' }) : day;
     if (!welcome)
-      await context.addInitScript(({ day }) => {
-        const prev = new Date(Date.parse(day + 'T00:00:00Z') - 86400000).toISOString().slice(0, 10);
-        for (const d of [day, prev]) for (let i = 0; i < 4; i++) localStorage.setItem('zen-welcome:qa:' + d + ':' + i, 'seen');
-      }, { day });
+      await context.addInitScript(({ days }) => {
+        for (const day of days) {
+          const prev = new Date(Date.parse(day + 'T00:00:00Z') - 86400000).toISOString().slice(0, 10);
+          for (const d of [day, prev]) for (let i = 0; i < 4; i++) localStorage.setItem('zen-welcome:qa:' + d + ':' + i, 'seen');
+        }
+      }, { days: [...new Set([day, pinned])] });
     await page.route('**/api/**', async (route) => {
       const req = route.request(),
         path = new URL(req.url()).pathname.slice(5);
