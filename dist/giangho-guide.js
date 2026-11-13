@@ -61,7 +61,9 @@
         ['Xuất ngân', 'Chi'],
         ['Thu ngân · hồi vốn', 'Thu · thu hồi'],
         ['Công phu', 'Thói quen trong Việc hằng ngày'],
-        ['Cảnh giới', 'Bậc lớn của Điểm tích lũy', 'mỗi cảnh giới gồm 10 cấp'],
+        ['Cảnh giới', 'Bậc lớn của Điểm tích lũy', 'mỗi cảnh giới gồm 10 cấp, mỗi cấp một danh xưng'],
+        ['Ải đột phá', 'Cấp 10, 20 … 100 của Điểm tích lũy', 'tốn chừng ba lần cấp thường'],
+        ['Thần cảnh', 'Từ cấp 100 trở lên', 'ba thần cấp sau dẫn tới Thần Vương'],
       ],
     ],
     [

@@ -12,8 +12,9 @@ import { startHarness } from './lib/browser-harness.mjs';
 
 const day = (n) => new Date(Date.now() + n * 864e5).toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
 const project = { id: 'p1', name: 'Dự án A', description: '', color: '#7950c8', icon: '✺', columns: ['Idea', 'List', 'Doing', 'Done'], columnNames: { Idea: 'Ý tưởng', List: 'Việc cần làm', Doing: 'Đang thực hiện', Done: 'Hoàn thành' }, tasks: [{ id: 'p1t0', title: 'Gửi báo cáo', col: 'Doing', description: '', due: day(3), tag: 'Công việc', priority: 'q2', checks: [] }] };
-// 9 nửa điểm = 4,5 điểm (cấp 4); hoàn thành một việc cộng 1 điểm → 5,5 điểm (cấp 5, chương 1).
-const growth = (extra = {}) => ({ v: 1, hero: 'nu', name: 'Lam Y', since: day(-40), log: [{ id: 'e1', d: day(-1), s: 'task', k: 'task:e1', n: 'Việc cũ', p: [9, 0, 0, 0, 0, 0, 0, 0] }], ...extra });
+// v2.5.0 (thang mới): 4 nửa điểm = 2 điểm (cấp 4); hoàn thành một việc cộng 1 điểm → 3 điểm (cấp 6), vượt mốc chương 1 ở cấp 5.
+// (Thang v1.85.0 dùng 4,5 → 5,5 điểm.)
+const growth = (extra = {}) => ({ v: 1, hero: 'nu', name: 'Lam Y', since: day(-40), log: [{ id: 'e1', d: day(-1), s: 'task', k: 'task:e1', n: 'Việc cũ', p: [4, 0, 0, 0, 0, 0, 0, 0] }], ...extra });
 const seed = (g) => () => ({ schema: 1, projects: [structuredClone(project)], notes: [], ...(g ? { growth: g } : {}) });
 const noOverflow = (page) => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth);
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -68,7 +69,7 @@ try {
     for (let i = 0; i < 4; i++) await page.keyboard.press('ArrowRight');
     s = await story(page);
     assert.match(s.lesson, /Tâm đắc.*Đều đặn thắng hăng hái/, 'trang cuối là Tâm đắc' + at);
-    assert.match(s.lesson, /Lam Y hiện ở cấp 5 · Sơ nhập giang hồ · 5,5 điểm tu vi/, 'Tâm đắc nêu cấp hiện tại' + at);
+    assert.match(s.lesson, /Lam Y hiện ở cấp 6 · Sơ nhập giang hồ · 3 điểm tu vi/, 'Tâm đắc nêu cấp hiện tại' + at);
     assert.equal(s.next, 'Khép sách', 'nút cuối là Khép sách' + at);
     await page.keyboard.press('ArrowLeft');
     s = await story(page);
@@ -88,7 +89,7 @@ try {
     assert.deepEqual(list[1], ['Trăm chuyến nước', 'Đã đọc', true], 'chương 1 đã đọc' + at);
     assert.deepEqual(list[2], ['Lá thư đầu tiên', 'Mở ở cấp 10', false], 'chương 2 còn khóa' + at);
     assert.deepEqual(list[20], ['Trở về chân núi', 'Mở ở cấp 100', false], 'chương cuối ở cấp 100' + at);
-    assert.match(await page.locator('.gr-story-panel .help-copy').innerText(), /Chương kế: Chương 2 · Lá thư đầu tiên mở ở cấp 10 \(còn 4,5 điểm tu vi\)\./, 'nêu chương kế và số điểm còn thiếu' + at);
+    assert.match(await page.locator('.gr-story-panel .help-copy').innerText(), /Chương kế: Chương 2 · Lá thư đầu tiên mở ở cấp 10 \(còn 5 điểm tu vi\)\./, 'nêu chương kế và số điểm còn thiếu' + at);
     assert.equal(await noOverflow(page), true, 'trang Tu vi không tràn ngang' + at);
     await page.click('[data-gr-story="0"]');
     await page.waitForSelector('dialog.gr-story[open]');

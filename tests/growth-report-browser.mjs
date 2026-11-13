@@ -75,6 +75,10 @@ try {
       assert.equal(saved.k, 'habit:h1:' + day(0), 'khóa theo việc và ngày' + at);
       assert.deepEqual(saved.p, [0, 0, 4, 1, 1, 0, 0, 0], 'ghi đúng nửa điểm' + at);
       assert.match(await page.locator('#toast').innerText(), /Đã dồn 3 điểm/, 'có thông báo đã cộng điểm' + at);
+      // v2.5.0 (thang mới): 3 điểm đầu tiên đã là cấp 6, vượt mốc chương truyện ký ở cấp 5 nên chương tự mở; khép lại rồi kiểm tiếp.
+      await page.waitForSelector('dialog.gr-story[open]');
+      await page.keyboard.press('Escape');
+      await page.waitForFunction(() => !document.querySelector('dialog.gr-story'));
       // Bỏ tích rồi tích lại ngay trong ngày: không hỏi lần hai.
       await tickToday(page);
       await wait(200);
@@ -137,7 +141,7 @@ try {
       assert.match(await page.locator('#main h1').innerText(), /Báo cáo tu luyện/, 'tiêu đề báo cáo' + at);
       const tiles = await page.evaluate(() => Object.fromEntries([...document.querySelectorAll('.gr-tile')].map((t) => [t.dataset.tile, t.textContent.replace(/\s+/g, ' ').trim()])));
       assert.match(tiles.total, /6,5 điểm/, 'tổng 6,5 điểm' + at);
-      assert.match(tiles.realm, /Sơ nhập giang hồ.*Cấp 6\/100/, 'cảnh giới và cấp (6,5 điểm = cấp 6)' + at);
+      assert.match(tiles.realm, /Sơ nhập giang hồ.*Cấp 9\/100/, 'cảnh giới và cấp (6,5 điểm = cấp 9 theo thang v2.5.0; thang v1.85.0: cấp 6)' + at);
       assert.match(tiles.week, /\+4,5 điểm/, '7 ngày qua cộng 4,5 điểm' + at);
       assert.match(tiles.week, /1 điểm/, 'so với 7 ngày trước 1 điểm' + at);
       assert.match(tiles.streak, /1 ngày/, 'chuỗi ngày có cộng điểm' + at);

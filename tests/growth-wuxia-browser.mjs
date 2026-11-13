@@ -11,6 +11,7 @@ const growth = (hero) => ({
   v: 1,
   hero,
   since: '2026-10-01',
+  // 60 nửa điểm = 30 điểm: cấp 22, Nhị lưu cao thủ (thang v2.5.0; thang v1.85.0: Tam lưu cao thủ).
   log: [{ id: 'e1', d: '2026-11-09', s: 'task', k: 'task:e1', n: 'Việc một', p: [20, 6, 8, 4, 2, 6, 10, 4] }],
 });
 const ws = (hero) => () => ({ schema: 1, projects: [], notes: [], growth: growth(hero) });
@@ -112,7 +113,7 @@ try {
       const OLD = /Nhân vật|Biểu đồ|Sử dụng điểm|Điểm hiện có|Phàm nhân|Trúc cơ|Cách tích điểm|Lịch sử cộng điểm|Điểm từng chỉ số|Tự động|Cười nói|Tập võ|Đi quyền|Ngồi thiền|Tiên tử/;
       const pageText = await page.locator('#main').innerText();
       assert.doesNotMatch(pageText, OLD, 'trang không còn từ ngữ cũ' + at);
-      for (const t of ['GIANG HỒ TU LUYỆN', 'Tu vi của Nữ hiệp', 'Bát phương đồ', 'Bát mạch tu vi', 'Công phu lục', 'Tâm pháp tu luyện', 'Đổi bảo vật', 'Đổi hiệp khách', 'Tam lưu cao thủ'])
+      for (const t of ['GIANG HỒ TU LUYỆN', 'Tu vi của Nữ hiệp', 'Bát phương đồ', 'Bát mạch tu vi', 'Công phu lục', 'Tâm pháp tu luyện', 'Đổi bảo vật', 'Đổi hiệp khách', 'Nhị lưu cao thủ'])
         assert.ok(pageText.includes(t), 'có chữ “' + t + '”' + at);
       assert.deepEqual(await page.evaluate(() => [...document.querySelectorAll('.gr-chip')].map((n) => n.textContent)), ['Tùy hứng', 'Đàm tiếu', 'Luyện kiếm', 'Thái cực', 'Tọa thiền'], 'thế võ Hán Việt' + at);
       const look = await page.evaluate(() => ({

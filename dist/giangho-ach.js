@@ -52,7 +52,7 @@
   const realm = () => (started() ? G().realmOf(G().total(G().earnedScores())).realm : 0);
   const chapters = () => [...receipts()].filter((k) => /^notice:story-([1-9]\d*)$/.test(k)).length;
 
-  // [mã, tên, mô tả, nhóm, số liệu, mốc]
+  // [mã, tên, mô tả, nhóm, số liệu, mốc]. v2.5.0: thêm realm-11 (Thành Thần).
   const LIST = [
     ['task-1', 'Xuất chiêu đầu tiên', 'Công thành nhiệm vụ đầu tiên.', 'Công thành', tasksDone, 1],
     ['task-25', 'Tiểu thành', 'Công thành 25 nhiệm vụ.', 'Công thành', tasksDone, 25],
@@ -69,7 +69,8 @@
     ['realm-2', 'Tam lưu cao thủ', 'Đột phá tới cảnh giới Tam lưu cao thủ.', 'Tu vi', realm, 2],
     ['realm-4', 'Nhất lưu cao thủ', 'Đột phá tới cảnh giới Nhất lưu cao thủ.', 'Tu vi', realm, 4],
     ['realm-7', 'Tông sư', 'Đột phá tới cảnh giới Tông sư.', 'Tu vi', realm, 7],
-    ['realm-10', 'Võ lâm chí tôn', 'Đạt cảnh giới cao nhất: Võ lâm chí tôn.', 'Tu vi', realm, 10],
+    ['realm-10', 'Võ lâm chí tôn', 'Đột phá tới cảnh giới Võ lâm chí tôn, đỉnh cao nhân gian.', 'Tu vi', realm, 10],
+    ['realm-11', 'Thành Thần', 'Phá ải cấp 100, bước vào Thần cảnh.', 'Tu vi', realm, 11],
     ['story-5', 'Nghe kể giang hồ', 'Đọc 5 chương Truyện ký.', 'Truyện ký', chapters, 5],
     ['story-20', 'Thông tỏ truyện ký', 'Đọc trọn 20 chương Truyện ký.', 'Truyện ký', chapters, 20],
   ];

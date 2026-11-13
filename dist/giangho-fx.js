@@ -3,7 +3,7 @@
 //  1. Ấn son công thành (Giang hồ): hoàn thành nhiệm vụ thì lời chúc mang con dấu son "Công thành" thay pháo hoa tím hồng, và khi
 //     về lại bảng, con dấu đóng lên thẻ vừa xong (chờ mọi hộp thoại đóng, ~3 giây rồi mờ dần).
 //  2. Nén hương bế quan (Giang hồ): trong đồng hồ bế quan, một nén hương cháy dần theo thời gian còn lại; khói chỉ bay khi đang đếm.
-//  3. Danh hiệu trên thanh bên (Giang hồ, đã có Tu vi): cảnh giới · trọng, cấp và vòng tiến cảnh tới cấp kế; bấm để mở Tu vi.
+//  3. Danh hiệu trên thanh bên (Giang hồ, đã có Tu vi): cảnh giới · danh xưng cấp (v2.5.0), cấp và vòng tiến cảnh tới cấp kế; bấm để mở Tu vi.
 //  4. Nghi thức Đột phá (Tu vi, cả hai phong cách): lưu công lực mà bước sang cảnh giới mới thì hiện một bảng nghi thức; chương truyện
 //     ký (nếu có) mở sau khi khép bảng. Tắt cùng "Thông báo điểm nghiệp" trong Cài đặt → Thông báo.
 // Tắt 1 và 2 ở Cài đặt → Giao diện → "Hiệu ứng ấn son, nén hương" (zen-gh-fx, theme.js).
@@ -110,7 +110,7 @@
     const G = window.zenGrowth;
     if (!slot || !gh() || !G?.started?.() || typeof G.realmOf !== 'function') return box?.remove();
     const r = G.realmOf(G.total(G.earnedScores()));
-    const tier = r.tier ? ' · ' + r.tier : '';
+    const title = r.title ? ' · ' + r.title : '';
     const next = r.top ? 'Đã tới đỉnh: cấp ' + r.level : r.pct + '% tới cấp ' + (r.level + 1);
     if (!box) {
       box = document.createElement('button');
@@ -126,8 +126,8 @@
     box.style.setProperty('--gh-rank-pct', r.pct);
     box.querySelector('b').textContent = r.level;
     box.querySelector('strong').textContent = r.name;
-    box.querySelector('small').textContent = (r.tier || 'Chưa nhập cảnh giới') + ' · ' + next;
-    box.setAttribute('aria-label', 'Tu vi: ' + r.name + tier + ', cấp ' + r.level + ', ' + next + '. Mở Tu vi');
+    box.querySelector('small').textContent = (r.title || 'Chưa nhập cảnh giới') + ' · ' + next;
+    box.setAttribute('aria-label', 'Tu vi: ' + r.name + title + ', cấp ' + r.level + ', ' + next + '. Mở Tu vi');
   }
   if (typeof render === 'function') {
     const before = render;
@@ -147,6 +147,9 @@
     const name = typeof esc === 'function' ? esc : (s) => String(s);
     const hero = G.growth?.()?.hero || 'nam';
     const art = window.zenHero?.svg ? window.zenHero.svg(hero, 'martial') : '';
+    // v2.5.0: cấp 100 là đột phá thành Thần (Thần cảnh), lời nghi thức riêng.
+    const god = r.god && r.level === (G.GOD || 100);
+    const who = name(G.heroName ? G.heroName() : 'Hiệp khách');
     const d = document.createElement('dialog');
     d.className = 'gr-breakthrough' + (reduce() ? ' is-still' : '');
     d.setAttribute('aria-labelledby', 'gr-bt-title');
@@ -154,16 +157,16 @@
     d.innerHTML =
       '<form method="dialog"><div class="gr-bt-stage" aria-hidden="true"><i class="gr-bt-ring"></i><i class="gr-bt-ring is-2"></i><i class="gr-bt-ring is-3"></i><div class="gr-bt-hero">' +
       art +
-      '</div></div><p class="eyebrow">ĐỘT PHÁ CẢNH GIỚI</p><h2 id="gr-bt-title">' +
+      '</div></div><p class="eyebrow">' +
+      (god ? 'ĐỘT PHÁ THÀNH THẦN' : 'ĐỘT PHÁ CẢNH GIỚI') +
+      '</p><h2 id="gr-bt-title">' +
       name(r.name) +
       '</h2><p id="gr-bt-text" class="gr-bt-text">' +
-      name(G.heroName ? G.heroName() : 'Hiệp khách') +
-      ' đã phá vỡ bình cảnh, bước vào cảnh giới ' +
-      name(r.name) +
-      ' · cấp ' +
-      r.level +
-      '.</p><p class="gr-bt-next">' +
-      (r.next ? 'Cảnh giới kế tiếp: ' + name(r.next) + '.' : 'Đây là cảnh giới cao nhất của giang hồ.') +
+      (god
+        ? who + ' đã phá vỡ cánh cửa cuối cùng của nhân gian, thành Thần · cấp ' + r.level + ' · ' + name(r.title) + '.'
+        : who + ' đã phá vỡ bình cảnh, bước vào cảnh giới ' + name(r.name) + ' · cấp ' + r.level + (r.title ? ' · ' + name(r.title) : '') + '.') +
+      '</p><p class="gr-bt-next">' +
+      (god ? 'Trên Thần còn ba thần cấp, đỉnh cuối là Thần Vương.' : r.next ? 'Cảnh giới kế tiếp: ' + name(r.next) + '.' : 'Đây là cảnh giới cao nhất của giang hồ.') +
       '</p><button class="btn primary" value="ok">Tiếp tục tu luyện</button></form>';
     document.body.append(d);
     d.addEventListener(

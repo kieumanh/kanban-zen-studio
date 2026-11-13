@@ -1,7 +1,10 @@
-// v1.85.0 (Bách Cấp): 100 cấp, 10 cảnh giới × 10 trọng. Cảnh giới sau tốn gấp đôi cảnh giới trước: 1, 2, 4 … 512 điểm cho mỗi cấp,
-// cộng dồn tới cấp 100 là 10.230 điểm. Cấp tính theo tổng điểm đã tu luyện nên không tụt khi đổi bảo vật.
-// Kiểm ở 390 (chạm), 820, 1440 px: cách tính cấp, khối cấp trên trang (ấn cảnh giới, "Cấp n/100 · Đệ … trọng", thanh tiến, thang 10 cảnh giới),
-// bảng thang 100 cấp, báo cáo, thông báo lên cấp / đột phá khi hoàn thành việc, không tràn ngang.
+// v2.5.0 (Thăng Thiên): thang 103 cấp, mỗi cấp một danh xưng, 11 cảnh giới. Thay yêu cầu của v1.85.0 (10 cảnh giới × 10 trọng,
+// 10.230 điểm tới cấp 100) theo yêu cầu mới của chủ dự án:
+//  - mỗi cấp một tên; cấp 100 thành Thần, trên Thần thêm 3 cấp tới Thần Vương (cấp 103);
+//  - vượt một đại cấp (9 → 10, 19 → 20 … 99 → 100) khó hơn mức thường: ải đột phá tốn ≥ 3 lần cấp thường của cảnh giới trước;
+//  - giảm 20% điểm cần tích lũy: cấp 100 = 8.184 điểm (80% của 10.230), không mốc nào cao hơn thang cũ nên không ai tụt cấp.
+// Kiểm ở 390 (chạm), 820, 1440 px: cách tính cấp, khối cấp trên trang (ấn cảnh giới, "Cấp n/100 · danh xưng", thanh tiến, thang
+// 11 cảnh giới), bảng thang và danh xưng 103 cấp, báo cáo, thông báo lên cấp / đột phá, nghi thức thành Thần, không tràn ngang.
 import assert from 'node:assert/strict';
 import { startHarness } from './lib/browser-harness.mjs';
 
@@ -16,6 +19,18 @@ const seed = (g) => () => ({
 });
 const noOverflow = (page) => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth);
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+const REALMS = ['Sơ nhập giang hồ', 'Tam lưu cao thủ', 'Nhị lưu cao thủ', 'Nhất lưu cao thủ', 'Tuyệt đỉnh cao thủ', 'Tiên thiên cao thủ', 'Tông sư', 'Đại tông sư', 'Thiên nhân hợp nhất', 'Võ lâm chí tôn', 'Thần cảnh'];
+// Hoàn thành việc p1t0 rồi dồn 1 điểm (2 lần vận công) vào mạch đầu.
+async function award(page) {
+  await h.show(page, 'board');
+  await page.evaluate(() => moveTask(project('p1'), project('p1').tasks[0], 'Done'));
+  await page.waitForSelector('#growth-award[open]');
+  await page.click('[data-gr-plus="0"]');
+  await page.click('[data-gr-plus="0"]');
+  await page.click('[data-gr-save]');
+  await page.waitForSelector('.completion-card');
+  await wait(300);
+}
 
 const h = await startHarness({ seed: seed(growth(60)) });
 try {
@@ -24,31 +39,48 @@ try {
     const { context, page } = await h.open(1440, { workspace: seed(growth(60))() });
     await h.show(page, 'growth');
     const m = await page.evaluate(() => {
-      const g = window.zenGrowth, r = (t) => { const x = g.realmOf(t); return [x.level, x.realm, x.name, x.tier]; };
+      const g = window.zenGrowth, r = (t) => { const x = g.realmOf(t); return [x.level, x.realm, x.name, x.title]; };
+      const cost = (n) => g.LEVEL_AT[n] - g.LEVEL_AT[n - 1];
+      const old = [0];
+      for (let n = 1; n <= 100; n++) old[n] = old[n - 1] + 2 ** Math.floor((n - 1) / 10); // thang v1.85.0
       return {
-        len: g.LEVEL_AT.length, at: [1, 10, 11, 20, 21, 30, 50, 90, 91, 100].map((n) => g.LEVEL_AT[n]), realms: g.REALMS,
-        r0: r(0), r05: r(0.5), r1: r(1), r10: r(10), r115: r(11.5), r12: r(12), r30: r(30), r10229: r(10229.5), r10230: r(10230), rBig: r(1e7),
-        need: [g.realmOf(30).need, g.realmOf(30).needRealm, g.realmOf(30).next, g.realmOf(30).breakthrough, g.realmOf(34).breakthrough],
-        top: [g.realmOf(10230).top, g.realmOf(10230).need, g.realmOf(10230).pct, g.realmOf(10230).next],
-        pct: [g.realmOf(6.5).pct, g.realmOf(32).pct, g.realmOf(33.5).pct],
+        len: g.LEVEL_AT.length, at: [1, 9, 10, 11, 19, 20, 30, 90, 99, 100, 101, 103].map((n) => g.LEVEL_AT[n]), realms: g.REALMS,
+        names: { len: g.LEVEL_NAMES.length, unique: new Set(g.LEVEL_NAMES.slice(1)).size, empty: g.LEVEL_NAMES.slice(1).filter((x) => !x).length, god: g.LEVEL_NAMES.slice(100) },
+        demoted: Array.from({ length: 100 }, (_, i) => i + 1).filter((n) => g.LEVEL_AT[n] > old[n]),
+        gates: Array.from({ length: 10 }, (_, i) => (i + 1) * 10).map((n) => +(cost(n) / cost(n - 1)).toFixed(2)),
+        normal: Array.from({ length: 10 }, (_, i) => i * 10 + 5).map(cost),
+        god: [101, 102, 103].map(cost),
+        r0: r(0), r05: r(0.5), r75: r(7.5), r8: r(8), r30: r(30), r99: r(8183.5), r100: r(8184), r103: r(14328), rBig: r(1e7),
+        need: [g.realmOf(17).need, g.realmOf(17).needRealm, g.realmOf(17).next, g.realmOf(17).breakthrough, g.realmOf(24).breakthrough],
+        god100: [g.realmOf(8184).god, g.realmOf(8183.5).god, g.realmOf(8184).top],
+        top: [g.realmOf(14328).top, g.realmOf(14328).need, g.realmOf(14328).pct, g.realmOf(14328).next],
+        pct: [g.realmOf(5.5).pct, g.realmOf(30).pct, g.realmOf(17 + 3.5).pct],
+        label: [g.levelLabel(37), g.levelLabel(100), g.levelLabel(102)],
       };
     });
-    assert.equal(m.len, 101, 'đủ mốc cho cấp 0–100');
-    assert.deepEqual(m.at, [1, 10, 12, 30, 34, 70, 310, 5110, 5622, 10230], 'mốc cộng dồn: mỗi cảnh giới gấp đôi, cấp 100 = 10.230 điểm');
-    assert.deepEqual(m.realms, ['Sơ nhập giang hồ', 'Tam lưu cao thủ', 'Nhị lưu cao thủ', 'Nhất lưu cao thủ', 'Tuyệt đỉnh cao thủ', 'Tiên thiên cao thủ', 'Tông sư', 'Đại tông sư', 'Thiên nhân hợp nhất', 'Võ lâm chí tôn'], '10 cảnh giới theo thứ tự');
+    assert.equal(m.len, 104, 'đủ mốc cho cấp 0–103');
+    assert.deepEqual(m.at, [0.5, 4.5, 8, 9, 17, 24, 56, 4088, 7157, 8184, 10232, 14328], 'mốc cộng dồn: cấp 100 = 8.184 điểm, cấp 103 = 14.328 điểm');
+    assert.equal(m.at[9], 10230 * 0.8, 'cấp 100 giảm đúng 20% so với thang cũ (10.230)');
+    assert.deepEqual(m.demoted, [], 'không mốc nào cao hơn thang cũ: không ai tụt cấp');
+    assert.ok(m.gates.every((x) => x >= 3), 'ải đột phá (cấp 10, 20 … 100) tốn ≥ 3 lần cấp thường trước nó: ' + m.gates.join(', '));
+    assert.deepEqual(m.normal, [0.5, 1, 2.5, 5, 10.5, 21, 42.5, 85, 170.5, 341], 'điểm mỗi cấp thường theo cảnh giới');
+    assert.deepEqual(m.god, [2048, 2048, 2048], 'mỗi thần cấp 2.048 điểm');
+    assert.deepEqual(m.realms, REALMS, '11 cảnh giới theo thứ tự');
+    assert.deepEqual(m.names, { len: 104, unique: 103, empty: 0, god: ['Thành Thần', 'Thượng Thần', 'Thần Quân', 'Thần Vương'] }, 'mỗi cấp một danh xưng riêng; cấp 100–103 tới Thần Vương');
     assert.deepEqual(m.r0, [0, 0, 'Vô danh tiểu tốt', ''], '0 điểm: chưa nhập cấp');
-    assert.deepEqual(m.r05, [0, 0, 'Vô danh tiểu tốt', ''], '0,5 điểm vẫn chưa đủ cấp 1');
-    assert.deepEqual(m.r1, [1, 1, 'Sơ nhập giang hồ', 'Đệ nhất trọng'], '1 điểm: cấp 1');
-    assert.deepEqual(m.r10, [10, 1, 'Sơ nhập giang hồ', 'Đệ thập trọng'], '10 điểm: cấp 10');
-    assert.deepEqual(m.r115, [10, 1, 'Sơ nhập giang hồ', 'Đệ thập trọng'], '11,5 điểm: chưa đủ cấp 11 (cần 2 điểm)');
-    assert.deepEqual(m.r12, [11, 2, 'Tam lưu cao thủ', 'Đệ nhất trọng'], '12 điểm: cấp 11, cảnh giới thứ hai');
-    assert.deepEqual(m.r30, [20, 2, 'Tam lưu cao thủ', 'Đệ thập trọng'], '30 điểm: cấp 20');
-    assert.deepEqual(m.r10229, [99, 10, 'Võ lâm chí tôn', 'Đệ cửu trọng'], 'thiếu nửa điểm: cấp 99');
-    assert.deepEqual(m.r10230, [100, 10, 'Võ lâm chí tôn', 'Đệ thập trọng'], '10.230 điểm: cấp 100');
-    assert.deepEqual(m.rBig, [100, 10, 'Võ lâm chí tôn', 'Đệ thập trọng'], 'không vượt quá cấp 100');
-    assert.deepEqual(m.need, [4, 4, 'Nhị lưu cao thủ', true, false], 'cấp 20: còn 4 điểm lên cấp 21 và đột phá Nhị lưu cao thủ; cấp 21 lên cấp 22 không đột phá');
-    assert.deepEqual(m.top, [true, 0, 100, ''], 'cấp 100 là cấp tối cao');
-    assert.deepEqual(m.pct, [50, 50, 87], 'phần trăm tới cấp kế tiếp (6,5 → 50%; 32 → 2/4; 33,5 → 3,5/4)');
+    assert.deepEqual(m.r05, [1, 1, 'Sơ nhập giang hồ', 'Sơ Tâm Khởi Bước'], '0,5 điểm: cấp 1');
+    assert.deepEqual(m.r75, [9, 1, 'Sơ nhập giang hồ', 'Khí Hải Sơ Thành'], '7,5 điểm: chưa qua ải cấp 10');
+    assert.deepEqual(m.r8, [10, 2, 'Tam lưu cao thủ', 'Phá Quan Nhập Lưu'], '8 điểm: qua ải, cấp 10 mở cảnh giới thứ hai');
+    assert.deepEqual(m.r30, [22, 3, 'Nhị lưu cao thủ', 'Chưởng Phong Sơ Hiện'], '30 điểm: cấp 22');
+    assert.deepEqual(m.r99, [99, 10, 'Võ lâm chí tôn', 'Nhân Gian Cực Cảnh'], 'thiếu nửa điểm: cấp 99');
+    assert.deepEqual(m.r100, [100, 11, 'Thần cảnh', 'Thành Thần'], '8.184 điểm: cấp 100, thành Thần');
+    assert.deepEqual(m.r103, [103, 11, 'Thần cảnh', 'Thần Vương'], '14.328 điểm: cấp 103, Thần Vương');
+    assert.deepEqual(m.rBig, [103, 11, 'Thần cảnh', 'Thần Vương'], 'không vượt quá cấp 103');
+    assert.deepEqual(m.need, [7, 7, 'Nhị lưu cao thủ', true, false], 'cấp 19: còn 7 điểm qua ải cấp 20 (Nhị lưu cao thủ); cấp 20 lên 21 không đột phá');
+    assert.deepEqual(m.god100, [true, false, false], 'cấp 100 là Thần nhưng chưa phải cấp tối cao');
+    assert.deepEqual(m.top, [true, 0, 100, ''], 'cấp 103 là cấp tối cao');
+    assert.deepEqual(m.pct, [28, 40, 50], 'phần trăm tới cấp kế tiếp (5,5 → 1/3,5; 30 → 1/2,5; 20,5 → 3,5/7)');
+    assert.deepEqual(m.label, ['Cấp 37/100', 'Cấp 100/100', 'Thần cấp 2/3'], 'nhãn cấp');
     await context.close();
   }
 
@@ -58,7 +90,7 @@ try {
     [1440, false],
   ]) {
     const at = ' (' + width + 'px)';
-    // 2. Khối cấp trên trang và bảng thang 100 cấp (30 điểm = cấp 20).
+    // 2. Khối cấp trên trang, bảng thang và danh xưng 103 cấp (30 điểm = cấp 22).
     {
       const { context, page } = await h.open(width, { touch, workspace: seed(growth(60))() });
       const errors = [];
@@ -72,41 +104,59 @@ try {
           sub: document.querySelector('#main').innerText,
         };
       });
-      assert.equal(b.name, 'Tam lưu cao thủ', 'ấn cảnh giới' + at);
-      assert.equal(b.rank, 'Cấp 20/100 · Đệ thập trọng', 'cấp và trọng' + at);
-      assert.equal(b.ahead, '30 điểm tu vi · còn 4 điểm lên cấp 21 · đột phá Nhị lưu cao thủ', 'còn bao nhiêu điểm' + at);
-      assert.deepEqual(b.bar, ['Tiến tới cấp 21', '0'], 'thanh tiến tới cấp kế tiếp' + at);
-      assert.deepEqual(b.ladder, ['Cảnh giới 2 trên 10', ['is-done', 'is-now', '-', '-', '-', '-', '-', '-', '-', '-']], 'thang 10 cảnh giới' + at);
-      assert.match(b.sub, /Cấp 20 · Tam lưu cao thủ · 30 điểm tu vi/, 'dòng phụ dưới tiêu đề' + at);
-      // Bảng thang 100 cấp: đóng sẵn, mở ra thấy 10 dòng, dòng hiện tại được tô.
-      assert.equal(await page.locator('.gr-scale table').isVisible(), false, 'bảng thang đóng sẵn' + at);
-      const sum = await page.locator('.gr-scale>summary').boundingBox();
+      assert.equal(b.name, 'Nhị lưu cao thủ', 'ấn cảnh giới' + at);
+      assert.equal(b.rank, 'Cấp 22/100 · Chưởng Phong Sơ Hiện', 'cấp và danh xưng' + at);
+      assert.equal(b.ahead, '30 điểm tu vi · còn 1,5 điểm lên cấp 23', 'còn bao nhiêu điểm' + at);
+      assert.deepEqual(b.bar, ['Tiến tới cấp 23', '40'], 'thanh tiến tới cấp kế tiếp' + at);
+      assert.deepEqual(b.ladder, ['Cảnh giới 3 trên 11', ['is-done', 'is-done', 'is-now', ...Array(8).fill('-')]], 'thang 11 cảnh giới' + at);
+      assert.match(b.sub, /Cấp 22 · Nhị lưu cao thủ · 30 điểm tu vi/, 'dòng phụ dưới tiêu đề' + at);
+      assert.match(b.sub, /Cấp 10, 20 … 100 là ải đột phá/, 'Tâm pháp tu luyện nêu ải đột phá' + at);
+      // Bảng thang: đóng sẵn, mở ra thấy 11 dòng (ải đột phá ghi dưới điểm mỗi cấp), dòng hiện tại được tô; danh xưng 103 cấp.
+      assert.equal(await page.locator('details.gr-scale table').isVisible(), false, 'bảng thang đóng sẵn' + at);
+      const sum = await page.locator('details.gr-scale>summary').boundingBox();
       assert.ok(sum.height >= 36, 'nút mở bảng đủ cao' + at);
-      await page.click('.gr-scale>summary');
+      assert.equal(await page.locator('details.gr-scale>summary').textContent(), 'Xem thang 103 cấp', 'nhãn nút mở bảng' + at);
+      await page.click('details.gr-scale>summary');
       const t = await page.evaluate(() => ({
-        rows: [...document.querySelectorAll('.gr-scale tbody tr')].map((r) => r.textContent.replace(/\s+/g, ' ').trim()),
-        now: document.querySelector('.gr-scale tr[aria-current=true] th').textContent,
+        rows: [...document.querySelectorAll('details.gr-scale tbody tr')].map((r) => r.textContent.replace(/\s+/g, ' ').trim()),
+        now: document.querySelector('details.gr-scale tr[aria-current=true] th').textContent,
         fits: (() => { const w = document.querySelector('.gr-scale-wrap'); return w.scrollWidth <= w.clientWidth + 1; })(),
+        names: [...document.querySelectorAll('.gr-names li')].map((li) => li.textContent),
+        current: [...document.querySelectorAll('.gr-names li[aria-current=true]')].map((li) => li.textContent),
+        done: document.querySelectorAll('.gr-names li.is-done').length,
+        gates: [...document.querySelectorAll('.gr-names li[data-gate] b')].map((b) => +b.textContent),
+        realmNow: document.querySelector('.gr-names-realm.is-now > strong').textContent,
       }));
-      assert.equal(t.rows.length, 10, 'bảng có 10 cảnh giới' + at);
-      assert.equal(t.rows[0], 'Sơ nhập giang hồ1–1011–10', 'dòng đầu' + at);
-      assert.equal(t.rows[1], 'Tam lưu cao thủ11–20212–30', 'dòng hai' + at);
-      assert.equal(t.rows[9], 'Võ lâm chí tôn91–1005125.622–10.230', 'dòng cuối' + at);
-      assert.equal(t.now, 'Tam lưu cao thủ', 'tô dòng cảnh giới hiện tại' + at);
+      assert.equal(t.rows.length, 11, 'bảng có 11 cảnh giới' + at);
+      assert.equal(t.rows[0], 'Sơ nhập giang hồ1–90,50,5–4,5', 'dòng đầu' + at);
+      assert.equal(t.rows[1], 'Tam lưu cao thủ10–191ải 3,58–17', 'dòng hai: ải đột phá cấp 10' + at);
+      assert.equal(t.rows[9], 'Võ lâm chí tôn90–99341ải 513,54.088–7.157', 'dòng Võ lâm chí tôn' + at);
+      assert.equal(t.rows[10], 'Thần cảnh100–1032.048ải 1.0278.184–14.328', 'dòng Thần cảnh' + at);
+      assert.equal(t.now, 'Nhị lưu cao thủ', 'tô dòng cảnh giới hiện tại' + at);
       assert.equal(t.fits, true, 'bảng vừa khung, không phải cuộn ngang' + at);
+      assert.equal(t.names.length, 103, 'đủ danh xưng 103 cấp' + at);
+      assert.deepEqual([t.names[0], t.names[9], t.names[99], t.names[102]], ['1 Sơ Tâm Khởi Bước', '10 Phá Quan Nhập Lưu', '100 Thành Thần', '103 Thần Vương'], 'danh xưng theo cấp' + at);
+      assert.deepEqual(t.current, ['22 Chưởng Phong Sơ Hiện'], 'tô cấp hiện tại' + at);
+      assert.equal(t.done, 21, 'các cấp đã qua' + at);
+      assert.deepEqual(t.gates, [10, 20, 30, 40, 50, 60, 70, 80, 90, 100], 'đánh dấu ải đột phá' + at);
+      assert.equal(t.realmNow, 'Nhị lưu cao thủ', 'tô cảnh giới hiện tại trong danh xưng' + at);
       assert.equal(await noOverflow(page), true, 'không tràn ngang' + at);
       // Báo cáo: ô cảnh giới có cấp.
       await page.click('[data-gr-report]');
       await page.waitForSelector('.gr-report');
       const tile = await page.locator('.gr-tile[data-tile=realm]').innerText();
-      assert.match(tile.replace(/\s+/g, ' '), /Tam lưu cao thủ Cấp 20\/100 · còn 4 điểm lên cấp 21/, 'báo cáo có cấp' + at);
+      assert.match(tile.replace(/\s+/g, ' '), /Nhị lưu cao thủ Cấp 22\/100 · còn 1,5 điểm lên cấp 23/, 'báo cáo có cấp' + at);
       assert.deepEqual(errors, [], 'không lỗi trang' + at);
       await context.close();
     }
-    // 3. Cấp 100 và 0 điểm.
+    // 3. Trước ải, cấp 100, thần cấp, cấp 103 và 0 điểm.
     for (const [half, rank, ahead] of [
-      [20460, 'Cấp 100/100 · Đệ thập trọng', '10.230 điểm tu vi · đã đạt cấp tối cao'],
-      [0, 'Chưa nhập cấp', '0 điểm tu vi · còn 1 điểm để nhập cấp 1'],
+      [34, 'Cấp 19/100 · Tam Lưu Viên Mãn', '17 điểm tu vi · còn 7 điểm lên cấp 20 · đột phá Nhị lưu cao thủ'],
+      [16367, 'Cấp 99/100 · Nhân Gian Cực Cảnh', '8.183,5 điểm tu vi · còn 0,5 điểm lên cấp 100 · đột phá thành Thần'],
+      [16368, 'Cấp 100/100 · Thành Thần', '8.184 điểm tu vi · còn 2.048 điểm lên cấp 101'],
+      [20464, 'Thần cấp 1/3 · Thượng Thần', '10.232 điểm tu vi · còn 2.048 điểm lên cấp 102'],
+      [28656, 'Thần cấp 3/3 · Thần Vương', '14.328 điểm tu vi · đã đạt Thần Vương, cấp tối cao'],
+      [0, 'Chưa nhập cấp', '0 điểm tu vi · còn 0,5 điểm để nhập cấp 1'],
     ]) {
       const { context, page } = await h.open(width, { touch, workspace: seed(growth(half))() });
       await h.show(page, 'growth');
@@ -115,30 +165,37 @@ try {
       assert.equal(await noOverflow(page), true, 'không tràn ngang' + at);
       await context.close();
     }
-    // 4. Hoàn thành việc: lên cấp thì báo "lên cấp"; không lên cấp thì không báo; đổi bảo vật không làm tụt cấp.
+    // 4. Hoàn thành việc: lên cấp thì báo "lên cấp"; không lên cấp thì không báo; qua ải thì báo đột phá.
     for (const [half, expect] of [
-      [19, /Chúc mừng! Thiếu hiệp lên cấp 10 · Sơ nhập giang hồ, đệ thập trọng\./], // 9,5 → 10,5 điểm
-      [20, null], // 10 → 11 điểm: vẫn cấp 10 (cấp 11 cần 12 điểm)
+      [6, /Chúc mừng! Thiếu hiệp lên cấp 8 · Tụ Khí Đan Điền \(Sơ nhập giang hồ\)\./], // 3 → 4 điểm
+      [10, null], // 5 → 6 điểm: vẫn cấp 9 (ải cấp 10 cần 8 điểm)
+      [14, /Chúc mừng! Thiếu hiệp đã đột phá, đạt cảnh giới Tam lưu cao thủ \(cấp 10\)\./], // 7 → 8 điểm
     ]) {
       const { context, page } = await h.open(width, { touch, workspace: seed(growth(half))() });
-      await h.show(page, 'board');
-      await page.evaluate(() => moveTask(project('p1'), project('p1').tasks[0], 'Done'));
-      await page.waitForSelector('#growth-award[open]');
-      await page.click('[data-gr-plus="0"]');
-      await page.click('[data-gr-plus="0"]');
-      await page.click('[data-gr-save]');
-      await page.waitForSelector('.completion-card');
-      await wait(300);
+      await award(page);
       const toast = (await page.locator('#toast').textContent()) || '';
-      if (expect) assert.match(toast, expect, 'báo lên cấp' + at);
+      if (expect) assert.match(toast, expect, 'báo lên cấp / đột phá' + at);
       else assert.doesNotMatch(toast, /lên cấp|đột phá/, 'không lên cấp thì không báo' + at);
+      await context.close();
+    }
+    // 5. Qua ải cấp 100: nghi thức thành Thần.
+    {
+      const { context, page } = await h.open(width, { touch, workspace: seed(growth(16366))() }); // 8.183 → 8.184 điểm
+      await award(page);
+      await page.waitForSelector('dialog.gr-breakthrough[open]');
+      const bt = await page.evaluate(() => {
+        const d = document.querySelector('dialog.gr-breakthrough');
+        return [d.querySelector('.eyebrow').textContent, d.querySelector('h2').textContent, d.querySelector('.gr-bt-text').textContent, d.querySelector('.gr-bt-next').textContent];
+      });
+      assert.deepEqual(bt, ['ĐỘT PHÁ THÀNH THẦN', 'Thần cảnh', 'Thiếu hiệp đã phá vỡ cánh cửa cuối cùng của nhân gian, thành Thần · cấp 100 · Thành Thần.', 'Trên Thần còn ba thần cấp, đỉnh cuối là Thần Vương.'], 'nghi thức thành Thần' + at);
+      assert.equal(await noOverflow(page), true, 'không tràn ngang' + at);
       await context.close();
     }
     {
       const spend = [{ id: 's1', d: day(-1), n: 'Ấm trà', p: [40, 0, 0, 0, 0, 0, 0, 0] }];
       const { context, page } = await h.open(width, { touch, workspace: seed(growth(60, { spend }))() });
       await h.show(page, 'growth');
-      assert.equal(await page.locator('.gr-rank').textContent(), 'Cấp 20/100 · Đệ thập trọng', 'đổi bảo vật không làm tụt cấp' + at);
+      assert.equal(await page.locator('.gr-rank').textContent(), 'Cấp 22/100 · Chưởng Phong Sơ Hiện', 'đổi bảo vật không làm tụt cấp' + at);
       assert.match(await page.locator('[data-wallet=left]').innerText(), /10/, 'tu vi hiện có vẫn trừ phần đã đổi' + at);
       await context.close();
     }

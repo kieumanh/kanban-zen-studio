@@ -1,6 +1,6 @@
 'use strict';
 // v1.92.0 (Truyện Ký): cốt truyện giang hồ của hiệp khách đồng hành trong mục Tu vi (Điểm tích lũy).
-// Khai cuộc (cấp 0, đọc trong danh sách chương) và 20 chương ở cấp 5, 10, 15 … 100. Mỗi khi vượt một mốc 5 cấp (ngay sau khi lưu công lực), bảng hội thoại tự hiện,
+// Khai cuộc (cấp 0, đọc trong danh sách chương) và 20 chương ở cấp 5, 10, 15 … 100 (v2.5.0: chương đánh số theo thứ tự). Mỗi khi vượt một mốc 5 cấp (ngay sau khi lưu công lực), bảng hội thoại tự hiện,
 // kể một chặng vượt khó của nhân vật. Chương đã mở đọc lại được ở khung "Truyện ký giang hồ" trong trang Tu vi.
 // Không đổi dữ liệu: dấu "đã đọc" lưu bằng dấu đã đọc của tài khoản (notification-receipts, khóa notice:story-N, dùng chung mọi thiết bị),
 // kèm bản sao trên thiết bị. Chỉ tự mở khi vượt mốc ngay lúc lưu công lực: người đã ở cấp cao khi bản này ra mắt không bị dồn chương,
@@ -159,7 +159,11 @@
     ], lesson: 'Đi hết một con đường là lúc trở thành người dẫn đường. Hãy bắt đầu lại, cùng một người mới.' },
   ];
   const byLv = (lv) => CHAPTERS.find((c) => c.lv === lv);
-  const number = (c) => (c.lv ? 'Chương ' + c.lv / 5 : 'Khai cuộc');
+  // v2.5.0: chương đánh số theo thứ tự (không còn theo bội 5), để chương có thể đặt ở bất kỳ cấp nào.
+  const STORY = CHAPTERS.filter((c) => c.lv > 0);
+  const STAGES = STORY.length;
+  const indexOf = (c) => STORY.indexOf(c) + 1;
+  const number = (c) => (c.lv ? 'Chương ' + indexOf(c) : 'Khai cuộc');
 
   // ---- Dấu đã đọc -----------------------------------------------------------------------------------------------------------
   const KEY = (lv) => 'notice:story-' + lv;
@@ -197,7 +201,9 @@
     const map = { name: G().heroName(), y: nu ? 'nàng' : 'chàng', Y: nu ? 'Nàng' : 'Chàng', sh: nu ? 'sư tỷ' : 'sư huynh', Sh: nu ? 'Sư tỷ' : 'Sư huynh' };
     return s.replace(/\{(name|y|Y|sh|Sh)\}/g, (_, k) => map[k]);
   };
-  const realmName = (lv) => (lv ? G().REALMS[Math.ceil(lv / 10) - 1] : 'Vô danh tiểu tốt');
+  // Cảnh giới của một cấp (v2.5.0: cảnh giới bắt đầu ở cấp 10, 20 …; cấp 100 là Thần cảnh).
+  const realmAt = (lv) => (lv ? G().REALM_FROM.findIndex((_, i) => lv < G().REALM_FROM[i + 1]) + 1 : 0);
+  const realmName = (lv) => (lv ? G().REALMS[realmAt(lv) - 1] : 'Vô danh tiểu tốt');
 
   // ---- Bảng hội thoại ---------------------------------------------------------------------------------------------------------
   let reader = null; // { el, queue: [lv…], at, page }
@@ -209,7 +215,7 @@
     if (!r) return;
     const c = byLv(r.queue[r.at]), last = r.page === c.pages.length, total = c.pages.length + 1;
     const head = r.el.querySelector('.gr-story-head');
-    head.innerHTML = '<span class="eyebrow">TRUYỆN KÝ GIANG HỒ · ' + esc(number(c)).toUpperCase() + (c.lv ? ' / 20' : '') + '</span><h2 id="gr-story-title">' + esc(c.title) + '</h2><small>' + (c.lv ? 'Mở ở cấp ' + c.lv + ' · ' + esc(realmName(c.lv)) : 'Ngày bước vào giang hồ') + '</small>';
+    head.innerHTML = '<span class="eyebrow">TRUYỆN KÝ GIANG HỒ · ' + esc(number(c)).toUpperCase() + (c.lv ? ' / ' + STAGES : '') + '</span><h2 id="gr-story-title">' + esc(c.title) + '</h2><small>' + (c.lv ? 'Mở ở cấp ' + c.lv + ' · ' + esc(realmName(c.lv)) : 'Ngày bước vào giang hồ') + '</small>';
     const body = r.el.querySelector('.gr-story-body');
     if (last) {
       const g = G(), lvNow = level(), rr = g.realmOf(earned());
@@ -312,19 +318,21 @@
       if (!reader) open(list);
     }, 900);
   }
-  // ---- Lộ trình tu luyện (v1.93.0) ------------------------------------------------------------------------------------------------
-  // Trang Tu vi: dòng thời gian 100 cấp = 10 cảnh giới × 2 chặng (mỗi chặng 5 cấp, cuối chặng là một chương truyện ký).
-  // Khối "đang ở đây" cho biết hiệp khách ở chặng nào, đã qua mấy cấp của chặng, còn bao nhiêu điểm tới chương kế.
-  // Mỗi chặng là một mục .gr-ch: chặng đã qua bấm để đọc chương; chặng hiện tại và chặng sau hiện "Mở ở cấp N".
-  const STAGES = 20, PER_STAGE = 5;
-  const stageOf = (lv) => Math.min(STAGES, Math.floor(lv / PER_STAGE) + 1); // chặng đang đi (cấp 100: chặng cuối, đã trọn)
+  // ---- Lộ trình tu luyện (v1.93.0; v2.5.0 theo thang 11 cảnh giới) ------------------------------------------------------------
+  // Trang Tu vi: dòng thời gian theo cảnh giới. Mỗi chương truyện ký kết thúc một chặng: chặng đi từ sau chương trước tới cấp của
+  // chương; chương được xếp vào cảnh giới chứa cấp của nó. Khối "đang ở đây" cho biết hiệp khách ở chặng nào, đã qua mấy cấp của
+  // chặng, còn bao nhiêu điểm tới chương kế. Mỗi chặng là một mục .gr-ch: chặng đã qua bấm để đọc chương; chặng hiện tại và chặng sau
+  // hiện "Mở ở cấp N".
+  const fromOf = (c) => (indexOf(c) > 1 ? STORY[indexOf(c) - 2].lv : 0); // cấp cuối của chặng trước
+  const nextChapter = (lv) => STORY.find((c) => c.lv > lv); // chương của chặng đang đi (hết chương: đã trọn)
+  const stageOf = (lv) => (nextChapter(lv) ? indexOf(nextChapter(lv)) : STAGES);
   function chapterItem(c, lv) {
-    const isOpen = unlocked(c), fresh = isOpen && !seen(c.lv), k = c.lv / PER_STAGE;
+    const isOpen = unlocked(c), fresh = isOpen && !seen(c.lv), k = indexOf(c), from = c.lv ? fromOf(c) : 0, span = c.lv - from;
     const tag = !isOpen ? 'Mở ở cấp ' + c.lv : fresh ? 'Chưa đọc' : 'Đã đọc';
-    const here = c.lv && lv < 100 && stageOf(lv) === k;
-    const filled = c.lv ? Math.max(0, Math.min(PER_STAGE, lv - (c.lv - PER_STAGE))) : 0;
-    const segs = c.lv ? '<span class="gr-segs" aria-hidden="true">' + Array.from({ length: PER_STAGE }, (_, i) => '<i' + (i < filled ? ' class="on"' : '') + '></i>').join('') + '</span>' : '';
-    const sub = c.lv ? 'Chặng ' + k + ' · cấp ' + (c.lv - PER_STAGE + 1) + '–' + c.lv : 'Khai cuộc · ngày bước vào giang hồ';
+    const here = c.lv && nextChapter(lv) === c;
+    const filled = c.lv ? Math.max(0, Math.min(span, lv - from)) : 0;
+    const segs = c.lv ? '<span class="gr-segs" aria-hidden="true">' + Array.from({ length: span }, (_, i) => '<i' + (i < filled ? ' class="on"' : '') + '></i>').join('') + '</span>' : '';
+    const sub = c.lv ? 'Chặng ' + k + ' · cấp ' + (span > 1 ? from + 1 + '–' + c.lv : c.lv) : 'Khai cuộc · ngày bước vào giang hồ';
     const inner = '<span class="gr-ch-no">' + (c.lv ? k : '✦') + '</span><span class="gr-ch-main">' + (here ? '<b class="gr-here">Đang ở đây</b>' : '') + '<strong>' + esc(c.title) + '</strong><small>' + sub + '</small>' + segs + '</span>' +
       '<em class="gr-ch-tag">' + tag + '</em>';
     const state = c.lv && lv >= c.lv ? ' is-done' : '';
@@ -349,30 +357,31 @@
     queueMicrotask(ensureReceipts);
     const g = G(), t = earned(), lv = level(), r = g.realmOf(t), name = esc(g.heroName());
     const open_ = CHAPTERS.filter(unlocked), unread = open_.filter((c) => !seen(c.lv));
-    const next = CHAPTERS.find((c) => !unlocked(c));
+    const next = nextChapter(lv);
     const need = next ? Math.max(0, g.LEVEL_AT[next.lv] - t) : 0;
     const lead = next
       ? 'Chương kế: <strong>' + esc(number(next)) + ' · ' + esc(next.title) + '</strong> mở ở cấp ' + next.lv + ' (còn ' + g.fmt(need) + ' điểm tu vi).'
-      : 'Các hạ đã mở trọn 20 chương. Đọc lại bất cứ lúc nào.';
+      : 'Các hạ đã mở trọn ' + STAGES + ' chương. Đọc lại bất cứ lúc nào.';
     // Khối "đang ở đây".
-    const done = lv >= 100, k = stageOf(lv), from = (k - 1) * PER_STAGE, to = k * PER_STAGE;
+    const done = !next, k = stageOf(lv), from = next ? fromOf(next) : 0, to = next ? next.lv : 0;
     const pct = done ? 100 : Math.max(0, Math.min(99, Math.floor(((t - g.LEVEL_AT[from]) / (g.LEVEL_AT[to] - g.LEVEL_AT[from])) * 100)));
-    const where = done ? name + ' đã đi trọn <strong>20 chặng</strong>, cấp 100 · Võ lâm chí tôn' : name + ' đang ở <strong>chặng ' + k + '/20</strong> · tiến về “' + esc(byLv(to).title) + '”';
-    const sub = done ? 'Hành trình trọn vẹn. Đỉnh núi chỉ là chỗ để thấy con đường tiếp theo.' : (lv ? 'Cấp ' + lv + ' · ' + esc(r.name) + ' · ' + esc(r.tier.toLowerCase()) : 'Chưa nhập cấp') + ' · đã qua ' + (lv - from) + '/5 cấp của chặng · còn ' + g.fmt(Math.max(0, g.LEVEL_AT[to] - t)) + ' điểm tới chương ' + k;
+    const where = done ? name + ' đã đi trọn <strong>' + STAGES + ' chặng</strong>, cấp ' + lv + ' · ' + esc(r.name) : name + ' đang ở <strong>chặng ' + k + '/' + STAGES + '</strong> · tiến về “' + esc(next.title) + '”';
+    const sub = done ? 'Hành trình trọn vẹn. Đỉnh núi chỉ là chỗ để thấy con đường tiếp theo.' : (lv ? 'Cấp ' + lv + ' · ' + esc(r.name) + ' · ' + esc(r.title) : 'Chưa nhập cấp') + ' · đã qua ' + (lv - from) + '/' + (to - from) + ' cấp của chặng · còn ' + g.fmt(Math.max(0, g.LEVEL_AT[to] - t)) + ' điểm tới chương ' + k;
     const nowBlock = '<div class="gr-path-now"><span class="gr-path-hero" aria-hidden="true">' + zenHero.svg(hero(), done ? 'zen' : 'martial') + '</span><div class="gr-path-now-text"><p>' + where + '</p><small>' + sub + '</small>' +
-      '<div class="progress" role="progressbar" aria-label="' + (done ? 'Đã đi trọn lộ trình' : 'Tiến trình chặng ' + k + ' (cấp ' + (from + 1) + '–' + to + ')') + '" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + pct + '"><span style="width:' + pct + '%"></span></div></div></div>';
-    // 10 cảnh giới, mỗi cảnh giới hai chặng.
-    const curRealm = done ? 11 : Math.ceil(k / 2);
+      '<div class="progress" role="progressbar" aria-label="' + (done ? 'Đã đi trọn lộ trình' : 'Tiến trình chặng ' + k + ' (cấp ' + (to - from > 1 ? from + 1 + '–' + to : to) + ')') + '" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + pct + '"><span style="width:' + pct + '%"></span></div></div></div>';
+    // Các cảnh giới, mỗi cảnh giới gồm các chương có cấp nằm trong cảnh giới đó.
+    const curRealm = r.top ? g.REALMS.length + 1 : Math.max(1, r.realm);
     const realms = g.REALMS.map((rn, i) => {
-      const n = i + 1, state = n < curRealm ? 'is-done' : n === curRealm ? 'is-now' : 'is-todo';
+      const n = i + 1, x = g.realmInfo(n), state = n < curRealm ? 'is-done' : n === curRealm ? 'is-now' : 'is-todo';
       const label = state === 'is-done' ? 'Đã qua' : state === 'is-now' ? 'Đang tu luyện' : 'Chưa tới';
-      const a = (n - 1) * 10 + 1, b = n * 10;
+      const list = STORY.filter((c) => realmAt(c.lv) === n);
+      const head = 'Cấp ' + x.from + '–' + x.to + (x.gate ? ' · ải đột phá ' + g.fmt(x.gate) : '') + ' · ' + g.fmt(x.cost) + ' điểm mỗi cấp · tu vi ' + g.fmt(x.at) + '–' + g.fmt(x.end);
       return '<li class="gr-path-realm ' + state + '"' + (state === 'is-now' ? ' aria-current="true"' : '') + '><span class="gr-path-node" aria-hidden="true">' + (state === 'is-done' ? '✓' : n) + '</span><div class="gr-path-body">' +
-        '<div class="gr-path-head"><strong>' + esc(rn) + '</strong><small>Cấp ' + a + '–' + b + ' · ' + g.fmt(2 ** i) + ' điểm mỗi cấp · tu vi ' + g.fmt(g.LEVEL_AT[a]) + '–' + g.fmt(g.LEVEL_AT[b]) + '</small><em>' + label + '</em></div>' +
-        '<ol class="gr-ch-list">' + chapterItem(byLv(n * 10 - 5), lv) + chapterItem(byLv(n * 10), lv) + '</ol></div></li>';
+        '<div class="gr-path-head"><strong>' + esc(rn) + '</strong><small>' + head + '</small><em>' + label + '</em></div>' +
+        (list.length ? '<ol class="gr-ch-list">' + list.map((c) => chapterItem(c, lv)).join('') + '</ol>' : '') + '</div></li>';
     }).join('');
-    return '<section class="panel gr-story-panel gr-path-panel" aria-labelledby="gr-story-panel-title"><h2 id="gr-story-panel-title">Lộ trình tu luyện <small>' + (done ? 'Trọn 20 chặng' : 'Chặng ' + k + '/20') + ' · ' + open_.length + '/' + CHAPTERS.length + ' chương</small></h2>' + nowBlock +
-      '<p class="help-copy">100 cấp chia 10 cảnh giới, mỗi cảnh giới hai chặng. Cuối mỗi chặng, hiệp khách kể một chương truyện ký. ' + lead + (unread.length ? ' Còn ' + unread.length + ' chương chưa đọc.' : '') + '</p>' +
+    return '<section class="panel gr-story-panel gr-path-panel" aria-labelledby="gr-story-panel-title"><h2 id="gr-story-panel-title">Lộ trình tu luyện <small>' + (done ? 'Trọn ' + STAGES + ' chặng' : 'Chặng ' + k + '/' + STAGES) + ' · ' + open_.length + '/' + CHAPTERS.length + ' chương</small></h2>' + nowBlock +
+      '<p class="help-copy">Lộ trình đi qua ' + g.REALMS.length + ' cảnh giới; cấp đầu mỗi cảnh giới là một ải đột phá. Cuối mỗi chặng, hiệp khách kể một chương truyện ký. ' + lead + (unread.length ? ' Còn ' + unread.length + ' chương chưa đọc.' : '') + '</p>' +
       '<ol class="gr-ch-list gr-path-start">' + chapterItem(byLv(0), lv) + '</ol><ol class="gr-path">' + realms + '</ol></section>';
   }
 

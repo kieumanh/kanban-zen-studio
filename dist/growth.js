@@ -40,15 +40,41 @@
       ideas: ['Làm một việc mình yêu thích', 'Sáng tạo hoặc thử điều mới', 'Dọn dẹp, sắp xếp chỗ ở', 'Nghỉ ngơi trọn vẹn, đi chơi'] },
   ];
   const HEROES = { nam: { label: 'Nam', title: 'Thiếu hiệp', desc: 'Kiếm khách áo lam' }, nu: { label: 'Nữ', title: 'Nữ hiệp', desc: 'Hồng y kiếm khách' } };
-  // 100 cấp (v1.85.0): 10 cảnh giới × 10 trọng. Cảnh giới sau tốn gấp đôi cảnh giới trước: 1, 2, 4 … 512 điểm cho mỗi cấp,
-  // cộng dồn tới cấp 100 là 10.230 điểm. Tính theo tổng điểm đã tu luyện (không trừ phần đổi bảo vật) nên cấp không bao giờ tụt.
-  const REALMS = ['Sơ nhập giang hồ', 'Tam lưu cao thủ', 'Nhị lưu cao thủ', 'Nhất lưu cao thủ', 'Tuyệt đỉnh cao thủ', 'Tiên thiên cao thủ', 'Tông sư', 'Đại tông sư', 'Thiên nhân hợp nhất', 'Võ lâm chí tôn'];
+  // v2.5.0 (Thăng Thiên): thang 103 cấp, mỗi cấp một danh xưng, 11 cảnh giới (thay thang v1.85.0: 10 cảnh giới × 10 trọng).
+  //  - Cảnh giới bắt đầu ở cấp 10, 20 … 90 (Sơ nhập giang hồ: cấp 1–9). Cấp 100 thành Thần (Thần cảnh); trên Thần còn 3 thần cấp,
+  //    cấp 103 là Thần Vương.
+  //  - Cấp 10, 20 … 100 là ải đột phá: tốn chừng ba lần cấp thường của cảnh giới trước (hai ải đầu gấp bảy).
+  //  - Tổng tới cấp 100 = 8.184 điểm, bằng 80% thang cũ (10.230). Mỗi mốc đều không cao hơn thang cũ nên không ai tụt cấp.
+  //  - Mỗi thần cấp 2.048 điểm; cấp 103 = 14.328 điểm.
+  //  - Tính theo tổng điểm đã tu luyện (không trừ phần đổi bảo vật) nên cấp không bao giờ tụt.
+  const REALMS = ['Sơ nhập giang hồ', 'Tam lưu cao thủ', 'Nhị lưu cao thủ', 'Nhất lưu cao thủ', 'Tuyệt đỉnh cao thủ', 'Tiên thiên cao thủ', 'Tông sư', 'Đại tông sư', 'Thiên nhân hợp nhất', 'Võ lâm chí tôn', 'Thần cảnh'];
+  const REALM_FROM = [1, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 104]; // cấp đầu của mỗi cảnh giới (phần tử cuối: chặn trên)
+  const REALM_NOTE = ['Luyện thân, mở mạch', 'Bước chân giang hồ', 'Rèn chiêu luyện thức', 'Thành danh một phương', 'Vượt giới hạn bản thân', 'Phản bổn hoàn nguyên', 'Khai tông, truyền nghề', 'Ngộ đạo, hóa phồn thành giản', 'Hòa cùng trời đất', 'Đỉnh cao nhân gian', 'Thành Thần, hướng tới Thần Vương'];
   const NO_REALM = 'Vô danh tiểu tốt';
-  const NUM_HV = ['nhất', 'nhị', 'tam', 'tứ', 'ngũ', 'lục', 'thất', 'bát', 'cửu', 'thập'];
-  const LEVEL_MAX = 100, PER_REALM = 10;
-  const levelCost = (n) => 2 ** Math.floor((n - 1) / PER_REALM);
+  // Danh xưng từng cấp (chỉ số = cấp; 0 = chưa nhập cấp).
+  const LEVEL_NAMES = ['',
+    'Sơ Tâm Khởi Bước', 'Thổ Nạp Điều Tức', 'Trát Mã Định Thân', 'Luyện Cân Thư Mạch', 'Đoán Cốt Thành Hình', 'Khai Mạch Thông Lạc', 'Dẫn Khí Nhập Thể', 'Tụ Khí Đan Điền', 'Khí Hải Sơ Thành',
+    'Phá Quan Nhập Lưu', 'Hành Cước Tứ Phương', 'Khinh Thân Như Yến', 'Thiết Thủ Khai Bia', 'Quyền Xuất Như Phong', 'Bộ Pháp Sơ Thành', 'Nội Tức Tuần Hoàn', 'Kiếm Ý Manh Nha', 'Độc Hành Thiên Lý', 'Tam Lưu Viên Mãn',
+    'Khí Quán Tứ Chi', 'Thảo Thượng Phi Hành', 'Chưởng Phong Sơ Hiện', 'Kiếm Hoa Lục Đóa', 'Nhãn Quan Lục Lộ', 'Nhĩ Thính Bát Phương', 'Ngự Phong Hành Bộ', 'Cương Nhu Tương Tế', 'Nội Lực Thâm Hậu', 'Nhị Lưu Viên Mãn',
+    'Chân Khí Hộ Thể', 'Đạp Tuyết Vô Ngân', 'Phi Hoa Trích Diệp', 'Cách Không Điểm Huyệt', 'Kiếm Tùy Tâm Chuyển', 'Thân Như Bàn Thạch', 'Nhất Kích Tất Trúng', 'Khí Trầm Như Hải', 'Uy Chấn Nhất Phương', 'Nhất Lưu Viên Mãn',
+    'Phá Kính Đăng Phong', 'Lăng Không Hư Độ', 'Kiếm Khí Tung Hoành', 'Chưởng Lực Khai Sơn', 'Hóa Phồn Vi Giản', 'Thính Phong Biện Khí', 'Bách Độc Bất Xâm', 'Tâm Như Chỉ Thủy', 'Khí Tráng Sơn Hà', 'Tuyệt Đỉnh Viên Mãn',
+    'Phản Bổn Hoàn Nguyên', 'Tiên Thiên Chân Khí', 'Nhâm Đốc Quán Thông', 'Sinh Tử Huyền Quan', 'Khí Hóa Cương Phong', 'Thần Quang Nội Liễm', 'Ngự Khí Thành Kiếm', 'Linh Đài Thanh Minh', 'Kim Cương Bất Hoại', 'Tiên Thiên Viên Mãn',
+    'Khai Tông Lập Phái', 'Vô Chiêu Thắng Hữu Chiêu', 'Ý Đáo Khí Đáo', 'Thảo Mộc Giai Binh', 'Hóa Kình Vô Hình', 'Truyền Đăng Tục Diệm', 'Tâm Kiếm Hợp Nhất', 'Vạn Pháp Quy Tông', 'Uy Trấn Bát Hoang', 'Tông Sư Viên Mãn',
+    'Đại Đạo Sơ Khuy', 'Bộ Bộ Sinh Liên', 'Kiếm Ý Thông Thiên', 'Nhất Khí Hóa Vạn', 'Thôi Sơn Điền Hải', 'Thiên Lý Truyền Âm', 'Tâm Thông Vạn Vật', 'Đại Âm Hi Thanh', 'Đại Xảo Nhược Chuyết', 'Đại Tông Sư Viên Mãn',
+    'Thiên Nhân Giao Cảm', 'Nhật Nguyệt Đồng Huy', 'Phong Vân Biến Sắc', 'Tinh Di Đẩu Chuyển', 'Ngũ Khí Triều Nguyên', 'Tam Hoa Tụ Đỉnh', 'Thần Du Thái Hư', 'Vạn Tượng Quy Nhất', 'Thiên Tâm Ngã Tâm', 'Thiên Nhân Viên Mãn',
+    'Đăng Phong Tạo Cực', 'Lôi Đình Vạn Quân', 'Càn Khôn Tại Thủ', 'Vạn Kiếm Triều Tông', 'Độc Bộ Thiên Hạ', 'Siêu Phàm Nhập Thánh', 'Bất Diệt Kim Thân', 'Xuyên Phá Hư Không', 'Bán Bộ Thành Thần', 'Nhân Gian Cực Cảnh',
+    'Thành Thần', 'Thượng Thần', 'Thần Quân', 'Thần Vương',
+  ];
+  const LEVEL_MAX = 103, GOD = 100;
+  // Điểm cho mỗi cấp thường của từng cảnh giới (chỉ số = cảnh giới − 1) và cho ải đột phá ở cấp 10, 20 … 100.
+  const NORMAL = [0.5, 1, 2.5, 5, 10.5, 21, 42.5, 85, 170.5, 341, 2048];
+  const GATE = [3.5, 7, 9.5, 19, 33.5, 67, 129.5, 259, 513.5, 1027];
+  const isGate = (n) => n % 10 === 0 && n >= 10 && n <= GOD;
+  const levelCost = (n) => (isGate(n) ? GATE[n / 10 - 1] : NORMAL[Math.min(10, Math.floor(n / 10))]);
   const LEVEL_AT = [0];
   for (let n = 1; n <= LEVEL_MAX; n++) LEVEL_AT[n] = LEVEL_AT[n - 1] + levelCost(n);
+  // "Cấp 37/100"; trên Thần: "Thần cấp 1/3".
+  const levelLabel = (lv) => (lv > GOD ? 'Thần cấp ' + (lv - GOD) + '/3' : 'Cấp ' + lv + '/100');
   const SOURCE_LABEL = { task: 'Hoàn thành nhiệm vụ', habit: 'Khổ luyện đủ 7 ngày', archive: 'Tổng hợp công phu cũ' };
   Object.assign(iconPaths, { growth: 'M8 3h8l5 5v8l-5 5H8l-5-5V8z M12 8l3 4-3 4-3-4z' });
   AXES.forEach((a) => (iconPaths['gr-' + a.id] = a.icon));
@@ -120,23 +146,37 @@
   const total = (s) => s.reduce((a, b) => a + b, 0);
   const earnedTotal = () => total(earnedScores());
   const spentTotal = () => total(spentScores());
-  const realmIndex = (lv) => (lv ? Math.ceil(lv / PER_REALM) : 0); // 0 = chưa nhập cấp
-  // Cấp, cảnh giới và trọng của tổng điểm t. need/pct: tới cấp kế tiếp; next/needRealm: tới cảnh giới kế tiếp.
+  const realmIndex = (lv) => (lv ? REALM_FROM.findIndex((_, i) => lv < REALM_FROM[i + 1]) + 1 : 0); // 0 = chưa nhập cấp
+  // Cấp, cảnh giới và danh xưng của tổng điểm t. need/pct: tới cấp kế tiếp; next/needRealm: tới cảnh giới kế tiếp;
+  // breakthrough: cấp kế tiếp là ải đột phá (sang cảnh giới mới).
   function realmOf(t) {
     let level = 0;
     while (level < LEVEL_MAX && t >= LEVEL_AT[level + 1]) level++;
-    const ri = realmIndex(level), top = level === LEVEL_MAX, nextRealmAt = ri < REALMS.length ? LEVEL_AT[ri * PER_REALM + 1] : 0;
+    const ri = realmIndex(level), top = level === LEVEL_MAX, nextRealmAt = ri < REALMS.length ? LEVEL_AT[REALM_FROM[ri]] : 0;
     return {
-      level, realm: ri, top, name: ri ? REALMS[ri - 1] : NO_REALM, tier: level ? 'Đệ ' + NUM_HV[(level - 1) % PER_REALM] + ' trọng' : '',
+      level, realm: ri, top, god: level >= GOD, name: ri ? REALMS[ri - 1] : NO_REALM, title: LEVEL_NAMES[level], nextTitle: top ? '' : LEVEL_NAMES[level + 1],
       need: top ? 0 : LEVEL_AT[level + 1] - t, pct: top ? 100 : Math.min(99, Math.floor(((t - LEVEL_AT[level]) / levelCost(level + 1)) * 100)),
       breakthrough: !top && realmIndex(level + 1) !== ri, next: nextRealmAt ? REALMS[ri] : '', needRealm: nextRealmAt ? nextRealmAt - t : 0,
     };
   }
-  // Thang 100 cấp: mỗi cảnh giới một dòng, dòng hiện tại được tô.
+  // Thông tin một cảnh giới (1–11): cấp đầu / cuối, điểm mỗi cấp thường, điểm ải đột phá vào cảnh giới, tu vi đầu / cuối.
+  function realmInfo(i) {
+    const from = REALM_FROM[i - 1], to = REALM_FROM[i] - 1;
+    return { i, name: REALMS[i - 1], note: REALM_NOTE[i - 1], from, to, cost: NORMAL[i - 1], gate: isGate(from) ? levelCost(from) : 0, at: LEVEL_AT[from], end: LEVEL_AT[to], levels: LEVEL_NAMES.slice(from, to + 1) };
+  }
+  // Thang cấp: mỗi cảnh giới một dòng (dòng hiện tại được tô), kèm danh xưng từng cấp (cấp hiện tại được tô).
   function scaleTable(r) {
-    return '<details class="gr-scale"><summary>Xem thang 100 cấp</summary><div class="gr-scale-wrap"><table><thead><tr><th scope="col">Cảnh giới</th><th scope="col">Cấp</th><th scope="col">Mỗi cấp</th><th scope="col">Tổng tu vi</th></tr></thead><tbody>' +
-      REALMS.map((name, i) => '<tr' + (i + 1 === r.realm ? ' class="is-now" aria-current="true"' : '') + '><th scope="row">' + name + '</th><td>' + (i * PER_REALM + 1) + '–' + (i + 1) * PER_REALM + '</td><td>' + thousands(2 ** i) + '</td><td>' + thousands(LEVEL_AT[i * PER_REALM + 1]) + '–' + thousands(LEVEL_AT[(i + 1) * PER_REALM]) + '</td></tr>').join('') +
-      '</tbody></table></div></details>';
+    const rows = REALMS.map((_, k) => {
+      const x = realmInfo(k + 1);
+      return '<tr' + (x.i === r.realm ? ' class="is-now" aria-current="true"' : '') + '><th scope="row">' + x.name + '</th><td>' + x.from + (x.to > x.from ? '–' + x.to : '') + '</td><td>' + fmt(x.cost) + (x.gate ? '<small>ải ' + fmt(x.gate) + '</small>' : '') + '</td><td>' + fmt(x.at) + '–<wbr>' + fmt(x.end) + '</td></tr>';
+    }).join('');
+    const names = REALMS.map((_, k) => {
+      const x = realmInfo(k + 1);
+      return '<li class="gr-names-realm' + (x.i === r.realm ? ' is-now' : '') + '"><strong>' + x.name + '</strong><small>' + esc(x.note) + '</small><ol class="gr-names" start="' + x.from + '">' +
+        x.levels.map((n, j) => { const lv = x.from + j; return '<li' + (lv === r.level ? ' class="is-now" aria-current="true"' : lv < r.level ? ' class="is-done"' : '') + (isGate(lv) ? ' data-gate' : '') + '><b>' + lv + '</b> ' + n + '</li>'; }).join('') + '</ol></li>';
+    }).join('');
+    return '<details class="gr-scale"><summary>Xem thang 103 cấp</summary><div class="gr-scale-wrap"><table><thead><tr><th scope="col">Cảnh giới</th><th scope="col">Cấp</th><th scope="col">Mỗi cấp</th><th scope="col">Tổng tu vi</th></tr></thead><tbody>' + rows + '</tbody></table></div>' +
+      '<p class="help-copy">Ải đột phá là cấp đầu của mỗi cảnh giới (cấp 10, 20 … 100), tốn chừng ba lần cấp thường; số điểm của ải ghi dưới điểm mỗi cấp. Cấp 100 thành Thần; ba thần cấp sau dẫn tới Thần Vương.</p><ol class="gr-names-list" aria-label="Danh xưng 103 cấp">' + names + '</ol></details>';
   }
   function extremes(s) {
     const mx = Math.max(...s), mn = Math.min(...s);
@@ -212,12 +252,12 @@
       realmBlock(r) + '</section>';
   }
   function realmBlock(r) {
-    const ahead = r.top ? 'đã đạt cấp tối cao' : !r.level ? 'còn ' + fmt(r.need) + ' điểm để nhập cấp 1' : 'còn ' + fmt(r.need) + ' điểm lên cấp ' + (r.level + 1) + (r.breakthrough ? ' · đột phá ' + r.next : '');
+    const ahead = r.top ? 'đã đạt Thần Vương, cấp tối cao' : !r.level ? 'còn ' + fmt(r.need) + ' điểm để nhập cấp 1' : 'còn ' + fmt(r.need) + ' điểm lên cấp ' + (r.level + 1) + (r.breakthrough ? ' · ' + (r.level + 1 === GOD ? 'đột phá thành Thần' : 'đột phá ' + r.next) : '');
     const ladder = REALMS.map((name, i) => '<li class="' + (i + 1 < r.realm ? 'is-done' : i + 1 === r.realm ? 'is-now' : '') + '" title="' + name + '"></li>').join('');
-    return '<div class="gr-realm"><div class="gr-realm-top"><span class="gr-realm-name">' + r.name + '</span><span class="gr-rank">' + (r.level ? '<b>Cấp ' + r.level + '</b>/100 · ' + r.tier : 'Chưa nhập cấp') + '</span></div>' +
+    return '<div class="gr-realm"><div class="gr-realm-top"><span class="gr-realm-name">' + r.name + '</span><span class="gr-rank">' + (r.level ? levelLabel(r.level).replace(/^(.+?)\//, '<b>$1</b>/') + ' · ' + r.title : 'Chưa nhập cấp') + '</span></div>' +
       '<small class="gr-realm-ahead">' + fmt(earnedTotal()) + ' điểm tu vi · ' + ahead + '</small>' +
-      '<div class="progress" role="progressbar" aria-label="' + (r.top ? 'Đã đạt cấp 100' : 'Tiến tới cấp ' + (r.level + 1)) + '" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + r.pct + '"><span style="width:' + r.pct + '%"></span></div>' +
-      '<ol class="gr-ladder" role="img" aria-label="Cảnh giới ' + r.realm + ' trên 10">' + ladder + '</ol></div>';
+      '<div class="progress" role="progressbar" aria-label="' + (r.top ? 'Đã đạt cấp ' + LEVEL_MAX : 'Tiến tới cấp ' + (r.level + 1)) + '" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + r.pct + '"><span style="width:' + r.pct + '%"></span></div>' +
+      '<ol class="gr-ladder" role="img" aria-label="Cảnh giới ' + r.realm + ' trên ' + REALMS.length + '">' + ladder + '</ol></div>';
   }
   function axisRows(s) {
     const tier = tierOf(Math.max(...s));
@@ -263,7 +303,7 @@
       : 'Sở trường: <strong>' + ex.top.name + '</strong> (' + fmt(ex.mx) + ') · Cần khổ luyện: <strong>' + ex.low.name + '</strong> (' + fmt(ex.mn) + ')';
     return '<div class="gr-page">' + heading('GIANG HỒ TU LUYỆN', 'Tu vi của ' + esc(heroName()), sub, '<div class="gr-head-actions"><button type="button" class="btn primary" data-gr-spend>Đổi bảo vật</button><button type="button" class="btn" data-gr-report>Xem báo cáo tu luyện</button><button type="button" class="btn" data-gr-change>Đổi hiệp khách</button></div>') +
       '<div class="gr-grid">' + stage(s) + '<section class="panel gr-radar-panel" aria-label="Bát phương đồ nội lực"><h2>Bát phương đồ</h2><div class="gr-radar-wrap" id="gr-radar">' + radar(s) + '</div><p class="gr-summary">' + summary + '</p>' + wallet(s) + '</section></div>' +
-      (window.zenStory ? window.zenStory.panel() : '') + (window.zenAch ? window.zenAch.panel() : '') /* v1.99.0 Bảng vàng */ + axisRows(s) + history() + spendPanel() + '<section class="panel gr-how"><h2>Tâm pháp tu luyện</h2><ul class="gr-how-list"><li>Mỗi việc hoàn thành cho các hạ <strong>2 lần vận công</strong> (1 điểm). Bảng vận công hiện ra trước lời chúc mừng.</li><li>Mỗi lần bấm <strong>+</strong> dồn 0,5 điểm vào mạch đã chọn; dồn cả hai lần vào một mạch cũng được.</li><li>Mỗi việc chỉ được vận công một lần.</li><li>Bấm <strong>Đổi bảo vật</strong> để ghi lại món đã mua hoặc quy đổi; tu vi bị trừ khỏi Bát phương đồ. Ghi nhầm thì sửa hoặc hủy quy đổi để hoàn điểm. Cấp và cảnh giới tính theo tổng tu vi đã luyện nên không tụt khi đổi bảo vật.</li><li><strong>100 cấp</strong> chia 10 cảnh giới, mỗi cảnh giới 10 trọng. Cảnh giới sau tốn gấp đôi cảnh giới trước: 1 điểm mỗi cấp ở Sơ nhập giang hồ, 2 điểm ở Tam lưu cao thủ… 512 điểm ở Võ lâm chí tôn; cấp 100 cần 10.230 điểm.</li></ul>' + scaleTable(r) + '</section></div>';
+      (window.zenStory ? window.zenStory.panel() : '') + (window.zenAch ? window.zenAch.panel() : '') /* v1.99.0 Bảng vàng */ + axisRows(s) + history() + spendPanel() + '<section class="panel gr-how"><h2>Tâm pháp tu luyện</h2><ul class="gr-how-list"><li>Mỗi việc hoàn thành cho các hạ <strong>2 lần vận công</strong> (1 điểm). Bảng vận công hiện ra trước lời chúc mừng.</li><li>Mỗi lần bấm <strong>+</strong> dồn 0,5 điểm vào mạch đã chọn; dồn cả hai lần vào một mạch cũng được.</li><li>Mỗi việc chỉ được vận công một lần.</li><li>Bấm <strong>Đổi bảo vật</strong> để ghi lại món đã mua hoặc quy đổi; tu vi bị trừ khỏi Bát phương đồ. Ghi nhầm thì sửa hoặc hủy quy đổi để hoàn điểm. Cấp và cảnh giới tính theo tổng tu vi đã luyện nên không tụt khi đổi bảo vật.</li><li><strong>100 cấp</strong> chia 10 cảnh giới, mỗi cấp một danh xưng. Cảnh giới sau tốn chừng gấp đôi cảnh giới trước: 0,5 điểm mỗi cấp ở Sơ nhập giang hồ, 1 điểm ở Tam lưu cao thủ… 341 điểm ở Võ lâm chí tôn.</li><li>Cấp 10, 20 … 100 là <strong>ải đột phá</strong> sang cảnh giới mới, tốn chừng ba lần cấp thường. Cấp 100 cần 8.184 điểm: đột phá thành Thần. Trên Thần còn 3 thần cấp tới <strong>Thần Vương</strong>, mỗi thần cấp 2.048 điểm.</li></ul>' + scaleTable(r) + '</section></div>';
   }
 
   // ---- Hoạt họa nhân vật --------------------------------------------------------------------------------------------------
@@ -394,10 +434,10 @@
         const parts = [];
         if (a.source !== 'task') parts.push('Đã dồn ' + fmt(a.spent * STEP) + ' điểm công lực vào Điểm tích lũy.');
         if (after.realm !== before.realm) parts.push('Chúc mừng! ' + heroName() + ' đã đột phá, đạt cảnh giới ' + after.name + ' (cấp ' + after.level + ').');
-        // v1.97.0 (Ấn Son): đột phá sang cảnh giới mới (từ Tam lưu cao thủ, cấp 11 trở lên) thì mở thêm nghi thức Đột phá
+        // v1.97.0 (Ấn Son): đột phá sang cảnh giới mới (từ Tam lưu cao thủ, cấp 10 trở lên) thì mở thêm nghi thức Đột phá
         // (giangho-fx.js); câu chúc vẫn ở thông báo. Bước vào Sơ nhập giang hồ ở điểm đầu tiên là khởi đầu, không phải đột phá.
         if (after.realm !== before.realm && after.realm >= 2 && window.zenFx?.breakthrough) breakthroughTo = after;
-        else if (after.level > before.level) parts.push('Chúc mừng! ' + heroName() + ' lên cấp ' + after.level + ' · ' + after.name + ', ' + after.tier.toLowerCase() + '.');
+        else if (after.level > before.level) parts.push('Chúc mừng! ' + heroName() + ' lên cấp ' + after.level + ' · ' + after.title + ' (' + after.name + ').');
         toastText = parts.join(' ');
       }
     }
@@ -547,7 +587,7 @@
     const tile = (id, label, value, sub) => '<div class="gr-tile" data-tile="' + id + '"><small>' + label + '</small><strong>' + value + '</strong><span>' + sub + '</span></div>';
     const tiles = '<div class="gr-tiles">' +
       tile('total', rep.spent ? 'Tu vi hiện có' : 'Tổng tu vi', fmt(rep.total) + ' điểm', rep.entries + ' lần vận công' + (rep.spent ? ' · đã đổi bảo vật ' + fmt(rep.spent) : '')) +
-      tile('realm', 'Cảnh giới', r.name, r.top ? 'Cấp 100/100 · cấp tối cao' : (r.level ? 'Cấp ' + r.level + '/100' : 'Chưa nhập cấp') + ' · còn ' + fmt(r.need) + ' điểm lên cấp ' + (r.level + 1)) +
+      tile('realm', 'Cảnh giới', r.name, r.top ? levelLabel(r.level) + ' · Thần Vương, cấp tối cao' : (r.level ? levelLabel(r.level) : 'Chưa nhập cấp') + ' · còn ' + fmt(r.need) + ' điểm lên cấp ' + (r.level + 1)) +
       tile('week', '7 ngày qua', '+' + fmt(rep.week.last) + ' điểm', '7 ngày trước đó: ' + fmt(rep.week.prev) + ' điểm') +
       tile('streak', 'Khổ luyện liền mạch', rep.streak + ' ngày', 'liên tiếp có vận công') + '</div>';
     const tier = tierOf(Math.max(...s));
@@ -565,7 +605,7 @@
     reporting = true;
     go('growth');
   }
-  window.zenGrowth = { AXES, started, scores, earnedScores, spentScores, total, realmOf, REALMS, LEVEL_AT, extremes, fmt, openAward, growth, STEP, iconSvg, habitStreak, buildReport, tipsOf, openReport, heroName, openSpend };
+  window.zenGrowth = { AXES, started, scores, earnedScores, spentScores, total, realmOf, realmInfo, levelLabel, REALMS, REALM_FROM, LEVEL_NAMES, LEVEL_AT, LEVEL_MAX, GOD, extremes, fmt, openAward, growth, STEP, iconSvg, habitStreak, buildReport, tipsOf, openReport, heroName, openSpend };
 
   // ---- Sử dụng điểm (v1.81.0) ---------------------------------------------------------------------------------------------
   // Form ghi vật phẩm đã mua / quy đổi và số điểm trừ ở từng chỉ số. Mỗi lần quy đổi là một dòng trong data.growth.spend;

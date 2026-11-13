@@ -1,5 +1,5 @@
 // v1.99.0 (Bảng Vàng): thành tựu trong trang Tu vi (dist/giangho-ach.js), tính từ dữ liệu sẵn có, dấu đã báo bằng biên nhận.
-//  1. Bảng vàng: đủ 18 danh hiệu theo nhóm; đạt / chưa đạt đúng theo dữ liệu (nhiệm vụ công thành, chuỗi Nhật khóa có ngày nghỉ, đại sự
+//  1. Bảng vàng: đủ 19 danh hiệu theo nhóm (v2.5.0 thêm "Thành Thần" ở cảnh giới 11); đạt / chưa đạt đúng theo dữ liệu (nhiệm vụ công thành, chuỗi Nhật khóa có ngày nghỉ, đại sự
 //     viên mãn, hồi vốn, Tàng thư, cảnh giới, chương Truyện ký đã đọc); chưa đạt có thanh tiến độ và số "23/25".
 //  2. Lần đầu: ghi notice:ach-init cùng các danh hiệu đang đạt, không thông báo dồn dập. Đạt thêm danh hiệu thì thông báo một lần và
 //     ghi biên nhận; thiết bị khác đã báo thì không báo lại; danh hiệu đạt ở nơi khác mà chưa báo thì báo khi mở.
@@ -10,7 +10,8 @@ import { startHarness, makeProject } from './lib/browser-harness.mjs';
 
 const NOW = '2026-11-12T09:00:00+07:00';
 const day = (n) => new Date(Date.parse(NOW) + n * 864e5 + 7 * 3600e3).toISOString().slice(0, 10);
-const growth = { v: 1, hero: 'nam', name: 'Lâm Phong', since: day(-60), log: [{ id: 'e1', d: day(-1), s: 'task', k: 'task:e1', n: 'Việc cũ', p: [22, 0, 0, 0, 0, 0, 0, 0] }] };
+// 7 điểm: cấp 9, vẫn ở Sơ nhập giang hồ (v2.5.0: thang mới dễ hơn 20%; 11 điểm của bản cũ nay đã là Tam lưu cao thủ).
+const growth = { v: 1, hero: 'nam', name: 'Lâm Phong', since: day(-60), log: [{ id: 'e1', d: day(-1), s: 'task', k: 'task:e1', n: 'Việc cũ', p: [14, 0, 0, 0, 0, 0, 0, 0] }] };
 const seed = (withGrowth = true) => () => {
   const a = makeProject('p1', 'Alpha', '#7950c8', 30);
   a.tasks.forEach((t, i) => (t.col = i < 20 ? 'Done' : 'List'));
@@ -63,10 +64,10 @@ try {
       await h.show(page, 'growth');
       await page.waitForSelector('.gr-ach-panel');
       let p = await panel(page);
-      assert.equal(p.items, 18, '18 danh hiệu' + at);
+      assert.equal(p.items, 19, '19 danh hiệu' + at);
       assert.deepEqual(p.groups, ['Công thành', 'Khổ luyện', 'Đại sự', 'Ngân khố', 'Tàng thư', 'Tu vi', 'Truyện ký'], 'các nhóm' + at);
       assert.deepEqual(p.done, DONE, 'đạt đúng theo dữ liệu' + at);
-      assert.equal(p.count, '5/18', 'đếm danh hiệu đã đạt' + at);
+      assert.equal(p.count, '5/19', 'đếm danh hiệu đã đạt' + at);
       assert.deepEqual(p.task25, { done: false, state: '23/25', now: '23' }, 'tiến độ danh hiệu chưa đạt' + at);
       assert.deepEqual(p.habit30, { done: false, state: '7/30', now: '7' }, 'chuỗi dài nhất 7 ngày (ngày nghỉ không đứt chuỗi)' + at);
       await page.waitForFunction(() => readReceiptKeys.has('notice:ach-init'));
@@ -83,7 +84,7 @@ try {
       await page.waitForFunction(() => readReceiptKeys.has('notice:ach-task-25'));
       assert.ok(server.receipts.includes('notice:ach-task-25'), 'ghi biên nhận danh hiệu mới' + at);
       p = await panel(page);
-      assert.equal(p.count, '6/18', 'Bảng vàng cập nhật' + at);
+      assert.equal(p.count, '6/19', 'Bảng vàng cập nhật' + at);
       const n = server.receipts.length;
       await page.evaluate(() => render());
       await page.waitForTimeout(300);

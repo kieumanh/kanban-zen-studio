@@ -196,9 +196,9 @@ try {
     }
 
     // 5. Thông báo điểm nghiệp: lên cảnh giới mới thì báo; tắt thì im.
-    // v1.85.0: 11 điểm (cấp 10) + 1 điểm = 12 điểm = cấp 11, bước vào cảnh giới Tam lưu cao thủ.
+    // v2.5.0: 7,5 điểm (cấp 9) + 1 điểm = 8,5 điểm, qua ải cấp 10, bước vào cảnh giới Tam lưu cao thủ (thang v1.85.0: 11 → 12 điểm).
     for (const [notify, expectToast] of [[undefined, true], [false, false]]) {
-      const g = growth({ log: [entry('big', 1, [22, 0, 0, 0, 0, 0, 0, 0], 'Việc lớn')], ...(notify === false ? { notify: false } : {}) });
+      const g = growth({ log: [entry('big', 1, [15, 0, 0, 0, 0, 0, 0, 0], 'Việc lớn')], ...(notify === false ? { notify: false } : {}) });
       const { context, page } = await h.open(width, { touch, workspace: seed(g)() });
       await h.show(page, 'board');
       await page.evaluate(() => moveTask(project('p1'), project('p1').tasks[0], 'Done'));
