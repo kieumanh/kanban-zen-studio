@@ -184,7 +184,7 @@ try {
       await page.locator('dialog.gr-breakthrough button').click();
       await page.waitForFunction(() => !document.querySelector('dialog.gr-breakthrough'));
       await page.waitForSelector('dialog.gr-story[open]');
-      assert.equal(await page.locator('#gr-story-title').textContent(), 'Lá thư đầu tiên', 'đóng nghi thức thì mở chương của ải cấp 10' + at);
+      assert.equal(await page.locator('#gr-story-title').textContent(), 'Trấn ngủ say', 'đóng nghi thức thì mở chương của ải cấp 10 (v2.6.0: truyện mới)' + at);
       await page.locator('[data-story-close]').click();
       await page.waitForFunction(() => !document.querySelector('dialog.gr-story'));
       await clearOverlay(page);

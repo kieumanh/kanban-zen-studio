@@ -416,6 +416,23 @@ dialog.gr-story::backdrop{background:#30251c99}
 .gr-story-say{padding:12px 14px 14px;border:1px solid color-mix(in srgb,var(--gr-gold) 45%,var(--gr-line));border-radius:14px;background:var(--gr-wash);min-height:104px}
 .gr-story-who{margin:0 0 4px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gr-seal-text)}
 .gr-story-who[data-who=ke]{color:var(--muted)}
+/* v2.6.0 (Song Nguyệt): cảnh Huyết Nguyệt đài: trời chiều tím, trăng đỏ, không có hiệp khách; tên phe ác màu son sẫm. */
+.gr-story-stage.is-moon{background:linear-gradient(180deg,#3a2233,#6b2a3a 58%,#2a1d2c)}
+.gr-story-stage.is-moon{position:relative;overflow:hidden}
+.gr-story-stage.is-moon .gr-sc-sun{display:none}
+.gr-story-stage.is-moon::after{content:'';position:absolute;top:16px;right:16%;width:48px;height:48px;border-radius:50%;background:radial-gradient(circle at 38% 36%,#ffb1a8,#d8344c 58%,#8e1328);box-shadow:0 0 26px 8px #d8344c66;animation:gr-blood-moon 4.5s ease-in-out infinite alternate;pointer-events:none}
+@keyframes gr-blood-moon{from{box-shadow:0 0 18px 4px #d8344c55}to{box-shadow:0 0 34px 12px #e0485e88}}
+@media (prefers-reduced-motion:reduce){.gr-story-stage.is-moon::after{animation:none}}
+.gr-story-stage.is-moon .gr-sc-far,.gr-story-stage.is-moon .gr-sc-mid,.gr-story-stage.is-moon .gr-sc-near{fill:#241722;opacity:.9}
+.gr-story-stage.is-moon .gr-sc-cloud,.gr-story-stage.is-moon .gr-sc-mist{fill:#8a4256;opacity:.35}
+.gr-story-stage.is-moon .gr-sc-petal{fill:#c23b52}
+.gr-story-stage.is-moon .gr-sc-needle{fill:#1d1420}
+.gr-story-stage.is-moon .gr-sc-trunk{stroke:#1d1420}
+.gr-story-stage.is-moon .gr-sc-birds{stroke:#c9a7b0}
+.gr-story-who[data-side=ac]{color:#9c1f35}
+:root[data-theme=dark] .gr-story-who[data-side=ac]{color:#f08a9b}
+.gr-story-lesson small.gr-story-rival{display:block;margin-top:4px;color:#9c1f35}
+:root[data-theme=dark] .gr-story-lesson small.gr-story-rival{color:#f08a9b}
 .gr-story-text{margin:0;font:500 17px/1.65 var(--serif,Georgia,serif);color:var(--gr-ink);text-wrap:pretty}
 .gr-story-text.is-narration{font-style:italic}
 .gr-story-lesson{display:grid;justify-items:center;gap:8px;padding:22px 16px;border:1px dashed color-mix(in srgb,var(--gr-gold) 60%,var(--gr-line));border-radius:16px;background:var(--gr-wash);text-align:center}

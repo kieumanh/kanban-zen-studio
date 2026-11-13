@@ -3186,6 +3186,39 @@
 :root[data-contrast=high] dialog.gr-story::backdrop {
     background: rgba(48,37,28,0.6)
 }
+:root[data-contrast=high] .gr-story-stage.is-moon::after {
+    background: radial-gradient(circle at 38% 36%,#ffffff,#d8344c 58%,#8e1328)
+}
+:root[data-contrast=high] .gr-story-stage.is-moon .gr-sc-far, :root[data-contrast=high] .gr-story-stage.is-moon .gr-sc-mid, :root[data-contrast=high] .gr-story-stage.is-moon .gr-sc-near {
+    fill: #060606
+}
+:root[data-contrast=high] .gr-story-stage.is-moon .gr-sc-cloud, :root[data-contrast=high] .gr-story-stage.is-moon .gr-sc-mist {
+    fill: #060606
+}
+:root[data-contrast=high] .gr-story-stage.is-moon .gr-sc-petal {
+    fill: #060606
+}
+:root[data-contrast=high] .gr-story-stage.is-moon .gr-sc-needle {
+    fill: #060606
+}
+:root[data-contrast=high] .gr-story-stage.is-moon .gr-sc-trunk {
+    stroke: #060606
+}
+:root[data-contrast=high] .gr-story-stage.is-moon .gr-sc-birds {
+    stroke: #060606
+}
+:root[data-contrast=high] .gr-story-who[data-side=ac] {
+    color: #060606
+}
+:root[data-contrast=high][data-theme=dark] .gr-story-who[data-side=ac] {
+    color: #060606
+}
+:root[data-contrast=high] .gr-story-lesson small.gr-story-rival {
+    color: #060606
+}
+:root[data-contrast=high][data-theme=dark] .gr-story-lesson small.gr-story-rival {
+    color: #060606
+}
 :root[data-contrast=high] .gr-story-seal {
     color: #ffffff
 }
@@ -7087,6 +7120,39 @@
 }
 :root[data-theme=dark][data-contrast=high] dialog.gr-story::backdrop {
     background: rgba(48,37,28,0.6)
+}
+:root[data-theme=dark][data-contrast=high] .gr-story-stage.is-moon::after {
+    background: radial-gradient(circle at 38% 36%,#030303,#d8344c 58%,#8e1328)
+}
+:root[data-theme=dark][data-contrast=high] .gr-story-stage.is-moon .gr-sc-far, :root[data-theme=dark][data-contrast=high] .gr-story-stage.is-moon .gr-sc-mid, :root[data-theme=dark][data-contrast=high] .gr-story-stage.is-moon .gr-sc-near {
+    fill: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .gr-story-stage.is-moon .gr-sc-cloud, :root[data-theme=dark][data-contrast=high] .gr-story-stage.is-moon .gr-sc-mist {
+    fill: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .gr-story-stage.is-moon .gr-sc-petal {
+    fill: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .gr-story-stage.is-moon .gr-sc-needle {
+    fill: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .gr-story-stage.is-moon .gr-sc-trunk {
+    stroke: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .gr-story-stage.is-moon .gr-sc-birds {
+    stroke: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .gr-story-who[data-side=ac] {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high][data-theme=dark] .gr-story-who[data-side=ac] {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .gr-story-lesson small.gr-story-rival {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high][data-theme=dark] .gr-story-lesson small.gr-story-rival {
+    color: #f5f5f5
 }
 :root[data-theme=dark][data-contrast=high] .gr-story-seal {
     color: #ffffff

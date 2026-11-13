@@ -5324,6 +5324,43 @@
 :root[data-style=giangho] .gr-story-who[data-who=ke] {
     color: var(--muted)
 }
+:root[data-style=giangho] .gr-story-stage.is-moon {
+    background: linear-gradient(180deg,#382814,#6c2b2e 58%,#2d2010)
+}
+:root[data-style=giangho] .gr-story-stage.is-moon::after {
+    background: radial-gradient(circle at 38% 36%,#ffb1a8,#d8344c 58%,#8e1328);
+    box-shadow: 0 0 26px 8px rgba(216,52,76,0.4)
+}
+:root[data-style=giangho] .gr-story-stage.is-moon .gr-sc-far, :root[data-style=giangho] .gr-story-stage.is-moon .gr-sc-mid, :root[data-style=giangho] .gr-story-stage.is-moon .gr-sc-near {
+    fill: #26180f
+}
+:root[data-style=giangho] .gr-story-stage.is-moon .gr-sc-cloud, :root[data-style=giangho] .gr-story-stage.is-moon .gr-sc-mist {
+    fill: #7d3537
+}
+:root[data-style=giangho] .gr-story-stage.is-moon .gr-sc-petal {
+    fill: #b12944
+}
+:root[data-style=giangho] .gr-story-stage.is-moon .gr-sc-needle {
+    fill: #22150c
+}
+:root[data-style=giangho] .gr-story-stage.is-moon .gr-sc-trunk {
+    stroke: #22150c
+}
+:root[data-style=giangho] .gr-story-stage.is-moon .gr-sc-birds {
+    stroke: #b49d8e
+}
+:root[data-style=giangho] .gr-story-who[data-side=ac] {
+    color: #8b0528
+}
+:root[data-style=giangho][data-theme=dark] .gr-story-who[data-side=ac] {
+    color: #e07c7d
+}
+:root[data-style=giangho] .gr-story-lesson small.gr-story-rival {
+    color: #8b0528
+}
+:root[data-style=giangho][data-theme=dark] .gr-story-lesson small.gr-story-rival {
+    color: #e07c7d
+}
 :root[data-style=giangho] .gr-story-text {
     color: var(--gr-ink)
 }
@@ -11895,6 +11932,43 @@
 }
 :root[data-style=giangho][data-theme=dark] .gr-story-who[data-who=ke] {
     color: var(--muted)
+}
+:root[data-style=giangho][data-theme=dark] .gr-story-stage.is-moon {
+    background: linear-gradient(180deg,#382814,#6c2b2e 58%,#2d2010)
+}
+:root[data-style=giangho][data-theme=dark] .gr-story-stage.is-moon::after {
+    background: radial-gradient(circle at 38% 36%,#4e1d1a,#d8344c 58%,#8e1328);
+    box-shadow: 0 0 26px 8px rgba(230,67,87,0.4)
+}
+:root[data-style=giangho][data-theme=dark] .gr-story-stage.is-moon .gr-sc-far, :root[data-style=giangho][data-theme=dark] .gr-story-stage.is-moon .gr-sc-mid, :root[data-style=giangho][data-theme=dark] .gr-story-stage.is-moon .gr-sc-near {
+    fill: #f5e5db
+}
+:root[data-style=giangho][data-theme=dark] .gr-story-stage.is-moon .gr-sc-cloud, :root[data-style=giangho][data-theme=dark] .gr-story-stage.is-moon .gr-sc-mist {
+    fill: #fdc3c1
+}
+:root[data-style=giangho][data-theme=dark] .gr-story-stage.is-moon .gr-sc-petal {
+    fill: #fbb9bd
+}
+:root[data-style=giangho][data-theme=dark] .gr-story-stage.is-moon .gr-sc-needle {
+    fill: #f5e7de
+}
+:root[data-style=giangho][data-theme=dark] .gr-story-stage.is-moon .gr-sc-trunk {
+    stroke: #f5e7de
+}
+:root[data-style=giangho][data-theme=dark] .gr-story-stage.is-moon .gr-sc-birds {
+    stroke: #cdb7aa
+}
+:root[data-style=giangho][data-theme=dark] .gr-story-who[data-side=ac] {
+    color: #fdc5c6
+}
+:root[data-style=giangho][data-theme=dark][data-theme=dark] .gr-story-who[data-side=ac] {
+    color: #f4a5a4
+}
+:root[data-style=giangho][data-theme=dark] .gr-story-lesson small.gr-story-rival {
+    color: #fdc5c6
+}
+:root[data-style=giangho][data-theme=dark][data-theme=dark] .gr-story-lesson small.gr-story-rival {
+    color: #f4a5a4
 }
 :root[data-style=giangho][data-theme=dark] .gr-story-text {
     color: var(--gr-ink)

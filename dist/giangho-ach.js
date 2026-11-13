@@ -50,7 +50,11 @@
   const habitStreak = () => (typeof data !== 'undefined' && Array.isArray(data.dailyHabits) ? data.dailyHabits.reduce((m, h) => Math.max(m, bestStreak(h)), 0) : 0);
   const notes = () => (typeof data !== 'undefined' && Array.isArray(data.notes) ? data.notes.length : 0);
   const realm = () => (started() ? G().realmOf(G().total(G().earnedScores())).realm : 0);
-  const chapters = () => [...receipts()].filter((k) => /^notice:story-([1-9]\d*)$/.test(k)).length;
+  // v2.6.0: truyện mới đánh dấu bằng notice:tale-N; danh hiệu đã đạt nhờ truyện cũ (notice:story-N) vẫn giữ.
+  const chapters = () => {
+    const keys = [...receipts()];
+    return Math.max(keys.filter((k) => /^notice:story-([1-9]\d*)$/.test(k)).length, keys.filter((k) => /^notice:tale-([1-9]\d*)$/.test(k)).length);
+  };
 
   // [mã, tên, mô tả, nhóm, số liệu, mốc]. v2.5.0: thêm realm-11 (Thành Thần).
   const LIST = [
@@ -72,7 +76,7 @@
     ['realm-10', 'Võ lâm chí tôn', 'Đột phá tới cảnh giới Võ lâm chí tôn, đỉnh cao nhân gian.', 'Tu vi', realm, 10],
     ['realm-11', 'Thành Thần', 'Phá ải cấp 100, bước vào Thần cảnh.', 'Tu vi', realm, 11],
     ['story-5', 'Nghe kể giang hồ', 'Đọc 5 chương Truyện ký.', 'Truyện ký', chapters, 5],
-    ['story-20', 'Thông tỏ truyện ký', 'Đọc trọn 20 chương Truyện ký.', 'Truyện ký', chapters, 20],
+    ['story-20', 'Thông tỏ truyện ký', 'Đọc 20 chương Truyện ký.', 'Truyện ký', chapters, 20],
   ];
   function evaluate() {
     const cache = new Map();
