@@ -461,7 +461,7 @@ taskDetail = function (p, t) {
   };
   body.append(comments);
   const actions = body.querySelector(".detail-actions");
-  if(actions) { const h=[...body.querySelectorAll("h3")].find(x=>x.textContent==="Checklist");if(h)h.before(actions);else body.append(actions); }
+  if(actions) { const h=[...body.querySelectorAll("h3")].find(x=>x.classList?.contains("task-check-heading")||x.textContent==="Checklist");if(h)h.before(actions);else body.append(actions); }
   const rows = [...body.querySelectorAll(".compact-check")];
   if (rows.length) {
     const list = document.createElement("div");
@@ -1374,14 +1374,15 @@ function wfFilterChoices(root){
 }
 const wfSettingsBefore=accountPanel;
 accountPanel=function(){wfSettingsBefore();const body=$('#editor-body');if(!body?.querySelector('.profile-card'))return;body.classList.add('wf-settings');const profile=body.querySelector('.profile-card');const groups=[];
- const wrap=(title,nodes)=>{const d=document.createElement('details');d.className='wf-settings-group';const summary=document.createElement('summary');summary.textContent=title;d.append(summary);const content=document.createElement('div');content.className='wf-settings-content';nodes.forEach(n=>content.append(n));d.append(content);groups.push(d);return d;};
- const profileGroup=wrap('Hồ sơ',[profile]);profileGroup.open=true;
+ // v2.4.0 (Kiên Cố): mỗi nhóm mang data-group để mã khác tìm theo mã nhóm, không theo chữ tiêu đề (chữ có thể đổi, ví dụ Giang hồ).
+ const wrap=(title,nodes,key='')=>{const d=document.createElement('details');d.className='wf-settings-group';if(key)d.dataset.group=key;const summary=document.createElement('summary');summary.textContent=title;d.append(summary);const content=document.createElement('div');content.className='wf-settings-content';nodes.forEach(n=>content.append(n));d.append(content);groups.push(d);return d;};
+ const profileGroup=wrap('Hồ sơ',[profile],'profile');profileGroup.open=true;
  body.querySelectorAll('.help-actions').forEach(row=>{if(row.querySelector('h3.settings-section')){while(row.firstChild)row.before(row.firstChild);row.remove();}});
- const headings=[...body.querySelectorAll(':scope > h3.settings-section')];headings.forEach(h=>{const nodes=[];let n=h.nextSibling;while(n&&!(n.nodeType===1&&(n.matches('h3.settings-section,.settings-signout')))){const next=n.nextSibling;nodes.push(n);n=next;}const title=h.textContent.includes('Thông báo')?'Thông báo':h.textContent.includes('Tổng kết tuần')?'Tổng kết tuần':h.textContent.includes('Dữ liệu')?'Dữ liệu & đồng bộ':'Tài khoản & bảo mật';h.remove();wrap(title,nodes);});
- const sessions=body.querySelector('.settings-signout');if(sessions)wrap('Phiên đăng nhập',[sessions]);
- const other=[...body.children].filter(n=>n.tagName!=='H2');if(other.length)wrap('Các tính năng khác',other);
- const help=document.createElement('button');help.type='button';help.className='btn';help.dataset.action='help';help.textContent='Hướng dẫn sử dụng';wrap('Hướng dẫn',[help]);
- const helpGroup=groups.pop();const sessionIndex=groups.findIndex(g=>g.querySelector('summary')?.textContent==='Phiên đăng nhập');groups.splice(sessionIndex<0?groups.length:sessionIndex,0,helpGroup);
+ const headings=[...body.querySelectorAll(':scope > h3.settings-section')];headings.forEach(h=>{const nodes=[];let n=h.nextSibling;while(n&&!(n.nodeType===1&&(n.matches('h3.settings-section,.settings-signout')))){const next=n.nextSibling;nodes.push(n);n=next;}const TITLES={notify:'Thông báo',weekly:'Tổng kết tuần',data:'Dữ liệu & đồng bộ',account:'Tài khoản & bảo mật'};const key=TITLES[h.dataset.section]?h.dataset.section:h.textContent.includes('Thông báo')?'notify':h.textContent.includes('Tổng kết tuần')?'weekly':h.textContent.includes('Dữ liệu')?'data':'account';h.remove();wrap(TITLES[key],nodes,key);});
+ const sessions=body.querySelector('.settings-signout');if(sessions)wrap('Phiên đăng nhập',[sessions],'session');
+ const other=[...body.children].filter(n=>n.tagName!=='H2');if(other.length)wrap('Các tính năng khác',other,'other');
+ const help=document.createElement('button');help.type='button';help.className='btn';help.dataset.action='help';help.textContent='Hướng dẫn sử dụng';wrap('Hướng dẫn',[help],'help');
+ const helpGroup=groups.pop();const sessionIndex=groups.findIndex(g=>g.dataset.group==='session');groups.splice(sessionIndex<0?groups.length:sessionIndex,0,helpGroup);
  groups.forEach(group=>body.append(group));
  $('#editor').addEventListener('close',()=>body.classList.remove('wf-settings'),{once:true});
 };
@@ -1413,12 +1414,12 @@ function zenArrangeTaskForm(isNew=false){const body=$('#editor-body'),form=$('#e
  const main=section('main','Nội dung chính'),schedule=section('schedule','Lịch & thời hạn'),actions=section('actions','Trạng thái & tài liệu'),checks=section('checks','Checklist');
  const title=form.querySelector('[name=title]')?.closest('.field'),description=body.querySelector('.wf-description-field');if(title)main.append(title);if(description)main.append(description);
  for(const selector of ['.form-intro','.priority-choices','[name=priority]','.keyword-choices','[name=tag]']){const el=body.querySelector(selector);if(el)main.append(el.closest('.field')||el);}
- body.querySelectorAll(':scope>.help-copy').forEach(el=>{if(el.textContent.includes('Lịch theo giờ')||el.textContent.includes('Chỉnh trực tiếp'))el.remove();});
+ body.querySelectorAll(':scope>.help-copy').forEach(el=>{if(el.classList.contains('task-edit-hint')||el.textContent.includes('Lịch theo giờ')||el.textContent.includes('Chỉnh trực tiếp'))el.remove();});
  for(const name of ['start','end']){const label=form.querySelector('[name='+name+']')?.closest('.field');if(label)schedule.append(label);}
  const info=document.createElement('p');info.className='help-copy';info.textContent='Ngày kết thúc đồng thời là hạn hoàn thành. Giờ Việt Nam.';schedule.append(info);
  const controls=body.querySelector('.detail-actions'),tools=body.querySelector('.wf-task-tools');const col=form.querySelector('[name=col]')?.closest('.field');if(col){if(!isNew&&controls?.querySelector('.wf-state-choices'))col.classList.add('zen-state-select-secondary');actions.append(col);}if(controls)actions.append(controls);if(tools)actions.append(tools);
  const liveProgress=body.querySelector('.task-live-progress');if(liveProgress)checks.append(liveProgress);
- const oldHeading=[...body.querySelectorAll(':scope>h3')].find(h=>h.textContent==='Checklist');if(oldHeading)oldHeading.remove();const list=body.querySelector('.wf-check-sort-list');if(list)checks.append(list);const extra=form.querySelector('[name=extra-checks],[name=checks]')?.closest('.field');if(extra)checks.append(extra);
+ const oldHeading=[...body.querySelectorAll(':scope>h3')].find(h=>h.classList?.contains('task-check-heading')||h.textContent==='Checklist');if(oldHeading)oldHeading.remove();const list=body.querySelector('.wf-check-sort-list');if(list)checks.append(list);const extra=form.querySelector('[name=extra-checks],[name=checks]')?.closest('.field');if(extra)checks.append(extra);
  const anchor=heading||body.firstChild;if(anchor){anchor.after(main);main.after(schedule);schedule.after(actions);actions.after(checks);}else body.prepend(main,schedule,actions,checks);
  body.querySelectorAll('.fields-row').forEach(row=>{if(!row.children.length)row.remove();});
  body.querySelectorAll(':scope>.help-copy').forEach(el=>{if(/Chọn ngày bắt đầu|Ngày kết thúc/.test(el.textContent))el.remove();});

@@ -173,6 +173,7 @@ jobs:
           node tests/giangho-sync-browser.mjs
           node tests/giangho-columns-browser.mjs
           node tests/focus-sound-browser.mjs
+          node tests/settings-groups-browser.mjs
           node tests/device-audit-browser.mjs
           node tests/gantt-edge-route-browser.mjs
           node tests/note-paste-lines-browser.mjs

@@ -58,7 +58,8 @@
   };
   function arrange() {
     const body = document.querySelector('#editor-body');
-    const group = [...(body?.querySelectorAll('details.wf-settings-group') || [])].find((d) => d.querySelector(':scope > summary')?.textContent.trim() === 'Thông báo');
+    // v2.4.0 (Kiên Cố): tìm nhóm theo mã (data-group), chữ tiêu đề chỉ là đường lùi cho bản cũ.
+    const group = body?.querySelector('details.wf-settings-group[data-group=notify]') || [...(body?.querySelectorAll('details.wf-settings-group') || [])].find((d) => d.querySelector(':scope > summary')?.textContent.trim() === 'Thông báo');
     const content = group?.querySelector(':scope > .wf-settings-content');
     if (!content || content.querySelector('.nf-blocks') || !window.zenGrowth || !window.zenHabits) return;
     const wrap = document.createElement('div');
