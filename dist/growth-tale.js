@@ -18,10 +18,16 @@
 //  - Hàn Phong "phản bội" ở cấp 70 (tua kiếm ba nút: còn nợ, sẽ trả); từ cấp 60, "Tiểu Mộc" có điều lạ (con rùa sau bếp rụt cổ);
 //    kế giữ trấn Thanh Khê bị lộ (cấp 84); Vô Vọng là Mạc Vọng, con trai Mạc Trấn Hải (cấp 86);
 //  - sợi chỉ đỏ buộc vào chính ngực hiệp khách (cấp 82); Miên Hồ được dặn "đừng giết, chỉ nhớ mặt" (cấp 10).
-//  - Sau cấp 95: sự thật. Giáo chủ làm mọi việc ác chỉ để gom đủ nội lực mở cánh cửa 99 → 100, và có giao ước với Vô Yểm Tà Thần:
-//    làm đủ nghiệp ác thì được kế thừa thần vị Huyết Nguyệt Thần.
-//  - Cấp 99: đại chiến Vân Mộng; hai bên soi vào nhau mà cùng phá cửa lên cấp 100. Hiệp khách nhận ngôi Hằng Nguyệt Thần,
-//    Giáo chủ thành Huyết Nguyệt Thần: mở ra Song thần chi chiến (3 thần cấp tới Thần Vương, viết tiếp ở bản sau).
+//  - Sau cấp 95: sự thật. Vô Yểm Tà Thần là một Phương thần bị đày, không tự mở được cánh cửa 99 → 100 (Thiên Môn). Nó nuôi
+//    Giáo chủ và mười Nguyệt Sứ làm đá mài, để hiệp khách mở cửa thay nó rồi bước theo qua sợi chỉ đỏ trên ngực hiệp khách.
+//  - v2.12.0 (Thiên Môn Ký): chặng 90–100 viết chi tiết, 18 chương. Chương có cấp lẻ (97.5, 98.3 … 99.8) mở giữa chừng một cấp:
+//    phần thập phân là phần đã đi của đường lên cấp kế tiếp (cấp 98–100 kéo dài nhiều tháng).
+//    90 Hàn Phong hẹn canh ba · 91 Thiên Diện lộ mặt (Tiểu Mộc giả) · 92 cứu Tiểu Mộc thật, chiếc ghế thứ mười một · 93 Lệ thôn:
+//    hiệp khách là đứa trẻ trong giỏ · 94 gánh nước cùng sư phụ, Tà thần chiếm xác Giáo chủ · 95 Mạc Trấn Hải chết đứng ·
+//    96 sự thật · 97 Thiên Hình: Thiên Môn sẽ bị niêm ở kỳ nguyệt thực; Không Nguyệt là Hằng Nguyệt tinh quân · 97.5 ấn buộc
+//    vào thói xấu · 98 trăng không lặn · 98.3 sư phụ mất, ngọn mạ đầu tiên · 98.7 đồng xanh · 99 đại chiến, hồn vào mắt đỏ ·
+//    99.2 "mẹ chết vì ngươi" · 99.4 mười ổ khóa · 99.6 món nợ một gáo nước · 99.8 nguyệt thực, một gáo nước · 100 cả hai qua
+//    cửa; hiệp khách kế thừa ngôi Hằng Nguyệt (Thiên Cang), Tà thần trong thân Giáo chủ đòi lại ngôi Phương thần: Song thần chi chiến.
 //
 // Mỗi chương: { lv, title, foe?, lead, pages: [[người nói, cảnh, lời]…], lesson }.
 //  - lead = cấp của Huyết Nguyệt Giáo chủ lúc ấy (tu luyện song hành).
@@ -40,6 +46,12 @@
     hai: 'Võ sư Mạc Trấn Hải',
     giao: 'Giáo chủ Lệ Vô Khuyết',
     than: 'Vô Yểm Tà Thần',
+    // v2.12.0 (Thiên Môn Ký): người nói của chặng 90–100.
+    trang: 'Tiếng nói trong trăng máu',
+    me: 'Thủy Nương, mẹ của Lệ Vô Khuyết',
+    be: 'Cậu bé Lệ Vô Khuyết',
+    batu: 'Bà Tư',
+    hinh: 'Thiên Hình tinh quân',
     mien: 'Thụy Nguyệt Sứ Miên Hồ',
     dien: 'Huyễn Nguyệt Sứ Thiên Diện',
     loi: 'Tật Nguyệt Sứ Lôi Tốc',
@@ -53,7 +65,7 @@
   };
   // Phe ác: Giáo chủ và Thập Nguyệt Sứ (thứ tự gặp). vice = thói xấu kẻ ấy đại diện; art = võ công; lv = cấp của hiệp khách khi giao đấu.
   const FOES = [
-    { id: 'giao', name: 'Lệ Vô Khuyết', title: 'Huyết Nguyệt Giáo chủ', vice: 'Lòng tham không đáy: muốn mọi thứ tròn đầy ngay lập tức', art: 'Thôn Nguyệt Quyết · Huyết Nguyệt Trảm · Huyết Nguyệt Thôn Thiên', color: '#b3263b', lv: [75, 80, 84, 88, 90, 95, 99, 100] },
+    { id: 'giao', name: 'Lệ Vô Khuyết', title: 'Huyết Nguyệt Giáo chủ', vice: 'Lòng tham không đáy: muốn mọi thứ tròn đầy ngay lập tức', art: 'Thôn Nguyệt Quyết · Huyết Nguyệt Trảm · Huyết Nguyệt Thôn Thiên', color: '#b3263b', lv: [75, 80, 84, 88, 90, 94, 95, 99, 100] },
     { id: 'mien', name: 'Miên Hồ', title: 'Thụy Nguyệt Sứ', vice: 'Trì hoãn', art: 'Mê Hồn Hương · Trường Miên Phiến', color: '#8e6bbf', lv: [10] },
     { id: 'dien', name: 'Thiên Diện', title: 'Huyễn Nguyệt Sứ', vice: 'Phân tâm', art: 'Thiên Diện Huyễn Đăng', color: '#d0892c', lv: [15] },
     { id: 'loi', name: 'Lôi Tốc', title: 'Tật Nguyệt Sứ', vice: 'Nóng vội', art: 'Lôi Quang Song Đao', color: '#3b7dd8', lv: [20] },
@@ -341,74 +353,228 @@
     ], lesson: 'Người vội vã nhất thường là người sợ hãi nhất, và việc "để sau" có khi không còn sau nữa. Hiểu nỗi sợ và món nợ phía sau một hành động giúp ta đối đầu mà không thù hận.' },
 
     { lv: 90, title: 'Võ lâm hội tụ', foe: 'giao', lead: 99, pages: [
-      ['ke', 'talk', 'Tin {name} làm Giáo chủ bị thương lan khắp giang hồ. Lần đầu tiên sau ba mươi năm, các môn phái cùng kéo về chân núi Vân Mộng.'],
-      ['phong', 'martial', 'Ta đã nói rồi: ta không phục. Nhưng kiếm của ta, từ nay đứng sau lưng ngươi.'],
-      ['suong', 'talk', 'Ngươi dạy ta rằng không cần một mình. Lần này, Lãnh Tịch ta mang mười hai đệ tử đến, để không ai phải một mình.'],
-      ['ke', 'moon', 'Huyết Nguyệt Giáo vây núi. Giáo chủ ngồi trên kiệu đỏ, tay không động, mà nghìn người ngã quỵ vì Thôn Nguyệt Quyết.'],
-      ['ke', 'taichi', '{Name} bước lên đầu trận. Nội lực như biển, tâm như tuyết đỉnh. Đòn Gánh vạch một vòng tròn: nghìn người được che chở trong ánh trăng bạc.'],
-      ['ke', 'zen', 'Đêm ấy, {name} phá ải cấp chín mươi, bước vào Võ lâm chí tôn. Trên kiệu đỏ, Giáo chủ vẫn ở cấp chín mươi chín, như đã ở đó hai mươi năm.'],
-    ], lesson: 'Khi ta kiên trì đủ lâu, người khác sẽ tự tìm đến đứng cùng. Hãy để việc làm của mình nói thay lời kêu gọi.' },
+      ['ke', 'talk', 'Tin {name} làm Giáo chủ bị thương lan khắp giang hồ. Lần đầu tiên sau hai mươi năm, các môn phái cùng kéo về chân núi Vân Mộng.'],
+      ['suong', 'talk', 'Ngươi dạy ta rằng không cần một mình. Lần này, Lãnh Tịch ta bỏ Huyết Nguyệt Giáo, mang mười hai đệ tử đến, để không ai phải một mình.'],
+      ['ke', 'moon', 'Huyết Nguyệt Giáo vây núi. Giáo chủ ngồi trên kiệu đỏ, tay không động, mà nghìn người ngã quỵ vì Thôn Nguyệt Quyết. Dẫn đầu tiền quân là một kiếm khách áo đen viền đỏ.'],
+      ['phong', 'moon', 'Nguyệt Sứ thứ mười một, Hàn Phong, phụng mệnh Giáo chủ. {Name}, ra đây. Món nợ cầu Lạc Nhạn, hôm nay tính cho xong.'],
+      ['ke', 'martial', 'Hai người giao đấu giữa hai trận tuyến. Kiếm Hàn Phong nhanh gấp ba ngày trước, nhưng tóc hắn đã điểm bạc: mười năm nội lực vay trong một đêm đang đòi lãi.'],
+      ['ke', 'taichi', '{Name} không trả đòn hiểm nào. Nội lực như biển, tâm như tuyết đỉnh. Đòn Gánh vạch một vòng tròn: nghìn người phía sau được che trong ánh trăng bạc.'],
+      ['ke', 'moon', 'Mũi kiếm Hàn Phong dừng sát cổ {name}. Hắn ghé tai, nói rất khẽ: "Canh ba. Cầu Lạc Nhạn. Đi một mình." Rồi hắn thu kiếm, hô quân lui ba dặm.'],
+      ['ke', 'zen', 'Đêm ấy, {name} phá ải cấp chín mươi, bước vào Võ lâm chí tôn. Trên kiệu đỏ, Giáo chủ vẫn ở cấp chín mươi chín. Còn {y} nhìn dải tua kiếm ba nút trong tay, không biết nên tin điều gì.'],
+    ], lesson: 'Khi ta kiên trì đủ lâu, người khác sẽ tự tìm đến đứng cùng. Hãy để việc làm nói thay lời kêu gọi, và đừng vội kết luận về một người khi chưa nghe hết.' },
+
+    { lv: 91, title: 'Mặt thứ một nghìn lẻ một', foe: 'dien', lead: 99, pages: [
+      ['ke', 'zen', 'Canh ba, cầu Lạc Nhạn. Hàn Phong ngồi trên thành cầu, cởi áo viền đỏ. Trên ngực hắn có một ấn trăng khuyết đỏ như than.'],
+      ['phong', 'talk', 'Nhát kiếm ở võ đường là kế của sư phụ ngươi và ta: phải có người vào được Huyết Nguyệt đài. Ta đâm lệch khỏi tim ngươi đúng một đốt ngón tay. Ba nút: còn nợ, sẽ trả.'],
+      ['phong', 'talk', 'Ai vào giáo cũng bị đóng ấn này. Giáo chủ chết thì kẻ mang ấn chết theo: ba nghìn giáo chúng, mười Nguyệt Sứ, và ta. Ngươi không được giết hắn.'],
+      ['phong', 'martial', 'Còn một việc. Trong võ đường của ngươi có kẻ không phải người của ngươi. Hắn ở đó từ mùa băng tan. Kế giữ Thanh Khê là hắn báo. Đêm nay hắn nhận lệnh giết ngươi.'],
+      ['ke', 'moon', '{Name} lao về võ đường. Mọi vò nước đã bị bỏ thuốc mê. Bên giường sư phụ, một bóng người nhỏ bé cầm dao găm đứng im rất lâu. Đó là Tiểu Mộc.'],
+      ['ke', 'moon', 'Con dao rơi xuống đất. "Tiểu Mộc" đưa tay lên mặt, lột ra một lớp da mỏng. Bên dưới là gương mặt không có nét gì để nhớ của Huyễn Nguyệt Sứ Thiên Diện.'],
+      ['dien', 'moon', 'Ta thế chỗ thằng bé từ mùa băng tan. Ta đọc sổ của nó để đếm tiếp từng chuyến nước cho giống. Đếm mãi, ta lại muốn biết con số kế tiếp.'],
+      ['dien', 'moon', 'Ta đã mang nghìn khuôn mặt. Chỉ có vai này, kẻ tin vào từng chuyến nước, ta đóng lâu đến mức tin thật. Giết ta đi. Hoặc cho ta giữ khuôn mặt này thêm một ngày.'],
+      ['hero', 'zen', 'Người dựng lại tấm bảng sau đêm nguyệt thực là hắn. Người đếm chuyến nước thứ mười nghìn cũng là hắn. Tại hạ chỉ hỏi điều còn quan trọng: Tiểu Mộc thật đang ở đâu?'],
+      ['dien', 'moon', 'Trong ngục đá dưới Huyết Nguyệt đài. Nó còn sống. Giáo chủ giữ lại vì nó là đứa duy nhất trong ngục không sợ hắn. Ta biết đường. Ta sẽ dẫn.'],
+    ], lesson: 'Vai ta đóng mỗi ngày rồi sẽ thành con người ta. Hãy chọn thói quen như chọn người mình muốn trở thành: lặp lại đủ lâu thì giả cũng hóa thật.' },
+
+    { lv: 92, title: 'Ngục dưới trăng', lead: 99, pages: [
+      ['ke', 'moon', 'Thiên Diện mang gương mặt Huyết Nguyệt Giáo chủ, đi thẳng qua ba lớp cổng. Lính gác quỳ rạp. {Name} và Hàn Phong cúi đầu theo sau như hai tên hầu.'],
+      ['ke', 'zen', 'Ngục đá sâu chín tầng. Ở tầng cuối, {name} sững lại: trên vách có ba cột vạch bằng đá nhọn. Chưa làm. Đang làm. Đã xong. Cột cuối kín đặc những vạch.'],
+      ['moc', 'talk', '{Sh} đến rồi à? Đệ biết {sh} sẽ đến, nên đệ chỉ lo phần của đệ thôi: mỗi ngày đào một thìa đất. Đường hầm còn thiếu ba thước nữa.'],
+      ['ke', 'talk', 'Tiểu Mộc thật đã cao hơn một cái đầu, gầy rộc, nhưng vẫn cười hì hì. Quanh cậu là hai trăm tù nhân, mỗi người một việc ghi trên vách: người đào, người chuyển đất, người canh, người kể chuyện.'],
+      ['moc', 'talk', 'Trong này ai tuyệt vọng thì chết trước. Nên đệ chia việc. Có việc để làm xong mỗi ngày thì người ta còn muốn sống tới ngày mai.'],
+      ['ke', 'martial', 'Ba người cùng đào nốt ba thước cuối. Thiên Diện đứng chắn cửa ngục, lần lượt mang mặt từng viên quản ngục để đuổi lính tuần đi nơi khác.'],
+      ['ke', 'moon', 'Cuối tầng chín còn một gian thạch thất khóa kín. Bên trong có mười chiếc ghế đá khắc tên mười Nguyệt Sứ, và chiếc thứ mười một. Hàn Phong tưởng ghế ấy dành cho mình.'],
+      ['ke', 'moon', 'Nhưng tên khắc trên ghế là {name}. Nét khắc đã mòn, rêu phủ kín: chiếc ghế được tạc từ rất lâu, trước cả ngày {y} lên núi gánh nước.'],
+      ['hero', 'zen', 'Có kẻ đã chờ tại hạ từ khi tại hạ chưa biết cầm kiếm. Không phải chờ để giết. Người ta không tạc ghế cho kẻ mình định giết.'],
+      ['ke', 'zen', 'Hai trăm người chui qua đường hầm ra tới bờ sông trước khi trăng lặn. Tiểu Mộc đi sau cùng, ngoái nhìn kẻ từng mang gương mặt mình: "Ngươi đếm thay ta à? Đếm có đúng không đấy?"'],
+    ], lesson: 'Khi việc quá lớn và chưa thấy ngày ra, hãy chia nó thành phần nhỏ làm được hôm nay, cho mình và cho cả nhóm. Có việc để làm xong mỗi ngày là có lý do để tiếp tục.' },
 
     { lv: 93, title: 'Hồn du về Lệ thôn', lead: 99, pages: [
-      ['thien', 'zen', 'Ngươi muốn biết vì sao hắn gom khổ đau? Nắm tay lão. Lão sẽ đưa hồn ngươi về năm mươi năm trước.'],
-      ['ke', 'zen', 'Một làng nhỏ tên Lệ thôn, mùa hạn thứ ba. Ruộng nứt nẻ. Một người đàn bà gầy guộc ngày ngày gánh nước từ con suối cạn về tưới mấy luống mạ.'],
-      ['ke', 'talk', 'Một cậu bé lon ton theo sau, ôm cái gáo nhỏ. Mẹ cậu cười: "Một gáo thôi con. Mỗi ngày một gáo, ruộng sẽ xanh."'],
-      ['ke', 'moon', 'Ruộng không xanh. Mùa đông năm ấy, người mẹ ngã xuống bên đòn gánh. Cậu bé ngồi cạnh mẹ ba ngày, dưới vầng trăng đỏ như máu.'],
-      ['than', 'moon', 'Chăm chỉ là lời dối trá của kẻ yếu. Lớn lên, hãy tìm ta. Ta sẽ cho ngươi thứ mạnh hơn cả trời.'],
-      ['hero', 'zen', 'Tại hạ hiểu rồi. Huynh ấy không ghét gánh nước. Huynh ấy ghét cái ngày gánh nước không cứu được mẹ mình.'],
-      ['thien', 'talk', 'Hãy nhớ điều ngươi vừa thấy. Đến lúc cuối cùng, thứ cứu được hắn sẽ không phải là kiếm.'],
-    ], lesson: 'Đằng sau mỗi thói quen xấu thường là một vết thương cũ. Hiểu gốc rễ, ta mới chữa được tận gốc, cho người và cho chính mình.' },
+      ['thien', 'zen', 'Ngươi muốn biết vì sao hắn gom khổ đau, và vì sao có kẻ tạc ghế chờ ngươi? Nắm tay lão. Lão sẽ đưa hồn ngươi về Lệ thôn, mùa hạn năm ấy.'],
+      ['ke', 'zen', 'Ruộng nứt nẻ. Một người đàn bà gầy guộc ngày ngày gánh nước từ con suối cạn về tưới mấy luống mạ. Trên vai bà là chiếc đòn gánh có vết khấc nhỏ như móng tay.'],
+      ['me', 'talk', 'Một gáo thôi con. Mỗi ngày một gáo, ruộng sẽ xanh.'],
+      ['ke', 'talk', 'Cậu bé lên mười lon ton theo sau, ôm cái gáo gỗ nhỏ. Một sáng, bên bờ suối cạn có tiếng khóc: người chạy hạn bỏ lại một chiếc giỏ, trong giỏ là một đứa bé còn đỏ hỏn.'],
+      ['ke', 'zen', 'Người đàn bà bế đứa bé về. Từ hôm ấy, bát cháo loãng chia làm ba, rồi phần của bà nhỏ dần. Bà sai con trai lên trấn xin gạo. Cậu đi ba ngày.'],
+      ['ke', 'talk', 'Ngày thứ nhất, một kiếm khách trẻ áo xám đi ngang, lưng đeo bầu nước. Bà xin chàng dừng lại. Chàng hứa xong việc sẽ quay về. {Name} nhận ra dáng người ấy: sư phụ Tùng Hạc.'],
+      ['ke', 'zen', 'Ngày thứ hai, bà đặt đứa bé vào giỏ, lót thêm cái gáo gỗ của con trai, gửi theo một gánh hàng trà xuôi về phương nam. Người bán trà còn trẻ, nhưng {name} nhận ra giọng nói ấy: Bà Tư.'],
+      ['hero', 'zen', 'Cái gáo sứt quai bên hông tại hạ. Chiếc giỏ trước cửa quán trà. Đứa bé ấy… là tại hạ. Bà đã nhịn phần cháo của mình để tại hạ được sống.'],
+      ['ke', 'moon', 'Ngày thứ ba, người mẹ ngã xuống bên đòn gánh. Cậu bé về tới nơi với nửa bao gạo, ngồi cạnh mẹ dưới vầng trăng đỏ như máu. Không ai kể cho cậu nghe về chiếc giỏ.'],
+      ['trang', 'moon', 'Chăm chỉ là lời dối trá của kẻ yếu, bé con ạ. Mẹ ngươi gánh nước cả đời, và ruộng có xanh đâu? Lớn lên, hãy tìm ta.'],
+      ['ke', 'moon', '{Name} ngẩng lên. Trên trời Lệ thôn, những đám mây mưa đang bị hút về phía vầng trăng đỏ, từng đám một. Mùa hạn ấy không phải của trời.'],
+      ['thien', 'talk', 'Ruộng không xanh, nhưng có một đứa trẻ đã sống. Hắn chưa từng biết điều đó. Kẻ thì thầm bên tai hắn bao năm sẽ không bao giờ để hắn biết.'],
+    ], lesson: 'Công sức ta bỏ ra có thể nở hoa ở nơi ta không bao giờ nhìn thấy. Đừng đo việc mình làm chỉ bằng kết quả trước mắt.' },
+
+    { lv: 94, title: 'Gánh nước cho mẹ ta', foe: 'giao', lead: 99, pages: [
+      ['ke', 'moon', '{Name} tỉnh dậy trên Tuyết Phong thì nghe tin dữ: Giáo chủ đã đích thân tới am Tùng Hạc trong đêm và mang sư phụ đi. Cùng lúc, ba nghìn quân Huyết Nguyệt tiến về Vân Mộng.'],
+      ['ke', 'talk', 'Các chưởng môn đòi {y} ở lại giữ núi. Một người đổi lấy cả ngọn núi, ai cũng thấy phép tính ấy. {Y} nhìn tấm bảng tre rất lâu.'],
+      ['hero', 'talk', 'Giữ núi là việc giao được. Tiểu Mộc chia việc, Lãnh Tịch giữ đèo, Hàn Phong báo đường tiến quân. Còn việc kia thì không ai làm thay tại hạ được.'],
+      ['dien', 'talk', 'Vậy đêm nay ta mang mặt ngươi đứng trên tường lũy. Quân Huyết Nguyệt thấy ngươi còn đó thì chưa dám đánh. Đi đi. Khuôn mặt này, ta sẽ không làm xấu.'],
+      ['ke', 'moon', 'Lệ thôn chỉ còn nền nhà và ruộng nứt. Dưới trăng đỏ, sư phụ Tùng Hạc, không còn chút nội lực, đang gánh nước từ con suối cạn lên ruộng. Vai ông đã bật máu.'],
+      ['giao', 'moon', 'Người dạy ta gánh nước. Vậy gánh đi. Gánh tới khi ruộng mẹ ta xanh. Ba ngày người nợ bà, hôm nay trả bằng ba vạn chuyến.'],
+      ['ke', 'taichi', '{Name} không rút kiếm. {Y} nhặt đôi thùng thứ hai, bước xuống suối, rồi đi bên cạnh sư phụ. Một chuyến. Mười chuyến. Trăm chuyến. Giáo chủ đứng nhìn suốt đêm.'],
+      ['hero', 'talk', 'Đại sư huynh. Bên bờ suối này, năm ấy, có một chiếc giỏ. Mẹ huynh chia cháo cho đứa bé trong giỏ, rồi gửi nó theo gánh hàng trà. Đây là cái gáo bà lót trong giỏ.'],
+      ['ke', 'moon', 'Giáo chủ nhìn cái gáo sứt quai. Chính tay hắn đã làm sứt nó năm lên tám. Chiếc mặt nạ trăng khuyết rơi xuống đất. "Mẹ… đã cứu được một người sao?"'],
+      ['ke', 'moon', 'Đúng lúc ấy, một tiếng sáo xương cất lên từ bóng tối. Lưng Giáo chủ cứng lại. Khi hắn ngẩng đầu, đôi mắt đã thành hai vầng trăng đỏ, và giọng nói không còn là của hắn.'],
+      ['trang', 'moon', 'Đủ rồi, Vô Khuyết. Ngươi đã làm xong phần việc của ngươi. Từ đây, thân xác này để ta dùng.'],
+      ['giao', 'moon', 'Chạy đi… tiểu {sd}… Mang sư phụ… chạy đi!'],
+    ], lesson: 'Có việc phải giao cho người khác thì mới đến được việc chỉ mình làm nổi. Hãy phân biệt hai loại việc ấy, và tự mình có mặt ở nơi không ai thay được.' },
 
     { lv: 95, title: 'Hai vị chín mươi lăm', foe: 'giao', lead: 99, pages: [
-      ['ke', 'moon', 'Giáo chủ dẫn quân đánh Tuyết Phong. Lần này hắn không chờ {name} tới nữa.'],
-      ['hai', 'martial', 'Lão già này còn chút nội lực, đủ chặn ba nghìn tên!'],
-      ['ke', 'martial', 'Mạc Trấn Hải vung quyền, núi tuyết rung chuyển. Hồn Không Nguyệt tỏa ra như ánh trăng phủ cả ngọn núi; ai đứng trong ánh trăng ấy, Thôn Nguyệt Quyết không chạm tới được.'],
-      ['ke', 'taichi', 'Một võ sư nội lực chín mươi lăm, một thiền sư tinh thần chín mươi lăm, và {name} đứng giữa. Ba người, một trận, giữ trọn Tuyết Phong.'],
-      ['giao', 'moon', 'Hai lão già và một kẻ gánh nước. Được. Ta chờ ở cửa chín mươi chín. Ở đó, không ai giúp được ngươi.'],
-      ['ke', 'zen', 'Đêm ấy, {name} vượt cấp chín mươi lăm: Siêu Phàm Nhập Thánh. Trong giấc mơ, {y} thấy vầng trăng đỏ mở ra như một con mắt.'],
-    ], lesson: 'Người dẫn đường giỏi không đi thay ta, mà giữ cho ta chỗ đứng để tự bước. Hãy biết ơn họ bằng cách đi tiếp.' },
+      ['ke', 'moon', 'Kẻ mang thân xác Giáo chủ không về Huyết Nguyệt đài. Nó đi thẳng lên Tuyết Phong, nơi {name} đưa sư phụ về dưỡng thương. Nó đi một mình. Nó không cần quân nữa.'],
+      ['hai', 'martial', 'Lão già này còn chút nội lực, đủ chặn nó một canh giờ! {Tt}, đưa sư phụ ngươi xuống núi!'],
+      ['ke', 'martial', 'Một võ sư nội lực chín mươi lăm, một thiền sư tinh thần chín mươi lăm. Mạc Trấn Hải vung quyền, núi tuyết rung chuyển. Hồn Không Nguyệt tỏa ra như ánh trăng phủ kín ngọn núi.'],
+      ['ke', 'moon', 'Giữa trận, một lão già lưng còng lê bước lên dốc: Vô Vọng, kẻ đã bị hút cạn nội lực. Hắn đến để nói điều hắn biết. Con mắt đỏ quay về phía hắn trước tiên.'],
+      ['trang', 'moon', 'Kẻ biết chuyện thì không nên còn lưỡi. Huyết Nguyệt Thôn Thiên!'],
+      ['ke', 'martial', 'Cả bầu trời bị hút về một điểm. Mạc Trấn Hải bước vào giữa điểm ấy, chắn trước đứa con trai. Lão đứng như đứng trước biển: dồn tới, rút về, dồn tới.'],
+      ['hai', 'talk', 'Vọng à. Ngày ấy con hỏi cố gắng để làm gì. Cha vụng, không biết trả lời. Giờ thì con nhìn đi.'],
+      ['ke', 'zen', 'Một canh giờ. Đủ để mọi người xuống núi. Khi cơn hút tan, lão ngư vẫn đứng, hai chân cắm vào đá, mặt hướng ra biển. Lão không còn thở nữa.'],
+      ['vong', 'talk', 'Cha… Hóa ra vẫn còn một việc đáng làm.'],
+      ['ke', 'zen', 'Trăng trên Tuyết Phong mờ hẳn: Không Nguyệt đã che núi quá lâu. Đêm ấy, giữa tang tóc, {name} vượt cấp chín mươi lăm, Siêu Phàm Nhập Thánh. Trong mơ, con mắt đỏ nhìn thẳng vào {y}: "Cuối cùng ngươi cũng đủ lớn."'],
+    ], lesson: 'Người dẫn đường giỏi không đi thay ta, mà giữ cho ta chỗ đứng để tự bước. Hãy biết ơn họ bằng cách đi tiếp, và trả lời câu hỏi "để làm gì" bằng chính việc mình làm.' },
 
     { lv: 96, title: 'Sự thật dưới trăng máu', foe: 'vong', lead: 99, pages: [
-      ['ke', 'zen', 'Vô Vọng, kẻ tưởng đã chết, tìm đến võ đường trong hình hài một lão già. Hắn quỳ trước {name}: "Ta sẽ nói hết, trước khi quá muộn."'],
-      ['vong', 'moon', 'Hai mươi năm trước, Giáo chủ chạm cấp chín mươi chín. Từ đó, hắn không tiến thêm nửa bước. Cánh cửa từ chín mươi chín lên một trăm không mở cho kẻ lòng còn khuyết.'],
-      ['vong', 'moon', 'Rồi trăng máu cất tiếng. Đó là Vô Yểm Tà Thần, vị thần không bao giờ no. Thần hứa: gom đủ nội lực, làm đủ vạn nghiệp ác, thần vị sẽ trao cho hắn.'],
-      ['ke', 'moon', 'Trấn ngủ say, đèn nghìn mặt, viên đan không ngủ, nước đen tuyệt vọng… Mỗi việc của Thập Nguyệt Sứ đều là một lần gặt khổ đau dâng cho trăng máu.'],
-      ['hero', 'zen', 'Vậy mọi việc ác ấy… chỉ để mở một cánh cửa?'],
-      ['vong', 'moon', 'Để thành thần trước khi già chết. Tà thần cần một thân xác ngồi lên thần vị. Hắn cần một thần vị để không bao giờ phải chậm nữa.'],
-      ['than', 'moon', 'Ngươi cũng muốn lên trăm, phải không? Đến đây. Ngôi thứ hai còn trống.'],
-      ['hero', 'martial', 'Không. Tại hạ sẽ lên trăm bằng chuyến nước của mình, hoặc không lên.'],
-    ], lesson: 'Đường tắt nào cũng có giá phải trả, và người trả thường không chỉ là ta. Hãy hỏi kỹ: thứ mình đổi lấy thành công là gì?' },
+      ['ke', 'zen', 'Sau tang lễ trên đảo Thiết Thạch, Vô Vọng ngồi vá tấm lưới của cha, vá cả cái nút vụng về năm xưa. Rồi hắn kể.'],
+      ['vong', 'moon', 'Thứ trong trăng máu tên là Vô Yểm Tà Thần, vị thần không bao giờ no. Nó từng có thần vị trên trời rồi bị đày xuống. Nó muốn quay về, nhưng tự nó không mở được cánh cửa.'],
+      ['vong', 'moon', 'Cánh cửa từ chín mươi chín lên một trăm chỉ mở cho kẻ đi lên từng bước, lòng không khuyết. Giáo chủ sẽ không bao giờ mở được. Tà thần biết thế ngay từ đầu.'],
+      ['hero', 'zen', 'Vậy nó nuôi huynh ấy hai mươi năm để làm gì?'],
+      ['vong', 'moon', 'Để mài ngươi. Mười Nguyệt Sứ là mười phiến đá mài. Mỗi lần ngươi thắng chúng ta, nó mừng hơn cả khi chúng ta thắng. Chiếc ghế thứ mười một tạc cho ngươi: kẻ sẽ mở cửa thay nó.'],
+      ['vong', 'moon', 'Nó chỉ sợ một thứ: chiếc đòn gánh của người mẹ. Nó sai người lục tìm suốt hai mươi năm, giấu cả Giáo chủ. Thanh gỗ ấy là bằng chứng rằng bà đã không thua.'],
+      ['ke', 'moon', 'Sợi chỉ đỏ trên ngực {name} siết lại. Nó được buộc từ đêm ở Lệ thôn, vào đúng chỗ trống {y} chưa từng lấp: nỗi không biết mình từ đâu tới, và món nợ với một người đã chết vì mình.'],
+      ['than', 'moon', 'Cứ gánh nước đi, đứa trẻ trong giỏ. Mỗi chuyến của ngươi là một bậc thang của ta. Ngày ngươi qua cửa, ta bước theo. Còn nếu ngươi dừng, ta ăn dần thế gian này bằng thân xác sư huynh ngươi.'],
+      ['hero', 'zen', 'Điều tại hạ tin nhất, mỗi ngày một chuyến, hóa ra đang xây thang cho kẻ thù. Sáng hôm sau, lần đầu tiên kể từ ngày lên núi, tại hạ không xuống suối.'],
+      ['moc', 'talk', '{Sh} nghỉ gánh thì nó thắng kiểu khác thôi. Bảng của mình chưa bao giờ sai vì làm đều. Mình chỉ cần sửa lại dòng trên cùng: làm những việc này để đi tới đâu.'],
+    ], lesson: 'Thói quen tốt cũng cần biết mình đang phục vụ điều gì. Đừng chỉ hỏi "hôm nay làm được bao nhiêu"; thỉnh thoảng hãy hỏi "những việc này đang đưa mình tới đâu".' },
 
-    { lv: 98, title: 'Đêm trước đại chiến', lead: 99, pages: [
-      ['ke', 'zen', 'Đêm trước trận cuối, võ đường dưới chân núi sáng đèn. Không ai luyện kiếm. Mọi người ngồi gói bánh, vá áo, kể chuyện.'],
-      ['moc', 'talk', '{Sh} ơi, đệ ghi xong rồi. Cột "Đã xong" trên bảng tre có hai nghìn bảy trăm việc. Từ trăm chuyến nước, tới trấn Thanh Khê, tới hôm nay.'],
-      ['su', 'zen', 'Mai ngươi đánh với sư huynh. Đừng đánh để giết nó. Hãy đánh để nó nhìn thấy điều nó chưa từng thấy.'],
-      ['hero', 'talk', 'Thấy gì ạ, sư phụ?'],
-      ['su', 'zen', 'Thấy rằng gánh nước chưa từng vô ích. Mẹ nó không thua. Bà chỉ chưa kịp đi hết đường.'],
-      ['ke', 'moon', 'Trên đỉnh Vân Mộng, Giáo chủ ngồi một mình dưới trăng đỏ. Lần đầu sau năm mươi năm, hắn không vận công, chỉ nhìn xuống chân núi, nơi có một ngọn đèn.'],
-      ['ke', 'zen', '{Name} ra suối, gánh chuyến nước cuối cùng của cấp chín mươi tám. Trăng rằm in xuống thùng nước, tròn và yên.'],
-    ], lesson: 'Trước một thử thách lớn, hãy nhìn lại cột "đã xong" của mình. Ta không bước vào trận cuối với hai bàn tay trắng.' },
+    { lv: 97, title: 'Sứ giả áo bạc', lead: 99, pages: [
+      ['ke', 'zen', 'Đêm ấy không có trăng. Một người áo bạc bước xuống từ khoảng trời trống, tay cầm thước ngọc. Tuyết không lún dưới chân, cỏ không rạp dưới gót: ông không thuộc về cõi này.'],
+      ['hinh', 'talk', 'Ta là Thiên Hình, một trong ba mươi sáu Thiên Cang tinh, giữ phép cho Thần giới. Trên chúng ta có mười hai Phương thần và năm Thần Vương. Không thừa một ngôi, không thiếu một ngôi.'],
+      ['hinh', 'talk', 'Vô Yểm từng là một Phương thần. Nó nuốt đồng liêu để ép Thần giới mở thêm ngôi Thần Vương thứ sáu. Thần vị không mở thêm được, chỉ kế thừa. Nó bị đày xuống cõi này.'],
+      ['hinh', 'zen', 'Năm Thần Vương đã phán: tới kỳ nguyệt thực, Thiên Môn của cõi người sẽ bị niêm lại vĩnh viễn. Không ai từ đây lên được nữa. Còn nó thì ở lại với các ngươi.'],
+      ['hero', 'martial', 'Các vị bỏ cả một cõi người cho nó ăn, để Thần giới được yên?'],
+      ['hinh', 'talk', 'Phép là phép. Nhưng phép có một khe hở: trước nguyệt thực, nếu có người phàm tự mở Thiên Môn mà không mang nó theo, cửa sẽ không bị niêm. Nguyệt thực còn cách ba mùa trăng.'],
+      ['ke', 'zen', 'Thước ngọc chỉ về phía Không Nguyệt. Vị sư già cúi đầu. Ông không phải người: ông là Hằng Nguyệt tinh quân, một trong ba mươi sáu Thiên Cang, đã giúp người phàm quá số lần phép cho.'],
+      ['thien', 'talk', 'Lão giữ ngôi này lâu lắm rồi, chỉ mong tìm được người kế thừa để đi ngao du vũ trụ. Nhớ lấy: sợi chỉ trên ngực ngươi không cắt bằng kiếm được. Nó buộc bằng gì thì gỡ bằng thứ ấy.'],
+      ['ke', 'moon', 'Thiên Hình mang Không Nguyệt đi. Phía chân trời, vầng trăng đỏ mở to như một con mắt vừa nghe hết mọi chuyện. Và nó cười.'],
+    ], lesson: 'Hạn chót và luật lệ không phải kẻ thù. Hãy hỏi cho rõ điều kiện, rồi tìm lối đi nằm trong chính điều kiện ấy thay vì than nó bất công.' },
+
+    { lv: 97.5, title: 'Mười một chiếc ghế', lead: 99, pages: [
+      ['ke', 'talk', '{Name} trở lại gian thạch thất dưới Huyết Nguyệt đài, giờ đã bỏ hoang. Mười chiếc ghế đá. {Y} quyết định đi tìm từng người từng ngồi trên đó.'],
+      ['ke', 'talk', 'Miên Hồ đang ngủ dưới gốc đa. Lôi Tốc chạy quanh một bãi đất trống. Bách Tý ôm chín món binh khí mà không dám đặt món nào xuống. Trên ngực ai cũng có ấn trăng khuyết.'],
+      ['ngoc', 'talk', 'Ta vá lại giáp lưu ly từ những mảnh vỡ. Xấu lắm. Nhưng mặc được. Lạ thay, từ hôm mặc tấm giáp vá này, ấn trên ngực ta mờ dần.'],
+      ['hero', 'zen', 'Tại hạ nhìn bằng con mắt học trên Tuyết Phong. Sợi chỉ đỏ của nàng không buộc vào Giáo chủ. Nó buộc vào nỗi sợ không hoàn hảo. Nàng hết sợ, sợi chỉ tự tuột.'],
+      ['phong', 'talk', 'Vậy ấn này không buộc mạng ta vào hắn. Nó buộc ta vào cái thói muốn nhanh hơn người khác. Bấy nhiêu năm, ta bị lừa bởi chính mình.'],
+      ['ke', 'martial', 'Từng người một. Miên Hồ dậy gõ chuông trấn mỗi sớm. Lôi Tốc tập đứng yên một nén nhang. Bách Tý đặt xuống tám món, giữ một. Khô Vinh ngủ trọn một đêm. Ảnh Song úp tấm gương xuống bàn.'],
+      ['ke', 'moon', 'Chỉ một kẻ không tới: Khúc U. Khi {name} tìm thấy hắn trên Huyết Nguyệt đài, ống sáo xương đang tự thổi. Dưới áo choàng không có ai cả. Hắn chưa bao giờ là người.'],
+      ['than', 'moon', 'Một đốt ngón tay của ta thôi. Ta để nó thổi bên tai Vô Khuyết mỗi đêm suốt hai mươi năm. Ngươi gỡ được chín sợi chỉ của chúng. Còn sợi trên ngực ngươi, ngươi gỡ nổi không?'],
+      ['hero', 'zen', 'Chín người từng là kẻ thù giờ ngồi quanh tấm bảng tre. Tại hạ ghi lên dòng đầu tiên việc khó nhất: gỡ sợi chỉ của chính mình, trước nguyệt thực.'],
+    ], lesson: 'Mỗi thói xấu là một sợi dây ta tự buộc vào mình. Không ai cắt giúp được; nhưng đổi một hành động nhỏ mỗi ngày thì nút thắt tự lỏng dần.' },
+
+    { lv: 98, title: 'Trăng không lặn', lead: 99, pages: [
+      ['ke', 'moon', 'Vầng trăng đỏ thôi không lặn nữa. Ngày không tới. Lúa trổ bông lép, giếng cạn dần, mây mưa bị hút về trời tây. Tà thần đang làm lại mùa hạn Lệ thôn, lần này cho cả thiên hạ.'],
+      ['than', 'moon', 'Ta không cần đánh ngươi. Ngươi sẽ tự mở cửa cho ta, vì ngươi không chịu nổi cảnh chúng đói. Người đàn bà nuôi ngươi ba ngày cũng đã không chịu nổi.'],
+      ['ke', 'talk', '{Name} không lên đỉnh quyết chiến. {Y} xuống ruộng. Tiểu Mộc dựng bảng tre ở từng làng. Hàn Phong, Lãnh Tịch, chín Nguyệt Sứ cũ, mỗi người nhận một con mương.'],
+      ['ke', 'martial', 'Mười vạn người xếp thành hàng từ sông lên ruộng, chuyền tay nhau từng thùng nước. Ban ngày tưới được một sào, đêm trăng đỏ hút khô một sào.'],
+      ['dan', 'talk', 'Tưới thế này thì tới bao giờ? Trăng kia đâu có mệt! Hay là để {name} mở cái cửa ấy cho xong, sống được ngày nào hay ngày ấy!'],
+      ['hero', 'zen', 'Tại hạ không trách họ. Tại hạ đang đứng đúng chỗ bà đã đứng: gánh nước vào một thửa ruộng không chịu xanh, trong khi có kẻ thì thầm rằng mọi thứ là vô ích.'],
+      ['moc', 'talk', 'Đệ không ghi "ruộng xanh" lên bảng nữa. Việc ấy mình không quyết được. Đệ ghi: hôm nay chuyền đủ ba nghìn thùng. Việc ấy thì làm xong được.'],
+      ['ke', 'zen', 'Ngày thứ bốn mươi, ruộng vẫn nứt. Nhưng cột "Đã xong" ở mỗi làng đã dài quá tầm tay với, và chưa ai bỏ hàng.'],
+    ], lesson: 'Khi kết quả chưa nằm trong tay mình, hãy đặt mục tiêu vào phần mình quyết được: số việc làm xong hôm nay. Tiến độ đo bằng hành động thì không ai lấy mất được.' },
+
+    { lv: 98.3, title: 'Ruộng không xanh', lead: 99, pages: [
+      ['ke', 'moon', 'Tháng thứ ba. Người bỏ hàng ngày một nhiều. Kẻ thì thầm trong trăng không cần nói dối: nó chỉ đọc to con số. Chín mươi ngày, mười vạn người, không một ngọn mạ.'],
+      ['ke', 'talk', 'Hàn Phong gục xuống giữa mương. Tóc hắn bạc trắng chỉ sau một đêm: mười năm nội lực vay của Giáo chủ đã tới hạn đòi, đúng lúc mọi người cần hắn nhất.'],
+      ['phong', 'talk', 'Đi nhanh mười năm, rồi trả lại hai mươi. Tính ra ta còn chậm hơn ngươi, đồ gánh nước. Đừng đỡ ta. Đưa ta cái thùng. Ta chuyền được.'],
+      ['ke', 'zen', 'Sư phụ Tùng Hạc ngày nào cũng ra ruộng, dù tay đã run. Ông không chuyền theo hàng. Ông gánh riêng, tới đúng thửa ruộng xa nhất, nơi chưa ai kịp tới.'],
+      ['su', 'talk', 'Năm ấy ta đến muộn ba ngày. Lần này ta muốn đến trước. Đừng cản ta, {name}. Còn Vô Khuyết… nếu được, hãy gánh cả nó về.'],
+      ['ke', 'zen', 'Chiều hôm ấy, người ta thấy ông ngồi tựa bờ ruộng xa, đôi thùng đã cạn, đòn gánh đặt ngang gối. Ông đi nhẹ như người chợp mắt sau một buổi làm xong việc.'],
+      ['ke', 'moon', 'Đêm ấy trăng đỏ sáng rực hơn bao giờ hết, chờ một dòng tuyệt vọng thật lớn. {Name} quỳ bên thầy, không khóc được. Sợi chỉ trên ngực {y} siết tới tận tim.'],
+      ['ke', 'taichi', 'Sáng ra, Tiểu Mộc là người thấy trước. Chỗ thùng nước cuối cùng của sư phụ đổ xuống, giữa kẽ đất nứt, có một ngọn mạ. Chỉ một ngọn. Xanh.'],
+    ], lesson: 'Phần lớn nỗ lực đều có một quãng dài chưa thấy gì. Người bỏ cuộc thường bỏ ngay trước khi mầm đầu tiên nhú lên. Hãy làm cho xong phần của hôm nay.' },
+
+    { lv: 98.7, title: 'Mầm xanh dưới trăng đỏ', lead: 99, pages: [
+      ['ke', 'talk', 'Tin về một ngọn mạ chạy dọc mười vạn người nhanh hơn ngựa. Người đã bỏ hàng quay lại. Bà Tư gánh trà ra tận ruộng. Lũ trẻ đặt tên cho ngọn mạ là "Thầy".'],
+      ['ke', 'martial', 'Mười ngày sau là một vạt. Một tháng sau, cả cánh đồng dưới chân Vân Mộng lên màu. Nước do người mang tới đã nhiều hơn nước vầng trăng kịp hút.'],
+      ['ke', 'moon', 'Dòng khí đỏ chảy về trăng máu mỏng dần rồi đứt hẳn. Không còn tuyệt vọng để ăn, con mắt đỏ lần đầu lộ vẻ đói. Nó đổi cách.'],
+      ['than', 'moon', 'Ngươi muốn gặp sư huynh ngươi không? Nhìn đi.'],
+      ['ke', 'moon', 'Trong con ngươi đỏ hiện ra một thửa ruộng nứt vô tận. Giữa ruộng, một cậu bé lên mười ngồi bó gối bên người mẹ đã lạnh. Lệ Vô Khuyết vẫn ở trong thân xác ấy, bị nhốt lại đúng cái đêm năm xưa.'],
+      ['than', 'moon', 'Mở cửa ngay đêm nay, ta thả nó ra. Một cánh cửa đổi một người anh. Ngươi nợ mẹ nó một mạng, nhớ không?'],
+      ['be', 'moon', 'Đừng… mở… tiểu {sd}. Ta thấy ruộng… của các ngươi rồi. Xanh thật… phải không?'],
+      ['hero', 'martial', 'Xanh thật, đại sư huynh. Tại hạ sẽ không mở cửa cho nó. Tại hạ sẽ vào tận trong đó mà gánh huynh ra.'],
+    ], lesson: 'Một kết quả nhỏ nhìn thấy được đáng giá hơn mười lời động viên. Hãy tìm và chỉ cho cả nhóm thấy ngọn mạ đầu tiên; nó kéo người ta quay lại hàng.' },
 
     { lv: 99, title: 'Đại chiến Vân Mộng', foe: 'giao', lead: 99, pages: [
-      ['ke', 'moon', 'Đêm rằm. Hai vầng trăng hiện trên đỉnh Vân Mộng: một bạc như nước, một đỏ như máu. Hai người cùng cấp chín mươi chín đứng đối diện nhau.'],
-      ['giao', 'moon', 'Tiểu {sd}, ba mươi năm ta nhảy từng bước ba bậc một. Ngươi bò từng chuyến nước. Rốt cuộc chúng ta đứng cùng một chỗ. Ngươi không thấy nực cười sao?'],
-      ['hero', 'talk', 'Không nực cười. Huynh đã chạy rất xa để khỏi phải nhìn lại ngày ở Lệ thôn. Tại hạ đến để gánh nốt đoạn đường mẹ huynh chưa đi hết.'],
-      ['ke', 'martial', 'Huyết Nguyệt Thôn Thiên! Cả bầu trời đỏ rực bị hút về một điểm. Vạn Nhật Nhất Kiếm! Mười nghìn ngày gánh nước dồn vào một nhát mộc kiếm.'],
-      ['ke', 'zen', 'Hai chiêu chạm nhau. Không nổ, không vỡ. Như hai vầng trăng soi vào nhau trên mặt nước. Trong kiếm của {name}, Giáo chủ thấy bóng một người đàn bà gánh nước.'],
-      ['giao', 'moon', 'Mẹ…'],
-      ['ke', 'zen', 'Lần đầu tiên sau năm mươi năm, Lệ Vô Khuyết đứng yên. Và trong khoảnh khắc đứng yên ấy, lòng hắn không còn khuyết.'],
-      ['ke', 'taichi', 'Cánh cửa chín mươi chín mở ra cho cả hai. {Name} bước qua vì đã đi trọn từng bước. Giáo chủ bước qua vì, trong một khắc, hắn đã đủ.'],
-      ['than', 'moon', 'Ngươi là của ta, Lệ Vô Khuyết! Giao ước đã trọn!'],
-    ], lesson: 'Đối thủ lớn nhất cũng có thể là tấm gương soi rõ nhất. Đi đến cùng con đường của mình, có khi ta giúp được cả người đứng phía bên kia.' },
+      ['ke', 'moon', 'Đêm rằm. Hai vầng trăng hiện trên đỉnh Vân Mộng: một bạc như nước, một đỏ như máu. Giữa hai vầng trăng, một cánh cổng đá mờ dần hiện ra, trên có mười ổ khóa: Thiên Môn.'],
+      ['than', 'moon', 'Chín mươi chín cấp. Ngươi đã tới đúng nơi ta cần ngươi tới. Giờ thì mở ra, hoặc nhìn ta dùng thân xác này giết từng đứa ngươi thương.'],
+      ['ke', 'martial', 'Huyết Nguyệt Thôn Thiên! Cả bầu trời đỏ rực bị hút về một điểm. Vạn Nhật Nhất Kiếm! Bao nhiêu ngày gánh nước dồn vào một nhát mộc kiếm.'],
+      ['ke', 'martial', 'Ba trăm chiêu. {Name} thắng thế mà không thể ra đòn kết liễu: mỗi vết thương trên thân xác kia là một vết thương của sư huynh. Tà thần biết thế, nên nó chẳng thèm đỡ.'],
+      ['hero', 'zen', 'Đánh thế này thì thua. Tại hạ tra kiếm vào bao, ngồi xuống giữa trận, làm điều Không Nguyệt dạy trên núi tuyết: để hồn rời thân, bước thẳng vào con mắt đỏ.'],
+      ['ke', 'moon', 'Thân {name} ngồi im như tượng trên đỉnh núi. Tiểu Mộc, Hàn Phong, Lãnh Tịch và chín Nguyệt Sứ cũ lập tức dựng vòng người che quanh. Không ai phải bảo ai.'],
+      ['dien', 'martial', 'Nó sẽ tìm cái thân đang ngồi này trước. Vậy đêm nay trên đỉnh núi sẽ có mười hai {name}. Để xem con mắt ấy nhận ra kẻ nào là thật.'],
+      ['ke', 'moon', 'Bên trong con mắt là thửa ruộng nứt vô tận dưới trăng đỏ. {Name} bước đi giữa ruộng, tay không, tiến về phía cậu bé đang ngồi bó gối.'],
+      ['ke', 'zen', 'Phía sau {y}, mười ổ khóa trên cổng đá cùng rung lên một tiếng. Thiên Môn không chờ kẻ thắng trận. Nó chờ kẻ dám đi tới tận cùng.'],
+    ], lesson: 'Có những vấn đề không giải được bằng cách đánh mạnh hơn. Khi mọi đòn đều làm tổn thương thứ mình muốn giữ, hãy đổi cách tiếp cận và đi vào gốc của vấn đề.' },
+
+    { lv: 99.2, title: 'Trong lòng trăng máu', foe: 'giao', lead: 99, pages: [
+      ['ke', 'moon', 'Trong thửa ruộng không có ngày đêm. {Name} ngồi xuống cạnh cậu bé. Không nói gì. Chỉ ngồi, như hai đứa trẻ bên bờ suối cạn.'],
+      ['be', 'moon', 'Ngươi là ai? Ở đây không ai tới cả. Chỉ có mẹ, ta, và tiếng nói trên kia.'],
+      ['hero', 'talk', 'Ta là đứa bé trong chiếc giỏ bên bờ suối. Mẹ huynh nuôi ta ba ngày bằng phần cháo của bà. Bà không thua mùa hạn. Bà đã cứu được ta.'],
+      ['ke', 'moon', 'Cậu bé ngẩng lên. Trong một nhịp thở, thửa ruộng như sắp có gió. Rồi gương mặt cậu méo đi.'],
+      ['be', 'moon', 'Phần cháo của mẹ…? Vậy là mẹ chết đói vì ngươi. Không có ngươi, mẹ đã chờ được ta mang gạo về. Mẹ chết… vì ngươi!'],
+      ['than', 'moon', 'Ngươi tưởng ta giấu chuyện ấy vì sợ nó có hy vọng sao? Ta để dành, đứa trẻ trong giỏ ạ. Con dao tốt nhất phải dùng sau cùng.'],
+      ['ke', 'moon', 'Cậu bé đứng dậy, và lần này tự tay nắm lấy vầng trăng đỏ. Không còn bị ép. Lệ Vô Khuyết và Tà thần hòa làm một. Một cú đánh hất hồn {name} văng khỏi con mắt.'],
+      ['ke', 'zen', 'Trên đỉnh núi, {y} mở mắt, hộc máu. Sợi chỉ đỏ trên ngực đã thành một sợi xích. Sự thật {y} tin sẽ cứu được người, lại vừa trao cho kẻ thù một đồng minh tự nguyện.'],
+      ['hero', 'zen', 'Huynh ấy nói đúng một nửa. Bà mất vì tại hạ. Câu ấy, tại hạ đã tránh nhìn thẳng suốt từ đêm ở Lệ thôn.'],
+    ], lesson: 'Nói ra sự thật chưa chắc được đón nhận ngay, và ta không điều khiển được cách người khác nghe nó. Phần của ta là nói cho trung thực, rồi nhận lấy phần trách nhiệm thuộc về mình.' },
+
+    { lv: 99.4, title: 'Mười ổ khóa', lead: 99, pages: [
+      ['ke', 'zen', 'Tà thần rút về trời tây dưỡng sức chờ nguyệt thực. Trên Thiên Môn, mười ổ khóa mang hình mười thứ quen thuộc: cây quạt, chiếc đèn, thanh đao, ống sáo… Mười thói xấu, lần này nằm trong chính {name}.'],
+      ['ke', 'talk', 'Mỗi Nguyệt Sứ cũ nhận dạy một khóa, vì không ai hiểu một thói xấu bằng kẻ từng sống trong nó. Miên Hồ bắt {y} làm ngay việc đang né. Thiên Diện bắt {y} ngồi nhìn một ngọn đèn suốt đêm.'],
+      ['loi', 'talk', 'Ngươi muốn gỡ sợi xích trong một ngày cho kịp nguyệt thực chứ gì? Đó là ta ngày xưa đấy. Đứng yên. Một nén nhang. Rồi hãy nói chuyện tiếp.'],
+      ['ke', 'martial', 'Bách Tý bắt {y} gạch bớt bảy trong tám việc trên bảng. Ngọc Vô Hà bắt {y} mặc tấm giáp vá ra trận. Khô Vinh canh cho {y} ngủ. Ảnh Song đập nốt mảnh gương cuối cùng.'],
+      ['suong', 'talk', 'Còn khóa của ta. Ngươi vào con mắt ấy một mình. Ngươi định gánh hắn ra một mình. Ngày trước ta cũng nghĩ một mình ta là đủ.'],
+      ['ke', 'zen', 'Tám ổ khóa lần lượt rơi. Ổ thứ chín mang hình ống sáo xương: tự nghi ngờ. Không ai dạy được khóa ấy, vì kẻ giữ nó chưa bao giờ là người.'],
+      ['ma', 'zen', 'Bà chết vì ngươi. Sư phụ ngươi chết trên ruộng vì ngươi. Lão ngư chết đứng vì ngươi. Ngươi gánh nước cả đời, và xem ngươi đã mang lại gì cho những người thương ngươi.'],
+      ['hero', 'zen', 'Trong ngôi miếu đêm mưa năm nào, tại hạ thắng tiếng sáo bằng cách đếm việc đã làm. Lần này không đếm được. Những cái tên ấy không nằm ở cột "Đã xong".'],
+      ['ke', 'moon', 'Ổ khóa thứ chín không rơi. Trên trời tây, vầng trăng bạc đã bắt đầu bị một cái bóng đen gặm vào mép. Nguyệt thực còn cách bảy đêm.'],
+    ], lesson: 'Người hiểu rõ một thói xấu nhất là người từng mắc nó. Hãy học từ những lần mình và người khác vấp ngã, và đừng ngại nhờ họ chỉ ra chỗ mình đang lặp lại.' },
+
+    { lv: 99.6, title: 'Món nợ một gáo nước', lead: 99, pages: [
+      ['ke', 'zen', 'Bảy đêm trước nguyệt thực, {name} rời đỉnh núi, một mình về quán trà dưới chân Vân Mộng. Bà Tư vẫn ngồi quạt lò, như chưa từng có ai rời đi.'],
+      ['batu', 'talk', 'Người đàn bà ấy dúi chiếc giỏ vào tay ta. Không dặn ta nuôi con cho giỏi, cũng chẳng bắt nó mang ơn. Bà chỉ nói một câu: "Cho nó uống nước mỗi ngày."'],
+      ['hero', 'talk', 'Bà ấy mất vì con, bà ạ.'],
+      ['batu', 'talk', 'Bà ấy mất vì hạn. Còn chia cháo cho con là việc bà ấy chọn. Con định giành luôn cả việc người ta đã chọn hay sao? Nợ kiểu ấy không trả ngược lại được, chỉ trả tiếp cho người sau.'],
+      ['hero', 'zen', 'Tại hạ chợt hiểu vì sao từ bé đã không chịu nổi cảnh thùng nước của ai đó vơi. Mỗi chuyến nước tại hạ gánh cho người khác, hóa ra là đang trả cho bà mà không biết.'],
+      ['ke', 'taichi', '{Y} thôi cãi lại tiếng sáo. Phải, bà mất vì đã chia phần cháo ấy. Và đứa trẻ được chia cháo đã gánh mười nghìn chuyến nước cho thiên hạ. Cả hai câu đều thật.'],
+      ['ke', 'zen', 'Sợi xích đỏ không đứt. Nó chỉ không còn chỗ để móc: chỗ trống ấy nay đã có tên, có mặt người, có một câu dặn. Sợi xích tuột xuống như sợi chỉ mục. Trên đỉnh núi, ổ khóa thứ chín rơi.'],
+      ['vong', 'talk', 'Còn khóa cuối, khóa của ta: tuyệt vọng. Ta không dạy ngươi được. Ngươi chưa từng tuyệt vọng thật. Chìa của nó nằm trong tay kẻ đang ngồi giữa ruộng nứt kia.'],
+      ['than', 'moon', 'Hai mươi năm xây thang, và nó tự tháo khỏi chân ta? Được. Không đi nhờ được thì ta phá cửa. Đêm nguyệt thực, ta đốt ba nghìn mạng mang ấn làm củi!'],
+    ], lesson: 'Mặc cảm chỉ giữ ta đứng yên; lòng biết ơn thì đẩy ta đi tiếp. Món nợ với người đã giúp mình không trả ngược lại được: hãy trả bằng cách giúp người đến sau.' },
+
+    { lv: 99.8, title: 'Nguyệt thực', foe: 'giao', lead: 99, pages: [
+      ['ke', 'moon', 'Đêm nguyệt thực. Cái bóng đen nuốt dần vầng trăng bạc. Thiên Hình đứng sẵn bên Thiên Môn, thước ngọc giơ cao: bóng che kín trăng thì cửa niêm vĩnh viễn.'],
+      ['ke', 'moon', 'Dưới chân núi, ba nghìn giáo chúng mang ấn bắt đầu bốc khói đỏ. Tà thần đang đốt họ lấy sức phá cửa. Tiểu Mộc đã chờ sẵn với ba nghìn tấm thẻ tre.'],
+      ['moc', 'talk', 'Mỗi người một việc ngược với thói của mình, làm ngay bây giờ! Ai hay để mai thì gõ chuông. Ai hay ôm việc thì đặt bớt xuống. Xong một việc, ấn mờ một phần. Nhanh lên!'],
+      ['ke', 'martial', 'Hàn Phong tóc bạc đứng giữ nhịp trống, thật chậm. Thiên Diện chạy khắp trận, mỗi lúc mang một gương mặt người thân của ai đó để gọi họ dậy. Khói đỏ thưa dần.'],
+      ['ke', 'zen', '{Name} không mang kiếm. {Y} gánh đôi thùng nước múc từ con suối Lệ thôn, nay đã chảy lại, đi vào con mắt đỏ lần thứ hai. Lần này, tất cả cùng đặt tay lên vai {y}.'],
+      ['hero', 'talk', 'Đại sư huynh. Huynh nói đúng: bà mất vì chia cháo cho ta. Ta không xin huynh tha. Ta mang nước tới. Bà dặn huynh mỗi ngày một gáo. Huynh chưa múc gáo nào.'],
+      ['ke', 'moon', 'Cậu bé nhìn cái gáo sứt quai rất lâu. Vầng trăng đỏ rít lên. Cậu cầm lấy gáo, múc đầy, và lần đầu tiên trong đời tưới xuống thửa ruộng của mẹ. Một gáo.'],
+      ['be', 'moon', 'Mẹ ơi. Con tưới rồi này.'],
+      ['ke', 'moon', 'Dưới gáo nước ấy, đất nứt khép lại một đường. Lòng Lệ Vô Khuyết không còn khuyết, và kẻ sống nhờ chỗ khuyết mất chỗ trú: Tà thần bị hất văng khỏi thân xác hắn. Trên đỉnh núi, ổ khóa thứ mười rơi xuống.'],
+    ], lesson: 'Thay đổi lớn nhất cũng bắt đầu bằng một lần làm thật: một gáo nước, một việc nhỏ. Đừng đợi được tha thứ hay thật sẵn sàng; hãy bắt đầu từ việc nhỏ đã bị bỏ dở lâu nhất.' },
 
     { lv: 100, title: 'Song nguyệt', foe: 'giao', lead: 100, pages: [
-      ['ke', 'zen', 'Khi bụi tan, trên trời có hai vầng trăng. {Name} đứng trên đỉnh núi, quanh thân là ánh bạc dịu như nước trong thùng.'],
-      ['thien', 'zen', 'Ngôi Hằng Nguyệt Thần đã trống từ thuở hồng hoang. Nó chỉ nhận người đi lên từng bước, không đi tắt bước nào. Chúc mừng ngươi.'],
-      ['ke', 'moon', 'Phía chân trời bên kia, Lệ Vô Khuyết ngồi trên ngai đỏ của Huyết Nguyệt Thần. Nhưng trong mắt hắn còn một tia sáng bạc chưa tắt.'],
-      ['giao', 'moon', 'Hằng Nguyệt Thần… tiểu {sd}. Tà thần đang nuốt ta từ bên trong. Nếu muốn cứu ta, hãy đến mà đánh. Nếu không, hãy đến mà giết.'],
-      ['su', 'talk', 'Đi đi. Lần này, gánh cả nó về.'],
+      ['ke', 'moon', 'Thiên Môn mở. Ánh sáng tràn xuống đỉnh Vân Mộng đúng lúc bóng đen sắp che kín trăng. Tà thần, giờ chỉ còn là một vành trăng khuyết đói khát, lao về phía cánh cửa.'],
+      ['giao', 'moon', 'Thôn Nguyệt Quyết… cả đời ta dùng nó để lấy của người. Lần cuối này, cho ta dùng để giữ. Đi đi, tiểu {sd}. Ta ghì nó ở đây.'],
+      ['ke', 'martial', 'Lệ Vô Khuyết hút trọn Tà thần vào thân xác già nua của mình và ghì chặt lấy. Thọ mệnh hắn chỉ còn tính bằng hơi thở. Cửa mở cho cả hai, nhưng hắn không bước.'],
+      ['hinh', 'talk', 'Người kế thừa Hằng Nguyệt, bước qua đi. Kẻ kia ở lại thì chết cùng nó trước bình minh. Cõi người yên, Thần giới yên. Phép chỉ cần có thế.'],
+      ['hero', 'martial', 'Sư phụ dặn tại hạ: gánh cả huynh ấy về. Tại hạ đã gánh nước cho cả thiên hạ. Không lý gì bỏ lại đúng một người.'],
+      ['ke', 'taichi', '{Name} xốc sư huynh lên vai như một gánh nước, bước qua Thiên Môn. Cánh cửa chín mươi chín mở ra cho cả hai: một người vì đã đi trọn từng bước, một người vì trong một khắc đã đủ đầy.'],
+      ['thien', 'zen', 'Hằng Nguyệt tinh, ngôi thứ ba mươi sáu của Thiên Cang, từ nay là của ngươi. Thần vị không mở thêm, chỉ truyền lại. Lão đi ngao du vũ trụ đây. Giữ nó như giữ thùng nước yên.'],
+      ['ke', 'moon', 'Nhưng vào tới Thần giới, Tà thần không cần trốn nữa. Từ bên trong Lệ Vô Khuyết, nó đòi lại ngôi Phương thần bỏ trống của mình, và ngôi ấy nhận ra chủ cũ. Một vầng trăng đỏ mọc giữa mười hai phương.'],
+      ['giao', 'moon', 'Tiểu {sd}… nó đang nuốt ta từ bên trong. Muốn cứu ta, hãy đánh lên tới chỗ ta ngồi. Nếu không kịp… thì hãy đến mà giết.'],
+      ['hinh', 'talk', 'Phương thần chỉ bị phế khi thua kẻ thách đấu đủ tư cách. Muốn thách một Phương thần, ngươi phải thắng cả ba mươi lăm Thiên Cang còn lại. Chính ngươi mang nó vào. Chính ngươi phải kéo nó xuống.'],
       ['ke', 'zen', 'Song thần chi chiến bắt đầu. Trên Thần còn ba cấp nữa mới tới Thần Vương. Và {name} biết: đường lên đó cũng chỉ đi được bằng từng chuyến nước.'],
-    ], lesson: 'Đích đến này là khởi đầu của một hành trình khác. Thành công thật sự là vẫn giữ được thói quen tốt đã đưa mình đến đây.' },
+    ], lesson: 'Đích đến này là khởi đầu của một hành trình khác, và lựa chọn nào cũng kèm trách nhiệm. Thành công thật sự là vẫn giữ được thói quen tốt đã đưa mình đến đây.' },
   ];
   window.zenTale = { WHO, FOES, CHAPTERS };
 })();

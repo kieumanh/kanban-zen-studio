@@ -53,7 +53,7 @@
   // v2.6.0: truyện mới đánh dấu bằng notice:tale-N; danh hiệu đã đạt nhờ truyện cũ (notice:story-N) vẫn giữ.
   const chapters = () => {
     const keys = [...receipts()];
-    return Math.max(keys.filter((k) => /^notice:story-([1-9]\d*)$/.test(k)).length, keys.filter((k) => /^notice:tale-([1-9]\d*)$/.test(k)).length);
+    return Math.max(keys.filter((k) => /^notice:story-([1-9]\d*)$/.test(k)).length, keys.filter((k) => /^notice:tale-([1-9]\d*(\.\d+)?)$/.test(k)).length);
   };
 
   // [mã, tên, mô tả, nhóm, số liệu, mốc]. v2.5.0: thêm realm-11 (Thành Thần); v2.7.0: thêm meet-22 (Tứ hải giai huynh đệ).

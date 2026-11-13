@@ -77,6 +77,12 @@
   const levelCost = (n) => (n >= DOUBLE_FROM && n <= GOD ? NORMAL[9] * 2 ** (n - DOUBLE_FROM) : isGate(n) ? GATE[n / 10 - 1] : NORMAL[Math.min(10, Math.floor(n / 10))]);
   const LEVEL_AT = [0];
   for (let n = 1; n <= LEVEL_MAX; n++) LEVEL_AT[n] = LEVEL_AT[n - 1] + levelCost(n);
+  // v2.12.0 (Thiên Môn Ký): tu vi cần cho một vị trí trên thang, kể cả cấp lẻ. 97.5 = nửa đường từ cấp 97 lên cấp 98
+  // (chương truyện giữa cấp, dist/growth-story.js).
+  const tuviAt = (lv) => {
+    const f = Math.min(LEVEL_MAX, Math.floor(lv));
+    return f >= LEVEL_MAX || lv === f ? LEVEL_AT[f] : LEVEL_AT[f] + (lv - f) * levelCost(f + 1);
+  };
   // "Cấp 37/100"; trên Thần: "Thần cấp 1/3".
   const levelLabel = (lv) => (lv > GOD ? 'Thần cấp ' + (lv - GOD) + '/3' : 'Cấp ' + lv + '/100');
   const SOURCE_LABEL = { task: 'Hoàn thành nhiệm vụ', habit: 'Khổ luyện đủ 7 ngày', archive: 'Tổng hợp công phu cũ' };
@@ -430,10 +436,10 @@
       const entry = { id: uid(), d: today(), s: a.source, k: a.key, n: String(a.title || '').slice(0, 120), p: a.add.slice() };
       if (!a.key) delete entry.k;
       if (!entry.n) delete entry.n;
-      const before = realmOf(earnedTotal());
+      const t0 = earnedTotal(), before = realmOf(t0);
       if (!wfSave(() => { data.growth.log.push(entry); data.growth.spend ||= []; compact(); })) return notify('Chưa lưu được điểm. Hãy thử lại.');
-      const after = realmOf(earnedTotal());
-      crossing = [before.level, after.level];
+      const t1 = earnedTotal(), after = realmOf(t1);
+      crossing = [before.level, after.level, t0, t1];
       // Thông báo điểm nghiệp (bật mặc định, tắt ở Cài đặt → Thông báo): lên cấp, đột phá cảnh giới mới; với việc hằng ngày còn báo số điểm vừa cộng.
       if (growth()?.notify !== false) {
         const parts = [];
@@ -454,7 +460,8 @@
     if (toastText) notify(toastText);
     window.zenFx?.rank();
     // v1.92.0: vượt mốc 5 cấp thì mở chương truyện ký tương ứng (growth-story.js); v1.97.0: sau nghi thức Đột phá nếu có.
-    const story = () => crossing && crossing[1] > crossing[0] && window.zenStory?.crossed(crossing[0], crossing[1]);
+    // v2.12.0: chương giữa cấp mở theo tu vi, nên báo cả khi chưa lên cấp.
+    const story = () => crossing && crossing[3] > crossing[2] && window.zenStory?.crossed(crossing[0], crossing[1], crossing[2], crossing[3]);
     if (breakthroughTo) window.zenFx.breakthrough(breakthroughTo, story);
     else story();
   }
@@ -610,7 +617,7 @@
     reporting = true;
     go('growth');
   }
-  window.zenGrowth = { AXES, started, scores, earnedScores, spentScores, total, realmOf, realmInfo, levelLabel, REALMS, REALM_FROM, LEVEL_NAMES, LEVEL_AT, LEVEL_MAX, GOD, extremes, fmt, openAward, growth, STEP, iconSvg, habitStreak, buildReport, tipsOf, openReport, heroName, openSpend };
+  window.zenGrowth = { AXES, started, scores, earnedScores, spentScores, total, realmOf, realmInfo, levelLabel, tuviAt, REALMS, REALM_FROM, LEVEL_NAMES, LEVEL_AT, LEVEL_MAX, GOD, extremes, fmt, openAward, growth, STEP, iconSvg, habitStreak, buildReport, tipsOf, openReport, heroName, openSpend };
 
   // ---- Sử dụng điểm (v1.81.0) ---------------------------------------------------------------------------------------------
   // Form ghi vật phẩm đã mua / quy đổi và số điểm trừ ở từng chỉ số. Mỗi lần quy đổi là một dòng trong data.growth.spend;

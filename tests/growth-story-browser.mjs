@@ -1,6 +1,7 @@
 // v1.92.0 (Truyện Ký): cốt truyện của hiệp khách trong mục Tu vi. Khai cuộc ở cấp 0, các chương theo cấp tới 100.
 // v2.6.0 (Song Nguyệt): cốt truyện mới "Hằng Nguyệt và Huyết Nguyệt" (27 chương + khai cuộc); dấu đã đọc dùng khóa notice:tale-N.
 // Bài này giữ nguyên các ý kiểm của v1.92.0, chỉ đổi tên chương, số trang và khóa theo truyện mới.
+// v2.12.0 (Thiên Môn Ký): tổng 38 chương + khai cuộc; chương giữa cấp ghi cấp lẻ (97,5).
 // v2.11.0 (Ẩn Tình): chương 1 viết lại có 10 trang (thêm chiếc đòn gánh cũ của sư phụ); Tiểu Mộc nói ở trang 4.
 // Kiểm ở 390 (chạm), 820 (chạm), 1440 px:
 //  1. Vượt mốc 5 cấp khi lưu công lực thì bảng hội thoại tự hiện đúng chương; lời thoại theo hiệp khách (danh hiệu, nàng / sư tỷ);
@@ -58,7 +59,7 @@ try {
     await finishTask(page);
     await page.waitForSelector('dialog.gr-story[open]', { timeout: 5000 });
     let s = await story(page);
-    assert.equal(s.eyebrow, 'TRUYỆN KÝ GIANG HỒ · CHƯƠNG 1 / 27', 'đúng chương' + at);
+    assert.equal(s.eyebrow, 'TRUYỆN KÝ GIANG HỒ · CHƯƠNG 1 / 38', 'đúng chương' + at);
     assert.equal(s.title, 'Trăm chuyến nước', 'tên chương' + at);
     assert.equal(s.who, 'Truyện ký', 'trang đầu là lời kể' + at);
     assert.match(s.text, /vai Lam Y rớm máu/, 'lời kể dùng danh hiệu hiệp khách' + at);
@@ -92,11 +93,12 @@ try {
     // 3. Khung Truyện ký trong trang Tu vi.
     await h.show(page, 'growth');
     const list = await page.evaluate(() => [...document.querySelectorAll('.gr-ch')].map((li) => [li.querySelector('strong').textContent, li.querySelector('.gr-ch-tag').textContent, !!li.querySelector('button')]));
-    assert.equal(list.length, 28, 'Khai cuộc + 27 chương' + at);
+    assert.equal(list.length, 39, 'Khai cuộc + 38 chương' + at);
     assert.deepEqual(list[0], ['Trăng trong thùng nước', 'Chưa đọc', true], 'Khai cuộc đọc được, chưa đọc' + at);
     assert.deepEqual(list[1], ['Trăm chuyến nước', 'Đã đọc', true], 'chương 1 đã đọc' + at);
     assert.deepEqual(list[2], ['Trấn ngủ say', 'Mở ở cấp 10', false], 'chương 2 còn khóa' + at);
-    assert.deepEqual(list[27], ['Song nguyệt', 'Mở ở cấp 100', false], 'chương cuối ở cấp 100' + at);
+    assert.deepEqual(list[38], ['Song nguyệt', 'Mở ở cấp 100', false], 'chương cuối ở cấp 100' + at);
+    assert.deepEqual(list[29], ['Mười một chiếc ghế', 'Mở ở cấp 97,5', false], 'chương giữa cấp ghi cấp lẻ' + at);
     assert.match(await page.locator('.gr-story-panel .help-copy').innerText(), /Chương kế: Chương 2 · Trấn ngủ say mở ở cấp 10 \(còn 5 điểm tu vi\)\./, 'nêu chương kế và số điểm còn thiếu' + at);
     assert.equal(await noOverflow(page), true, 'trang Tu vi không tràn ngang' + at);
     await page.click('[data-gr-story="0"]');

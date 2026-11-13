@@ -13,6 +13,10 @@
 //       gánh cũ có vết khấc (cấp 5) thành mộc kiếm Đòn Gánh (cấp 30) và là của mẹ Lệ Vô Khuyết (cấp 88); Hàn Phong trở mặt ở cấp 70,
 //       để lại tua kiếm ba nút (cấp 75, ám hiệu đặt ở cấp 35); "Tiểu Mộc" có điều lạ từ cấp 60; kế giữ trấn bị lộ (cấp 84);
 //       sợi chỉ đỏ trên ngực hiệp khách (cấp 82); Vô Vọng là con Mạc Trấn Hải (cấp 86); ba ngày đến muộn của sư phụ (cấp 30, 80, 88).
+//     - v2.12.0 (Thiên Môn Ký): chặng 90–100 viết chi tiết thành 18 chương (tổng: khai cuộc + 38 chương), kịch tính dày hơn hẳn
+//       90 cấp đầu; 7 chương mở giữa cấp (97.5, 98.3, 98.7, 99.2, 99.4, 99.6, 99.8) vì cấp 98–100 kéo dài nhiều tháng.
+//       Thiên Môn (cánh cửa 99 → 100) hiện ra ở cấp 99 với mười ổ khóa, mở cho cả hai ở cấp 100; Thần giới có 36 Thiên Cang,
+//       12 Phương thần, 5 Thần Vương, thần vị chỉ kế thừa; hiệp khách kế thừa ngôi Hằng Nguyệt (Thiên Cang).
 //  2. Khung đọc (390 chạm, 820 chạm, 1440): trang phe ác hiện cảnh Huyết Nguyệt đài (không vẽ hiệp khách), tên phe ác màu riêng;
 //     chỗ thay theo nữ hiệp (sư muội, nha đầu); Tâm đắc nêu cấp Giáo chủ lúc ấy; bảng vừa màn hình.
 //  3. Dấu đã đọc dùng khóa mới notice:tale-N: đã đọc truyện cũ (notice:story-N) thì chương mới vẫn là "Chưa đọc" và vẫn tự mở khi
@@ -56,7 +60,7 @@ try {
     const t = await page.evaluate(() => window.zenTale);
     const C = t.CHAPTERS;
     const lv = C.map((c) => c.lv);
-    assert.equal(C.length, 28, 'khai cuộc + 27 chương');
+    assert.equal(C.length, 39, 'khai cuộc + 38 chương');
     assert.equal(lv[0], 0, 'khai cuộc ở cấp 0');
     assert.equal(lv.at(-1), 100, 'chương cuối ở cấp 100');
     assert.ok(lv.every((x, i) => !i || x > lv[i - 1]), 'cấp tăng dần');
@@ -79,7 +83,7 @@ try {
     assert.ok(C.filter((c) => c.foe === 'giao').length >= 5, 'nhiều trận với Giáo chủ từ cấp 80');
     const lead = C.map((c) => c.lead);
     assert.ok(lead.every((x, i) => !i || x >= lead[i - 1]), 'Giáo chủ tu luyện song hành: cấp không giảm');
-    assert.ok(C.every((c) => c.lead >= c.lv), 'Giáo chủ luôn đi trước hoặc ngang hiệp khách');
+    assert.ok(C.every((c) => c.lead >= Math.floor(c.lv)), 'Giáo chủ luôn đi trước hoặc ngang hiệp khách');
     assert.deepEqual([C.find((c) => c.lv === 99).lead, C.find((c) => c.lv === 100).lead], [99, 100], 'kẹt ở 99, lên 100 cùng hiệp khách');
     const said = (id, max = 100, min = 0) => C.filter((c) => c.lv >= min && c.lv <= max && c.pages.some(([who]) => who === id)).map((c) => c.lv);
     assert.ok(said('thien').length >= 3 && said('hai').length >= 2, 'thiền sư và võ sư xuất hiện nhiều lần');
@@ -91,7 +95,9 @@ try {
     const reveal = C.filter((c) => /Vô Yểm Tà Thần/.test(all(c)) && /thần vị/.test(all(c)));
     assert.ok(reveal.length && reveal.every((c) => c.lv > 95), 'sự thật về giao ước với tà thần chỉ lộ sau cấp 95');
     assert.ok(C.filter((c) => /cánh cửa/i.test(all(c)) && /chín mươi chín/.test(all(c))).some((c) => c.lv > 95), 'cánh cửa 99 → 100');
-    assert.match(all(C.find((c) => c.lv === 99)), /Cánh cửa chín mươi chín mở ra cho cả hai/, 'đại chiến ở 99, cả hai cùng qua cửa');
+    assert.match(all(C.find((c) => c.lv === 99)), /Huyết Nguyệt Thôn Thiên!.*Vạn Nhật Nhất Kiếm!/, 'đại chiến ở 99');
+    assert.match(all(C.find((c) => c.lv === 99)), /mười ổ khóa: Thiên Môn/, 'Thiên Môn hiện ra ở 99');
+    assert.match(all(C.find((c) => c.lv === 100)), /Cánh cửa chín mươi chín mở ra cho cả hai/, 'cả hai cùng qua cửa lên 100');
     assert.match(all(C.find((c) => c.lv === 100)), /Song thần chi chiến/, 'cấp 100 mở Song thần chi chiến');
     const text = JSON.stringify(t);
     for (const bad of ['Đường Tam', 'Đấu La', 'Võ Hồn', 'Hồn Sư', 'Hạo Thiên', 'Bỉ Bỉ Đông', 'Sử Lai Khắc', 'Tiểu Vũ', 'Hải Thần', 'Tu La']) assert.ok(!text.includes(bad), 'không dùng tên của truyện tham khảo: ' + bad);
@@ -111,6 +117,34 @@ try {
     assert.match(at(88), /Chiếc đòn gánh ấy là của bà/, 'cấp 88: chiếc đòn gánh của mẹ Lệ Vô Khuyết');
     assert.match(at(88), /Ta quay lại muộn ba ngày/, 'cấp 88: lời thú nhận của sư phụ');
     assert.ok(C.filter((c) => c.lv < 90).every((c) => !/đứa trẻ trong giỏ.*là ngươi|là tại hạ/.test(all(c))), 'thân thế hiệp khách chưa lộ trước cấp 90');
+    // v2.12.0 (Thiên Môn Ký): chặng 90–100.
+    const last = C.filter((c) => c.lv >= 90);
+    assert.equal(last.length, 18, '18 chương từ cấp 90 tới 100');
+    assert.deepEqual(last.map((c) => c.lv), [90, 91, 92, 93, 94, 95, 96, 97, 97.5, 98, 98.3, 98.7, 99, 99.2, 99.4, 99.6, 99.8, 100], 'mỗi cấp 90–100 một chương, thêm 7 chương giữa cấp');
+    assert.ok(C.filter((c) => c.lv < 90).every((c) => Number.isInteger(c.lv)), 'dưới cấp 90 không có chương giữa cấp');
+    const density = (list, span) => list.reduce((n, c) => n + c.pages.length, 0) / span;
+    assert.ok(density(last, 10) > 3 * density(C.filter((c) => c.lv > 0 && c.lv < 90), 89), 'chặng 90–100 dày gấp hơn ba lần 90 cấp đầu (số trang mỗi cấp)');
+    assert.match(at(90), /Canh ba\. Cầu Lạc Nhạn\. Đi một mình/, 'cấp 90: Hàn Phong hẹn canh ba');
+    assert.match(at(91), /ba nghìn giáo chúng, mười Nguyệt Sứ, và ta/, 'cấp 91: ấn Huyết Nguyệt');
+    assert.match(at(91), /gương mặt không có nét gì để nhớ của Huyễn Nguyệt Sứ Thiên Diện/, 'cấp 91: Tiểu Mộc giả là Thiên Diện');
+    assert.match(at(92), /mỗi ngày đào một thìa đất/, 'cấp 92: Tiểu Mộc thật trong ngục');
+    assert.match(at(92), /chiếc thứ mười một/, 'cấp 92: chiếc ghế thứ mười một');
+    assert.match(at(93), /Đứa bé ấy… là tại hạ/, 'cấp 93: thân thế hiệp khách');
+    assert.match(at(93), /Mùa hạn ấy không phải của trời/, 'cấp 93: mùa hạn do trăng máu');
+    assert.match(at(94), /thân xác này để ta dùng/, 'cấp 94: Giáo chủ bị chiếm xác');
+    assert.match(at(95), /Lão không còn thở nữa/, 'cấp 95: Mạc Trấn Hải chết đứng');
+    assert.match(at(96), /Mười Nguyệt Sứ là mười phiến đá mài/, 'cấp 96: mười Nguyệt Sứ là đá mài');
+    assert.match(at(97), /ba mươi sáu Thiên Cang tinh.*mười hai Phương thần và năm Thần Vương/, 'cấp 97: Thần giới có 36 Thiên Cang, 12 Phương thần, 5 Thần Vương');
+    assert.match(at(97), /Thần vị không mở thêm được, chỉ kế thừa/, 'cấp 97: thần vị chỉ kế thừa');
+    assert.match(at(97), /Hằng Nguyệt tinh quân.*ngao du vũ trụ/, 'cấp 97: Không Nguyệt là Hằng Nguyệt tinh quân, muốn nhường ngôi để ngao du vũ trụ');
+    assert.match(at(97.5), /Nó buộc vào nỗi sợ không hoàn hảo/, 'cấp 97,5: ấn buộc vào thói xấu');
+    assert.match(at(98.3), /hãy gánh cả nó về.*Chỉ một ngọn\. Xanh/, 'cấp 98,3: sư phụ mất, ngọn mạ đầu tiên');
+    assert.match(at(99.2), /Mẹ chết… vì ngươi!/, 'cấp 99,2: sự thật bị dùng làm dao');
+    assert.match(at(99.4), /Tám ổ khóa lần lượt rơi/, 'cấp 99,4: mười ổ khóa');
+    assert.match(at(99.6), /ổ khóa thứ chín rơi/, 'cấp 99,6: gỡ sợi xích');
+    assert.match(at(99.8), /Mẹ ơi\. Con tưới rồi này.*ổ khóa thứ mười rơi xuống/, 'cấp 99,8: một gáo nước');
+    assert.match(at(100), /Hằng Nguyệt tinh, ngôi thứ ba mươi sáu của Thiên Cang, từ nay là của ngươi/, 'cấp 100: kế thừa ngôi Hằng Nguyệt');
+    assert.match(at(100), /phải thắng cả ba mươi lăm Thiên Cang còn lại/, 'cấp 100: đường lên Phương thần');
     await context.close();
   }
 
