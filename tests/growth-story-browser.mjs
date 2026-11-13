@@ -1,6 +1,7 @@
 // v1.92.0 (Truyện Ký): cốt truyện của hiệp khách trong mục Tu vi. Khai cuộc ở cấp 0, các chương theo cấp tới 100.
 // v2.6.0 (Song Nguyệt): cốt truyện mới "Hằng Nguyệt và Huyết Nguyệt" (27 chương + khai cuộc); dấu đã đọc dùng khóa notice:tale-N.
 // Bài này giữ nguyên các ý kiểm của v1.92.0, chỉ đổi tên chương, số trang và khóa theo truyện mới.
+// v2.11.0 (Ẩn Tình): chương 1 viết lại có 10 trang (thêm chiếc đòn gánh cũ của sư phụ); Tiểu Mộc nói ở trang 4.
 // Kiểm ở 390 (chạm), 820 (chạm), 1440 px:
 //  1. Vượt mốc 5 cấp khi lưu công lực thì bảng hội thoại tự hiện đúng chương; lời thoại theo hiệp khách (danh hiệu, nàng / sư tỷ);
 //     lật trang bằng nút và phím mũi tên; trang cuối là Tâm đắc; Khép sách đóng bảng.
@@ -66,9 +67,14 @@ try {
     assert.equal(await noOverflow(page), true, 'không tràn ngang' + at);
     await page.click('[data-story-next]');
     s = await story(page);
-    assert.equal(s.who, 'Tiểu Mộc', 'trang 2: Tiểu Mộc nói' + at);
+    assert.equal(s.who, 'Truyện ký', 'trang 2: lời kể về chiếc đòn gánh cũ' + at);
+    assert.match(s.text, /chiếc đòn gánh cũ/, 'trang 2: sư phụ lấy chiếc đòn gánh cũ trên xà nhà' + at);
+    await page.click('[data-story-next]');
+    await page.click('[data-story-next]');
+    s = await story(page);
+    assert.equal(s.who, 'Tiểu Mộc', 'trang 4: Tiểu Mộc nói' + at);
     assert.match(s.text, /^Hì hì, sư tỷ gánh nước/, 'nữ hiệp được gọi là sư tỷ' + at);
-    for (let i = 0; i < 7; i++) await page.keyboard.press('ArrowRight'); // chương 1 có 8 trang
+    for (let i = 0; i < 7; i++) await page.keyboard.press('ArrowRight'); // chương 1 có 10 trang
     s = await story(page);
     assert.match(s.lesson, /Tâm đắc.*Đều đặn thắng hăng hái/, 'trang cuối là Tâm đắc' + at);
     assert.match(s.lesson, /Lam Y hiện ở cấp 6 · Sơ nhập giang hồ · 3 điểm tu vi/, 'Tâm đắc nêu cấp hiện tại' + at);

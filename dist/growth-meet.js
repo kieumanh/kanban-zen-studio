@@ -7,7 +7,7 @@
 (function () {
   const ROLES = { giup: 'Giúp đỡ', can: 'Gây khó', amsat: 'Ám sát', thu: 'Thử thách' };
   const CAST = [
-    { id: 'batu', name: 'Bà Tư', title: 'Chủ quán trà chân núi Vân Mộng', bio: 'Người cho hiệp khách gánh nước kiếm cơm ngày đầu. Quạt lò cả đời, không biết võ, biết người.', meets: [
+    { id: 'batu', name: 'Bà Tư', title: 'Chủ quán trà chân núi Vân Mộng', bio: 'Người cưu mang hiệp khách ở quán trà từ thuở còn nằm trong giỏ, cho gánh nước kiếm cơm. Quạt lò cả đời, không biết võ, biết người.', meets: [
       { from: 1, to: 14, kind: 'giup', title: 'Chén trà nghỉ chân', pages: [
         ['ke', 'talk', '{Name} xuống núi mua muối, ghé lại quán trà cũ. Bà Tư vẫn ngồi quạt lò, như chưa từng có ai rời đi.'],
         ['batu', 'talk', 'Ngồi xuống uống chén trà đã. Ta thấy con đi đâu cũng vội như bị ma đuổi.'],
@@ -93,7 +93,7 @@
       { from: 61, to: 90, kind: 'amsat', title: 'Độc trong giếng', pages: [
         ['ke', 'moon', 'Lam Hạt thả độc vào giếng nước của võ đường. Đệ tử lần lượt ngã bệnh.'],
         ['hero', 'martial', 'Tại hạ không vội đi tìm thuốc giải. Tại hạ cho lấp giếng, gánh nước từ suối xa, rồi mới lần theo dấu độc.'],
-        ['ke', 'zen', 'Chặn nguồn độc trước, chữa người sau. Ba ngày sau, Lam Hạt bị Hàn Phong chặn ở cửa rừng, hũ độc vỡ tan.'],
+        ['ke', 'zen', 'Chặn nguồn độc trước, chữa người sau. Ba ngày sau, Lam Hạt bị dân ba làng chặn ở cửa rừng, hũ độc vỡ tan.'],
       ], lesson: 'Khi sự cố xảy ra, hãy chặn nguồn gốc trước rồi mới xử lý hậu quả. Chữa triệu chứng mà để nguyên gốc thì việc không bao giờ hết.' },
     ] },
     { id: 'kytien', name: 'Kỳ Tiên Ông', title: 'Lão cờ thủ bên gốc tùng', bio: 'Năm xưa từng đánh cờ với Lệ Vô Khuyết. Mỗi ván cờ của lão là một bài học về chọn lựa.', meets: [
@@ -200,7 +200,7 @@
       ], lesson: 'Một việc lớn, kể cả sửa sai, cũng chỉ làm được từng bước. Đừng để quy mô của vấn đề làm ta không dám bắt đầu.' },
       { from: 76, to: 95, kind: 'giup', title: 'Bản đồ Huyết Nguyệt đài', pages: [
         ['hotam', 'talk', 'Ta vẽ được lối lên Huyết Nguyệt đài. Nhưng xin các hạ một điều: đừng chỉ đánh, hãy cứu những người còn bị giam.'],
-        ['ke', 'zen', 'Nhờ bản đồ của Hồ Tam, Hàn Phong dẫn người phá ngục, cứu ra ba trăm người bị Thôn Nguyệt Quyết hút dở.'],
+        ['ke', 'zen', 'Nhờ bản đồ của Hồ Tam, {name} dẫn người phá trại giam ngoài, cứu ra ba trăm người bị Thôn Nguyệt Quyết hút dở. Lạ thay, then cổng trại đã được ai đó rút sẵn từ bên trong.'],
       ], lesson: 'Thông tin từ người trong cuộc rất quý; hãy dùng nó đúng mục đích: để giúp, không chỉ để thắng.' },
     ] },
     { id: 'trinhho', name: 'Trịnh Bá Hổ', title: 'Huyện lệnh tham lam', side: 'ac', bio: 'Đặt thuế cho cả việc gánh nước, sẵn sàng mở cổng thành để đổi lấy chức tri phủ.', meets: [

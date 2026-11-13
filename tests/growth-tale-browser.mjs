@@ -9,6 +9,10 @@
 //     - sự thật (Vô Yểm Tà Thần, cánh cửa 99 → 100, thần vị) chỉ lộ sau cấp 95;
 //     - đại chiến ở 99, Song thần ở 100;
 //     - không dùng tên nhân vật / môn phái của truyện tham khảo.
+//     - v2.11.0 (Ẩn Tình): cấp 0–88 viết lại, gieo tình tiết bất ngờ: đứa trẻ trong giỏ và cái gáo sứt quai (khai cuộc); chiếc đòn
+//       gánh cũ có vết khấc (cấp 5) thành mộc kiếm Đòn Gánh (cấp 30) và là của mẹ Lệ Vô Khuyết (cấp 88); Hàn Phong trở mặt ở cấp 70,
+//       để lại tua kiếm ba nút (cấp 75, ám hiệu đặt ở cấp 35); "Tiểu Mộc" có điều lạ từ cấp 60; kế giữ trấn bị lộ (cấp 84);
+//       sợi chỉ đỏ trên ngực hiệp khách (cấp 82); Vô Vọng là con Mạc Trấn Hải (cấp 86); ba ngày đến muộn của sư phụ (cấp 30, 80, 88).
 //  2. Khung đọc (390 chạm, 820 chạm, 1440): trang phe ác hiện cảnh Huyết Nguyệt đài (không vẽ hiệp khách), tên phe ác màu riêng;
 //     chỗ thay theo nữ hiệp (sư muội, nha đầu); Tâm đắc nêu cấp Giáo chủ lúc ấy; bảng vừa màn hình.
 //  3. Dấu đã đọc dùng khóa mới notice:tale-N: đã đọc truyện cũ (notice:story-N) thì chương mới vẫn là "Chưa đọc" và vẫn tự mở khi
@@ -91,6 +95,22 @@ try {
     assert.match(all(C.find((c) => c.lv === 100)), /Song thần chi chiến/, 'cấp 100 mở Song thần chi chiến');
     const text = JSON.stringify(t);
     for (const bad of ['Đường Tam', 'Đấu La', 'Võ Hồn', 'Hồn Sư', 'Hạo Thiên', 'Bỉ Bỉ Đông', 'Sử Lai Khắc', 'Tiểu Vũ', 'Hải Thần', 'Tu La']) assert.ok(!text.includes(bad), 'không dùng tên của truyện tham khảo: ' + bad);
+    // v2.11.0 (Ẩn Tình): các tình tiết gieo ở cấp 0–88.
+    const at = (lv) => all(C.find((c) => c.lv === lv));
+    assert.match(at(0), /một đứa bé, và một cái gáo gỗ sứt quai/, 'khai cuộc: đứa trẻ trong giỏ và cái gáo sứt quai');
+    assert.match(at(5), /chiếc đòn gánh cũ.*vết khấc/, 'cấp 5: chiếc đòn gánh cũ có vết khấc');
+    assert.match(at(30), /gọt chiếc đòn gánh đen bóng thành một thanh mộc kiếm, giữ nguyên vết khấc/, 'cấp 30: mộc kiếm Đòn Gánh gọt từ chiếc đòn gánh cũ');
+    assert.match(at(30), /Ở một nơi ta đến muộn ba ngày/, 'cấp 30: sư phụ đến muộn ba ngày');
+    assert.match(at(35), /ba nút là còn nợ/, 'cấp 35: ám hiệu tua kiếm');
+    assert.match(at(60), /con rùa sau bếp rụt cổ/, 'cấp 60: Tiểu Mộc về muộn, con rùa rụt cổ');
+    assert.match(at(70), /Nguyệt Sứ thứ mười một/, 'cấp 70: Hàn Phong trở mặt');
+    assert.match(at(75), /thắt đúng ba nút/, 'cấp 75: tua kiếm ba nút');
+    assert.match(at(82), /ở đó cũng có một sợi chỉ đỏ/, 'cấp 82: sợi chỉ đỏ trên ngực hiệp khách');
+    assert.match(at(84), /Kế giữ trấn chỉ ba người biết/, 'cấp 84: kế giữ trấn bị lộ');
+    assert.match(at(86), /con trai ta, Mạc Vọng/, 'cấp 86: Vô Vọng là con Mạc Trấn Hải');
+    assert.match(at(88), /Chiếc đòn gánh ấy là của bà/, 'cấp 88: chiếc đòn gánh của mẹ Lệ Vô Khuyết');
+    assert.match(at(88), /Ta quay lại muộn ba ngày/, 'cấp 88: lời thú nhận của sư phụ');
+    assert.ok(C.filter((c) => c.lv < 90).every((c) => !/đứa trẻ trong giỏ.*là ngươi|là tại hạ/.test(all(c))), 'thân thế hiệp khách chưa lộ trước cấp 90');
     await context.close();
   }
 
