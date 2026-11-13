@@ -56,7 +56,7 @@
     return Math.max(keys.filter((k) => /^notice:story-([1-9]\d*)$/.test(k)).length, keys.filter((k) => /^notice:tale-([1-9]\d*)$/.test(k)).length);
   };
 
-  // [mã, tên, mô tả, nhóm, số liệu, mốc]. v2.5.0: thêm realm-11 (Thành Thần).
+  // [mã, tên, mô tả, nhóm, số liệu, mốc]. v2.5.0: thêm realm-11 (Thành Thần); v2.7.0: thêm meet-22 (Tứ hải giai huynh đệ).
   const LIST = [
     ['task-1', 'Xuất chiêu đầu tiên', 'Công thành nhiệm vụ đầu tiên.', 'Công thành', tasksDone, 1],
     ['task-25', 'Tiểu thành', 'Công thành 25 nhiệm vụ.', 'Công thành', tasksDone, 25],
@@ -77,6 +77,7 @@
     ['realm-11', 'Thành Thần', 'Phá ải cấp 100, bước vào Thần cảnh.', 'Tu vi', realm, 11],
     ['story-5', 'Nghe kể giang hồ', 'Đọc 5 chương Truyện ký.', 'Truyện ký', chapters, 5],
     ['story-20', 'Thông tỏ truyện ký', 'Đọc 20 chương Truyện ký.', 'Truyện ký', chapters, 20],
+    ['meet-22', 'Tứ hải giai huynh đệ', 'Gặp đủ 22 nhân vật kỳ ngộ.', 'Truyện ký', () => window.zenStory?.metCount?.() || 0, 22],
   ];
   function evaluate() {
     const cache = new Map();

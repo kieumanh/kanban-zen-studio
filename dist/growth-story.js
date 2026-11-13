@@ -2,6 +2,9 @@
 // v1.92.0 (Truyện Ký): cốt truyện giang hồ của hiệp khách đồng hành trong mục Tu vi (Điểm tích lũy).
 // v2.6.0 (Song Nguyệt): thay bằng cốt truyện "Hằng Nguyệt và Huyết Nguyệt" (dist/growth-tale.js). Dấu đã đọc dùng khóa mới
 // notice:tale-N, nên người đã đọc truyện cũ vẫn thấy chương mới là "Chưa đọc"; khóa cũ notice:story-N giữ nguyên, không xóa.
+// v2.7.0 (Kỳ Ngộ): 22 nhân vật phụ (dist/growth-meet.js), mỗi người 2 lần kỳ ngộ ở các cấp không có chương. Cấp gặp chọn ngẫu nhiên
+// nhưng cố định theo tài khoản (băm mã người dùng); mỗi lần vượt cấp tự mở tối đa một kỳ ngộ (sau các chương). Dấu đã đọc:
+// notice:meet-<nhân vật>-<lần>. Khung "Giang hồ kỳ ngộ" trong trang Tu vi liệt kê người đã gặp, người chưa gặp và cấp sẽ gặp.
 // Khai cuộc (cấp 0, đọc trong danh sách chương) và 20 chương ở cấp 5, 10, 15 … 100 (v2.5.0: chương đánh số theo thứ tự). Mỗi khi vượt một mốc 5 cấp (ngay sau khi lưu công lực), bảng hội thoại tự hiện,
 // kể một chặng vượt khó của nhân vật. Chương đã mở đọc lại được ở khung "Truyện ký giang hồ" trong trang Tu vi.
 // Không đổi dữ liệu: dấu "đã đọc" lưu bằng dấu đã đọc của tài khoản (notification-receipts, khóa notice:story-N, dùng chung mọi thiết bị),
@@ -22,8 +25,74 @@
   const indexOf = (c) => STORY.indexOf(c) + 1;
   const number = (c) => (c.lv ? 'Chương ' + indexOf(c) : 'Khai cuộc');
 
+  // ---- Kỳ ngộ (v2.7.0) ------------------------------------------------------------------------------------------------------
+  const MEET = window.zenMeet || { CAST: [], ROLES: {} };
+  const CAST = MEET.CAST;
+  const castOf = (id) => CAST.find((c) => c.id === id);
+  const hashOf = (str) => {
+    let x = 2166136261;
+    for (const ch of str) {
+      x ^= ch.codePointAt(0);
+      x = Math.imul(x, 16777619);
+    }
+    return x >>> 0;
+  };
+  // Lịch gặp của một tài khoản: mỗi kỳ ngộ một cấp trong khoảng [from, to] của nó, không trùng cấp có chương, không trùng nhau.
+  // Xếp theo hạn chót (to) tăng dần; mỗi lần chọn một cấp ngẫu nhiên (băm) mà vẫn đủ chỗ cho các kỳ ngộ còn lại.
+  const plans = new Map();
+  function schedule(uid) {
+    uid = String(uid || (typeof currentUser !== 'undefined' && currentUser?.id) || 'guest');
+    if (plans.has(uid)) return plans.get(uid);
+    const taken = new Set(CHAPTERS.map((c) => c.lv));
+    const all = CAST.flatMap((c) => c.meets.map((m, k) => ({ cast: c, k: k + 1, meet: m }))).sort((a, b) => a.meet.to - b.meet.to || a.meet.from - b.meet.from);
+    const fits = (rest, used) => {
+      const t = new Set(used);
+      return rest.every((e) => {
+        for (let lv = e.meet.from; lv <= e.meet.to; lv++)
+          if (!t.has(lv)) {
+            t.add(lv);
+            return true;
+          }
+        return false;
+      });
+    };
+    const list = [];
+    all.forEach((e, i) => {
+      const free = [];
+      for (let lv = e.meet.from; lv <= e.meet.to; lv++) if (!taken.has(lv)) free.push(lv);
+      const start = free.length ? hashOf(uid + ':' + e.cast.id + ':' + e.k) % free.length : 0;
+      for (let j = 0; j < free.length; j++) {
+        const lv = free[(start + j) % free.length];
+        taken.add(lv);
+        if (fits(all.slice(i + 1), taken)) {
+          list.push({ ...e, lv, id: 'm:' + e.cast.id + '-' + e.k });
+          return;
+        }
+        taken.delete(lv);
+      }
+    });
+    list.sort((a, b) => a.lv - b.lv);
+    plans.set(uid, list);
+    return list;
+  }
+  const meetOf = (id) => schedule().find((x) => x.id === id);
+  const isMeet = (id) => typeof id === 'string' && id.startsWith('m:');
+  // Mục đọc chung cho chương và kỳ ngộ.
+  function entryOf(id) {
+    if (isMeet(id)) {
+      const m = meetOf(id);
+      if (!m) return null;
+      return { id, lv: m.lv, title: m.meet.title, pages: m.meet.pages, lesson: m.meet.lesson, meet: m, eyebrow: 'KỲ NGỘ GIANG HỒ · ' + (MEET.ROLES[m.meet.kind] || '').toUpperCase(), sub: m.cast.name + ' · ' + m.cast.title + ' · cấp ' + m.lv };
+    }
+    const c = byLv(Number(id));
+    if (!c) return null;
+    return { ...c, id: c.lv, eyebrow: 'TRUYỆN KÝ GIANG HỒ · ' + number(c).toUpperCase() + (c.lv ? ' / ' + STAGES : ''), sub: c.lv ? 'Mở ở cấp ' + c.lv + ' · ' + realmName(c.lv) : 'Ngày bước vào giang hồ' };
+  }
+  const speakerOf = (who) => (who === 'hero' ? G().heroName() : WHO[who] || castOf(who)?.name || who);
+  const isFoe = (who) => FOE_IDS.has(who) || castOf(who)?.side === 'ac';
+
   // ---- Dấu đã đọc -----------------------------------------------------------------------------------------------------------
-  const KEY = (lv) => 'notice:tale-' + lv;
+  const KEY = (id) => (isMeet(id) ? 'notice:meet-' + id.slice(2) : 'notice:tale-' + id);
   const localKey = () => 'zen-tale:' + (currentUser?.id || '');
   function local() {
     try {
@@ -76,9 +145,10 @@
   function paint() {
     const r = reader;
     if (!r) return;
-    const c = byLv(r.queue[r.at]), last = r.page === c.pages.length, total = c.pages.length + 1;
+    const c = entryOf(r.queue[r.at]), last = r.page === c.pages.length, total = c.pages.length + 1;
     const head = r.el.querySelector('.gr-story-head');
-    head.innerHTML = '<span class="eyebrow">TRUYỆN KÝ GIANG HỒ · ' + esc(number(c)).toUpperCase() + (c.lv ? ' / ' + STAGES : '') + '</span><h2 id="gr-story-title">' + esc(c.title) + '</h2><small>' + (c.lv ? 'Mở ở cấp ' + c.lv + ' · ' + esc(realmName(c.lv)) : 'Ngày bước vào giang hồ') + '</small>';
+    head.innerHTML = '<span class="eyebrow">' + esc(c.eyebrow) + '</span><h2 id="gr-story-title">' + esc(c.title) + '</h2><small>' + esc(c.sub) + '</small>';
+    r.el.classList.toggle('is-meet', !!c.meet);
     const body = r.el.querySelector('.gr-story-body');
     if (last) {
       const g = G(), lvNow = level(), rr = g.realmOf(earned());
@@ -86,7 +156,7 @@
         (c.lead ? '<small class="gr-story-rival">Huyết Nguyệt Giáo chủ lúc ấy: cấp ' + c.lead + (c.lead >= 99 && c.lv < 99 ? ', kẹt trước cánh cửa thứ một trăm' : '') + '</small>' : '') + '</div>';
     } else {
       const [who, pose, text] = c.pages[r.page];
-      const speaker = who === 'hero' ? G().heroName() : WHO[who];
+      const speaker = speakerOf(who);
       let art = body.querySelector(':scope > .gr-story-art');
       if (!art) {
         body.innerHTML = '<div class="gr-story-art"></div><div class="gr-story-say"></div>';
@@ -97,7 +167,7 @@
         art.innerHTML = stageArt(pose);
         art.dataset.pose = pose;
       }
-      body.querySelector('.gr-story-say').innerHTML = '<p class="gr-story-who" data-who="' + who + '"' + (FOE_IDS.has(who) ? ' data-side="ac"' : '') + '>' + esc(speaker) + '</p><p class="gr-story-text' + (who === 'ke' ? ' is-narration' : '') + '">' + esc(fill(text)) + '</p>';
+      body.querySelector('.gr-story-say').innerHTML = '<p class="gr-story-who" data-who="' + who + '"' + (isFoe(who) ? ' data-side="ac"' : '') + '>' + esc(speaker) + '</p><p class="gr-story-text' + (who === 'ke' ? ' is-narration' : '') + '">' + esc(fill(text)) + '</p>';
     }
     const dots = r.el.querySelector('.gr-story-dots');
     dots.innerHTML = Array.from({ length: total }, (_, i) => '<i' + (i === r.page ? ' class="is-on"' : '') + '></i>').join('');
@@ -105,7 +175,7 @@
     const prev = r.el.querySelector('[data-story-prev]'), next = r.el.querySelector('[data-story-next]');
     prev.disabled = r.page === 0;
     const more = r.at < r.queue.length - 1;
-    next.textContent = !last ? 'Tiếp →' : more ? 'Chương kế →' : 'Khép sách';
+    next.textContent = !last ? 'Tiếp →' : more ? (isMeet(r.queue[r.at + 1]) ? 'Kỳ ngộ kế →' : 'Chương kế →') : 'Khép sách';
     next.classList.toggle('primary', last);
   }
   function close() {
@@ -117,9 +187,14 @@
     r.then?.();
     if (view === 'growth' && !document.querySelector('dialog[open]')) render();
   }
-  // Mở một hoặc nhiều chương liền nhau (khi vượt nhiều mốc cùng lúc). Chỉ mở chương đã tới cấp.
+  // Mở một hoặc nhiều chương / kỳ ngộ liền nhau (khi vượt nhiều mốc cùng lúc). Chỉ mở mục đã tới cấp.
+  // Chương: số cấp; kỳ ngộ: 'm:<nhân vật>-<lần>'.
+  const norm = (id) => (isMeet(id) ? id : Number(id));
   function open(list, opt = {}) {
-    const queue = [].concat(list).map(Number).filter((lv) => byLv(lv) && unlocked(byLv(lv)));
+    const queue = [].concat(list).map(norm).filter((id) => {
+      const c = entryOf(id);
+      return c && c.lv <= level();
+    });
     if (!queue.length || !started()) return false;
     if (reader) close();
     const d = document.createElement('dialog');
@@ -142,7 +217,7 @@
   function step(dir) {
     const r = reader;
     if (!r) return;
-    const c = byLv(r.queue[r.at]);
+    const c = entryOf(r.queue[r.at]);
     if (dir < 0) {
       if (r.page > 0) r.page--;
     } else if (r.page < c.pages.length) r.page++;
@@ -161,7 +236,7 @@
     if (b.hasAttribute('data-story-next')) return step(1);
     if (b.hasAttribute('data-story-prev')) return step(-1);
     if (b.hasAttribute('data-story-close')) return close();
-    if (b.dataset.grStory !== undefined) open(Number(b.dataset.grStory));
+    if (b.dataset.grStory !== undefined) open(b.dataset.grStory);
   });
   document.addEventListener('keydown', (e) => {
     if (!reader || e.target.closest?.('input,textarea,select')) return;
@@ -179,6 +254,9 @@
   function crossed(before, after) {
     if (typeof contentReadOnly !== 'undefined' && contentReadOnly) return;
     const list = CHAPTERS.filter((c) => c.lv > before && c.lv <= after && !seen(c.lv)).map((c) => c.lv);
+    // v2.7.0: thêm kỳ ngộ cao nhất vừa vượt qua (tối đa một lần mỗi lần vượt cấp; các kỳ ngộ khác chờ trong khung Kỳ ngộ).
+    const met = schedule().filter((m) => m.lv > before && m.lv <= after && !seen(m.id));
+    if (met.length) list.push(met[met.length - 1].id);
     if (!list.length) return;
     setTimeout(() => {
       if (!reader) open(list);
@@ -215,11 +293,44 @@
     receiptsTried = owner;
     loadReadReceipts().then((ok) => {
       const box = document.querySelector('.gr-path-panel');
-      if (ok && box && view === 'growth' && currentUser?.id === owner) box.outerHTML = panel();
+      if (ok && box && view === 'growth' && currentUser?.id === owner) {
+        document.querySelector('.gr-meet-panel')?.remove();
+        box.outerHTML = panel();
+      }
     });
   }
   function panel() {
-    if (!started()) return '';
+    return started() ? pathPanel() + meetPanel() : '';
+  }
+  // ---- Khung Giang hồ kỳ ngộ (v2.7.0) ---------------------------------------------------------------------------------------
+  const initials = (n) => n.split(/\s+/).filter(Boolean).slice(-2).map((w) => w[0]).join('').toUpperCase();
+  function metCount() {
+    if (!started()) return 0;
+    const lv = level();
+    return new Set(schedule().filter((m) => m.lv <= lv).map((m) => m.cast.id)).size;
+  }
+  function meetPanel() {
+    const lv = level(), plan = schedule();
+    const done = plan.filter((m) => m.lv <= lv), unread = done.filter((m) => !seen(m.id)), next = plan.find((m) => m.lv > lv);
+    const order = [...new Set(plan.map((m) => m.cast.id))].map(castOf);
+    const cards = order.map((c) => {
+      const mine = plan.filter((m) => m.cast.id === c.id), first = mine[0];
+      if (!first || first.lv > lv)
+        return '<li class="gr-meet is-locked" data-cast="' + c.id + '"><span class="gr-meet-face" aria-hidden="true">?</span><div class="gr-meet-main"><strong>Kỳ nhân chưa lộ diện</strong><small>' + (first ? 'Xuất hiện ở cấp ' + first.lv : 'Chưa có duyên gặp') + '</small></div></li>';
+      const acts = mine.map((m) => {
+        const role = MEET.ROLES[m.meet.kind] || '';
+        if (m.lv > lv) return '<span class="gr-meet-act is-later">Lần gặp sau: cấp ' + m.lv + '</span>';
+        const fresh = !seen(m.id);
+        return '<button type="button" class="gr-meet-act' + (fresh ? ' is-new' : '') + '" data-gr-story="' + m.id + '" data-kind="' + m.meet.kind + '" aria-label="Đọc kỳ ngộ ' + esc(m.meet.title) + ' (' + role + ', cấp ' + m.lv + ')' + (fresh ? ', chưa đọc' : '') + '"><b>Cấp ' + m.lv + '</b> ' + esc(m.meet.title) + ' <em>' + role + (fresh ? ' · Chưa đọc' : '') + '</em></button>';
+      }).join('');
+      return '<li class="gr-meet is-met" data-cast="' + c.id + '" data-kind="' + first.meet.kind + '"' + (c.side === 'ac' ? ' data-side="ac"' : '') + '><span class="gr-meet-face" aria-hidden="true">' + esc(initials(c.name)) + '</span><div class="gr-meet-main"><strong>' + esc(c.name) + '</strong><small>' + esc(c.title) + '</small><p>' + esc(c.bio) + '</p><div class="gr-meet-acts">' + acts + '</div></div></li>';
+    }).join('');
+    const people = new Set(done.map((m) => m.cast.id)).size;
+    return '<section class="panel gr-meet-panel" aria-labelledby="gr-meet-title"><h2 id="gr-meet-title">Giang hồ kỳ ngộ <small>Đã gặp ' + people + '/' + CAST.length + ' nhân vật · ' + done.length + '/' + plan.length + ' kỳ ngộ</small></h2>' +
+      '<p class="help-copy">' + CAST.length + ' nhân vật xuất hiện ngẫu nhiên ở những cấp không có chương truyện: người giúp đỡ, kẻ gây khó, sát thủ, người thử thách. Mỗi hiệp khách gặp họ ở những cấp khác nhau.' +
+      (next ? ' Kỳ ngộ kế tiếp ở cấp ' + next.lv + '.' : ' Các hạ đã gặp đủ mọi người.') + (unread.length ? ' Còn ' + unread.length + ' kỳ ngộ chưa đọc.' : '') + '</p><ul class="gr-meet-list">' + cards + '</ul></section>';
+  }
+  function pathPanel() {
     queueMicrotask(ensureReceipts);
     const g = G(), t = earned(), lv = level(), r = g.realmOf(t), name = esc(g.heroName());
     const open_ = CHAPTERS.filter(unlocked), unread = open_.filter((c) => !seen(c.lv));
@@ -251,5 +362,5 @@
       '<ol class="gr-ch-list gr-path-start">' + chapterItem(byLv(0), lv) + '</ol><ol class="gr-path">' + realms + '</ol></section>';
   }
 
-  window.zenStory = { CHAPTERS, WHO, open, crossed, panel, seen, fill, stageOf, isOpen: () => !!reader };
+  window.zenStory = { CHAPTERS, WHO, CAST, schedule, metCount, open, crossed, panel, seen, fill, stageOf, isOpen: () => !!reader };
 })();

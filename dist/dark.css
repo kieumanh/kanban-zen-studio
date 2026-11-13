@@ -3215,6 +3215,12 @@
 :root[data-theme=dark] .gr-story-lesson small.gr-story-rival {
     color: #fbb7b9
 }
+:root[data-theme=dark] dialog.gr-story.is-meet .gr-story-head .eyebrow {
+    color: #abc9fd
+}
+:root[data-theme=dark][data-theme=dark] dialog.gr-story.is-meet .gr-story-head .eyebrow {
+    color: #9ab3e3
+}
 :root[data-theme=dark][data-theme=dark] .gr-story-lesson small.gr-story-rival {
     color: #e89ba6
 }

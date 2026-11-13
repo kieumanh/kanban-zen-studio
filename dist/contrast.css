@@ -3216,6 +3216,12 @@
 :root[data-contrast=high] .gr-story-lesson small.gr-story-rival {
     color: #060606
 }
+:root[data-contrast=high] dialog.gr-story.is-meet .gr-story-head .eyebrow {
+    color: #060606
+}
+:root[data-contrast=high][data-theme=dark] dialog.gr-story.is-meet .gr-story-head .eyebrow {
+    color: #060606
+}
 :root[data-contrast=high][data-theme=dark] .gr-story-lesson small.gr-story-rival {
     color: #060606
 }
@@ -7149,6 +7155,12 @@
     color: #f5f5f5
 }
 :root[data-theme=dark][data-contrast=high] .gr-story-lesson small.gr-story-rival {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] dialog.gr-story.is-meet .gr-story-head .eyebrow {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high][data-theme=dark] dialog.gr-story.is-meet .gr-story-head .eyebrow {
     color: #f5f5f5
 }
 :root[data-theme=dark][data-contrast=high][data-theme=dark] .gr-story-lesson small.gr-story-rival {

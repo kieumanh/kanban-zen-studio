@@ -5358,6 +5358,63 @@
 :root[data-style=giangho] .gr-story-lesson small.gr-story-rival {
     color: #8b0528
 }
+:root[data-style=giangho] .gr-meet-panel h2 small {
+    color: var(--muted)
+}
+:root[data-style=giangho] .gr-meet {
+    border: 1px solid var(--gr-line);
+    background: var(--gr-paper)
+}
+:root[data-style=giangho] .gr-meet-face {
+    border: 2px solid var(--role);
+    background: color-mix(in srgb,var(--role) 12%,var(--gr-paper));
+    color: var(--role)
+}
+:root[data-style=giangho] .gr-meet.is-locked {
+    background: transparent
+}
+:root[data-style=giangho] .gr-meet.is-locked .gr-meet-face {
+    border-color: var(--gr-line);
+    color: var(--muted);
+    background: transparent
+}
+:root[data-style=giangho] .gr-meet-main>strong {
+    color: var(--gr-ink,var(--ink))
+}
+:root[data-style=giangho] .gr-meet-main>small {
+    color: var(--muted)
+}
+:root[data-style=giangho] .gr-meet-main>p {
+    color: var(--gr-ink,var(--ink))
+}
+:root[data-style=giangho] .gr-meet-act {
+    border: 1px solid var(--gr-line);
+    background: var(--gr-paper);
+    color: var(--gr-ink,var(--ink))
+}
+:root[data-style=giangho] .gr-meet-act b {
+    color: var(--muted)
+}
+:root[data-style=giangho] .gr-meet-act em {
+    color: var(--role)
+}
+:root[data-style=giangho] .gr-meet-act.is-new {
+    border-color: var(--role);
+    box-shadow: inset 3px 0 0 var(--role)
+}
+:root[data-style=giangho] .gr-meet-act.is-later {
+    color: var(--muted)
+}
+:root[data-style=giangho] button.gr-meet-act:hover, :root[data-style=giangho] button.gr-meet-act:focus-visible {
+    border-color: var(--role);
+    background: color-mix(in srgb,var(--role) 8%,var(--gr-paper))
+}
+:root[data-style=giangho] dialog.gr-story.is-meet .gr-story-head .eyebrow {
+    color: #2e5398
+}
+:root[data-style=giangho][data-theme=dark] dialog.gr-story.is-meet .gr-story-head .eyebrow {
+    color: #80a0df
+}
 :root[data-style=giangho][data-theme=dark] .gr-story-lesson small.gr-story-rival {
     color: #e07c7d
 }
@@ -11966,6 +12023,63 @@
 }
 :root[data-style=giangho][data-theme=dark] .gr-story-lesson small.gr-story-rival {
     color: #fdc5c6
+}
+:root[data-style=giangho][data-theme=dark] .gr-meet-panel h2 small {
+    color: var(--muted)
+}
+:root[data-style=giangho][data-theme=dark] .gr-meet {
+    border: 1px solid var(--gr-line);
+    background: var(--gr-paper)
+}
+:root[data-style=giangho][data-theme=dark] .gr-meet-face {
+    border: 2px solid var(--role);
+    background: color-mix(in srgb,var(--role) 12%,var(--gr-paper));
+    color: var(--role)
+}
+:root[data-style=giangho][data-theme=dark] .gr-meet.is-locked {
+    background: transparent
+}
+:root[data-style=giangho][data-theme=dark] .gr-meet.is-locked .gr-meet-face {
+    border-color: var(--gr-line);
+    color: var(--muted);
+    background: transparent
+}
+:root[data-style=giangho][data-theme=dark] .gr-meet-main>strong {
+    color: var(--gr-ink,var(--ink))
+}
+:root[data-style=giangho][data-theme=dark] .gr-meet-main>small {
+    color: var(--muted)
+}
+:root[data-style=giangho][data-theme=dark] .gr-meet-main>p {
+    color: var(--gr-ink,var(--ink))
+}
+:root[data-style=giangho][data-theme=dark] .gr-meet-act {
+    border: 1px solid var(--gr-line);
+    background: var(--gr-paper);
+    color: var(--gr-ink,var(--ink))
+}
+:root[data-style=giangho][data-theme=dark] .gr-meet-act b {
+    color: var(--muted)
+}
+:root[data-style=giangho][data-theme=dark] .gr-meet-act em {
+    color: var(--role)
+}
+:root[data-style=giangho][data-theme=dark] .gr-meet-act.is-new {
+    border-color: var(--role);
+    box-shadow: inset 3px 0 0 var(--role)
+}
+:root[data-style=giangho][data-theme=dark] .gr-meet-act.is-later {
+    color: var(--muted)
+}
+:root[data-style=giangho][data-theme=dark] button.gr-meet-act:hover, :root[data-style=giangho][data-theme=dark] button.gr-meet-act:focus-visible {
+    border-color: var(--role);
+    background: color-mix(in srgb,var(--role) 8%,var(--gr-paper))
+}
+:root[data-style=giangho][data-theme=dark] dialog.gr-story.is-meet .gr-story-head .eyebrow {
+    color: #bad2fd
+}
+:root[data-style=giangho][data-theme=dark][data-theme=dark] dialog.gr-story.is-meet .gr-story-head .eyebrow {
+    color: #a4bded
 }
 :root[data-style=giangho][data-theme=dark][data-theme=dark] .gr-story-lesson small.gr-story-rival {
     color: #f4a5a4

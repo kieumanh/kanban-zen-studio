@@ -432,6 +432,28 @@ dialog.gr-story::backdrop{background:#30251c99}
 .gr-story-who[data-side=ac]{color:#9c1f35}
 :root[data-theme=dark] .gr-story-who[data-side=ac]{color:#f08a9b}
 .gr-story-lesson small.gr-story-rival{display:block;margin-top:4px;color:#9c1f35}
+/* v2.7.0 (Kỳ Ngộ): khung Giang hồ kỳ ngộ, thẻ nhân vật theo vai (giúp · gây khó · ám sát · thử thách). */
+.gr-meet-panel h2 small{font-size:12.5px;font-weight:500;color:var(--muted)}
+.gr-meet-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));align-items:start;gap:10px;margin:12px 0 0;padding:0;list-style:none}
+.gr-meet{--role:var(--gr-seal);display:flex;gap:10px;align-items:flex-start;padding:12px;border:1px solid var(--gr-line);border-radius:14px;background:var(--gr-paper)}
+.gr-meet[data-kind=giup]{--role:#2e7d5b}.gr-meet[data-kind=can]{--role:#a8641b}.gr-meet[data-kind=amsat]{--role:#a32c40}.gr-meet[data-kind=thu]{--role:#3c62a8}
+:root[data-theme=dark] .gr-meet[data-kind=giup]{--role:#6cc79a}:root[data-theme=dark] .gr-meet[data-kind=can]{--role:#e0a25a}:root[data-theme=dark] .gr-meet[data-kind=amsat]{--role:#f08a9b}:root[data-theme=dark] .gr-meet[data-kind=thu]{--role:#8fb0f0}
+.gr-meet-face{flex:none;display:grid;place-items:center;width:42px;height:42px;border-radius:12px;border:2px solid var(--role);background:color-mix(in srgb,var(--role) 12%,var(--gr-paper));font:700 15px/1 var(--serif);color:var(--role)}
+.gr-meet.is-locked{border-style:dashed;background:transparent}
+.gr-meet.is-locked .gr-meet-face{border-color:var(--gr-line);color:var(--muted);background:transparent}
+.gr-meet-main{min-width:0;flex:1}
+.gr-meet-main>strong{display:block;font:600 15px/1.3 var(--serif);color:var(--gr-ink,var(--ink))}
+.gr-meet-main>small{display:block;font-size:12px;color:var(--muted)}
+.gr-meet-main>p{margin:6px 0 0;font-size:13px;line-height:1.5;color:var(--gr-ink,var(--ink))}
+.gr-meet-acts{display:grid;gap:6px;margin-top:8px}
+.gr-meet-act{display:block;width:100%;min-height:40px;padding:7px 10px;border:1px solid var(--gr-line);border-radius:10px;background:var(--gr-paper);text-align:left;font-size:13px;line-height:1.4;color:var(--gr-ink,var(--ink));cursor:pointer}
+.gr-meet-act b{font-variant-numeric:tabular-nums;color:var(--muted);font-weight:600}
+.gr-meet-act em{display:block;font-style:normal;font-size:12px;font-weight:600;color:var(--role)}
+.gr-meet-act.is-new{border-color:var(--role);box-shadow:inset 3px 0 0 var(--role)}
+.gr-meet-act.is-later{cursor:default;border-style:dashed;color:var(--muted);font-size:12px}
+button.gr-meet-act:hover,button.gr-meet-act:focus-visible{border-color:var(--role);background:color-mix(in srgb,var(--role) 8%,var(--gr-paper))}
+dialog.gr-story.is-meet .gr-story-head .eyebrow{color:#3c62a8}
+:root[data-theme=dark] dialog.gr-story.is-meet .gr-story-head .eyebrow{color:#8fb0f0}
 :root[data-theme=dark] .gr-story-lesson small.gr-story-rival{color:#f08a9b}
 .gr-story-text{margin:0;font:500 17px/1.65 var(--serif,Georgia,serif);color:var(--gr-ink);text-wrap:pretty}
 .gr-story-text.is-narration{font-style:italic}
