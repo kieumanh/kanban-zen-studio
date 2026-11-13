@@ -11,7 +11,8 @@ import { startHarness } from './lib/browser-harness.mjs';
 
 const day = (n) => new Date(Date.now() + n * 864e5).toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
 // half = số nửa điểm đã tích lũy.
-const seed = (half) => () => ({ schema: 1, projects: [], notes: [], growth: { v: 1, hero: 'nam', since: day(-40), log: half ? [{ id: 'e1', d: day(-1), s: 'task', k: 'task:e1', n: 'Việc cũ', p: [half, 0, 0, 0, 0, 0, 0, 0] }] : [] } });
+// v2.14.0 (Thần Lộ): thần cấp 101–103 cần đủ lĩnh ngộ cả tám chỉ số, nên mốc 14.328 điểm gieo đều tám chỉ số (half ≥ 28.656).
+const seed = (half) => () => ({ schema: 1, projects: [], notes: [], growth: { v: 1, hero: 'nam', since: day(-40), log: half ? [{ id: 'e1', d: day(-1), s: 'task', k: 'task:e1', n: 'Việc cũ', p: half >= 28656 ? Array(8).fill(half / 8) : [half, 0, 0, 0, 0, 0, 0, 0] }] : [] } });
 const noOverflow = (page) => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth);
 const read = (page) =>
   page.evaluate(() => {

@@ -3332,6 +3332,46 @@
 :root[data-theme=dark][data-theme=dark] .gr-gods-stars li.is-seat strong, :root[data-theme=dark][data-theme=dark] .gr-gods-tag {
     color: #97b1d8
 }
+:root[data-theme=dark] .gr-gods-star.is-won {
+    fill: var(--gr-gold,#d7b67e)
+}
+:root[data-theme=dark] .gr-gods-star.is-next {
+    stroke: var(--gr-seal,#fbb1b2)
+}
+:root[data-theme=dark] .gr-gods-lord.is-won circle {
+    stroke: var(--gr-gold,#d7b67e)
+}
+:root[data-theme=dark] .gr-gods-lord.is-mine circle {
+    fill: #99b5dc;
+    stroke: #aacbfc
+}
+:root[data-theme=dark] .gr-gods-lord.is-mine text {
+    fill: #c1d9fe
+}
+:root[data-theme=dark] .gr-gods-king.is-mine {
+    fill: #99b5dc;
+    stroke: #aacbfc
+}
+:root[data-theme=dark] .gr-gods-region.is-mine {
+    border-color: #5b8fd9
+}
+:root[data-theme=dark] .gr-gods-region.is-mine .gr-gods-region-head i {
+    background: #253e61;
+    border-color: #94b9f1;
+    color: #c1d9fe
+}
+:root[data-theme=dark] .gr-gods-tag.is-next {
+    color: #ffffff
+}
+:root[data-theme=dark] .gr-gods-kings li.is-mine {
+    border-top-color: #5b8fd9
+}
+:root[data-theme=dark] dialog.gr-story.is-god .gr-story-head .eyebrow {
+    color: #aacbfc
+}
+:root[data-theme=dark][data-theme=dark] dialog.gr-story.is-god .gr-story-head .eyebrow {
+    color: #97b1d8
+}
 :root[data-theme=dark] {
     --muted: #ccc2d7;
     --text-muted: #ccc2d7

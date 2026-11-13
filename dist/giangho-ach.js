@@ -49,7 +49,7 @@
   }
   const habitStreak = () => (typeof data !== 'undefined' && Array.isArray(data.dailyHabits) ? data.dailyHabits.reduce((m, h) => Math.max(m, bestStreak(h)), 0) : 0);
   const notes = () => (typeof data !== 'undefined' && Array.isArray(data.notes) ? data.notes.length : 0);
-  const realm = () => (started() ? G().realmOf(G().total(G().earnedScores())).realm : 0);
+  const realm = () => (started() ? (G().myRealm ? G().myRealm() : G().realmOf(G().total(G().earnedScores()))).realm : 0);
   // v2.6.0: truyện mới đánh dấu bằng notice:tale-N; danh hiệu đã đạt nhờ truyện cũ (notice:story-N) vẫn giữ.
   const chapters = () => {
     const keys = [...receipts()];

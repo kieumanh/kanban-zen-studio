@@ -174,6 +174,8 @@ jobs:
           node tests/growth-midchapter-browser.mjs
           # v2.13.0 (Thần Giới): 5 Thần Vương, 12 Phương thần, 36 Thiên Cang tinh; khung Thần giới và Thiên đồ.
           node tests/growth-gods-browser.mjs
+          # v2.14.0 (Thần Lộ): lĩnh ngộ tám quy luật, thắng 35 Thiên Cang, 12 Phương thần, ngang tài Thần Vương; chiến ký.
+          node tests/growth-godpath-browser.mjs
           node tests/giangho-coverage-browser.mjs
           node tests/giangho-guide-browser.mjs
           node tests/giangho-fx-browser.mjs

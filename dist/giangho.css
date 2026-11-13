@@ -5742,7 +5742,7 @@
 }
 :root[data-style=giangho] .gr-gods-tiers b {
     border: 1.5px solid var(--gr-gold);
-    color: var(--gr-gold)
+    color: var(--gr-ink,var(--ink))
 }
 :root[data-style=giangho] .gr-gods-panel strong {
     color: var(--gr-ink,var(--ink))
@@ -5785,7 +5785,7 @@
     border-top: 3px solid var(--gr-gold)
 }
 :root[data-style=giangho] .gr-gods-kings em {
-    color: var(--gr-gold)
+    color: var(--gr-ink,var(--ink))
 }
 :root[data-style=giangho] .gr-gods-region {
     border: 1px solid var(--gr-line)
@@ -5816,6 +5816,102 @@
     color: #215098
 }
 :root[data-style=giangho][data-theme=dark] .gr-gods-stars li.is-seat strong, :root[data-style=giangho][data-theme=dark] .gr-gods-tag {
+    color: #8db0e4
+}
+:root[data-style=giangho] .gr-gods-star.is-won {
+    fill: var(--gr-gold,#a57b28)
+}
+:root[data-style=giangho] .gr-gods-star.is-next {
+    fill: none;
+    stroke: var(--gr-seal,#a20d2d)
+}
+:root[data-style=giangho] .gr-gods-lord.is-won circle {
+    stroke: var(--gr-gold,#a57b28)
+}
+:root[data-style=giangho] .gr-gods-lord.is-mine circle {
+    fill: #80a4d7;
+    stroke: #215098
+}
+:root[data-style=giangho] .gr-gods-lord.is-mine text {
+    fill: #07234e
+}
+:root[data-style=giangho] .gr-gods-king.is-mine {
+    fill: #80a4d7;
+    stroke: #215098
+}
+:root[data-style=giangho] .gr-gods-panel li small.gr-gods-rule {
+    color: var(--gr-ink,var(--ink))
+}
+:root[data-style=giangho] .gr-gods-panel li small.gr-gods-count {
+    color: var(--gr-seal-text,var(--gr-ink))
+}
+:root[data-style=giangho] .gr-gods-road {
+    border: 1px solid var(--gr-line);
+    background: var(--gr-paper)
+}
+:root[data-style=giangho] .gr-gods-road h3 {
+    color: var(--gr-ink,var(--ink))
+}
+:root[data-style=giangho] .gr-gods-next {
+    border: 1px solid var(--gr-seal);
+    background: var(--gr-wash);
+    color: var(--gr-ink,var(--ink))
+}
+:root[data-style=giangho] .gr-gods-next.is-locked, :root[data-style=giangho] .gr-gods-next.is-done {
+    border-color: var(--gr-line);
+    color: var(--muted)
+}
+:root[data-style=giangho] .gr-gods-next em {
+    color: var(--gr-seal-text,var(--gr-ink))
+}
+:root[data-style=giangho] .gr-gods-lawrow {
+    border: 1px solid var(--gr-line)
+}
+:root[data-style=giangho] .gr-gods-lawrow.is-short {
+    border-color: var(--gr-seal)
+}
+:root[data-style=giangho] .gr-gods-lawrow b {
+    color: var(--gr-ink,var(--ink))
+}
+:root[data-style=giangho] .gr-gods-region.is-explored {
+    border-color: var(--gr-gold)
+}
+:root[data-style=giangho] .gr-gods-region.is-mine {
+    border-color: #4f83cc
+}
+:root[data-style=giangho] .gr-gods-region.is-mine .gr-gods-region-head i {
+    background: #8fb4e8;
+    border-color: #2f5fa8;
+    color: #07234e
+}
+:root[data-style=giangho] .gr-gods-tag.is-won {
+    border-color: var(--gr-gold);
+    color: var(--gr-ink,var(--ink))
+}
+:root[data-style=giangho] .gr-gods-tag.is-next {
+    border-color: var(--gr-seal);
+    background: var(--gr-seal);
+    color: #ffffff
+}
+:root[data-style=giangho] .gr-gods-stars li.is-won strong {
+    color: var(--gr-ink,var(--ink))
+}
+:root[data-style=giangho] .gr-gods-read {
+    border: 1px solid var(--gr-line);
+    background: var(--gr-paper);
+    color: var(--gr-ink,var(--ink))
+}
+:root[data-style=giangho] .gr-gods-read:hover, :root[data-style=giangho] .gr-gods-read:focus-visible {
+    border-color: var(--gr-seal);
+    background: var(--gr-wash)
+}
+:root[data-style=giangho] .gr-gods-kings li.is-mine {
+    border-top-color: #4f83cc
+}
+:root[data-style=giangho] dialog.gr-story.is-god .gr-story-head .eyebrow {
+    color: #215098
+}
+:root[data-style=giangho][data-theme=dark] dialog.gr-story.is-god .gr-story-head .eyebrow {
     color: #8db0e4
 }
 :root[data-style=giangho] {
@@ -12598,7 +12694,7 @@
 }
 :root[data-style=giangho][data-theme=dark] .gr-gods-tiers b {
     border: 1.5px solid var(--gr-gold);
-    color: var(--gr-gold)
+    color: var(--gr-ink,var(--ink))
 }
 :root[data-style=giangho][data-theme=dark] .gr-gods-panel strong {
     color: var(--gr-ink,var(--ink))
@@ -12641,7 +12737,7 @@
     border-top: 3px solid var(--gr-gold)
 }
 :root[data-style=giangho][data-theme=dark] .gr-gods-kings em {
-    color: var(--gr-gold)
+    color: var(--gr-ink,var(--ink))
 }
 :root[data-style=giangho][data-theme=dark] .gr-gods-region {
     border: 1px solid var(--gr-line)
@@ -12672,6 +12768,102 @@
     color: #bad4fd
 }
 :root[data-style=giangho][data-theme=dark][data-theme=dark] .gr-gods-stars li.is-seat strong, :root[data-style=giangho][data-theme=dark][data-theme=dark] .gr-gods-tag {
+    color: #a0bbe2
+}
+:root[data-style=giangho][data-theme=dark] .gr-gods-star.is-won {
+    fill: var(--gr-gold,#e1bf87)
+}
+:root[data-style=giangho][data-theme=dark] .gr-gods-star.is-next {
+    fill: none;
+    stroke: var(--gr-seal,#fcbfbf)
+}
+:root[data-style=giangho][data-theme=dark] .gr-gods-lord.is-won circle {
+    stroke: var(--gr-gold,#e1bf87)
+}
+:root[data-style=giangho][data-theme=dark] .gr-gods-lord.is-mine circle {
+    fill: #a2bee6;
+    stroke: #bad4fd
+}
+:root[data-style=giangho][data-theme=dark] .gr-gods-lord.is-mine text {
+    fill: #d1e2fe
+}
+:root[data-style=giangho][data-theme=dark] .gr-gods-king.is-mine {
+    fill: #a2bee6;
+    stroke: #bad4fd
+}
+:root[data-style=giangho][data-theme=dark] .gr-gods-panel li small.gr-gods-rule {
+    color: var(--gr-ink,var(--ink))
+}
+:root[data-style=giangho][data-theme=dark] .gr-gods-panel li small.gr-gods-count {
+    color: var(--gr-seal-text,var(--gr-ink))
+}
+:root[data-style=giangho][data-theme=dark] .gr-gods-road {
+    border: 1px solid var(--gr-line);
+    background: var(--gr-paper)
+}
+:root[data-style=giangho][data-theme=dark] .gr-gods-road h3 {
+    color: var(--gr-ink,var(--ink))
+}
+:root[data-style=giangho][data-theme=dark] .gr-gods-next {
+    border: 1px solid var(--gr-seal);
+    background: var(--gr-wash);
+    color: var(--gr-ink,var(--ink))
+}
+:root[data-style=giangho][data-theme=dark] .gr-gods-next.is-locked, :root[data-style=giangho][data-theme=dark] .gr-gods-next.is-done {
+    border-color: var(--gr-line);
+    color: var(--muted)
+}
+:root[data-style=giangho][data-theme=dark] .gr-gods-next em {
+    color: var(--gr-seal-text,var(--gr-ink))
+}
+:root[data-style=giangho][data-theme=dark] .gr-gods-lawrow {
+    border: 1px solid var(--gr-line)
+}
+:root[data-style=giangho][data-theme=dark] .gr-gods-lawrow.is-short {
+    border-color: var(--gr-seal)
+}
+:root[data-style=giangho][data-theme=dark] .gr-gods-lawrow b {
+    color: var(--gr-ink,var(--ink))
+}
+:root[data-style=giangho][data-theme=dark] .gr-gods-region.is-explored {
+    border-color: var(--gr-gold)
+}
+:root[data-style=giangho][data-theme=dark] .gr-gods-region.is-mine {
+    border-color: #5b8fd9
+}
+:root[data-style=giangho][data-theme=dark] .gr-gods-region.is-mine .gr-gods-region-head i {
+    background: #253e61;
+    border-color: #94b9f1;
+    color: #d1e2fe
+}
+:root[data-style=giangho][data-theme=dark] .gr-gods-tag.is-won {
+    border-color: var(--gr-gold);
+    color: var(--gr-ink,var(--ink))
+}
+:root[data-style=giangho][data-theme=dark] .gr-gods-tag.is-next {
+    border-color: var(--gr-seal);
+    background: var(--gr-seal);
+    color: #ffffff
+}
+:root[data-style=giangho][data-theme=dark] .gr-gods-stars li.is-won strong {
+    color: var(--gr-ink,var(--ink))
+}
+:root[data-style=giangho][data-theme=dark] .gr-gods-read {
+    border: 1px solid var(--gr-line);
+    background: var(--gr-paper);
+    color: var(--gr-ink,var(--ink))
+}
+:root[data-style=giangho][data-theme=dark] .gr-gods-read:hover, :root[data-style=giangho][data-theme=dark] .gr-gods-read:focus-visible {
+    border-color: var(--gr-seal);
+    background: var(--gr-wash)
+}
+:root[data-style=giangho][data-theme=dark] .gr-gods-kings li.is-mine {
+    border-top-color: #5b8fd9
+}
+:root[data-style=giangho][data-theme=dark] dialog.gr-story.is-god .gr-story-head .eyebrow {
+    color: #bad4fd
+}
+:root[data-style=giangho][data-theme=dark][data-theme=dark] dialog.gr-story.is-god .gr-story-head .eyebrow {
     color: #a0bbe2
 }
 :root[data-style=giangho][data-theme=dark] {

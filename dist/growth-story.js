@@ -10,6 +10,8 @@
 // v2.12.0 (Thiên Môn Ký): chương giữa cấp. Chương có cấp lẻ (97.5, 98.3 … 99.8) mở khi tu vi đi được phần ấy của đường lên cấp
 // kế tiếp (97.5 = nửa đường từ cấp 97 lên 98), vì cấp 98–100 kéo dài nhiều tháng. Mọi phép so "đã tới chương chưa" tính theo tu vi
 // (zenGrowth.tuviAt). Dấu đã đọc: notice:tale-97.5.
+// v2.14.0 (Thần Lộ): bảng hội thoại đọc thêm chiến ký ở Thần giới (mã 'g:s<k>', 'g:l<j>', 'g:k' do zenGods.entry cấp; dấu đã đọc
+// notice:god-<mã>). Khi lưu điểm mà thắng thêm trận, chiến ký tự mở. Cấp hiện tại lấy từ zenGrowth.myRealm().
 // Khai cuộc (cấp 0, đọc trong danh sách chương) và 20 chương ở cấp 5, 10, 15 … 100 (v2.5.0: chương đánh số theo thứ tự). Mỗi khi vượt một mốc 5 cấp (ngay sau khi lưu công lực), bảng hội thoại tự hiện,
 // kể một chặng vượt khó của nhân vật. Chương đã mở đọc lại được ở khung "Truyện ký giang hồ" trong trang Tu vi.
 // Không đổi dữ liệu: dấu "đã đọc" lưu bằng dấu đã đọc của tài khoản (notification-receipts, khóa notice:story-N, dùng chung mọi thiết bị),
@@ -83,7 +85,9 @@
   const meetOf = (id) => schedule().find((x) => x.id === id);
   const isMeet = (id) => typeof id === 'string' && id.startsWith('m:');
   // Mục đọc chung cho chương và kỳ ngộ.
+  const isGod = (id) => typeof id === 'string' && id.startsWith('g:');
   function entryOf(id) {
+    if (isGod(id)) return window.zenGods?.entry(id) || null;
     if (isMeet(id)) {
       const m = meetOf(id);
       if (!m) return null;
@@ -97,7 +101,7 @@
   const isFoe = (who) => FOE_IDS.has(who) || castOf(who)?.side === 'ac';
 
   // ---- Dấu đã đọc -----------------------------------------------------------------------------------------------------------
-  const KEY = (id) => (isMeet(id) ? 'notice:meet-' + id.slice(2) : 'notice:tale-' + id);
+  const KEY = (id) => (isGod(id) ? 'notice:god-' + id.slice(2) : isMeet(id) ? 'notice:meet-' + id.slice(2) : 'notice:tale-' + id);
   const localKey = () => 'zen-tale:' + (currentUser?.id || '');
   function local() {
     try {
@@ -124,7 +128,7 @@
   // ---- Trạng thái hiện tại ----------------------------------------------------------------------------------------------------
   const started = () => !!G()?.started();
   const earned = () => G().total(G().earnedScores());
-  const level = () => (started() ? G().realmOf(earned()).level : -1);
+  const level = () => (started() ? G().myRealm().level : -1);
   // v2.12.0: đã tới một vị trí trên thang chưa (cấp nguyên hoặc cấp lẻ), tính theo tu vi.
   const whole = (lv) => Number.isInteger(lv);
   const lvText = (lv) => String(lv).replace('.', ',');
@@ -160,14 +164,15 @@
     const head = r.el.querySelector('.gr-story-head');
     head.innerHTML = '<span class="eyebrow">' + esc(c.eyebrow) + '</span><h2 id="gr-story-title">' + esc(c.title) + '</h2><small>' + esc(c.sub) + '</small>';
     r.el.classList.toggle('is-meet', !!c.meet);
+    r.el.classList.toggle('is-god', !!c.god);
     const body = r.el.querySelector('.gr-story-body');
     if (last) {
-      const g = G(), lvNow = level(), rr = g.realmOf(earned());
+      const g = G(), lvNow = level(), rr = g.myRealm();
       body.innerHTML = '<div class="gr-story-lesson"><span class="gr-story-seal" aria-hidden="true">Ngộ</span><h3>Tâm đắc</h3><p>' + esc(c.lesson) + '</p><small>' + esc(g.heroName()) + ' hiện ở cấp ' + lvNow + ' · ' + esc(rr.name) + ' · ' + g.fmt(earned()) + ' điểm tu vi</small>' +
         (c.lead ? '<small class="gr-story-rival">Huyết Nguyệt Giáo chủ lúc ấy: cấp ' + c.lead + (c.lead >= 99 && c.lv < 99 ? ', kẹt trước cánh cửa thứ một trăm' : '') + '</small>' : '') + '</div>';
     } else {
       const [who, pose, text] = c.pages[r.page];
-      const speaker = speakerOf(who);
+      const speaker = c.speakers?.[who] || speakerOf(who);
       let art = body.querySelector(':scope > .gr-story-art');
       if (!art) {
         body.innerHTML = '<div class="gr-story-art"></div><div class="gr-story-say"></div>';
@@ -176,7 +181,7 @@
       // Tranh chỉ vẽ lại khi đổi cảnh / đổi thế, để hoạt họa không bị ngắt giữa các trang.
       // Trang phe ác: tranh của người đang nói; lời kể ở Huyết Nguyệt đài: tranh đối thủ của chương, không có thì Giáo chủ.
       const foeIds = window.zenFoe?.IDS || [];
-      const foe = pose !== 'moon' ? '' : foeIds.includes(who) ? who : who === 'ke' && !c.meet ? (foeIds.includes(c.foe) ? c.foe : 'giao') : '';
+      const foe = pose !== 'moon' ? '' : foeIds.includes(who) ? who : (who === 'ke' || who === 'than' || who === 'trang') && !c.meet ? (foeIds.includes(c.foe) ? c.foe : 'giao') : ''; // v2.14.0: Tà thần nói qua thân Giáo chủ
       const scene = pose + ':' + foe;
       if (art.dataset.pose !== scene) {
         art.innerHTML = stageArt(pose, foe);
@@ -190,7 +195,7 @@
     const prev = r.el.querySelector('[data-story-prev]'), next = r.el.querySelector('[data-story-next]');
     prev.disabled = r.page === 0;
     const more = r.at < r.queue.length - 1;
-    next.textContent = !last ? 'Tiếp →' : more ? (isMeet(r.queue[r.at + 1]) ? 'Kỳ ngộ kế →' : 'Chương kế →') : 'Khép sách';
+    next.textContent = !last ? 'Tiếp →' : more ? (isGod(r.queue[r.at + 1]) ? 'Chiến ký →' : isMeet(r.queue[r.at + 1]) ? 'Kỳ ngộ kế →' : 'Chương kế →') : 'Khép sách';
     next.classList.toggle('primary', last);
   }
   function close() {
@@ -204,11 +209,11 @@
   }
   // Mở một hoặc nhiều chương / kỳ ngộ liền nhau (khi vượt nhiều mốc cùng lúc). Chỉ mở mục đã tới cấp.
   // Chương: số cấp; kỳ ngộ: 'm:<nhân vật>-<lần>'.
-  const norm = (id) => (isMeet(id) ? id : Number(id));
+  const norm = (id) => (isMeet(id) || isGod(id) ? id : Number(id));
   function open(list, opt = {}) {
     const queue = [].concat(list).map(norm).filter((id) => {
       const c = entryOf(id);
-      return c && reached(c.lv);
+      return c && (c.god ? c.ok : reached(c.lv));
     });
     if (!queue.length || !started()) return false;
     if (reader) close();
@@ -267,13 +272,23 @@
   // ---- Khi vượt mốc ---------------------------------------------------------------------------------------------------------
   // growth.js gọi sau khi lưu công lực: các mốc 5 cấp nằm trong (trước, sau] chưa đọc thì tự mở, sau lời chúc mừng một nhịp.
   // v2.12.0: t0, t1 = tu vi trước và sau khi lưu; chương (kể cả chương giữa cấp) mở theo tu vi. Không có t0/t1 thì tính theo cấp.
-  function crossed(before, after, t0, t1) {
+  // v2.14.0: s0, s1 = điểm tám chỉ số trước và sau khi lưu; thắng thêm trận ở Thần giới thì mở chiến ký.
+  function crossed(before, after, t0, t1, s0, s1) {
     if (typeof contentReadOnly !== 'undefined' && contentReadOnly) return;
     const passed = t1 === undefined ? (c) => c.lv > before && c.lv <= after : (c) => tuviAt(c.lv) > t0 && tuviAt(c.lv) <= t1;
     const list = CHAPTERS.filter((c) => passed(c) && !seen(c.lv)).map((c) => c.lv);
     // v2.7.0: thêm kỳ ngộ cao nhất vừa vượt qua (tối đa một lần mỗi lần vượt cấp; các kỳ ngộ khác chờ trong khung Kỳ ngộ).
     const met = schedule().filter((m) => m.lv > before && m.lv <= after && !seen(m.id));
     if (met.length) list.push(met[met.length - 1].id);
+    const gods = window.zenGods;
+    if (gods && s0 && s1) {
+      // Một lần lưu có thể thắng liền nhiều trận (khi quy luật còn thiếu vừa đủ). Mở trận đầu tiên theo thứ tự, và trận mốc
+      // (thành Thượng Thần, Song thần chi chiến, kế vị) nếu có; các trận còn lại đọc trong khung Thần giới.
+      const fresh = gods.wonIds(t1, s1).slice(gods.wonIds(t0, s0).length).filter((id) => !seen(id));
+      const big = fresh.find((id) => id === 'g:s' + gods.RIVALS || id === 'g:l' + gods.LORDS.length || id === 'g:k');
+      if (fresh.length) list.push(fresh[0]);
+      if (big && big !== fresh[0]) list.push(big);
+    }
     if (!list.length) return;
     setTimeout(() => {
       if (!reader) open(list);
@@ -401,7 +416,7 @@
   }
   function pathPanel() {
     queueMicrotask(ensureReceipts);
-    const g = G(), t = earned(), lv = level(), r = g.realmOf(t), name = esc(g.heroName());
+    const g = G(), t = earned(), lv = level(), r = g.myRealm(), name = esc(g.heroName());
     const open_ = CHAPTERS.filter(unlocked), unread = open_.filter((c) => !seen(c.lv));
     const next = nextChapter();
     // Điểm cộng theo bước 0,5 nên số còn thiếu tới một mốc lẻ được làm tròn lên bước 0,5 kế tiếp.

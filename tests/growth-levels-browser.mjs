@@ -3,6 +3,10 @@
 //  - mỗi cấp một tên; cấp 100 thành Thần, trên Thần thêm 3 cấp tới Thần Vương (cấp 103);
 //  - vượt một đại cấp (9 → 10, 19 → 20 … 99 → 100) khó hơn mức thường: ải đột phá tốn ≥ 3 lần cấp thường của cảnh giới trước;
 //  - giảm 20% điểm cần tích lũy: cấp 100 = 8.184 điểm (80% của 10.230), không mốc nào cao hơn thang cũ nên không ai tụt cấp.
+// v2.14.0 (Thần Lộ), theo yêu cầu mới của chủ dự án: từ cấp 100, đủ điểm chưa đủ để lên cấp; thần cấp 101–103 còn cần lĩnh ngộ
+// (điểm đã tích lũy của cả tám chỉ số) và chiến tích ở Thần giới. Vì vậy mục 3 gieo điểm đều tám chỉ số cho các thần cấp, và
+// thêm trường hợp dồn hết điểm vào một chỉ số: đủ điểm mà vẫn ở cấp 100. realmOf(t) không truyền điểm chỉ số thì vẫn tính thuần
+// theo điểm (bảng thang, mốc).
 // v2.10.0 (Thiên Môn), theo yêu cầu mới của chủ dự án: từ cấp 90 trở đi, cấp sau khó gấp đôi cấp trước; ải cấp 100 khó nhất.
 //  - cấp 91 tốn 4 điểm, rồi 8, 16 … 1.024 (cấp 99), cấp 100 tốn 2.048 điểm (bằng cả chín cấp trước cộng lại);
 //  - tổng tới cấp 100 = 8.180 điểm (không cao hơn 8.184 của v2.5.0), vẫn đi hết trong 3–4 năm; không mốc nào cao hơn thang v2.5.0.
@@ -14,6 +18,8 @@ import { startHarness } from './lib/browser-harness.mjs';
 const day = (n) => new Date(Date.now() + n * 864e5).toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
 // half = số nửa điểm đã tích lũy (sổ cái lưu nửa điểm).
 const growth = (half, extra = {}) => ({ v: 1, hero: 'nam', since: day(-40), log: half ? [{ id: 'e1', d: day(-1), s: 'task', k: 'task:e1', n: 'Việc cũ', p: [half, 0, 0, 0, 0, 0, 0, 0] }] : [], ...extra });
+// Điểm chia đều tám chỉ số (half chia hết cho 8): đủ lĩnh ngộ cho mọi trận ở Thần giới.
+const even = (half) => ({ v: 1, hero: 'nam', since: day(-40), log: [{ id: 'e1', d: day(-1), s: 'task', k: 'task:e1', n: 'Việc cũ', p: Array(8).fill(half / 8) }] });
 const seed = (g) => () => ({
   schema: 1,
   projects: [{ id: 'p1', name: 'Dự án A', description: '', color: '#7950c8', icon: '✺', columns: ['Idea', 'List', 'Doing', 'Done'], columnNames: { Idea: 'Ý tưởng', List: 'Việc cần làm', Doing: 'Đang thực hiện', Done: 'Hoàn thành' }, tasks: [{ id: 'p1t0', title: 'Gửi báo cáo', col: 'Doing', description: '', due: day(3), tag: 'Công việc', priority: 'q2', checks: [] }] }],
@@ -172,11 +178,13 @@ try {
       [12264, 'Cấp 99/100 · Nhân Gian Cực Cảnh', '6.132 điểm tu vi · còn 2.048 điểm lên cấp 100 · đột phá thành Thần'],
       [16359, 'Cấp 99/100 · Nhân Gian Cực Cảnh', '8.179,5 điểm tu vi · còn 0,5 điểm lên cấp 100 · đột phá thành Thần'],
       [16360, 'Cấp 100/100 · Thành Thần', '8.180 điểm tu vi · còn 2.048 điểm lên cấp 101'],
-      [20456, 'Thần cấp 1/3 · Thượng Thần', '10.228 điểm tu vi · còn 2.048 điểm lên cấp 102'],
-      [28648, 'Thần cấp 3/3 · Thần Vương', '14.324 điểm tu vi · đã đạt Thần Vương, cấp tối cao'],
+      [20456, 'Cấp 100/100 · Thành Thần', '10.228 điểm tu vi · đã đủ điểm lên cấp 101 · còn thiếu chiến tích ở Thần giới'],
+      [[20456], 'Thần cấp 1/3 · Thượng Thần', '10.228 điểm tu vi · còn 2.048 điểm lên cấp 102'],
+      [[28648], 'Thần cấp 3/3 · Thần Vương', '14.324 điểm tu vi · đã đạt Thần Vương, cấp tối cao'],
       [0, 'Chưa nhập cấp', '0 điểm tu vi · còn 0,5 điểm để nhập cấp 1'],
     ]) {
-      const { context, page } = await h.open(width, { touch, workspace: seed(growth(half))() });
+      // [half] = chia đều tám chỉ số; half = dồn vào một chỉ số.
+      const { context, page } = await h.open(width, { touch, workspace: seed(Array.isArray(half) ? even(half[0]) : growth(half))() });
       await h.show(page, 'growth');
       assert.equal(await page.locator('.gr-rank').textContent(), rank, 'dòng cấp' + at);
       assert.equal(await page.locator('.gr-realm-ahead').textContent(), ahead, 'dòng điểm' + at);

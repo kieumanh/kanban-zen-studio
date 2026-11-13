@@ -109,7 +109,7 @@
     let box = slot?.querySelector('.gh-rank');
     const G = window.zenGrowth;
     if (!slot || !gh() || !G?.started?.() || typeof G.realmOf !== 'function') return box?.remove();
-    const r = G.realmOf(G.total(G.earnedScores()));
+    const r = G.myRealm ? G.myRealm() : G.realmOf(G.total(G.earnedScores())); // v2.14.0: có tính chiến tích Thần giới
     const title = r.title ? ' · ' + r.title : '';
     const next = r.top ? 'Đã tới đỉnh: cấp ' + r.level : r.pct + '% tới cấp ' + (r.level + 1);
     if (!box) {
