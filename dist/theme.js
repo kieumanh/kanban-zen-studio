@@ -66,7 +66,8 @@
   function preloadFonts() {
     if (fontsQueued || !document.head) return;
     fontsQueued = true;
-    ['noto-serif-vietnamese-600.v1.woff2', 'noto-serif-latin-600.v1.woff2'].forEach(function (name) {
+    // v2.9.0 (Thư Pháp): thêm phông bút lông Potta One của tiêu đề.
+    ['noto-serif-vietnamese-600.v1.woff2', 'noto-serif-latin-600.v1.woff2', 'potta-one-vietnamese-400.v1.woff2', 'potta-one-latin-400.v1.woff2'].forEach(function (name) {
       var link = document.createElement('link');
       link.rel = 'preload';
       link.as = 'font';

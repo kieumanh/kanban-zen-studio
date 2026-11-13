@@ -416,27 +416,42 @@ const GH_FONT_RANGES = {
   latin:
     'U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD',
 };
-export const GH_FONT_FILES = ['600', '700'].flatMap((w) =>
-  ['vietnamese', 'latin'].map(
-    (sub) => 'noto-serif-' + sub + '-' + w + '.v1.woff2',
-  ),
-);
-const GH_FONTS = ['600', '700']
-  .flatMap((w) =>
+// v2.9.0 (Thư Pháp): thêm phông bút lông Potta One (đậm 400, SIL OFL 1.1, Latin + tiếng Việt) cho tiêu đề Giang hồ.
+export const GH_FONT_FILES = [
+  ...['600', '700'].flatMap((w) =>
     ['vietnamese', 'latin'].map(
+      (sub) => 'noto-serif-' + sub + '-' + w + '.v1.woff2',
+    ),
+  ),
+  ...['vietnamese', 'latin'].map((sub) => 'potta-one-' + sub + '-400.v1.woff2'),
+];
+const GH_FONTS =
+  ['600', '700']
+    .flatMap((w) =>
+      ['vietnamese', 'latin'].map(
+        (sub) =>
+          "@font-face {\n  font-family: 'Noto Serif';\n  font-style: normal;\n  font-weight: " +
+          w +
+          ";\n  font-display: swap;\n  src: url('/fonts/noto-serif-" +
+          sub +
+          '-' +
+          w +
+          ".v1.woff2') format('woff2');\n  unicode-range: " +
+          GH_FONT_RANGES[sub] +
+          ';\n}\n',
+      ),
+    )
+    .join('') +
+  ['vietnamese', 'latin']
+    .map(
       (sub) =>
-        "@font-face {\n  font-family: 'Noto Serif';\n  font-style: normal;\n  font-weight: " +
-        w +
-        ";\n  font-display: swap;\n  src: url('/fonts/noto-serif-" +
+        "@font-face {\n  font-family: 'Potta One';\n  font-style: normal;\n  font-weight: 400;\n  font-display: swap;\n  src: url('/fonts/potta-one-" +
         sub +
-        '-' +
-        w +
-        ".v1.woff2') format('woff2');\n  unicode-range: " +
+        "-400.v1.woff2') format('woff2');\n  unicode-range: " +
         GH_FONT_RANGES[sub] +
         ';\n}\n',
-    ),
-  )
-  .join('');
+    )
+    .join('');
 
 export function checkSkin(css) {
   const tree = postcss.parse(css, { from: 'scripts/giangho-skin.css' });

@@ -28,11 +28,13 @@ assert.ok(rules > 1000, 'bộ sinh phải phát ra hàng nghìn quy tắc (sáng
 tree.walkAtRules('import', (a) => assert.fail('giangho.css không còn @import: ' + a.params));
 const faces = [];
 tree.walkAtRules('font-face', (a) => faces.push(Object.fromEntries(a.nodes.map((d) => [d.prop, d.value]))));
-assert.equal(faces.length, 4, 'bốn @font-face: Latin + tiếng Việt, đậm 600 và 700');
+// v2.9.0 (Thư Pháp): thêm Potta One (đậm 400, Latin + tiếng Việt) cho tiêu đề: 4 mặt Noto Serif + 2 mặt Potta One.
+assert.equal(faces.length, 6, 'sáu @font-face: Noto Serif (Latin + tiếng Việt, đậm 600 và 700) và Potta One (Latin + tiếng Việt, 400)');
+assert.equal(faces.filter((f) => f['font-family'] === "'Potta One'").length, 2, 'hai mặt Potta One');
 for (const f of faces) {
-  assert.equal(f['font-family'], "'Noto Serif'", 'phông Noto Serif');
+  assert.ok(["'Noto Serif'", "'Potta One'"].includes(f['font-family']), 'phông Noto Serif hoặc Potta One');
   assert.equal(f['font-display'], 'swap', 'hiện chữ ngay bằng phông dự phòng trong lúc tải');
-  const file = f.src.match(/^url\('\/fonts\/(noto-serif-(latin|vietnamese)-(600|700)\.v1\.woff2)'\) format\('woff2'\)$/);
+  const file = f.src.match(/^url\('\/fonts\/((?:noto-serif|potta-one)-(latin|vietnamese)-(400|600|700)\.v1\.woff2)'\) format\('woff2'\)$/);
   assert.ok(file, 'tệp phông tự lưu: ' + f.src);
   assert.equal(file[3], f['font-weight'], 'đúng độ đậm');
   assert.ok(readFileSync(new URL('../dist/fonts/' + file[1], import.meta.url)).length > 4000, 'có tệp phông ' + file[1]);

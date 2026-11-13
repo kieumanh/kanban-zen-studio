@@ -169,6 +169,7 @@ jobs:
           node tests/giangho-treasure-browser.mjs
           node tests/giangho-settings-browser.mjs
           node tests/giangho-perf-browser.mjs
+          node tests/giangho-title-font-browser.mjs
           node tests/giangho-coverage-browser.mjs
           node tests/giangho-guide-browser.mjs
           node tests/giangho-fx-browser.mjs

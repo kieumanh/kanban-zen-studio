@@ -482,3 +482,31 @@
     vertical-align: middle;
   }
 }
+
+/* ---- v2.9.0 (Thư Pháp): tiêu đề theo phong cách võ lâm kiếm hiệp ------------------------------------------------------------
+   Tiêu đề trang, tiêu đề khung, tiêu đề hộp thoại, ấn cảnh giới, danh hiệu thanh bên và tên chương truyện dùng phông bút lông
+   Potta One (tự lưu, SIL OFL 1.1, có đủ dấu tiếng Việt). Phông chỉ có một độ đậm nên tắt in đậm giả. Chữ thường giữ Noto Serif. */
+:root[data-style=giangho] {
+  --gh-title: 'Potta One', var(--gh-serif);
+}
+:root[data-style=giangho] #main h1,
+:root[data-style=giangho] #main :is(.panel, .section-head, .wf-focus-group, .bg-chart-head, .month-controls) > h2,
+:root[data-style=giangho] dialog[open] h2,
+:root[data-style=giangho] .gr-realm-name,
+:root[data-style=giangho] .gh-rank strong {
+  font-family: var(--gh-title);
+  font-weight: 400;
+  font-synthesis: none;
+  letter-spacing: 0.01em;
+}
+:root[data-style=giangho] #main h1 {
+  line-height: 1.25;
+}
+/* Chữ phụ nhỏ trong tiêu đề (đếm số, chặng, âm lịch…) giữ chữ có chân để dễ đọc. */
+:root[data-style=giangho] #main h1 small,
+:root[data-style=giangho] #main :is(.panel, .section-head, .wf-focus-group, .bg-chart-head, .month-controls) > h2 small,
+:root[data-style=giangho] dialog[open] h2 small {
+  font-family: var(--gh-serif);
+  font-weight: 600;
+  letter-spacing: 0;
+}

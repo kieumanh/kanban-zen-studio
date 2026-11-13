@@ -1,6 +1,8 @@
 // v1.94.0 (Khinh Công): tối ưu tải cho phong cách Giang hồ.
 //  1. Phông chữ có chân Noto Serif tự lưu: máy chủ trả tệp woff2 đúng kiểu, CSP cho phép phông cùng nguồn; Giang hồ tải và dùng
 //     được phông (tiêu đề ra Noto Serif), không còn yêu cầu nào tới Google cho Noto Serif; phong cách Thiền không tải tệp phông nào.
+//     v2.9.0 (Thư Pháp): tiêu đề trang đổi sang phông bút lông Potta One (dự phòng Noto Serif) theo yêu cầu; tải sớm thêm 2 tệp
+//     Potta One (tổng 4); Thiền vẫn không tải tệp phông nào.
 //  2. Bộ chuyển ngữ làm việc vừa đủ: mỗi lần dựng lại bảng 180 nhiệm vụ chỉ một lượt quan sát, số chữ được xem không vượt số chữ trên
 //     trang (trước đây cây con thêm chồng nhau bị quét lại ~4 lần), phần lớn chữ lấy từ bộ nhớ "chắc chắn không đổi"; chữ vẫn đổi đúng.
 // Kiểm ở 390 (chạm), 820 (chạm), 1440 px. Thời gian chỉ in ra để theo dõi, không dùng để chấm đỗ / trượt (máy CI dao động).
@@ -33,11 +35,11 @@ try {
         return { faces: faces.length, ok: document.fonts.check("600 24px 'Noto Serif'", 'Tầm'), h1: getComputedStyle(document.querySelector('#main h1')).fontFamily, type: res.headers.get('Content-Type'), csp: res.headers.get('Content-Security-Policy') || '', magic: String.fromCharCode(...head) };
       });
       assert.ok(font.faces >= 1 && font.ok, 'Giang hồ nạp được phông Noto Serif tự lưu' + at);
-      assert.match(font.h1, /^"?Noto Serif"?,/, 'tiêu đề dùng Noto Serif' + at);
+      assert.match(font.h1, /^"?Potta One"?, "?Noto Serif"?,/, 'tiêu đề dùng phông bút lông Potta One, dự phòng Noto Serif' + at);
       assert.equal(font.type, 'font/woff2', 'máy chủ trả đúng kiểu phông' + at);
       assert.equal(font.magic, 'wOF2', 'tệp phông hợp lệ' + at);
       assert.ok(requests.some((u) => /\/fonts\/noto-serif-vietnamese-600\.v1\.woff2$/.test(u)), 'tải phông từ máy chủ của ứng dụng' + at);
-      assert.equal(await page.evaluate(() => document.querySelectorAll('link[rel=preload][as=font][crossorigin]').length), 2, 'tải sớm phông tiêu đề (đậm 600)' + at);
+      assert.equal(await page.evaluate(() => document.querySelectorAll('link[rel=preload][as=font][crossorigin]').length), 4, 'tải sớm phông tiêu đề (Noto Serif đậm 600 và Potta One)' + at);
       assert.equal(requests.filter((u) => u.endsWith('/fonts/noto-serif-vietnamese-600.v1.woff2')).length, 1, 'tải sớm và @font-face dùng chung một lần tải' + at);
       assert.ok(!requests.some((u) => /Noto\+Serif|noto-serif/i.test(u) && !u.includes('/fonts/noto-serif-')), 'không gọi Google cho Noto Serif' + at);
       const doc = await page.evaluate(async () => (await fetch('/')).headers.get('Content-Security-Policy') || '');
@@ -75,7 +77,7 @@ try {
       const { context, page } = await h.open(width, { touch, setup: ({ page }) => page.on('request', (r) => requests.push(r.url())) });
       await h.show(page, 'projects', 'p1');
       await page.evaluate(() => document.fonts.ready);
-      assert.ok(!requests.some((u) => /noto-serif|Noto\+Serif/i.test(u)), 'Thiền không tải phông Noto Serif: ' + requests.filter((u) => /noto/i.test(u)) + at);
+      assert.ok(!requests.some((u) => /noto-serif|Noto\+Serif|potta-one/i.test(u)), 'Thiền không tải phông Noto Serif / Potta One: ' + requests.filter((u) => /noto|potta/i.test(u)) + at);
       assert.equal(await page.evaluate(() => document.querySelectorAll('link[rel=preload][as=font]').length), 0, 'Thiền không tải sớm phông' + at);
       await context.close();
     }
