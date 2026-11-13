@@ -130,8 +130,9 @@ export async function reportShareOwner(request, env, u) {
       )
       .bind(u.id)
       .first();
+    // v2.3.0: trang chia sẻ công khai (người ngoài xem, report.js đọc nhãn thường) luôn dùng giọng thường.
     report = weeklyReport(
-      workspace,
+      { ...workspace, style: undefined },
       reportDate(),
       previous ? JSON.parse(previous.data) : null,
     );

@@ -94,6 +94,57 @@ const VOICES = {
     weeklyEyebrow: 'ZEN STUDIO · NHÌN LẠI MỖI TUẦN',
     weeklyTitle: 'Bức tranh công việc',
     weeklyLine: 'BỨC TRANH CÔNG VIỆC',
+    w: {
+      head: (projects, tasks, pct) =>
+        `${projects} dự án hoạt động · ${tasks} công việc · ${pct}% tiến độ`,
+      counts: (c) =>
+        `Hoàn thành: ${c.done} · Đang xây dựng: ${c.doing} · Chưa làm: ${c.todo} · Quá hạn: ${c.overdue}`,
+      compare:
+        'So sánh trạng thái với lần tổng kết trước; các task đã xóa hoặc lưu trữ không tính vào thay đổi.',
+      first:
+        'Đây là mốc tổng kết đầu tiên. Các lần sau sẽ có thay đổi so với bản trước.',
+      project: (done, total, late, soon) =>
+        `${done}/${total} việc hoàn thành · ${late} quá hạn · ${soon} đến hạn trong 7 ngày tới.`,
+      projectRe: /^\d+\/\d+ việc hoàn thành/,
+      delta: (added, diff) =>
+        `So với bản trước: ${added} việc chuyển sang hoàn thành; tiến độ ${diff >= 0 ? '+' : ''}${diff} điểm phần trăm.`,
+      deltaMark: 'So với bản trước:',
+      empty:
+        'Gợi ý: tạo một việc nhỏ, xác định kết quả cần đạt và ngày thực hiện.',
+      finished:
+        'Gợi ý: rà soát kết quả, ghi lại bài học và cân nhắc lưu trữ dự án.',
+      priority: [
+        'Ưu tiên: kiểm tra nguyên nhân trễ, chia nhỏ việc hoặc đặt lại hạn thực tế.',
+        'Ưu tiên: thu hẹp số việc đang làm, hoàn tất trước khi mở thêm.',
+        'Ưu tiên: dành thời gian cho việc sắp đến hạn; kiểm tra checklist còn thiếu.',
+        'Ưu tiên: chọn việc quan trọng nhất, đặt lịch cụ thể và chia thành bước nhỏ.',
+      ],
+      priorityMark: 'Ưu tiên:',
+      lead: 'Đề xuất tuần tới:',
+      step: 'Bước tiếp: ',
+      noStep:
+        'Xác định đầu ra và thêm một checklist có thể hoàn thành trong một buổi.',
+      due: ' · hạn ',
+      noDue: ' · chưa đặt hạn',
+      rhythm: 'NHỊP LÀM VIỆC TUẦN TỚI',
+      rhythmSteps: [
+        'Thứ 2: chốt tối đa 3 kết quả quan trọng; xử lý việc quá hạn trước.',
+        'Thứ 3–5: dành khung tập trung cho việc quan trọng, cập nhật checklist cuối ngày.',
+        'Thứ 6–7: kiểm tra kết quả, tệp bàn giao và hạn còn lại.',
+        'Chủ nhật: nghỉ, nhìn lại tiến độ và điều chỉnh kế hoạch.',
+      ],
+      footnote: 'Gợi ý được tạo theo trạng thái, hạn và ưu tiên bạn đã nhập.',
+      footnoteMark: 'Gợi ý được tạo theo',
+      labels: ['Hoàn thành', 'Đang xây dựng', 'Chưa làm', 'Quá hạn'],
+      unit: 'việc',
+      unitTasks: 'công việc',
+      unitProjects: 'dự án',
+      overall: 'Tiến độ tổng thể',
+      distribution: 'Phân bố công việc',
+      projectProgress: 'Tiến độ dự án',
+      footer:
+        'để cập nhật công việc. Đổi giờ hoặc tắt email trong Settings → Tổng kết tuần.',
+    },
   },
   giangho: {
     subject: 'Truyền thư kỳ hạn · ',
@@ -113,6 +164,59 @@ const VOICES = {
     weeklyEyebrow: 'ZEN STUDIO · CHIẾN BÁO MỖI TUẦN',
     weeklyTitle: 'Chiến báo đại sự',
     weeklyLine: 'CHIẾN BÁO ĐẠI SỰ',
+    // v2.3.0 (Chiến Báo): thân chiến báo tuần giọng giang hồ.
+    w: {
+      head: (projects, tasks, pct) =>
+        `${projects} đại sự đang vận hành · ${tasks} nhiệm vụ · ${pct}% tiến cảnh`,
+      counts: (c) =>
+        `Công thành: ${c.done} · Đang hành sự: ${c.doing} · Chưa xuất chiêu: ${c.todo} · Lỡ hẹn: ${c.overdue}`,
+      compare:
+        'So với chiến báo trước; nhiệm vụ đã xóa hoặc phong ấn không tính vào thay đổi.',
+      first:
+        'Đây là chiến báo đầu tiên. Từ lần sau sẽ có so sánh với bản trước.',
+      project: (done, total, late, soon) =>
+        `${done}/${total} nhiệm vụ công thành · ${late} lỡ hẹn · ${soon} tới kỳ trong 7 ngày tới.`,
+      projectRe: /^\d+\/\d+ nhiệm vụ công thành/,
+      delta: (added, diff) =>
+        `So với chiến báo trước: thêm ${added} nhiệm vụ công thành; tiến cảnh ${diff >= 0 ? '+' : ''}${diff} điểm phần trăm.`,
+      deltaMark: 'So với chiến báo trước:',
+      empty:
+        'Kế sách: khởi một nhiệm vụ nhỏ, định rõ thành quả và ngày xuất chiêu.',
+      finished:
+        'Kế sách: soát lại thành quả, chép bài học vào Tàng thư và cân nhắc phong ấn đại sự.',
+      priority: [
+        'Tiên quyết: truy nguyên nhân lỡ hẹn, chia nhỏ nhiệm vụ hoặc định lại kỳ hạn cho sát thực.',
+        'Tiên quyết: bớt số nhiệm vụ đang hành sự, hoàn tất rồi mới khởi thêm.',
+        'Tiên quyết: dồn sức cho nhiệm vụ sắp tới kỳ; soát lại chiêu thức còn thiếu.',
+        'Tiên quyết: chọn nhiệm vụ trọng yếu nhất, định ngày cụ thể và chia thành chiêu nhỏ.',
+      ],
+      priorityMark: 'Tiên quyết:',
+      lead: 'Kế sách tuần tới:',
+      step: 'Chiêu kế tiếp: ',
+      noStep:
+        'Định rõ thành quả và thêm một chiêu thức có thể xong trong một buổi.',
+      due: ' · kỳ hạn ',
+      noDue: ' · chưa định kỳ hạn',
+      rhythm: 'NHỊP HÀNH SỰ TUẦN TỚI',
+      rhythmSteps: [
+        'Thứ 2: chốt tối đa 3 thành quả trọng yếu; xử lý nhiệm vụ lỡ hẹn trước.',
+        'Thứ 3–5: dành canh giờ bế quan cho nhiệm vụ trọng yếu, soát chiêu thức cuối ngày.',
+        'Thứ 6–7: kiểm thành quả, bảo vật bàn giao và kỳ hạn còn lại.',
+        'Chủ nhật: nghỉ ngơi dưỡng sức, nhìn lại tiến cảnh và điều chỉnh kế sách.',
+      ],
+      footnote:
+        'Kế sách được bày theo trạng thái, kỳ hạn và mức cấp bách các hạ đã ghi.',
+      footnoteMark: 'Kế sách được bày theo',
+      labels: ['Công thành', 'Đang hành sự', 'Chưa xuất chiêu', 'Lỡ hẹn'],
+      unit: 'nhiệm vụ',
+      unitTasks: 'nhiệm vụ',
+      unitProjects: 'đại sự',
+      overall: 'Tiến cảnh tổng thể',
+      distribution: 'Phân bố nhiệm vụ',
+      projectProgress: 'Tiến cảnh đại sự',
+      footer:
+        'để cập nhật nhiệm vụ. Đổi giờ hoặc tắt thư trong Cơ quan → Chiến báo tuần.',
+    },
   },
 };
 export const voiceOf = (workspace) =>
@@ -152,11 +256,9 @@ export function weeklyReport(workspace, day, previous = null) {
     voice = voiceOf(workspace),
     lines = [
       `${voice.weeklyLine} · ${shiftDay(day, -6)} → ${day}`,
-      `${projects.length} dự án hoạt động · ${tasks.length} công việc · ${reportProgress(tasks)}% tiến độ`,
-      `Hoàn thành: ${counts.done} · Đang xây dựng: ${counts.doing} · Chưa làm: ${counts.todo} · Quá hạn: ${counts.overdue}`,
-      previous
-        ? 'So sánh trạng thái với lần tổng kết trước; các task đã xóa hoặc lưu trữ không tính vào thay đổi.'
-        : 'Đây là mốc tổng kết đầu tiên. Các lần sau sẽ có thay đổi so với bản trước.',
+      voice.w.head(projects.length, tasks.length, reportProgress(tasks)),
+      voice.w.counts(counts),
+      previous ? voice.w.compare : voice.w.first,
       '',
     ];
   for (const p of projects) {
@@ -174,15 +276,18 @@ export function weeklyReport(workspace, day, previous = null) {
       );
     lines.push(
       `◆ ${oneLine(p.name)} · ${current.pct}%`,
-      `${list.filter((t) => t.col === 'Done').length}/${list.length} việc hoàn thành · ${late.length} quá hạn · ${upcoming.length} đến hạn trong 7 ngày tới.`,
+      voice.w.project(
+        list.filter((t) => t.col === 'Done').length,
+        list.length,
+        late.length,
+        upcoming.length,
+      ),
     );
     if (old) {
       const added = current.doneIds.filter(
         (id) => !old.doneIds.includes(id),
       ).length;
-      lines.push(
-        `So với bản trước: ${added} việc chuyển sang hoàn thành; tiến độ ${current.pct - old.pct >= 0 ? '+' : ''}${current.pct - old.pct} điểm phần trăm.`,
-      );
+      lines.push(voice.w.delta(added, current.pct - old.pct));
     }
     const candidates = list
       .filter((t) => t.col !== 'Done')
@@ -198,44 +303,31 @@ export function weeklyReport(workspace, day, previous = null) {
         );
       })
       .slice(0, 3);
-    if (!list.length)
-      lines.push(
-        'Gợi ý: tạo một việc nhỏ, xác định kết quả cần đạt và ngày thực hiện.',
-      );
-    else if (!candidates.length)
-      lines.push(
-        'Gợi ý: rà soát kết quả, ghi lại bài học và cân nhắc lưu trữ dự án.',
-      );
+    if (!list.length) lines.push(voice.w.empty);
+    else if (!candidates.length) lines.push(voice.w.finished);
     else {
       lines.push(
-        late.length
-          ? 'Ưu tiên: kiểm tra nguyên nhân trễ, chia nhỏ việc hoặc đặt lại hạn thực tế.'
-          : doing.length > 3
-            ? 'Ưu tiên: thu hẹp số việc đang làm, hoàn tất trước khi mở thêm.'
-            : upcoming.length
-              ? 'Ưu tiên: dành thời gian cho việc sắp đến hạn; kiểm tra checklist còn thiếu.'
-              : 'Ưu tiên: chọn việc quan trọng nhất, đặt lịch cụ thể và chia thành bước nhỏ.',
+        voice.w.priority[
+          late.length ? 0 : doing.length > 3 ? 1 : upcoming.length ? 2 : 3
+        ],
       );
-      lines.push('Đề xuất tuần tới:');
+      lines.push(voice.w.lead);
       for (const t of candidates) {
         const unchecked = (t.checks || []).filter((c) => !c.done),
           hint = unchecked.length
-            ? `Bước tiếp: ${oneLine(unchecked[0].text)}`
-            : 'Xác định đầu ra và thêm một checklist có thể hoàn thành trong một buổi.';
+            ? voice.w.step + oneLine(unchecked[0].text)
+            : voice.w.noStep;
         lines.push(
-          `• ${oneLine(t.title)}${taskDeadline(t) ? ' · hạn ' + taskDeadline(t) : ' · chưa đặt hạn'}\n  ${hint}`,
+          `• ${oneLine(t.title)}${taskDeadline(t) ? voice.w.due + taskDeadline(t) : voice.w.noDue}\n  ${hint}`,
         );
       }
     }
     lines.push('');
   }
   lines.push(
-    `NHỊP LÀM VIỆC TUẦN TỚI · ${shiftDay(day, 1)} → ${next}`,
-    'Thứ 2: chốt tối đa 3 kết quả quan trọng; xử lý việc quá hạn trước.',
-    'Thứ 3–5: dành khung tập trung cho việc quan trọng, cập nhật checklist cuối ngày.',
-    'Thứ 6–7: kiểm tra kết quả, tệp bàn giao và hạn còn lại.',
-    'Chủ nhật: nghỉ, nhìn lại tiến độ và điều chỉnh kế hoạch.',
-    'Gợi ý được tạo theo trạng thái, hạn và ưu tiên bạn đã nhập.',
+    `${voice.w.rhythm} · ${shiftDay(day, 1)} → ${next}`,
+    ...voice.w.rhythmSteps,
+    voice.w.footnote,
   );
   const summary = {
     tasks: tasks.map((t) => ({
@@ -293,11 +385,13 @@ export function weeklyReportHTML(report) {
     progress: 0,
     projects: [],
   };
+  const voice = VOICES[report.voice] || VOICES.zen,
+    W = voice.w;
   const groups = [
-    ['done', 'Hoàn thành', '#3b8b61'],
-    ['doing', 'Đang xây dựng', '#8054bf'],
-    ['todo', 'Chưa làm', '#df8c40'],
-    ['overdue', 'Quá hạn', '#cd4c58'],
+    ['done', W.labels[0], '#3b8b61'],
+    ['doing', W.labels[1], '#8054bf'],
+    ['todo', W.labels[2], '#df8c40'],
+    ['overdue', W.labels[3], '#cd4c58'],
   ];
   const percent = (n) => (s.total ? Math.round((n / s.total) * 1000) / 10 : 0);
   let offset = 0;
@@ -309,12 +403,12 @@ export function weeklyReportHTML(report) {
       return fraction ? circle : '';
     })
     .join('');
-  const donut = `<div class="report-donut" style="text-align:center;break-inside:avoid"><svg xmlns="http://www.w3.org/2000/svg" width="220" height="220" viewBox="0 0 220 220" role="img" aria-label="Phân bố ${s.total} công việc"><circle cx="110" cy="110" r="80" fill="none" stroke="#eeeaf2" stroke-width="24"/>${rings}<text x="110" y="108" text-anchor="middle" fill="#352d40" font-size="30" font-weight="700">${s.total}</text><text x="110" y="132" text-anchor="middle" fill="#74677e" font-size="13">công việc</text></svg></div>`;
+  const donut = `<div class="report-donut" style="text-align:center;break-inside:avoid"><svg xmlns="http://www.w3.org/2000/svg" width="220" height="220" viewBox="0 0 220 220" role="img" aria-label="Phân bố ${s.total} ${W.unitTasks}"><circle cx="110" cy="110" r="80" fill="none" stroke="#eeeaf2" stroke-width="24"/>${rings}<text x="110" y="108" text-anchor="middle" fill="#352d40" font-size="30" font-weight="700">${s.total}</text><text x="110" y="132" text-anchor="middle" fill="#74677e" font-size="13">${W.unitTasks}</text></svg></div>`;
   const distribution = groups
     .map(([key, label, color]) => {
       const count = s.counts[key] || 0,
         pct = percent(count);
-      return `<tr class="report-status-main"><td width="58%" style="font-size:13px;padding:9px 14px 4px;border-radius:10px 0 0 0;background:#faf8fc;border-top:1px solid #eee8f3;border-left:1px solid #eee8f3"><span style="color:${color}">●</span> <strong>${label}</strong></td><td align="right" style="font-size:13px;padding:9px 14px 4px;border-radius:0 10px 0 0;background:#faf8fc;border-top:1px solid #eee8f3;border-right:1px solid #eee8f3"><strong>${count}</strong> việc <span style="color:#756580">·</span> <strong>${pct}%</strong></td></tr><tr class="report-status-bar"><td colspan="2" style="padding:0 14px 8px;border-radius:0 0 10px 10px;background:#faf8fc;border:1px solid #eee8f3;border-top:0">${reportBar(pct, color, true)}</td></tr>`;
+      return `<tr class="report-status-main"><td width="58%" style="font-size:13px;padding:9px 14px 4px;border-radius:10px 0 0 0;background:#faf8fc;border-top:1px solid #eee8f3;border-left:1px solid #eee8f3"><span style="color:${color}">●</span> <strong>${label}</strong></td><td align="right" style="font-size:13px;padding:9px 14px 4px;border-radius:0 10px 0 0;background:#faf8fc;border-top:1px solid #eee8f3;border-right:1px solid #eee8f3"><strong>${count}</strong> ${W.unit} <span style="color:#756580">·</span> <strong>${pct}%</strong></td></tr><tr class="report-status-bar"><td colspan="2" style="padding:0 14px 8px;border-radius:0 0 10px 10px;background:#faf8fc;border:1px solid #eee8f3;border-top:0">${reportBar(pct, color, true)}</td></tr>`;
     })
     .join('');
   let projectIndex = 0;
@@ -326,33 +420,30 @@ export function weeklyReportHTML(report) {
           const p = s.projects[projectIndex++];
           if (!p) return '';
           const color = /^#[a-f\d]{6}$/i.test(p.color) ? p.color : '#8054bf';
-          return `<h2 class="report-project-title" style="--report-accent:${color};font-size:18px;margin:26px 0 6px;padding:12px 14px;border-left:3px solid ${color};break-after:avoid">${reportEscape(p.name)}</h2><table role="presentation" width="100%" class="report-project-progress"><tr><td style="font-size:13px;color:#6a6073">Tiến độ dự án</td><td align="right" style="font-size:18px;font-weight:bold;color:${color}">${p.pct}%</td></tr></table>${reportBar(p.pct, color)}`;
+          return `<h2 class="report-project-title" style="--report-accent:${color};font-size:18px;margin:26px 0 6px;padding:12px 14px;border-left:3px solid ${color};break-after:avoid">${reportEscape(p.name)}</h2><table role="presentation" width="100%" class="report-project-progress"><tr><td style="font-size:13px;color:#6a6073">${W.projectProgress}</td><td align="right" style="font-size:18px;font-weight:bold;color:${color}">${p.pct}%</td></tr></table>${reportBar(p.pct, color)}`;
         }
         if (!line)
           return '<div class="report-section-gap" aria-hidden="true"></div>';
-        if (line.startsWith('NHỊP LÀM VIỆC TUẦN TỚI'))
+        if (line.startsWith(W.rhythm))
           return `<h2 class="report-rhythm-title" style="font-size:18px;margin:24px 0 10px;break-after:avoid">${reportEscape(line)}</h2>`;
-        if (line.startsWith('Ưu tiên:'))
+        if (line.startsWith(W.priorityMark))
           return `<p class="report-priority-note">${reportEscape(line)}</p>`;
-        if (
-          line.startsWith('Đề xuất tuần tới:') ||
-          line.startsWith('Gợi ý tuần tới:')
-        )
+        if (line.startsWith(W.lead) || line.startsWith('Gợi ý tuần tới:'))
           return `<p class="report-suggestion-lead">${reportEscape(line)}</p>`;
         if (line.startsWith('• '))
           return `<p class="report-suggestion-item">${reportEscape(line)}</p>`;
         if (line.startsWith('  '))
           return `<p class="report-suggestion-next">${reportEscape(line.trim())}</p>`;
-        if (/^\d+\/\d+ việc hoàn thành/.test(line))
+        if (W.projectRe.test(line))
           return `<p class="report-project-summary">${reportEscape(line)}</p>`;
-        if (line.startsWith('So với bản trước:'))
+        if (line.startsWith(W.deltaMark))
           return `<p class="report-project-delta">${reportEscape(line)}</p>`;
         if (/^(Thứ \d|Thứ \d–\d|Chủ nhật:)/.test(line))
           return `<p class="report-rhythm-step">${reportEscape(line)}</p>`;
-        if (line.startsWith('Gợi ý được tạo theo'))
+        if (line.startsWith(W.footnoteMark))
           return `<p class="report-rhythm-footnote">${reportEscape(line)}</p>`;
         return `<p class="report-body-copy">${reportEscape(line)}</p>`;
       })
       .join('');
-  return `<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${reportEscape(report.subject)}</title><style>${REPORT_STYLE}</style></head><body><main class="report-sheet" style="max-width:680px;margin:0 auto;padding:32px;background:#ffffff;border:1px solid #e7e1ec"><p style="font-size:11px;letter-spacing:2px;color:#887491;margin:0 0 10px">${(VOICES[report.voice] || VOICES.zen).weeklyEyebrow}</p><h1 style="font-size:27px;line-height:1.35;margin:0 0 8px">${(VOICES[report.voice] || VOICES.zen).weeklyTitle}</h1><p style="font-size:13px;color:#74677e;margin:0 0 24px">${reportEscape(lines[0].replace('BỨC TRANH CÔNG VIỆC · ', ''))}</p><table role="presentation" width="100%"><tr><td><strong style="font-size:30px">${s.progress}%</strong><br><span style="font-size:12px;color:#74677e">Tiến độ tổng thể</span></td><td align="right" style="font-size:14px">${s.projects.length} dự án<br>${s.total} công việc</td></tr></table>${reportBar(s.progress, '#8054bf')}<h2 style="font-size:17px;margin:24px 0 10px">Phân bố công việc</h2>${donut}<table class="report-distribution" cellpadding="0" cellspacing="0" aria-label="Phân bố công việc theo trạng thái">${distribution}</table>${content}<div id="report-task-data" hidden>${reportEscape(JSON.stringify(s.tasks || []))}</div><p style="margin-top:28px;padding-top:16px;border-top:1px solid #e7e1ec;font-size:12px;color:#74677e">Mở <a href="https://kanban.huongthiennature.com/">Kanban Zen Studio</a> để cập nhật công việc. Đổi giờ hoặc tắt email trong Settings → Tổng kết tuần.</p></main></body></html>`;
+  return `<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${reportEscape(report.subject)}</title><style>${REPORT_STYLE}</style></head><body><main class="report-sheet" style="max-width:680px;margin:0 auto;padding:32px;background:#ffffff;border:1px solid #e7e1ec"><p style="font-size:11px;letter-spacing:2px;color:#887491;margin:0 0 10px">${voice.weeklyEyebrow}</p><h1 style="font-size:27px;line-height:1.35;margin:0 0 8px">${voice.weeklyTitle}</h1><p style="font-size:13px;color:#74677e;margin:0 0 24px">${reportEscape(lines[0].replace(voice.weeklyLine + ' · ', ''))}</p><table role="presentation" width="100%"><tr><td><strong style="font-size:30px">${s.progress}%</strong><br><span style="font-size:12px;color:#74677e">${W.overall}</span></td><td align="right" style="font-size:14px">${s.projects.length} ${W.unitProjects}<br>${s.total} ${W.unitTasks}</td></tr></table>${reportBar(s.progress, '#8054bf')}<h2 style="font-size:17px;margin:24px 0 10px">${W.distribution}</h2>${donut}<table class="report-distribution" cellpadding="0" cellspacing="0" aria-label="${W.distribution} theo trạng thái">${distribution}</table>${content}<div id="report-task-data" hidden>${reportEscape(JSON.stringify(s.tasks || []))}</div><p style="margin-top:28px;padding-top:16px;border-top:1px solid #e7e1ec;font-size:12px;color:#74677e">Mở <a href="https://kanban.huongthiennature.com/">Kanban Zen Studio</a> ${W.footer}</p></main></body></html>`;
 }
