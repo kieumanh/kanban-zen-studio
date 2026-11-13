@@ -172,6 +172,8 @@ jobs:
           node tests/giangho-title-font-browser.mjs
           # v2.12.0 (Thiên Môn Ký): chương truyện mở giữa cấp (97,5 … 99,8) theo tu vi; lộ trình ghi cấp lẻ.
           node tests/growth-midchapter-browser.mjs
+          # v2.13.0 (Thần Giới): 5 Thần Vương, 12 Phương thần, 36 Thiên Cang tinh; khung Thần giới và Thiên đồ.
+          node tests/growth-gods-browser.mjs
           node tests/giangho-coverage-browser.mjs
           node tests/giangho-guide-browser.mjs
           node tests/giangho-fx-browser.mjs

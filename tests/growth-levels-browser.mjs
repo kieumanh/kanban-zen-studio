@@ -81,7 +81,7 @@ try {
     assert.equal(m.hardest, true, 'ải cấp 100 là cấp tốn nhiều điểm nhất của cõi người');
     assert.deepEqual(m.god, [2048, 2048, 2048], 'mỗi thần cấp 2.048 điểm');
     assert.deepEqual(m.realms, REALMS, '11 cảnh giới theo thứ tự');
-    assert.deepEqual(m.names, { len: 104, unique: 103, empty: 0, god: ['Thành Thần', 'Thượng Thần', 'Thần Quân', 'Thần Vương'] }, 'mỗi cấp một danh xưng riêng; cấp 100–103 tới Thần Vương');
+    assert.deepEqual(m.names, { len: 104, unique: 103, empty: 0, god: ['Thành Thần', 'Thượng Thần', 'Phương Thần', 'Thần Vương'] }, 'mỗi cấp một danh xưng riêng; cấp 100–103 tới Thần Vương');
     assert.deepEqual(m.r0, [0, 0, 'Vô danh tiểu tốt', ''], '0 điểm: chưa nhập cấp');
     assert.deepEqual(m.r05, [1, 1, 'Sơ nhập giang hồ', 'Sơ Tâm Khởi Bước'], '0,5 điểm: cấp 1');
     assert.deepEqual(m.r75, [9, 1, 'Sơ nhập giang hồ', 'Khí Hải Sơ Thành'], '7,5 điểm: chưa qua ải cấp 10');

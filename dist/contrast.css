@@ -3285,6 +3285,54 @@
 :root[data-contrast=high] .gr-ach.is-done .gr-ach-state {
     color: #060606
 }
+:root[data-contrast=high] .gr-gods-ring.is-core {
+    fill: var(--gr-gold,#060606);
+    stroke: var(--gr-gold,#060606)
+}
+:root[data-contrast=high] .gr-gods-star.is-seat {
+    stroke: #060606
+}
+:root[data-contrast=high] .gr-gods-star.is-seat.is-mine {
+    fill: #060606;
+    stroke: #060606
+}
+:root[data-contrast=high] .gr-gods-lord circle {
+    fill: var(--gr-paper,var(--surface,#ffffff))
+}
+:root[data-contrast=high] .gr-gods-lord.is-blood circle {
+    fill: #060606;
+    stroke: #060606
+}
+:root[data-contrast=high] .gr-gods-lord.is-blood text {
+    fill: #ffffff
+}
+:root[data-contrast=high] .gr-gods-penta {
+    stroke: var(--gr-gold,#060606)
+}
+:root[data-contrast=high] .gr-gods-king {
+    fill: var(--gr-gold,#060606);
+    stroke: var(--gr-paper,#ffffff)
+}
+:root[data-contrast=high] .gr-gods-rank.is-now>b {
+    color: #ffffff
+}
+:root[data-contrast=high] .gr-gods-region.is-blood {
+    border-color: #2c080b
+}
+:root[data-contrast=high] .gr-gods-region.is-blood .gr-gods-region-head i {
+    border-color: #2c080b;
+    color: #ffffff
+}
+:root[data-contrast=high] .gr-gods-stars li.is-seat strong {
+    color: #060606
+}
+:root[data-contrast=high] .gr-gods-tag {
+    border: 1px solid #0b1627;
+    color: #060606
+}
+:root[data-contrast=high][data-theme=dark] .gr-gods-stars li.is-seat strong, :root[data-contrast=high][data-theme=dark] .gr-gods-tag {
+    color: #060606
+}
 :root[data-contrast=high] {
     --muted: #060606;
     --text-muted: #060606
@@ -7230,6 +7278,54 @@
     color: #f5f5f5
 }
 :root[data-theme=dark][data-contrast=high] .gr-ach.is-done .gr-ach-state {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .gr-gods-ring.is-core {
+    fill: var(--gr-gold,#f5f5f5);
+    stroke: var(--gr-gold,#f5f5f5)
+}
+:root[data-theme=dark][data-contrast=high] .gr-gods-star.is-seat {
+    stroke: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .gr-gods-star.is-seat.is-mine {
+    fill: #f5f5f5;
+    stroke: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .gr-gods-lord circle {
+    fill: var(--gr-paper,var(--surface,#ffffff))
+}
+:root[data-theme=dark][data-contrast=high] .gr-gods-lord.is-blood circle {
+    fill: #f5f5f5;
+    stroke: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .gr-gods-lord.is-blood text {
+    fill: #ffffff
+}
+:root[data-theme=dark][data-contrast=high] .gr-gods-penta {
+    stroke: var(--gr-gold,#f5f5f5)
+}
+:root[data-theme=dark][data-contrast=high] .gr-gods-king {
+    fill: var(--gr-gold,#f5f5f5);
+    stroke: var(--gr-paper,#ffffff)
+}
+:root[data-theme=dark][data-contrast=high] .gr-gods-rank.is-now>b {
+    color: #ffffff
+}
+:root[data-theme=dark][data-contrast=high] .gr-gods-region.is-blood {
+    border-color: #cecece
+}
+:root[data-theme=dark][data-contrast=high] .gr-gods-region.is-blood .gr-gods-region-head i {
+    border-color: #cecece;
+    color: #ffffff
+}
+:root[data-theme=dark][data-contrast=high] .gr-gods-stars li.is-seat strong {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .gr-gods-tag {
+    border: 1px solid #cecece;
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high][data-theme=dark] .gr-gods-stars li.is-seat strong, :root[data-theme=dark][data-contrast=high][data-theme=dark] .gr-gods-tag {
     color: #f5f5f5
 }
 :root[data-theme=dark][data-contrast=high] {

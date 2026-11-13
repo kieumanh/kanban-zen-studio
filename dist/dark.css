@@ -3284,6 +3284,54 @@
 :root[data-theme=dark] .gr-ach.is-done .gr-ach-state {
     color: #fbb3b7
 }
+:root[data-theme=dark] .gr-gods-ring.is-core {
+    fill: var(--gr-gold,#d7b67e);
+    stroke: var(--gr-gold,#d7b67e)
+}
+:root[data-theme=dark] .gr-gods-star.is-seat {
+    stroke: #99c2fc
+}
+:root[data-theme=dark] .gr-gods-star.is-seat.is-mine {
+    fill: #99b5dc;
+    stroke: #aacbfc
+}
+:root[data-theme=dark] .gr-gods-lord circle {
+    fill: var(--gr-paper,var(--surface,#ffffff))
+}
+:root[data-theme=dark] .gr-gods-lord.is-blood circle {
+    fill: #ffbfc0;
+    stroke: #faa7a9
+}
+:root[data-theme=dark] .gr-gods-lord.is-blood text {
+    fill: #ffffff
+}
+:root[data-theme=dark] .gr-gods-penta {
+    stroke: var(--gr-gold,#d7b67e)
+}
+:root[data-theme=dark] .gr-gods-king {
+    fill: var(--gr-gold,#d7b67e);
+    stroke: var(--gr-paper,#ffffff)
+}
+:root[data-theme=dark] .gr-gods-rank.is-now>b {
+    color: #ffffff
+}
+:root[data-theme=dark] .gr-gods-region.is-blood {
+    border-color: #e64357
+}
+:root[data-theme=dark] .gr-gods-region.is-blood .gr-gods-region-head i {
+    border-color: #e64357;
+    color: #ffffff
+}
+:root[data-theme=dark] .gr-gods-stars li.is-seat strong {
+    color: #aacbfc
+}
+:root[data-theme=dark] .gr-gods-tag {
+    border: 1px solid #5b8fd9;
+    color: #aacbfc
+}
+:root[data-theme=dark][data-theme=dark] .gr-gods-stars li.is-seat strong, :root[data-theme=dark][data-theme=dark] .gr-gods-tag {
+    color: #97b1d8
+}
 :root[data-theme=dark] {
     --muted: #ccc2d7;
     --text-muted: #ccc2d7
