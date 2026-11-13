@@ -2130,3 +2130,24 @@ dialog[open] button[aria-label^="Đóng"],
     gap: 2px;
   }
 }
+
+/* v2.2.0 (Thanh Âm): ô chọn âm thanh trong đồng hồ tập trung (focus-sound.js). */
+.studio-pomodoro .zen-focus-sound {
+  display: grid;
+  gap: 6px;
+  max-width: 360px;
+  margin: 8px 0 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #5d3c7a;
+}
+.studio-pomodoro .zen-focus-sound select {
+  min-height: 44px;
+  border-radius: 12px;
+}
+.studio-pomodoro .zen-focus-sound small {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #685974;
+}

@@ -6556,6 +6556,12 @@
 :root[data-style=giangho] .gh-intro-copy p {
     color: var(--zen-text-muted)
 }
+:root[data-style=giangho] .studio-pomodoro .zen-focus-sound {
+    color: #6d2328
+}
+:root[data-style=giangho] .studio-pomodoro .zen-focus-sound small {
+    color: #624d40
+}
 :root[data-style=giangho][data-theme=dark] {
     --bg: #18130c;
     --paper: #1e1811;
@@ -13078,6 +13084,12 @@
 }
 :root[data-style=giangho][data-theme=dark] .gh-intro-copy p {
     color: var(--zen-text-muted)
+}
+:root[data-style=giangho][data-theme=dark] .studio-pomodoro .zen-focus-sound {
+    color: #fccac8
+}
+:root[data-style=giangho][data-theme=dark] .studio-pomodoro .zen-focus-sound small {
+    color: #e5cdbe
 }
 
 /* ---- Họa tiết Giang hồ viết tay (v1.86.0 · Chu Mặc) ------------------------------------------------------------------------

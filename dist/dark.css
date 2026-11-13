@@ -3895,6 +3895,12 @@
 :root[data-theme=dark] .gh-intro-copy strong {
     color: #edcdd2
 }
+:root[data-theme=dark] .studio-pomodoro .zen-focus-sound {
+    color: #dcc1f7
+}
+:root[data-theme=dark] .studio-pomodoro .zen-focus-sound small {
+    color: #d0c3da
+}
 
 :root[data-theme=dark] {
   color-scheme: dark;
