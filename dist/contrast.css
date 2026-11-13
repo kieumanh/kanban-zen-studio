@@ -3219,6 +3219,12 @@
 :root[data-contrast=high] dialog.gr-story.is-meet .gr-story-head .eyebrow {
     color: #060606
 }
+:root[data-contrast=high] .gr-route-gate.is-done>span {
+    color: #ffffff
+}
+:root[data-contrast=high] .gr-route-foe.is-next .gr-route-tag {
+    color: #ffffff
+}
 :root[data-contrast=high][data-theme=dark] dialog.gr-story.is-meet .gr-story-head .eyebrow {
     color: #060606
 }
@@ -7159,6 +7165,12 @@
 }
 :root[data-theme=dark][data-contrast=high] dialog.gr-story.is-meet .gr-story-head .eyebrow {
     color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .gr-route-gate.is-done>span {
+    color: #ffffff
+}
+:root[data-theme=dark][data-contrast=high] .gr-route-foe.is-next .gr-route-tag {
+    color: #ffffff
 }
 :root[data-theme=dark][data-contrast=high][data-theme=dark] dialog.gr-story.is-meet .gr-story-head .eyebrow {
     color: #f5f5f5

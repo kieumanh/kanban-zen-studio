@@ -5,6 +5,8 @@
 // v2.7.0 (Kỳ Ngộ): 22 nhân vật phụ (dist/growth-meet.js), mỗi người 2 lần kỳ ngộ ở các cấp không có chương. Cấp gặp chọn ngẫu nhiên
 // nhưng cố định theo tài khoản (băm mã người dùng); mỗi lần vượt cấp tự mở tối đa một kỳ ngộ (sau các chương). Dấu đã đọc:
 // notice:meet-<nhân vật>-<lần>. Khung "Giang hồ kỳ ngộ" trong trang Tu vi liệt kê người đã gặp, người chưa gặp và cấp sẽ gặp.
+// v2.8.0 (Huyết Nguyệt Lộ): trang phe ác vẽ tranh động của Giáo chủ / Nguyệt Sứ (dist/growth-foes.js) trên cảnh Huyết Nguyệt đài;
+// khung "Huyết Nguyệt lộ" trong trang Tu vi: lộ trình gặp gỡ, đối kháng và vượt cấp, cùng thanh tu luyện song hành với Giáo chủ.
 // Khai cuộc (cấp 0, đọc trong danh sách chương) và 20 chương ở cấp 5, 10, 15 … 100 (v2.5.0: chương đánh số theo thứ tự). Mỗi khi vượt một mốc 5 cấp (ngay sau khi lưu công lực), bảng hội thoại tự hiện,
 // kể một chặng vượt khó của nhân vật. Chương đã mở đọc lại được ở khung "Truyện ký giang hồ" trong trang Tu vi.
 // Không đổi dữ liệu: dấu "đã đọc" lưu bằng dấu đã đọc của tài khoản (notification-receipts, khóa notice:story-N, dùng chung mọi thiết bị),
@@ -138,8 +140,9 @@
   // ---- Bảng hội thoại ---------------------------------------------------------------------------------------------------------
   let reader = null; // { el, queue: [lv…], at, page }
   // Cảnh 'moon' (v2.6.0): Huyết Nguyệt đài, phe ác đang nói hoặc lời kể về Giáo chủ; không vẽ hiệp khách, trăng nhuốm đỏ.
-  function stageArt(pose) {
-    if (pose === 'moon') return '<div class="gr-stage-bg gr-story-stage is-moon">' + zenHero.scene() + '</div>';
+  // v2.8.0: cảnh 'moon' vẽ thêm tranh phe ác (foe = mã trong zenFoe) nếu có.
+  function stageArt(pose, foe) {
+    if (pose === 'moon') return '<div class="gr-stage-bg gr-story-stage is-moon">' + zenHero.scene() + (foe ? '<div class="gr-figure gr-story-figure gr-story-foe">' + window.zenFoe.svg(foe) + '</div>' : '') + '</div>';
     return '<div class="gr-stage-bg gr-story-stage">' + zenHero.scene() + '<div class="gr-figure gr-story-figure">' + zenHero.svg(hero(), pose) + '</div></div>';
   }
   function paint() {
@@ -163,9 +166,13 @@
         art = body.firstChild;
       }
       // Tranh chỉ vẽ lại khi đổi cảnh / đổi thế, để hoạt họa không bị ngắt giữa các trang.
-      if (art.dataset.pose !== pose) {
-        art.innerHTML = stageArt(pose);
-        art.dataset.pose = pose;
+      // Trang phe ác: tranh của người đang nói; lời kể ở Huyết Nguyệt đài: tranh đối thủ của chương, không có thì Giáo chủ.
+      const foeIds = window.zenFoe?.IDS || [];
+      const foe = pose !== 'moon' ? '' : foeIds.includes(who) ? who : who === 'ke' && !c.meet ? (foeIds.includes(c.foe) ? c.foe : 'giao') : '';
+      const scene = pose + ':' + foe;
+      if (art.dataset.pose !== scene) {
+        art.innerHTML = stageArt(pose, foe);
+        art.dataset.pose = scene;
       }
       body.querySelector('.gr-story-say').innerHTML = '<p class="gr-story-who" data-who="' + who + '"' + (isFoe(who) ? ' data-side="ac"' : '') + '>' + esc(speaker) + '</p><p class="gr-story-text' + (who === 'ke' ? ' is-narration' : '') + '">' + esc(fill(text)) + '</p>';
     }
@@ -295,13 +302,59 @@
       const box = document.querySelector('.gr-path-panel');
       if (ok && box && view === 'growth' && currentUser?.id === owner) {
         document.querySelector('.gr-meet-panel')?.remove();
+        document.querySelector('.gr-route-panel')?.remove();
         box.outerHTML = panel();
       }
     });
   }
   function panel() {
-    return started() ? pathPanel() + meetPanel() : '';
+    return started() ? pathPanel() + routePanel() + meetPanel() : '';
   }
+  // ---- Khung Huyết Nguyệt lộ (v2.8.0) ----------------------------------------------------------------------------------------
+  // Lộ trình gặp gỡ, đối kháng và vượt cấp: các ải đột phá (cấp 10, 20 … 100) và mười Nguyệt Sứ xếp theo cấp giao đấu, rồi Giáo chủ.
+  // Thanh "tu luyện song hành": cấp của hiệp khách và cấp của Giáo chủ lúc ấy (theo chương mới nhất đã mở).
+  function routePanel() {
+    const g = G(), lv = level(), foes = TALE.FOES || [], draw = window.zenFoe?.svg || (() => '');
+    const lastOpen = [...CHAPTERS].reverse().find((c) => c.lv <= lv);
+    const lead = lastOpen?.lead || CHAPTERS[0]?.lead || 0;
+    const items = [];
+    for (let k = 1; k <= 10; k++) {
+      const gate = k * 10, ri = realmAt(gate);
+      items.push({ lv: gate, gate: true, html: '<li class="gr-route-gate' + (lv >= gate ? ' is-done' : '') + '"><span aria-hidden="true">' + (lv >= gate ? '✓' : '◆') + '</span><b>Ải cấp ' + gate + '</b> · ' + esc(gate === 100 ? 'Thành Thần' : g.REALMS[ri - 1]) + '</li>' });
+    }
+    let nextSet = false;
+    const lieutenants = foes.filter((f) => f.id !== 'giao');
+    lieutenants.forEach((f) => {
+      const fights = f.lv.filter((x) => x < 80), first = fights[0], last = fights[fights.length - 1];
+      const state = lv >= last ? 'done' : !nextSet ? ((nextSet = true), 'next') : 'todo';
+      const label = { done: 'Đã vượt qua', next: lv >= first ? 'Đang đối đầu' : 'Sắp đối đầu', todo: 'Chưa lộ diện' }[state];
+      const read = lv >= first ? ' data-gr-story="' + first + '"' : '';
+      items.push({ lv: first + 0.5, html: foeItem(f, state, label, 'Giao đấu ở cấp ' + fights.join(', '), read, draw) });
+    });
+    const leader = foes.find((f) => f.id === 'giao');
+    let met = 0;
+    if (leader) {
+      const fights = leader.lv.filter((x) => x >= 80);
+      const state = lv >= 100 ? 'done' : lv >= fights[0] ? 'next' : 'todo';
+      const label = state === 'done' ? 'Cùng thành Thần' : state === 'next' ? 'Đang giao thủ' : 'Chờ ở cấp ' + fights[0];
+      items.push({ lv: 99.5, html: foeItem(leader, state, label, 'Giao thủ ở cấp ' + fights.join(', '), lv >= fights[0] ? ' data-gr-story="' + fights[0] + '"' : '', draw, true) });
+    }
+    met = lieutenants.filter((f) => lv >= f.lv.filter((x) => x < 80).slice(-1)[0]).length;
+    items.sort((a, b) => a.lv - b.lv);
+    const bar = (name, value, cls, short) =>
+      '<div class="gr-rival ' + cls + '"><span title="' + name + '">' + (short || name) + '</span><div class="progress" role="progressbar" aria-label="' + name + ': cấp ' + value + ' trên 100" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + Math.min(100, value) + '"><span style="width:' + Math.min(100, value) + '%"></span></div><b>Cấp ' + value + '</b></div>';
+    return '<section class="panel gr-route-panel" aria-labelledby="gr-route-title"><h2 id="gr-route-title">Huyết Nguyệt lộ <small>Đã vượt ' + met + '/' + lieutenants.length + ' Nguyệt Sứ</small></h2>' +
+      '<p class="help-copy">Lộ trình gặp gỡ, đối kháng và vượt cấp. Dưới cấp 80 là mười Nguyệt Sứ, mỗi kẻ một thói xấu; từ cấp 80, Huyết Nguyệt Giáo chủ đích thân ra tay. Hắn tu luyện song hành, luôn đi trước một bước.</p>' +
+      '<div class="gr-rivals" aria-label="Tu luyện song hành">' + bar(esc(g.heroName()), Math.max(0, lv), 'is-hero') + bar('Huyết Nguyệt Giáo chủ', lead, 'is-foe', 'Giáo chủ') + '</div>' +
+      '<ol class="gr-route">' + items.map((x) => x.html).join('') + '</ol></section>';
+  }
+  function foeItem(f, state, label, when, read, draw, boss) {
+    const inner = '<span class="gr-route-art" aria-hidden="true">' + draw(f.id) + '</span><span class="gr-route-main"><strong>' + esc(f.title + ' ' + f.name) + '</strong>' +
+      '<small>' + esc(boss ? f.vice : 'Thói xấu: ' + f.vice) + '</small><small>Tà công: ' + esc(f.art) + '</small><small>' + esc(when) + '</small></span><em class="gr-route-tag">' + label + '</em>';
+    return '<li class="gr-route-foe is-' + state + (boss ? ' is-boss' : '') + '" data-foe="' + f.id + '" style="--fc:' + f.color + '"' + (state === 'next' ? ' aria-current="step"' : '') + '>' +
+      (read ? '<button type="button"' + read + ' aria-label="Đọc chương gặp ' + esc(f.title + ' ' + f.name) + '">' + inner + '</button>' : '<div>' + inner + '</div>') + '</li>';
+  }
+
   // ---- Khung Giang hồ kỳ ngộ (v2.7.0) ---------------------------------------------------------------------------------------
   const initials = (n) => n.split(/\s+/).filter(Boolean).slice(-2).map((w) => w[0]).join('').toUpperCase();
   function metCount() {

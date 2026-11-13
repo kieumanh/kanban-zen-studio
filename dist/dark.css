@@ -3218,6 +3218,12 @@
 :root[data-theme=dark] dialog.gr-story.is-meet .gr-story-head .eyebrow {
     color: #abc9fd
 }
+:root[data-theme=dark] .gr-route-gate.is-done>span {
+    color: #ffffff
+}
+:root[data-theme=dark] .gr-route-foe.is-next .gr-route-tag {
+    color: #ffffff
+}
 :root[data-theme=dark][data-theme=dark] dialog.gr-story.is-meet .gr-story-head .eyebrow {
     color: #9ab3e3
 }

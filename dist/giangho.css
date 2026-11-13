@@ -5412,6 +5412,64 @@
 :root[data-style=giangho] dialog.gr-story.is-meet .gr-story-head .eyebrow {
     color: #2e5398
 }
+:root[data-style=giangho] .gr-route-panel h2 small {
+    color: var(--muted)
+}
+:root[data-style=giangho] .gr-rival>span {
+    color: var(--gr-ink,var(--ink))
+}
+:root[data-style=giangho] .gr-rival.is-foe .progress>span {
+    background: linear-gradient(90deg,#7a1526,#d8344c)
+}
+:root[data-style=giangho] .gr-rival>b {
+    color: var(--muted)
+}
+:root[data-style=giangho] .gr-route-gate {
+    color: var(--muted)
+}
+:root[data-style=giangho] .gr-route-gate>span {
+    border: 1.5px solid var(--gr-gold);
+    color: var(--gr-gold)
+}
+:root[data-style=giangho] .gr-route-gate.is-done>span {
+    background: var(--gr-gold);
+    color: #ffffff
+}
+:root[data-style=giangho] .gr-route-gate b {
+    color: var(--gr-ink,var(--ink))
+}
+:root[data-style=giangho] .gr-route-foe>button, :root[data-style=giangho] .gr-route-foe>div {
+    border: 1px solid var(--gr-line);
+    border-left: 4px solid var(--fc);
+    background: var(--gr-paper);
+    color: inherit
+}
+:root[data-style=giangho] .gr-route-foe>button:hover, :root[data-style=giangho] .gr-route-foe>button:focus-visible {
+    background: color-mix(in srgb,var(--fc) 8%,var(--gr-paper))
+}
+:root[data-style=giangho] .gr-route-art {
+    background: radial-gradient(circle at 50% 40%,#5c2a2c,#251a0d)
+}
+:root[data-style=giangho] .gr-route-main strong {
+    color: var(--gr-ink,var(--ink))
+}
+:root[data-style=giangho] .gr-route-main small {
+    color: var(--muted)
+}
+:root[data-style=giangho] .gr-route-tag {
+    border: 1px solid var(--gr-line);
+    color: var(--muted)
+}
+:root[data-style=giangho] .gr-route-foe.is-done .gr-route-tag {
+    background: var(--gr-wash);
+    color: var(--gr-seal-text);
+    border-color: var(--gr-seal)
+}
+:root[data-style=giangho] .gr-route-foe.is-next .gr-route-tag {
+    background: var(--gr-seal);
+    color: #ffffff;
+    border-color: var(--gr-seal)
+}
 :root[data-style=giangho][data-theme=dark] dialog.gr-story.is-meet .gr-story-head .eyebrow {
     color: #80a0df
 }
@@ -12077,6 +12135,64 @@
 }
 :root[data-style=giangho][data-theme=dark] dialog.gr-story.is-meet .gr-story-head .eyebrow {
     color: #bad2fd
+}
+:root[data-style=giangho][data-theme=dark] .gr-route-panel h2 small {
+    color: var(--muted)
+}
+:root[data-style=giangho][data-theme=dark] .gr-rival>span {
+    color: var(--gr-ink,var(--ink))
+}
+:root[data-style=giangho][data-theme=dark] .gr-rival.is-foe .progress>span {
+    background: linear-gradient(90deg,#7a1526,#d8344c)
+}
+:root[data-style=giangho][data-theme=dark] .gr-rival>b {
+    color: var(--muted)
+}
+:root[data-style=giangho][data-theme=dark] .gr-route-gate {
+    color: var(--muted)
+}
+:root[data-style=giangho][data-theme=dark] .gr-route-gate>span {
+    border: 1.5px solid var(--gr-gold);
+    color: var(--gr-gold)
+}
+:root[data-style=giangho][data-theme=dark] .gr-route-gate.is-done>span {
+    background: var(--gr-gold);
+    color: #ffffff
+}
+:root[data-style=giangho][data-theme=dark] .gr-route-gate b {
+    color: var(--gr-ink,var(--ink))
+}
+:root[data-style=giangho][data-theme=dark] .gr-route-foe>button, :root[data-style=giangho][data-theme=dark] .gr-route-foe>div {
+    border: 1px solid var(--gr-line);
+    border-left: 4px solid var(--fc);
+    background: var(--gr-paper);
+    color: inherit
+}
+:root[data-style=giangho][data-theme=dark] .gr-route-foe>button:hover, :root[data-style=giangho][data-theme=dark] .gr-route-foe>button:focus-visible {
+    background: color-mix(in srgb,var(--fc) 8%,var(--gr-paper))
+}
+:root[data-style=giangho][data-theme=dark] .gr-route-art {
+    background: radial-gradient(circle at 50% 40%,#5c2a2c,#251a0d)
+}
+:root[data-style=giangho][data-theme=dark] .gr-route-main strong {
+    color: var(--gr-ink,var(--ink))
+}
+:root[data-style=giangho][data-theme=dark] .gr-route-main small {
+    color: var(--muted)
+}
+:root[data-style=giangho][data-theme=dark] .gr-route-tag {
+    border: 1px solid var(--gr-line);
+    color: var(--muted)
+}
+:root[data-style=giangho][data-theme=dark] .gr-route-foe.is-done .gr-route-tag {
+    background: var(--gr-wash);
+    color: var(--gr-seal-text);
+    border-color: var(--gr-seal)
+}
+:root[data-style=giangho][data-theme=dark] .gr-route-foe.is-next .gr-route-tag {
+    background: var(--gr-seal);
+    color: #ffffff;
+    border-color: var(--gr-seal)
 }
 :root[data-style=giangho][data-theme=dark][data-theme=dark] dialog.gr-story.is-meet .gr-story-head .eyebrow {
     color: #a4bded
