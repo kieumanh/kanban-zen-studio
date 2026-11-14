@@ -3188,27 +3188,6 @@
 :root[data-theme=dark] dialog.gr-story::backdrop {
     background: rgba(48,37,28,0.6)
 }
-:root[data-theme=dark] .gr-story-stage.is-moon::after {
-    background: radial-gradient(circle at 38% 36%,#4e1d1a,#d8344c 58%,#8e1328)
-}
-:root[data-theme=dark] .gr-story-stage.is-moon .gr-sc-far, :root[data-theme=dark] .gr-story-stage.is-moon .gr-sc-mid, :root[data-theme=dark] .gr-story-stage.is-moon .gr-sc-near {
-    fill: #e8dae5
-}
-:root[data-theme=dark] .gr-story-stage.is-moon .gr-sc-cloud, :root[data-theme=dark] .gr-story-stage.is-moon .gr-sc-mist {
-    fill: #f5b6c4
-}
-:root[data-theme=dark] .gr-story-stage.is-moon .gr-sc-petal {
-    fill: #faabb0
-}
-:root[data-theme=dark] .gr-story-stage.is-moon .gr-sc-needle {
-    fill: #e6dce9
-}
-:root[data-theme=dark] .gr-story-stage.is-moon .gr-sc-trunk {
-    stroke: #e6dce9
-}
-:root[data-theme=dark] .gr-story-stage.is-moon .gr-sc-birds {
-    stroke: #c5abb2
-}
 :root[data-theme=dark] .gr-story-who[data-side=ac] {
     color: #fbb7b9
 }
@@ -3374,6 +3353,9 @@
 }
 :root[data-theme=dark][data-theme=dark] dialog.gr-story.is-god .gr-story-head .eyebrow {
     color: #97b1d8
+}
+:root[data-theme=dark] .sc-chip {
+    background: rgba(18,12,22,0.58)
 }
 :root[data-theme=dark] {
     --muted: #ccc2d7;

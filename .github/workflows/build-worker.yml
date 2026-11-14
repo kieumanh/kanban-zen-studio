@@ -179,6 +179,7 @@ jobs:
           node tests/growth-body3d-browser.mjs
           # v2.16.0 (Ma Ảnh): phe ác dựng 3D bằng lõi growth-rig.js.
           node tests/growth-foe3d-browser.mjs
+          node tests/growth-scene-browser.mjs
           node tests/giangho-coverage-browser.mjs
           node tests/giangho-guide-browser.mjs
           node tests/giangho-fx-browser.mjs

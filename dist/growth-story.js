@@ -151,12 +151,11 @@
 
   // ---- Bảng hội thoại ---------------------------------------------------------------------------------------------------------
   let reader = null; // { el, queue: [lv…], at, page }
-  // Cảnh 'moon' (v2.6.0): Huyết Nguyệt đài, phe ác đang nói hoặc lời kể về Giáo chủ; không vẽ hiệp khách, trăng nhuốm đỏ.
-  // v2.8.0: cảnh 'moon' vẽ thêm tranh phe ác (foe = mã trong zenFoe) nếu có.
-  function stageArt(pose, foe) {
-    if (pose === 'moon') return '<div class="gr-stage-bg gr-story-stage is-moon">' + zenHero.scene() + (foe ? '<div class="gr-figure gr-story-figure gr-story-foe">' + window.zenFoe.svg(foe) + '</div>' : '') + '</div>';
-    return '<div class="gr-stage-bg gr-story-stage">' + zenHero.scene() + '<div class="gr-figure gr-story-figure">' + zenHero.svg(hero(), pose) + '</div></div>';
-  }
+  // Gỡ tranh khỏi khung (đóng sách hoặc sang trang Tâm đắc) để bộ theo dõi kích thước không giữ phần tử đã bỏ.
+  const dropArt = (body) => {
+    const a = body.querySelector(':scope > .gr-story-art');
+    if (a) window.zenScene?.destroy(a);
+  };
   function paint() {
     const r = reader;
     if (!r) return;
@@ -167,6 +166,7 @@
     r.el.classList.toggle('is-god', !!c.god);
     const body = r.el.querySelector('.gr-story-body');
     if (last) {
+      dropArt(body);
       const g = G(), lvNow = level(), rr = g.myRealm();
       body.innerHTML = '<div class="gr-story-lesson"><span class="gr-story-seal" aria-hidden="true">Ngộ</span><h3>Tâm đắc</h3><p>' + esc(c.lesson) + '</p><small>' + esc(g.heroName()) + ' hiện ở cấp ' + lvNow + ' · ' + esc(rr.name) + ' · ' + g.fmt(earned()) + ' điểm tu vi</small>' +
         (c.lead ? '<small class="gr-story-rival">Huyết Nguyệt Giáo chủ lúc ấy: cấp ' + c.lead + (c.lead >= 99 && c.lv < 99 ? ', kẹt trước cánh cửa thứ một trăm' : '') + '</small>' : '') + '</div>';
@@ -178,15 +178,11 @@
         body.innerHTML = '<div class="gr-story-art"></div><div class="gr-story-say"></div>';
         art = body.firstChild;
       }
-      // Tranh chỉ vẽ lại khi đổi cảnh / đổi thế, để hoạt họa không bị ngắt giữa các trang.
-      // Trang phe ác: tranh của người đang nói; lời kể ở Huyết Nguyệt đài: tranh đối thủ của chương, không có thì Giáo chủ.
-      const foeIds = window.zenFoe?.IDS || [];
-      const foe = pose !== 'moon' ? '' : foeIds.includes(who) ? who : (who === 'ke' || who === 'than' || who === 'trang') && !c.meet ? (foeIds.includes(c.foe) ? c.foe : 'giao') : ''; // v2.14.0: Tà thần nói qua thân Giáo chủ
-      const scene = pose + ':' + foe;
-      if (art.dataset.pose !== scene) {
-        art.innerHTML = stageArt(pose, foe);
-        art.dataset.pose = scene;
-      }
+      // v2.17.0 (Họa Cảnh): mỗi trang một tranh riêng (growth-scene.js dựng nhiều lớp theo bảng cảnh growth-plates.js).
+      // Cùng một nơi và giờ thì chỉ đổi người, vật và máy quay nên hoạt họa liền mạch; đổi nơi thì chuyển cảnh mờ dần.
+      const Z = window.zenScene;
+      Z.heroKind = hero();
+      Z.mount(art, Z.shotFor(c.id, r.page, c));
       body.querySelector('.gr-story-say').innerHTML = '<p class="gr-story-who" data-who="' + who + '"' + (isFoe(who) ? ' data-side="ac"' : '') + '>' + esc(speaker) + '</p><p class="gr-story-text' + (who === 'ke' ? ' is-narration' : '') + '">' + esc(fill(text)) + '</p>';
     }
     const dots = r.el.querySelector('.gr-story-dots');
@@ -202,6 +198,7 @@
     const r = reader;
     if (!r) return;
     reader = null;
+    dropArt(r.el.querySelector('.gr-story-body'));
     r.el.close();
     r.el.remove();
     r.then?.();

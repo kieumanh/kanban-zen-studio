@@ -92,23 +92,22 @@ try {
     for (let i = 0; i < 12; i++) {
       pages.push(await page.evaluate(() => {
         const d = document.querySelector('dialog.gr-story[open]');
-        return { who: d.querySelector('.gr-story-who')?.textContent || '', foe: d.querySelector('.gr-story-foe svg.gr-foe')?.dataset.foe || '', hero: !!d.querySelector('.gr-story-art svg.gr-hero'), lesson: !!d.querySelector('.gr-story-lesson') };
+        return { who: d.querySelector('.gr-story-who')?.textContent || '', cast: (d.querySelector('.gr-story-art .sc')?.dataset.who || '').split(',').filter(Boolean), lesson: !!d.querySelector('.gr-story-lesson') };
       }));
       if (pages.at(-1).lesson) break;
       await page.keyboard.press('ArrowRight');
     }
     const mien = pages.find((p) => p.who === 'Thụy Nguyệt Sứ Miên Hồ');
-    assert.deepEqual([mien.foe, mien.hero], ['mien', false], 'trang Miên Hồ nói: tranh Miên Hồ' + at);
-    const narr = pages.filter((p) => p.who === 'Truyện ký' && p.foe);
-    assert.ok(narr.length && narr.every((p) => p.foe === 'mien'), 'lời kể ở Huyết Nguyệt đài: tranh đối thủ của chương' + at);
-    assert.ok(pages.some((p) => p.who === 'Lam Y' && p.hero && !p.foe), 'trang hiệp khách vẫn vẽ hiệp khách' + at);
+    // v2.17.0: tranh là một cảnh nhiều nhân vật (.sc, data-who liệt kê người có mặt) thay cho một hình đối thủ đứng riêng.
+    assert.ok(mien.cast.includes('mien'), 'trang Miên Hồ nói: tranh có Miên Hồ' + at);
+    assert.ok(pages.some((p) => p.who === 'Lam Y' && p.cast.includes('hero')), 'trang hiệp khách vẫn vẽ hiệp khách' + at);
     await page.keyboard.press('Escape');
     await page.waitForFunction(() => !document.querySelector('dialog.gr-story'));
     // Khai cuộc: lời Giáo chủ có tranh Giáo chủ.
     await page.click('[data-gr-story="0"]');
     await page.waitForSelector('dialog.gr-story[open]');
     for (let i = 0; i < 8; i++) await page.keyboard.press('ArrowRight');
-    assert.equal(await page.evaluate(() => document.querySelector('dialog.gr-story[open] .gr-story-foe svg')?.dataset.foe), 'giao', 'lời Giáo chủ ở khai cuộc: tranh Giáo chủ' + at);
+    assert.equal(await page.evaluate(() => document.querySelector('dialog.gr-story[open] .gr-story-art .sc')?.dataset.who.split(',').includes('giao')), true, 'lời Giáo chủ ở khai cuộc: tranh có Giáo chủ' + at);
     await page.keyboard.press('Escape');
     assert.equal(await noOverflow(page), true, 'không tràn ngang' + at);
     assert.deepEqual(errors, [], 'không lỗi trang' + at);

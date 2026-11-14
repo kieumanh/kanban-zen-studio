@@ -3,7 +3,8 @@
 //  2. Nét riêng của từng nhân vật (mặt nạ trăng khuyết, tai hồ ly, song đao, sáu món binh khí, gương đồng, xích đen...) có mặt trong hình dựng;
 //  3. Chiều sâu thật: quay lưng thì mặt biến mất; Bách Tý có bốn tay, các nhân vật khác hai tay;
 //  4. Hoạt họa chạy thật trong khung Huyết Nguyệt lộ, hình nhỏ vẽ nửa nhịp; giảm chuyển động thì đứng yên, không có vòng lặp;
-//  5. Ở 390 (chạm), 820 (chạm), 1440 px: khung Huyết Nguyệt lộ và khung đọc truyện (Miên Hồ) đều vẽ 3D, nằm trong khung, không tràn ngang, không lỗi trang.
+//  5. Ở 390 (chạm), 820 (chạm), 1440 px: khung Huyết Nguyệt lộ vẽ 3D; khung đọc truyện (Miên Hồ) từ v2.17.0 dựng tranh minh họa riêng từng trang
+//     (xem growth-scene-browser.mjs) nên chỉ kiểm Miên Hồ có mặt trong tranh; nằm trong khung, không tràn ngang, không lỗi trang.
 import assert from 'node:assert/strict';
 import { startHarness } from './lib/browser-harness.mjs';
 
@@ -142,7 +143,9 @@ try {
       assert.ok(x.label && x.label.includes(' · '), x.id + ': giữ nhãn đọc (danh hiệu, tên, tà công)' + at);
       assert.equal(x.inside, true, x.id + ': hình nằm trong ô tranh' + at);
     });
-    // Khung đọc: chương gặp Miên Hồ, trang Miên Hồ nói thì thấy Miên Hồ 3D lớn.
+    // Khung đọc: chương gặp Miên Hồ. Từ v2.17.0 khung đọc dựng tranh minh họa riêng từng trang (growth-scene.js, nhân vật vẽ bóng mực
+    // nhiều lớp) thay cho hình 3D lớn của một nhân vật lặp lại, nên ở đây chỉ kiểm: trang Miên Hồ nói có Miên Hồ trong tranh và
+    // không rò hình 3D của trang Giang hồ sang khung đọc. Hình 3D của phe ác vẫn được kiểm ở các thẻ đối thủ phía trên.
     await page.click('.gr-route-foe[data-foe=mien] button');
     await page.waitForSelector('dialog.gr-story[open]');
     let seen = null;
@@ -150,21 +153,16 @@ try {
       seen = await page.evaluate(() => {
         const d = document.querySelector('dialog.gr-story[open]');
         if (d.querySelector('.gr-story-who')?.textContent !== 'Thụy Nguyệt Sứ Miên Hồ') return null;
-        const s = d.querySelector('.gr-story-foe svg.gr-foe'), st = d.querySelector('.gr-story-stage').getBoundingClientRect(), r = s.getBoundingClientRect();
-        return { foe: s.dataset.foe, shapes: s.querySelectorAll('.gr-world > *').length, w: Math.round(r.width), inside: r.left >= st.left - 1 && r.right <= st.right + 1 && r.top >= st.top - 1 && r.bottom <= st.bottom + 1 };
+        const sc = d.querySelector('.gr-story-art .sc'), a = sc.getBoundingClientRect(), dl = d.getBoundingClientRect();
+        return { who: sc.dataset.who.split(','), figs: sc.querySelectorAll('.sc-fig').length, label: sc.getAttribute('aria-label'), inside: a.left >= dl.left - 1 && a.right <= dl.right + 1, foe3d: !!d.querySelector('svg.gr-foe') };
       });
       if (!seen) await page.keyboard.press('ArrowRight');
     }
     assert.ok(seen, 'có trang Miên Hồ nói' + at);
-    await wait(400);
-    const big = await page.evaluate(() => {
-      const s = document.querySelector('dialog.gr-story[open] .gr-story-foe svg.gr-foe'), inst = [...zenRig.live].find((i) => i.svg === s);
-      return { shapes: s.querySelectorAll('.gr-world > *').length, every: inst ? inst.every || 1 : 0 };
-    });
-    assert.equal(seen.foe, 'mien', 'trang Miên Hồ vẽ Miên Hồ' + at);
-    assert.ok(seen.shapes >= 60 && big.shapes >= 60, 'hình lớn trong khung đọc là 3D đủ khối (' + seen.shapes + '/' + big.shapes + ')' + at);
-    assert.equal(seen.inside, true, 'hình nằm trong sân khấu của khung đọc' + at);
-    assert.equal(big.every, 1, 'hình lớn trong khung đọc vẽ đủ nhịp' + at);
+    assert.ok(seen.who.includes('mien') && seen.figs >= 1, 'trang Miên Hồ nói: Miên Hồ có mặt trong tranh' + at);
+    assert.ok(seen.label && seen.label.startsWith('Tranh minh họa'), 'tranh có mô tả cho người đọc màn hình' + at);
+    assert.equal(seen.inside, true, 'tranh nằm trong khung đọc' + at);
+    assert.equal(seen.foe3d, false, 'khung đọc không còn dùng hình 3D phe ác' + at);
     await page.keyboard.press('Escape');
     await page.waitForFunction(() => !document.querySelector('dialog.gr-story'));
     await wait(200);

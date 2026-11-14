@@ -49,7 +49,7 @@ const read = (page) =>
 const dialog = (page) =>
   page.evaluate(() => {
     const d = document.querySelector('dialog.gr-story[open]'), b = d.getBoundingClientRect();
-    return { god: d.classList.contains('is-god'), eyebrow: d.querySelector('.eyebrow').textContent, title: d.querySelector('#gr-story-title').textContent, sub: d.querySelector('.gr-story-head small').textContent, who: d.querySelector('.gr-story-who')?.textContent || '', text: d.querySelector('.gr-story-text')?.textContent || '', lesson: d.querySelector('.gr-story-lesson p')?.textContent || '', foe: d.querySelector('.gr-story-foe svg')?.dataset.foe || '', dots: d.querySelector('.gr-story-dots').getAttribute('aria-label'), fits: b.left >= 0 && b.right <= innerWidth && b.top >= 0 && b.bottom <= innerHeight };
+    return { god: d.classList.contains('is-god'), eyebrow: d.querySelector('.eyebrow').textContent, title: d.querySelector('#gr-story-title').textContent, sub: d.querySelector('.gr-story-head small').textContent, who: d.querySelector('.gr-story-who')?.textContent || '', text: d.querySelector('.gr-story-text')?.textContent || '', lesson: d.querySelector('.gr-story-lesson p')?.textContent || '', foe: (d.querySelector('.gr-story-art .sc')?.dataset.who || '').split(',').includes('giao') ? 'giao' : '', dots: d.querySelector('.gr-story-dots').getAttribute('aria-label'), fits: b.left >= 0 && b.right <= innerWidth && b.top >= 0 && b.bottom <= innerHeight };
   });
 
 const h = await startHarness({ seed: seed(WALK) });

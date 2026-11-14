@@ -5353,31 +5353,6 @@
 :root[data-style=giangho] .gr-story-who[data-who=ke] {
     color: var(--muted)
 }
-:root[data-style=giangho] .gr-story-stage.is-moon {
-    background: linear-gradient(180deg,#382814,#6c2b2e 58%,#2d2010)
-}
-:root[data-style=giangho] .gr-story-stage.is-moon::after {
-    background: radial-gradient(circle at 38% 36%,#ffb1a8,#d8344c 58%,#8e1328);
-    box-shadow: 0 0 26px 8px rgba(216,52,76,0.4)
-}
-:root[data-style=giangho] .gr-story-stage.is-moon .gr-sc-far, :root[data-style=giangho] .gr-story-stage.is-moon .gr-sc-mid, :root[data-style=giangho] .gr-story-stage.is-moon .gr-sc-near {
-    fill: #26180f
-}
-:root[data-style=giangho] .gr-story-stage.is-moon .gr-sc-cloud, :root[data-style=giangho] .gr-story-stage.is-moon .gr-sc-mist {
-    fill: #7d3537
-}
-:root[data-style=giangho] .gr-story-stage.is-moon .gr-sc-petal {
-    fill: #b12944
-}
-:root[data-style=giangho] .gr-story-stage.is-moon .gr-sc-needle {
-    fill: #22150c
-}
-:root[data-style=giangho] .gr-story-stage.is-moon .gr-sc-trunk {
-    stroke: #22150c
-}
-:root[data-style=giangho] .gr-story-stage.is-moon .gr-sc-birds {
-    stroke: #b49d8e
-}
 :root[data-style=giangho] .gr-story-who[data-side=ac] {
     color: #8b0528
 }
@@ -5926,6 +5901,19 @@
 }
 :root[data-style=giangho][data-theme=dark] dialog.gr-story.is-god .gr-story-head .eyebrow {
     color: #8db0e4
+}
+:root[data-style=giangho] .sc {
+    background: #1a1106
+}
+:root[data-style=giangho] .sc-grade {
+    background: radial-gradient(130% 100% at 50% 42%,transparent 52%,color-mix(in srgb,var(--sc-ink) 52%,transparent)),linear-gradient(180deg,color-mix(in srgb,var(--sc-ink) 18%,transparent),transparent 22%,transparent 72%,color-mix(in srgb,var(--sc-ink) 34%,transparent))
+}
+:root[data-style=giangho] .sc::after {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .9 0'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>")
+}
+:root[data-style=giangho] .sc-chip {
+    color: #f8f1e4;
+    background: rgba(21,13,5,0.58)
 }
 :root[data-style=giangho] {
     --muted: #685345;
@@ -12318,31 +12306,6 @@
 :root[data-style=giangho][data-theme=dark] .gr-story-who[data-who=ke] {
     color: var(--muted)
 }
-:root[data-style=giangho][data-theme=dark] .gr-story-stage.is-moon {
-    background: linear-gradient(180deg,#382814,#6c2b2e 58%,#2d2010)
-}
-:root[data-style=giangho][data-theme=dark] .gr-story-stage.is-moon::after {
-    background: radial-gradient(circle at 38% 36%,#4e1d1a,#d8344c 58%,#8e1328);
-    box-shadow: 0 0 26px 8px rgba(230,67,87,0.4)
-}
-:root[data-style=giangho][data-theme=dark] .gr-story-stage.is-moon .gr-sc-far, :root[data-style=giangho][data-theme=dark] .gr-story-stage.is-moon .gr-sc-mid, :root[data-style=giangho][data-theme=dark] .gr-story-stage.is-moon .gr-sc-near {
-    fill: #f5e5db
-}
-:root[data-style=giangho][data-theme=dark] .gr-story-stage.is-moon .gr-sc-cloud, :root[data-style=giangho][data-theme=dark] .gr-story-stage.is-moon .gr-sc-mist {
-    fill: #fdc3c1
-}
-:root[data-style=giangho][data-theme=dark] .gr-story-stage.is-moon .gr-sc-petal {
-    fill: #fbb9bd
-}
-:root[data-style=giangho][data-theme=dark] .gr-story-stage.is-moon .gr-sc-needle {
-    fill: #f5e7de
-}
-:root[data-style=giangho][data-theme=dark] .gr-story-stage.is-moon .gr-sc-trunk {
-    stroke: #f5e7de
-}
-:root[data-style=giangho][data-theme=dark] .gr-story-stage.is-moon .gr-sc-birds {
-    stroke: #cdb7aa
-}
 :root[data-style=giangho][data-theme=dark] .gr-story-who[data-side=ac] {
     color: #fdc5c6
 }
@@ -12891,6 +12854,19 @@
 }
 :root[data-style=giangho][data-theme=dark][data-theme=dark] dialog.gr-story.is-god .gr-story-head .eyebrow {
     color: #a0bbe2
+}
+:root[data-style=giangho][data-theme=dark] .sc {
+    background: #1a1106
+}
+:root[data-style=giangho][data-theme=dark] .sc-grade {
+    background: radial-gradient(130% 100% at 50% 42%,transparent 52%,color-mix(in srgb,var(--sc-ink) 52%,transparent)),linear-gradient(180deg,color-mix(in srgb,var(--sc-ink) 18%,transparent),transparent 22%,transparent 72%,color-mix(in srgb,var(--sc-ink) 34%,transparent))
+}
+:root[data-style=giangho][data-theme=dark] .sc::after {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .9 0'/></filter><rect width='160' height='160' filter='url(%23n)'/></svg>")
+}
+:root[data-style=giangho][data-theme=dark] .sc-chip {
+    color: #f8f1e4;
+    background: rgba(21,13,5,0.58)
 }
 :root[data-style=giangho][data-theme=dark] {
     --muted: #e1ccbf;

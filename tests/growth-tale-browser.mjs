@@ -37,7 +37,8 @@ const reader = (page) =>
     const r = d.getBoundingClientRect(), who = d.querySelector('.gr-story-who');
     return {
       title: d.querySelector('#gr-story-title').textContent, who: who?.textContent || '', side: who?.dataset.side || '', text: d.querySelector('.gr-story-text')?.textContent || '',
-      moon: !!d.querySelector('.gr-story-stage.is-moon'), hero: !!d.querySelector('.gr-story-art svg.gr-hero'), lesson: d.querySelector('.gr-story-lesson')?.textContent || '',
+      // v2.17.0: mỗi trang một cảnh nhiều nhân vật (.sc), không còn một hình duy nhất; `cast` là các nhân vật có mặt, `time` là giờ của cảnh.
+      cast: (d.querySelector('.gr-story-art .sc')?.dataset.who || '').split(',').filter(Boolean), time: d.querySelector('.gr-story-art .sc')?.dataset.t || '', lesson: d.querySelector('.gr-story-lesson')?.textContent || '',
       rival: d.querySelector('.gr-story-rival')?.textContent || '', fits: r.left >= 0 && r.right <= innerWidth && r.top >= 0 && r.bottom <= innerHeight,
     };
   });
@@ -173,9 +174,9 @@ try {
       r = await reader(page);
     }
     const mien = seen.find((x) => x.who === 'Thụy Nguyệt Sứ Miên Hồ');
-    assert.ok(mien && mien.moon && !mien.hero && mien.side === 'ac', 'trang phe ác: cảnh Huyết Nguyệt đài, không vẽ hiệp khách, tên màu riêng' + at);
+    assert.ok(mien && mien.cast.includes('mien') && mien.side === 'ac', 'trang phe ác: tranh có Miên Hồ, tên màu riêng' + at);
     const heroPage = seen.find((x) => x.who === 'Lam Y');
-    assert.ok(heroPage && heroPage.hero && !heroPage.moon, 'trang của hiệp khách vẫn vẽ hiệp khách' + at);
+    assert.ok(heroPage && heroPage.cast.includes('hero') && heroPage.side !== 'ac', 'trang của hiệp khách vẫn vẽ hiệp khách' + at);
     assert.ok(seen.every((x) => x.fits), 'mọi trang vừa màn hình' + at);
     assert.ok(seen.every((x) => !/\{\w+\}/.test(x.text)), 'không còn chỗ thay chưa điền' + at);
     assert.match(r.lesson, /Đừng đợi có hứng mới bắt đầu/, 'Tâm đắc của chương' + at);

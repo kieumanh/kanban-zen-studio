@@ -360,6 +360,36 @@
     "text/javascript; charset=utf-8"
   ],
   [
+    "/growth-scene.js",
+    "growth-scene.js",
+    "text/javascript; charset=utf-8"
+  ],
+  [
+    "/growth-cast.js",
+    "growth-cast.js",
+    "text/javascript; charset=utf-8"
+  ],
+  [
+    "/growth-props.js",
+    "growth-props.js",
+    "text/javascript; charset=utf-8"
+  ],
+  [
+    "/growth-sets.js",
+    "growth-sets.js",
+    "text/javascript; charset=utf-8"
+  ],
+  [
+    "/growth-places.js",
+    "growth-places.js",
+    "text/javascript; charset=utf-8"
+  ],
+  [
+    "/growth-plates.js",
+    "growth-plates.js",
+    "text/javascript; charset=utf-8"
+  ],
+  [
     "/growth-story.js",
     "growth-story.js",
     "text/javascript; charset=utf-8"
