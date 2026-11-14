@@ -725,6 +725,325 @@
       'peaks/path day +dust @.5,.72,1.5 hero:taichi@.35,.84*1.3 hai:strike@.61,.7*1.3 slash@.48,.7*1.2?1 "Hiệp khách đứng tấn suốt một canh giờ, lão đẩy một chưởng mà không lùi nửa bước"',
       'peaks/path dusk +leaves +birds @.64,.76,1.66 hai:zen@.69,.7*1.33 hero:stand@.36,.87*1.2 "Ta già rồi, tới trận cuối chưa chắc còn đứng cạnh ngươi, nhưng biển thì vẫn ở đó, nhớ nhịp của nó"',
     ],
+    // ---- Chiến ký (v2.19.0): 35 trận Thiên Cang, khóa 'g:s<k>' -------------------------------------------------------------------
+    'g:s1': [
+      'interior/am lamp +dust @.5,.6,1.1 god:stand@.7,.9*1.2 hero:stand@.3,.9*1.1 letter@.12,.5*1 letter@.2,.62*.8 letter@.88,.46*1 letter@.8,.6*.9 "Điện Minh Báo chất sổ sách cao tới mái, mỗi cuốn ghi nhân quả của một người phàm"',
+      'interior/am lamp +dust @.64,.7,1.55 god:talk@.71,.95*1.3 letter@.36,.84*.7 "Minh Báo hỏi: trong sổ của ngươi việc nào ngươi làm mà không mong ai biết?"',
+      'interior/am lamp +dust @.5,.68,1.4 hero:taichi@.35,.93*1.25 god:point@.65,.93*1.2 letter@.5,.84*.9 "Hiệp khách không kể hết vì chính mình cũng không nhớ, Minh Báo lật sổ, những dòng ấy dài hơn mọi dòng khác"',
+      'interior/am lamp +dust @.64,.72,1.55 god:talk@.71,.94*1.3 hero:bow@.36,.94*1.1 "Kẻ không nhớ việc tốt mình đã làm thì ta không còn gì để hỏi, ngươi thắng"',
+    ],
+    'g:s2': [
+      'bridge/river dawn +sparks ~sun@.7,.3,56 @.5,.64,1.1 godb:stand@.7,.84*1.2 hero:stand@.3,.84*1.1 bowl@.5,.9*.9 "Kho Thông Bảo không có cửa, vàng bạc các cõi chảy qua như một dòng sông"',
+      'bridge/river dawn +sparks @.64,.72,1.55 godb:talk@.71,.88*1.3 bowl@.36,.86*1 pill@.28,.7*.4 "Thông Bảo đưa một kho báu: giữ được nó nguyên vẹn một ngày thì thắng"',
+      'bridge/river day +sparks @.5,.7,1.3 hero:walk@.35,.85*1.2 dan:stand@.58,.85*1 dan2:stand@.69,.85*1 kid:stand@.81,.85*.9 bowl@.5,.9*1 "Hiệp khách mở kho, chia cho từng người đi qua đúng phần họ cần"',
+      'bridge/river dusk +sparks ~sun@.3,.4,56 @.64,.72,1.55 godb:talk@.71,.88*1.3 hero:stand@.38,.88*1.1 bowl@.46,.88*1 "Cuối ngày kho vẫn đầy: thứ cho đi đã quay về theo lối khác, qua đi"',
+    ],
+    'g:s3': [
+      'shore/rocks night +fireflies +ripple ~moon@.3,.2,60 @.5,.66,1.1 godb:sit@.66,.83*1.2 hero:stand@.22,.84*1.1 "Cõi mộng là một mặt hồ, Tịch Chiếu tinh quân ngồi giữa hồ, quanh người là giấc ngủ của muôn loài"',
+      'shore/rocks night +ripple +fireflies @.64,.74,1.5 godb:talk@.71,.85*1.3 "Đánh thức ta mà không làm gợn mặt hồ, một gợn sóng thôi là vạn giấc mơ vỡ"',
+      'shore/rocks night +fireflies +ripple ~moon@.3,.2,60 @.4,.74,1.4 hero:zen@.3,.85*1.2 godb:sit@.64,.83*1.1 "Hiệp khách ngồi xuống bờ, thở và chờ, ba ngày sau Tịch Chiếu tự mở mắt"',
+      'shore/rocks dawn +ripple +birds @.64,.74,1.5 godb:talk@.71,.85*1.3 hero:zen@.36,.86*1.15 "Ngươi không đánh vậy mà ta thua, trăng trong thùng nước của ngươi tròn thật"',
+    ],
+    'g:s4': [
+      'heaven/realm dusk +redthread @.5,.62,1.1 godr:stand@.7,.84*1.2 hero:stand@.3,.84*1.1 thread@.5,.5*1.2 "Kết Duyên tinh quân se những sợi tơ nối người với người, trên tay bà hàng vạn sợi không sợi nào rối"',
+      'heaven/realm dusk +redthread @.64,.72,1.55 godr:talk@.71,.88*1.3 thread@.4,.7*1 "Cắt một sợi bất kỳ trong tay ta, cắt được mà không ai đau thì ta nhận thua"',
+      'heaven/realm dusk +redthread +petals @.5,.7,1.4 hero:point@.37,.86*1.25 thread@.5,.62*1.3 batu:stand@.76,.9*.5 "Hiệp khách không cắt, lần theo từng sợi của chính mình: Bà Tư, sư phụ, Tiểu Mộc, Hàn Phong, rồi buộc thêm một sợi mới vào tay bà"',
+      'heaven/realm dusk +redthread +petals @.6,.72,1.5 hero:bow@.3,.9*1.1 godr:talk@.71,.88*1.3 thread@.34,.58*1.2 "Kẻ đến để nối thì ta đánh sao được, sợi này ta giữ cho ngươi"',
+    ],
+    'g:s5': [
+      'field/green dawn +petals @.5,.66,1.1 godj:stand@.7,.9*1.2 hero:stand@.3,.9*1.1 sprout@.5,.9*.6 "Cõi linh thú đang cuối đông, Xuân Sinh tinh quân canh một hạt mầm chưa chịu nứt vỏ"',
+      'field/green dawn @.64,.74,1.5 godj:talk@.71,.92*1.3 sprout@.36,.9*.6 "Làm cho nó mọc ngay bây giờ, thần lực của ngươi dư sức mà"',
+      'field/green day +rain @.5,.76,1.5 hero:kneel@.41,.91*1.25 bucket@.26,.92*1?1 sprout@.6,.92*.7 "Hiệp khách không truyền chút thần lực nào, chỉ tưới nước, che gió và đợi đủ một mùa"',
+      'field/green dusk +petals ~sun@.7,.4,56 @.64,.74,1.55 godj:talk@.71,.93*1.3 sprout@.36,.9*1 "Bao tân thần đã ép nó lớn rồi làm nó chết, ngươi biết đợi, thắng rồi đấy"',
+    ],
+    'g:s6': [
+      'interior/am lamp +dust @.5,.6,1.1 godg:stand@.68,.9*1.2 hero:stand@.3,.9*1.1 letter@.14,.5*1 letter@.86,.5*1 letter@.2,.64*.8 "Thư khố Thần giới có mười vạn kệ sách, Động Vi tinh quân đọc cùng lúc bảy cuốn bằng bảy con mắt"',
+      'interior/am lamp +dust @.64,.7,1.55 godg:talk@.71,.95*1.3 letter@.34,.84*.8 "Trong mười vạn cuốn có một cuốn chép sai một chữ, tìm ra trước khi trăng lặn"',
+      'interior/am lamp +dust @.5,.68,1.4 hero:point@.37,.93*1.25 godg:stand@.65,.93*1.2 letter@.52,.5*1.1^8 "Hiệp khách không lật cuốn nào, chỉ hỏi: cuốn nào tiền bối chưa từng mở lại?"',
+      'interior/am lamp +dust @.64,.72,1.55 godg:talk@.71,.94*1.3 letter@.34,.82*.9 "Hỏi đúng một câu hơn đọc vạn trang, ta chịu"',
+    ],
+    'g:s7': [
+      'peaks/path day +dust +birds @.5,.7,1.1 godg:stand@.68,.64*1.2 hero:stand@.3,.82*1.1 tiles@.8,.8*1 "Trường thành biên giới dài không thấy cuối, Tích Vi tinh quân mỗi ngày chỉ đặt một viên đá"',
+      'peaks/path day +dust @.64,.72,1.5 godg:talk@.71,.69*1.3 tiles@.3,.86*1 "Xây cho ta một dặm thành trong một đêm, không được thì về"',
+      'peaks/path dusk +dust @.5,.74,1.5 hero:kneel@.39,.82*1.25 tiles@.58,.9*1 godg:stand@.78,.62*1.1 "Hiệp khách đặt một viên đá cho thật khít, rồi nói sáng mai sẽ đặt viên nữa"',
+      'peaks/path dusk +birds @.5,.7,1.4 godg:sit@.58,.71*1.2 hero:sit@.31,.85*1.15 teapot@.44,.9*1 bowl@.38,.93*.9 "Kẻ nào hứa xong trong một đêm ta đều đuổi, ngươi thì ở lại uống trà"',
+    ],
+    'g:s8': [
+      'peaks/summit dusk +drift ~sun@.28,.38,60 ~moon@.74,.26,50 @.5,.6,1.1 god:stand@.7,.8*1.2 hero:stand@.3,.8*1.1 "Thái Hòa tinh quân đứng trên cán cân của ngày và đêm, lệch một ly một cõi sẽ không có bình minh"',
+      'peaks/summit dusk +drift @.64,.72,1.5 god:talk@.71,.83*1.3 "Đấu với ta không nghỉ, tới khi một bên gục, ngươi dám không?"',
+      'peaks/summit day +drift +dust @.5,.7,1.4 hero:sit@.35,.82*1.25 bowl@.5,.92*1 god:stagger@.71,.82*1.2 "Tới giờ Ngọ, hiệp khách tra kiếm, ngồi ăn cơm nắm rồi ngủ một giấc, Thái Hòa thì đã kiệt sức từ canh ba"',
+      'peaks/summit dusk +drift ~sun@.28,.38,60 @.64,.72,1.5 god:talk@.71,.83*1.3 hero:bow@.36,.83*1.1 "Ta giữ nhịp ngày đêm cho thiên hạ mà quên nhịp của mình, bài học này ta nhận"',
+    ],
+    'g:s9': [
+      'bridge/bridge holy +petals @.5,.6,1.1 god:stand@.7,.6*1.2 hero:stand@.3,.6*1.1 "Chính Quả tinh quân đưa những linh hồn đã trọn hạnh qua cầu, hôm nay cầu vắng"',
+      'bridge/bridge holy +petals @.64,.7,1.5 god:talk@.71,.64*1.3 "Kể tên một người nhờ ngươi mà đi trọn đường, chỉ một người thôi"',
+      'bridge/bridge holy +petals +fireflies @.5,.68,1.35 hero:talk@.33,.62*1.2 su:stand@.88,.74*.6 "Hiệp khách định kể về mình rồi dừng, kể về một lão sư gánh nước tới thửa ruộng xa nhất, bên kia cầu có bóng người áo xám khẽ gật đầu"',
+      'bridge/bridge holy +petals @.64,.72,1.55 god:talk@.71,.64*1.3 hero:bow@.36,.65*1.1 "Ông ấy qua cầu này năm ngoái và có nhắc tên ngươi, qua đi"',
+    ],
+    'g:s10': [
+      'bridge/river dawn +sparks ~sun@.3,.3,50 @.5,.62,1.1 godb:stand@.7,.84*1.2 hero:stand@.3,.84*1.1 ladle@.84,.9*.9 "Những dòng sông sao chảy về mọi cõi, Lưu Kim tinh quân canh ở đầu nguồn, tay cầm chiếc gáo bạc"',
+      'bridge/river dawn +sparks @.64,.72,1.5 godb:talk@.71,.87*1.3 ladle@.36,.86*1 "Sông này sắp cạn một nhánh, ngươi lấy sao ở đâu bù vào?"',
+      'bridge/river day +ripple +sparks @.5,.72,1.4 hero:martial@.37,.85*1.2 pole@.6,.9*.9^-60 godb:stand@.76,.85*1.1 "Hiệp khách tháo bớt nước ở nhánh đang tràn dẫn sang nhánh cạn, không thêm ngôi sao nào mà cả hai nhánh cùng sáng"',
+      'bridge/river dusk +sparks ~sun@.3,.4,50 @.64,.72,1.55 godb:talk@.71,.88*1.3 "Kẻ khác đòi ta xin thêm sao, ngươi chỉ xếp lại dòng, giỏi"',
+    ],
+    'g:s11': [
+      'shore/rocks storm +rain +lightning @.5,.6,1.1 godb:stand@.7,.83*1.2 hero:stand@.3,.84*1.1 "Biển giữa các cõi đang bão, An Lan tinh quân đứng trên đầu sóng áo không ướt"',
+      'shore/rocks storm +rain @.64,.7,1.5 godb:talk@.71,.87*1.3 "Dẹp cơn bão này, bằng sức, bằng phép, tùy ngươi"',
+      'shore/rocks storm +rain +ripple @.5,.72,1.45 hero:taichi@.37,.86*1.25 boat@.76,.88*1 godb:stand@.88,.85*1 "Hiệp khách nhớ lời lão ngư, thở cùng sóng, dồn tới rút về, bão không tan nhưng thuyền các cõi đi được"',
+      'shore/rocks dusk +ripple +birds @.64,.74,1.55 godb:talk@.71,.85*1.3 hero:bow@.36,.87*1.1 "Bão không phải thứ để dẹp, ai dạy ngươi điều đó hẳn là người hiểu biển"',
+    ],
+    'g:s12': [
+      'arena/field day +birds @.5,.64,1.05 godr:stand@.5,.85*1.2 dan:stand@.14,.85*1 dan:stand@.26,.85*1 dan:stand@.74,.85*1 dan:stand@.86,.85*1 hero:stand@.5,.9*1 "Đội tiên phong của Đồng Tâm tinh quân có trăm thiên binh, trăm năm nay chưa mất một ai"',
+      'arena/field day @.64,.72,1.5 godr:talk@.71,.88*1.3 "Một mình ngươi phá vòng vây của trăm người ta, phá được thì thắng"',
+      'arena/field day +dust @.5,.74,1.4 hero:stand@.37,.86*1.2 dan:hurt@.52,.86*1.05 dan:stand@.69,.86*1 dan2:stand@.82,.86*1 banner@.14,.88*.7 "Hiệp khách không phá, tìm người lính yếu nhất trong vòng vây và đứng che cho anh ta"',
+      'arena/field dusk +birds @.64,.72,1.5 godr:talk@.71,.88*1.3 dan:stand@.38,.88*1 dan2:stand@.28,.88*.95 "Trận của ta dựng để không bỏ ai lại, ngươi vào trận mà cũng không bỏ ai, coi như người nhà"',
+    ],
+    'g:s13': [
+      'peaks/snow day +snow @.5,.64,1.1 godj:stand@.7,.81*1.2 hero:stand@.3,.81*1.1 "Kiện Hành tinh quân tuần quanh cõi băng mỗi ngày một vòng, ba nghìn năm không nghỉ"',
+      'peaks/snow day +snow @.64,.72,1.5 godj:talk@.71,.84*1.3 "Chạy với ta mười vòng, về trước thì thắng"',
+      'peaks/snow day +snow +drift @.5,.74,1.4 hero:carry@.41,.82*1.25 godj:stagger@.63,.82*1.15 "Tới vòng thứ mười Kiện Hành khuỵu gối, hiệp khách cõng ông về đích"',
+      'peaks/snow dusk +snow @.64,.74,1.5 godj:sit@.69,.83*1.25 hero:stand@.36,.83*1.15 "Ba nghìn năm ta không nghỉ và tưởng thế là khỏe, hôm nay ta xin nghỉ một ngày"',
+    ],
+    'g:s14': [
+      'heaven/realm storm +lightning @.5,.5,1.1 godg:stand@.7,.83*1.2 hero:stand@.3,.83*1.1 ruler@.84,.74*.8 "Giữa trời có một vết nứt lạ, Cách Vật tinh quân đã đo nó bằng bảy mươi hai loại thước"',
+      'heaven/realm storm +lightning @.64,.66,1.5 godg:talk@.71,.89*1.3 ruler@.34,.74*.8 "Nói cho ta biết vết nứt này từ đâu ra, sai thì về"',
+      'heaven/realm night +drift +spiral @.5,.68,1.4 hero:sit@.35,.87*1.25 eye@.62,.3*.7 godg:sit@.71,.87*1.1 "Hiệp khách thú thật là không biết, xin ở lại xem ba hôm, ngày thứ ba thấy vết nứt khép lại lúc không ai nhìn"',
+      'heaven/realm dawn +rays @.64,.72,1.55 godg:talk@.71,.88*1.3 hero:bow@.36,.88*1.1 ruler@.4,.86*.7^30 "Bảy mươi hai cây thước không bằng một câu ta chưa biết, ngươi được"',
+    ],
+    'g:s15': [
+      'peaks/path morning +dust @.5,.7,1.1 godg:stand@.68,.64*1.2 hero:stand@.3,.82*1.1 tiles@.86,.8*1 "Khai Sơn tinh quân đục đường qua dãy núi giữa hai thế giới, tay ông chỉ có một cây đục"',
+      'peaks/path morning +dust @.64,.72,1.5 godg:talk@.71,.69*1.3 "Núi này dày vạn dặm, ngươi tính mấy đời thì thông?"',
+      'peaks/path dusk +dust +sparks @.5,.74,1.45 hero:strike@.35,.82*1.25 sword@.5,.7*.6 godg:stand@.69,.65*1.2 "Hiệp khách cầm búa đục nhát đầu tiên rồi hỏi mượn chỗ ngủ"',
+      'peaks/path dawn +dust +birds ~sun@.7,.36,56 @.5,.74,1.5 hero:strike@.35,.83*1.25 godg:strike@.61,.69*1.2 "Sáng hôm sau hai người đục chung, kẻ ngồi tính thì bỏ đi trước bữa trưa, kẻ đục thì ở lại"',
+    ],
+    'g:s16': [
+      'field/dry dusk +embers +ash ~sun@.5,.4,100 @.5,.62,1.1 god:stand@.7,.84*1.2 hero:stand@.3,.84*1.1 "Ở cõi lửa ngày nóng chảy đá đêm lạnh nứt sắt, Trú Dạ tinh quân canh đúng lằn ranh giữa hai thứ"',
+      'field/dry dusk +embers @.64,.72,1.5 god:talk@.71,.87*1.3 "Đứng trên lằn ranh này cùng ta một ngày một đêm, nghiêng hẳn về bên nào cũng chết"',
+      'field/dry night +embers +ash @.5,.74,1.45 hero:taichi@.37,.85*1.25 god:taichi@.63,.85*1.2 fire@.12,.9*.8 "Hiệp khách mỗi canh giờ đổi chân trụ, lúc nghiêng sang nóng, lúc nghiêng sang lạnh, không đứng im nên không ngã"',
+      'field/dry dawn +ash ~sun@.7,.36,70 @.64,.72,1.55 god:talk@.71,.88*1.3 "Cân bằng không phải là đứng im ở giữa, ít kẻ hiểu ra trước khi cháy"',
+    ],
+    'g:s17': [
+      'village/dyke morning +birds @.5,.66,1.1 god:carry@.7,.85*1.2 hero:stand@.3,.85*1.1 pole@.86,.82*1 "Hồi Hướng tinh quân gánh công đức trả về nơi đã gieo, đôi quang gánh của bà trông quen lạ lùng"',
+      'village/dyke morning +birds @.64,.72,1.5 god:talk@.71,.88*1.3 pole@.34,.84*1^-8 "Gánh này nặng bằng mọi việc tốt ngươi từng làm, nhấc lên rồi mang trả cho đúng người"',
+      'field/green dusk +petals ~sun@.7,.4,56 @.5,.76,1.45 hero:carry@.35,.91*1.25 statue@.7,.9*.6 bucket@.84,.92*.9?1 "Hiệp khách nhấc gánh đi thẳng về cõi người, tới nấm mộ bên thửa ruộng xanh ở Lệ thôn, đặt xuống, gánh nhẹ bẫng"',
+      'village/dyke dusk +birds @.64,.74,1.55 god:talk@.71,.88*1.3 hero:bow@.36,.88*1.1 "Đa phần mang về cho mình, ngươi biết gánh ấy của ai, ta không hỏi nữa"',
+    ],
+    'g:s18': [
+      'field/dry day +drift @.5,.58,1.1 godb:stand@.7,.86*1.2 hero:stand@.3,.86*1.1 "Tán Tụ tinh quân chăn những đàn mây, dưới kia có mười cõi đang hạn"',
+      'field/dry day +drift @.64,.68,1.5 godb:talk@.71,.89*1.3 "Ta chỉ còn một đám mây, cõi nào cũng xin, ngươi cho ai?"',
+      'field/dry day +drift +rain @.5,.62,1.4 hero:cast@.41,.87*1.25 godb:point@.69,.87*1.2 "Hiệp khách xé đám mây làm mười, thả ở mười đầu nguồn, không cõi nào no nước nhưng không cõi nào chết khát"',
+      'field/green dusk +rain +petals @.64,.72,1.55 godb:talk@.71,.94*1.3 hero:stand@.36,.94*1.15 "Kẻ từng sống qua một mùa hạn mới chia như thế, mây này từ nay ngươi chăn cùng ta"',
+    ],
+    'g:s19': [
+      'shore/rocks mist +ripple @.5,.62,1.1 godb:stand@.7,.83*1.2 hero:stand@.3,.84*1.1 "Hồ soi trời phẳng như gương, Chỉ Thủy tinh quân bảo ai nhìn xuống cũng chỉ thấy điều mình sợ nhất"',
+      'shore/rocks mist +ripple @.64,.72,1.5 godb:talk@.71,.86*1.3 "Nhìn xuống đủ một nén nhang mà mặt hồ không gợn thì ngươi thắng"',
+      'shore/rocks mist +ripple @.4,.76,1.4 hero:bow@.36,.85*1.25 bowl@.6,.92*1 "Dưới hồ là người đàn bà chia bát cháo làm ba, hiệp khách nhìn không quay đi, chỉ cúi đầu chào"',
+      'shore/rocks dawn +ripple +birds @.64,.74,1.55 godb:talk@.71,.85*1.3 hero:zen@.36,.87*1.15 "Ngươi không hết sợ, ngươi chỉ thôi chạy, thế là đủ cho hồ này"',
+    ],
+    'g:s20': [
+      'temple night +fireflies ~moon@.7,.2,54 @.5,.62,1.1 godr:stand@.7,.86*1.2 hero:stand@.3,.86*1.1 bell@.14,.5*1 "Tri Âm tinh quân nghe được tiếng kêu cứu từ mọi cõi, tai bà chưa có một ngày yên"',
+      'temple night +fireflies @.64,.72,1.5 godr:talk@.71,.89*1.3 "Lúc này có vạn tiếng gọi, ngươi cứu được mấy?"',
+      'valley/stream night +fireflies ~moon@.3,.2,50 @.5,.78,1.5 hero:kneel@.41,.86*1.25 basket@.62,.92*1.1 kid:lie@.64,.9*.5 "Hiệp khách chọn một tiếng nhỏ nhất: một đứa trẻ khóc trong giỏ bên bờ suối cạn, cứu xong mới quay lại nhận tiếng tiếp theo"',
+      'temple dawn +birds @.64,.72,1.55 godr:talk@.71,.9*1.3 hero:stand@.36,.9*1.15 "Ta nghe vạn tiếng nên chẳng cứu trọn ai, ngươi dạy lại ta cách bắt đầu"',
+    ],
+    'g:s21': [
+      'village/camp dusk +steam @.5,.66,1.1 godj:stand@.7,.85*1.2 hero:stand@.3,.85*1.1 dan:lie@.14,.9*.9 dan2:sit@.86,.9*.9 "Sau mỗi trận thần binh bị thương đều về chỗ Dưỡng Chính tinh quân, hôm nay ông chỉ chờ một người"',
+      'village/camp dusk +steam @.64,.72,1.5 godj:talk@.71,.88*1.3 "Ngươi thắng hai mươi trận liền và giấu ta ba vết thương, cởi áo ra"',
+      'village/camp night +steam +fireflies @.5,.76,1.45 hero:lie@.35,.86*1.2 godj:kneel@.61,.86*1.2 bowl@.8,.92*.9 "Hiệp khách định chối rồi ngồi xuống để ông băng bó, ngủ một mạch hai ngày"',
+      'village/camp dawn +steam +birds @.64,.74,1.55 godj:talk@.71,.88*1.3 hero:sit@.28,.9*1.1 "Biết dừng để chữa cũng là một loại võ công, trận này ngươi thắng chính mình"',
+    ],
+    'g:s22': [
+      'bridge/river mist +drift @.5,.64,1.1 godg:stand@.7,.84*1.2 hero:stand@.3,.84*1.1 boat@.84,.9*.9 "Vấn Tân tinh quân đứng ở bến đò giữa các thế giới, hôm nay sương dày chính ông cũng không thấy bờ"',
+      'bridge/river mist @.64,.72,1.5 godg:talk@.71,.87*1.3 "Đưa ta sang bờ bên kia, không la bàn, không sao trời"',
+      'bridge/river mist +ripple @.5,.76,1.4 hero:walk@.31,.85*1.2 boat@.6,.9*1.2 sprout@.46,.9*.3 "Hiệp khách thả một chiếc lá xuống nước, xem nó trôi, rồi chèo ngược dòng lá"',
+      'bridge/river dawn +ripple +birds @.64,.74,1.55 godg:talk@.71,.87*1.3 boat@.34,.9*1 "Không biết đường thì hỏi dòng nước, câu ấy đáng khắc lên bến này"',
+    ],
+    'g:s23': [
+      'town/gate night +fireflies @.5,.62,1.1 godg:stand@.68,.86*1.2 hero:stand@.3,.86*1.1 lamp@.2,.64*1.2 "Ở cửa Thần giới có một ngọn đèn chưa từng tắt, Trì Hằng tinh quân châm dầu cho nó chín nghìn năm"',
+      'town/gate night +fireflies @.64,.72,1.5 godg:talk@.71,.89*1.3 lamp@.3,.64*1.4 "Thổi tắt nó đi, thần lực của ngươi thừa sức"',
+      'town/gate night +fireflies @.5,.72,1.45 hero:hold@.41,.88*1.25 bucket@.3,.92*1?1 lamp@.62,.6*1.4 godg:sit@.8,.88*1 "Hiệp khách lắc đầu, cầm bình dầu châm thay ông một đêm rồi một đêm nữa"',
+      'town/gate dawn +birds @.64,.74,1.55 godg:talk@.71,.89*1.3 lamp@.3,.7*1.2 "Kẻ muốn thắng ta thì thổi, kẻ hiểu ta thì châm dầu, ngọn đèn này nhận ra ngươi"',
+    ],
+    'g:s24': [
+      'peaks/summit night +drift ~moon@.3,.22,60 @.5,.58,1.1 god:stand@.7,.81*1.2 hero:stand@.3,.81*1.1 "Trương Thỉ tinh quân giương cây cung dài bằng cả dải ngân hà, mũi tên của ông chưa từng trượt"',
+      'peaks/summit night +drift @.64,.7,1.5 god:talk@.71,.84*1.3 "Bắn trúng ngôi sao kia trước ta"',
+      'peaks/summit night +sparks @.5,.7,1.4 hero:hold@.37,.82*1.25 god:strike@.69,.82*1.2 slash@.56,.4*1.2?1 "Hiệp khách giương cung rồi hạ xuống để dây chùng hẳn mới kéo lại, Trương Thỉ bắn vội, dây cung đứt phựt"',
+      'peaks/summit dawn +drift @.64,.72,1.55 god:talk@.71,.84*1.3 hero:stand@.36,.84*1.15 "Dây không được chùng thì sẽ đứt, ta quên mất điều chính mình dạy cho tân binh"',
+    ],
+    'g:s25': [
+      'field/dry deep +fireflies @.5,.66,1.1 god:stand@.7,.84*1.2 hero:stand@.3,.84*1.1 sprout@.5,.9*.6 "Dưới cõi âm có một vườn hạt giống lành, Thiện Căn tinh quân canh chúng qua mùa đông dài nhất"',
+      'field/dry deep +fireflies @.64,.72,1.5 god:talk@.71,.87*1.3 sprout@.34,.9*.7 "Trong vạn hạt này có một hạt mang tên kẻ thù của ngươi, nhổ đi hay để lại?"',
+      'field/dry deep +fireflies +petals @.5,.78,1.5 hero:kneel@.41,.85*1.25 sprout@.62,.92*.9 bucket@.8,.92*.9?1 "Hiệp khách tìm ra hạt mang tên Lệ Vô Khuyết, nhỏ lép nhưng đã nứt một đường xanh, vun thêm đất cho nó"',
+      'field/dry dawn +birds +petals @.64,.74,1.55 god:talk@.71,.87*1.3 ladle@.34,.9*.9?1 "Hạt ấy nứt từ đêm có người đưa cho nó một gáo nước, ngươi biết là ai mà"',
+    ],
+    'g:s26': [
+      'village/camp day +dust @.5,.66,1.1 godb:stand@.7,.85*1.2 hero:stand@.3,.85*1.1 basket@.14,.88*1 basket@.24,.9*.8 "Tiết Độ tinh quân giữ kho lương của ba mươi sáu Thiên Cang, sổ của ông không lệch một hạt"',
+      'village/camp day @.64,.72,1.5 godb:talk@.71,.88*1.3 basket@.34,.88*1 "Kho chỉ đủ ăn nửa năm, chiến sự còn một năm, tính đi"',
+      'village/camp day +dust @.5,.74,1.4 hero:point@.35,.86*1.25 basket@.52,.9*1 basket@.64,.9*1 basket@.76,.9*1 godb:stand@.88,.86*1 "Hiệp khách chia kho làm ba: phần ăn, phần gieo, phần đổi với cõi bên"',
+      'field/green dusk +birds @.64,.74,1.55 godb:talk@.71,.93*1.3 sprout@.34,.92*.7 "Kẻ giữ của thì đếm, kẻ hiểu của thì gieo, sổ này từ nay có thêm cột của ngươi"',
+    ],
+    'g:s27': [
+      'peaks/summit storm +leaves +dust @.5,.56,1.1 godb:sit@.5,.81*1.2 hero:stand@.26,.81*1.1 "Định Phong tinh quân ngồi trong mắt bão, quanh ông gió xé nát cả đá"',
+      'peaks/summit storm +leaves @.64,.68,1.5 godb:talk@.71,.85*1.3 "Vào đây ngồi với ta, tâm ngươi động một niệm là gió cuốn đi"',
+      'peaks/summit storm +leaves +dust @.5,.7,1.45 hero:zen@.41,.83*1.25 flute@.76,.5*.8^20 godb:sit@.69,.83*1.1 "Gió mang tới tiếng sáo xương năm nào, hiệp khách nghe, nhận ra, rồi để nó thổi qua, vạt áo không lay"',
+      'peaks/summit dawn +drift @.64,.72,1.55 godb:talk@.71,.84*1.3 hero:zen@.36,.84*1.15 "Ngươi nghe thấy mà không đi theo, bão nào rồi cũng chỉ đến thế thôi"',
+    ],
+    'g:s28': [
+      'town/street morning +birds @.5,.66,1.1 hero:walk@.3,.86*1.1 dan:stand@.5,.86*1 dan2:walk@.62,.86*1 kid:stand@.74,.86*.9 godr:stand@.85,.86*1 "Hiệp khách tìm Hòa Quang tinh quân khắp Thần giới không thấy, vị thần này sống lẫn giữa cõi người"',
+      'town/street morning +birds @.64,.72,1.5 godr:talk@.71,.89*1.3 "Tìm ra ta giữa một phiên chợ nghìn người, thần lực không giúp được ngươi đâu"',
+      'town/street day +steam @.5,.74,1.4 hero:martial@.35,.86*1.2 teapot@.52,.9*1 dan:sit@.66,.9*1 "Hiệp khách ngồi xuống quán trà đầu chợ giúp bà chủ quạt lò"',
+      'town/street dusk +birds @.64,.74,1.55 godr:talk@.71,.89*1.3 hero:sit@.28,.9*1.1 teapot@.46,.9*1 "Tới chiều bà cụ bán trà mỉm cười, bà chính là Hòa Quang, muốn tìm ta phải chịu ngồi xuống với người"',
+    ],
+    'g:s29': [
+      'field/green dusk +leaves ~sun@.7,.34,54 @.5,.6,1.1 godj:stand@.7,.9*1.2 hero:stand@.3,.9*1.1 statue@.5,.8*1 "Cây nối các cõi cao không thấy ngọn, Cố Bản tinh quân chỉ chăm phần rễ nơi không ai nhìn"',
+      'field/green dusk +leaves @.64,.72,1.5 godj:talk@.71,.93*1.3 "Cành trên kia đang héo, ngươi chữa ở đâu?"',
+      'field/green day +leaves +dust @.5,.78,1.5 hero:kneel@.41,.91*1.25 tiles@.62,.92*.9 godj:stand@.78,.91*1.1 "Hiệp khách không leo lên ngọn, xuống tận rễ gỡ một tảng đá đang chèn"',
+      'field/green dawn +leaves +birds @.64,.74,1.55 godj:talk@.71,.93*1.3 sprout@.34,.92*.9 "Một tuần sau cành trên cao tự xanh lại, ai cũng trèo lên chỗ thấy được, ngươi xuống chỗ ta, hiếm đấy"',
+    ],
+    'g:s30': [
+      'temple holy +rays @.5,.6,1.1 godg:stand@.5,.86*1.2 hero:stand@.22,.86*1.1 mirror@.84,.8*1.2 "Minh Kính tinh quân có tấm gương soi ra chân tướng sau mọi lớp mặt nạ, ông bảo hiệp khách đứng vào"',
+      'temple holy +rays @.64,.7,1.5 godg:talk@.71,.9*1.3 mirror@.3,.78*1.2 "Xem thử dưới danh hiệu thần của ngươi là ai"',
+      'temple holy +rays @.5,.7,1.4 hero:bow@.41,.88*1.25 mirror@.66,.7*1.5 bucket@.84,.92*.9?1 "Trong gương không có vị thần nào, chỉ có một kẻ gánh nước vai chai tay cầm cái gáo sứt quai, hiệp khách gật đầu chào người ấy"',
+      'temple holy +rays +petals @.64,.72,1.55 godg:talk@.71,.9*1.3 mirror@.3,.76*1 "Kẻ nhìn gương này thường đập nó, ngươi lại chào, ta không còn gì để soi"',
+    ],
+    'g:s31': [
+      'arena/field day +dust +birds @.5,.64,1.05 godg:stand@.7,.85*1.2 hero:stand@.3,.85*1.1 tiles@.9,.8*1.1 dan:stand@.12,.9*.9 dan2:strike@.2,.9*.9 "Trường thành ngăn hư không là công trình lớn nhất Thần giới, Đại Thành tinh quân thống lĩnh mười vạn thợ"',
+      'arena/field day +dust @.64,.72,1.5 godg:talk@.71,.88*1.3 tiles@.3,.88*1 "Một đoạn thành vừa sụp, lỗi của ai ngươi tìm ra thì thắng"',
+      'arena/field day +dust @.5,.7,1.4 hero:point@.35,.87*1.25 board@.6,.76*1.4 tiles@.82,.9*1 dan:strike@.88,.87*.9 "Hiệp khách không tìm lỗi, dựng một tấm bảng ba cột trước đoạn thành sụp"',
+      'arena/field dusk +birds @.64,.72,1.55 godg:talk@.71,.89*1.3 board@.3,.76*1 "Ta mất nghìn năm tìm kẻ có lỗi, ngươi mất ba ngày để xây xong, tấm bảng ấy cho ta xin"',
+    ],
+    'g:s32': [
+      'peaks/summit day +drift +birds @.5,.56,1.1 god:lie@.66,.81*1.3 hero:stand@.28,.81*1.1 sword@.86,.7*1 "Tiêu Dao tinh quân nằm vắt chân trên một đám mây, nón che mặt, thanh kiếm cắm dưới gốc đào"',
+      'peaks/summit day +drift @.64,.68,1.5 god:lie@.71,.85*1.3 "Đánh với ta thì chán lắm, hay là ngủ thi? Ai mở mắt trước thì thua"',
+      'peaks/summit day +drift +birds @.5,.7,1.45 hero:lie@.37,.83*1.25 god:lie@.69,.83*1.2 "Hiệp khách nằm xuống thật và ngủ ngon lành, việc hôm nay đã xong cả rồi"',
+      'peaks/summit dusk +drift +birds @.64,.72,1.55 god:sit@.71,.84*1.3 hero:lie@.36,.84*1.1 "Chỉ kẻ làm xong việc mới ngủ được như thế, ta giả vờ nhàn, ngươi nhàn thật"',
+    ],
+    'g:s33': [
+      'heaven/stairs holy +rays @.5,.6,1.1 hinh:sit@.7,.84*1.2 hero:stand@.3,.84*1.1 ruler@.84,.72*1 "Thiên Hình tinh quân đợi sẵn, thước ngọc đặt ngang gối, ông là kẻ từng định niêm Thiên Môn"',
+      'heaven/stairs holy +rays @.64,.7,1.5 hinh:talk@.71,.88*1.3 ruler@.32,.74*1 "Ngươi mang một tà thần vào Thần giới, phép ghi rõ tội ấy, biện bạch đi"',
+      'heaven/stairs holy +rays @.5,.72,1.4 hero:kneel@.35,.85*1.25 ruler@.62,.72*1.1 hinh:point@.73,.85*1.2 "Hiệp khách không biện bạch, nhận tội rồi kể mình đã làm gì mỗi ngày từ hôm ấy để sửa, thước ngọc đo từng việc rồi hạ xuống"',
+      'heaven/stairs holy +petals +rays @.64,.72,1.55 hinh:talk@.71,.88*1.3 hero:bow@.36,.88*1.1 "Phép phạt kẻ chối không phạt kẻ đang trả, ngôi thứ ba mươi ba không cản ngươi nữa"',
+    ],
+    'g:s34': [
+      'field/green blood +redmist ~red@.6,.2,100 @.5,.6,1.1 godb:stand@.7,.9*1.2 hero:stand@.3,.9*1.1 "Phương Hợi là đất của Huyết Nguyệt, Phong Đăng tinh quân coi mùa màng ở đây và mùa nào cũng bị thu sạch về trăng đỏ"',
+      'field/green blood +redmist @.64,.7,1.5 godb:talk@.71,.94*1.3 basket@.3,.9*.8 "Chủ phương lệnh cho ta chặn ngươi, ta không muốn nhưng kho của ta trống, ta lấy gì mà cãi lệnh?"',
+      'field/green day +petals @.5,.76,1.45 hero:kneel@.37,.91*1.25 basket@.54,.9*1 godb:kneel@.69,.91*1.2 sprout@.84,.92*.8 "Hiệp khách mở túi chia nửa phần lương vào kho Phong Đăng rồi cùng ông gieo lại một vụ"',
+      'field/green dawn +birds ~sun@.7,.4,56 @.64,.74,1.55 godb:talk@.71,.93*1.3 sprout@.34,.92*.9 "Nó lấy của ta nghìn mùa, ngươi cho ta một vụ, ta biết mình nên đứng về bên nào"',
+    ],
+    'g:s35': [
+      'altar blood +embers ~red@.5,.24,120 @.5,.56,1.1 godb:stand@.5,.7*1.35 hero:stand@.3,.71*1.1 dan:stand@.13,.71*.9 dan2:stand@.87,.71*.9 "Vô Ba tinh quân, mạnh nhất Thiên Cang, đứng chắn trước điện Huyết Nguyệt, ba mươi tư vị kia đều đã tới xem"',
+      'altar blood +embers @.64,.64,1.5 godb:talk@.71,.74*1.35 "Tâm ta như mặt nước không gợn, ngươi làm nó gợn được một lần, ngôi đầu Thiên Cang là của ngươi"',
+      'altar blood +embers +sparks @.5,.66,1.4 hero:martial@.35,.75*1.25 godb:strike@.65,.75*1.3 slash@.5,.6*1.3?1 "Trăm chiêu không ăn thua, hiệp khách dừng tay hỏi khẽ: nước không gợn là vì yên hay vì đã đóng băng?"',
+      'altar blood +embers @.64,.66,1.55 godb:talk@.71,.75*1.35 hero:stand@.36,.75*1.15 "Ta lặng vì sợ kẻ ngồi trong điện kia đâu phải vì yên, ngươi nhìn ra được, đi đi Thượng Thần"',
+      'heaven/realm holy +rays +sparks ~moon@.5,.2,80 @.5,.5,1.1 hero:zen@.5,.83*1.3 god:stand@.17,.83*.9 godb:stand@.26,.83*.9 godg:stand@.74,.83*.9 godj:stand@.83,.83*.9 "Ba mươi lăm ngôi sao cùng sáng, hiệp khách thành Thượng Thần đứng đầu Thiên Cang, đủ tư cách gõ cửa mười hai phương"',
+    ],
+    // ---- Chiến ký: 11 Phương thần, khóa 'g:l<k>' ----------------------------------------------------------------------------------
+    'g:l1': [
+      'shore/deep night +bubbles @.5,.62,1.1 godb:sit@.7,.84*1.2 hero:stand@.3,.84*1.1 "Phương Tý là đêm sâu nhất của Thần giới, Huyền Minh phương thần ngồi dưới đáy một hồ nước đen, nơi không có một tiếng động"',
+      'shore/deep night +bubbles @.64,.72,1.5 godb:talk@.71,.87*1.3 "Thượng Thần muốn lên ngôi cao thì xuống đây, ở lại với ta qua một đêm dài bằng trăm năm, không làm gì cả"',
+      'shore/deep deep +bubbles @.4,.76,1.4 hero:zen@.32,.85*1.25 godb:sit@.64,.85*1.15 "Hiệp khách từng ngồi chín tháng dưới đáy biển không trăng, ngồi thở để đêm tự trôi"',
+      'shore/deep dawn +bubbles +birds ~sun@.7,.3,50 @.5,.7,1.4 hero:stand@.35,.86*1.25 fire@.64,.9*.9 godb:stand@.76,.86*1.2 "Gần sáng hiệp khách đứng dậy nhóm bếp: đêm là để nghỉ, không phải để trốn, kẻ biết ngồi và biết dậy, phương Tý mở đường"',
+      'peaks/path dawn +birds ~sun@.7,.3,54 @.5,.7,1.2 hero:walk@.4,.79*1.2 gate@.84,.82*.8 "Phương Tý mở đường, còn mười một phương nữa, và phương cuối cùng là phương Hợi"',
+    ],
+    'g:l2': [
+      'peaks/path dusk +dust @.5,.66,1.1 godg:carry@.68,.64*1.3 hero:stand@.3,.82*1.1 statue@.84,.8*.8 "Hậu Tải phương thần là một bà lão lưng còng, cõng cả phương Sửu trên vai, bà chưa từng đặt nó xuống"',
+      'peaks/path dusk +dust @.64,.72,1.5 godg:talk@.71,.69*1.3 "Cõng thay ta một ngày, chỉ một ngày thôi, xem vai ngươi có chở nổi không"',
+      'peaks/path dusk +dust @.5,.74,1.4 hero:carry@.39,.8*1.3 basket@.54,.88*1 basket@.66,.9*1 godg:stand@.8,.6*1.1 "Hiệp khách ghé vai, chia gánh nặng làm trăm chuyến nhỏ, đi từng chuyến, nghỉ giữa các chuyến"',
+      'peaks/path dawn +dust +birds @.64,.74,1.55 godg:talk@.71,.69*1.3 hero:stand@.36,.86*1.15 "Ta cõng một hơi suốt vạn năm nên lưng mới còng, ngươi dạy bà lão này cách đặt gánh xuống mà không làm rơi"',
+      'peaks/path dawn +birds @.5,.7,1.2 hero:walk@.4,.79*1.2 gate@.84,.82*.8 "Phương Sửu mở đường, còn mười phương nữa, và phương cuối cùng là phương Hợi"',
+    ],
+    'g:l3': [
+      'peaks/am dawn +birds ~sun@.5,.36,60 @.5,.62,1.1 godr:stand@.7,.82*1.2 hero:stand@.3,.82*1.1 "Phương Dần luôn là rạng đông, Khai Dương phương thần trẻ như thiếu niên, ngày nào cũng bắt đầu một việc mới và chưa việc nào xong"',
+      'peaks/am dawn +birds @.64,.72,1.5 godr:talk@.71,.85*1.3 "Đua với ta xem ai khởi sự được nhiều hơn trước khi mặt trời lên!"',
+      'peaks/am dawn +leaves @.5,.74,1.4 godr:walk@.69,.82*1.2 hero:taichi@.35,.82*1.25 board@.16,.8*1 "Khai Dương mở trăm việc, hiệp khách chỉ mở một, hiểu cho rõ nó cần gì và làm xong trước bình minh"',
+      'peaks/am morning +birds ~sun@.5,.3,60 @.64,.72,1.55 godr:talk@.71,.86*1.3 hero:stand@.36,.86*1.15 "Ta giỏi bắt đầu tới mức quên cả kết thúc, một việc xong của ngươi sáng hơn trăm việc dở của ta"',
+      'peaks/path morning +birds @.5,.7,1.2 hero:walk@.4,.79*1.2 gate@.84,.82*.8 "Phương Dần mở đường, còn chín phương nữa, và phương cuối cùng là phương Hợi"',
+    ],
+    'g:l4': [
+      'valley/stream morning +leaves +fireflies @.5,.62,1.1 godj:stand@.7,.85*1.3 hero:stand@.3,.85*1.1 "Phương Mão là một cánh rừng, Thanh Mộc phương thần chính là cây lớn nhất, rễ nối với mọi cây khác"',
+      'valley/stream morning +leaves @.64,.72,1.5 godj:talk@.71,.88*1.3 "Chặt được ta thì ngươi qua, nhưng coi chừng: ta ngã thì cả rừng ngã"',
+      'valley/stream day +leaves +fireflies @.5,.76,1.45 hero:kneel@.37,.86*1.25 sprout@.54,.92*.8 bucket@.2,.92*1?1 godj:stand@.76,.86*1.2 "Hiệp khách bỏ kiếm đi một vòng quanh rừng tưới cho những cây non còi cọc, cây lớn tự nghiêng cành mở lối cho nắng"',
+      'valley/stream dusk +fireflies +leaves @.64,.74,1.55 godj:talk@.71,.88*1.3 hero:stand@.36,.88*1.15 "Ngươi không thắng ta, ngươi làm cho cả rừng thắng, ở phương này thế mới gọi là thắng"',
+      'peaks/path dusk +leaves @.5,.7,1.2 hero:walk@.4,.79*1.2 gate@.84,.82*.8 "Phương Mão mở đường, còn tám phương nữa, và phương cuối cùng là phương Hợi"',
+    ],
+    'g:l5': [
+      'peaks/summit storm +rain +drift @.5,.56,1.1 godb:stand@.7,.81*1.2 hero:stand@.3,.81*1.1 bucket@.2,.9*1.2?1 bucket@.1,.92*1?1 "Vân Vũ phương thần cưỡi rồng mây nắm hết mưa của Thần giới, ông nhìn đôi thùng gỗ của hiệp khách rất lâu"',
+      'peaks/summit storm +rain @.64,.68,1.5 godb:talk@.71,.85*1.3 "Nghe nói ngươi từng tưới xanh một cánh đồng dưới trăng đỏ mà không xin ta giọt mưa nào, kể ta nghe"',
+      'peaks/summit day +rain +drift @.5,.72,1.4 hero:point@.35,.81*1.25 pole@.58,.88*1 godb:stand@.71,.81*1.2 dan:carry@.84,.81*.8 "Hiệp khách chỉ cho ông thấy mưa của ông rơi đều nhưng không ai dẫn nó tới ruộng xa, hai người cùng đào mương"',
+      'peaks/summit dusk +rain +petals @.64,.72,1.55 godb:talk@.71,.84*1.3 hero:stand@.36,.84*1.15 "Mưa của trời cần mương của người, ta làm thần mưa bấy lâu mà giờ mới biết, phương Thìn nợ ngươi một mùa"',
+      'peaks/path dusk +drift @.5,.7,1.2 hero:walk@.4,.79*1.2 gate@.84,.82*.8 "Phương Thìn mở đường, còn bảy phương nữa, và phương cuối cùng là phương Hợi"',
+    ],
+    'g:l6': [
+      'field/dry dusk +embers +ash ~sun@.5,.4,110 @.5,.62,1.1 godr:stand@.7,.84*1.2 hero:stand@.3,.84*1.1 fire@.16,.9*.9 "Phương Tỵ rực lửa, Xích Diễm phương thần cháy sáng nhất Thần giới và quanh ông toàn tro của những việc cháy quá nhanh"',
+      'field/dry dusk +embers @.64,.72,1.5 godr:talk@.71,.87*1.3 fire@.3,.88*.9 "Nhiệt tâm của ngươi đâu? Đốt hết mình trong một trận cho ta xem!"',
+      'field/dry night +embers +ash @.5,.76,1.45 hero:kneel@.37,.85*1.25 fire@.54,.9*.7 bowl@.7,.92*1 godr:stagger@.82,.85*1.15 "Hiệp khách nhóm một bếp than nhỏ, ủ tro giữ lửa qua đêm"',
+      'field/dry dawn +ash ~sun@.7,.36,70 @.64,.74,1.55 godr:talk@.71,.87*1.3 fire@.34,.9*.6 "Lửa của Xích Diễm đã tàn, bếp than vẫn đỏ đủ nấu cơm cho cả phương, lửa của ngươi bền hơn"',
+      'peaks/path dawn +ash @.5,.7,1.2 hero:walk@.4,.79*1.2 gate@.84,.82*.8 "Phương Tỵ mở đường, còn sáu phương nữa, và phương cuối cùng là phương Hợi"',
+    ],
+    'g:l7': [
+      'town/square day +rays ~sun@.5,.12,80 @.5,.62,1.1 godg:stand@.5,.86*1.3 hero:stand@.26,.86*1.1 "Phương Ngọ không có bóng, dưới ánh Chính Dương phương thần mọi việc đã làm đều hiện rõ kể cả việc muốn giấu"',
+      'town/square day +rays @.64,.72,1.5 godg:talk@.71,.89*1.3 "Đứng giữa trưa của ta, kể ra một việc ngươi làm sai mà chưa ai biết"',
+      'town/square day +rays @.4,.76,1.4 hero:bow@.34,.86*1.25 su:stand@.84,.8*.5 "Hiệp khách kể đêm ở trấn Thanh Khê từng nghi cả sư phụ là kẻ phản bội mà chưa bao giờ xin lỗi, quay về phía cõi người cúi đầu"',
+      'town/square day +rays +petals @.64,.74,1.55 godg:talk@.71,.89*1.3 hero:stand@.36,.89*1.15 "Kẻ không có bóng là kẻ không giấu gì, giữa trưa này ngươi đứng thẳng được"',
+      'peaks/path day +rays @.5,.7,1.2 hero:walk@.4,.79*1.2 gate@.84,.82*.8 "Phương Ngọ mở đường, còn năm phương nữa, và phương cuối cùng là phương Hợi"',
+    ],
+    'g:l8': [
+      'field/green dusk +birds ~sun@.78,.34,60 @.5,.62,1.1 godj:stand@.7,.9*1.3 hero:stand@.3,.9*1.1 basket@.14,.9*1 basket@.24,.92*.9 "Phương Mùi lúa chín quanh năm, Phong Nhiêu phương thần béo tốt hiền lành và đang lo: kho đầy mà dân các cõi vẫn đói"',
+      'field/green dusk +birds @.64,.72,1.5 godj:talk@.71,.93*1.3 basket@.34,.9*1 "Ta có thừa họ vẫn thiếu, giải được thì ngươi thắng, ta còn phải cảm ơn"',
+      'field/green day +dust @.5,.74,1.4 hero:point@.35,.91*1.25 board@.62,.74*1.2 palanquin@.86,.9*.7 godj:stand@.76,.91*1.2 "Hiệp khách lần theo đường thóc, nó nằm chết trong kho vì không ai chở, dựng một tấm bảng chia chuyến, ngày nào cũng có xe đi"',
+      'field/green dusk +birds ~sun@.78,.34,60 @.64,.74,1.55 godj:talk@.71,.93*1.3 hero:stand@.36,.93*1.15 "Thóc trong kho chưa phải là cơm, ngươi biến thứ ta có thành thứ họ cần, thua kiểu này ta vui lắm"',
+      'peaks/path dusk +birds @.5,.7,1.2 hero:walk@.4,.79*1.2 gate@.84,.82*.8 "Phương Mùi mở đường, còn bốn phương nữa, và phương cuối cùng là phương Hợi"',
+    ],
+    'g:l9': [
+      'arena/plaza morning +sparks @.5,.62,1.1 godg:strike@.7,.85*1.2 hero:stand@.3,.85*1.1 "Kim Cương phương thần cứng như sắt, mỗi ngày tập đúng một vạn nhát kiếm không thiếu một nhát, đã vạn năm"',
+      'arena/plaza morning +sparks @.64,.72,1.5 godg:talk@.71,.88*1.3 sword@.34,.8*.9 "Kỷ luật của ngươi tới đâu? Tập với ta, sai một nhát là thua"',
+      'arena/plaza day +dust +birds @.5,.72,1.4 hero:hold@.37,.86*1.25 crow@.5,.5*.6 godg:strike@.73,.86*1.2 "Nhát thứ chín nghìn một con chim non rơi khỏi tổ giữa sân, hiệp khách bỏ dở, đỡ nó lên cành rồi mới quay lại tập nốt"',
+      'arena/plaza dusk +birds @.64,.74,1.55 godg:talk@.71,.88*1.3 hero:stand@.36,.88*1.15 "Ta giữ một vạn nhát mà quên giữ vì cái gì, ngươi lỡ một nhát mà đúng cả bài, kỷ luật của ngươi có tim"',
+      'peaks/path dusk +birds @.5,.7,1.2 hero:walk@.4,.79*1.2 gate@.84,.82*.8 "Phương Thân mở đường, còn ba phương nữa, và phương cuối cùng là phương Hợi"',
+    ],
+    'g:l10': [
+      'field/green dusk +leaves ~sun@.7,.36,60 @.5,.62,1.1 godr:stand@.7,.9*1.2 hero:stand@.3,.9*1.1 basket@.16,.9*1 "Phương Dậu là buổi chiều thu, Thu Liễm phương thần đang gặt và dạy rằng biết đủ là mùa gặt cuối cùng"',
+      'field/green dusk +leaves @.64,.72,1.5 godr:talk@.71,.93*1.3 "Ngươi đã thắng chín phương, tới đây thì dừng đi, hay ngươi cũng tham như kẻ ngồi ở phương Hợi?"',
+      'field/green dusk +leaves +petals @.4,.76,1.4 hero:zen@.32,.91*1.25 basket@.6,.9*1.1 godr:stand@.72,.91*1.2 "Hiệp khách nghĩ rất lâu, đặt xuống mọi chiến tích chỉ giữ một câu dặn: gánh cả nó về"',
+      'field/green dusk +leaves ~sun@.7,.36,60 @.64,.74,1.55 godr:talk@.71,.93*1.3 hero:bow@.36,.93*1.1 "Tham là muốn thêm cho mình, ngươi muốn bớt cho người, câu trả lời ấy qua được mùa thu của ta"',
+      'peaks/path dusk +leaves @.5,.7,1.2 hero:walk@.4,.79*1.2 gate@.84,.82*.8 "Phương Dậu mở đường, còn hai phương nữa, và phương cuối cùng là phương Hợi"',
+    ],
+    'g:l11': [
+      'peaks/summit blood +redmist ~red@.6,.2,100 @.5,.58,1.1 god:stand@.7,.81*1.3 hero:stand@.3,.81*1.1 "Trấn Thủ phương thần canh biên giới các cõi, mình đầy sẹo, sau lưng ông là phương Hợi nơi trăng đỏ đã nuốt mất nửa bầu trời"',
+      'peaks/summit blood +redmist @.64,.68,1.5 god:talk@.71,.85*1.3 "Ta chặn ngươi không vì ghét, qua ta rồi là không còn ai đỡ cho ngươi nữa"',
+      'peaks/summit dusk +redmist +drift @.5,.7,1.35 hero:point@.35,.81*1.25 god:walk@.61,.81*1.25 godb:stand@.78,.81*.9 godr:stand@.88,.81*.9 dan:stand@.86,.81*.8 "Hiệp khách không vượt qua ông mà mời ông cùng đi, sau lưng hai người Thiên Cang và Phương thần lặng lẽ xếp hàng"',
+      'peaks/summit dusk +redmist +drift @.64,.72,1.55 god:talk@.71,.84*1.3 hero:stand@.36,.84*1.15 "Vạn năm ta canh một mình ở biên giới hóa ra có thể đi cùng, ta thua và ta theo"',
+      'peaks/path blood +redmist ~red@.7,.2,80 @.5,.7,1.2 hero:walk@.4,.79*1.2 god:walk@.56,.7*1.3 gate@.86,.82*.8 "Phương Tuất mở đường, còn một phương nữa, và phương cuối cùng là phương Hợi"',
+    ],
+    // ---- Chiến ký: Song thần chi chiến và Ngang dòng thời gian (trước đây một phần nằm ở GOD_LINES) ------------------------------
+    'g:l12': [
+      'altar blood +redmist +redthread ~red@.5,.24,120 @.5,.52,1.15 giao:sit@.5,.69*1.35 chair@.5,.9*1.5 hero:stand@.21,.69*1.1 ma:stand@.81,.69*1.1 "Điện Huyết Nguyệt ở phương Hợi, trên ngai là thân xác Lệ Vô Khuyết tóc trắng xóa đôi mắt là hai vầng trăng đỏ, Vô Yểm đã nuốt gần hết"',
+      'altar blood +redmist +embers ~red@.6,.2,110 @.64,.66,1.55 ma:talk@.71,.75*1.35 giao:sit@.3,.9*1 "Vô Yểm cười: ngươi mang ta vào đây trả ta ngôi cũ, giờ Trường Lưu sắp gác ngôi và trong mười hai phương chỉ còn ta đủ sức kế thừa"',
+      'altar blood +redmist +spiral ~red@.5,.24,120 @.5,.64,1.4 hero:hurt@.31,.74*1.25 ma:cast@.69,.74*1.35 "Huyết Nguyệt Thôn Thiên lần này ở tầm Phương thần hút cả ánh sáng của ba mươi sáu ngôi sao, thần lực của hiệp khách bị rút đi"',
+      'altar blood +redmist @.38,.7,1.5 hero:zen@.3,.74*1.3 ma:stand@.71,.74*1.2 "Nó hút nội lực thì tại hạ thua, nhưng tám quy luật không phải thứ hút được: không ai lấy trộm được điều kẻ khác đã tự hiểu ra"',
+      'altar blood +redmist +sparks +rays ~red@.5,.24,120 @.5,.6,1.3 hero:taichi@.35,.73*1.3 ma:cast@.69,.73*1.3 thread@.5,.56*1.2 eye@.5,.3*.6 "Nhân Quả, Lưu Thông, Tĩnh Động, Tương Sinh: mỗi đòn nó đánh dội lại chính nó, thần lực bị hút chảy một vòng rồi trở về, tâm hiệp khách không gợn"',
+      'altar blood +redmist +sparks ~red@.5,.24,120 @.5,.64,1.4 hero:strike@.35,.74*1.3 ma:stagger@.69,.74*1.3 slash@.5,.6*1.4?2 "Sinh Trưởng, Minh Lý, Tích Lũy, Âm Dương: vết thương lành theo nhịp của nó, hiệp khách thấy rõ chỗ khuyết trong lòng kẻ không bao giờ no"',
+      'altar blood +redmist @.5,.76,1.5 hero:kneel@.33,.71*1.3 ladle@.5,.94*1.2?1 giao:sit@.69,.71*1.25 chair@.7,.9*1.3 "Hiệp khách dừng tay thật, giữa trận đặt xuống trước ngai một cái gáo gỗ sứt quai đầy nước"',
+      'altar blood +redmist +embers @.38,.7,1.55 hero:talk@.3,.75*1.3 giao:sit@.67,.75*1.2 ladle@.54,.92*.9?1 "Đại sư huynh, ruộng của mẹ đã xanh tới tận bờ, chỉ còn thiếu người tưới, về thôi"',
+      'heaven/realm blood +redmist ~red@.5,.24,110 @.6,.7,1.7 giao:hold@.66,.9*1.4 hero:kneel@.3,.92*1.1 ladle@.44,.95*.9?1 "Lệ Vô Khuyết nghe thấy tiếng gọi từ chiếc gáo, giọng khàn nhưng đã là của người anh: cho ta mượn cái gáo"',
+      'heaven/realm holy +sparks +rays ~red@.5,.2,90 @.5,.74,1.8 giao:hold@.5,.9*1.35 ladle@.36,.95*.9?1 hinh:point@.82,.9*1.3 ruler@.74,.7*.8 "Bàn tay già nua cầm lấy gáo nước, Vô Yểm mất chỗ trú và bị thước ngọc của Thiên Hình niêm dưới đáy hồ soi trời"',
+      'peaks/path dawn +birds ~sun@.7,.3,54 @.5,.7,1.5 giao:hold@.36,.9*1.3 pole@.66,.92*1.0?1 "Lệ Vô Khuyết không giữ ngôi, xin về cõi người, lên núi Tùng Hạc nhận lại chiếc đòn gánh của mẹ"',
+      'peaks/path morning +birds @.5,.7,1.4 giao:carry@.4,.9*1.2 kid:carry@.64,.92*1.0 "Lệ Vô Khuyết gánh nước cho lũ trẻ mới lên núi, chậm thôi, mỗi ngày một chuyến"',
+      'heaven/realm holy +petals ~moon@.5,.22,84 @.5,.55,1.2 hero:zen@.5,.9*1.2 god:stand@.2,.88*.9 god:stand@.8,.88*.9 godg:stand@.1,.86*.8 godj:stand@.9,.86*.8 "Mười một Phương thần cùng quay về phía hiệp khách, vầng trăng ở phương Hợi đổi từ đỏ sang bạc"',
+    ],
+    'g:k': [
+      'bridge/river holy +ripple +drift @.5,.6,1.1 king:sit@.7,.84*1.3 pole@.8,.7*1.4^-25 hero:stand@.28,.84*1.1 "Điện của Trường Lưu Thần Vương là một dòng sông, thời gian của mọi thế giới chảy qua đây, ông lão ngồi câu bên bờ, cần câu không có lưỡi"',
+      'bridge/river holy +ripple @.64,.7,1.55 king:talk@.71,.89*1.35 pole@.36,.8*1.2^-20 "Ta giữ dòng này từ trước khi có ngôi sao đầu tiên, ta muốn đi xem nó chảy về đâu, nhưng ngôi này không bỏ trống được"',
+      'bridge/river holy +ripple +drift @.64,.72,1.55 king:zen@.71,.88*1.35 hero:stand@.36,.88*1.15 "Kẻ thắng được ta sẽ muốn bắt dòng sông chảy theo ý mình, kẻ thua ta thì bị nó cuốn, ta cần một người đi ngang ta, không hơn, không kém"',
+      'bridge/river holy +ripple +drift @.5,.78,1.4 hero:carry@.36,.9*1.2 king:carry@.64,.9*1.3 "Hai người lội xuống dòng sông thời gian, mỗi người một gánh, mang nước của hôm qua tưới cho ngày mai"',
+      'bridge/river holy +ripple @.5,.8,1.6 hero:fall@.4,.9*1.3 king:carry@.7,.9*1.25 "Năm thứ một trăm hiệp khách muốn vượt lên, dòng nước xô ngã, ông lão vẫn đều bước phía trước"',
+      'bridge/river holy +ripple @.5,.8,1.55 hero:zen@.5,.85*1.3 bucket@.3,.94*1.2?1 "Hiệp khách thôi nhìn lưng ông ấy, thôi đếm năm, chỉ còn bước này rồi bước này, một chuyến rồi một chuyến nữa"',
+      'bridge/river holy +ripple +fireflies ~moon@.5,.24,70 @.5,.8,1.6 bucket@.36,.94*1.3?1 bucket@.64,.94*1.3?1 hero:zen@.26,.9*1.1 king:zen@.74,.9*1.2 "Nghìn năm đã qua, hai người đặt gánh xuống cùng một lúc, trong bốn chiếc thùng đều có một vầng trăng tròn"',
+      'bridge/river holy +ripple +petals @.64,.74,1.55 king:talk@.71,.87*1.35 hero:bow@.36,.87*1.15 "Ngang nhau, vạn năm ta mới gặp một kẻ không cố thắng thời gian cũng không chịu thua nó, ngôi chủ Thời là của ngươi"',
+      'heaven/realm night +drift ~moon@.7,.2,56 @.5,.55,1.2 thien:zen@.62,.9*1.3 king:walk@.3,.9*1.3 "Ở rìa vũ trụ Không Nguyệt đứng đợi vị Thần Vương già đang chống gậy bước ra khỏi Thần giới"',
+      'peaks/path night ~moon@.68,.2,58 @.5,.7,1.4 giao:carry@.36,.9*1.2 kid:carry@.6,.92*1.0 "Trên núi Tùng Hạc một lão nhân tóc trắng gánh nước lên dốc, theo sau là đứa trẻ mới lên núi, trăng rằm in xuống thùng nước của cả hai"',
+      'bridge/river holy +ripple +petals @.5,.62,1.1 hero:zen@.5,.9*1.3 "Thần Vương chủ Thời đứng bên dòng sông thời gian, nhớ lại một câu rất cũ: chiêu lợi hại nhất là chiêu ngươi luyện mỗi ngày"',
+    ],
   };
 
   // ===========================================================================================================================
@@ -807,7 +1126,7 @@
     'field/green blood +redmist ~red@.6,.2,100', // 34 Phong Đăng: mùa màng ở phương Hợi
     'altar blood +embers ~red@.5,.24,120', // 35 Vô Ba: chắn trước điện Huyết Nguyệt
   ];
-  // Bối cảnh 11 trận Phương thần đầu (g:l1 … g:l11); g:l12 (Song thần chi chiến) và g:k (Trường Lưu) có cảnh riêng ở GOD_LINES.
+  // Bối cảnh 11 trận Phương thần đầu (g:l1 … g:l11); mọi trang chiến ký nay có khung vẽ tay riêng ở LINES, phần dựng tự động này chỉ là dự phòng cho trang mới thêm.
   const LORD_ENV = [
     'shore/deep night +bubbles', // Tý: dưới đáy hồ nước đen
     'peaks/path dusk +dust', // Sửu: bà lão cõng cả phương
@@ -824,25 +1143,6 @@
   // Màu áo thần theo quy luật (Nhân Quả, Lưu Thông, Tĩnh Động, Tương Sinh, Sinh Trưởng, Minh Lý, Tích Lũy, Âm Dương) và theo phương.
   const STAR_LOOK = ['god', 'godb', 'godb', 'godr', 'godj', 'godg', 'godg', 'god'];
   const LORD_LOOK = ['godb', 'godg', 'godr', 'godj', 'godb', 'godr', 'godg', 'godj', 'godg', 'godr', 'god'];
-
-  // Hai trận có nhiều trang và đổi nơi giữa chừng: khung vẽ riêng cho những trang ấy (trang khác để đạo diễn tự động).
-  const GOD_LINES = {
-    'g:k': {
-      3: 'bridge/river holy +ripple +drift @.5,.78,1.4 hero:carry@.36,.9*1.2 king:carry@.64,.9*1.3 "Hai người lội xuống dòng sông thời gian, mỗi người một gánh, mang nước của hôm qua tưới cho ngày mai"',
-      4: 'bridge/river holy +ripple @.5,.8,1.6 hero:fall@.4,.9*1.3 king:carry@.7,.9*1.25 "Năm thứ một trăm hiệp khách muốn vượt lên, dòng nước xô ngã, ông lão vẫn đều bước phía trước"',
-      6: 'bridge/river holy +ripple +fireflies ~moon@.5,.24,70 @.5,.8,1.6 bucket@.36,.94*1.3?1 bucket@.64,.94*1.3?1 hero:zen@.26,.9*1.1 king:zen@.74,.9*1.2 "Nghìn năm đã qua, hai người đặt gánh xuống cùng một lúc, trong bốn chiếc thùng đều có một vầng trăng tròn"',
-      8: 'heaven/realm night +drift ~moon@.7,.2,56 @.5,.55,1.2 thien:zen@.62,.9*1.3 king:walk@.3,.9*1.3 "Ở rìa vũ trụ Không Nguyệt đứng đợi vị Thần Vương già đang chống gậy bước ra khỏi Thần giới"',
-      9: 'peaks/path night ~moon@.68,.2,58 @.5,.7,1.4 giao:carry@.36,.9*1.2 kid:carry@.6,.92*1.0 "Trên núi Tùng Hạc một lão nhân tóc trắng gánh nước lên dốc, theo sau là đứa trẻ mới lên núi, trăng rằm in xuống thùng nước của cả hai"',
-      10: 'bridge/river holy +ripple +petals @.5,.62,1.1 hero:zen@.5,.9*1.3 "Thần Vương chủ Thời đứng bên dòng sông thời gian, nhớ lại một câu rất cũ: chiêu lợi hại nhất là chiêu ngươi luyện mỗi ngày"',
-    },
-    'g:l12': {
-      8: 'heaven/realm blood +redmist ~red@.5,.24,110 @.6,.7,1.7 giao:hold@.66,.9*1.4 hero:kneel@.3,.92*1.1 ladle@.44,.95*.9?1 "Lệ Vô Khuyết nghe thấy tiếng gọi từ chiếc gáo, giọng khàn nhưng đã là của người anh: cho ta mượn cái gáo"',
-      9: 'heaven/realm holy +sparks +rays ~red@.5,.2,90 @.5,.74,1.8 giao:hold@.5,.9*1.35 ladle@.36,.95*.9?1 hinh:point@.82,.9*1.3 ruler@.74,.7*.8 "Bàn tay già nua cầm lấy gáo nước, Vô Yểm mất chỗ trú và bị thước ngọc của Thiên Hình niêm dưới đáy hồ soi trời"',
-      10: 'peaks/path dawn +birds ~sun@.7,.3,54 @.5,.7,1.5 giao:hold@.36,.9*1.3 pole@.66,.92*1.0?1 "Lệ Vô Khuyết không giữ ngôi, xin về cõi người, lên núi Tùng Hạc nhận lại chiếc đòn gánh của mẹ"',
-      11: 'peaks/path morning +birds @.5,.7,1.4 giao:carry@.4,.9*1.2 kid:carry@.64,.92*1.0 "Lệ Vô Khuyết gánh nước cho lũ trẻ mới lên núi, chậm thôi, mỗi ngày một chuyến"',
-      12: 'heaven/realm holy +petals ~moon@.5,.22,84 @.5,.55,1.2 hero:zen@.5,.9*1.2 god:stand@.2,.88*.9 god:stand@.8,.88*.9 godg:stand@.1,.86*.8 godj:stand@.9,.86*.8 "Mười một Phương thần cùng quay về phía hiệp khách, vầng trăng ở phương Hợi đổi từ đỏ sang bạc"',
-    },
-  };
 
   // ---- Đạo diễn tự động -------------------------------------------------------------------------------------------------------
   const envOf = (spec) => {
@@ -933,7 +1233,7 @@
     } else {
       E = envOf(prev ? envFromShot(prev) : 'valley/tea day');
     }
-    const lines = GOD_LINES[id] || {};
+    const lines = {};
     return entry.pages.map(([who, pose], i) => {
       const bow = kind === 'god' && who !== 'ke' && who !== 'hero' && i === 3;
       return Z.parse(lines[i] || frame(E, A, who === 'god' || who === 'king' ? A[0] : who, pose, i, id, { ...o, bow }), null);
@@ -951,5 +1251,5 @@
     return hit.shots[Math.min(i, hit.shots.length - 1)] || null;
   }
 
-  window.zenPlates = { LINES, derive, MEET_ENV, STAR_ENV, LORD_ENV, GOD_LINES };
+  window.zenPlates = { LINES, derive, MEET_ENV, STAR_ENV, LORD_ENV };
 })();
