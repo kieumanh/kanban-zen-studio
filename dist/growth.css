@@ -9,10 +9,6 @@
 .gr-hero.is-leave{animation:gr-leave .42s ease-in both;pointer-events:none}
 @keyframes gr-enter{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:none}}
 @keyframes gr-leave{from{opacity:1}to{opacity:0;transform:translateY(-6px) scale(1.02)}}
-@keyframes gr-nod{0%,100%{transform:rotate(-1.4deg)}50%{transform:rotate(1.8deg) translateY(1px)}}
-@keyframes gr-ribbon{0%,100%{transform:rotate(-4deg) skewY(0)}50%{transform:rotate(9deg) skewY(-4deg)}}
-@keyframes gr-swing{0%,100%{transform:rotate(-7deg)}50%{transform:rotate(7deg)}}
-@keyframes gr-spin{to{transform:rotate(360deg)}}
 
 /* ---- Phông sơn thủy của sân khấu: núi mực, mây trôi, sương, cành tùng, chim bay, cánh đào rơi ---------------------------- */
 .gr-stage-bg{--sc-sky1:#fbf4e8;--sc-sky2:#f1e7f6;--sc-sun:#ec8a6c;--sc-cloud:#ffffffcc;--sc-far:#d9d0e4;--sc-mid:#bdb2cf;--sc-near:#a79bbd;--sc-mist:#ffffffb8;--sc-trunk:#4a4058;--sc-needle:#5d7466;--sc-bird:#4a4058;--sc-petal:#f29bb2}
@@ -402,64 +398,11 @@ dialog.gr-story::backdrop{background:#30251c99}
 .gr-meet-act.is-later{cursor:default;border-style:dashed;color:var(--muted);font-size:12px}
 button.gr-meet-act:hover,button.gr-meet-act:focus-visible{border-color:var(--role);background:color-mix(in srgb,var(--role) 8%,var(--gr-paper))}
 dialog.gr-story.is-meet .gr-story-head .eyebrow{color:#3c62a8}
-/* v2.8.0 (Huyết Nguyệt Lộ): tranh động phe ác (growth-foes.js). Mỗi nhân vật một tà công chuyển động; giảm chuyển động thì đứng yên. */
+/* v2.8.0 (Huyết Nguyệt Lộ), v2.16.0 (Ma Ảnh): phe ác dựng 3D bằng growth-rig.js (growth-foes.js); CSS chỉ giữ khổ vẽ và vầng hào quang sau lưng. Giảm chuyển động thì đứng yên. */
 .gr-foe{display:block;width:100%;height:auto;overflow:visible}
-.gr-foe .gr-fo-sway{transform-origin:100px 210px;animation:gr-fo-sway 5s ease-in-out infinite}
-.gr-foe .gr-fo-head{transform-origin:100px 116px;animation:gr-nod 4.6s cubic-bezier(.45,0,.55,1) infinite}
-.gr-foe .gr-fo-d0{animation-delay:0s}.gr-foe .gr-fo-d1{animation-delay:-.4s}.gr-foe .gr-fo-d2{animation-delay:-.8s}.gr-foe .gr-fo-d3{animation-delay:-1.2s}.gr-foe .gr-fo-d4{animation-delay:-1.6s}.gr-foe .gr-fo-d5{animation-delay:-2s}.gr-foe .gr-fo-d6{animation-delay:-2.4s}.gr-foe .gr-fo-d7{animation-delay:-2.8s}
-.gr-foe .gr-fo-vortex{transform-origin:100px 100px;animation:gr-spin 9s linear infinite reverse}
-.gr-foe .gr-fo-pulse{transform-origin:100px 100px;animation:gr-fo-pulse 3.2s ease-in-out infinite}
-.gr-foe .gr-fo-sink{animation:gr-fo-sink 3.2s ease-in infinite}
-.gr-foe .gr-fo-orb{transform-box:fill-box;transform-origin:center;animation:gr-fo-orb 1.8s ease-in-out infinite}
-.gr-foe .gr-fo-glow{animation:gr-fo-glow 1.6s ease-in-out infinite}
-.gr-foe .gr-fo-hair{transform-origin:100px 70px;animation:gr-fo-sway 6s ease-in-out infinite reverse}
-.gr-foe .gr-fo-smoke{animation:gr-fo-smoke 4.2s ease-out infinite}
-.gr-foe .gr-fo-fan{transform-box:fill-box;transform-origin:50% 0;animation:gr-fo-fan 2.4s ease-in-out infinite}
-.gr-foe .gr-fo-zzz{animation:gr-fo-float 3s ease-in-out infinite}
-.gr-foe .gr-fo-bob{animation:gr-fo-float 3.4s ease-in-out infinite}
-.gr-foe .gr-fo-mask{opacity:0;animation:gr-fo-mask 6s steps(1,end) infinite}
-.gr-foe .gr-fo-m1{animation-delay:-4s}.gr-foe .gr-fo-m2{animation-delay:-2s}
-.gr-foe .gr-fo-bolt{animation:gr-fo-flash 2.2s steps(1,end) infinite}
-.gr-foe .gr-fo-dash{animation:gr-fo-dash 2.2s ease-in-out infinite}
-.gr-foe .gr-fo-ghost{animation:gr-fo-ghost 2.2s ease-in-out infinite}
-.gr-foe .gr-fo-tail{transform-origin:136px 66px;animation:gr-ribbon 1.2s ease-in-out infinite}
-.gr-foe .gr-fo-ring{transform-box:fill-box;transform-origin:center;animation:gr-fo-ring 2.6s ease-out infinite}
-.gr-foe .gr-fo-note{animation:gr-fo-note 3.2s ease-in-out infinite}
-.gr-foe .gr-fo-wheel{animation:gr-spin 7s linear infinite}
-.gr-foe .gr-fo-shine{animation:gr-fo-shine 3.6s ease-in-out infinite}
-.gr-foe .gr-fo-glint{transform-box:fill-box;transform-origin:center;animation:gr-fo-glint 2.4s ease-in-out infinite}
-.gr-foe .gr-fo-leaf{transform-box:fill-box;transform-origin:center;animation:gr-fo-leaf 6s linear infinite}
-.gr-foe .gr-fo-drain{animation:gr-fo-drain 1.4s linear infinite}
-.gr-foe .gr-fo-hunch{transform-origin:100px 210px;animation:gr-fo-hunch 4s ease-in-out infinite}
-.gr-foe .gr-fo-flicker{animation:gr-fo-flicker 2.8s steps(1,end) infinite}
-.gr-foe .gr-fo-orbit{transform-origin:100px 112px;animation:gr-spin 12s linear infinite}
 .gr-foe .gr-fo-halo{transform-box:fill-box;transform-origin:center;animation:gr-fo-pulse 4s ease-in-out infinite}
-.gr-foe .gr-fo-chain{transform-box:fill-box;transform-origin:50% 0;animation:gr-swing 2.6s ease-in-out infinite}
-.gr-foe .gr-fo-ring2{transform-box:fill-box;transform-origin:center;animation:gr-fo-ripple 2.8s ease-out infinite}
-.gr-foe .gr-fo-heavy{animation:gr-fo-heavy 5s ease-in-out infinite}
-@keyframes gr-fo-sway{0%,100%{transform:rotate(-1.2deg)}50%{transform:rotate(1.2deg)}}
 @keyframes gr-fo-pulse{0%,100%{transform:scale(.96);opacity:.75}50%{transform:scale(1.05);opacity:1}}
-@keyframes gr-fo-sink{0%{transform:translate(0,0) scale(1);opacity:0}15%{opacity:1}100%{transform:translate(var(--dx),var(--dy)) scale(.3);opacity:0}}
-@keyframes gr-fo-orb{0%,100%{transform:scale(.85);opacity:.7}50%{transform:scale(1.15);opacity:1}}
-@keyframes gr-fo-glow{0%,100%{opacity:.6}50%{opacity:1}}
-@keyframes gr-fo-smoke{0%{transform:translateY(20px);opacity:0}25%{opacity:.75}100%{transform:translateY(-40px);opacity:0}}
-@keyframes gr-fo-fan{0%,100%{transform:rotate(-14deg)}50%{transform:rotate(14deg)}}
-@keyframes gr-fo-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
-@keyframes gr-fo-mask{0%{opacity:1}33.33%,100%{opacity:0}}
-@keyframes gr-fo-flash{0%,8%{opacity:1}12%,40%{opacity:0}44%,48%{opacity:1}52%,100%{opacity:0}}
-@keyframes gr-fo-dash{0%,100%{transform:translateX(0)}10%{transform:translateX(8px)}20%{transform:translateX(0)}}
-@keyframes gr-fo-ghost{0%,100%{opacity:.2;transform:translate(-22px,4px)}10%{opacity:.5;transform:translate(-6px,4px)}30%{opacity:0;transform:translate(-30px,4px)}}
-@keyframes gr-fo-ring{0%{transform:scale(.6);opacity:.9}100%{transform:scale(3);opacity:0}}
-@keyframes gr-fo-note{0%,100%{transform:translateY(0) rotate(-6deg);opacity:.5}50%{transform:translateY(-10px) rotate(6deg);opacity:1}}
-@keyframes gr-fo-shine{0%,60%{transform:translateX(0);opacity:0}70%{opacity:.6}100%{transform:translateX(150px);opacity:0}}
-@keyframes gr-fo-glint{0%,100%{transform:scale(.2);opacity:0}50%{transform:scale(1);opacity:1}}
-@keyframes gr-fo-leaf{0%{transform:translate(0,0) rotate(0);opacity:0}10%{opacity:.9}100%{transform:translate(-30px,200px) rotate(260deg);opacity:0}}
-@keyframes gr-fo-drain{to{stroke-dashoffset:-18}}
-@keyframes gr-fo-hunch{0%,100%{transform:rotate(2deg) translateY(2px)}50%{transform:rotate(3.5deg) translateY(4px)}}
-@keyframes gr-fo-flicker{0%{opacity:.9}20%{opacity:.2}24%{opacity:.8}60%{opacity:.4}64%{opacity:.9}}
-@keyframes gr-fo-ripple{0%{transform:scale(.4);opacity:.9}100%{transform:scale(1.8);opacity:0}}
-@keyframes gr-fo-heavy{0%,100%{transform:translate(100px,120px) scale(1.12) translate(-100px,-120px)}50%{transform:translate(100px,122px) scale(1.12,1.1) translate(-100px,-120px)}}
-@media (prefers-reduced-motion:reduce){.gr-foe *{animation:none}.gr-foe .gr-fo-mask{opacity:0}.gr-foe .gr-fo-m0{opacity:1}.gr-foe .gr-fo-sink,.gr-foe .gr-fo-smoke,.gr-foe .gr-fo-leaf,.gr-foe .gr-fo-glint{opacity:.6}}
+@media (prefers-reduced-motion:reduce){.gr-foe *{animation:none}}
 /* Khung đọc: tranh phe ác đứng trên cảnh Huyết Nguyệt đài. */
 .gr-story-stage.is-moon .gr-story-foe{position:relative;z-index:1}
 /* Khung Huyết Nguyệt lộ. */

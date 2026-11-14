@@ -64,6 +64,21 @@
     };
   }
 
+  // Đặt một nhân vật vào cảnh: tỉ lệ s, tịnh tiến pos, xoay quanh trục đứng yaw (độ); dùng chung camera của cảnh.
+  // Điểm vào là tọa độ nhân vật (gốc ở sàn, dưới chân), ra là tọa độ màn hình của cảnh; k nhân thêm s nên bán kính các khối co theo.
+  function place(cam, o) {
+    const s = o.s == null ? 1 : o.s, pos = o.pos || [0, 0, 0], Ry = rotY(o.yaw || 0), R = mm(cam.R, Ry);
+    return {
+      R, L: cam.L, yaw: cam.yaw, pitch: cam.pitch, fwd: R[2],
+      p(v) {
+        const P = cam.p(V.add(mv(Ry, V.mul(v, s)), pos));
+        P.k *= s;
+        return P;
+      },
+      n: (v) => mv(R, v), // pháp tuyến nhân vật → không gian camera; hàng R[0], R[1], R[2] là phải, lên, hướng về người xem theo tọa độ nhân vật
+    };
+  }
+
   // ---- Cảnh: danh sách khối đã chiếu --------------------------------------------------------------------------------------------
   const f1 = (v) => Math.round(v * 10) / 10;
   const pts = (a) => a.map((p) => f1(p.x) + ',' + f1(p.y)).join(' ');
@@ -93,7 +108,15 @@
       this.mats = new Set();
     }
     push(k, tag, z, a, inner) {
-      this.ops.push({ k, tag, z, a, inner });
+      this.ops.push({ k: this.pre ? this.pre + k : k, tag, z, a, inner });
+    }
+    // Cảnh con dùng chung danh sách khối và bảng màu với cảnh mẹ (nhân vật đặt vào một cảnh lớn); pre làm khóa không trùng nhau.
+    child(cam, pre) {
+      const c = new Scene(cam);
+      c.ops = this.ops;
+      c.mats = this.mats;
+      c.pre = pre || '';
+      return c;
     }
     // Khối cầu/elip: dùng dải màu xuyên tâm có điểm sáng ở phía nguồn sáng.
     sphere(k, c, r, m, zb = 0) {
@@ -471,6 +494,8 @@
       if (!inst.svg.isConnected) { live.delete(inst); return; }
       if (inst.visible === false) return;
       inst.advance(dt, ptr);
+      // Hình nhỏ (danh sách, thẻ) chỉ cần vẽ nửa số khung; mô phỏng vẫn chạy đủ nhịp.
+      if (inst.every > 1 && (inst.tick = (inst.tick || 0) + 1) % inst.every) return;
       paint(inst);
     });
     raf = requestAnimationFrame(loop);
@@ -485,5 +510,5 @@
     if (io && svg) io.observe(svg);
   }
 
-  window.zenRig = { V, M, clamp, lerp, camera, mat, mixc, Scene, Chain, Clip, solveIK, track, mount, paint, reduced, watchVisible, live, nextGid: () => 'zg' + ++gidN, tick: (inst, dt) => { inst.advance(dt, ptr); paint(inst); } };
+  window.zenRig = { V, M, clamp, lerp, camera, place, mat, mixc, Scene, Chain, Clip, solveIK, track, mount, paint, reduced, watchVisible, live, nextGid: () => 'zg' + ++gidN, tick: (inst, dt) => { inst.advance(dt, ptr); paint(inst); } };
 })();
