@@ -501,6 +501,230 @@
       'heaven/realm holy +rays @.5,.5,1.0 hinh:talk@.2,.9*1.3 hero:stand@.5,.9*1.25 god:stand@.64,.86*.7 god:stand@.72,.86*.7 god:stand@.8,.86*.7 god:stand@.88,.86*.7 god:stand@.96,.86*.7 "Thiên Hình chỉ cho hiệp khách chặng đường lên: phải thắng cả ba mươi lăm Thiên Cang mới được thách một Phương thần"',
       'heaven/stairs dawn +petals @.5,.64,1.15 hero:carry@.5,.95*1.0 "Hiệp khách bước lên bậc thềm Thần giới mang theo đôi thùng nước, đường lên Thần Vương cũng chỉ đi được bằng từng chuyến nước"',
     ],
+    // ---- Kỳ ngộ (v2.18.0): mỗi trang một khung riêng, khóa 'm:<mã>-<lần gặp>' --------------------------------------------------
+    'm:batu-1': [
+      'valley/tea morning +steam +birds @.55,.66,1.05 hero:walk@.24,.84*1.1 batu:talk@.76,.84*1.15 teapot@.56,.9*1 "Hiệp khách xuống núi mua muối, quán trà cũ vẫn nghi ngút khói, Bà Tư ngồi quạt lò như chưa từng có ai rời đi"',
+      'valley/tea morning +steam @.64,.74,1.62 batu:talk@.73,.88*1.31 hero:stand@.38,.88*1.15 teapot@.5,.9*1.1 bowl@.4,.93*1 "Bà Tư rót trà, nhìn hiệp khách bằng ánh mắt hiền: con đi đâu cũng vội như bị ma đuổi"',
+      'valley/tea morning +steam @.36,.74,1.62 hero:talk@.29,.88*1.31 batu:stand@.66,.88*1.1 bucket@.14,.92*1?1 pole@.2,.88*.8^-10 "Hiệp khách đứng giữa sân, kể một tràng việc phải làm: gánh nước, luyện kiếm, chép kinh"',
+      'valley/tea day +steam @.55,.78,1.68 batu:zen@.63,.87*1.33 hero:sit@.34,.87*1.25 teapot@.46,.93*1.1 bowl@.38,.94*.9 "Hai người ngồi bên ấm trà, nước vừa sôi để lắng, hiệp khách lần đầu thấy mình chậm lại"',
+    ],
+    'm:batu-2': [
+      'valley/tea dusk +steam +fireflies ~sun@.8,.36,15.2 @.5,.64,1.05 batu:talk@.66,.84*1.15 hero:stand@.3,.84*1.1 banner@.44,.82*.9 "Hoàng hôn xuống quán trà, một tấm biển mới treo trước cửa: Nơi hiệp khách từng gánh nước"',
+      'valley/tea dusk +steam @.64,.72,1.6 batu:talk@.73,.89*1.31 dan:sit@.44,.89*1.0 dan2:sit@.32,.89*0.95 banner@.82,.84*.8 "Khách ngồi quanh nghe Bà Tư kể: hồi ấy con làm đổ nước suốt"',
+      'valley/tea dusk +steam @.34,.72,1.62 hero:talk@.28,.9*1.31 dan:stand@.61,.9*1.0 dan2:stand@.72,.9*0.95 "Hiệp khách đỏ mặt, đứng ngượng giữa những tiếng cười của khách quán"',
+      'valley/tea dusk +fireflies ~sun@.8,.36,15.2 @.58,.78,1.68 batu:zen@.65,.87*1.33 hero:stand@.37,.87*1.2 bucket@.46,.93*1.2?1 "Bà Tư vỗ vai hiệp khách, chỉ chiếc thùng đổ nước cũ treo trên tường: ai cũng từng đổ nước, thế họ mới dám bắt đầu"',
+    ],
+    'm:luc-1': [
+      'bridge/bridge dusk +birds @.5,.7,1.1 hero:stand@.34,.59*1.15 luc:sit@.7,.6*1.0 basket@.82,.9*.8 "Dưới gầm cầu Thanh Khê, hiệp khách chia nửa cái bánh bao cho đứa bé ăn mày tên Lục Lục"',
+      'bridge/bridge dusk +birds @.66,.78,1.65 luc:talk@.72,.63*1.33 hero:kneel@.39,.64*1.2 "Lục Lục thì thầm: đêm nay người của Huyết Nguyệt Giáo đi qua lối rừng trúc"',
+      'peaks/path night +dust ~moon@.3,.2,13.2 @.5,.7,1.25 hero:martial@.4,.79*1.2 dan:back@.79,.6*0.9 dan2:back@.88,.57*0.85 "Nhờ tin của Lục Lục, hiệp khách đổi đường, tránh được toán phục kích trong rừng"',
+    ],
+    'm:luc-2': [
+      'bridge/bridge night +fireflies ~moon@.3,.2,13.2 @.5,.7,1.15 luc:talk@.5,.56*1.2 kid:sit@.31,.6*0.95 kid:sit@.71,.61*0.95 dan:sit@.83,.61*0.9 "Dưới gầm cầu, Lục Lục và ba mươi đứa bạn họp nhau bên bảng tin tự làm"',
+      'bridge/bridge night +fireflies @.5,.6,1.5 board@.5,.5*1.5 hero:zen@.29,.63*1.15 luc:stand@.69,.63*1.1 "Bảng tin ba cột: Nghe được, Đang kiểm, Chắc chắn, hiệp khách đọc từng dòng"',
+      'bridge/bridge night ~moon@.3,.2,13.2 @.4,.72,1.55 hero:talk@.31,.64*1.3 luc:talk@.64,.65*1.2 kid:stand@.77,.66*0.9 "Hiệp khách khen Lục Lục: ngươi còn giỏi hơn thám báo của triều đình"',
+    ],
+    'm:cuu-1': [
+      'town/street dusk +embers @.6,.7,1.15 cuu:talk@.64,.86*1.25 hero:stand@.33,.86*1.15 fire@.82,.9*.8 "Lò rèn của Thiết Cửu đỏ lửa trở lại, ông nhớ ơn người từng gõ chuông đánh thức cả trấn"',
+      'town/street dusk +embers +sparks @.66,.72,1.62 cuu:martial@.76,.91*1.31 sabers@.5,.7*.5 fire@.84,.9*.9 "Thiết Cửu quai búa trên đe, rèn đôi móc sắt nhỏ để gánh nước đỡ trượt vai"',
+      'town/street dusk +embers @.5,.72,1.65 cuu:zen@.63,.91*1.31 hero:stand@.35,.91*1.2 bucket@.5,.93*1.1?1 fire@.84,.9*.85 "Công cụ tốt không làm thay việc của ngươi, nó chỉ bớt những phiền phức không đáng có"',
+    ],
+    'm:cuu-2': [
+      'town/street day +sparks @.55,.7,1.3 cuu:talk@.71,.86*1.3 hero:stand@.33,.86*1.2 pole@.5,.86*.9^-8 fire@.84,.9*.8 "Thiết Cửu đòi bịt sắt cho Đòn Gánh, bảo gỗ thế này gặp đao Huyết Nguyệt Giáo là gãy"',
+      'town/street day @.36,.74,1.62 hero:talk@.29,.9*1.31 pole@.62,.84*1?1 cuu:stand@.66,.9*1.2 "Hiệp khách xin giữ Đòn Gánh là gỗ, gãy thì gọt lại, mỗi lần gọt lại hiểu nó hơn"',
+      'town/street day +sparks @.62,.76,1.65 cuu:zen@.7,.89*1.31 hero:stand@.37,.89*1.2 fire@.86,.9*.9 "Thiết Cửu cười gằn rồi rèn cho hiệp khách con dao gọt tốt nhất trấn"',
+    ],
+    'm:diep-1': [
+      'peaks/path morning +leaves @.5,.7,1.15 diep:talk@.69,.63*1.2 hero:stand@.34,.81*1.15 basket@.84,.88*.7 "Một nữ thầy thuốc đeo hòm gỗ chặn hiệp khách giữa đường núi, bắt lấy cổ tay"',
+      'peaks/path morning +leaves @.62,.76,1.65 diep:point@.68,.7*1.33 hero:stand@.37,.86*1.2 "Mạch nhanh, khí nổi, mắt quầng: ngươi ngủ mấy canh mỗi đêm?"',
+      'peaks/path morning +leaves @.38,.76,1.62 hero:hurt@.3,.84*1.3 diep:stand@.63,.67*1.2 "Hiệp khách gãi đầu thú nhận: dạ hai canh, việc nhiều quá"',
+      'interior/am lamp +steam @.55,.74,1.65 diep:zen@.65,.94*1.31 hero:sit@.34,.94*1.2 teapot@.46,.92*1.1 "Diệp Thanh Đàn kê một thang thuốc: đủ bốn canh ngủ mỗi đêm, uống liền ba mươi ngày"',
+    ],
+    'm:diep-2': [
+      'village/camp day +steam @.6,.7,1.15 diep:talk@.68,.85*1.2 dan:lie@.33,.85*0.95 dan2:lie@.22,.85*0.9 kid:sit@.84,.85*0.85 "Những người uống đan của Khô Vinh đang kiệt dần, Diệp Thanh Đàn cần người khiêng thuốc tới mười làng"',
+      'peaks/path dusk +dust @.5,.72,1.3 hero:carry@.35,.81*1.2 diep:walk@.63,.67*1.15 basket@.82,.86*.8 "Hiệp khách cùng Diệp Thanh Đàn đi suốt hai tuần, vai nặng thuốc, chân đầy bụi"',
+      'village/camp dusk +steam @.62,.76,1.65 diep:zen@.67,.89*1.31 dan:sit@.37,.89*1.1 bowl@.44,.93*.9 "Đến làng nào bà cũng dặn một câu: ngủ đi, việc vẫn ở đó chờ"',
+    ],
+    'm:yen-1': [
+      'town/roofs night +birds ~moon@.7,.22,14.7 @.5,.6,1.1 yen:float@.7,.5*1.1 hero:stand@.28,.82*1.1 dan:back@.13,.82*0.8 "Giữa chợ đêm, một bóng áo xanh lướt qua mái ngói, túi tiền mua thuốc biến mất"',
+      'town/roofs night @.66,.5,1.62 yen:talk@.68,.52*1.31 tiles@.7,.62*1.2 "Phi Yến đứng trên mái nhà cười: ta lỡ tay rồi, ngươi trông nghèo thật"',
+      'town/street dusk +dust @.5,.7,1.3 hero:walk@.31,.86*1.2 dan:sit@.6,.86*1.0 dan2:sit@.73,.86*0.95 kid:sit@.84,.86*0.85 "Hiệp khách không đuổi trên mái mà chạy thẳng tới xóm nghèo nhất trấn, nơi Phi Yến đang chia tiền"',
+      'town/street dusk @.36,.74,1.62 hero:talk@.29,.9*1.31 yen:stand@.64,.9*1.25 dan:sit@.79,.9*0.85 "Hiệp khách xin cô cứ chia, chỉ nhờ mua thuốc cho chính những người này"',
+    ],
+    'm:yen-2': [
+      'town/roofs dusk +birds ~sun@.3,.4,16.2 @.58,.52,1.4 yen:talk@.62,.5*1.3 tiles@.5,.6*1.2 letter@.34,.5*.6 "Phi Yến ngồi trên mái, vẫy cuốn sổ trộm được từ Huyết Nguyệt Giáo"',
+      'town/roofs dusk +birds @.5,.54,1.5 yen:float@.74,.46*1.2< letter@.4,.62*.9^20 hero:stand@.31,.82*1.1 "Cô ném cuốn sổ rồi biến mất trên mái ngói, ba làng kịp sơ tán trước khi Nguyệt Sứ tới"',
+      'town/street dusk @.36,.74,1.62 hero:talk@.29,.9*1.31 letter@.6,.86*.7 "Hiệp khách hỏi vọng lên mái: cô nương, sao lại giúp tại hạ?"',
+      'town/roofs dusk +birds ~sun@.3,.4,16.2 @.66,.5,1.65 yen:talk@.66,.5*1.31 tiles@.6,.62*1.2 "Vì ngươi đã không bắt ta hôm ở chợ: người tin ta một lần, ta trả bằng một cuốn sổ"',
+    ],
+    'm:nhan-1': [
+      'interior/am night ~moon@.3,.2,13.7 @.5,.7,1.1 hero:lie@.3,.9*1.1 nhan:stand@.7,.9*1.15 "Nửa đêm, một bóng đen lẻn vào am tranh, lưỡi dao mỏng như lá lúa"',
+      'interior/am night +dust @.66,.72,1.65 nhan:strike@.72,.95*1.33 sabers@.4,.7*.4 "Ảnh Nhận chưa từng ra tay quá một lần, hắn muốn xem hiệp khách có ngủ say như kẻ khác"',
+      'valley/stream dawn +birds @.5,.78,1.4 hero:carry@.35,.86*1.2 bucket@.2,.92*1.1?1 "Canh tư, hiệp khách đã thức dậy gánh nước, lưỡi dao chỉ đâm vào chăn trống"',
+    ],
+    'm:nhan-2': [
+      'bridge/bridge night +drift ~red@.7,.2,18.7 @.5,.66,1.3 nhan:cast@.69,.63*1.3 hero:martial@.35,.62*1.2 slash@.5,.6*1.2?2 "Giữa trận, Ảnh Nhận phá lời thề, lao tới lúc hiệp khách đang đỡ một đòn khác"',
+      'bridge/bridge night +drift ~red@.7,.2,18.7 @.5,.7,1.6 hero:martial@.33,.67*1.2 nhan:strike@.61,.65*1.3 moc:martial@.8,.68*1.1 "Tiểu Mộc đứng chắn sau lưng như mọi khi"',
+      'bridge/bridge night @.66,.76,1.62 moc:martial@.69,.62*1.31 nhan:back@.43,.63*1.2 hero:stand@.94,.65*1.0 "Muốn đâm sư huynh thì phải qua đệ trước, đệ canh lưng bao năm rồi đấy"',
+    ],
+    'm:lamhat-1': [
+      'interior/am lamp +steam @.5,.7,1.1 lamhat:stand@.7,.9*1.2 hero:sit@.3,.9*1.15 teapot@.5,.92*1 bowl@.4,.94*.9 "Quán trà ven đường mời hiệp khách chén trà màu lam thơm lạ, bà chủ quán cười rất hiền"',
+      'interior/am lamp +steam @.66,.74,1.65 lamhat:talk@.72,.94*1.33 bowl@.44,.9*1.2 "Uống đi khách quý, trà này giúp người ta không bao giờ thấy mệt"',
+      'valley/stream day +leaves @.5,.8,1.65 hero:zen@.32,.86*1.25 bowl@.52,.94*1 sprout@.66,.92*.4 "Hiệp khách nhớ lời sư phụ, thứ gì hứa không bao giờ mệt đều đáng ngờ, đổ chén trà xuống đất, cỏ héo rũ"',
+    ],
+    'm:lamhat-2': [
+      'village/camp night +fireflies ~moon@.7,.2,14.2 @.5,.66,1.2 lamhat:cast@.73,.85*1.2 dan:lie@.21,.85*1.0 dan2:lie@.35,.85*0.95 kid:lie@.46,.85*0.9 "Lam Hạt thả độc vào giếng, đệ tử võ đường lần lượt ngã bệnh"',
+      'village/dyke morning +leaves @.5,.72,1.3 hero:martial@.35,.86*1.2 dan:carry@.61,.86*1.0 dan2:carry@.75,.86*0.95 bucket@.86,.92*1?1 "Hiệp khách cho lấp giếng, gánh nước từ suối xa cho cả võ đường"',
+      'valley/stream morning +birds @.55,.74,1.5 lamhat:fall@.62,.87*1.2 dan:martial@.34,.87*1.05 dan2:martial@.82,.87*1.0 shards@.48,.94*1 "Ba ngày sau, Lam Hạt bị dân ba làng chặn ở cửa rừng, hũ độc vỡ tan"',
+    ],
+    'm:kytien-1': [
+      'peaks/path day +leaves +birds @.5,.7,1.15 kytien:sit@.68,.64*1.2 hero:sit@.31,.82*1.15 goboard@.5,.9*1?6 "Kỳ Tiên Ông bày bàn cờ giữa đường núi: ván này chỉ được đi ba nước"',
+      'peaks/path day @.38,.78,1.64 hero:talk@.3,.83*1.31 goboard@.62,.88*1.1?6 kytien:stand@.72,.62*1.1 "Hiệp khách hỏi: ba nước thì làm sao thắng được ạ?"',
+      'peaks/path day +leaves @.66,.78,1.66 kytien:zen@.68,.7*1.33 goboard@.38,.88*1.1?3 "Không cần thắng cả bàn, chỉ cần cứu được con xe đang bị vây"',
+      'peaks/path dusk +birds @.5,.78,1.62 hero:taichi@.41,.81*1.25 goboard@.62,.88*1.1?6 kytien:stand@.78,.62*1.15 "Hiệp khách bỏ qua những quân hấp dẫn, ba nước đưa con xe ra khỏi vòng vây, lão ông vuốt râu cười"',
+    ],
+    'm:kytien-2': [
+      'peaks/am dawn +drift @.5,.7,1.2 kytien:sit@.67,.82*1.2 hero:sit@.31,.82*1.15 goboard@.5,.9*1?2 "Bàn cờ lần này không có quân tướng, kỳ ông hỏi hiệp khách bảo vệ cái gì"',
+      'peaks/am dawn @.4,.78,1.65 hero:zen@.29,.84*1.3 goboard@.62,.88*1.1?2 "Không có tướng, tốt là thứ còn lại để giữ bàn cờ"',
+      'peaks/am dawn +drift @.66,.78,1.66 kytien:zen@.7,.84*1.33 goboard@.4,.88*1.1?0 hero:sit@.3,.84*.9 "Lệ Vô Khuyết năm xưa cũng ngồi đây, thí hết tốt để đổi một nước chiếu tướng, thắng ván cờ và chẳng còn ai bên cạnh"',
+    ],
+    'm:cokiem-1': [
+      'bridge/river day +leaves @.5,.7,1.2 cokiem:martial@.71,.85*1.25 hero:stand@.31,.85*1.15 "Cô Kiếm Lãng Tử chặn hiệp khách bên sông: rút kiếm đi, kẻ gánh nước"',
+      'bridge/river day +leaves @.5,.7,1.5 cokiem:strike@.61,.88*1.3 hero:strike@.41,.88*1.3 pole@.5,.74*.5^-80 "Một kiếm duy nhất, kiếm dừng cách cổ một sợi tóc, Đòn Gánh dừng cách ngực một sợi tóc"',
+      'bridge/river dusk +leaves @.64,.76,1.65 cokiem:talk@.71,.88*1.33 hero:stand@.36,.88*1.2 "Hòa, ngươi luyện chiêu này bao lâu rồi?"',
+      'bridge/river dusk @.38,.76,1.65 hero:talk@.3,.88*1.31 cokiem:stand@.66,.88*1.2 pole@.16,.88*.8^-10 "Mỗi ngày một trăm lần, từ ngày lên núi"',
+    ],
+    'm:cokiem-2': [
+      'valley/tea dusk +birds @.5,.7,1.15 cokiem:stand@.68,.85*1.2 hero:stand@.32,.85*1.15 "Lãng tử đứng bên quán trà cuối ngày, đi cả đời tìm đối thủ mà chẳng có nhà"',
+      'valley/tea dusk @.38,.76,1.62 hero:point@.3,.87*1.3 cokiem:stand@.67,.87*1.2 kid:stand@.81,.87*0.8 "Hiệp khách mời ông dạy kiếm cho bọn trẻ ở võ đường"',
+      'town/square morning +birds @.5,.7,1.2 cokiem:martial@.5,.86*1.3 kid:sit@.21,.86*0.9 kid:sit@.33,.86*0.85 kid:sit@.77,.86*0.9 kid:sit@.89,.86*0.85 "Từ đó sân võ đường có thêm một kiếm khách già, mỗi sáng một chiêu, chưa từng nghỉ ngày nào"',
+    ],
+    'm:vantam-1': [
+      'interior/am lamp +dust @.5,.68,1.15 vantam:sit@.68,.9*1.2 hero:sit@.31,.9*1.15 letter@.5,.5*1 "Tạ Văn Tâm, người chép chuyện giang hồ, xin hiệp khách kể từ chuyến nước đầu tiên"',
+      'interior/am lamp @.38,.76,1.64 hero:talk@.3,.93*1.3 vantam:stand@.67,.93*1.15 "Có gì đáng chép đâu, toàn chuyện gánh nước, luyện kiếm, ngủ dậy lại gánh nước"',
+      'interior/am lamp +dust @.64,.76,1.66 vantam:zen@.69,.93*1.33 letter@.38,.5*.9 "Chính những chuyện lặp lại mới đáng chép, người đời chỉ nhớ trận đánh mà quên trăm ngày luyện trước trận đánh"',
+    ],
+    'm:vantam-2': [
+      'temple day +petals @.5,.68,1.15 vantam:stand@.68,.86*1.2 hero:stand@.31,.86*1.15 letter@.5,.5*.9 "Tạ Văn Tâm đã chép ba quyển về hiệp khách, còn một quyển chưa viết được: quyển về Lệ Vô Khuyết"',
+      'temple day +petals @.38,.76,1.65 hero:zen@.28,.9*1.3 vantam:stand@.68,.9*1.15 "Viết đi, viết cả mẹ huynh ấy, cả mùa hạn năm xưa: kẻ ác cũng từng là một đứa trẻ"',
+      'temple dusk +petals +birds @.62,.76,1.66 vantam:bow@.67,.9*1.31 letter@.36,.5*.9 "Hiệp khách là người đầu tiên bảo ông viết cho kẻ thù một trang tử tế"',
+    ],
+    'm:nhuy-1': [
+      'town/square day +birds @.5,.7,1.15 nhuy:talk@.69,.86*1.2 hero:stand@.32,.86*1.15 letter@.5,.8*.9 "Kim Như Ý nghe nói hiệp khách giữ quỹ sửa cầu, đòi xem sổ"',
+      'town/square day @.38,.76,1.64 hero:talk@.3,.89*1.3 letter@.6,.84*.8 nhuy:stand@.68,.89*1.15 "Hiệp khách ghi từng đồng: ngày nào thu, ngày nào chi, mua gỗ gì"',
+      'town/square day +birds @.64,.76,1.66 nhuy:zen@.69,.89*1.31 letter@.38,.84*.8 "Sổ sạch thế này thì thương hội góp thêm một nửa: tiền chỉ chảy về nơi được ghi chép rõ ràng"',
+    ],
+    'm:nhuy-2': [
+      'town/square dusk +birds @.5,.7,1.2 nhuy:talk@.69,.86*1.2 hero:stand@.33,.86*1.15 boat@.9,.9*.5 "Kim Như Ý hỏi có nên nhận món lời gấp mười của Huyết Nguyệt Giáo chở hàng cho chúng"',
+      'town/square dusk @.38,.76,1.65 hero:talk@.3,.89*1.31 nhuy:stand@.68,.89*1.15 "Hàng của chúng là khổ đau của người khác, lời gấp mười nhưng lỗ cả đời"',
+      'bridge/river dawn +birds ~sun@.3,.4,15.2 @.5,.7,1.2 nhuy:stand@.31,.85*1.2 hero:stand@.21,.85*1.1 boat@.64,.88*1.1 boat@.84,.9*.9 "Thương hội đã từ chối từ hôm qua, cho hết thuyền chở gạo về trấn Thanh Khê"',
+    ],
+    'm:ngao-1': [
+      'town/gate day +birds @.5,.7,1.15 ngao:talk@.62,.86*1.25 hero:stand@.29,.86*1.15 banner@.86,.9*1 "Hách Liên Ngạo chặn cổng Thiên Ưng Bảo, khoe mười năm học với ba danh sư"',
+      'town/gate day +birds @.6,.72,1.5 ngao:point@.62,.89*1.3 hero:stand@.36,.89*1.15 dan:stand@.84,.89*0.9 dan2:stand@.92,.89*0.85 banner@.12,.9*.9 "Hắn đòi hiệp khách quỳ xuống mới cho qua, người xem xì xào"',
+      'peaks/path morning +leaves @.5,.7,1.3 hero:walk@.4,.79*1.2 "Hiệp khách không cãi, đi đường vòng xa hơn nửa canh giờ, việc cần làm ở bên kia núi"',
+    ],
+    'm:ngao-2': [
+      'town/gate dusk +embers +sparks @.5,.66,1.15 ngao:kneel@.69,.86*1.2 banner@.86,.9*1 dan:hurt@.21,.86*0.95 dan2:lie@.31,.86*0.9 "Thiên Ưng Bảo bị Huyết Nguyệt Giáo vây ba ngày, ba danh sư bỏ chạy, Hách Liên Ngạo xin giúp"',
+      'town/gate night +dust +sparks @.5,.7,1.3 hero:martial@.37,.86*1.25 dan:back@.69,.86*1.0 dan2:back@.82,.86*0.95 slash@.52,.66*1.2?1 "Hiệp khách đến, không một lời trách, đánh lui địch ngoài cổng bảo"',
+      'town/gate morning +birds @.5,.74,1.5 ngao:carry@.35,.88*1.2 bucket@.62,.92*1.1?1 hero:stand@.69,.88*1.1 "Việc duy nhất hiệp khách nhờ: mỗi sáng thiếu chủ gánh nước cho bảo, một chuyến thôi đấy"',
+    ],
+    'm:tuytang-1': [
+      'temple dusk +leaves +birds @.5,.68,1.15 tuytang:talk@.68,.86*1.2 hero:stand@.31,.86*1.15 bowl@.5,.92*1 "Túy Tăng chống vò rượu bên chùa, ra một câu đố: một chén mỗi ngày thì bao lâu hết vò?"',
+      'temple dusk +leaves @.38,.76,1.64 hero:talk@.3,.89*1.3 tuytang:stand@.68,.89*1.2 "Hiệp khách đáp: còn tùy vò lớn hay nhỏ, đại sư"',
+      'temple dusk +leaves +birds @.64,.76,1.66 tuytang:zen@.68,.9*1.33 bowl@.4,.92*1 "Sai! Ngày nào bần tăng cũng rót thêm nên chẳng bao giờ hết, việc tốt làm đều thì không cạn"',
+    ],
+    'm:tuytang-2': [
+      'temple dawn +birds @.5,.68,1.15 tuytang:sit@.68,.86*1.2 hero:stand@.31,.86*1.15 bowl@.52,.93*1 "Bình minh ở chùa, Túy Tăng say ba mươi năm để khỏi phải nhìn rõ"',
+      'temple dawn @.38,.76,1.64 hero:zen@.3,.89*1.3 tuytang:stand@.68,.89*1.2 "Hiệp khách dám nhìn rõ Giáo chủ, vì nhìn rõ hắn cũng là nhìn rõ phần sợ hãi trong chính mình"',
+      'valley/stream morning +leaves +birds @.5,.78,1.5 tuytang:stand@.59,.86*1.25 shards@.48,.94*1.1 hero:walk@.28,.86*1.15 "Túy Tăng đổ vò rượu xuống suối rồi tỉnh táo đi cùng một quãng"',
+    ],
+    'm:daoly-1': [
+      'town/square dusk +petals @.5,.66,1.15 dao:float@.69,.86*1.0 ly:float@.31,.86*1.0 basket@.5,.5*.7 hero:stand@.5,.86*1.15 "Hai cô bé song sinh Đào và Lý nhảy quanh hiệp khách, chuyền túi gạo qua lại"',
+      'town/square dusk +petals @.5,.7,1.3 dao:walk@.29,.86*1.0 ly:walk@.73,.86*1.0 basket@.5,.6*.8^30 hero:stand@.5,.86*1.2 lanterns@.5,.26*1?5 "Đuổi đứa này thì đứa kia đã chạy mất, túi gạo bay từ tay bên này sang bên kia"',
+      'town/square night +fireflies @.5,.76,1.5 hero:taichi@.5,.87*1.3 dao:fall@.31,.87*1.0 ly:fall@.71,.87*1.0 basket@.5,.5*.8 "Hiệp khách đứng yên, chuyền tới lần thứ mười hai đứa mỏi tay, túi gạo rơi trúng lòng"',
+    ],
+    'm:daoly-2': [
+      'town/square night +fireflies @.5,.6,1.15 dao:talk@.31,.87*1.1 ly:talk@.69,.87*1.1 lanterns@.5,.24*1.1?8 hero:stand@.5,.87*1.15 "Đào và Lý biết lối vào gánh xiếc của Thiên Diện, nơi Huyết Nguyệt Giáo giấu người bắt trong hội đèn"',
+      'town/square night +sparks @.5,.7,1.3 dao:strike@.31,.86*1.1 ly:strike@.71,.86*1.1 dien:stagger@.5,.86*1.2 hero:martial@.16,.86*1.1 "Đào giả làm Lý, Lý giả làm Đào, Thiên Diện nghìn mặt mà không nhận ra ai là ai"',
+    ],
+    'm:vongtinh-1': [
+      'peaks/am night +drift ~moon@.25,.2,13.7 @.5,.66,1.2 vongtinh:zen@.69,.82*1.2 hero:sit@.31,.82*1.15 "Bà lão mù ngồi nhìn trời đêm, thấy trăng đỏ đang lớn dần và một vì sao bạc đi rất chậm"',
+      'peaks/am night +drift ~red@.7,.2,18.7 @.4,.64,1.45 hero:talk@.27,.86*1.3 vongtinh:sit@.57,.86*1.15 "Hiệp khách ngước nhìn vầng trăng đỏ đang lớn dần, hỏi bà vì sao bạc ấy là gì"',
+      'peaks/am night +drift @.62,.76,1.66 vongtinh:zen@.68,.85*1.33 hero:talk@.35,.85*1.2 "Vì sao bạc ấy là ngươi, trăng đỏ nhanh hơn nhưng nó đang ăn chính mình"',
+    ],
+    'm:vongtinh-2': [
+      'peaks/summit night +drift ~moon@.3,.2,13.2 ~red@.7,.22,17.2 @.5,.5,1.2 vongtinh:zen@.5,.78*1.25 hero:stand@.31,.78*1.1 "Trên đỉnh núi, bà thấy ngày hai vầng trăng cùng mọc: một vầng sẽ sáng, một vầng sẽ đói"',
+      'peaks/summit night +drift ~moon@.3,.2,13.2 @.4,.76,1.66 hero:zen@.31,.83*1.31 bucket@.66,.93*1.2?1 "Hiệp khách muốn làm vầng trăng in trong thùng nước: không to, không sáng nhất, nhưng yên"',
+    ],
+    'm:hotam-1': [
+      'peaks/path night +drift ~moon@.7,.2,13.7 @.5,.7,1.15 hotam:kneel@.69,.63*1.15 hero:stand@.31,.82*1.15 "Hồ Tam, cựu thủ hạ của Khô Vinh, quỳ bên đường muốn chuộc lỗi mà không biết bắt đầu từ đâu"',
+      'peaks/path night +drift @.38,.76,1.65 hero:point@.3,.84*1.3 hotam:kneel@.66,.66*1.2 "Bắt đầu từ một người, tìm người đầu tiên ngươi phát đan và chăm họ khỏe lại"',
+      'village/camp morning +steam +birds @.55,.74,1.4 hotam:carry@.37,.86*1.2 dan:sit@.67,.86*1.05 pill@.5,.76*.4 kid:sit@.81,.86*0.85 "Hồ Tam đi tìm từng người một, đến người thứ mười mới ngủ được một giấc trọn đêm"',
+    ],
+    'm:hotam-2': [
+      'interior/am lamp +dust @.5,.68,1.15 hotam:talk@.68,.9*1.2 hero:stand@.31,.9*1.15 letter@.5,.62*1.2 "Hồ Tam trải bản đồ lối lên Huyết Nguyệt đài, xin hiệp khách đừng chỉ đánh mà hãy cứu người còn bị giam"',
+      'peaks/path night +dust ~moon@.7,.2,13.7 ~red@.5,.2,16.2 @.5,.7,1.3 hero:walk@.31,.83*1.2 hotam:point@.5,.74*1.15 dan:walk@.69,.64*1.0 dan2:walk@.79,.6*0.95 gate@.9,.84*.8 "Hiệp khách dẫn người phá trại giam ngoài Huyết Nguyệt đài, cứu ba trăm người bị Thôn Nguyệt Quyết hút dở"',
+    ],
+    'm:trinhho-1': [
+      'town/gate day @.5,.7,1.15 trinhho:talk@.66,.86*1.25 palanquin@.88,.9*.8 dan:stand@.21,.86*0.95 dan2:stand@.31,.86*0.9 "Quan Trịnh Bá Hổ ra lệnh: ai gánh nước từ suối công phải nộp thuế, một chuyến một đồng"',
+      'village/camp day +dust @.5,.72,1.3 dan:carry@.31,.86*1.05 dan2:carry@.46,.86*1.0 kid:carry@.61,.86*0.9 bucket@.8,.92*1.1?1 "Dân chân núi kêu trời, người nghèo nhất lại phải gánh nước nhiều nhất"',
+      'village/dyke morning +leaves @.5,.76,1.5 hero:martial@.31,.86*1.2 dan:martial@.52,.86*1.0 dan2:martial@.65,.86*1.0 kid:stand@.8,.86*0.85 pole@.14,.9*1?1 "Hiệp khách không đánh quan mà cùng dân đào con mương dẫn nước về tận làng"',
+    ],
+    'm:trinhho-2': [
+      'town/gate night +fireflies ~moon@.3,.2,13.7 @.5,.66,1.15 trinhho:stand@.69,.86*1.25 gate@.5,.84*1.1 "Huyết Nguyệt Giáo hứa cho quan lên chức tri phủ nếu mở cổng thành cho chúng"',
+      'town/gate night +fireflies +sparks @.5,.7,1.2 hero:martial@.5,.86*1.2 luc:stand@.31,.86*0.9 kid:stand@.21,.86*0.85 dan:stand@.69,.86*1.0 dan2:stand@.81,.86*0.95 torch@.62,.9*1.1 "Đêm ấy cổng thành mở, nhưng ngoài cổng là dân chân núi cùng Lục Lục và lũ trẻ đã báo tin từ trước"',
+    ],
+    'm:moclao-1': [
+      'peaks/path morning +leaves +birds @.5,.7,1.15 moclao:martial@.69,.63*1.25 hero:stand@.31,.82*1.15 statue@.88,.8*.6 "Mộc Lão chặt một cây cổ thụ đã ba năm, mỗi ngày một nhát"',
+      'peaks/path morning +leaves @.38,.76,1.64 hero:talk@.3,.84*1.3 moclao:stand@.68,.65*1.2 "Hiệp khách thắc mắc: ba năm cho một cây, sao lão không chặt một lúc cho xong?"',
+      'peaks/path dusk +leaves @.64,.76,1.66 moclao:zen@.69,.7*1.33 hero:sit@.36,.87*1.1 "Vì ta còn phải đốn củi, nấu cơm, dạy cháu, mỗi ngày một nhát không làm ta mệt, mai nó sẽ đổ"',
+      'peaks/path morning +leaves +dust @.5,.7,1.3 moclao:walk@.63,.67*1.2 hero:stand@.31,.83*1.15 tiles@.4,.9*.6^70 "Sáng hôm sau cây đổ ầm, Mộc Lão không reo mừng, chỉ đi tìm cây khác chặt nhát đầu tiên"',
+    ],
+    'm:moclao-2': [
+      'peaks/path dusk +leaves @.5,.68,1.2 moclao:martial@.69,.63*1.3 hero:stand@.31,.83*1.15 "Mộc Lão bảo hiệp khách đỡ một nhát rìu của lão"',
+      'peaks/path dusk +dust @.5,.72,1.5 moclao:strike@.65,.69*1.31 hero:taichi@.37,.83*1.3 slash@.5,.7*1.2?0 "Nhát rìu bổ xuống nặng như núi đổ, hiệp khách không đỡ, chỉ dẫn lực rìu xuống đất, mặt đất nứt một đường dài"',
+      'peaks/path dusk +leaves @.64,.78,1.65 moclao:zen@.69,.69*1.33 hero:stand@.36,.85*1.2 "Biết tránh cái không cần đỡ, được"',
+    ],
+    'm:tieuhuyet-1': [
+      'village/camp night +fireflies ~moon@.7,.2,14.2 @.5,.7,1.15 tieuhuyet:stand@.69,.85*1.0 hero:stand@.31,.85*1.15 "Giữa đêm, Tiểu Huyết nhỏ gầy cầm dao đứng chắn đường hiệp khách"',
+      'village/camp night +fireflies @.66,.8,1.68 tieuhuyet:talk@.72,.87*1.36 sabers@.36,.8*.3 "Giáo chủ nói giết được ngươi thì ta sẽ không phải đói nữa"',
+      'village/camp night +fireflies +steam @.5,.8,1.68 hero:kneel@.35,.87*1.3 tieuhuyet:stand@.68,.87*1.2 bowl@.52,.84*.6 "Hiệp khách nắm lấy cổ tay gầy guộc, đặt vào đó một cái bánh bao còn nóng: ăn đi đã, đói thì không nghĩ được gì"',
+    ],
+    'm:tieuhuyet-2': [
+      'valley/stream morning +birds @.5,.78,1.3 su:carry@.4,.86*1.2 tieuhuyet:carry@.61,.86*1.0 bucket@.2,.92*1?1 bucket@.8,.92*.9?1 "Tiểu Huyết ở lại võ đường, mỗi sáng theo sư phụ đã mất võ công xuống suối gánh nước"',
+      'valley/stream morning +leaves @.62,.76,1.65 tieuhuyet:talk@.68,.89*1.34 su:stand@.37,.89*1.2 pole@.84,.86*.8^-8 "Ông ơi, gánh nước mỗi ngày làm gì, chẳng mạnh lên được bao nhiêu"',
+      'valley/stream dawn +birds ~sun@.78,.3,15.2 @.4,.78,1.65 su:zen@.32,.88*1.31 tieuhuyet:stand@.64,.88*1.2 bucket@.54,.93*1.1?1 "Không mạnh lên nhiều, nhưng ngày nào cũng có nước, thế là đủ cho một đứa trẻ không phải đói nữa"',
+    ],
+    'm:bacham-1': [
+      'shore/rocks night +fireflies +ripple ~moon@.7,.2,15.2 @.5,.68,1.15 bacham:sit@.69,.83*1.2 drum@.82,.9*.6 hero:sit@.31,.84*1.15 "Bạch Âm ngồi bên mặt nước đêm, gọi hiệp khách nghe một khúc đàn khác với tiếng sáo của Khúc U"',
+      'shore/rocks night +ripple @.64,.78,1.65 bacham:zen@.69,.85*1.33 drum@.82,.88*.7 "Tiếng đàn chỉ đếm nhịp, chậm rãi như bước chân người gánh nước"',
+      'shore/rocks night +fireflies ~moon@.7,.2,15.2 @.36,.78,1.66 hero:zen@.29,.87*1.31 "Nghe đàn, hiệp khách thấy mình đang đếm lại những ngày đã qua, ngày nào cũng có một việc đã xong"',
+    ],
+    'm:bacham-2': [
+      'shore/rocks dusk +birds +ripple @.5,.68,1.15 bacham:stand@.69,.83*1.2 drum@.84,.9*.6 hero:martial@.31,.84*1.15 "Trận này Bạch Âm không cầm kiếm, bà giữ nhịp cho mọi người"',
+      'shore/rocks dusk +ripple +sparks @.5,.7,1.35 bacham:cast@.5,.85*1.2 hero:martial@.27,.85*1.2 dan:martial@.73,.84*1.05 dan2:martial@.84,.84*1.0 drum@.5,.9*.55 "Tiếng đàn vang đều giữa trận, ai hoảng loạn cũng tìm lại được hơi thở, Thôn Nguyệt Quyết không hút được nỗi sợ nào"',
+    ],
+    'm:thien-1': [
+      'temple dawn +birds @.5,.68,1.15 thien:zen@.69,.86*1.2 hero:stand@.31,.86*1.15 bucket@.5,.92*1?1 "Thiền sư Không Nguyệt đi ngang võ đường, ghé xem thùng nước của hiệp khách còn yên không"',
+      'temple dawn @.38,.76,1.64 hero:talk@.3,.89*1.3 thien:stand@.68,.89*1.2 "Dạo này tại hạ bận quá, nhiều hôm không ngồi thiền được"',
+      'temple dawn +birds @.64,.78,1.66 thien:zen@.68,.89*1.33 hero:zen@.36,.89*1.2 "Thì ngồi ba hơi thở, ba hơi cũng là thiền, đừng đợi có nửa canh giờ trống mới bắt đầu"',
+    ],
+    'm:thien-2': [
+      'peaks/snow night +snow ~moon@.7,.2,13.7 @.5,.68,1.2 thien:zen@.67,.81*1.25 hero:sit@.31,.81*1.15 "Đêm tuyết, thiền sư kể đã đi ngang Huyết Nguyệt đài, thấy hắn ngồi một mình đếm những gì còn thiếu"',
+      'peaks/snow night +snow @.4,.78,1.66 hero:zen@.31,.84*1.31 thien:stand@.71,.84*1.2 "Hiệp khách hỏi có cách nào khiến huynh ấy đếm những gì đã có không"',
+      'peaks/snow night +snow ~moon@.7,.2,13.7 @.62,.78,1.66 thien:talk@.67,.84*1.33 hero:stand@.35,.84*1.2 "Có, cho hắn thấy một người đếm những gì đã có, mỗi ngày"',
+    ],
+    'm:hai-1': [
+      'shore/hut dusk +birds @.5,.66,1.15 hai:talk@.83,.83*1.0 net@.84,.86*.8 letter@.5,.34*.6 "Một con hải âu đáp xuống võ đường, chân buộc mảnh giấy nguệch ngoạc từ lão ngư ngoài đảo đá"',
+      'peaks/summit morning +drift +birds @.4,.74,1.5 hero:stand@.36,.82*1.3 letter@.62,.88*.7 "Hiệp khách đứng đón gió núi thay sóng biển, không bỏ ngày nào"',
+      'shore/hut dusk +birds +ripple @.62,.74,1.65 hai:talk@.68,.87*1.34 net@.84,.86*.9 "Được, không có biển thì tìm gió, không có thời gian dài thì tìm thời gian ngắn, đừng có tìm cớ"',
+    ],
+    'm:hai-2': [
+      'peaks/path day +leaves +birds @.5,.7,1.15 hai:talk@.69,.63*1.25 hero:stand@.31,.82*1.15 net@.88,.88*.7 "Lão ngư lên núi một chuyến, xem hiệp khách có lười không"',
+      'peaks/path day +dust @.5,.72,1.5 hero:taichi@.35,.84*1.3 hai:strike@.61,.7*1.3 slash@.48,.7*1.2?1 "Hiệp khách đứng tấn suốt một canh giờ, lão đẩy một chưởng mà không lùi nửa bước"',
+      'peaks/path dusk +leaves +birds @.64,.76,1.66 hai:zen@.69,.7*1.33 hero:stand@.36,.87*1.2 "Ta già rồi, tới trận cuối chưa chắc còn đứng cạnh ngươi, nhưng biển thì vẫn ở đó, nhớ nhịp của nó"',
+    ],
   };
 
   // ===========================================================================================================================

@@ -162,6 +162,20 @@
   PROPS.boat = (c, o) => '<path d="M-110,0 Q-70,34 0,34 Q70,34 110,0 Q120,-14 100,-12 L-100,-12 Q-120,-14 -110,0Z" fill="' + T(c, '#5a3c22') + '"/><path d="M-100,-12 L100,-12" stroke="' + T(c, '#8a6a44') + '" stroke-width="4"/>' + (o.a ? '<path d="M104,-12 L130,-26 L118,-4Z M118,-4 l12,-6" fill="' + T(c, '#5a3c22') + '"/>' : '') + '<path d="M-6,-12 L-6,-130" stroke="' + T(c, '#3a2a1c') + '" stroke-width="4"/>';
   PROPS.fire = (c, o) => glow(c, 0, -60, 170 * (o.s || 1), '#ff8a3a', 0.6) + '<path d="M-34,20 C-52,-30 -20,-50 -18,-92 C-6,-70 4,-84 0,-120 C20,-90 30,-70 28,-50 C46,-60 52,-30 34,20Z" fill="#ff7a2a" class="sc-flame"/><path d="M-18,20 C-28,-10 -6,-30 -2,-60 C8,-40 16,-30 14,-8 C22,-16 24,4 16,20Z" fill="#ffd36a"/><path d="M0,-130 q-22,-70 14,-150 q10,-30 -6,-70" stroke="#2a2430" stroke-width="30" fill="none" opacity=".35" stroke-linecap="round"/>';
   // Sách bìa, ấm, bát…: dùng ít, gọn.
+  // v2.18.0: bàn cờ (kỳ ngộ Kỳ Tiên Ông): mặt gỗ nhìn nghiêng, lưới 7×7, vài quân đen trắng; ?n = số quân (0 = trống).
+  PROPS.goboard = (c, o) => {
+    let g = '<ellipse cx="0" cy="40" rx="90" ry="10" fill="' + c.P.ink + '" opacity=".25"/><path d="M-84,-6 L-60,-46 L60,-46 L84,-6Z" fill="' + T(c, '#caa45e') + '"/><path d="M-84,-6 L84,-6 L84,26 L-84,26Z" fill="' + T(c, '#9c7a3c') + '"/>';
+    for (let i = 0; i <= 6; i++) {
+      const t = i / 6, y = -40 + t * 28, w = 56 + t * 22;
+      g += '<path d="M' + (-w).toFixed(1) + ',' + y.toFixed(1) + ' L' + w.toFixed(1) + ',' + y.toFixed(1) + '" stroke="' + T(c, '#4a3516') + '" stroke-width="1.3" opacity=".7"/>';
+      const x0 = -56 + t * 112, x1 = -78 + t * 156;
+      g += '<path d="M' + x0.toFixed(1) + ',-40 L' + x1.toFixed(1) + ',-12" stroke="' + T(c, '#4a3516') + '" stroke-width="1.3" opacity=".7"/>';
+    }
+    const n = o && o.a !== undefined ? o.a : 6;
+    const pts = [[-34, -30], [-6, -22], [20, -34], [30, -16], [-52, -16], [4, -40], [44, -26], [-20, -38]];
+    for (let i = 0; i < Math.min(n, pts.length); i++) g += '<ellipse cx="' + pts[i][0] + '" cy="' + pts[i][1] + '" rx="8" ry="4.6" fill="' + (i % 2 ? '#f1ece0' : '#1e1a22') + '" stroke="#0004" stroke-width=".6"/>';
+    return g;
+  };
   PROPS.bowl = (c) => '<ellipse cx="0" cy="22" rx="48" ry="6" fill="' + c.P.ink + '" opacity=".25"/><path d="M-44,-8 Q-40,26 0,26 Q40,26 44,-8Z" fill="' + T(c, '#d8cfc0') + '"/><ellipse cx="0" cy="-8" rx="44" ry="9" fill="' + T(c, '#f4eddc') + '"/><ellipse cx="0" cy="-7" rx="34" ry="6" fill="' + T(c, '#e0d2a8') + '"/>';
   // Thiên Môn: cổng đá mười ổ khóa. ?n: n ổ đã rơi (0–10); ?11 hé mở; ?12 mở toang.
   const lockIcon = (i, col) => {

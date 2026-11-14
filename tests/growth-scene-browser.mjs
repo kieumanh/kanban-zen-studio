@@ -2,7 +2,7 @@
 // growth-places.js, growth-plates.js). Kiểm tra:
 //  1. Dữ liệu (kiểm một lần): mỗi chương chính có đúng một dòng tranh cho mỗi trang; mọi nhân vật, thế, vật, hiệu ứng, nơi chốn đều đã
 //     biết và dựng được; mỗi chương có ít nhất 5 nơi-giờ khác nhau, không hai trang nào trùng khung hình; tổng số nơi-giờ khác nhau ≥ 200;
-//     người nói có mặt trong tranh (trừ vài trang chỉ nghe tiếng); kỳ ngộ (44) và chiến ký (48) dựng được và không trang nào trùng khung;
+//     người nói có mặt trong tranh (trừ vài trang chỉ nghe tiếng); kỳ ngộ (44, mỗi cái một dòng vẽ tay cho mỗi trang, người nói luôn có mặt) và chiến ký (48, tự dựng) dựng được và không trang nào trùng khung;
 //  2. Khung đọc (390 chạm, 820 chạm, 1440): mỗi trang một tranh có mô tả cho người đọc màn hình, nằm trong khung, không tràn ngang, không
 //     lỗi trang; lật liền các trang cùng một cảnh thì mọi dải màu được dùng đều đã khai báo (không hình nào mất màu);
 //  3. Đổi nơi thì chuyển cảnh mờ dần (hai cảnh cùng có mặt một lúc); giảm chuyển động thì không có hoạt họa nào trong tranh;
@@ -77,16 +77,26 @@ try {
           if (!list[i].f.some((q) => q.who === who)) absent.push(key + '.' + i + ':' + who);
         });
       }
-      for (const k of Object.keys(PL.LINES)) if (!window.zenTale.CHAPTERS.some((c) => 't' + c.lv === k)) bad.push(k + ': khung thừa');
+      const meetIds = new Set(window.zenMeet.CAST.flatMap((c) => c.meets.map((_, k) => 'm:' + c.id + '-' + (k + 1))));
+      for (const k of Object.keys(PL.LINES)) if (!window.zenTale.CHAPTERS.some((c) => 't' + c.lv === k) && !meetIds.has(k)) bad.push(k + ': khung thừa');
       // Kỳ ngộ.
-      let meets = 0;
+      let meets = 0, meetSpeakers = 0;
+      const meetAbsent = [];
       const dup = [];
       for (const cast of window.zenMeet.CAST) {
         cast.meets.forEach((m, k) => {
           const id = 'm:' + cast.id + '-' + (k + 1), entry = { id, pages: m.pages, meet: { cast, meet: m, k: k + 1 } };
+          // v2.18.0: mỗi kỳ ngộ có khung vẽ tay riêng, đúng một dòng cho mỗi trang.
+          if (!PL.LINES[id] || PL.LINES[id].length !== m.pages.length) bad.push(id + ': ' + (PL.LINES[id] ? PL.LINES[id].length : 0) + ' dòng ≠ ' + m.pages.length + ' trang');
           const list = m.pages.map((_, i) => Z.shotFor(id, i, entry));
           list.forEach((s, i) => check(id + '.' + i, s));
           if (new Set(list.map(sig)).size !== list.length) dup.push(id);
+          if (new Set(list.map((s) => Z.keyOf(s))).size < 1) weak.push(id);
+          m.pages.forEach(([who], i) => {
+            if (NARR.has(who) || who === 'ke' || !Z.CAST.has(who)) return;
+            meetSpeakers++;
+            if (!list[i].f.some((q) => q.who === who)) meetAbsent.push(id + '.' + i + ':' + who);
+          });
           meets++;
         });
       }
@@ -101,7 +111,7 @@ try {
         if (new Set(list.map(sig)).size !== list.length) dup.push(id);
         duels++;
       }
-      return { bad, shots, chapters: window.zenTale.CHAPTERS.length, envs: envs.size, weak, few, absent, speakers, meets, duels, dup };
+      return { bad, shots, chapters: window.zenTale.CHAPTERS.length, envs: envs.size, weak, few, absent, speakers, meets, duels, dup, meetAbsent, meetSpeakers };
     });
     assert.deepEqual(r.bad, [], 'mọi khung tranh hợp lệ và dựng được');
     assert.equal(r.chapters, 39, 'khai cuộc + 38 chương');
@@ -112,6 +122,7 @@ try {
     assert.deepEqual(r.few, [], 'mỗi chương có ít nhất 5 nơi-giờ khác nhau');
     assert.ok(r.envs >= 200, 'tổng số nơi-giờ khác nhau của truyện chính ≥ 200 (' + r.envs + ')');
     assert.deepEqual(r.dup, [], 'kỳ ngộ và chiến ký không có hai trang trùng khung hình');
+    assert.ok(r.meetSpeakers >= 80 && r.meetAbsent.length === 0, 'kỳ ngộ: người nói có mặt trong tranh: ' + r.meetAbsent.join(' '));
     assert.ok(r.absent.length <= 12 && r.absent.length / r.speakers < 0.08, 'người nói có mặt trong tranh, trừ vài trang chỉ nghe tiếng: ' + r.absent.join(' '));
     assert.deepEqual(errors, [], 'không lỗi trang');
     await context.close();
