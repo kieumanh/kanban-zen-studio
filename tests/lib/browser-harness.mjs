@@ -56,7 +56,7 @@ export async function startHarness({ seed = defaultSeed, executablePath = proces
   // v1.19.1: welcome=true bỏ việc đánh dấu sẵn "đã thấy lời chào" (để thử đúng luồng vào trang); now = giờ giả (Date/ISO) cài trước khi tải trang;
   // meDelay = độ trễ (ms) của /api/me; receiptsMode = 'ok' | 'fail' | 'hang' cho GET notification-receipts; receiptsSeed = các dấu đã đọc máy chủ đã có;
   // setup = hàm chạy trước khi tải trang.
-  async function open(width, { touch = false, height = width <= 700 ? 844 : 900, colorScheme, contrast, forcedColors, workspace, welcome = false, now = null, meDelay = 0, receiptsMode = 'ok', receiptsSeed = [], setup = null } = {}) {
+  async function open(width, { touch = false, height = width <= 700 ? 844 : 900, colorScheme, contrast, forcedColors, reducedMotion, workspace, welcome = false, now = null, meDelay = 0, receiptsMode = 'ok', receiptsSeed = [], setup = null } = {}) {
     const context = await browser.newContext({
       viewport: { width, height },
       timezoneId: 'Asia/Ho_Chi_Minh',
@@ -64,6 +64,7 @@ export async function startHarness({ seed = defaultSeed, executablePath = proces
       ...(colorScheme ? { colorScheme } : {}),
       ...(contrast ? { contrast } : {}),
       ...(forcedColors ? { forcedColors } : {}),
+      ...(reducedMotion ? { reducedMotion } : {}),
     });
     const page = await context.newPage();
     if (now) await page.clock.install({ time: new Date(now) });

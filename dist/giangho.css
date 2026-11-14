@@ -4864,6 +4864,19 @@
     border-right: 1px solid var(--line);
     border-bottom: 1px solid var(--line)
 }
+:root[data-style=giangho] .gr-form {
+    border: 1px solid var(--line);
+    background: var(--paper)
+}
+:root[data-style=giangho] .gr-form strong {
+    color: var(--ink)
+}
+:root[data-style=giangho] .gr-form strong i {
+    color: #784d10
+}
+:root[data-style=giangho] .gr-form small {
+    color: var(--muted)
+}
 :root[data-style=giangho] .gr-chip {
     border: 1px solid var(--line);
     background: var(--paper);
@@ -11815,6 +11828,19 @@
     background: var(--paper);
     border-right: 1px solid var(--line);
     border-bottom: 1px solid var(--line)
+}
+:root[data-style=giangho][data-theme=dark] .gr-form {
+    border: 1px solid var(--line);
+    background: var(--paper)
+}
+:root[data-style=giangho][data-theme=dark] .gr-form strong {
+    color: var(--ink)
+}
+:root[data-style=giangho][data-theme=dark] .gr-form strong i {
+    color: #f2c99a
+}
+:root[data-style=giangho][data-theme=dark] .gr-form small {
+    color: var(--muted)
 }
 :root[data-style=giangho][data-theme=dark] .gr-chip {
     border: 1px solid var(--line);

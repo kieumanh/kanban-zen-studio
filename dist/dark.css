@@ -3092,6 +3092,9 @@
 :root[data-theme=dark] .bg-be-key-dot {
     border: 3px solid #94c5aa
 }
+:root[data-theme=dark] .gr-form strong i {
+    color: #e8bf91
+}
 :root[data-theme=dark] .gr-chip:hover {
     background: #130f16
 }

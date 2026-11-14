@@ -264,10 +264,27 @@
     const list = lines[pose] || lines.talk;
     return list[msgIndex % list.length];
   }
+  // v2.15.0: dòng chú giải thức đang luyện (Thái cực, Luyện kiếm, Tọa thiền); Đàm tiếu không có thức nên ẩn.
+  function formBlock(f) {
+    return '<div class="gr-form" id="gr-form" aria-live="off"' + (f ? '' : ' hidden') + '>' + (f ? '<strong>' + esc(f.name) + ' <i lang="zh-Hant">' + esc(f.han) + '</i></strong><small>' + esc(f.tip) + '</small>' : '') + '</div>';
+  }
+  function paintForm(f) {
+    const el = document.querySelector('#gr-form');
+    if (!el) return;
+    const tpl = document.createElement('template');
+    tpl.innerHTML = formBlock(f);
+    const next = tpl.content.firstElementChild;
+    if (el.innerHTML !== next.innerHTML) el.innerHTML = next.innerHTML;
+    el.hidden = !f;
+  }
+  document.addEventListener('gr-form', (e) => {
+    if (e.target.closest?.('#gr-figure') && !e.target.classList?.contains('is-leave')) paintForm(e.detail);
+  });
   function stage(s) {
     const g = growth(), r = myRealm();
     const chips = [{ id: 'auto', label: 'Tùy hứng' }, ...zenHero.POSES].map((p) => '<button type="button" class="gr-chip' + (poseMode === p.id ? ' is-on' : '') + '" data-gr-pose="' + p.id + '" aria-pressed="' + (poseMode === p.id) + '">' + p.label + '</button>').join('');
     return '<section class="panel gr-stage" aria-label="Hiệp khách đồng hành"><div class="gr-stage-bg">' + zenHero.scene() + '<p class="gr-bubble" id="gr-bubble" role="status">' + esc(bubbleText(poseNow, s)) + '</p><div class="gr-figure" id="gr-figure">' + zenHero.svg(g.hero, poseNow) + '</div></div>' +
+      formBlock(zenHero.formAt(poseNow, zenHero.START[poseNow])) +
       '<div class="gr-poses" role="group" aria-label="Thế võ của hiệp khách">' + chips + '</div>' +
       realmBlock(r) + '</section>';
   }
@@ -347,6 +364,7 @@
         setTimeout(() => cur.remove(), 450);
       } else if (cur) cur.remove();
       fig.prepend(next);
+      paintForm(zenHero.formAt(poseNow, zenHero.START[poseNow]));
     }
     const bubble = document.querySelector('#gr-bubble');
     const text = bubbleText(poseNow, scores());
