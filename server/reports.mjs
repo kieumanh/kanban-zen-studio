@@ -55,6 +55,28 @@ const reminderTasks = (workspace, day) =>
         taskDeadline(t) <= shiftDay(day, 3),
     )
     .sort((a, b) => taskDeadline(a).localeCompare(taskDeadline(b)));
+// v2.53.0 (Nhắc Việc Chờ): việc đang chờ người khác (waitFor) mà ngày hẹn hỏi lại (waitUntil) đã tới hoặc đã qua; chưa xong, không lưu trữ.
+// Xếp theo ngày hẹn (cũ nhất trước). Việc không có ngày hẹn không nhắc (chỉ hiện trong ứng dụng).
+const isDayText = (s) => typeof s === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(s);
+export const waitingTasks = (workspace, day) =>
+  reportTasks(workspace, day)
+    .filter(
+      (t) =>
+        t.col !== 'Done' &&
+        typeof t.waitFor === 'string' &&
+        t.waitFor.trim() &&
+        isDayText(t.waitUntil) &&
+        t.waitUntil <= day,
+    )
+    .sort(
+      (a, b) =>
+        a.waitUntil.localeCompare(b.waitUntil) ||
+        String(a.title).localeCompare(String(b.title), 'vi'),
+    );
+const waitWho = (t, n = 40) => {
+  const who = oneLine(t.waitFor);
+  return who.length > n ? who.slice(0, n - 1) + '…' : who;
+};
 // v2.49.0 (Thông Báo Có Tên): nội dung thông báo đẩy nêu tên 1–2 việc gấp nhất kèm số lượng, theo giọng của người dùng.
 // Văn bản thuần (thông báo không hiểu HTML); tên việc được rút gọn để vừa màn hình khóa.
 const pushName = (t) => {
@@ -62,10 +84,28 @@ const pushName = (t) => {
   return '“' + (name.length > 34 ? name.slice(0, 33) + '…' : name) + '”';
 };
 export function reminderPush(workspace, day) {
-  const tasks = reminderTasks(workspace, day);
-  if (!tasks.length) return null;
-  const v = voiceOf(workspace).push,
-    kind = (t) =>
+  const tasks = reminderTasks(workspace, day),
+    waits = waitingTasks(workspace, day);
+  if (!tasks.length && !waits.length) return null;
+  const voice = voiceOf(workspace),
+    v = voice.push;
+  if (!tasks.length) {
+    // Chỉ có việc đang chờ người khác đã tới hẹn hỏi lại.
+    const w = voice.wait,
+      names = waits.slice(0, 2).map(pushName);
+    return {
+      count: waits.length,
+      title: w.title(waits.length),
+      body:
+        waits.length === 1
+          ? names[0] + ' ' + w.one(waitWho(waits[0]))
+          : names.join(v.and) +
+            (waits.length > 2 ? v.others(waits.length - 2) : '') +
+            '. ' +
+            w.many(waits.length),
+    };
+  }
+  const kind = (t) =>
       t.category === 'overdue' ? 0 : taskDeadline(t) === day ? 1 : 2,
     counts = [0, 0, 0];
   tasks.forEach((t) => counts[kind(t)]++);
@@ -80,27 +120,48 @@ export function reminderPush(workspace, day) {
             .map((n, i) => (n ? n + ' ' + v.stats[i] : ''))
             .filter(Boolean)
             .join(' · ');
-  return { count: tasks.length, title: v.title(tasks.length), body };
+  return {
+    count: tasks.length,
+    title: v.title(tasks.length),
+    body: waits.length ? body + ' · ' + voice.wait.tail(waits.length) : body,
+  };
 }
 export function reminderReport(workspace, day) {
-  const tasks = reminderTasks(workspace, day);
-  if (!tasks.length) return null;
+  const tasks = reminderTasks(workspace, day),
+    waits = waitingTasks(workspace, day);
+  if (!tasks.length && !waits.length) return null;
   const overdue = tasks.filter((t) => t.category === 'overdue').length,
-    v = voiceOf(workspace);
+    v = voiceOf(workspace),
+    w = v.wait,
+    taskText = tasks.length
+      ? v.intro(overdue, tasks.length - overdue) +
+        '\n\n' +
+        tasks
+          .slice(0, 80)
+          .map(
+            (t) =>
+              `• ${t.category === 'overdue' ? v.tags[0] : taskDeadline(t) === day ? v.tags[1] : v.tags[2]} · ${oneLine(t.title)}\n  ${oneLine(t.projectName)} · ${v.due} ${taskDeadline(t)}`,
+          )
+          .join('\n') +
+        (tasks.length > 80 ? '\n' + v.more(tasks.length - 80) : '')
+      : '',
+    waitText = waits.length
+      ? (tasks.length ? '\n\n' : '') +
+        w.intro(waits.length) +
+        '\n\n' +
+        waits
+          .slice(0, 40)
+          .map(
+            (t) =>
+              `• ${w.tag} · ${oneLine(t.title)}\n  ${oneLine(t.projectName)} · ${w.who} ${oneLine(t.waitFor)} · ${w.since} ${t.waitUntil}`,
+          )
+          .join('\n') +
+        (waits.length > 40 ? '\n' + v.more(waits.length - 40) : '')
+      : '';
   return {
-    html: reminderReportHTML(tasks, day, v),
+    html: reminderReportHTML(tasks, day, v, waits),
     subject: v.subject + day,
-    text:
-      v.intro(overdue, tasks.length - overdue) +
-      '\n\n' +
-      tasks
-        .slice(0, 80)
-        .map(
-          (t) =>
-            `• ${t.category === 'overdue' ? v.tags[0] : taskDeadline(t) === day ? v.tags[1] : v.tags[2]} · ${oneLine(t.title)}\n  ${oneLine(t.projectName)} · ${v.due} ${taskDeadline(t)}`,
-        )
-        .join('\n') +
-      (tasks.length > 80 ? '\n' + v.more(tasks.length - 80) : ''),
+    text: taskText + waitText,
   };
 }
 // v2.0.0 (Truyền Âm): giọng của email theo phong cách người dùng chọn (workspace.style). Chỉ đổi chữ khung; tên việc, tên dự án giữ
@@ -121,6 +182,21 @@ const VOICES = {
       stats: ['quá hạn', 'hôm nay', 'sắp hạn'],
       and: ' và ',
       others: (n) => ` cùng ${n} việc khác`,
+    },
+    // v2.53.0 (Nhắc Việc Chờ): việc đang chờ người khác đã tới ngày hẹn hỏi lại.
+    wait: {
+      group: 'Đến lúc hỏi lại',
+      tag: 'HỎI LẠI',
+      who: 'Chờ',
+      since: 'Hẹn hỏi lại',
+      title: (n) => `Đến lúc hỏi lại · ${n} việc`,
+      one: (who) => `đang chờ ${who}, đã đến lúc hỏi lại.`,
+      many: (n) => `${n} việc đang chờ người khác, đã đến lúc hỏi lại.`,
+      tail: (n) => `${n} việc cần hỏi lại`,
+      intro: (n) =>
+        `Bạn có ${n} việc đang chờ người khác đã đến ngày hẹn hỏi lại.`,
+      introHTML: (n) =>
+        `Bạn có <strong>${n} việc đang chờ người khác</strong> đã đến ngày hẹn hỏi lại.`,
     },
     tags: ['QUÁ HẠN', 'HÔM NAY', 'SẮP HẠN'],
     groups: ['Quá hạn', 'Hôm nay', 'Sắp đến hạn'],
@@ -199,6 +275,20 @@ const VOICES = {
       and: ' và ',
       others: (n) => ` cùng ${n} nhiệm vụ khác`,
     },
+    wait: {
+      group: 'Đến lúc hỏi hồi âm',
+      tag: 'HỎI HỒI ÂM',
+      who: 'Đợi',
+      since: 'Hẹn hỏi lại',
+      title: (n) => `Truyền thư · ${n} nhiệm vụ đến lúc hỏi hồi âm`,
+      one: (who) => `đang đợi ${who}, đã đến lúc hỏi hồi âm.`,
+      many: (n) => `${n} nhiệm vụ đang đợi hồi âm, đã đến lúc hỏi lại.`,
+      tail: (n) => `${n} nhiệm vụ cần hỏi hồi âm`,
+      intro: (n) =>
+        `Các hạ có ${n} nhiệm vụ đang đợi hồi âm đã tới ngày hẹn hỏi lại.`,
+      introHTML: (n) =>
+        `Các hạ có <strong>${n} nhiệm vụ đang đợi hồi âm</strong> đã tới ngày hẹn hỏi lại.`,
+    },
     tags: ['LỠ HẸN', 'HÔM NAY', 'SẮP TỚI KỲ'],
     groups: ['Lỡ hẹn', 'Hôm nay', 'Sắp tới kỳ'],
     due: 'Kỳ hạn',
@@ -265,7 +355,7 @@ const VOICES = {
 };
 export const voiceOf = (workspace) =>
   workspace?.style === 'giangho' ? VOICES.giangho : VOICES.zen;
-export function reminderReportHTML(tasks, day, v = VOICES.zen) {
+export function reminderReportHTML(tasks, day, v = VOICES.zen, waits = []) {
   const shown = tasks.slice(0, 80),
     groups = [
       [v.groups[0], '#b63850', (t) => taskDeadline(t) < day],
@@ -280,7 +370,23 @@ export function reminderReportHTML(tasks, day, v = VOICES.zen) {
     })
     .join('');
   const late = tasks.filter((t) => taskDeadline(t) < day).length;
-  return `<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${v.title}</title></head><body style="margin:0;padding:0;background:#f5f2f9;color:#30243e;font-family:Arial,sans-serif"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f5f2f9"><tr><td align="center" style="padding:20px 12px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:#ffffff;border:1px solid #e9e1ef;border-radius:16px"><tr><td style="padding:25px 22px"><p style="margin:0 0 10px;color:#70469b;font-size:12px;font-weight:bold;letter-spacing:1px">${v.brand}</p><h1 style="margin:0;font-size:25px;line-height:1.3">${v.h1}</h1><p style="margin:12px 0 0;color:#695b72;font-size:15px;line-height:1.6">${v.introHTML(late, tasks.length - late)}</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0">${sections}</table>${tasks.length > 80 ? `<p style="font-size:13px;color:#695b72">${v.more(tasks.length - 80)}</p>` : ''}<table role="presentation" cellpadding="0" cellspacing="0" style="margin-top:22px"><tr><td bgcolor="#7950c8" style="border-radius:9px"><a href="https://kanban.huongthiennature.com/" style="display:inline-block;padding:13px 20px;color:#fff;text-decoration:none;font-weight:bold;font-size:14px">Mở Kanban Zen Studio →</a></td></tr></table><p style="margin:25px 0 0;padding-top:16px;border-top:1px solid #e9e1ef;color:#695b72;font-size:12px;line-height:1.6">${v.foot}</p></td></tr></table></td></tr></table></body></html>`;
+  // v2.53.0: khối "Đến lúc hỏi lại" (việc đang chờ người khác đã tới ngày hẹn); chỉ có khi có việc như vậy.
+  const waitColor = '#2f6d57',
+    waitSection = waits.length
+      ? `<tr><td style="padding:22px 0 0"><h2 style="margin:0 0 10px;font-size:17px;line-height:1.4;color:${waitColor}">${v.wait.group} · ${waits.length}</h2><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse">${waits
+          .slice(0, 40)
+          .map(
+            (t) =>
+              `<tr><td style="padding:12px 14px;border:1px solid #e9e1ef;border-left:3px solid ${waitColor};background:#fcfafd"><strong style="display:block;font-size:15px;line-height:1.5;color:#30243e;overflow-wrap:anywhere">${reportEscape(oneLine(t.title))}</strong><span style="display:block;margin-top:4px;color:#695b72;font-size:13px;line-height:1.5">${reportEscape(oneLine(t.projectName))} · ${v.wait.who} ${reportEscape(oneLine(t.waitFor))} · ${v.wait.since} ${reportEscape(t.waitUntil.split('-').reverse().join('/'))}</span></td></tr><tr><td style="height:6px;font-size:1px;line-height:6px">&nbsp;</td></tr>`,
+          )
+          .join(
+            '',
+          )}</table>${waits.length > 40 ? `<p style="font-size:13px;color:#695b72">${v.more(waits.length - 40)}</p>` : ''}</td></tr>`
+      : '';
+  const lead = tasks.length
+    ? v.introHTML(late, tasks.length - late)
+    : v.wait.introHTML(waits.length);
+  return `<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>${v.title}</title></head><body style="margin:0;padding:0;background:#f5f2f9;color:#30243e;font-family:Arial,sans-serif"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f5f2f9"><tr><td align="center" style="padding:20px 12px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px;background:#ffffff;border:1px solid #e9e1ef;border-radius:16px"><tr><td style="padding:25px 22px"><p style="margin:0 0 10px;color:#70469b;font-size:12px;font-weight:bold;letter-spacing:1px">${v.brand}</p><h1 style="margin:0;font-size:25px;line-height:1.3">${v.h1}</h1><p style="margin:12px 0 0;color:#695b72;font-size:15px;line-height:1.6">${lead}</p><table role="presentation" width="100%" cellpadding="0" cellspacing="0">${sections}${waitSection}</table>${tasks.length > 80 ? `<p style="font-size:13px;color:#695b72">${v.more(tasks.length - 80)}</p>` : ''}<table role="presentation" cellpadding="0" cellspacing="0" style="margin-top:22px"><tr><td bgcolor="#7950c8" style="border-radius:9px"><a href="https://kanban.huongthiennature.com/" style="display:inline-block;padding:13px 20px;color:#fff;text-decoration:none;font-weight:bold;font-size:14px">Mở Kanban Zen Studio →</a></td></tr></table><p style="margin:25px 0 0;padding-top:16px;border-top:1px solid #e9e1ef;color:#695b72;font-size:12px;line-height:1.6">${v.foot}</p></td></tr></table></td></tr></table></body></html>`;
 }
 export function weeklyReport(workspace, day, previous = null) {
   const projects = (workspace.projects || []).filter((p) => !p.archived),
