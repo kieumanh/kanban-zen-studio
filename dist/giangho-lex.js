@@ -557,6 +557,10 @@
     'Thông báo trình duyệt (chỉ thiết bị này)': 'Truyền thư trên trình duyệt (chỉ thiết bị này)',
     'Bật thông báo trình duyệt': 'Bật truyền thư trên trình duyệt',
     'Tắt thông báo thiết bị này': 'Tắt truyền thư trên thiết bị này',
+    // v2.49.0: công tắc tên việc trong thông báo trình duyệt (push-names.js) và hai dòng báo trạng thái.
+    'Hiện tên việc trong thông báo trình duyệt (áp dụng cho thiết bị này; có thể hiện trên màn hình khóa).': 'Hiện tên nhiệm vụ trong truyền thư trên trình duyệt (chỉ thiết bị này; có thể hiện ngay trên màn hình khóa).',
+    'Thông báo sẽ nêu tên việc gấp nhất.': 'Truyền thư sẽ nêu tên nhiệm vụ gấp nhất.',
+    'Thông báo chỉ nêu chung, không hiện tên việc.': 'Truyền thư chỉ nêu chung, không lộ tên nhiệm vụ.',
     'Áp dụng cho thiết bị này. Giờ nhắc riêng của từng việc đặt khi thêm hoặc chỉnh sửa việc.': 'Áp dụng cho thiết bị này. Giờ nhắc riêng của từng môn đặt khi thêm hoặc chỉnh sửa môn.',
     'Nhắc đến giờ của từng việc (khung nhắc ở trang Việc hằng ngày và chấm trên chuông).': 'Nhắc khi tới giờ luyện từng môn (khung nhắc ở trang Nhật khóa và chấm trên chuông truyền thư).',
     'Nhắc nhẹ khi hôm nay chưa tích việc nào.': 'Nhắc nhẹ khi hôm nay chưa luyện môn nào.',

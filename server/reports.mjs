@@ -45,8 +45,9 @@ export function reportTasks(workspace, day) {
         })),
     );
 }
-export function reminderReport(workspace, day) {
-  const tasks = reportTasks(workspace, day)
+// Việc cần nhắc: chưa xong, có hạn, hạn đã qua hoặc trong 3 ngày tới; xếp theo hạn (quá hạn trước).
+const reminderTasks = (workspace, day) =>
+  reportTasks(workspace, day)
     .filter(
       (t) =>
         t.col !== 'Done' &&
@@ -54,6 +55,35 @@ export function reminderReport(workspace, day) {
         taskDeadline(t) <= shiftDay(day, 3),
     )
     .sort((a, b) => taskDeadline(a).localeCompare(taskDeadline(b)));
+// v2.49.0 (Thông Báo Có Tên): nội dung thông báo đẩy nêu tên 1–2 việc gấp nhất kèm số lượng, theo giọng của người dùng.
+// Văn bản thuần (thông báo không hiểu HTML); tên việc được rút gọn để vừa màn hình khóa.
+const pushName = (t) => {
+  const name = oneLine(t.title);
+  return '“' + (name.length > 34 ? name.slice(0, 33) + '…' : name) + '”';
+};
+export function reminderPush(workspace, day) {
+  const tasks = reminderTasks(workspace, day);
+  if (!tasks.length) return null;
+  const v = voiceOf(workspace).push,
+    kind = (t) =>
+      t.category === 'overdue' ? 0 : taskDeadline(t) === day ? 1 : 2,
+    counts = [0, 0, 0];
+  tasks.forEach((t) => counts[kind(t)]++);
+  const names = tasks.slice(0, 2).map(pushName),
+    body =
+      tasks.length === 1
+        ? names[0] + ' ' + v.states[kind(tasks[0])] + '.'
+        : names.join(v.and) +
+          (tasks.length > 2 ? v.others(tasks.length - 2) : '') +
+          '. ' +
+          counts
+            .map((n, i) => (n ? n + ' ' + v.stats[i] : ''))
+            .filter(Boolean)
+            .join(' · ');
+  return { count: tasks.length, title: v.title(tasks.length), body };
+}
+export function reminderReport(workspace, day) {
+  const tasks = reminderTasks(workspace, day);
   if (!tasks.length) return null;
   const overdue = tasks.filter((t) => t.category === 'overdue').length,
     v = voiceOf(workspace);
@@ -85,6 +115,13 @@ const VOICES = {
       `Bạn có ${late} việc quá hạn và ${soon} việc đến hạn hôm nay hoặc trong 3 ngày tới.`,
     introHTML: (late, soon) =>
       `Bạn có <strong>${late} việc quá hạn</strong> và <strong>${soon} việc đến hạn hôm nay hoặc trong 3 ngày tới</strong>.`,
+    push: {
+      title: (n) => `Nhắc việc · ${n} việc cần chú ý`,
+      states: ['đã quá hạn', 'đến hạn hôm nay', 'sắp đến hạn'],
+      stats: ['quá hạn', 'hôm nay', 'sắp hạn'],
+      and: ' và ',
+      others: (n) => ` cùng ${n} việc khác`,
+    },
     tags: ['QUÁ HẠN', 'HÔM NAY', 'SẮP HẠN'],
     groups: ['Quá hạn', 'Hôm nay', 'Sắp đến hạn'],
     due: 'Hạn',
@@ -155,6 +192,13 @@ const VOICES = {
       `Các hạ có ${late} nhiệm vụ lỡ hẹn và ${soon} nhiệm vụ tới kỳ hôm nay hoặc trong 3 ngày tới.`,
     introHTML: (late, soon) =>
       `Các hạ có <strong>${late} nhiệm vụ lỡ hẹn</strong> và <strong>${soon} nhiệm vụ tới kỳ hôm nay hoặc trong 3 ngày tới</strong>.`,
+    push: {
+      title: (n) => `Truyền thư · ${n} nhiệm vụ cần chú ý`,
+      states: ['đã lỡ hẹn', 'tới kỳ hôm nay', 'sắp tới kỳ'],
+      stats: ['lỡ hẹn', 'hôm nay', 'sắp tới kỳ'],
+      and: ' và ',
+      others: (n) => ` cùng ${n} nhiệm vụ khác`,
+    },
     tags: ['LỠ HẸN', 'HÔM NAY', 'SẮP TỚI KỲ'],
     groups: ['Lỡ hẹn', 'Hôm nay', 'Sắp tới kỳ'],
     due: 'Kỳ hạn',

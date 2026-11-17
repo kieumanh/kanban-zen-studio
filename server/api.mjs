@@ -56,6 +56,7 @@ import {
   shiftDay,
   taskDeadline,
   reminderReport,
+  reminderPush,
   weeklyReport,
 } from './reports.mjs';
 import { financeReport, validFinanceSettings } from './finance-report.mjs';
@@ -823,6 +824,23 @@ export async function api(request, env) {
     if (path === '/api/push-key') {
       await session(request, env);
       return json({ key: env.VAPID_PUBLIC });
+    }
+    // v2.49.0: thông báo đẩy không mang nội dung; service worker hỏi API chỉ-đọc này để hiện tên 1–2 việc gấp nhất kèm số lượng.
+    // Chỉ trả về chuỗi văn bản đã dựng sẵn của chính người dùng đang đăng nhập (không email, không mã); lỗi hay hết phiên thì
+    // service worker quay về câu chung như trước.
+    if (path === '/api/push-summary' && request.method === 'GET') {
+      const user = await session(request, env);
+      await limited(db, 'push-summary:' + user.id, 30);
+      const latest = await readWorkspace(db, user.id),
+        row = latest
+          ? null
+          : await db
+              .prepare('SELECT data FROM workspaces WHERE user_id=?')
+              .bind(user.id)
+              .first(),
+        workspace = latest ? latest.data : row ? JSON.parse(row.data) : null,
+        push = workspace ? reminderPush(workspace, reportDate()) : null;
+      return json(push || { count: 0 });
     }
     if (
       [

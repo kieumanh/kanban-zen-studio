@@ -320,6 +320,11 @@
     "text/javascript; charset=utf-8"
   ],
   [
+    "/push-names.js",
+    "push-names.js",
+    "text/javascript; charset=utf-8"
+  ],
+  [
     "/studio-zen.css",
     "studio-zen.css",
     "text/css; charset=utf-8"
