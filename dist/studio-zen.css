@@ -2453,3 +2453,81 @@ body select:not([multiple]):not([size]):not([data-zen-native]):not(.wf-original-
   text-overflow: ellipsis;
 }
 
+/* v2.46.0 (Bảng Phím Tắt): hộp thoại liệt kê phím tắt, mở bằng phím "?" hoặc lệnh "Xem phím tắt" (dist/shortcuts.js). */
+.zen-shortcuts {
+  width: min(560px, calc(100vw - 28px));
+  max-height: 80dvh;
+  padding: 20px;
+  border: 1px solid #d8c9e4;
+  border-radius: 20px;
+  background: #fffdfd;
+  color: #352a44;
+  box-shadow: 0 24px 80px #352a4430;
+  overflow: auto;
+}
+.zen-shortcuts::backdrop {
+  background: #30223960;
+  backdrop-filter: blur(4px);
+}
+.zen-shortcuts header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.zen-shortcuts h2 {
+  margin: 0;
+  font-size: 20px;
+}
+.zen-shortcuts-lead {
+  margin: 12px 0 0;
+  color: #685974;
+  font-size: 14px;
+}
+.zen-shortcuts h3 {
+  margin: 20px 0 8px;
+  color: #5d3c7a;
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.zen-shortcuts dl {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+}
+.zen-shortcuts dl > div {
+  display: grid;
+  grid-template-columns: minmax(112px, auto) 1fr;
+  gap: 14px;
+  align-items: center;
+}
+.zen-shortcuts dt {
+  white-space: nowrap;
+}
+.zen-shortcuts dd {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.zen-shortcuts kbd {
+  display: inline-block;
+  min-width: 28px;
+  padding: 3px 8px;
+  border: 1px solid #cbb6db;
+  border-bottom-width: 2px;
+  border-radius: 8px;
+  background: #f2eaf8;
+  color: #352a44;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  text-align: center;
+}
+@media (max-width: 700px) {
+  .zen-shortcuts dl > div {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+}
+

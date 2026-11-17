@@ -727,6 +727,17 @@
     ['Ghi chú mới', { to: 'Chép quyển mới', in: '.zen-empty-action' }],
     ['Xem dự án', { to: 'Xem đại sự', in: '.zen-empty-action' }],
     ['Tải tệp lên', { to: 'Cất vào bảo khố', in: '.zen-empty-action' }],
+    // v2.46.0 (Bảng Phím Tắt): hộp thoại phím tắt (dist/shortcuts.js).
+    ['Phím tắt', { to: 'Khẩu quyết phím', in: '.zen-shortcuts' }],
+    ['Chung', { to: 'Thông dụng', in: '.zen-shortcuts' }],
+    ['Tạo mới', { to: 'Khởi tạo', in: '.zen-shortcuts' }],
+    ['Tab dự án', { to: 'Thẻ đại sự', in: '.zen-shortcuts' }],
+    ['Gantt', { to: 'Trận đồ', in: '.zen-shortcuts' }],
+    ['Mở bảng lệnh: tìm dự án, việc, trang, cài đặt', { to: 'Mở bảng lệnh: truy tìm đại sự, nhiệm vụ, trang, cơ quan', in: '.zen-shortcuts' }],
+    ['Mở bảng phím tắt này', { to: 'Mở bảng khẩu quyết phím này', in: '.zen-shortcuts' }],
+    ['Tạo việc mới (khi đang mở một dự án) hoặc tạo dự án (khi chưa mở dự án)', { to: 'Khởi nhiệm vụ mới (khi đang xem một đại sự) hoặc khởi đại sự (khi chưa xem đại sự nào)', in: '.zen-shortcuts' }],
+    ['Dời tab dự án đang chọn sang trái hoặc phải (khi đã đặt tiêu điểm vào tab)', { to: 'Dời thẻ đại sự đang chọn sang trái hoặc phải (khi đã trỏ vào thẻ)', in: '.zen-shortcuts' }],
+    ['Uốn đường nối đang chọn sang trái hoặc phải (khi đã đặt tiêu điểm vào điểm uốn)', { to: 'Uốn đường nối đang chọn sang trái hoặc phải (khi đã trỏ vào điểm uốn)', in: '.zen-shortcuts' }],
     ['Công việc cần chú ý', { to: 'Nhiệm vụ cần chú ý', in: 'h2:has(~ .due-work-tabs)' }],
     ['Đăng xuất', { to: 'Hạ sơn', in: '#editor-form:has([data-confirm=signout]) .modal-foot' }],
     ['Tổng kết tuần', { to: 'Chiến báo tuần', in: '.report-dialog-toolbar' }],
@@ -1179,6 +1190,7 @@
     'Tạo công việc mới': 'Khởi nhiệm vụ mới',
     'Thêm nhanh bằng một câu': 'Ghi nhanh bằng một câu',
     'Tìm kiếm toàn bộ nội dung': 'Truy tìm khắp giang hồ',
+    'Xem phím tắt': 'Xem khẩu quyết phím',
   };
   const command = (label) => {
     if (COMMANDS[label]) return [COMMANDS[label], label];

@@ -7264,6 +7264,26 @@
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%238a7f93' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
     color: #322114
 }
+:root[data-style=giangho] .zen-shortcuts {
+    border: 1px solid #dfc9a9;
+    background: #fffcf6;
+    color: #311f13;
+    box-shadow: 0 24px 80px rgba(63,43,27,0.188)
+}
+:root[data-style=giangho] .zen-shortcuts::backdrop {
+    background: rgba(53,37,18,0.376)
+}
+:root[data-style=giangho] .zen-shortcuts-lead {
+    color: #624d40
+}
+:root[data-style=giangho] .zen-shortcuts h3 {
+    color: #6d2328
+}
+:root[data-style=giangho] .zen-shortcuts kbd {
+    border: 1px solid #ceb999;
+    background: #f6ecdc;
+    color: #311f13
+}
 :root[data-style=giangho][data-theme=dark] {
     --bg: #18130c;
     --paper: #1e1811;
@@ -14478,6 +14498,26 @@
     background-color: #1e1811;
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%238a7f93' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
     color: #f4dccc
+}
+:root[data-style=giangho][data-theme=dark] .zen-shortcuts {
+    border: 1px solid #504135;
+    background: #1e1811;
+    color: #f5dccc;
+    box-shadow: 0 24px 80px rgba(200,179,163,0.188)
+}
+:root[data-style=giangho][data-theme=dark] .zen-shortcuts::backdrop {
+    background: rgba(53,37,18,0.376)
+}
+:root[data-style=giangho][data-theme=dark] .zen-shortcuts-lead {
+    color: #e5cdbe
+}
+:root[data-style=giangho][data-theme=dark] .zen-shortcuts h3 {
+    color: #fccac8
+}
+:root[data-style=giangho][data-theme=dark] .zen-shortcuts kbd {
+    border: 1px solid #5c4736;
+    background: #1e1710;
+    color: #f5dccc
 }
 
 /* ---- Họa tiết Giang hồ viết tay (v1.86.0 · Chu Mặc) ------------------------------------------------------------------------

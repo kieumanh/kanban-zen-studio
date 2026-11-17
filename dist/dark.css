@@ -4119,6 +4119,25 @@
     background-color: #1b181f;
     color: #ddd1ee
 }
+:root[data-theme=dark] .zen-shortcuts {
+    border: 1px solid #49404f;
+    background: #1b181f;
+    color: #dcd3ec
+}
+:root[data-theme=dark] .zen-shortcuts::backdrop {
+    background: rgba(48,34,57,0.376)
+}
+:root[data-theme=dark] .zen-shortcuts-lead {
+    color: #d0c3da
+}
+:root[data-theme=dark] .zen-shortcuts h3 {
+    color: #dcc1f7
+}
+:root[data-theme=dark] .zen-shortcuts kbd {
+    border: 1px solid #53465c;
+    background: #1b1720;
+    color: #dcd3ec
+}
 
 :root[data-theme=dark] {
   color-scheme: dark;
