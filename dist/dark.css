@@ -4019,6 +4019,12 @@
 :root[data-theme=dark] .studio-pomodoro .zen-focus-sound small {
     color: #d0c3da
 }
+@supports selector(:has(*)) {
+    :root[data-theme=dark] .zen-check-add:has(textarea:focus) {
+        border-color: #845cd6;
+        outline: 2px solid #845cd6
+    }
+}
 
 :root[data-theme=dark] {
   color-scheme: dark;

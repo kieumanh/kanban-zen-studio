@@ -2151,3 +2151,18 @@ dialog[open] button[aria-label^="Đóng"],
   line-height: 1.5;
   color: #685974;
 }
+
+/* v2.20.2 (Chuẩn Ô Nhập): ô "Thêm mục mới" của checklist là MỘT thanh bo tròn duy nhất.
+   Trước đây vòng focus vẽ quanh riêng ô chữ nên hiện thành khung chữ nhật nằm lọt trong thanh bo tròn; ở Chế độ tập trung → Sửa
+   còn lồng thêm một ô viền bo 12px bên trong thanh. Nay ô chữ không viền, trong suốt, và vòng focus vẽ quanh cả thanh theo đúng độ bo.
+   Bộ chọn :is(#editor, .zen-fe-form) mang độ ưu tiên của #editor để thắng quy tắc textarea:focus của các chủ đề (tối, tương phản, Giang hồ).
+   Trình duyệt chưa có :has() vẫn giữ vòng focus cũ của ô chữ, nên không bao giờ mất dấu focus. */
+.zen-fe-form .zen-check-add { align-items: center; gap: 8px; padding: 6px 6px 6px 18px; min-height: 56px; border-radius: 999px; }
+:is(#editor, .zen-fe-form) .zen-check-add textarea { border: 0; border-radius: 0; background: transparent; box-shadow: none; }
+.zen-fe-form .zen-check-add textarea { margin: 0; padding: 11px 0; min-height: 44px; font-size: 15px; line-height: 22px; }
+.zen-fe-form .zen-check-add [data-fe-add] { flex: none; align-self: center; margin: 0; min-height: 44px; padding: 0 20px; border-radius: 999px; font-size: 14px; white-space: nowrap; }
+.zen-fe-form .zen-check-hint { margin: 8px 0 0 18px; line-height: 1.5; }
+@supports selector(:has(*)) {
+  :is(#editor, .zen-fe-form) .zen-check-add textarea:focus { outline: none; }
+  .zen-check-add:has(textarea:focus) { border-color: #7950c8; outline: 2px solid #7950c8; outline-offset: -2px; }
+}

@@ -7002,6 +7002,20 @@
 :root[data-style=giangho] .studio-pomodoro .zen-focus-sound small {
     color: #624d40
 }
+:root[data-style=giangho] :is(#editor, .zen-fe-form) .zen-check-add textarea {
+    border: 0;
+    background: transparent;
+    box-shadow: none
+}
+@supports selector(:has(*)) {
+    :root[data-style=giangho] :is(#editor, .zen-fe-form) .zen-check-add textarea:focus {
+        outline: none
+    }
+    :root[data-style=giangho] .zen-check-add:has(textarea:focus) {
+        border-color: #b44148;
+        outline: 2px solid #b44148
+    }
+}
 :root[data-style=giangho][data-theme=dark] {
     --bg: #18130c;
     --paper: #1e1811;
@@ -13954,6 +13968,20 @@
 }
 :root[data-style=giangho][data-theme=dark] .studio-pomodoro .zen-focus-sound small {
     color: #e5cdbe
+}
+:root[data-style=giangho][data-theme=dark] :is(#editor, .zen-fe-form) .zen-check-add textarea {
+    border: 0;
+    background: transparent;
+    box-shadow: none
+}
+@supports selector(:has(*)) {
+    :root[data-style=giangho][data-theme=dark] :is(#editor, .zen-fe-form) .zen-check-add textarea:focus {
+        outline: none
+    }
+    :root[data-style=giangho][data-theme=dark] .zen-check-add:has(textarea:focus) {
+        border-color: #c24d53;
+        outline: 2px solid #c24d53
+    }
 }
 
 /* ---- Họa tiết Giang hồ viết tay (v1.86.0 · Chu Mặc) ------------------------------------------------------------------------
