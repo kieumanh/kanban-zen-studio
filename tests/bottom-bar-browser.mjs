@@ -125,6 +125,15 @@ try {
       const toast = await page.evaluate(() => ({ bottom: Math.round(document.querySelector('#toast').getBoundingClientRect().bottom), bar: Math.round(document.querySelector('.zen-bottom-bar').getBoundingClientRect().top) }));
       assert.ok(toast.bottom <= toast.bar, 'thông báo nằm trên thanh (' + toast.bottom + ' ≤ ' + toast.bar + ')' + at);
       assert.equal(await noOverflow(page), true, 'không tràn ngang' + at);
+      // Trình duyệt tự cuộn tới một phần tử (phím Tab, liên kết neo): phần tử dừng phía trên thanh, không nằm dưới nó.
+      await page.evaluate(() => window.scrollTo(0, 0));
+      const stop = await page.evaluate(() => {
+        const target = document.querySelector('#main').lastElementChild;
+        target.scrollIntoView({ block: 'end' });
+        return { bottom: Math.round(target.getBoundingClientRect().bottom), bar: Math.round(document.querySelector('.zen-bottom-bar').getBoundingClientRect().top), pad: parseFloat(getComputedStyle(document.documentElement).scrollPaddingBottom) };
+      });
+      assert.ok(stop.pad >= 76, 'khoảng đệm cuộn đủ chứa thanh (' + stop.pad + ')' + at);
+      assert.ok(stop.bottom <= stop.bar, 'phần tử được cuộn tới nằm trên thanh (' + stop.bottom + ' ≤ ' + stop.bar + ')' + at);
 
       // Bàn phím mở (ô tìm kiếm có focus): thanh ẩn; rời ô: hiện lại.
       await page.focus('#search');

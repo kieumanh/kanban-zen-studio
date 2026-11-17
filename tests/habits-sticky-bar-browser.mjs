@@ -1,5 +1,8 @@
 // v1.36.0: thanh chuyển chế độ (Bảng Kanban / Lịch / Gantt) dính trên đầu khi cuộn trên điện thoại phải có nền đặc,
-// không để nội dung của các thẻ việc hằng ngày lộ qua bên dưới; cả chế độ sáng và chế độ tối. Kiểm tra ở 390 (chạm).
+// không để nội dung bên dưới lộ qua; cả chế độ sáng và chế độ tối. Kiểm tra ở 390 (chạm).
+// v2.38.0: thanh này chỉ còn ở ba trang dự án (Bảng / Lịch / Gantt), không còn ở trang Việc hằng ngày; nên bài kiểm giữ nguyên các
+// khẳng định (nền đặc, điểm chạm thuộc chính thanh, không tràn ngang) nhưng đo ở trang Bảng của dự án có nhiều việc, và thêm một điều
+// kiện: trang Việc hằng ngày không còn thanh đó.
 import assert from 'node:assert/strict';
 import { startHarness, makeProject } from './lib/browser-harness.mjs';
 
@@ -10,7 +13,7 @@ const addD = (n) =>
     .slice(0, 10);
 const seed = () => ({
   schema: 1,
-  projects: [makeProject('p1', 'Gia đình', '#b8467f', 2)],
+  projects: [makeProject('p1', 'Gia đình', '#b8467f', 14)],
   notes: [],
   dailyHabits: [
     {
@@ -32,6 +35,9 @@ try {
   const { page } = await h.open(390, { touch: true, workspace: seed() });
   await h.show(page, 'habits');
   await page.waitForSelector('[data-hb-row="a"]');
+  assert.equal(await page.evaluate(() => getComputedStyle(document.querySelector('.mobile-viewbar')).display), 'none', 'trang Việc hằng ngày không còn thanh chuyển chế độ');
+  await h.show(page, 'projects', 'p1');
+  await page.waitForFunction(() => getComputedStyle(document.querySelector('.mobile-viewbar')).display !== 'none');
   await page.evaluate(() => window.scrollTo(0, 620));
   await page.waitForTimeout(300);
 

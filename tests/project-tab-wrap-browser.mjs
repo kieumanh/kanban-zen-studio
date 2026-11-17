@@ -56,7 +56,7 @@ try {
   ]) {
     const at = ' (' + width + 'px)';
     const { context, page } = await h.open(width, { touch, workspace: seed() });
-    await h.show(page, 'board');
+    await h.show(page, 'projects');
 
     // sameState: tab dài và tab ngắn cùng trạng thái (không tab nào đang mở), nên khung phải bằng nhau.
     const check = async (label, sameState) => {

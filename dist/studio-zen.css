@@ -2294,6 +2294,10 @@ body.signed-out .quick-add-btn { display: none; }
   .zbb-add .zbb-label {
     transform: translateY(-5px);
   }
+  /* Khi trình duyệt tự cuộn tới một ô (phím Tab, liên kết neo), ô đó dừng phía trên thanh chứ không nằm dưới nó. */
+  html:has(.zen-bottom-bar:not([hidden])) {
+    scroll-padding-bottom: calc(84px + env(safe-area-inset-bottom));
+  }
   /* Chừa chỗ để nội dung, chân trang, thông báo và nút nhạc không bị thanh che. */
   body:not(.signed-out):not(.wf-is-focused) .app {
     padding-bottom: calc(76px + env(safe-area-inset-bottom));
