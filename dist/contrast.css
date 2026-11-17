@@ -3373,6 +3373,9 @@
 :root[data-contrast=high] .sc-chip {
     background: rgba(18,12,22,0.58)
 }
+:root[data-contrast=high] .gr-store-chip input:checked+span {
+    color: #ffffff
+}
 :root[data-contrast=high] {
     --muted: #060606;
     --text-muted: #060606
@@ -7413,6 +7416,9 @@
 }
 :root[data-theme=dark][data-contrast=high] .sc-chip {
     background: rgba(18,12,22,0.58)
+}
+:root[data-theme=dark][data-contrast=high] .gr-store-chip input:checked+span {
+    color: #ffffff
 }
 :root[data-theme=dark][data-contrast=high] {
     --muted: #f5f5f5;

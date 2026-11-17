@@ -3372,6 +3372,9 @@
 :root[data-theme=dark] .sc-chip {
     background: rgba(18,12,22,0.58)
 }
+:root[data-theme=dark] .gr-store-chip input:checked+span {
+    color: #ffffff
+}
 :root[data-theme=dark] {
     --muted: #ccc2d7;
     --text-muted: #ccc2d7

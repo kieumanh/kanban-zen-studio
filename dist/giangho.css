@@ -5950,6 +5950,117 @@
 :root[data-style=giangho] .zem-pop-text small {
     color: var(--gr-seal-text)
 }
+:root[data-style=giangho] .gr-store-art {
+    background: var(--st-wood);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb,var(--gr-gold) 45%,transparent),0 8px 20px -12px rgba(40,20,10,0.65)
+}
+:root[data-style=giangho] .gr-store-talk {
+    border: 1px solid var(--gr-line);
+    background: var(--gr-wash)
+}
+:root[data-style=giangho] .gr-store-owner strong {
+    color: var(--gr-ink)
+}
+:root[data-style=giangho] .gr-store-owner small {
+    color: var(--muted)
+}
+:root[data-style=giangho] .gr-store-face {
+    border: 2px solid var(--gr-gold);
+    background: var(--st-night)
+}
+:root[data-style=giangho] .gr-store-say {
+    border: 1px solid color-mix(in srgb,var(--gr-gold) 55%,var(--gr-line));
+    background: var(--gr-paper);
+    color: var(--gr-ink)
+}
+:root[data-style=giangho] .gr-store-say .gr-store-close {
+    color: var(--muted)
+}
+:root[data-style=giangho] .gr-store-bars li {
+    color: var(--gr-ink)
+}
+:root[data-style=giangho] .gr-store-bars i {
+    background: color-mix(in srgb,var(--gr-ink) 12%,transparent)
+}
+:root[data-style=giangho] .gr-store-bars b {
+    background: var(--c)
+}
+:root[data-style=giangho] .gr-store-bars li.is-fit i {
+    box-shadow: 0 0 0 2px var(--c)
+}
+:root[data-style=giangho] .gr-store-item {
+    border: 1px solid var(--gr-line);
+    background: var(--gr-paper)
+}
+:root[data-style=giangho] .gr-store-item.is-asked {
+    border-color: var(--gr-seal);
+    box-shadow: 0 0 0 2px color-mix(in srgb,var(--gr-seal) 24%,transparent)
+}
+:root[data-style=giangho] .gr-store-pic {
+    border: 1px solid var(--gr-line);
+    background: var(--gr-wash)
+}
+:root[data-style=giangho] .gr-store-name h3 {
+    color: var(--gr-ink)
+}
+:root[data-style=giangho] .gr-store-tag, :root[data-style=giangho] .gr-fit-tag {
+    color: var(--gr-seal-text);
+    background: color-mix(in srgb,var(--gr-seal) 10%,transparent)
+}
+:root[data-style=giangho] .gr-store-blurb {
+    color: var(--muted)
+}
+:root[data-style=giangho] .gr-store-pick {
+    border: 0
+}
+:root[data-style=giangho] .gr-store-chip span {
+    border: 1px solid var(--gr-line);
+    background: var(--gr-paper);
+    color: var(--gr-ink)
+}
+:root[data-style=giangho] .gr-store-chip[style] span:before {
+    background: var(--dot)
+}
+:root[data-style=giangho] .gr-store-chip input:checked+span {
+    border-color: var(--gr-seal);
+    background: var(--gr-seal);
+    color: #ffffff
+}
+:root[data-style=giangho] .gr-store-chip[style] input:checked+span:before {
+    box-shadow: 0 0 0 2px #fffbf6
+}
+:root[data-style=giangho] .gr-store-chip input:focus-visible+span {
+    outline: 3px solid var(--gr-gold)
+}
+:root[data-style=giangho] .gr-store-pay i {
+    background: var(--c)
+}
+:root[data-style=giangho] .gr-store-pay i.is-fit {
+    box-shadow: 0 0 0 2px var(--gr-paper),0 0 0 3.5px var(--c)
+}
+:root[data-style=giangho] .gr-store-hint {
+    color: var(--muted)
+}
+:root[data-style=giangho] .gr-store-used {
+    color: var(--gr-seal-text)
+}
+:root[data-style=giangho] .gr-store-strip {
+    border: 1px solid color-mix(in srgb,var(--gr-gold) 55%,var(--gr-line));
+    background: var(--gr-wash)
+}
+:root[data-style=giangho] .gr-store-strip strong {
+    color: var(--gr-ink)
+}
+:root[data-style=giangho] .gr-store-strip p {
+    color: var(--gr-ink)
+}
+:root[data-style=giangho] .gr-store-strip .gr-store-close {
+    color: var(--muted)
+}
+:root[data-style=giangho] .gr-spend-row.is-fit input {
+    border-color: var(--gr-gold);
+    box-shadow: 0 0 0 1px var(--gr-gold)
+}
 :root[data-style=giangho] {
     --muted: #685345;
     --text-muted: #685345
@@ -12951,6 +13062,117 @@
 }
 :root[data-style=giangho][data-theme=dark] .zem-pop-text small {
     color: var(--gr-seal-text)
+}
+:root[data-style=giangho][data-theme=dark] .gr-store-art {
+    background: var(--st-wood);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb,var(--gr-gold) 45%,transparent),0 8px 20px -12px rgba(199,179,169,0.65)
+}
+:root[data-style=giangho][data-theme=dark] .gr-store-talk {
+    border: 1px solid var(--gr-line);
+    background: var(--gr-wash)
+}
+:root[data-style=giangho][data-theme=dark] .gr-store-owner strong {
+    color: var(--gr-ink)
+}
+:root[data-style=giangho][data-theme=dark] .gr-store-owner small {
+    color: var(--muted)
+}
+:root[data-style=giangho][data-theme=dark] .gr-store-face {
+    border: 2px solid var(--gr-gold);
+    background: var(--st-night)
+}
+:root[data-style=giangho][data-theme=dark] .gr-store-say {
+    border: 1px solid color-mix(in srgb,var(--gr-gold) 55%,var(--gr-line));
+    background: var(--gr-paper);
+    color: var(--gr-ink)
+}
+:root[data-style=giangho][data-theme=dark] .gr-store-say .gr-store-close {
+    color: var(--muted)
+}
+:root[data-style=giangho][data-theme=dark] .gr-store-bars li {
+    color: var(--gr-ink)
+}
+:root[data-style=giangho][data-theme=dark] .gr-store-bars i {
+    background: color-mix(in srgb,var(--gr-ink) 12%,transparent)
+}
+:root[data-style=giangho][data-theme=dark] .gr-store-bars b {
+    background: var(--c)
+}
+:root[data-style=giangho][data-theme=dark] .gr-store-bars li.is-fit i {
+    box-shadow: 0 0 0 2px var(--c)
+}
+:root[data-style=giangho][data-theme=dark] .gr-store-item {
+    border: 1px solid var(--gr-line);
+    background: var(--gr-paper)
+}
+:root[data-style=giangho][data-theme=dark] .gr-store-item.is-asked {
+    border-color: var(--gr-seal);
+    box-shadow: 0 0 0 2px color-mix(in srgb,var(--gr-seal) 24%,transparent)
+}
+:root[data-style=giangho][data-theme=dark] .gr-store-pic {
+    border: 1px solid var(--gr-line);
+    background: var(--gr-wash)
+}
+:root[data-style=giangho][data-theme=dark] .gr-store-name h3 {
+    color: var(--gr-ink)
+}
+:root[data-style=giangho][data-theme=dark] .gr-store-tag, :root[data-style=giangho][data-theme=dark] .gr-fit-tag {
+    color: var(--gr-seal-text);
+    background: color-mix(in srgb,var(--gr-seal) 10%,transparent)
+}
+:root[data-style=giangho][data-theme=dark] .gr-store-blurb {
+    color: var(--muted)
+}
+:root[data-style=giangho][data-theme=dark] .gr-store-pick {
+    border: 0
+}
+:root[data-style=giangho][data-theme=dark] .gr-store-chip span {
+    border: 1px solid var(--gr-line);
+    background: var(--gr-paper);
+    color: var(--gr-ink)
+}
+:root[data-style=giangho][data-theme=dark] .gr-store-chip[style] span:before {
+    background: var(--dot)
+}
+:root[data-style=giangho][data-theme=dark] .gr-store-chip input:checked+span {
+    border-color: var(--gr-seal);
+    background: var(--gr-seal);
+    color: #ffffff
+}
+:root[data-style=giangho][data-theme=dark] .gr-store-chip[style] input:checked+span:before {
+    box-shadow: 0 0 0 2px #362c24
+}
+:root[data-style=giangho][data-theme=dark] .gr-store-chip input:focus-visible+span {
+    outline: 3px solid var(--gr-gold)
+}
+:root[data-style=giangho][data-theme=dark] .gr-store-pay i {
+    background: var(--c)
+}
+:root[data-style=giangho][data-theme=dark] .gr-store-pay i.is-fit {
+    box-shadow: 0 0 0 2px var(--gr-paper),0 0 0 3.5px var(--c)
+}
+:root[data-style=giangho][data-theme=dark] .gr-store-hint {
+    color: var(--muted)
+}
+:root[data-style=giangho][data-theme=dark] .gr-store-used {
+    color: var(--gr-seal-text)
+}
+:root[data-style=giangho][data-theme=dark] .gr-store-strip {
+    border: 1px solid color-mix(in srgb,var(--gr-gold) 55%,var(--gr-line));
+    background: var(--gr-wash)
+}
+:root[data-style=giangho][data-theme=dark] .gr-store-strip strong {
+    color: var(--gr-ink)
+}
+:root[data-style=giangho][data-theme=dark] .gr-store-strip p {
+    color: var(--gr-ink)
+}
+:root[data-style=giangho][data-theme=dark] .gr-store-strip .gr-store-close {
+    color: var(--muted)
+}
+:root[data-style=giangho][data-theme=dark] .gr-spend-row.is-fit input {
+    border-color: var(--gr-gold);
+    box-shadow: 0 0 0 1px var(--gr-gold)
 }
 :root[data-style=giangho][data-theme=dark] {
     --muted: #e1ccbf;

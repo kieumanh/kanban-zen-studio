@@ -202,6 +202,8 @@ jobs:
           node tests/growth-emblem-browser.mjs
           # v2.33.0 (Tam Niên Thành Thần): công thức điểm tích lũy mới — hai năm đi hết 90 cấp đầu, thêm một năm thì thành Thần ở cấp 100 (6.134 điểm); không ai tụt cấp.
           node tests/growth-pace-browser.mjs
+          # v2.34.0 (Tàng Bảo Các): kho vật phẩm trong trang Tu vi — sáu món, bà chủ tư vấn theo điểm đang có, bảng quy đổi nhập tay đủ tám mạch (không giá định sẵn).
+          node tests/growth-store-browser.mjs
           node tests/growth-scene-browser.mjs
           node tests/note-chips-browser.mjs
           node tests/checklist-focus-ring-browser.mjs

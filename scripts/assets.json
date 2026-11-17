@@ -360,6 +360,11 @@
     "text/javascript; charset=utf-8"
   ],
   [
+    "/growth-store.js",
+    "growth-store.js",
+    "text/javascript; charset=utf-8"
+  ],
+  [
     "/growth-scene.js",
     "growth-scene.js",
     "text/javascript; charset=utf-8"

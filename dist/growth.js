@@ -356,8 +356,8 @@
       ? earnedTotal() === 0 ? 'Bát mạch đều ở 0. Hoàn thành một việc để khai mạch.' : 'Tu vi hiện có đang ở 0 sau khi đổi bảo vật. Hoàn thành việc để tu luyện tiếp.'
       : 'Sở trường: <strong>' + ex.top.name + '</strong> (' + fmt(ex.mx) + ') · Cần khổ luyện: <strong>' + ex.low.name + '</strong> (' + fmt(ex.mn) + ')';
     return '<div class="gr-page">' + heading('GIANG HỒ TU LUYỆN', 'Tu vi của ' + esc(heroName()), sub, '<div class="gr-head-actions"><button type="button" class="btn primary" data-gr-spend>Đổi bảo vật</button><button type="button" class="btn" data-gr-report>Xem báo cáo tu luyện</button><button type="button" class="btn" data-gr-change>Đổi hiệp khách</button></div>') +
-      '<div class="gr-grid">' + stage(s) + '<section class="panel gr-radar-panel" aria-label="Bát phương đồ nội lực"><h2>Bát phương đồ</h2><div class="gr-radar-wrap" id="gr-radar">' + radar(s) + '</div><p class="gr-summary">' + summary + '</p>' + wallet(s) + '</section></div>' +
-      (window.zenStory ? window.zenStory.panel() : '') + (window.zenGods ? window.zenGods.panel() : '') /* v2.13.0 Thần giới */ + (window.zenAch ? window.zenAch.panel() : '') /* v1.99.0 Bảng vàng */ + axisRows(s) + history() + spendPanel() + '<section class="panel gr-how"><h2>Tâm pháp tu luyện</h2><ul class="gr-how-list"><li>Mỗi việc hoàn thành cho các hạ <strong>2 lần vận công</strong> (1 điểm). Bảng vận công hiện ra trước lời chúc mừng.</li><li>Mỗi lần bấm <strong>+</strong> dồn 0,5 điểm vào mạch đã chọn; dồn cả hai lần vào một mạch cũng được.</li><li>Mỗi việc chỉ được vận công một lần.</li><li>Bấm <strong>Đổi bảo vật</strong> để ghi lại món đã mua hoặc quy đổi; tu vi bị trừ khỏi Bát phương đồ. Ghi nhầm thì sửa hoặc hủy quy đổi để hoàn điểm. Cấp và cảnh giới tính theo tổng tu vi đã luyện nên không tụt khi đổi bảo vật.</li><li><strong>100 cấp</strong> chia 10 cảnh giới, mỗi cấp một danh xưng. Cảnh giới sau tốn chừng gấp đôi cảnh giới trước: 0,5 điểm mỗi cấp ở Sơ nhập giang hồ, 1 điểm ở Tam lưu cao thủ… 170,5 điểm ở Thiên nhân hợp nhất.</li><li>Cấp 10, 20 … 90 là <strong>ải đột phá</strong> sang cảnh giới mới, tốn chừng ba lần cấp thường.</li><li><strong>Nhịp chuẩn</strong> của thang: ' + paceText() + '.</li><li>Từ cấp 91, <strong>mỗi cấp tốn gấp đôi cấp trước</strong>: ' + doublingText() + ' điểm ở cấp 99. Cấp 100 là ải nặng nhất: ' + fmt(levelCost(GOD)) + ' điểm, gần bằng cả chín cấp trước cộng lại. Đủ ' + fmt(LEVEL_AT[GOD]) + ' điểm thì đột phá thành Thần. Trên Thần còn 3 thần cấp tới <strong>Thần Vương</strong>, mỗi thần cấp ' + fmt(NORMAL[10]) + ' điểm.</li><li>Từ cấp 100, <strong>đủ điểm chưa đủ để lên cấp</strong>: còn phải lĩnh ngộ tám quy luật tự nhiên (điểm đã tích lũy của tám chỉ số) và thắng các vị thần đang giữ ngôi. Xem khung Thần giới.</li></ul>' + scaleTable(r) + '</section></div>';
+      '<div class="gr-grid">' + stage(s) + '<section class="panel gr-radar-panel" aria-label="Bát phương đồ nội lực"><h2>Bát phương đồ</h2><div class="gr-radar-wrap" id="gr-radar">' + radar(s) + '</div><p class="gr-summary">' + summary + '</p>' + wallet(s) + (window.zenStore ? '<p class="gr-store-go"><button type="button" class="btn" data-gr-store-go>Ghé Tàng Bảo Các</button></p>' : '') + '</section></div>' +
+      (window.zenStory ? window.zenStory.panel() : '') + (window.zenGods ? window.zenGods.panel() : '') /* v2.13.0 Thần giới */ + (window.zenAch ? window.zenAch.panel() : '') /* v1.99.0 Bảng vàng */ + axisRows(s) + history() + (window.zenStore ? window.zenStore.panel() : '') /* v2.34.0 Tàng Bảo Các */ + spendPanel() + '<section class="panel gr-how"><h2>Tâm pháp tu luyện</h2><ul class="gr-how-list"><li>Mỗi việc hoàn thành cho các hạ <strong>2 lần vận công</strong> (1 điểm). Bảng vận công hiện ra trước lời chúc mừng.</li><li>Mỗi lần bấm <strong>+</strong> dồn 0,5 điểm vào mạch đã chọn; dồn cả hai lần vào một mạch cũng được.</li><li>Mỗi việc chỉ được vận công một lần.</li><li>Bấm <strong>Đổi bảo vật</strong> để ghi lại món đã mua hoặc quy đổi; tu vi bị trừ khỏi Bát phương đồ. Ghi nhầm thì sửa hoặc hủy quy đổi để hoàn điểm. Cấp và cảnh giới tính theo tổng tu vi đã luyện nên không tụt khi đổi bảo vật.</li><li><strong>100 cấp</strong> chia 10 cảnh giới, mỗi cấp một danh xưng. Cảnh giới sau tốn chừng gấp đôi cảnh giới trước: 0,5 điểm mỗi cấp ở Sơ nhập giang hồ, 1 điểm ở Tam lưu cao thủ… 170,5 điểm ở Thiên nhân hợp nhất.</li><li>Cấp 10, 20 … 90 là <strong>ải đột phá</strong> sang cảnh giới mới, tốn chừng ba lần cấp thường.</li><li><strong>Nhịp chuẩn</strong> của thang: ' + paceText() + '.</li><li>Từ cấp 91, <strong>mỗi cấp tốn gấp đôi cấp trước</strong>: ' + doublingText() + ' điểm ở cấp 99. Cấp 100 là ải nặng nhất: ' + fmt(levelCost(GOD)) + ' điểm, gần bằng cả chín cấp trước cộng lại. Đủ ' + fmt(LEVEL_AT[GOD]) + ' điểm thì đột phá thành Thần. Trên Thần còn 3 thần cấp tới <strong>Thần Vương</strong>, mỗi thần cấp ' + fmt(NORMAL[10]) + ' điểm.</li><li>Từ cấp 100, <strong>đủ điểm chưa đủ để lên cấp</strong>: còn phải lĩnh ngộ tám quy luật tự nhiên (điểm đã tích lũy của tám chỉ số) và thắng các vị thần đang giữ ngôi. Xem khung Thần giới.</li></ul>' + scaleTable(r) + '</section></div>';
   }
 
   // ---- Hoạt họa nhân vật --------------------------------------------------------------------------------------------------
@@ -781,12 +781,15 @@
     sd.sum.innerHTML = 'Quy đổi <b>' + fmt(sum * STEP) + '</b> điểm · Tu vi hiện có sau khi trừ: <b>' + fmt(Math.max(0, have - sum) * STEP) + '</b>';
     sd.msg.textContent = '';
   }
-  function openSpend(id) {
+  // opts (chỉ khi mở từ Tàng Bảo Các, dist/growth-store.js): { name, fit, strip, eyebrow, title, owner } — tên món điền sẵn, lời bà chủ
+  // dưới tiêu đề, mạch hợp món được đánh dấu. Mọi mạch vẫn nhập tay tự do, không có giá định sẵn.
+  function openSpend(id, opts) {
     if (contentReadOnly) return notify('Bản chia sẻ chỉ có quyền xem.');
     const g = growth();
     if (!g) return;
     const old = id ? (g.spend || []).find((e) => e.id === id && !e.x) : null;
     if (id && !old) return;
+    const pre = !old && opts && typeof opts === 'object' ? opts : null, fit = pre && Array.isArray(pre.fit) ? pre.fit : [];
     if (!old && (g.spend || []).length >= SPEND_MAX) return notify('Sổ quy đổi đã đầy (' + SPEND_MAX + ' lần). Hãy xóa hẳn bớt các lần đã hủy.');
     const avail = balancesHalf(old?.id);
     if (!old && !avail.some((v) => v > 0)) return notify('Chưa có điểm để quy đổi. Hoàn thành việc để tu luyện trước.');
@@ -796,10 +799,10 @@
     d.id = 'growth-spend';
     d.className = 'gr-award gr-spend-dlg';
     d.setAttribute('aria-labelledby', 'gr-spend-title');
-    const rows = AXES.map((a, i) => '<li class="gr-spend-row" style="--c:' + a.color + '"><span class="gr-axis-ico">' + iconSvg('gr-' + a.id, 18) + '</span><div class="gr-axis-main"><div class="gr-axis-head"><strong>' + a.name + '</strong><small class="gr-spend-left"></small></div><div class="progress" aria-hidden="true"><span></span></div></div>' +
+    const rows = AXES.map((a, i) => '<li class="gr-spend-row' + (fit.includes(i) ? ' is-fit' : '') + '" style="--c:' + a.color + '"><span class="gr-axis-ico">' + iconSvg('gr-' + a.id, 18) + '</span><div class="gr-axis-main"><div class="gr-axis-head"><strong>' + a.name + '</strong>' + (fit.includes(i) ? '<em class="gr-fit-tag">hợp món này</em>' : '') + '<small class="gr-spend-left"></small></div><div class="progress" aria-hidden="true"><span></span></div></div>' +
       '<input type="number" inputmode="decimal" min="0" max="' + avail[i] * STEP + '" step="0.5" data-gr-spend-axis="' + i + '" placeholder="0" aria-label="Điểm trừ ở ' + a.name + ', đang có ' + fmt(avail[i] * STEP) + '" value="' + (old && old.p[i] ? old.p[i] * STEP : '') + '"></li>').join('');
-    d.innerHTML = '<form class="gr-award-form gr-spend-form" novalidate><header><span class="eyebrow">GIANG HỒ TU LUYỆN</span><h2 id="gr-spend-title">' + (old ? 'Sửa lần quy đổi' : 'Đổi bảo vật') + '</h2><p class="help-copy">Ghi lại bảo vật các hạ đã mua hoặc quy đổi. Tu vi sẽ bị trừ khỏi các mạch đã chọn và Bát phương đồ co lại tương ứng.</p></header>' +
-      '<div class="gr-spend-fields"><label class="field gr-spend-name">Bảo vật / nội dung quy đổi<input type="text" name="n" maxlength="120" autocomplete="off" placeholder="Ví dụ: tai nghe mới, bữa tối ngoài, một ngày nghỉ" value="' + esc(old?.n || '') + '"></label>' +
+    d.innerHTML = '<form class="gr-award-form gr-spend-form" novalidate><header><span class="eyebrow">' + esc(pre?.eyebrow || 'GIANG HỒ TU LUYỆN') + '</span><h2 id="gr-spend-title">' + (old ? 'Sửa lần quy đổi' : pre?.title ? esc(pre.title) : 'Đổi bảo vật') + '</h2><p class="help-copy">' + (pre ? 'Không có giá định sẵn: các hạ tự nhập số điểm thấy xứng đáng ở từng mạch, ít hay nhiều đều được, mạch nào cũng trả được. Bát phương đồ co lại tương ứng.' : 'Ghi lại bảo vật các hạ đã mua hoặc quy đổi. Tu vi sẽ bị trừ khỏi các mạch đã chọn và Bát phương đồ co lại tương ứng.') + '</p>' + (pre && typeof pre.strip === 'string' ? pre.strip : '') + '</header>' +
+      '<div class="gr-spend-fields"><label class="field gr-spend-name">Bảo vật / nội dung quy đổi<input type="text" name="n" maxlength="120" autocomplete="off" placeholder="Ví dụ: tai nghe mới, bữa tối ngoài, một ngày nghỉ" value="' + esc(old?.n || pre?.name || '') + '"></label>' +
       '<label class="field">Ngày quy đổi<input type="date" name="d" max="' + today() + '" value="' + esc(old?.d || today()) + '"></label>' +
       '<label class="field gr-spend-note">Ghi chú (không bắt buộc)<textarea name="note" rows="2" maxlength="300" placeholder="Nơi mua, giá tiền, lý do thưởng cho bản thân…">' + esc(old?.note || '') + '</textarea></label></div>' +
       '<section class="gr-spend-split" aria-labelledby="gr-spend-split-title"><h3 id="gr-spend-split-title">Trừ tu vi ở từng mạch</h3>' +
@@ -808,7 +811,7 @@
       '<p class="gr-spend-msg" role="alert"></p><footer class="gr-award-foot"><button type="button" class="btn" data-gr-spend-close>Đóng</button><span class="gr-grow"></span><button type="submit" class="btn primary">' + (old ? 'Lưu thay đổi' : 'Ghi vào sổ bảo vật') + '</button></footer></form>';
     document.body.append(d);
     const form = d.querySelector('form');
-    spendDlg = { el: d, form, id: old?.id || '', avail, rows: [...d.querySelectorAll('.gr-spend-row')], inputs: [...d.querySelectorAll('[data-gr-spend-axis]')], sum: d.querySelector('.gr-spend-sum'), msg: d.querySelector('.gr-spend-msg') };
+    spendDlg = { el: d, form, id: old?.id || '', owner: pre && typeof pre.owner === 'string' ? pre.owner : '', avail, rows: [...d.querySelectorAll('.gr-spend-row')], inputs: [...d.querySelectorAll('[data-gr-spend-axis]')], sum: d.querySelector('.gr-spend-sum'), msg: d.querySelector('.gr-spend-msg') };
     d.addEventListener('cancel', (e) => {
       e.preventDefault();
       closeSpend();
@@ -826,7 +829,12 @@
     });
     paintSpend();
     d.showModal();
-    form.elements.n.focus();
+    // Từ Tàng Bảo Các: đưa tiêu điểm lên tiêu đề (không bật bàn phím, không cuộn mất lời bà chủ); Tab đi tiếp tới ô tên rồi tám mạch.
+    if (pre) {
+      const h = d.querySelector('#gr-spend-title');
+      h.tabIndex = -1;
+      h.focus({ preventScroll: true });
+    } else form.elements.n.focus();
   }
   function splitSpend() {
     const sd = spendDlg;
@@ -883,7 +891,7 @@
     closeSpend();
     if (view === 'growth') render();
     const points = fmt(p.reduce((a, b) => a + b, 0) * STEP);
-    notify(editing ? 'Đã cập nhật lần quy đổi “' + name + '” (' + points + ' điểm).' : 'Đã quy đổi ' + points + ' điểm cho “' + name + '”. Tu vi hiện có: ' + fmt(total(scores())) + '.');
+    notify(editing ? 'Đã cập nhật lần quy đổi “' + name + '” (' + points + ' điểm).' : sd.owner ? 'Chưởng quỹ ' + sd.owner + ' nhận ' + points + ' điểm, giao “' + name + '”. Tu vi hiện có: ' + fmt(total(scores())) + '.' : 'Đã quy đổi ' + points + ' điểm cho “' + name + '”. Tu vi hiện có: ' + fmt(total(scores())) + '.');
   }
   const spendById = (id) => (growth()?.spend || []).find((e) => e.id === id);
   function voidSpend(id) {

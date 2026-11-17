@@ -876,3 +876,84 @@ dialog.gr-breakthrough.is-still .gr-bt-emblem{animation:none}
 @keyframes zem-pop-fade{0%{opacity:0}8%{opacity:1}88%{opacity:1}100%{opacity:0}}
 @media (max-width:520px){.gr-emblem{width:72px;height:72px}.gr-realm.has-emblem{column-gap:10px}}
 @media (prefers-reduced-motion:reduce){.gr-emblem:not(.is-empty)::after{animation:none;display:none}.gr-bt-emblem{animation:none}.zem-pop{animation:zem-pop-fade 4.8s linear both}}
+
+/* ---- v2.34.0 (Tàng Bảo Các): kho vật phẩm — quầy hàng có bà chủ tư vấn, sáu món, lời bà chủ trong bảng quy đổi ----------------------
+   Hình quầy và hình từng món là tranh nên giữ nguyên màu ở mọi giao diện (forced-color-adjust:none); khung chữ dùng biến --gr-* như các khung khác.
+   Màu cố định của tranh viết trong biến --st-* (không thuộc vai trò nào của bộ sinh giao diện) để chế độ tối không đảo ngược. */
+.gr-store,.gr-store-strip{--st-wood:#3a2316;--st-night:#4a2c1c}
+.gr-store>.help-copy{margin:-2px 0 14px}
+.gr-store-hero{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:16px;align-items:start}
+.gr-store-art{overflow:hidden;border-radius:16px;background:var(--st-wood);line-height:0;box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--gr-gold) 45%,transparent),0 8px 20px -12px rgba(40,20,10,.65)}
+.gr-st-scene{display:block;width:100%;height:auto;forced-color-adjust:none}
+.gr-st-plaque text{font-family:var(--serif,Georgia,serif)}
+.gr-store-talk{display:grid;gap:12px;align-content:start;min-width:0;padding:14px;border:1px solid var(--gr-line);border-radius:16px;background:var(--gr-wash)}
+.gr-store-owner{display:flex;align-items:center;gap:12px;min-width:0}
+.gr-store-owner>div{min-width:0}
+.gr-store-owner strong{display:block;font:700 17px/1.3 var(--serif);color:var(--gr-ink)}
+.gr-store-owner small{display:block;color:var(--muted)}
+.gr-store-face{flex:none;display:block;width:56px;height:56px;overflow:hidden;border-radius:50%;border:2px solid var(--gr-gold);background:var(--st-night);line-height:0}
+.gr-st-face{display:block;width:100%;height:100%;forced-color-adjust:none}
+.gr-store-say{padding:12px 14px;border:1px solid color-mix(in srgb,var(--gr-gold) 55%,var(--gr-line));border-radius:6px 16px 16px 16px;background:var(--gr-paper);color:var(--gr-ink)}
+.gr-store-say p{margin:0 0 7px;line-height:1.55;overflow-wrap:anywhere}
+.gr-store-say p:last-child{margin-bottom:0}
+.gr-store-say .gr-store-close{font-size:13px;color:var(--muted)}
+.gr-store-bars{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.gr-store-bars li{display:grid;grid-template-columns:minmax(0,88px) minmax(0,1fr) 54px;gap:8px;align-items:center;font-size:13px;color:var(--gr-ink)}
+.gr-store-bars span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.gr-store-bars i{display:block;height:8px;overflow:hidden;border-radius:99px;background:color-mix(in srgb,var(--gr-ink) 12%,transparent)}
+.gr-store-bars b{display:block;height:100%;border-radius:99px;background:var(--c)}
+.gr-store-bars em{font-style:normal;text-align:right;font-variant-numeric:tabular-nums}
+.gr-store-bars li.is-fit span{font-weight:700}
+.gr-store-bars li.is-fit i{box-shadow:0 0 0 2px var(--c)}
+.gr-store-items{list-style:none;margin:16px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,360px),1fr));gap:12px}
+.gr-store-item{display:grid;grid-template-columns:76px minmax(0,1fr);grid-template-rows:1fr auto;grid-template-areas:'pic info' 'act act';gap:10px 14px;padding:14px;border:1px solid var(--gr-line);border-radius:16px;background:var(--gr-paper);transition:border-color .2s,box-shadow .2s}
+.gr-store-item.is-asked{border-color:var(--gr-seal);box-shadow:0 0 0 2px color-mix(in srgb,var(--gr-seal) 24%,transparent)}
+.gr-store-pic{grid-area:pic;align-self:start;display:grid;place-items:center;width:76px;height:76px;border-radius:14px;border:1px solid var(--gr-line);background:var(--gr-wash)}
+.gr-st-pic{display:block;width:64px;height:64px;forced-color-adjust:none}
+.gr-store-info{grid-area:info;display:grid;gap:7px;min-width:0;align-content:start}
+.gr-store-name{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 8px}
+.gr-store-name h3{margin:0;font:700 16px/1.3 var(--serif);color:var(--gr-ink)}
+.gr-store-tag,.gr-fit-tag{font-style:normal;font-size:12px;font-weight:700;color:var(--gr-seal-text);background:color-mix(in srgb,var(--gr-seal) 10%,transparent);border-radius:99px;padding:2px 9px}
+.gr-store-blurb{margin:0;font-size:13.5px;line-height:1.5;color:var(--muted);overflow-wrap:anywhere}
+.gr-store-pick{display:flex;flex-wrap:wrap;gap:6px;margin:0;padding:0;border:0;min-width:0}
+.gr-store-pick legend{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.gr-store-chip{position:relative;display:inline-flex}
+.gr-store-chip input{position:absolute;inset:0;width:100%;height:100%;margin:0;opacity:0;cursor:pointer}
+.gr-store-chip span{display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:6px 14px;border:1px solid var(--gr-line);border-radius:99px;background:var(--gr-paper);color:var(--gr-ink);font-size:13px;font-weight:600}
+.gr-store-chip[style] span:before{content:'';flex:none;width:10px;height:10px;border-radius:50%;background:var(--dot)}
+.gr-store-chip input:checked+span{border-color:var(--gr-seal);background:var(--gr-seal);color:#fff}
+.gr-store-chip[style] input:checked+span:before{box-shadow:0 0 0 2px #fff}
+.gr-store-chip input:focus-visible+span{outline:3px solid var(--gr-gold);outline-offset:2px}
+.gr-store-meta{display:grid;gap:5px}
+.gr-store-pay{display:flex;gap:5px;align-items:center}
+.gr-store-pay i{display:block;width:12px;height:12px;border-radius:50%;background:var(--c);opacity:.5}
+.gr-store-pay i.is-fit{opacity:1;box-shadow:0 0 0 2px var(--gr-paper),0 0 0 3.5px var(--c)}
+.gr-store-hint{font-size:12.5px;line-height:1.45;color:var(--muted);overflow-wrap:anywhere}
+.gr-store-used{font-size:12px;font-weight:700;color:var(--gr-seal-text)}
+.gr-store-act{grid-area:act;align-self:end;display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px}
+.gr-store-act .btn{min-height:40px;padding:8px 16px}
+.gr-store-go{margin:12px 0 0;width:100%;text-align:center}
+.gr-store-go .btn{min-height:40px}
+.gr-store-strip{display:flex;align-items:flex-start;gap:12px;margin:12px 0 0;padding:12px;border:1px solid color-mix(in srgb,var(--gr-gold) 55%,var(--gr-line));border-radius:14px;background:var(--gr-wash);text-align:left}
+.gr-store-strip>div{min-width:0}
+.gr-store-strip strong{display:block;margin-bottom:4px;font:700 15px/1.3 var(--serif);color:var(--gr-ink)}
+.gr-store-strip p{margin:0 0 5px;font-size:13.5px;line-height:1.5;color:var(--gr-ink);overflow-wrap:anywhere}
+.gr-store-strip .gr-store-close{margin-bottom:0;font-size:12.5px;color:var(--muted)}
+.gr-spend-row.is-fit input{border-color:var(--gr-gold);box-shadow:0 0 0 1px var(--gr-gold)}
+@media (max-width:900px){.gr-store-hero{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:560px){.gr-store-item{padding:12px;gap:10px}.gr-store-bars li{grid-template-columns:minmax(0,78px) minmax(0,1fr) 48px}.gr-store-act .btn{flex:1 1 130px}.gr-store-owner strong{font-size:16px}}
+@media (prefers-reduced-motion:no-preference){
+  .gr-st-sway{transform-box:view-box;transform-origin:0 12px;animation:gr-st-sway 5.2s cubic-bezier(.45,0,.55,1) infinite}
+  .gr-st-sway-b{animation-duration:6s;animation-delay:-1.7s}
+  .gr-st-sway-c{animation-duration:4.4s;animation-delay:-2.9s}
+  .gr-st-steam{animation:gr-st-steam 3.4s ease-in-out infinite}
+  .gr-st-owner{transform-box:fill-box;transform-origin:50% 100%;animation:gr-st-breathe 5s cubic-bezier(.45,0,.55,1) infinite}
+  .gr-st-eye{transform-box:fill-box;transform-origin:50% 50%;animation:gr-st-blink 5.6s infinite}
+  .gr-st-fan{transform-box:view-box;transform-origin:296px 130px;animation:gr-st-fan 6.4s cubic-bezier(.45,0,.55,1) infinite}
+  .gr-st-beads{transform-box:view-box;transform-origin:252px 72px;animation:gr-st-sway 3.8s cubic-bezier(.45,0,.55,1) infinite -1s}
+}
+@keyframes gr-st-sway{0%,100%{rotate:-2.6deg}50%{rotate:2.6deg}}
+@keyframes gr-st-steam{0%,100%{opacity:.35;translate:0 1.5px}50%{opacity:.8;translate:0 -2px}}
+@keyframes gr-st-breathe{0%,100%{scale:1 1}50%{scale:1 1.012}}
+@keyframes gr-st-blink{0%,93%,100%{scale:1 1}96%{scale:1 .1}}
+@keyframes gr-st-fan{0%,100%{rotate:-2.5deg}50%{rotate:3deg}}
