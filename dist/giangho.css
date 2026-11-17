@@ -7184,6 +7184,35 @@
 :root[data-style=giangho] .qa-empty {
     color: #624d40
 }
+@media screen and (max-width: 700px) {
+    :root[data-style=giangho] .zen-bottom-bar {
+        background: rgba(255,252,246,0.969);
+        border-top: 1px solid #eeddc5;
+        box-shadow: 0 -6px 20px rgba(83,35,36,0.078)
+    }
+    :root[data-style=giangho] .zbb-cell {
+        border: 0;
+        background: transparent;
+        color: #594538
+    }
+    :root[data-style=giangho] .zbb-cell[aria-current='page'] {
+        color: #7d001c;
+        background: #f7eddb
+    }
+    :root[data-style=giangho] .zbb-cell:focus-visible {
+        outline: 2px solid #a3303a
+    }
+    :root[data-style=giangho] .zbb-add {
+        color: #7d001c
+    }
+    :root[data-style=giangho] .zbb-add .zbb-icon {
+        color: #ffffff
+    }
+    :root[data-style=giangho] .zbb-add .zbb-icon::before {
+        background: var(--zen-primary-gradient);
+        box-shadow: 0 6px 16px rgba(163,48,58,0.271)
+    }
+}
 :root[data-style=giangho][data-theme=dark] {
     --bg: #18130c;
     --paper: #1e1811;
@@ -14318,6 +14347,35 @@
 }
 :root[data-style=giangho][data-theme=dark] .qa-empty {
     color: #e5cdbe
+}
+@media screen and (max-width: 700px) {
+    :root[data-style=giangho][data-theme=dark] .zen-bottom-bar {
+        background: rgba(30,24,17,0.969);
+        border-top: 1px solid #433830;
+        box-shadow: 0 -6px 20px rgba(203,178,158,0.078)
+    }
+    :root[data-style=giangho][data-theme=dark] .zbb-cell {
+        border: 0;
+        background: transparent;
+        color: #e8d0c0
+    }
+    :root[data-style=giangho][data-theme=dark] .zbb-cell[aria-current='page'] {
+        color: #fec9c8;
+        background: #140e08
+    }
+    :root[data-style=giangho][data-theme=dark] .zbb-cell:focus-visible {
+        outline: 2px solid #fe9596
+    }
+    :root[data-style=giangho][data-theme=dark] .zbb-add {
+        color: #fec9c8
+    }
+    :root[data-style=giangho][data-theme=dark] .zbb-add .zbb-icon {
+        color: #ffffff
+    }
+    :root[data-style=giangho][data-theme=dark] .zbb-add .zbb-icon::before {
+        background: var(--zen-primary-gradient);
+        box-shadow: 0 6px 16px rgba(254,149,150,0.271)
+    }
 }
 
 /* ---- Họa tiết Giang hồ viết tay (v1.86.0 · Chu Mặc) ------------------------------------------------------------------------

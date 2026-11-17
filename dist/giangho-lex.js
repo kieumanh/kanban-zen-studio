@@ -426,6 +426,7 @@
     'thu và chi cộng dồn': 'thu ngân và xuất ngân cộng dồn',
     'Quay lại tất cả dự án': 'Quay lại mọi đại sự',
     'Điều hướng Phân bổ tài nguyên': 'Điều hướng Ngân khố',
+    'Điều hướng nhanh': 'Lối đi nhanh',
     'Lọc khoản thu chi': 'Lọc khoản thu ngân, xuất ngân',
     'Khoản thu': 'Khoản thu ngân',
     'Khoản chi': 'Khoản xuất ngân',
@@ -706,6 +707,12 @@
   for (const [k, v] of [
     ['dự án', { to: 'đại sự', in: '.home-project-total' }],
     ['Tổng quan', { to: 'Tổng đàn', in: '.tab-home' }],
+    // v2.39.0 (Thanh Dưới Điện Thoại): nhãn năm ô của thanh dưới đáy; cùng tên giang hồ với menu bên.
+    ['Tổng quan', { to: 'Tổng đàn', in: '.zbb-label' }],
+    ['Bảng', { to: 'Cáo thị', in: '.zbb-label' }],
+    ['Thêm', { to: 'Ghi nhanh', in: '.zbb-label' }],
+    ['Hằng ngày', { to: 'Nhật khóa', in: '.zbb-label' }],
+    ['Ghi chú', { to: 'Tàng thư', in: '.zbb-label' }],
     ['Thêm', { to: 'Hậu viện', in: '.nav-more-summary' }],
     ['Công việc cần chú ý', { to: 'Nhiệm vụ cần chú ý', in: 'h2:has(~ .due-work-tabs)' }],
     ['Đăng xuất', { to: 'Hạ sơn', in: '#editor-form:has([data-confirm=signout]) .modal-foot' }],

@@ -4065,6 +4065,25 @@
 :root[data-theme=dark] .qa-empty {
     color: #d0c3da
 }
+@media screen and (max-width: 700px) {
+    :root[data-theme=dark] .zen-bottom-bar {
+        background: rgba(27,24,31,0.969);
+        border-top: 1px solid #3d3843
+    }
+    :root[data-theme=dark] .zbb-cell {
+        color: #d2c5e1
+    }
+    :root[data-theme=dark] .zbb-cell[aria-current='page'] {
+        color: #d3c4fe;
+        background: #110e15
+    }
+    :root[data-theme=dark] .zbb-cell:focus-visible {
+        outline: 2px solid #bca9f8
+    }
+    :root[data-theme=dark] .zbb-add {
+        color: #d3c4fe
+    }
+}
 
 :root[data-theme=dark] {
   color-scheme: dark;

@@ -212,6 +212,8 @@ jobs:
           node tests/lazy-load-browser.mjs
           # v2.38.0 (Đầu Trang Điện Thoại Gọn): trên điện thoại, dải dự án và thanh Bảng / Lịch / Gantt chỉ hiện ở ba trang của một dự án.
           node tests/phone-head-browser.mjs
+          # v2.39.0 (Thanh Dưới Điện Thoại): thanh điều hướng dưới đáy trên điện thoại — Tổng quan · Bảng · + Thêm nhanh · Hằng ngày · Ghi chú.
+          node tests/bottom-bar-browser.mjs
           node tests/growth-scene-browser.mjs
           node tests/note-chips-browser.mjs
           node tests/checklist-focus-ring-browser.mjs
