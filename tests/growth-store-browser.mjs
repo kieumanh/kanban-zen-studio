@@ -32,6 +32,8 @@ const radarValues = (page) => page.evaluate(() => [...document.querySelectorAll(
 const axis = (page, i) => page.locator('[data-gr-spend-axis="' + i + '"]');
 const text = async (loc) => (await loc.innerText()).replace(/\s+/g, ' ').trim();
 const item = (page, id) => page.locator('.gr-store-item[data-item="' + id + '"]');
+// Chờ mọi hiệu ứng chuyển màu (CSS transition) đang chạy xong để đọc màu cuối cùng; hoạt họa lặp vô hạn của tranh không tính.
+const settle = (page) => page.evaluate(() => Promise.all(document.getAnimations().filter((a) => a instanceof CSSTransition).map((a) => a.finished.catch(() => {}))).then(() => undefined));
 const setStyle = (style) => ({ context }) => context.addInitScript((s) => localStorage.setItem('zen-style', s), style);
 async function openBuy(page, id) {
   await page.click('[data-gr-shop-buy="' + id + '"]');
@@ -189,6 +191,7 @@ try {
       assert.equal(await page.locator('.gr-store-item.is-asked').count(), 1);
       assert.equal(await item(page, 'tro').evaluate((n) => n.classList.contains('is-asked')), true, 'thẻ được hỏi được đánh dấu' + at);
       assert.deepEqual(await page.evaluate(() => [...document.querySelectorAll('.gr-store-bars li.is-fit span')].map((n) => n.textContent)), ['Tâm cảnh', 'Thể lực'], 'đánh dấu hai mạch hợp' + at);
+      await settle(page);
       const [bd1, bd2] = await page.evaluate(() => ['tro', 'son'].map((id) => getComputedStyle(document.querySelector('.gr-store-item[data-item="' + id + '"]')).borderTopColor));
       assert.notEqual(bd1, bd2, 'thẻ được hỏi có viền khác' + at);
       await page.click('[data-gr-shop-ask="ai"]');
@@ -429,6 +432,7 @@ try {
     const { context, page } = await h.open(width, { touch: width < 700, workspace: rich(), setup: setStyle(style), ...opts });
     await h.show(page, 'growth');
     await page.click('[data-gr-shop-ask="tro"]');
+    await settle(page);
     const sels = ['.gr-store-blurb', '.gr-store-hint', '.gr-store-say p', '.gr-store-close', '.gr-store-bars li span', '.gr-store-bars li em', '.gr-store-tag', '.gr-store-owner small', '.gr-store-name h3', '.gr-store-item .btn:not(.primary)', '.gr-store-chip:has(input:not(:checked)) span', '.gr-store-chip:has(input:checked) span'];
     for (const s of sels) {
       const c = await contrast(page, s);
@@ -437,6 +441,7 @@ try {
     }
     assert.equal(await noOverflow(page), true, 'không tràn ngang' + at);
     await openBuy(page, 'tro');
+    await settle(page);
     for (const s of ['.gr-store-strip p', '.gr-store-strip strong', '.gr-fit-tag', '.gr-spend-dlg .help-copy']) {
       const c = await contrast(page, s);
       assert.ok(c !== null && c >= 4.5, 'chữ trong bảng ' + s + ' đủ tương phản (' + (c && c.toFixed(2)) + ')' + at);
