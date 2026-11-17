@@ -192,6 +192,8 @@ jobs:
           node tests/growth-handanh-browser.mjs
           # v2.28.0 (Tiếng Gánh Nước): Quyển Một, truyện cấp 0–25 dài thêm 32 trang có tranh riêng.
           node tests/growth-quyen1-browser.mjs
+          # v2.29.0 (Lò Nhà Nhóm Sẵn): Quyển Hai, truyện cấp 30–50 dài thêm 24 trang có tranh riêng.
+          node tests/growth-quyen2-browser.mjs
           node tests/growth-scene-browser.mjs
           node tests/note-chips-browser.mjs
           node tests/checklist-focus-ring-browser.mjs
