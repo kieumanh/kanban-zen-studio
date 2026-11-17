@@ -190,6 +190,8 @@ jobs:
           node tests/growth-thiencang-browser.mjs
           # v2.27.0 (Hán Danh): mọi nhân vật mang tên Hán Việt, không đổi mã nhân vật hay lịch kỳ ngộ.
           node tests/growth-handanh-browser.mjs
+          # v2.28.0 (Tiếng Gánh Nước): Quyển Một, truyện cấp 0–25 dài thêm 32 trang có tranh riêng.
+          node tests/growth-quyen1-browser.mjs
           node tests/growth-scene-browser.mjs
           node tests/note-chips-browser.mjs
           node tests/checklist-focus-ring-browser.mjs

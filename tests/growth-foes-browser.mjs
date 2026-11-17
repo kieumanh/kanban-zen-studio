@@ -104,10 +104,21 @@ try {
     await page.keyboard.press('Escape');
     await page.waitForFunction(() => !document.querySelector('dialog.gr-story'));
     // Khai cuộc: lời Giáo chủ có tranh Giáo chủ.
+    // v2.28.0: khai cuộc dài thêm trang mới, nên tìm đúng trang giới thiệu Giáo chủ theo lời kể thay vì gắn cứng số lần lật.
     await page.click('[data-gr-story="0"]');
     await page.waitForSelector('dialog.gr-story[open]');
-    for (let i = 0; i < 8; i++) await page.keyboard.press('ArrowRight');
-    assert.equal(await page.evaluate(() => document.querySelector('dialog.gr-story[open] .gr-story-art .sc')?.dataset.who.split(',').includes('giao')), true, 'lời Giáo chủ ở khai cuộc: tranh có Giáo chủ' + at);
+    let giaoPage = null;
+    for (let i = 0; i < 40 && !giaoPage; i++) {
+      const r = await page.evaluate(() => {
+        const d = document.querySelector('dialog.gr-story[open]');
+        return { text: d.querySelector('.gr-story-text')?.textContent || '', giao: (d.querySelector('.gr-story-art .sc')?.dataset.who || '').split(',').includes('giao'), lesson: !!d.querySelector('.gr-story-lesson') };
+      });
+      if (/Huyết Nguyệt Giáo chủ/.test(r.text)) giaoPage = r;
+      else if (r.lesson) break;
+      else await page.keyboard.press('ArrowRight');
+    }
+    assert.ok(giaoPage, 'khai cuộc có trang giới thiệu Giáo chủ' + at);
+    assert.equal(giaoPage.giao, true, 'lời Giáo chủ ở khai cuộc: tranh có Giáo chủ' + at);
     await page.keyboard.press('Escape');
     assert.equal(await noOverflow(page), true, 'không tràn ngang' + at);
     assert.deepEqual(errors, [], 'không lỗi trang' + at);

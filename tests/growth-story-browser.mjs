@@ -75,7 +75,8 @@ try {
     s = await story(page);
     assert.equal(s.who, 'Tiểu Mộc', 'trang 4: Tiểu Mộc nói' + at);
     assert.match(s.text, /^Hì hì, sư tỷ gánh nước/, 'nữ hiệp được gọi là sư tỷ' + at);
-    for (let i = 0; i < 7; i++) await page.keyboard.press('ArrowRight'); // chương 1 có 10 trang
+    // v2.28.0: chương này dài thêm trang mới, nên lật đến khi hiện Tâm đắc thay vì đếm cứng số lần lật.
+    for (let i = 0; i < 40 && !(await story(page)).lesson; i++) await page.keyboard.press('ArrowRight');
     s = await story(page);
     assert.match(s.lesson, /Tâm đắc.*Đều đặn thắng hăng hái/, 'trang cuối là Tâm đắc' + at);
     assert.match(s.lesson, /Lam Y hiện ở cấp 6 · Sơ nhập giang hồ · 3 điểm tu vi/, 'Tâm đắc nêu cấp hiện tại' + at);
