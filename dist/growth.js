@@ -9,8 +9,7 @@
   const STEP = 0.5; // mỗi lần bấm + cộng 0,5 điểm
   const TASK_STEPS = 2; // mỗi việc hoàn thành được 2 lần cộng (1 điểm) để phân bổ
   const HABIT_STEPS = 6; // một việc hằng ngày đủ 7 ngày liền được 6 lần cộng (3 điểm)
-  const LOG_MAX = 3000;
-  const SPEND_MAX = 500;
+  const { LOG_MAX, SPEND_MAX } = window.zenGrowthValid.limits; // cùng giới hạn với bộ kiểm ở lazy.js
   const TIERS = [5, 10, 20, 40, 80, 160, 320, 640, 1280, 2560, 5120];
   // Thứ tự các chỉ số là cố định (chỉ số p[i] trong sổ cái); không đổi thứ tự sau khi đã phát hành.
   const AXES = [
@@ -97,38 +96,8 @@
     const d = new Date(s + 'T12:00:00Z');
     return Number.isFinite(d.getTime()) && d.toISOString().slice(0, 10) === s;
   };
-  function validGrowth(g) {
-    if (g === undefined) return true;
-    if (!g || typeof g !== 'object' || Array.isArray(g)) return false;
-    if (!Object.keys(g).every((k) => ['v', 'hero', 'name', 'since', 'log', 'notify', 'tips', 'spend'].includes(k))) return false;
-    if (g.v !== 1 || !['nam', 'nu'].includes(g.hero) || !isDate(g.since)) return false;
-    if (g.name !== undefined && (typeof g.name !== 'string' || g.name.length > 30)) return false;
-    if (g.notify !== undefined && typeof g.notify !== 'boolean') return false;
-    if (g.tips !== undefined && typeof g.tips !== 'boolean') return false;
-    if (!Array.isArray(g.log) || g.log.length > LOG_MAX) return false;
-    const points = (p) => Array.isArray(p) && p.length === 8 && p.every((x) => Number.isInteger(x) && x >= 0 && x <= 1000000) && p.some((x) => x > 0);
-    const seen = new Set();
-    const logOk = g.log.every(
-      (e) =>
-        !!e && typeof e === 'object' && !Array.isArray(e) && Object.keys(e).every((k) => ['id', 'd', 's', 'k', 'n', 'p'].includes(k)) && typeof e.id === 'string' && /^[A-Za-z0-9_-]{1,99}$/.test(e.id) &&
-        !seen.has(e.id) && !!seen.add(e.id) && isDate(e.d) && ['task', 'habit', 'archive'].includes(e.s) &&
-        (e.k === undefined || (typeof e.k === 'string' && e.k.length <= 120)) && (e.n === undefined || (typeof e.n === 'string' && e.n.length <= 120)) && points(e.p),
-    );
-    if (!logOk) return false;
-    if (g.spend === undefined) return true;
-    if (!Array.isArray(g.spend) || g.spend.length > SPEND_MAX) return false;
-    const spent = new Set();
-    return g.spend.every(
-      (e) =>
-        !!e && typeof e === 'object' && !Array.isArray(e) && Object.keys(e).every((k) => ['id', 'd', 'n', 'note', 'p', 'x'].includes(k)) && typeof e.id === 'string' && /^[A-Za-z0-9_-]{1,99}$/.test(e.id) &&
-        !spent.has(e.id) && !!spent.add(e.id) && isDate(e.d) && typeof e.n === 'string' && e.n.length >= 1 && e.n.length <= 120 &&
-        (e.note === undefined || (typeof e.note === 'string' && e.note.length <= 300)) && (e.x === undefined || e.x === true) && points(e.p),
-    );
-  }
-  const validBeforeGrowth = valid;
-  valid = function (d) {
-    return validBeforeGrowth(d) && validGrowth(d.growth);
-  };
+  // v2.37.0: bộ kiểm dữ liệu data.growth (và bản bọc valid) nằm ở dist/lazy.js, đặt sẵn từ lúc mở trang dù growth.js chưa nạp; dùng lại ở đây.
+  const validGrowth = window.zenGrowthValid;
 
   // ---- Mô hình ------------------------------------------------------------------------------------------------------------
   const growth = () => (data.growth && validGrowth(data.growth) ? data.growth : null);

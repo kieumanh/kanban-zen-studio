@@ -35,3 +35,27 @@ export function validateAssets(assets) {
     routes.add(route);
   }
 }
+
+// v2.37.0 (Tải Theo Nhu Cầu): các nhóm tệp chỉ tải khi cần (đánh dấu trong dist/index.html). Service worker không lưu sẵn chúng lúc cài
+// đặt; nhóm được lưu khi người dùng thật sự mở tới nó, và được giữ tươi qua các lần cập nhật nếu người đó đã từng dùng.
+export function lazyGroups(html, files = {}) {
+  const groups = {};
+  const add = (group, url) =>
+    (groups[group] ||= []).includes(url) ? 0 : groups[group].push(url);
+  for (const m of html.matchAll(
+    /<script type="zen\/lazy" data-lazy="([^"]+)" src="([^"]+)"><\/script>/g,
+  ))
+    add(m[1], m[2]);
+  for (const m of html.matchAll(
+    /<link rel="zen-lazy" data-lazy="([^"]+)" href="([^"]+)">/g,
+  ))
+    add(m[1], m[2]);
+  for (const m of html.matchAll(
+    /<script src="[^"]+" data-css="([^"]+)" data-need="([^"]+)"><\/script>/g,
+  ))
+    add(m[2], m[1]);
+  // Phông chữ chỉ dùng cho giangho.css.
+  for (const url of Object.keys(files))
+    if (url.startsWith('/fonts/')) add('giangho', url);
+  return groups;
+}

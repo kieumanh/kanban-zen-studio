@@ -36,13 +36,28 @@ export const defaultSeed = () => ({
   notes: [],
 });
 
-export async function startHarness({ seed = defaultSeed, executablePath = process.env.CHROMIUM_PATH } = {}) {
+// v2.37.0 (Tải Theo Nhu Cầu): index.html đánh dấu các khối tải khi cần (Điểm tích lũy, Giang hồ, nhật ký phát hành) bằng type="zen/lazy"
+// hoặc rel="zen-lazy". Mặc định bộ dựng đổi chúng về thẻ script/stylesheet thường, đúng chỗ cũ, nên mọi bài kiểm thử cũ chạy với đúng thứ tự
+// nạp như trước. Chạy với { lazy: true } (hoặc ZEN_LAZY=1) để thử đúng đường tải theo nhu cầu như ngoài đời; tests/lazy-load-browser.mjs luôn làm vậy.
+export const eagerHtml = (html) =>
+  html
+    .replace(/<script type="zen\/lazy" data-lazy="([^"]+)" src="([^"]+)"><\/script>/g, '<script data-lazy="$1" src="$2" defer></script>')
+    .replace(/<link rel="zen-lazy" data-lazy="([^"]+)" href="([^"]+)">/g, '<link rel="stylesheet" data-lazy="$1" href="$2">')
+    .replace(/<script src="[^"]+" data-css="([^"]+)" data-need="[^"]+"><\/script>/g, '<link rel="stylesheet" href="$1">');
+
+export async function startHarness({ seed = defaultSeed, executablePath = process.env.CHROMIUM_PATH, lazy = process.env.ZEN_LAZY === '1' } = {}) {
   const { chromium } = await import(process.env.PLAYWRIGHT_MODULE || 'playwright');
   const server = createServer(async (req, res) => {
     try {
       const r = await worker.fetch(new Request('http://localhost' + req.url));
-      res.writeHead(r.status, Object.fromEntries(r.headers));
-      res.end(Buffer.from(await r.arrayBuffer()));
+      const headers = Object.fromEntries(r.headers);
+      let body = Buffer.from(await r.arrayBuffer());
+      if (!lazy && /text\/html/.test(headers['content-type'] || '')) {
+        body = Buffer.from(eagerHtml(body.toString('utf8')), 'utf8');
+        delete headers['content-length'];
+      }
+      res.writeHead(r.status, headers);
+      res.end(body);
     } catch (e) {
       res.writeHead(500);
       res.end(e.message);

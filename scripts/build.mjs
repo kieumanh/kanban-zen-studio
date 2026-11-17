@@ -1,7 +1,11 @@
 import { buildStaticAssets } from './static-build.mjs';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { stripModuleSyntax, validateAssets } from './build-utils.mjs';
+import {
+  lazyGroups,
+  stripModuleSyntax,
+  validateAssets,
+} from './build-utils.mjs';
 import { createHash } from 'node:crypto';
 import { Script } from 'node:vm';
 import { GH_FONT_FILES } from './generate-themes.mjs';
@@ -37,7 +41,11 @@ const shellVersion = createHash('sha256')
   .slice(0, 20);
 files['/sw.js'].body = files['/sw.js'].body
   .replace('__SHELL_VERSION__', shellVersion)
-  .replace('__SHELL_ASSETS__', JSON.stringify(shell));
+  .replace('__SHELL_ASSETS__', JSON.stringify(shell))
+  .replace(
+    '__LAZY_ASSETS__',
+    JSON.stringify(lazyGroups(files['/'].body, files)),
+  );
 files['/bamboo.ogg'] = {
   body: readFileSync(root + 'dist/bamboo.ogg.b64', 'utf8').trim(),
   type: 'audio/ogg',

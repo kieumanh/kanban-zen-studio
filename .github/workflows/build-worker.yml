@@ -208,6 +208,8 @@ jobs:
           node tests/quickadd-browser.mjs
           # v2.36.0 (Một Tên Một Trang): menu = tiêu đề trang = đường dẫn cho Phân bổ tài nguyên, Chế độ tập trung, Tài nguyên, Lưu trữ…; không còn nhãn tiếng Anh “RESOURCE VIEWS”.
           node tests/naming-browser.mjs
+          # v2.37.0 (Tải Theo Nhu Cầu): mã Điểm tích lũy, Giang hồ và nhật ký phát hành chỉ tải khi cần; lần mở đầu nhẹ đi khoảng một nửa, không mất lần hỏi điểm.
+          node tests/lazy-load-browser.mjs
           node tests/growth-scene-browser.mjs
           node tests/note-chips-browser.mjs
           node tests/checklist-focus-ring-browser.mjs

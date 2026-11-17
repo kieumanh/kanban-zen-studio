@@ -448,5 +448,20 @@
     "/giangho-sync.js",
     "giangho-sync.js",
     "text/javascript; charset=utf-8"
+  ],
+  [
+    "/lazy.js",
+    "lazy.js",
+    "text/javascript; charset=utf-8"
+  ],
+  [
+    "/lazy-css.js",
+    "lazy-css.js",
+    "text/javascript; charset=utf-8"
+  ],
+  [
+    "/releases.js",
+    "releases.js",
+    "text/javascript; charset=utf-8"
   ]
 ]

@@ -1,5 +1,6 @@
 import { mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { createHash } from 'node:crypto';
+import { lazyGroups } from './build-utils.mjs';
 export function buildStaticAssets(files, root, version, source) {
   const out = root + 'public/';
   rmSync(out, { recursive: true, force: true });
@@ -48,6 +49,18 @@ export function buildStaticAssets(files, root, version, source) {
     .replace(
       /const SHELL_ASSETS=.*?;/,
       'const SHELL_ASSETS=' + JSON.stringify(shell) + ';',
+    )
+    .replace(
+      /const LAZY_ASSETS=.*?;/,
+      'const LAZY_ASSETS=' +
+        JSON.stringify(
+          Object.fromEntries(
+            Object.entries(lazyGroups(files['/'].body, files)).map(
+              ([group, urls]) => [group, urls.map((u) => mapping[u] || u)],
+            ),
+          ),
+        ) +
+        ';',
     );
   write('/sw.js', swSource);
   writeFileSync(

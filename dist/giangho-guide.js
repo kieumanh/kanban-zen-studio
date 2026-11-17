@@ -123,6 +123,11 @@
   }
   function glossary(opts = {}) {
     if (typeof modal !== 'function') return;
+    // v2.37.0: bảng tên giang hồ nằm trong giangho-lex.js (tải khi cần); người dùng phong cách Thiền mở bảng này thì nạp trước.
+    if (!lex() && window.zenLazy) {
+      window.zenLazy.load('giangho').then(() => lex() && glossary(opts), () => notify('Chưa tải được Bảng chú giải. Kiểm tra kết nối rồi thử lại.'));
+      return;
+    }
     modal(glossaryHtml(), null, true);
     const body = document.querySelector('#editor-body');
     const box = body?.querySelector('.gh-glossary');

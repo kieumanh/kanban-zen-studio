@@ -59,7 +59,9 @@ assert.doesNotThrow(() => checkSkin(':root[data-style=giangho] .x { color: red; 
 
 // 3. Nạp và đăng ký.
 const html = read('dist/index.html');
-const links = [...html.matchAll(/<link rel="stylesheet" href="([^"]+)">/g)].map((m) => m[1]);
+// v2.37.0: giangho.css chỉ tải khi phong cách Giang hồ bật; thẻ lazy-css.js đứng đúng chỗ <link> cũ (giữ thứ tự cascade), nên coi nó là một mục trong dãy bảng kiểu.
+const links = [...html.matchAll(/<link rel="stylesheet" href="([^"]+)">|<script src="\/lazy-css\.js" data-css="([^"]+)" data-need="giangho"><\/script>/g)].map((m) => m[1] || m[2]);
+assert.ok(html.includes('<script src="/lazy-css.js" data-css="/giangho.css" data-need="giangho"></script>'), 'giangho.css tải theo nhu cầu qua lazy-css.js');
 assert.equal(links.indexOf('/giangho.css'), links.indexOf('/studio-zen.css') - 1, 'giangho.css nạp ngay trước studio-zen.css');
 assert.deepEqual(links.slice(-3), ['/studio-zen.css', '/dark.css', '/contrast.css'], 'dark.css và contrast.css vẫn nạp sau cùng');
 const assets = JSON.parse(read('scripts/assets.json')).map((a) => a[0]);

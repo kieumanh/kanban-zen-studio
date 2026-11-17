@@ -82,6 +82,13 @@
       if (value === 'system') localStorage.removeItem(key);
       else localStorage.setItem(key, value);
     } catch (e) {}
+    // v2.37.0: giangho.css chỉ tải khi cần (dist/lazy-css.js). Lần đầu chọn Giang hồ thì đợi bảng kiểu về rồi mới đổi thuộc tính, để không
+    // hiện giao diện Thiền lỡ dở; các lần sau (và mọi lựa chọn khác) đổi ngay như trước.
+    var wait = window.zenCss && state().style === 'giangho' ? window.zenCss.ensure(['giangho']) : null;
+    if (wait) {
+      wait.then(apply, apply);
+      return state();
+    }
     return apply();
   }
   apply();
