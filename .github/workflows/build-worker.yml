@@ -182,6 +182,8 @@ jobs:
           node tests/growth-motion-browser.mjs
           # v2.23.0 (Liên Mạch): Bát phương đồ thành mạng lưới liên kết, thang tự co giãn.
           node tests/growth-network-browser.mjs
+          # v2.24.0 (Thập Nhị Phương): mười một Phương thần có nơi riêng trong Thần giới.
+          node tests/growth-phuong-browser.mjs
           node tests/growth-scene-browser.mjs
           node tests/note-chips-browser.mjs
           node tests/checklist-focus-ring-browser.mjs

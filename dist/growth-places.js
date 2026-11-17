@@ -408,6 +408,152 @@
     for (let i = 0; i < 6; i++) set += '<path d="' + smooth(Array.from({ length: 7 }, (_, k) => [-100 + k * 290, 880 + i * 36 + between(r, -10, 10)])) + '" stroke="' + mix(h.cloud, P.ink, 0.12) + '" stroke-width="3" fill="none" opacity=".45"/>';
     return { place: 'Biển mây Thần giới', far, mid, set, fg: h.sea(960, 2, '#ffffff', 0.85), ground: () => 836, depth: () => 1, hot: [800, 300] };
   };
+  // ---- v2.24.0 (Thập Nhị Phương): nơi riêng của mười một Phương thần (Phương Thìn đã có biển mây từ v2.20.0) ----------------
+  // Cùng mặt đất y = 836 như mọi cảnh Thần giới; trời lấy theo giờ của từng trang, cảnh chỉ thêm đất, vật và ánh sáng riêng.
+  const floor = (c, id, top, bot, lift) => '<path d="M-100,1100 L-100,' + (840 + (lift || 0)) + ' Q800,' + (822 + (lift || 0)) + ' 1700,' + (840 + (lift || 0)) + ' L1700,1100Z" fill="' + c.lin(id, [[0, top], [1, bot]]) + '"/>';
+  const stars = (r, n, y1, op) => { let s = ''; for (let i = 0; i < n; i++) s += '<circle cx="' + f(r() * W) + '" cy="' + f(Math.pow(r(), 1.4) * y1) + '" r="' + f(0.6 + r() * 1.4) + '" fill="#fff" opacity="' + f(op * (0.4 + r() * 0.6)) + '"/>'; return s; };
+  // Phương Tý: hồ nước đen dưới đáy đêm; gợn sóng vòng tròn, lối đá phẳng, đèn hoa đăng trôi lặng.
+  HEAVEN.ty = (c, r, h) => {
+    const P = c.P, deep = '#06070f';
+    // Đêm sâu thì trời đen riêng; gần sáng (trang nhóm bếp) để trời theo giờ cho thấy đêm đã trôi.
+    const lit = /dawn|morning|day/.test((c.shot && c.shot.t) || '');
+    const sky = lit ? undefined : rect(-40, -40, W + 80, H + 80, c.lin('tyk', [[0, '#020208'], [0.6, '#0a0d1e'], [1, '#141a30']])) + stars(r, 40, 520, 0.7) + ((c.shot && c.shot.b) || []).map((b) => K.bodyArt(c, b)).join('');
+    let far = ridge(c, r, { y: 640, amp: 160, fill: '#0c1022', fade: '#05060c', id: 'tyr', n: 30 }), set = '';
+    set += '<path d="M-100,1100 L-100,660 L1700,660 L1700,1100Z" fill="' + c.lin('tyw', [[0, '#141a30'], [0.3, deep], [1, '#000003']]) + '"/>';
+    for (let i = 0; i < 6; i++) set += '<ellipse cx="800" cy="' + (950 + i * 4) + '" rx="' + (120 + i * 150) + '" ry="' + (14 + i * 9) + '" fill="none" stroke="#7a8ac8" stroke-width="1.6" opacity="' + f(0.34 - i * 0.05) + '" class="sc-ring" style="animation-delay:-' + i * 1.4 + 's"/>';
+    set += '<path d="M-100,836 Q800,816 1700,836 L1700,872 Q800,852 -100,872Z" fill="' + c.lin('typ', [[0, '#2a3048'], [1, '#10131f']]) + '"/><path d="M-100,836 Q800,816 1700,836" stroke="#8a96c8" stroke-width="2" fill="none" opacity=".35"/>';
+    for (const [x, y, s] of [[220, 760, 1], [560, 720, 0.7], [1080, 740, 0.8], [1400, 780, 1.1]]) set += glow(c, x, y - 6 * s, 60 * s, '#ffd88a', 0.5) + '<path d="M' + (x - 16 * s) + ',' + y + ' Q' + x + ',' + (y - 22 * s) + ' ' + (x + 16 * s) + ',' + y + 'Z" fill="#ffcf7a"/><ellipse cx="' + x + '" cy="' + (y + 2) + '" rx="' + 22 * s + '" ry="' + 4 * s + '" fill="#ffd88a" opacity=".25"/>';
+    return { place: 'Hồ đen Phương Tý', sky, far, mid: mist(c, r, 650, 3, 0.35, '#2a3050'), set, fg: '', ground: () => 836, depth: () => 1, hot: [800, 900] };
+  };
+  // Phương Sửu: núi gánh, sườn đá xếp bậc, đá tảng chồng thành gánh, đòn gánh dựa vách, miếu nhỏ trên đỉnh.
+  HEAVEN.suu = (c, r, h) => {
+    const P = c.P, stone = mix('#9a8a6a', P.ink, P.dark ? 0.5 : 0.2);
+    let far = ridge(c, r, { y: 520, amp: 320, fill: mix(P.far, '#8a7a5a', 0.3), fade: P.haze, id: 'sur', n: 26, peak: 0.62, peakW: 3 });
+    far += pagoda(c, 1000, 250, 90, 2, mix(h.gold, P.ink, 0.3)) + glow(c, 1000, 220, 120, '#fff1bd', 0.4);
+    let mid = ridge(c, r, { y: 720, amp: 160, fill: mix(P.mid, '#7a6a4a', 0.35), fade: mix(P.mid, P.haze, 0.4), id: 'sum', n: 30 });
+    for (let i = 0; i < 9; i++) mid += '<path d="M' + f(140 + i * 150) + ',' + f(720 - i * 22) + ' h90" stroke="' + mix(stone, '#fff', 0.3) + '" stroke-width="5" opacity=".55" stroke-linecap="round"/>';
+    let set = floor(c, 'suf', mix('#c9b88a', P.ink, P.dark ? 0.45 : 0.1), mix('#6a5a3a', P.ink, 0.4));
+    for (const [x, n, w] of [[110, 4, 90], [1450, 5, 100], [1290, 3, 70]]) for (let k = 0; k < n; k++) set += '<rect x="' + f(x - w / 2 + between(r, -8, 8)) + '" y="' + f(836 - (k + 1) * w * 0.42) + '" width="' + f(w * between(r, 0.8, 1)) + '" height="' + f(w * 0.42 - 3) + '" rx="8" fill="' + mix(stone, P.ink, k * 0.06) + '"/>';
+    set += '<path d="M190,836 L260,600" stroke="' + mix('#6a5040', P.ink, 0.2) + '" stroke-width="10" stroke-linecap="round"/><path d="M226,700 q-20,40 0,80 M244,650 q20,40 0,80" stroke="' + P.ink + '" stroke-width="2" fill="none" opacity=".6"/>';
+    return { place: 'Núi gánh Phương Sửu', far, mid: mid + mist(c, r, 700, 2, 0.4), set, fg: rock(c, r, 1500, 1080, 240, 120, P.fg), ground: () => 836, depth: () => 1, hot: [1000, 260] };
+  };
+  // Phương Dần: bờ rạng đông, vầng dương lớn nhô khỏi mặt biển, trăm giàn gỗ dựng dở dọc bờ cát.
+  HEAVEN.dan = (c, r, h) => {
+    const P = c.P;
+    let far = glow(c, 800, 600, 520, '#ffb36a', 0.55) + '<path d="M630,612 A170,170 0 0 1 970,612Z" fill="' + c.rad('dns', [[0, '#fff6d8'], [0.7, '#ffd08a'], [1, '#ff9a5a']]) + '"/>';
+    for (let i = 0; i < 14; i++) { const a = (-180 + i * (180 / 13)) * Math.PI / 180; far += '<path d="M' + f(800 + Math.cos(a) * 200) + ',' + f(600 + Math.sin(a) * 200) + ' L' + f(800 + Math.cos(a) * 760) + ',' + f(600 + Math.sin(a) * 760) + '" stroke="#ffe0a8" stroke-width="' + (i % 2 ? 6 : 14) + '" opacity=".16"/>'; }
+    let mid = '<path d="M-100,596 H1700 V780 H-100Z" fill="' + c.lin('dnw', [[0, '#ffcf9a'], [1, mix('#6a7aa8', P.ink, 0.2)]]) + '"/>';
+    for (let i = 0; i < 12; i++) mid += '<path d="M' + f(between(r, -50, 1500)) + ',' + f(610 + i * 12) + ' h' + f(between(r, 80, 260)) + '" stroke="#fff3d8" stroke-width="2" opacity=".5"/>';
+    let set = floor(c, 'dnf', mix('#f0d8a8', P.ink, P.dark ? 0.4 : 0.05), mix('#b08a5a', P.ink, 0.35));
+    const wood = mix('#7a5a3a', P.ink, 0.2);
+    for (const [x, w, hh, k] of [[120, 120, 230, 3], [330, 90, 170, 2], [1180, 110, 210, 3], [1420, 150, 270, 4]]) {
+      set += '<g stroke="' + wood + '" stroke-width="7" fill="none" stroke-linecap="round"><path d="M' + (x - w / 2) + ',836 V' + (836 - hh) + ' M' + (x + w / 2) + ',836 V' + (836 - hh * between(r, 0.55, 0.9)) + '"/>';
+      for (let j = 1; j < k; j++) set += '<path d="M' + (x - w / 2) + ',' + f(836 - (hh * j) / k) + ' H' + f(x + w / 2 * (j < k - 1 ? 1 : 0.2)) + '"/>';
+      set += '</g>';
+    }
+    return { place: 'Bờ rạng đông Phương Dần', far, mid, set, fg: grass(c, r, 0, W, 1060, 30, 36, P.fg), ground: () => 836, depth: () => 1, hot: [800, 600] };
+  };
+  // Phương Mão: cánh rừng có một cây lớn ở giữa, rễ lan khắp đất và nắm lấy rễ của mọi cây non.
+  HEAVEN.mao = (c, r, h) => {
+    const P = c.P, bark = mix('#5a4030', P.ink, 0.25), leaf = mix('#3f7a4a', P.ink, P.dark ? 0.45 : 0.1);
+    let far = '', mid = '';
+    for (let i = 0; i < 16; i++) { const x = between(r, -40, 1640), y = between(r, 560, 640); far += '<path d="' + blob(r, x, y - 120, 90, 120, 6) + 'Z" fill="' + mix(leaf, P.haze, 0.6) + '"/>' + rect(x - 8, y - 20, 16, 200, mix(bark, P.haze, 0.6)); }
+    for (let i = 0; i < 9; i++) { const x = 80 + i * 180 + between(r, -30, 30); mid += rect(x - 14, 520, 28, 320, mix(bark, P.haze, 0.3)) + '<path d="' + blob(r, x, 480, 120, 110, 6) + 'Z" fill="' + mix(leaf, P.haze, 0.3) + '"/>'; }
+    let set = floor(c, 'maf', mix('#6a8a4a', P.ink, P.dark ? 0.5 : 0.15), mix('#2a3a20', P.ink, 0.3));
+    set += '<path d="M700,836 C700,600 690,420 640,250 L960,250 C910,420 900,600 900,836Z" fill="' + bark + '"/><path d="' + blob(r, 800, 170, 430, 200, 9) + 'Z" fill="' + leaf + '"/><path d="' + blob(r, 800, 140, 320, 140, 7) + 'Z" fill="' + mix(leaf, '#fff', 0.12) + '"/>';
+    const tips = [[-60, 900], [180, 870], [420, 940], [1180, 940], [1420, 868], [1660, 910]];
+    for (const [x, y] of tips) set += '<path d="M' + (x < 800 ? 720 : 880) + ',830 C' + f(lerp(800, x, 0.4)) + ',' + f(y + 20) + ' ' + f(lerp(800, x, 0.7)) + ',' + f(y - 10) + ' ' + x + ',' + y + '" stroke="' + mix(bark, P.ink, 0.1) + '" stroke-width="12" fill="none" stroke-linecap="round"/>';
+    for (const x of [180, 1420]) set += rect(x - 6, 760, 12, 110, bark) + '<path d="' + blob(r, x, 740, 46, 40, 5) + 'Z" fill="' + mix(leaf, '#fff', 0.2) + '"/>';
+    return { place: 'Rừng rễ nối Phương Mão', far, mid: mid + mist(c, r, 640, 2, 0.35), set, fg: grass(c, r, 0, W, 1050, 50, 44, P.fg), ground: () => 836, depth: () => 1, hot: [800, 300] };
+  };
+  // Phương Tỵ: núi lửa phun sau lưng, sông dung nham đỏ, đất đá bazan nứt sáng, hai bếp than ủ ở hai bên.
+  HEAVEN.tyj = (c, r, h) => {
+    const P = c.P;
+    let far = glow(c, 800, 300, 520, '#ff5a2a', 0.42) + '<path d="M240,720 C420,660 560,480 650,330 Q700,292 760,300 Q800,312 840,300 Q900,292 950,330 C1040,480 1180,660 1360,720Z" fill="' + c.lin('tyv', [[0, '#3a1a1a'], [1, '#1a0a0a']]) + '"/><path d="M660,300 Q800,250 940,300 Q800,330 660,300Z" fill="#ff7a3a"/>';
+    far += '<path d="M780,300 C760,420 820,520 760,700 M840,310 C880,430 830,560 900,700" stroke="#ff6a2a" stroke-width="9" fill="none" opacity=".85" class="sc-flame"/>';
+    for (let i = 0; i < 6; i++) far += '<circle cx="' + f(800 + between(r, -120, 120)) + '" cy="' + f(180 - i * 26) + '" r="' + f(40 + i * 12) + '" fill="#5a4a48" opacity="' + f(0.5 - i * 0.06) + '"/>';
+    let set = floor(c, 'tyf', '#3a2422', '#120808');
+    let d = '';
+    for (let i = 0; i < 14; i++) { const x = between(r, -60, 1660), y = between(r, 860, 1080); d += 'M' + f(x) + ',' + f(y) + ' l' + f(between(r, -80, 80)) + ',' + f(between(r, 10, 40)) + ' l' + f(between(r, -60, 60)) + ',' + f(between(r, 10, 40)) + ' '; }
+    set += '<path d="' + d + '" stroke="#ff7a3a" stroke-width="3" fill="none" opacity=".7"/>' + brazier(c, 130, 836, 1.1) + brazier(c, 1470, 836, 1.1);
+    for (const x of [380, 1210]) set += '<ellipse cx="' + x + '" cy="836" rx="90" ry="22" fill="#5a4a48" opacity=".8"/>';
+    return { place: 'Núi lửa Phương Tỵ', far, mid: mist(c, r, 700, 3, 0.45, '#6a3a30'), set, fg: '', ground: () => 836, depth: () => 1, hot: [800, 300] };
+  };
+  // Phương Ngọ: đồng đá trắng giữa trưa, nắng rọi thẳng đỉnh đầu, mặt đá bóng như gương, cột nhật quỹ không đổ bóng.
+  HEAVEN.ngo = (c, r, h) => {
+    const P = c.P;
+    let far = glow(c, 800, -60, 900, '#fffbe6', 0.7) + '<path d="M-100,640 H1700 V700 H-100Z" fill="' + mix('#f4ecd2', P.haze, 0.4) + '"/>';
+    let set = '<path d="M-100,1100 L-100,660 L1700,660 L1700,1100Z" fill="' + c.lin('ngf', [[0, '#fffdf4'], [1, mix('#e8dcc0', P.ink, P.dark ? 0.4 : 0.12)]]) + '"/>';
+    for (let i = 0; i < 17; i++) set += '<path d="M' + f(800 + (i - 8) * 70) + ',660 L' + f(800 + (i - 8) * 260) + ',1100" stroke="' + h.gold + '" stroke-width="1.6" opacity=".35"/>';
+    for (let k = 1; k < 8; k++) { const y = 660 + Math.pow(k / 8, 1.6) * 440; set += '<path d="M-100,' + f(y) + ' H1700" stroke="' + h.gold + '" stroke-width="1.4" opacity=".3"/>'; }
+    set += rect(788, 380, 24, 300, mix('#fff6dc', P.ink, 0.1)) + '<circle cx="800" cy="372" r="34" fill="none" stroke="' + h.gold + '" stroke-width="6"/><circle cx="800" cy="372" r="10" fill="' + h.gold + '"/>' + '<ellipse cx="800" cy="684" rx="130" ry="18" fill="none" stroke="' + h.gold + '" stroke-width="3" opacity=".7"/>';
+    for (const x of [200, 1400]) set += rect(x - 22, 470, 44, 370, mix('#fff6dc', P.ink, 0.08)) + rect(x - 34, 452, 68, 24, h.gold);
+    return { place: 'Đồng trưa Phương Ngọ', far, mid: '', set, fg: '', ground: () => 836, depth: () => 1, hot: [800, 120] };
+  };
+  // Phương Mùi: ruộng bậc thang vàng chín, dãy kho thóc mái cong, con đường chở thóc có vệt bánh xe, bao thóc chất đống.
+  HEAVEN.mui = (c, r, h) => {
+    const P = c.P, gold = mix('#e6b84a', P.ink, P.dark ? 0.4 : 0.05);
+    let far = ridge(c, r, { y: 560, amp: 180, fill: mix(gold, P.haze, 0.45), fade: mix(gold, P.haze, 0.7), id: 'mur', n: 30 });
+    for (let k = 0; k < 6; k++) far += '<path d="' + smooth(Array.from({ length: 9 }, (_, i) => [-100 + i * 225, 520 + k * 24 + between(r, -8, 8)])) + '" stroke="' + mix(gold, '#fff', 0.3) + '" stroke-width="2" fill="none" opacity=".5"/>';
+    let mid = '';
+    for (let i = 0; i < 6; i++) { const x = 140 + i * 265; mid += rect(x - 70, 640, 140, 120, mix('#c9a06a', P.ink, P.dark ? 0.5 : 0.15)) + roof(x, 640, 170, 90, mix('#8a4a3a', P.ink, 0.2)) + rect(x - 18, 690, 36, 70, mix('#3a2a1a', P.ink, 0.2)); }
+    let set = floor(c, 'muf', mix('#d9b86a', P.ink, P.dark ? 0.45 : 0.08), mix('#7a5a2a', P.ink, 0.35));
+    set += '<path d="M700,760 L560,1100 M900,760 L1040,1100" stroke="' + mix('#7a5a2a', P.ink, 0.3) + '" stroke-width="4" opacity=".5"/>';
+    for (const [x, n] of [[120, 5], [1480, 6]]) for (let k = 0; k < n; k++) set += '<ellipse cx="' + f(x + (k % 3 - 1) * 46) + '" cy="' + f(828 - Math.floor(k / 3) * 34) + '" rx="30" ry="22" fill="' + mix('#e8d8a8', P.ink, P.dark ? 0.4 : 0.05) + '" stroke="' + mix('#8a6a3a', P.ink, 0.2) + '" stroke-width="2"/>';
+    return { place: 'Kho thóc Phương Mùi', far, mid, set, fg: grass(c, r, 0, W, 1060, 60, 50, mix(gold, P.fg, 0.4)), ground: () => 836, depth: () => 1, hot: [800, 500] };
+  };
+  // Phương Thân: luyện trường bằng sắt, cột thép và giá binh khí, vòng tập khắc trên nền, đe rèn tóe lửa.
+  HEAVEN.than = (c, r, h) => {
+    const P = c.P, steel = mix('#8a96a8', P.ink, P.dark ? 0.5 : 0.2);
+    let far = '';
+    for (let i = 0; i < 7; i++) far += spire(c, r, 120 + i * 230 + between(r, -40, 40), 700, between(r, 70, 110), between(r, 260, 420), mix(steel, P.haze, 0.3));
+    let mid = '';
+    for (const x of [260, 560, 1040, 1340]) mid += rect(x - 18, 420, 36, 420, mix(steel, P.ink, 0.15)) + rect(x - 30, 404, 60, 22, mix(steel, '#fff', 0.2));
+    mid += '<path d="M260,470 H560 M1040,470 H1340" stroke="' + mix(steel, P.ink, 0.3) + '" stroke-width="10"/>';
+    let set = floor(c, 'thf', mix('#a8b0bc', P.ink, P.dark ? 0.5 : 0.15), mix('#4a5260', P.ink, 0.35));
+    set += '<ellipse cx="800" cy="930" rx="560" ry="80" fill="none" stroke="' + h.gold + '" stroke-width="3" opacity=".55"/><ellipse cx="800" cy="930" rx="420" ry="56" fill="none" stroke="' + h.gold + '" stroke-width="1.6" opacity=".4"/>';
+    for (const x of [130, 1470]) {
+      set += '<path d="M' + (x - 46) + ',836 h92 l-14,-30 h-64Z M' + (x - 60) + ',806 h120 l-10,-26 h-100Z" fill="' + mix('#3a4048', P.ink, 0.2) + '"/>' + glow(c, x, 770, 90, '#ffb36a', 0.45);
+      for (let k = 0; k < 6; k++) set += '<path d="M' + x + ',776 l' + f(between(r, -50, 50)) + ',' + f(between(r, -60, -20)) + '" stroke="#ffd08a" stroke-width="2" opacity=".8"/>';
+    }
+    for (const x of [400, 1200]) { set += '<path d="M' + (x - 60) + ',836 V700 M' + (x + 60) + ',836 V700 M' + (x - 70) + ',710 H' + (x + 70) + '" stroke="' + mix('#5a4030', P.ink, 0.2) + '" stroke-width="7"/>'; for (let k = -2; k <= 2; k++) set += '<path d="M' + (x + k * 22) + ',712 V' + (k % 2 ? 640 : 610) + '" stroke="' + steel + '" stroke-width="4"/>'; }
+    return { place: 'Luyện trường Phương Thân', far, mid, set, fg: '', ground: () => 836, depth: () => 1, hot: [800, 600] };
+  };
+  // Phương Dậu: đồng chiều thu vừa gặt, gốc rạ thành hàng, bó lúa dựng chụm, hàng phong đỏ cuối đồng.
+  HEAVEN.dau = (c, r, h) => {
+    const P = c.P, straw = mix('#d9a85a', P.ink, P.dark ? 0.45 : 0.08);
+    let far = ridge(c, r, { y: 600, amp: 140, fill: mix(P.far, '#c9784a', 0.25), fade: P.haze, id: 'dar', n: 30 });
+    let mid = '';
+    for (let i = 0; i < 14; i++) { const x = between(r, -40, 1640), y = between(r, 650, 690); mid += rect(x - 5, y - 10, 10, 90, mix('#4a3020', P.haze, 0.3)) + '<path d="' + blob(r, x, y - 50, 60, 54, 6) + 'Z" fill="' + mix(['#c94a2a', '#e08a3a', '#b8342a'][i % 3], P.haze, 0.25) + '"/>'; }
+    let set = floor(c, 'daf', mix('#c9a06a', P.ink, P.dark ? 0.45 : 0.08), mix('#6a4a2a', P.ink, 0.35));
+    for (let k = 0; k < 9; k++) { const y = 850 + Math.pow(k / 9, 1.4) * 240; set += '<path d="M-100,' + f(y) + ' H1700" stroke="' + mix(straw, P.ink, 0.25) + '" stroke-width="' + f(2 + k * 0.6) + '" stroke-dasharray="' + f(4 + k) + ' ' + f(6 + k) + '" opacity=".6"/>'; }
+    for (const [x, y, s] of [[110, 836, 1.2], [270, 826, 0.9], [1330, 830, 1], [1480, 838, 1.2], [560, 812, 0.6], [1050, 812, 0.6]]) set += '<path d="M' + f(x - 34 * s) + ',' + y + ' L' + f(x - 8 * s) + ',' + f(y - 96 * s) + ' L' + f(x + 8 * s) + ',' + f(y - 96 * s) + ' L' + f(x + 34 * s) + ',' + y + 'Z" fill="' + straw + '"/><path d="M' + f(x - 20 * s) + ',' + f(y - 46 * s) + ' H' + f(x + 20 * s) + '" stroke="' + mix(straw, P.ink, 0.4) + '" stroke-width="' + f(5 * s) + '"/>';
+    return { place: 'Đồng chiều thu Phương Dậu', far, mid, set, fg: grass(c, r, 0, W, 1060, 50, 34, mix(straw, P.fg, 0.4)), ground: () => 836, depth: () => 1, hot: [800, 450] };
+  };
+  // Phương Tuất: biên ải cuối Thần giới, cao nguyên dừng ở vách đá bên phải, phía ngoài là hư không đỏ; tháp canh có đèn, cờ biên.
+  HEAVEN.tuat = (c, r, h) => {
+    const P = c.P, rockc = mix('#5a4a50', P.ink, 0.3);
+    let far = glow(c, 1450, 620, 520, '#c4203c', 0.4) + ridge(c, r, { y: 640, amp: 120, fill: mix(P.far, '#3a2a40', 0.4), fade: P.haze, id: 'tur', n: 28, op: 0.7 });
+    let mid = '';
+    for (let i = 0; i < 10; i++) mid += rect(-40 + i * 120, 690 - (i % 2) * 14, 110, 140, mix(rockc, P.haze, 0.35)) + rect(-40 + i * 120, 676 - (i % 2) * 14, 30, 18, mix(rockc, P.haze, 0.35));
+    let set = '<path d="M-100,1100 L-100,840 Q600,822 1260,834 L1330,1100Z" fill="' + c.lin('tuf', [[0, mix('#8a7a70', P.ink, P.dark ? 0.5 : 0.2)], [1, mix('#3a2a30', P.ink, 0.3)]]) + '"/>';
+    set += '<path d="M1260,834 L1330,1100 L1700,1100 L1700,834Z" fill="#14060c" opacity=".85"/><path d="M1260,834 L1300,940 L1280,1100" stroke="#e0344c" stroke-width="2" fill="none" opacity=".6"/>';
+    set += rect(150, 470, 120, 366, mix(rockc, P.ink, 0.1)) + roof(210, 470, 170, 90, mix('#3a2a30', P.ink, 0.2)) + lantern(c, 210, 560, 1.1, '#ffb36a');
+    for (const x of [420, 760, 1100]) set += '<path d="M' + x + ',836 V640" stroke="' + P.ink + '" stroke-width="5"/><path d="M' + x + ',640 l70,14 l-8,40 l-62,-12Z" fill="#8a1a2e" class="sc-wave"/>';
+    return { place: 'Biên ải Phương Tuất', far, mid, set, fg: rock(c, r, 60, 1090, 220, 120, P.fg), ground: () => 836, depth: () => 1, hot: [1450, 620] };
+  };
+  // Phương Hợi: ruộng khô dưới trăng đỏ, kho trống cửa mở toang, luống cày mới vạch và mầm lúa đầu tiên.
+  HEAVEN.hoi = (c, r, h) => {
+    const P = c.P;
+    let far = ridge(c, r, { y: 620, amp: 120, fill: mix(P.far, '#4a2a2a', 0.35), fade: P.haze, id: 'hor', n: 28 });
+    let mid = '';
+    for (const x of [300, 1300]) mid += rect(x - 120, 560, 240, 200, mix('#6a4a3a', P.ink, 0.35)) + roof(x, 560, 290, 130, mix('#3a2020', P.ink, 0.2)) + rect(x - 50, 640, 100, 120, '#0e0608');
+    let set = floor(c, 'hof', mix('#7a5a40', P.ink, P.dark ? 0.4 : 0.15), mix('#2a1a12', P.ink, 0.3));
+    for (let k = 0; k < 10; k++) { const y = 850 + Math.pow(k / 10, 1.4) * 240; set += '<path d="' + smooth(Array.from({ length: 8 }, (_, i) => [-100 + i * 260, y + between(r, -4, 4)])) + '" stroke="' + mix('#3a2418', P.ink, 0.2) + '" stroke-width="' + f(2.4 + k * 0.5) + '" fill="none" opacity=".7"/>'; }
+    for (let i = 0; i < 9; i++) { const x = 900 + i * 80, y = 880 + (i % 3) * 40; set += '<path d="M' + x + ',' + y + ' q-6,-18 -12,-24 M' + x + ',' + y + ' q4,-20 12,-26" stroke="#7ac85a" stroke-width="3" fill="none" stroke-linecap="round"/>'; }
+    set += '<path d="M120,836 V700 M90,730 H150" stroke="' + mix('#5a4030', P.ink, 0.2) + '" stroke-width="6"/><circle cx="120" cy="690" r="16" fill="' + mix('#c9a06a', P.ink, 0.3) + '"/>';
+    return { place: 'Ruộng trăng đỏ Phương Hợi', far, mid, set, fg: '', ground: () => 836, depth: () => 1, hot: [800, 240] };
+  };
   SETS.heaven = (c, v) => {
     const P = c.P, r = c.rnd('hv');
     let far = '', mid = '', set = '', fg = '', place = 'Thần giới';
