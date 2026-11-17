@@ -7290,6 +7290,24 @@
 :root[data-style=giangho] .capacity-panel.capacity-warning.capacity-high, :root[data-style=giangho] .capacity-panel.capacity-warning.capacity-full {
     border-left-color: #b63850
 }
+:root[data-style=giangho] .zen-share {
+    border: 1px solid #dfc9a9;
+    background: #fffcf6;
+    color: #311f13;
+    box-shadow: 0 24px 80px rgba(63,43,27,0.188)
+}
+:root[data-style=giangho] .zen-share::backdrop {
+    background: rgba(53,37,18,0.376)
+}
+:root[data-style=giangho] .zen-share-lead {
+    color: #624d40
+}
+:root[data-style=giangho] .zen-share-kind {
+    border: 0
+}
+:root[data-style=giangho] .zen-share-status {
+    color: #8c1e38
+}
 :root[data-style=giangho][data-theme=dark] {
     --bg: #18130c;
     --paper: #1e1811;
@@ -14530,6 +14548,24 @@
 }
 :root[data-style=giangho][data-theme=dark] .capacity-panel.capacity-warning.capacity-high, :root[data-style=giangho][data-theme=dark] .capacity-panel.capacity-warning.capacity-full {
     border-left-color: #c4455b
+}
+:root[data-style=giangho][data-theme=dark] .zen-share {
+    border: 1px solid #504135;
+    background: #1e1811;
+    color: #f5dccc;
+    box-shadow: 0 24px 80px rgba(200,179,163,0.188)
+}
+:root[data-style=giangho][data-theme=dark] .zen-share::backdrop {
+    background: rgba(53,37,18,0.376)
+}
+:root[data-style=giangho][data-theme=dark] .zen-share-lead {
+    color: #e5cdbe
+}
+:root[data-style=giangho][data-theme=dark] .zen-share-kind {
+    border: 0
+}
+:root[data-style=giangho][data-theme=dark] .zen-share-status {
+    color: #ffc1c6
 }
 
 /* ---- Họa tiết Giang hồ viết tay (v1.86.0 · Chu Mặc) ------------------------------------------------------------------------

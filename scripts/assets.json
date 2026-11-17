@@ -330,6 +330,11 @@
     "text/javascript; charset=utf-8"
   ],
   [
+    "/share-target.js",
+    "share-target.js",
+    "text/javascript; charset=utf-8"
+  ],
+  [
     "/studio-zen.css",
     "studio-zen.css",
     "text/css; charset=utf-8"

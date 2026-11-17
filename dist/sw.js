@@ -32,6 +32,11 @@ self.addEventListener('activate',event=>event.waitUntil((async()=>{
 })()));
 self.addEventListener('fetch',event=>{
  const request=event.request,url=new URL(request.url);
+ // v2.51.0: mở app từ nút Chia sẻ ("/?title=…&text=…&url=…") mà đang ngoại tuyến thì dùng bản vỏ ứng dụng đã lưu; có mạng thì luôn lấy từ mạng như trước.
+ if(request.method==='GET'&&request.mode==='navigate'&&url.origin===self.location.origin&&url.pathname==='/'&&['title','text','url'].some(k=>url.searchParams.has(k))){
+  event.respondWith((async()=>{try{return await fetch(request);}catch(error){const hit=await(await caches.open(SHELL_CACHE)).match('/');if(hit)return hit;throw error;}})());
+  return;
+ }
  if(request.method!=='GET'||url.origin!==self.location.origin||url.search||url.pathname.startsWith('/api/')||!SHELL_ASSETS.includes(url.pathname))return;
  event.respondWith((async()=>{
   const cache=await caches.open(SHELL_CACHE),hit=await cache.match(url.pathname);

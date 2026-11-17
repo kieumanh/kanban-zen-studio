@@ -2547,3 +2547,103 @@ body select:not([multiple]):not([size]):not([data-zen-native]):not(.wf-original-
 .capacity-warning .help-actions {
   margin-top: 10px;
 }
+
+/* v2.51.0 (Chia Sẻ Vào App): hộp thoại lưu nội dung được chia sẻ từ điện thoại thành Ghi chú hoặc Việc (dist/share-target.js). */
+.zen-share {
+  width: min(520px, calc(100vw - 28px));
+  max-height: 88dvh;
+  padding: 20px;
+  border: 1px solid #d8c9e4;
+  border-radius: 20px;
+  background: #fffdfd;
+  color: #352a44;
+  box-shadow: 0 24px 80px #352a4430;
+  overflow: auto;
+}
+.zen-share::backdrop {
+  background: #30223960;
+  backdrop-filter: blur(4px);
+}
+.zen-share header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.zen-share h2 {
+  margin: 0;
+  font-size: 20px;
+}
+.zen-share-lead {
+  margin: 10px 0 0;
+  color: #685974;
+  font-size: 14px;
+}
+.zen-share-form {
+  display: grid;
+  gap: 14px;
+  margin-top: 16px;
+}
+.zen-share-form label {
+  display: grid;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.zen-share-form [hidden] {
+  display: none;
+}
+.zen-share-form input:not([type='radio']),
+.zen-share-form textarea {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 400;
+}
+.zen-share-form textarea {
+  resize: vertical;
+}
+@media (min-width: 701px) {
+  .zen-share-form input:not([type='radio']),
+  .zen-share-form textarea {
+    font-size: 14px;
+  }
+}
+.zen-share-kind {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+.zen-share-kind legend {
+  padding: 0;
+  margin-bottom: 6px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.zen-share-kind label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  font-weight: 500;
+}
+.zen-share-status {
+  min-height: 1.4em;
+  margin: 0;
+  color: #9d2f45;
+  font-size: 14px;
+}
+.zen-share-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
+}
+

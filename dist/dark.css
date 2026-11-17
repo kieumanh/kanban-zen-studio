@@ -4144,6 +4144,20 @@
 :root[data-theme=dark] .capacity-panel.capacity-warning.capacity-high, :root[data-theme=dark] .capacity-panel.capacity-warning.capacity-full {
     border-left-color: #c4455b
 }
+:root[data-theme=dark] .zen-share {
+    border: 1px solid #49404f;
+    background: #1b181f;
+    color: #dcd3ec
+}
+:root[data-theme=dark] .zen-share::backdrop {
+    background: rgba(48,34,57,0.376)
+}
+:root[data-theme=dark] .zen-share-lead {
+    color: #d0c3da
+}
+:root[data-theme=dark] .zen-share-status {
+    color: #feb3ba
+}
 
 :root[data-theme=dark] {
   color-scheme: dark;
