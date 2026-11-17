@@ -3,6 +3,7 @@
 //  1. Dữ liệu (kiểm một lần): mỗi chương chính có đúng một dòng tranh cho mỗi trang; mọi nhân vật, thế, vật, hiệu ứng, nơi chốn đều đã
 //     biết và dựng được; mỗi chương có ít nhất 5 nơi-giờ khác nhau, không hai trang nào trùng khung hình; tổng số nơi-giờ khác nhau ≥ 200;
 //     người nói có mặt trong tranh (trừ vài trang chỉ nghe tiếng); kỳ ngộ (44, mỗi cái một dòng vẽ tay cho mỗi trang, người nói luôn có mặt) và chiến ký (48, mỗi trận một dòng vẽ tay cho mỗi trang, người nói luôn có mặt) dựng được và không trang nào trùng khung;
+//     v2.20.0: Thần giới có sáu nơi riêng (thư khố, hồ soi trời, trường thành, Thiên Môn, điện nghị sự, biển mây), mỗi nơi dựng được ở mọi giờ và được dùng ở ít nhất 3 trang;
 //  2. Khung đọc (390 chạm, 820 chạm, 1440): mỗi trang một tranh có mô tả cho người đọc màn hình, nằm trong khung, không tràn ngang, không
 //     lỗi trang; lật liền các trang cùng một cảnh thì mọi dải màu được dùng đều đã khai báo (không hình nào mất màu);
 //  3. Đổi nơi thì chuyển cảnh mờ dần (hai cảnh cùng có mặt một lúc); giảm chuyển động thì không có hoạt họa nào trong tranh;
@@ -42,6 +43,7 @@ try {
       const Z = window.zenScene, PL = window.zenPlates, bad = [];
       const sig = (s) => JSON.stringify([s.s, s.t, s.f.map((q) => [q.who, q.pose, q.x]), s.p.map((q) => q.id), s.c]);
       let shots = 0;
+      const heaven = {};
       const check = (label, shot) => {
         shots++;
         try {
@@ -52,6 +54,7 @@ try {
           for (const p of shot.p) if (!Z.PROPS[p.id]) bad.push(label + ': vật lạ ' + p.id);
           for (const x of shot.fx) if (!Z.FX[x]) bad.push(label + ': hiệu ứng lạ ' + x);
           if (!Z.SETS[shot.s]) bad.push(label + ': nơi lạ ' + shot.s);
+          if (shot.s === 'heaven') heaven[shot.v || ''] = (heaven[shot.v || ''] || 0) + 1;
           if (!Z.TIME_NAMES[shot.t]) bad.push(label + ': giờ lạ ' + shot.t);
           Z.build(shot);
         } catch (e) {
@@ -121,7 +124,15 @@ try {
         });
         duels++;
       }
-      return { bad, shots, chapters: window.zenTale.CHAPTERS.length, envs: envs.size, weak, few, absent, speakers, meets, duels, dup, meetAbsent, meetSpeakers, duelAbsent, duelSpeakers };
+      // v2.20.0: sáu nơi Thần giới dựng được ở mọi giờ.
+      const HV = ['archive', 'lake', 'wall', 'gate', 'hall', 'sky'];
+      for (const v of HV) for (const t of Object.keys(Z.TIME_NAMES)) {
+        try {
+          const info = Z.build(Z.parse('heaven/' + v + ' ' + t + ' hero:stand@.5 "thử"', null));
+          if (!info) bad.push('heaven/' + v + ' ' + t + ': không dựng được');
+        } catch (e) { bad.push('heaven/' + v + ' ' + t + ': ' + e.message); }
+      }
+      return { heaven, bad, shots, chapters: window.zenTale.CHAPTERS.length, envs: envs.size, weak, few, absent, speakers, meets, duels, dup, meetAbsent, meetSpeakers, duelAbsent, duelSpeakers };
     });
     assert.deepEqual(r.bad, [], 'mọi khung tranh hợp lệ và dựng được');
     assert.equal(r.chapters, 39, 'khai cuộc + 38 chương');
@@ -131,6 +142,7 @@ try {
     assert.deepEqual(r.weak, [], 'chương không có hai trang trùng khung hình');
     assert.deepEqual(r.few, [], 'mỗi chương có ít nhất 5 nơi-giờ khác nhau');
     assert.ok(r.envs >= 200, 'tổng số nơi-giờ khác nhau của truyện chính ≥ 200 (' + r.envs + ')');
+    for (const v of ['archive', 'lake', 'wall', 'gate', 'hall', 'sky']) assert.ok((r.heaven[v] || 0) >= 3, 'Thần giới/' + v + ' được dùng ở ít nhất 3 trang (' + (r.heaven[v] || 0) + ')');
     assert.deepEqual(r.dup, [], 'kỳ ngộ và chiến ký không có hai trang trùng khung hình');
     assert.ok(r.duelSpeakers >= 60 && r.duelAbsent.length === 0, 'chiến ký: người nói có mặt trong tranh: ' + r.duelAbsent.join(' '));
     assert.ok(r.meetSpeakers >= 80 && r.meetAbsent.length === 0, 'kỳ ngộ: người nói có mặt trong tranh: ' + r.meetAbsent.join(' '));

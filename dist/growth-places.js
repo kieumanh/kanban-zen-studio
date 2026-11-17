@@ -279,11 +279,141 @@
   // ===========================================================================================================================
   // THẦN GIỚI, CÕI MẮT ĐỎ, ĐẤU TRƯỜNG
   // ===========================================================================================================================
+  // ===========================================================================================================================
+  // v2.20.0 (Thần Cảnh Họa): sáu nơi riêng của Thần giới. Mỗi nơi cùng mặt đất y = 836 như hai cảnh cũ (realm, stairs) để tọa độ người đứng không đổi.
+  // ===========================================================================================================================
+  const HEAVEN = {};
+  const fillOf = (c, id, a, b) => c.lin(id, [[0, a], [1, b]]);
+  // Thư khố mười vạn kệ: tường sách tới mái, cửa tròn sáng ở cuối, thang trượt, bàn đọc, cuộn giấy bay.
+  HEAVEN.archive = (c, r, h) => {
+    const P = c.P, gold = h.gold, wood = mix('#3a2e48', P.ink, 0.25);
+    let sky = rect(-40, -40, W + 80, H + 80, fillOf(c, 'arw', mix('#463a62', P.ink, 0.3), mix('#8a6a3c', P.ink, 0.3)));
+    const tones = ['#9a4a4a', '#4a6a9a', '#c9a15a', '#5a8a7a', '#8a6aa8', '#d9cfae'], paths = tones.map(() => '');
+    for (let row = 0; row < 8; row++) {
+      const y0 = 70 + row * 92;
+      sky += rect(-40, y0 + 78, W + 80, 10, mix(gold, P.ink, 0.45));
+      let x = -10;
+      while (x < W + 20) {
+        const w = between(r, 12, 26), hh = between(r, 46, 74), k = Math.floor(r() * tones.length);
+        paths[k] += 'M' + f(x) + ',' + f(y0 + 78 - hh) + ' h' + f(w - 2) + ' v' + f(hh) + ' h' + f(-(w - 2)) + 'Z';
+        x += w + (r() > 0.86 ? between(r, 18, 40) : 1);
+      }
+    }
+    tones.forEach((t, k) => { sky += '<path d="' + paths[k] + '" fill="' + mix(t, P.ink, P.dark ? 0.35 : 0.12) + '"/>'; });
+    sky += '<circle cx="800" cy="330" r="228" fill="' + mix(wood, P.ink, 0.4) + '" opacity=".92"/><circle cx="800" cy="330" r="196" fill="' + c.rad('arwin', [[0, '#fffbe6'], [0.6, '#ffe6a0'], [1, mix('#e6c36a', P.ink, 0.1)]]) + '"/><circle cx="800" cy="330" r="196" fill="none" stroke="' + gold + '" stroke-width="8"/>';
+    sky += '<circle cx="800" cy="330" r="150" fill="none" stroke="' + mix(gold, '#ffffff', 0.4) + '" stroke-width="2" opacity=".6"/><circle cx="800" cy="330" r="100" fill="none" stroke="' + mix(gold, '#ffffff', 0.4) + '" stroke-width="2" opacity=".5"/>' + glow(c, 800, 330, 180, '#fffbe6', 0.6);
+    for (const [x0, x1] of [[560, 280], [800, 800], [1040, 1320]]) sky += '<path d="M' + (x0 - 24) + ',520 L' + (x1 - 70) + ',840 H' + (x1 + 70) + ' L' + (x0 + 24) + ',520Z" fill="#fff1bd" opacity="' + (P.dark ? 0.1 : 0.07) + '"/>';
+    let set = '<path d="M-100,1100 L-100,820 Q800,800 1700,820 L1700,1100Z" fill="' + c.lin('arf', [[0, mix('#e8dcc0', P.ink, 0.1)], [1, mix('#8a6a3c', P.ink, 0.45)]]) + '"/>';
+    for (let i = 0; i < 9; i++) set += '<path d="M' + f(800 + (i - 4) * 70) + ',826 L' + f(800 + (i - 4) * 360) + ',1100" stroke="' + mix(gold, P.ink, 0.35) + '" stroke-width="2" opacity=".45"/>';
+    for (const x of [110, 1490]) set += rect(x - 46, 40, 92, 790, mix('#6a5040', P.ink, 0.25)) + rect(x - 58, 30, 116, 34, gold) + rect(x - 58, 810, 116, 28, gold);
+    // thang trượt dựa vào kệ
+    set += '<g stroke="' + mix(gold, P.ink, 0.3) + '" stroke-width="7" fill="none" stroke-linecap="round"><path d="M1290,300 L1360,832 M1356,300 L1426,832"/></g>';
+    for (let i = 0; i < 9; i++) set += '<path d="M' + f(lerp(1296, 1366, i / 8) ) + ',' + f(lerp(330, 800, i / 8)) + ' H' + f(lerp(1352, 1422, i / 8) ) + '" stroke="' + mix(gold, P.ink, 0.3) + '" stroke-width="5"/>';
+    // bàn đọc thấp với cuốn sách mở và ngọn đèn
+    set += rect(180, 770, 250, 14, mix('#6a5040', P.ink, 0.15)) + rect(196, 784, 14, 52, mix('#6a5040', P.ink, 0.25)) + rect(400, 784, 14, 52, mix('#6a5040', P.ink, 0.25));
+    set += '<path d="M222,770 L304,752 L304,768 L222,784Z M304,752 L386,770 L386,784 L304,768Z" fill="#f4ecd2"/><path d="M304,752 V768" stroke="' + P.ink + '" stroke-width="2" opacity=".6"/>' + glow(c, 304, 740, 150, P.lamp, P.dark ? 0.5 : 0.22);
+    for (const [x, y, rot, s] of [[640, 250, -14, 1], [980, 210, 12, 0.9], [740, 440, 8, 0.8], [1120, 470, -9, 0.85], [470, 360, 16, 0.8]]) set += '<g class="sc-sway" style="transform-origin:' + x + 'px ' + y + 'px"><g transform="translate(' + x + ' ' + y + ') rotate(' + rot + ') scale(' + s + ')"><rect x="-30" y="-9" width="60" height="18" rx="9" fill="#f4ecd2"/><rect x="-32" y="-11" width="8" height="22" rx="4" fill="' + gold + '"/><rect x="24" y="-11" width="8" height="22" rx="4" fill="' + gold + '"/></g></g>';
+    return { place: 'Thư khố Thần giới', sky, far: '', mid: '', set, fg: '', ground: () => 836, depth: () => 1, hot: [800, 330] };
+  };
+  // Hồ soi trời: mặt nước phẳng như gương phản chiếu tháp và mây, lối đá nổi giữa hồ, sen.
+  HEAVEN.lake = (c, r, h) => {
+    const P = c.P, gold = h.gold;
+    let far = h.sea(540, 3, mix(P.haze, gold, 0.25), 0.5), mid = '', set = '', fg = '';
+    const isle = (x, w, flip) => '<g' + (flip ? ' transform="translate(0 1400) scale(1 -1)" opacity=".38"' : '') + '><ellipse cx="' + x + '" cy="706" rx="' + (w * 1.2) + '" ry="20" fill="' + mix(h.cloud, P.ink, 0.1) + '" opacity=".9"/>' + pagoda(c, x, 700, w, 4, mix(gold, P.ink, 0.35)) + '</g>';
+    mid += isle(250, 190) + isle(1380, 210);
+    set += '<path d="M-100,1100 L-100,706 L1700,706 L1700,1100Z" fill="' + c.lin('lkw', [[0, mix(P.sky[2], '#ffffff', 0.25)], [0.4, mix(P.sky[1], '#ffffff', 0.12)], [1, mix(P.sky[1], P.ink, 0.35)]]) + '"/>';
+    set += isle(250, 190, true) + isle(1380, 210, true);
+    for (let i = 0; i < 16; i++) { const y = 718 + Math.pow(i / 16, 1.5) * 360, x0 = between(r, -60, 1500), w = between(r, 120, 380); set += '<path d="M' + f(x0) + ',' + f(y) + ' h' + f(w) + '" stroke="#ffffff" stroke-width="' + f(1.2 + i * 0.12) + '" opacity="' + f(0.16 + r() * 0.22) + '" stroke-linecap="round"/>'; }
+    // lối đá nổi giữa hồ
+    set += '<path d="M-100,832 Q800,812 1700,832 L1700,880 Q800,858 -100,880Z" fill="' + c.lin('lkp', [[0, '#fffaf0'], [1, mix('#e8dcc0', P.ink, 0.25)]]) + '"/><path d="M-100,832 Q800,812 1700,832" stroke="' + gold + '" stroke-width="3" fill="none" opacity=".8"/>';
+    for (let i = 0; i < 6; i++) { const x = 160 + i * 260; set += '<path d="M' + x + ',832 v44" stroke="' + mix(gold, P.ink, 0.3) + '" stroke-width="2" opacity=".4"/>'; }
+    for (const [x, y, rx] of [[500, 930, 70], [820, 970, 90], [1150, 930, 66]]) set += '<ellipse cx="' + x + '" cy="' + y + '" rx="' + rx + '" ry="' + f(rx * 0.22) + '" fill="#f4ecd2" opacity=".85"/><ellipse cx="' + x + '" cy="' + (y + 6) + '" rx="' + f(rx * 1.5) + '" ry="' + f(rx * 0.3) + '" fill="none" stroke="#ffffff" stroke-width="2" opacity=".35"/>';
+    for (const [x, y] of [[250, 960], [1330, 990], [90, 1030]]) {
+      fg += '<ellipse cx="' + x + '" cy="' + y + '" rx="84" ry="18" fill="' + mix('#5a8a6a', P.ink, 0.25) + '"/><ellipse cx="' + (x + 58) + '" cy="' + (y - 8) + '" rx="50" ry="12" fill="' + mix('#5a8a6a', P.ink, 0.12) + '"/>';
+      fg += '<g class="sc-sway" style="transform-origin:' + x + 'px ' + y + 'px"><path d="M' + (x - 12) + ',' + (y - 6) + ' Q' + x + ',' + (y - 46) + ' ' + (x + 12) + ',' + (y - 6) + ' Q' + x + ',' + (y - 22) + ' ' + (x - 12) + ',' + (y - 6) + 'Z" fill="#ffd0dc"/><path d="M' + (x - 26) + ',' + (y - 4) + ' Q' + (x - 14) + ',' + (y - 36) + ' ' + (x - 2) + ',' + (y - 6) + 'Z M' + (x + 26) + ',' + (y - 4) + ' Q' + (x + 14) + ',' + (y - 36) + ' ' + (x + 2) + ',' + (y - 6) + 'Z" fill="#f6b6c8"/></g>';
+    }
+    return { place: 'Hồ soi trời', far, mid, set, fg, ground: () => 836, depth: () => 1, hot: [800, 700] };
+  };
+  // Trường thành ngăn hư không: tường đá xếp dày, một đoạn đang xây dở có giàn gỗ, phía sau là hư không tím thẫm.
+  HEAVEN.wall = (c, r, h) => {
+    const P = c.P, gold = h.gold, stone = mix('#e8dcc0', P.ink, P.dark ? 0.55 : 0.28);
+    let sky = rect(-40, -40, W + 80, H + 80, c.lin('wlv', [[0, '#080618'], [0.55, mix('#2a1a50', P.sky[1], 0.25)], [1, mix('#5a3a80', P.sky[2], 0.3)]]));
+    for (let i = 0; i < 90; i++) sky += '<circle cx="' + f(r() * W) + '" cy="' + f(Math.pow(r(), 1.5) * 560) + '" r="' + f(0.7 + r() * 1.5) + '" fill="#fff" opacity="' + f(0.3 + r() * 0.6) + '"/>';
+    sky += glow(c, 1130, 640, 300, '#7a4ac8', 0.22);
+    let far = '', mid = h.sea(700, 3, mix('#5a3a80', P.haze, 0.3), 0.55), set = '';
+    const clip = (x0, y0, w, hh, inner) => '<svg x="' + x0 + '" y="' + y0 + '" width="' + w + '" height="' + hh + '" viewBox="' + x0 + ' ' + y0 + ' ' + w + ' ' + hh + '" overflow="hidden">' + inner + '</svg>';
+    const block = (x0, x1, top) => {
+      let s = clip(x0, top, x1 - x0, 836 - top, stoneWall(c, top, 836, stone, { id: 'w' + x0, bh: 50, bw: 110 }));
+      for (let x = x0 + 10; x < x1 - 86; x += 120) s += rect(x, top - 46, 76, 46, stone) + rect(x, top - 46, 76, 6, mix(stone, '#ffffff', 0.25));
+      return s;
+    };
+    set += block(-40, 960, 500) + block(1290, 1640, 500);
+    // đoạn đang xây dở: tường thấp dần, giàn gỗ, chồng đá và ròng rọc
+    set += clip(960, 714, 330, 122, stoneWall(c, 714, 836, stone, { id: 'wg', bh: 44, bw: 100 }));
+    set += '<g stroke="' + mix('#8a6a3c', P.ink, 0.25) + '" stroke-width="9" fill="none" stroke-linecap="round"><path d="M1010,836 V420 M1250,836 V420 M1010,560 H1250 M1010,700 H1250 M1010,700 L1250,560 M1010,560 L1250,420"/></g>';
+    set += '<path d="M1130,420 V560" stroke="' + P.ink + '" stroke-width="3"/><rect x="1112" y="560" width="36" height="30" fill="' + stone + '" stroke="' + P.ink + '" stroke-width="2"/>';
+    for (const [x, y, rx] of [[1360, 828, 34], [1410, 832, 26], [1330, 834, 22]]) set += '<ellipse cx="' + x + '" cy="' + y + '" rx="' + rx + '" ry="' + f(rx * 0.7) + '" fill="' + stone + '" stroke="' + P.ink + '" stroke-width="2" opacity=".95"/>';
+    set += '<path d="M-100,836 L1700,836 L1700,1100 L-100,1100Z" fill="' + c.lin('wlf', [[0, mix('#e8dcc0', P.ink, 0.2)], [1, mix('#8a7a60', P.ink, 0.5)]]) + '"/><path d="M-100,836 H1700" stroke="' + gold + '" stroke-width="3" opacity=".6"/>';
+    return { place: 'Trường thành ngăn hư không', sky, far, mid, set, fg: '', ground: () => 836, depth: () => 1, hot: [1130, 500] };
+  };
+  // Thiên Môn / cửa Thần giới: hai cánh cửa khép hờ, ánh sáng tràn ra, ngọn đèn bất diệt đặt bên bậc thềm.
+  HEAVEN.gate = (c, r, h) => {
+    const P = c.P, gold = h.gold, pillar = mix('#fff6dc', P.ink, 0.12);
+    let far = h.sea(560, 5, mix(P.haze, gold, 0.25), 0.55), mid = h.sea(690, 4, h.cloud, 0.7), set = '';
+    set += glow(c, 800, 600, 520, '#fff1bd', 0.55);
+    set += rect(540, 320, 64, 516, pillar) + rect(996, 320, 64, 516, pillar);
+    for (const x of [540, 996]) set += rect(x - 10, 320, 84, 24, gold) + rect(x - 10, 812, 84, 24, gold) + rect(x - 4, 520, 72, 10, gold, ' opacity=".7"');
+    set += rect(500, 296, 600, 46, mix(gold, P.ink, 0.1)) + roof(800, 296, 780, 190, mix(gold, P.ink, 0.28), { up: 26 });
+    set += '<path d="M604,342 H996 V836 H604Z" fill="' + c.rad('gtl', [[0, '#ffffff'], [0.5, '#fff1bd'], [1, mix('#ffe6a0', P.ink, 0.1)]], [0.5, 0.55, 0.7]) + '"/>';
+    set += '<path d="M800,342 V836" stroke="#ffffff" stroke-width="40" opacity=".35"/>';
+    set += '<path d="M604,342 L690,362 V820 L604,836Z" fill="' + mix('#7a4a30', P.ink, 0.25) + '"/><path d="M996,342 L910,362 V820 L996,836Z" fill="' + mix('#7a4a30', P.ink, 0.25) + '"/>';
+    for (const y of [430, 560, 690]) set += '<path d="M604,' + y + ' L690,' + (y + 8) + ' M996,' + y + ' L910,' + (y + 8) + '" stroke="' + gold + '" stroke-width="5"/>';
+    // chín bậc thềm đi lên cửa
+    for (let i = 0; i < 6; i++) { const y = 836 + i * 46, inset = i * 82; set += '<path d="M' + f(300 - inset) + ',' + y + ' H' + f(1300 + inset) + ' V' + (y + 46) + ' H' + f(300 - inset) + 'Z" fill="' + mix('#fffaf0', P.ink, 0.08 + i * 0.07) + '"/><path d="M' + f(300 - inset) + ',' + y + ' H' + f(1300 + inset) + '" stroke="' + gold + '" stroke-width="2.4" opacity=".7"/>'; }
+    set += rect(-100, 836, 400, 264, mix('#fffaf0', P.ink, 0.1)) + rect(1300, 836, 400, 264, mix('#fffaf0', P.ink, 0.1));
+    // ngọn đèn bất diệt trên cột đồng ở bên trái
+    set += rect(344, 560, 16, 276, mix('#8a6a3c', P.ink, 0.2)) + '<path d="M326,560 H378 L368,534 H336Z" fill="' + mix(gold, P.ink, 0.2) + '"/>' + glow(c, 352, 506, 170, P.lamp, P.dark ? 0.7 : 0.4);
+    set += '<g class="sc-flame"><path d="M352,456 Q374,486 364,516 Q352,532 340,516 Q330,488 352,456Z" fill="#ffe6a0"/><path d="M352,486 Q362,504 356,518 Q352,524 348,518 Q342,504 352,486Z" fill="#fffdf0"/></g>';
+    return { place: 'Thiên Môn', far, mid, set, fg: '', ground: () => 836, depth: () => 1, hot: [800, 520] };
+  };
+  // Điện nghị sự của Thần Vương: năm ngôi trên bệ cao, vòng thiên đồ sau lưng, cột và dải cờ buông xuống.
+  HEAVEN.hall = (c, r, h) => {
+    const P = c.P, gold = h.gold;
+    let sky = rect(-40, -40, W + 80, H + 80, fillOf(c, 'hlw', mix('#3a3258', P.ink, 0.3), mix('#9a7a4a', P.ink, 0.3)));
+    sky += glow(c, 800, 480, 620, '#fff1bd', P.dark ? 0.4 : 0.28);
+    sky += '<circle cx="800" cy="470" r="250" fill="none" stroke="' + gold + '" stroke-width="7" opacity=".85"/><circle cx="800" cy="470" r="196" fill="none" stroke="' + gold + '" stroke-width="3" opacity=".6"/>';
+    for (let i = 0; i < 12; i++) { const a = (i / 12) * 6.283; sky += '<path d="M' + f(800 + Math.cos(a) * 196) + ',' + f(470 + Math.sin(a) * 196) + ' L' + f(800 + Math.cos(a) * 250) + ',' + f(470 + Math.sin(a) * 250) + '" stroke="' + gold + '" stroke-width="4" opacity=".7"/><circle cx="' + f(800 + Math.cos(a) * 224) + '" cy="' + f(470 + Math.sin(a) * 224) + '" r="5" fill="' + gold + '"/>'; }
+    const col = mix('#e8dcc0', P.ink, 0.28);
+    for (const x of [60, 250, 1350, 1540]) sky += rect(x - 36, 0, 72, 760, col) + rect(x - 48, 740, 96, 28, gold) + rect(x - 48, 0, 96, 24, gold);
+    for (const x of [380, 1220]) sky += '<g class="sc-sway" style="transform-origin:' + x + 'px 0px"><path d="M' + (x - 34) + ',0 H' + (x + 34) + ' V380 L' + x + ',350 L' + (x - 34) + ',380Z" fill="' + mix('#a83a46', P.ink, 0.22) + '"/><path d="M' + x + ',60 v200" stroke="' + gold + '" stroke-width="5"/></g>';
+    let set = rect(300, 706, 1000, 40, mix('#fff6dc', P.ink, 0.2)) + rect(260, 746, 1080, 30, mix('#fff6dc', P.ink, 0.3)) + rect(300, 706, 1000, 6, gold);
+    const sashes = ['#6aa8c8', '#d9a64a', '#a83a46', '#6aa88a', '#8a6ac8'];
+    [[390, 0.8], [595, 0.9], [800, 1.08], [1005, 0.9], [1210, 0.8]].forEach(([x, s2], i) => {
+      set += '<g transform="translate(' + x + ' 712) scale(' + s2 + ')"><path d="M-54,0 V-190 Q-54,-236 0,-244 Q54,-236 54,-190 V0Z" fill="' + mix('#fff6dc', P.ink, 0.1) + '" stroke="' + gold + '" stroke-width="5"/><path d="M-36,-10 V-182 Q-36,-216 0,-222 Q36,-216 36,-182 V-10Z" fill="' + mix(sashes[i], P.ink, 0.15) + '" opacity=".85"/><rect x="-62" y="-34" width="124" height="34" rx="6" fill="' + mix(gold, P.ink, 0.15) + '"/><circle cx="0" cy="-168" r="12" fill="' + gold + '"/></g>';
+    });
+    set += '<path d="M-100,1100 L-100,778 L1700,778 L1700,1100Z" fill="' + c.lin('hlf', [[0, mix('#f4ecd2', P.ink, 0.12)], [1, mix('#8a6a3c', P.ink, 0.5)]]) + '"/>';
+    for (let i = 0; i < 8; i++) set += '<path d="M' + f(800 + (i - 3.5) * 90) + ',780 L' + f(800 + (i - 3.5) * 420) + ',1100" stroke="' + gold + '" stroke-width="2" opacity=".4"/>';
+    return { place: 'Điện nghị sự Thần Vương', sky, far: '', mid: '', set, fg: '', ground: () => 836, depth: () => 1, hot: [800, 470] };
+  };
+  // Biển mây và dải ngân hà: đảo mây nổi, dòng sao chảy chéo bầu trời, đài mây rộng làm chỗ đứng.
+  HEAVEN.sky = (c, r, h) => {
+    const P = c.P, gold = h.gold;
+    let far = '', mid = '', set = '';
+    far += '<path d="M-100,520 Q400,300 800,260 T1700,60" stroke="#ffffff" stroke-width="130" fill="none" opacity="' + (P.dark ? 0.1 : 0.14) + '" stroke-linecap="round"/>';
+    for (let i = 0; i < 150; i++) { const t = r(), x = lerp(-60, 1660, t), y = lerp(500, 80, t) - 60 * Math.sin(t * 3.4) + between(r, -70, 70); far += '<circle cx="' + f(x) + '" cy="' + f(y) + '" r="' + f(0.8 + r() * 1.8) + '" fill="#fff" opacity="' + f(0.35 + r() * 0.6) + '"/>'; }
+    far += h.sea(560, 4, mix(P.haze, gold, 0.2), 0.5);
+    for (const [x, y, w] of [[260, 600, 120], [1360, 560, 150], [820, 640, 90]]) mid += '<ellipse cx="' + x + '" cy="' + (y + 16) + '" rx="' + w + '" ry="' + f(w * 0.16) + '" fill="' + h.cloud + '" opacity=".92"/>' + (w > 100 ? pagoda(c, x, y + 8, w * 0.8, 3, mix(gold, P.ink, 0.35)) : '');
+    mid += h.sea(700, 4, h.cloud, 0.75);
+    set += '<path d="M-100,1100 L-100,846 ' + smooth(Array.from({ length: 9 }, (_, k) => [-100 + k * 225, 828 + (k % 2 ? -16 : 8) + between(r, -8, 8)])).replace(/^M[^C]*/, '') + ' L1700,1100Z" fill="' + c.lin('skp', [[0, '#ffffff'], [1, mix(h.cloud, P.ink, 0.1)]]) + '"/>';
+    for (let i = 0; i < 6; i++) set += '<path d="' + smooth(Array.from({ length: 7 }, (_, k) => [-100 + k * 290, 880 + i * 36 + between(r, -10, 10)])) + '" stroke="' + mix(h.cloud, P.ink, 0.12) + '" stroke-width="3" fill="none" opacity=".45"/>';
+    return { place: 'Biển mây Thần giới', far, mid, set, fg: h.sea(960, 2, '#ffffff', 0.85), ground: () => 836, depth: () => 1, hot: [800, 300] };
+  };
   SETS.heaven = (c, v) => {
     const P = c.P, r = c.rnd('hv');
     let far = '', mid = '', set = '', fg = '', place = 'Thần giới';
     const gold = '#e6c36a', cloud = mix('#ffffff', P.haze, 0.3);
     const sea = (y, n, col, op) => { let s = ''; for (let i = 0; i < n; i++) { const yy = y + i * 34 + between(r, -6, 6); s += '<path d="' + smooth(Array.from({ length: 10 }, (_, k) => [-100 + k * 200, yy - between(r, 10, 36)])) + 'L1700,1100 L-100,1100Z" fill="' + mix(col, '#ffffff', i * 0.06) + '" opacity="' + op + '"/>'; } return s; };
+    if (HEAVEN[v]) return HEAVEN[v](c, r, { gold, cloud, sea });
     far += sea(560, 5, mix(P.haze, gold, 0.25), 0.55);
     for (const [x, y, w] of [[300, 560, 120], [800, 520, 160], [1300, 580, 110]]) far += '<g opacity=".7"><path d="M' + (x - w) + ',' + y + ' Q' + x + ',' + (y + 60) + ' ' + (x + w) + ',' + y + 'Z" fill="' + mix(P.far, gold, 0.3) + '"/>' + pagoda(c, x, y, w * 0.9, 3, mix(P.far, gold, 0.45)) + '</g>';
     mid += sea(680, 5, cloud, 0.7);
