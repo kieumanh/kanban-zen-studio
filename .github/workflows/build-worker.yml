@@ -180,6 +180,8 @@ jobs:
           node tests/growth-art2d-browser.mjs
           # v2.22.0 (Sinh Khí): hiệp khách 2D chớp mắt, liếc, nói ngắt nghỉ, thở, nhìn theo con trỏ, nhảy chào; giảm chuyển động thì đứng yên.
           node tests/growth-motion-browser.mjs
+          # v2.23.0 (Liên Mạch): Bát phương đồ thành mạng lưới liên kết, thang tự co giãn.
+          node tests/growth-network-browser.mjs
           node tests/growth-scene-browser.mjs
           node tests/note-chips-browser.mjs
           node tests/checklist-focus-ring-browser.mjs

@@ -205,27 +205,53 @@
   const heroName = () => growth()?.name || HEROES[growth()?.hero || 'nam'].title;
 
   // ---- Biểu đồ mạng nhện (SVG) --------------------------------------------------------------------------------------------
+  // v2.23.0 (Liên Mạch): Bát phương đồ là một mạng lưới liên kết năng lực thay cho tám chấm rời.
+  //  - Thang tự co giãn: vòng ngoài là số tròn gần nhất trên điểm cao nhất (2, 4, 6, 8, 10, 20 …), không còn nhảy gấp đôi như bậc cũ.
+  //  - Bán kính theo căn bậc hai (diện tích tỉ lệ với điểm) và có lõi ở giữa (điểm 0), nên mạch yếu vẫn tách khỏi tâm, thấy được toàn cảnh.
+  //    Vòng giữa ghi rõ một phần tư thang để người xem đọc đúng thang không đều.
+  //  - Tám chấm nối vòng quanh bằng dải đổi màu giữa hai mạch kề nhau; bên trong là các đường nối chéo giữa mọi cặp mạch,
+  //    đậm và dày theo mạch yếu hơn của cặp (hai mạch cùng mạnh thì liên kết mạnh), mạch 0 điểm thì không có đường nối.
+  let radarSeq = 0;
+  const radarTop = (mx) => {
+    if (!(mx > 2)) return 2;
+    const p = 10 ** Math.floor(Math.log10(mx));
+    return [1, 2, 4, 6, 8, 10].find((n) => n * p >= mx - 1e-9) * p;
+  };
   function radar(s, pending) {
-    const CX = 200, CY = 192, R = 104, add = pending || Array(8).fill(0);
+    const CX = 200, CY = 192, R = 112, R0 = 16, add = pending || Array(8).fill(0), id = 'gr-rd' + ++radarSeq;
     const vals = s.map((v, i) => v + add[i] * STEP);
-    const tier = tierOf(Math.max(...vals));
-    const pt = (i, r) => {
-      const a = ((-90 + i * 45) * Math.PI) / 180;
-      return [CX + r * Math.cos(a), CY + r * Math.sin(a)];
-    };
-    const poly = (r) => AXES.map((_, i) => pt(i, r).map((n) => n.toFixed(1)).join(',')).join(' ');
-    const rings = [1, 2, 3, 4, 5].map((k) => '<polygon class="gr-ring' + (k === 5 ? ' gr-ring-outer' : '') + '" points="' + poly((R * k) / 5) + '"/>').join('');
-    const spokes = AXES.map((_, i) => { const [x, y] = pt(i, R); return '<line class="gr-spoke" x1="' + CX + '" y1="' + CY + '" x2="' + x.toFixed(1) + '" y2="' + y.toFixed(1) + '"/>'; }).join('');
-    const area = AXES.map((_, i) => pt(i, (R * Math.min(1, vals[i] / tier))).map((n) => n.toFixed(1)).join(',')).join(' ');
-    const dots = AXES.map((a, i) => { const [x, y] = pt(i, R * Math.min(1, vals[i] / tier)); return '<circle class="gr-dot" cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="5.5" style="fill:' + a.color + '"/>'; }).join('');
+    const top = radarTop(Math.max(...vals));
+    const rad = (v) => R0 + (R - R0) * Math.sqrt(Math.max(0, Math.min(1, v / top)));
+    const ang = (i) => ((-90 + i * 45) * Math.PI) / 180;
+    const pt = (i, r) => [CX + r * Math.cos(ang(i)), CY + r * Math.sin(ang(i))];
+    const f = (n) => n.toFixed(1);
+    const poly = (r) => AXES.map((_, i) => pt(i, r).map(f).join(',')).join(' ');
+    const rings = '<polygon class="gr-ring gr-ring-core" points="' + poly(R0) + '"/>' + [1, 2, 3, 4].map((k) => '<polygon class="gr-ring' + (k === 4 ? ' gr-ring-outer' : '') + '" points="' + poly(R0 + ((R - R0) * k) / 4) + '"/>').join('');
+    const spokes = AXES.map((_, i) => { const [a, b] = pt(i, R0), [x, y] = pt(i, R); return '<line class="gr-spoke" x1="' + f(a) + '" y1="' + f(b) + '" x2="' + f(x) + '" y2="' + f(y) + '"/>'; }).join('');
+    const P = vals.map((v, i) => pt(i, rad(v)));
+    const web = [];
+    for (let i = 0; i < 8; i++) {
+      for (let j = i + 2; j < 8; j++) {
+        if (i === 0 && j === 7) continue;
+        const w = Math.sqrt(Math.min(vals[i], vals[j]) / top);
+        if (!(w > 0)) continue;
+        web.push('<line class="gr-web" data-pair="' + i + '-' + j + '" x1="' + f(P[i][0]) + '" y1="' + f(P[i][1]) + '" x2="' + f(P[j][0]) + '" y2="' + f(P[j][1]) + '" style="stroke-opacity:' + (0.1 + 0.34 * w).toFixed(2) + ';stroke-width:' + (0.8 + 1.8 * w).toFixed(2) + '"/>');
+      }
+    }
+    const grads = AXES.map((a, i) => { const j = (i + 1) % 8; return '<linearGradient id="' + id + '-' + i + '" gradientUnits="userSpaceOnUse" x1="' + f(P[i][0]) + '" y1="' + f(P[i][1]) + '" x2="' + f(P[j][0]) + '" y2="' + f(P[j][1]) + '"><stop offset="0" stop-color="' + a.color + '"/><stop offset="1" stop-color="' + AXES[j].color + '"/></linearGradient>'; }).join('');
+    const links = AXES.map((_, i) => { const j = (i + 1) % 8; return '<line class="gr-link" data-pair="' + i + '-' + j + '" x1="' + f(P[i][0]) + '" y1="' + f(P[i][1]) + '" x2="' + f(P[j][0]) + '" y2="' + f(P[j][1]) + '" stroke="url(#' + id + '-' + i + ')"/>'; }).join('');
+    const area = P.map((q) => q.map(f).join(',')).join(' ');
+    const dots = AXES.map((a, i) => '<circle class="gr-halo" cx="' + f(P[i][0]) + '" cy="' + f(P[i][1]) + '" r="11" style="fill:' + a.color + '"/><circle class="gr-dot" cx="' + f(P[i][0]) + '" cy="' + f(P[i][1]) + '" r="6.5" style="fill:' + a.color + '"/>').join('');
     const labels = AXES.map((a, i) => {
-      const [x, y] = pt(i, R + 22), c = Math.cos(((-90 + i * 45) * Math.PI) / 180), sn = Math.sin(((-90 + i * 45) * Math.PI) / 180);
+      const [x, y] = pt(i, R + 22), c = Math.cos(ang(i)), sn = Math.sin(ang(i));
       const anchor = c > 0.3 ? 'start' : c < -0.3 ? 'end' : 'middle';
       const dy = sn < -0.5 ? -14 : sn > 0.5 ? 6 : -6;
-      return '<text class="gr-label" x="' + x.toFixed(1) + '" y="' + (y + dy).toFixed(1) + '" text-anchor="' + anchor + '">' + esc(a.name) + '</text><text class="gr-value" x="' + x.toFixed(1) + '" y="' + (y + dy + 16).toFixed(1) + '" text-anchor="' + anchor + '">' + fmt(vals[i]) + '</text>';
+      return '<text class="gr-label" x="' + f(x) + '" y="' + f(y + dy) + '" text-anchor="' + anchor + '">' + esc(a.name) + '</text><text class="gr-value" x="' + f(x) + '" y="' + f(y + dy + 16) + '" text-anchor="' + anchor + '">' + fmt(vals[i]) + '</text>';
     }).join('');
-    const label = 'Bát phương đồ 8 mạch: ' + AXES.map((a, i) => a.name + ' ' + fmt(vals[i])).join(', ') + '. Thang tối đa ' + tier + ' điểm.';
-    return '<svg class="gr-radar" viewBox="0 0 400 384" role="img" aria-label="' + esc(label) + '">' + rings + spokes + '<polygon class="gr-area" points="' + area + '"/>' + dots + labels + '<text class="gr-scale" x="' + (CX + 7) + '" y="' + (CY - R - 5) + '">' + tier + '</text></svg>';
+    // Số của vòng nằm giữa hai nan Nghiệp quả và Tài lộc để không đè lên chấm.
+    const ringVal = (k, v) => { const r = R0 + ((R - R0) * k) / 4, a = (-67.5 * Math.PI) / 180; return '<text class="gr-ring-val" x="' + f(CX + r * Math.cos(a)) + '" y="' + f(CY + r * Math.sin(a) + 4) + '" text-anchor="middle">' + fmt(v) + '</text>'; };
+    const label = 'Bát phương đồ 8 mạch: ' + AXES.map((a, i) => a.name + ' ' + fmt(vals[i])).join(', ') + '. Thang tối đa ' + fmt(top) + ' điểm. Tám mạch nối thành mạng lưới, hai mạch cùng mạnh thì đường nối đậm.';
+    return '<svg class="gr-radar" viewBox="0 0 400 384" role="img" aria-label="' + esc(label) + '"><defs>' + grads + '</defs>' + rings + spokes + '<g class="gr-webs">' + web.join('') + '</g><polygon class="gr-area" points="' + area + '"/><g class="gr-links">' + links + '</g><circle class="gr-hub" cx="' + CX + '" cy="' + CY + '" r="3"/>' + dots + labels + ringVal(2, top / 4) + ringVal(4, top) + '</svg>';
   }
 
   // ---- Trang Điểm tích lũy ------------------------------------------------------------------------------------------------

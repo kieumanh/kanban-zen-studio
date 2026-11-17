@@ -3113,6 +3113,18 @@
 :root[data-contrast=high] .gr-dot {
     stroke: #ffffff
 }
+:root[data-contrast=high] .gr-ring-core {
+    fill: rgba(6,6,6,0.06)
+}
+:root[data-contrast=high] .gr-radar .gr-area {
+    fill: rgba(6,6,6,0.14)
+}
+:root[data-contrast=high] .gr-web {
+    stroke: #060606
+}
+:root[data-contrast=high] .gr-hub {
+    fill: #060606
+}
 :root[data-contrast=high] .gr-card:focus-within {
     outline: 3px solid #1b1026
 }
@@ -3182,6 +3194,12 @@
 }
 :root[data-contrast=high] .gr-area {
     fill: rgba(6,6,6,0.16)
+}
+:root[data-contrast=high] .gr-radar .gr-area {
+    fill: rgba(6,6,6,0.12)
+}
+:root[data-contrast=high] .gr-ring-core {
+    fill: rgba(6,6,6,0.05)
 }
 :root[data-contrast=high] dialog.gr-story::backdrop {
     background: rgba(48,37,28,0.6)
@@ -7136,6 +7154,18 @@
 :root[data-theme=dark][data-contrast=high] .gr-dot {
     stroke: #ffffff
 }
+:root[data-theme=dark][data-contrast=high] .gr-ring-core {
+    fill: rgba(245,245,245,0.06)
+}
+:root[data-theme=dark][data-contrast=high] .gr-radar .gr-area {
+    fill: rgba(245,245,245,0.14)
+}
+:root[data-theme=dark][data-contrast=high] .gr-web {
+    stroke: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .gr-hub {
+    fill: #f5f5f5
+}
 :root[data-theme=dark][data-contrast=high] .gr-card:focus-within {
     outline: 3px solid #cecece
 }
@@ -7205,6 +7235,12 @@
 }
 :root[data-theme=dark][data-contrast=high] .gr-area {
     fill: rgba(245,245,245,0.16)
+}
+:root[data-theme=dark][data-contrast=high] .gr-radar .gr-area {
+    fill: rgba(245,245,245,0.12)
+}
+:root[data-theme=dark][data-contrast=high] .gr-ring-core {
+    fill: rgba(245,245,245,0.05)
 }
 :root[data-theme=dark][data-contrast=high] dialog.gr-story::backdrop {
     background: rgba(48,37,28,0.6)

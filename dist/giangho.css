@@ -4897,6 +4897,26 @@
 :root[data-style=giangho] .gr-dot {
     stroke: #ffffff
 }
+:root[data-style=giangho] .gr-ring-core {
+    fill: rgba(171,36,53,0.06)
+}
+:root[data-style=giangho] .gr-radar .gr-area {
+    fill: rgba(171,36,53,0.14);
+    stroke: none
+}
+:root[data-style=giangho] .gr-web {
+    stroke: #ab2435
+}
+:root[data-style=giangho] .gr-link {
+    fill: none
+}
+:root[data-style=giangho] .gr-hub {
+    fill: #ab2435
+}
+:root[data-style=giangho] .gr-ring-val {
+    fill: var(--muted);
+    stroke: var(--paper)
+}
 :root[data-style=giangho] .gr-label {
     fill: var(--ink)
 }
@@ -5189,6 +5209,19 @@
 :root[data-style=giangho] .gr-area {
     fill: rgba(167,33,60,0.16);
     stroke: var(--gr-seal)
+}
+:root[data-style=giangho] .gr-radar .gr-area {
+    fill: rgba(167,33,60,0.12);
+    stroke: none
+}
+:root[data-style=giangho] .gr-web, :root[data-style=giangho] .gr-hub {
+    stroke: var(--gr-seal)
+}
+:root[data-style=giangho] .gr-hub {
+    fill: var(--gr-seal)
+}
+:root[data-style=giangho] .gr-ring-core {
+    fill: rgba(167,33,60,0.05)
 }
 :root[data-style=giangho] .gr-wallet>div, :root[data-style=giangho] .gr-tile, :root[data-style=giangho] .gr-tip {
     background: var(--gr-paper);
@@ -11851,6 +11884,26 @@
 :root[data-style=giangho][data-theme=dark] .gr-dot {
     stroke: #ffffff
 }
+:root[data-style=giangho][data-theme=dark] .gr-ring-core {
+    fill: rgba(254,186,185,0.06)
+}
+:root[data-style=giangho][data-theme=dark] .gr-radar .gr-area {
+    fill: rgba(254,186,185,0.14);
+    stroke: none
+}
+:root[data-style=giangho][data-theme=dark] .gr-web {
+    stroke: #febab9
+}
+:root[data-style=giangho][data-theme=dark] .gr-link {
+    fill: none
+}
+:root[data-style=giangho][data-theme=dark] .gr-hub {
+    fill: #febab9
+}
+:root[data-style=giangho][data-theme=dark] .gr-ring-val {
+    fill: var(--muted);
+    stroke: var(--paper)
+}
 :root[data-style=giangho][data-theme=dark] .gr-label {
     fill: var(--ink)
 }
@@ -12143,6 +12196,19 @@
 :root[data-style=giangho][data-theme=dark] .gr-area {
     fill: rgba(252,188,191,0.16);
     stroke: var(--gr-seal)
+}
+:root[data-style=giangho][data-theme=dark] .gr-radar .gr-area {
+    fill: rgba(252,188,191,0.12);
+    stroke: none
+}
+:root[data-style=giangho][data-theme=dark] .gr-web, :root[data-style=giangho][data-theme=dark] .gr-hub {
+    stroke: var(--gr-seal)
+}
+:root[data-style=giangho][data-theme=dark] .gr-hub {
+    fill: var(--gr-seal)
+}
+:root[data-style=giangho][data-theme=dark] .gr-ring-core {
+    fill: rgba(252,188,191,0.05)
 }
 :root[data-style=giangho][data-theme=dark] .gr-wallet>div, :root[data-style=giangho][data-theme=dark] .gr-tile, :root[data-style=giangho][data-theme=dark] .gr-tip {
     background: var(--gr-paper);

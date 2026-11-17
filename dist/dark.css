@@ -3112,6 +3112,18 @@
 :root[data-theme=dark] .gr-dot {
     stroke: #ffffff
 }
+:root[data-theme=dark] .gr-ring-core {
+    fill: rgba(202,184,254,0.06)
+}
+:root[data-theme=dark] .gr-radar .gr-area {
+    fill: rgba(202,184,254,0.14)
+}
+:root[data-theme=dark] .gr-web {
+    stroke: #cab8fe
+}
+:root[data-theme=dark] .gr-hub {
+    fill: #cab8fe
+}
 :root[data-theme=dark] .gr-card:focus-within {
     outline: 3px solid #a674d6
 }
@@ -3181,6 +3193,12 @@
 }
 :root[data-theme=dark] .gr-area {
     fill: rgba(251,173,178,0.16)
+}
+:root[data-theme=dark] .gr-radar .gr-area {
+    fill: rgba(251,173,178,0.12)
+}
+:root[data-theme=dark] .gr-ring-core {
+    fill: rgba(251,173,178,0.05)
 }
 :root[data-theme=dark] dialog.gr-story::backdrop {
     background: rgba(48,37,28,0.6)
