@@ -41,7 +41,7 @@
     moc: 'Tiểu Mộc',
     phong: 'Hàn Phong',
     ma: 'Tâm ma',
-    dan: 'Người trấn Thanh Khê',
+    dan: 'Trấn dân Thanh Khê',
     thien: 'Thiền sư Không Nguyệt',
     hai: 'Võ sư Mạc Trấn Hải',
     giao: 'Giáo chủ Lệ Vô Khuyết',
@@ -49,8 +49,8 @@
     // v2.12.0 (Thiên Môn Ký): người nói của chặng 90–100.
     trang: 'Tiếng nói trong trăng máu',
     me: 'Thủy Nương, mẹ của Lệ Vô Khuyết',
-    be: 'Cậu bé Lệ Vô Khuyết',
-    batu: 'Bà Tư',
+    be: 'Tiểu Vô Khuyết',
+    batu: 'Tô Bà Bà',
     hinh: 'Thiên Hình tinh quân',
     mien: 'Thụy Nguyệt Sứ Miên Hồ',
     dien: 'Huyễn Nguyệt Sứ Thiên Diện',
@@ -80,7 +80,7 @@
   const CHAPTERS = [
     { lv: 0, title: 'Trăng trong thùng nước', lead: 70, pages: [
       ['ke', 'zen', 'Dưới chân núi Vân Mộng có một quán trà nhỏ. Ở đó, {name} ngày ngày gánh nước từ suối về, chưa ai biết tên, cũng chưa ai đoán được con đường phía trước.'],
-      ['ke', 'talk', '{Y} không biết cha mẹ mình là ai. Bà Tư chủ quán kể: năm đói, có người đặt một chiếc giỏ trước cửa. Trong giỏ là một đứa bé, và một cái gáo gỗ sứt quai.'],
+      ['ke', 'talk', '{Y} không biết cha mẹ mình là ai. Tô Bà Bà chủ quán kể: năm đói, có người đặt một chiếc giỏ trước cửa. Trong giỏ là một đứa bé, và một cái gáo gỗ sứt quai.'],
       ['ke', 'talk', 'Một tối, trăng rằm in xuống thùng nước. {Y} đứng nhìn rất lâu: nước động thì trăng vỡ, nước yên thì trăng tròn.'],
       ['ke', 'martial', 'Bên suối, một lão nhân áo xám trượt chân. {Y} buông đòn gánh, lao tới đỡ, chẳng tiếc hai thùng nước vừa đầy.'],
       ['su', 'talk', 'Đôi tay này chưa biết một chiêu nào, nhưng biết dừng lại vì người khác. Ít ai làm được thế. Ngươi có muốn học võ không?'],
@@ -120,7 +120,7 @@
     ], lesson: 'Đừng đợi có hứng mới bắt đầu. Khi uể oải, hãy làm một việc nhỏ trong hai phút: hành động đến trước, tinh thần theo sau.' },
 
     { lv: 15, title: 'Hội đèn nghìn mặt', foe: 'dien', lead: 75, pages: [
-      ['ke', 'talk', 'Rằm tháng Giêng, chợ Thanh Khê mở hội đèn. Dân trấn góp tiền, nhờ {name} giữ quỹ sửa cây cầu gỗ sắp sập.'],
+      ['ke', 'talk', 'Rằm tháng Giêng, chợ Thanh Khê mở hội đèn. Trấn dân góp tiền, nhờ {name} giữ quỹ sửa cây cầu gỗ sắp sập.'],
       ['ke', 'moon', 'Giữa hội có một gánh xiếc lạ. Gã chủ gánh mỗi lần quay đầu lại mang một khuôn mặt khác: lúc ông lão, lúc thiếu nữ, lúc chính người đang nhìn hắn.'],
       ['dien', 'moon', 'Lại đây, lại đây! Ở đây có cả nghìn điều thú vị. Ngươi nhìn đèn này chưa? Còn đèn kia? Kia nữa!'],
       ['ke', 'talk', 'Mỗi ngọn đèn hắn chỉ vào lại mở ra một ảo cảnh. Đám thanh niên trong trấn đi theo ánh đèn, quên cả việc đang làm, rồi mất hút vào bóng đêm.'],
@@ -396,7 +396,7 @@
       ['ke', 'talk', 'Cậu bé lên mười lon ton theo sau, ôm cái gáo gỗ nhỏ. Một sáng, bên bờ suối cạn có tiếng khóc: người chạy hạn bỏ lại một chiếc giỏ, trong giỏ là một đứa bé còn đỏ hỏn.'],
       ['ke', 'zen', 'Người đàn bà bế đứa bé về. Từ hôm ấy, bát cháo loãng chia làm ba, rồi phần của bà nhỏ dần. Bà sai con trai lên trấn xin gạo. Cậu đi ba ngày.'],
       ['ke', 'talk', 'Ngày thứ nhất, một kiếm khách trẻ áo xám đi ngang, lưng đeo bầu nước. Bà xin chàng dừng lại. Chàng hứa xong việc sẽ quay về. {Name} nhận ra dáng người ấy: sư phụ Tùng Hạc.'],
-      ['ke', 'zen', 'Ngày thứ hai, bà đặt đứa bé vào giỏ, lót thêm cái gáo gỗ của con trai, gửi theo một gánh hàng trà xuôi về phương nam. Người bán trà còn trẻ, nhưng {name} nhận ra giọng nói ấy: Bà Tư.'],
+      ['ke', 'zen', 'Ngày thứ hai, bà đặt đứa bé vào giỏ, lót thêm cái gáo gỗ của con trai, gửi theo một gánh hàng trà xuôi về phương nam. Người bán trà còn trẻ, nhưng {name} nhận ra giọng nói ấy: Tô Bà Bà.'],
       ['hero', 'zen', 'Cái gáo sứt quai bên hông tại hạ. Chiếc giỏ trước cửa quán trà. Đứa bé ấy… là tại hạ. Bà đã nhịn phần cháo của mình để tại hạ được sống.'],
       ['ke', 'moon', 'Ngày thứ ba, người mẹ ngã xuống bên đòn gánh. Cậu bé về tới nơi với nửa bao gạo, ngồi cạnh mẹ dưới vầng trăng đỏ như máu. Không ai kể cho cậu nghe về chiếc giỏ.'],
       ['trang', 'moon', 'Chăm chỉ là lời dối trá của kẻ yếu, bé con ạ. Mẹ ngươi gánh nước cả đời, và ruộng có xanh đâu? Lớn lên, hãy tìm ta.'],
@@ -492,7 +492,7 @@
     ], lesson: 'Phần lớn nỗ lực đều có một quãng dài chưa thấy gì. Người bỏ cuộc thường bỏ ngay trước khi mầm đầu tiên nhú lên. Hãy làm cho xong phần của hôm nay.' },
 
     { lv: 98.7, title: 'Mầm xanh dưới trăng đỏ', lead: 99, pages: [
-      ['ke', 'talk', 'Tin về một ngọn mạ chạy dọc mười vạn người nhanh hơn ngựa. Người đã bỏ hàng quay lại. Bà Tư gánh trà ra tận ruộng. Lũ trẻ đặt tên cho ngọn mạ là "Thầy".'],
+      ['ke', 'talk', 'Tin về một ngọn mạ chạy dọc mười vạn người nhanh hơn ngựa. Người đã bỏ hàng quay lại. Tô Bà Bà gánh trà ra tận ruộng. Lũ trẻ đặt tên cho ngọn mạ là "Thầy".'],
       ['ke', 'martial', 'Mười ngày sau là một vạt. Một tháng sau, cả cánh đồng dưới chân Vân Mộng lên màu. Nước do người mang tới đã nhiều hơn nước vầng trăng kịp hút.'],
       ['ke', 'moon', 'Dòng khí đỏ chảy về trăng máu mỏng dần rồi đứt hẳn. Không còn tuyệt vọng để ăn, con mắt đỏ lần đầu lộ vẻ đói. Nó đổi cách.'],
       ['than', 'moon', 'Ngươi muốn gặp sư huynh ngươi không? Nhìn đi.'],
@@ -539,7 +539,7 @@
     ], lesson: 'Người hiểu rõ một thói xấu nhất là người từng mắc nó. Hãy học từ những lần mình và người khác vấp ngã, và đừng ngại nhờ họ chỉ ra chỗ mình đang lặp lại.' },
 
     { lv: 99.6, title: 'Món nợ một gáo nước', lead: 99, pages: [
-      ['ke', 'zen', 'Bảy đêm trước nguyệt thực, {name} rời đỉnh núi, một mình về quán trà dưới chân Vân Mộng. Bà Tư vẫn ngồi quạt lò, như chưa từng có ai rời đi.'],
+      ['ke', 'zen', 'Bảy đêm trước nguyệt thực, {name} rời đỉnh núi, một mình về quán trà dưới chân Vân Mộng. Tô Bà Bà vẫn ngồi quạt lò, như chưa từng có ai rời đi.'],
       ['batu', 'talk', 'Người đàn bà ấy dúi chiếc giỏ vào tay ta. Không dặn ta nuôi con cho giỏi, cũng chẳng bắt nó mang ơn. Bà chỉ nói một câu: "Cho nó uống nước mỗi ngày."'],
       ['hero', 'talk', 'Bà ấy mất vì con, bà ạ.'],
       ['batu', 'talk', 'Bà ấy mất vì hạn. Còn chia cháo cho con là việc bà ấy chọn. Con định giành luôn cả việc người ta đã chọn hay sao? Nợ kiểu ấy không trả ngược lại được, chỉ trả tiếp cho người sau.'],

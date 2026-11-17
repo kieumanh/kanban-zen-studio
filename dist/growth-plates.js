@@ -6,7 +6,7 @@
     // ---- Khai cuộc: Trăng trong thùng nước ------------------------------------------------------------------------------------
     t0: [
       'valley/tea dawn +birds +steam @.6,.62,1 hero:carry@.36*1.1 batu:stand@.8 "Rạng đông, hiệp khách gánh nước từ suối về quán trà dưới chân núi Vân Mộng"',
-      'valley/tea morning - @.62,.76,1.45 batu:talk@.68*1.1 hero:stand@.38*1.1 basket@.52,.9*1.1?1 "Bà Tư kể chuyện chiếc giỏ đặt trước cửa quán năm đói"',
+      'valley/tea morning - @.62,.76,1.45 batu:talk@.68*1.1 hero:stand@.38*1.1 basket@.52,.9*1.1?1 "Tô Bà Bà kể chuyện chiếc giỏ đặt trước cửa quán năm đói"',
       'valley/stream night +fireflies ~moon@.3,.2,60 @.62,.84,2 hero:stand@.44,.9*1.3 bucket@.66,.94*1.5?1 "Trăng rằm in xuống thùng nước, nước yên thì trăng tròn"',
       'valley/stream morning +leaves ~sun@.78,.2,54 @.5,.7,1.25 su:fall@.58,.8*1.1 hero:strike@.36*1.1 pole@.18,.9*.7 "Lão nhân áo xám trượt chân bên suối, hiệp khách buông đòn gánh lao tới đỡ"',
       'valley/stream morning - @.5,.72,1.5 su:talk@.58*1.2 hero:bow@.4*1.2 "Sư phụ hỏi: ngươi có muốn học võ không?"',
@@ -418,7 +418,7 @@
     ],
     // ---- 98.7: Mầm xanh dưới trăng đỏ -----------------------------------------------------------------------------------------
     't98.7': [
-      'field/dry day +birds @.5,.74,1.3 sprout@.5,.9*.9 kid:stand@.36,.92*.95 kid:sit@.62,.92*.9 batu:carry@.82,.92 "Người đã bỏ hàng kéo về quanh ngọn mạ duy nhất, Bà Tư gánh trà ra tận ruộng, lũ trẻ gọi ngọn mạ là Thầy"',
+      'field/dry day +birds @.5,.74,1.3 sprout@.5,.9*.9 kid:stand@.36,.92*.95 kid:sit@.62,.92*.9 batu:carry@.82,.92 "Người đã bỏ hàng kéo về quanh ngọn mạ duy nhất, Tô Bà Bà gánh trà ra tận ruộng, lũ trẻ gọi ngọn mạ là Thầy"',
       'field/green morning +birds ~sun@.78,.25,56 @.5,.65,1.0 dan:carry@.2,.92 dan2:carry@.4,.9 dan:carry@.72,.92 "Cả cánh đồng dưới chân Vân Mộng lên màu xanh, nước người mang tới đã nhiều hơn nước vầng trăng kịp hút"',
       'field/green blood +redthread ~eye@.5,.24,160 @.5,.36,1.45 hero:stand@.5,.92*1.0 "Dòng khí đỏ chảy về vầng trăng máu mỏng dần rồi đứt hẳn, con mắt đỏ lần đầu lộ vẻ đói"',
       'void/field void +redthread @.5,.26,2.0 "Con mắt đỏ quay xuống thì thầm: ngươi muốn gặp sư huynh ngươi không? Nhìn đi"',
@@ -465,10 +465,10 @@
     ],
     // ---- 99.6: Món nợ một gáo nước --------------------------------------------------------------------------------------------
     't99.6': [
-      'valley/tea dusk +steam +birds @.5,.7,1.1 hero:walk@.2,.92*1.1 batu:sit@.7,.9*1.1 "Bảy đêm trước nguyệt thực hiệp khách một mình về quán trà dưới chân Vân Mộng, Bà Tư vẫn ngồi quạt lò như chưa từng có ai rời đi"',
-      'valley/tea lamp +steam @.5,.7,1.7 batu:talk@.36,.9*1.35 basket@.7,.92*1.2?1 "Bà Tư kể lại lời dặn của người đàn bà năm xưa khi dúi chiếc giỏ vào tay bà: cho nó uống nước mỗi ngày"',
+      'valley/tea dusk +steam +birds @.5,.7,1.1 hero:walk@.2,.92*1.1 batu:sit@.7,.9*1.1 "Bảy đêm trước nguyệt thực hiệp khách một mình về quán trà dưới chân Vân Mộng, Tô Bà Bà vẫn ngồi quạt lò như chưa từng có ai rời đi"',
+      'valley/tea lamp +steam @.5,.7,1.7 batu:talk@.36,.9*1.35 basket@.7,.92*1.2?1 "Tô Bà Bà kể lại lời dặn của người đàn bà năm xưa khi dúi chiếc giỏ vào tay bà: cho nó uống nước mỗi ngày"',
       'valley/tea lamp @.5,.76,2.4 hero:sit@.34,.92*1.3 teapot@.62,.94*1.0 bowl@.52,.95*.9 "Hiệp khách cúi đầu bên bàn trà nói khẽ: bà ấy mất vì con, bà ạ"',
-      'valley/tea lamp +steam @.5,.7,1.3 batu:point@.62,.9*1.4 hero:sit@.3,.92*1.25 "Bà Tư gõ nhẹ xuống bàn: bà ấy mất vì hạn, còn chia cháo là việc bà ấy chọn, nợ kiểu ấy không trả ngược, chỉ trả tiếp cho người sau"',
+      'valley/tea lamp +steam @.5,.7,1.3 batu:point@.62,.9*1.4 hero:sit@.3,.92*1.25 "Tô Bà Bà gõ nhẹ xuống bàn: bà ấy mất vì hạn, còn chia cháo là việc bà ấy chọn, nợ kiểu ấy không trả ngược, chỉ trả tiếp cho người sau"',
       'valley/stream morning +birds ~sun@.7,.25,50 @.5,.72,1.5 hero:carry@.4,.9*1.35 bucket@.7,.94*1.5 "Sáng hôm sau bên suối hiệp khách gánh nước và chợt hiểu mỗi chuyến nước gánh cho người khác hóa ra là trả cho bà mà không biết"',
       'peaks/am dawn +drift ~sun@.5,.34,60 @.5,.7,1.35 hero:taichi@.5,.9*1.4 "Trên triền núi lúc bình minh hiệp khách tập thái cực, thôi cãi lại tiếng sáo vì cả hai câu đều thật"',
       'peaks/summit dawn +petals ~sun@.5,.3,70 @.5,.6,1.5 thread@.5,.6*1.3?1 gate@.5,.9*.7?9 hero:stand@.5,.94*1.2 "Sợi xích đỏ tuột xuống như sợi chỉ mục vì chỗ trống nay đã có tên có mặt người, trên Thiên Môn ổ khóa thứ chín rơi xuống"',
@@ -503,26 +503,26 @@
     ],
     // ---- Kỳ ngộ (v2.18.0): mỗi trang một khung riêng, khóa 'm:<mã>-<lần gặp>' --------------------------------------------------
     'm:batu-1': [
-      'valley/tea morning +steam +birds @.55,.66,1.05 hero:walk@.24,.84*1.1 batu:talk@.76,.84*1.15 teapot@.56,.9*1 "Hiệp khách xuống núi mua muối, quán trà cũ vẫn nghi ngút khói, Bà Tư ngồi quạt lò như chưa từng có ai rời đi"',
-      'valley/tea morning +steam @.64,.74,1.62 batu:talk@.73,.88*1.31 hero:stand@.38,.88*1.15 teapot@.5,.9*1.1 bowl@.4,.93*1 "Bà Tư rót trà, nhìn hiệp khách bằng ánh mắt hiền: con đi đâu cũng vội như bị ma đuổi"',
+      'valley/tea morning +steam +birds @.55,.66,1.05 hero:walk@.24,.84*1.1 batu:talk@.76,.84*1.15 teapot@.56,.9*1 "Hiệp khách xuống núi mua muối, quán trà cũ vẫn nghi ngút khói, Tô Bà Bà ngồi quạt lò như chưa từng có ai rời đi"',
+      'valley/tea morning +steam @.64,.74,1.62 batu:talk@.73,.88*1.31 hero:stand@.38,.88*1.15 teapot@.5,.9*1.1 bowl@.4,.93*1 "Tô Bà Bà rót trà, nhìn hiệp khách bằng ánh mắt hiền: con đi đâu cũng vội như bị ma đuổi"',
       'valley/tea morning +steam @.36,.74,1.62 hero:talk@.29,.88*1.31 batu:stand@.66,.88*1.1 bucket@.14,.92*1?1 pole@.2,.88*.8^-10 "Hiệp khách đứng giữa sân, kể một tràng việc phải làm: gánh nước, luyện kiếm, chép kinh"',
       'valley/tea day +steam @.55,.78,1.68 batu:zen@.63,.87*1.33 hero:sit@.34,.87*1.25 teapot@.46,.93*1.1 bowl@.38,.94*.9 "Hai người ngồi bên ấm trà, nước vừa sôi để lắng, hiệp khách lần đầu thấy mình chậm lại"',
     ],
     'm:batu-2': [
       'valley/tea dusk +steam +fireflies ~sun@.8,.36,15.2 @.5,.64,1.05 batu:talk@.66,.84*1.15 hero:stand@.3,.84*1.1 banner@.44,.82*.9 "Hoàng hôn xuống quán trà, một tấm biển mới treo trước cửa: Nơi hiệp khách từng gánh nước"',
-      'valley/tea dusk +steam @.64,.72,1.6 batu:talk@.73,.89*1.31 dan:sit@.44,.89*1.0 dan2:sit@.32,.89*0.95 banner@.82,.84*.8 "Khách ngồi quanh nghe Bà Tư kể: hồi ấy con làm đổ nước suốt"',
+      'valley/tea dusk +steam @.64,.72,1.6 batu:talk@.73,.89*1.31 dan:sit@.44,.89*1.0 dan2:sit@.32,.89*0.95 banner@.82,.84*.8 "Khách ngồi quanh nghe Tô Bà Bà kể: hồi ấy con làm đổ nước suốt"',
       'valley/tea dusk +steam @.34,.72,1.62 hero:talk@.28,.9*1.31 dan:stand@.61,.9*1.0 dan2:stand@.72,.9*0.95 "Hiệp khách đỏ mặt, đứng ngượng giữa những tiếng cười của khách quán"',
-      'valley/tea dusk +fireflies ~sun@.8,.36,15.2 @.58,.78,1.68 batu:zen@.65,.87*1.33 hero:stand@.37,.87*1.2 bucket@.46,.93*1.2?1 "Bà Tư vỗ vai hiệp khách, chỉ chiếc thùng đổ nước cũ treo trên tường: ai cũng từng đổ nước, thế họ mới dám bắt đầu"',
+      'valley/tea dusk +fireflies ~sun@.8,.36,15.2 @.58,.78,1.68 batu:zen@.65,.87*1.33 hero:stand@.37,.87*1.2 bucket@.46,.93*1.2?1 "Tô Bà Bà vỗ vai hiệp khách, chỉ chiếc thùng đổ nước cũ treo trên tường: ai cũng từng đổ nước, thế họ mới dám bắt đầu"',
     ],
     'm:luc-1': [
-      'bridge/bridge dusk +birds @.5,.7,1.1 hero:stand@.34,.59*1.15 luc:sit@.7,.6*1.0 basket@.82,.9*.8 "Dưới gầm cầu Thanh Khê, hiệp khách chia nửa cái bánh bao cho đứa bé ăn mày tên Lục Lục"',
-      'bridge/bridge dusk +birds @.66,.78,1.65 luc:talk@.72,.63*1.33 hero:kneel@.39,.64*1.2 "Lục Lục thì thầm: đêm nay người của Huyết Nguyệt Giáo đi qua lối rừng trúc"',
-      'peaks/path night +dust ~moon@.3,.2,13.2 @.5,.7,1.25 hero:martial@.4,.79*1.2 dan:back@.79,.6*0.9 dan2:back@.88,.57*0.85 "Nhờ tin của Lục Lục, hiệp khách đổi đường, tránh được toán phục kích trong rừng"',
+      'bridge/bridge dusk +birds @.5,.7,1.1 hero:stand@.34,.59*1.15 luc:sit@.7,.6*1.0 basket@.82,.9*.8 "Dưới gầm cầu Thanh Khê, hiệp khách chia nửa cái bánh bao cho đứa bé ăn mày tên Tiểu Lục Tử"',
+      'bridge/bridge dusk +birds @.66,.78,1.65 luc:talk@.72,.63*1.33 hero:kneel@.39,.64*1.2 "Tiểu Lục Tử thì thầm: đêm nay người của Huyết Nguyệt Giáo đi qua lối rừng trúc"',
+      'peaks/path night +dust ~moon@.3,.2,13.2 @.5,.7,1.25 hero:martial@.4,.79*1.2 dan:back@.79,.6*0.9 dan2:back@.88,.57*0.85 "Nhờ tin của Tiểu Lục Tử, hiệp khách đổi đường, tránh được toán phục kích trong rừng"',
     ],
     'm:luc-2': [
-      'bridge/bridge night +fireflies ~moon@.3,.2,13.2 @.5,.7,1.15 luc:talk@.5,.56*1.2 kid:sit@.31,.6*0.95 kid:sit@.71,.61*0.95 dan:sit@.83,.61*0.9 "Dưới gầm cầu, Lục Lục và ba mươi đứa bạn họp nhau bên bảng tin tự làm"',
+      'bridge/bridge night +fireflies ~moon@.3,.2,13.2 @.5,.7,1.15 luc:talk@.5,.56*1.2 kid:sit@.31,.6*0.95 kid:sit@.71,.61*0.95 dan:sit@.83,.61*0.9 "Dưới gầm cầu, Tiểu Lục Tử và ba mươi đứa bạn họp nhau bên bảng tin tự làm"',
       'bridge/bridge night +fireflies @.5,.6,1.5 board@.5,.5*1.5 hero:zen@.29,.63*1.15 luc:stand@.69,.63*1.1 "Bảng tin ba cột: Nghe được, Đang kiểm, Chắc chắn, hiệp khách đọc từng dòng"',
-      'bridge/bridge night ~moon@.3,.2,13.2 @.4,.72,1.55 hero:talk@.31,.64*1.3 luc:talk@.64,.65*1.2 kid:stand@.77,.66*0.9 "Hiệp khách khen Lục Lục: ngươi còn giỏi hơn thám báo của triều đình"',
+      'bridge/bridge night ~moon@.3,.2,13.2 @.4,.72,1.55 hero:talk@.31,.64*1.3 luc:talk@.64,.65*1.2 kid:stand@.77,.66*0.9 "Hiệp khách khen Tiểu Lục Tử: ngươi còn giỏi hơn thám báo của triều đình"',
     ],
     'm:cuu-1': [
       'town/street dusk +embers @.6,.7,1.15 cuu:talk@.64,.86*1.25 hero:stand@.33,.86*1.15 fire@.82,.9*.8 "Lò rèn của Thiết Cửu đỏ lửa trở lại, ông nhớ ơn người từng gõ chuông đánh thức cả trấn"',
@@ -640,13 +640,13 @@
       'valley/stream morning +leaves +birds @.5,.78,1.5 tuytang:stand@.59,.86*1.25 shards@.48,.94*1.1 hero:walk@.28,.86*1.15 "Túy Tăng đổ vò rượu xuống suối rồi tỉnh táo đi cùng một quãng"',
     ],
     'm:daoly-1': [
-      'town/square dusk +petals @.5,.66,1.15 dao:float@.69,.86*1.0 ly:float@.31,.86*1.0 basket@.5,.5*.7 hero:stand@.5,.86*1.15 "Hai cô bé song sinh Đào và Lý nhảy quanh hiệp khách, chuyền túi gạo qua lại"',
+      'town/square dusk +petals @.5,.66,1.15 dao:float@.69,.86*1.0 ly:float@.31,.86*1.0 basket@.5,.5*.7 hero:stand@.5,.86*1.15 "Hai cô bé song sinh Đào Nhi và Lý Nhi nhảy quanh hiệp khách, chuyền túi gạo qua lại"',
       'town/square dusk +petals @.5,.7,1.3 dao:walk@.29,.86*1.0 ly:walk@.73,.86*1.0 basket@.5,.6*.8^30 hero:stand@.5,.86*1.2 lanterns@.5,.26*1?5 "Đuổi đứa này thì đứa kia đã chạy mất, túi gạo bay từ tay bên này sang bên kia"',
       'town/square night +fireflies @.5,.76,1.5 hero:taichi@.5,.87*1.3 dao:fall@.31,.87*1.0 ly:fall@.71,.87*1.0 basket@.5,.5*.8 "Hiệp khách đứng yên, chuyền tới lần thứ mười hai đứa mỏi tay, túi gạo rơi trúng lòng"',
     ],
     'm:daoly-2': [
-      'town/square night +fireflies @.5,.6,1.15 dao:talk@.31,.87*1.1 ly:talk@.69,.87*1.1 lanterns@.5,.24*1.1?8 hero:stand@.5,.87*1.15 "Đào và Lý biết lối vào gánh xiếc của Thiên Diện, nơi Huyết Nguyệt Giáo giấu người bắt trong hội đèn"',
-      'town/square night +sparks @.5,.7,1.3 dao:strike@.31,.86*1.1 ly:strike@.71,.86*1.1 dien:stagger@.5,.86*1.2 hero:martial@.16,.86*1.1 "Đào giả làm Lý, Lý giả làm Đào, Thiên Diện nghìn mặt mà không nhận ra ai là ai"',
+      'town/square night +fireflies @.5,.6,1.15 dao:talk@.31,.87*1.1 ly:talk@.69,.87*1.1 lanterns@.5,.24*1.1?8 hero:stand@.5,.87*1.15 "Đào Nhi và Lý Nhi biết lối vào gánh xiếc của Thiên Diện, nơi Huyết Nguyệt Giáo giấu người bắt trong hội đèn"',
+      'town/square night +sparks @.5,.7,1.3 dao:strike@.31,.86*1.1 ly:strike@.71,.86*1.1 dien:stagger@.5,.86*1.2 hero:martial@.16,.86*1.1 "Đào Nhi giả làm Lý Nhi, Lý Nhi giả làm Đào Nhi, Thiên Diện nghìn mặt mà không nhận ra ai là ai"',
     ],
     'm:vongtinh-1': [
       'peaks/am night +drift ~moon@.25,.2,13.7 @.5,.66,1.2 vongtinh:zen@.69,.82*1.2 hero:sit@.31,.82*1.15 "Bà lão mù ngồi nhìn trời đêm, thấy trăng đỏ đang lớn dần và một vì sao bạc đi rất chậm"',
@@ -673,7 +673,7 @@
     ],
     'm:trinhho-2': [
       'town/gate night +fireflies ~moon@.3,.2,13.7 @.5,.66,1.15 trinhho:stand@.69,.86*1.25 gate@.5,.84*1.1 "Huyết Nguyệt Giáo hứa cho quan lên chức tri phủ nếu mở cổng thành cho chúng"',
-      'town/gate night +fireflies +sparks @.5,.7,1.2 hero:martial@.5,.86*1.2 luc:stand@.31,.86*0.9 kid:stand@.21,.86*0.85 dan:stand@.69,.86*1.0 dan2:stand@.81,.86*0.95 torch@.62,.9*1.1 "Đêm ấy cổng thành mở, nhưng ngoài cổng là dân chân núi cùng Lục Lục và lũ trẻ đã báo tin từ trước"',
+      'town/gate night +fireflies +sparks @.5,.7,1.2 hero:martial@.5,.86*1.2 luc:stand@.31,.86*0.9 kid:stand@.21,.86*0.85 dan:stand@.69,.86*1.0 dan2:stand@.81,.86*0.95 torch@.62,.9*1.1 "Đêm ấy cổng thành mở, nhưng ngoài cổng là dân chân núi cùng Tiểu Lục Tử và lũ trẻ đã báo tin từ trước"',
     ],
     'm:moclao-1': [
       'peaks/path morning +leaves +birds @.5,.7,1.15 moclao:martial@.69,.63*1.25 hero:stand@.31,.82*1.15 statue@.88,.8*.6 "Mộc Lão chặt một cây cổ thụ đã ba năm, mỗi ngày một nhát"',
@@ -747,7 +747,7 @@
     'g:s4': [
       'heaven/sky dusk +redthread @.5,.62,1.1 godc04:stand@.7,.84*1.2 hero:stand@.3,.84*1.1 thread@.5,.5*1.2 "Kết Duyên tinh quân se những sợi tơ nối người với người, trên tay bà hàng vạn sợi không sợi nào rối"',
       'heaven/sky dusk +redthread @.64,.72,1.55 godc04:talk@.71,.88*1.3 thread@.4,.7*1 "Cắt một sợi bất kỳ trong tay ta, cắt được mà không ai đau thì ta nhận thua"',
-      'heaven/sky dusk +redthread +petals @.5,.7,1.4 hero:point@.37,.86*1.25 thread@.5,.62*1.3 batu:stand@.76,.9*.5 "Hiệp khách không cắt, lần theo từng sợi của chính mình: Bà Tư, sư phụ, Tiểu Mộc, Hàn Phong, rồi buộc thêm một sợi mới vào tay bà"',
+      'heaven/sky dusk +redthread +petals @.5,.7,1.4 hero:point@.37,.86*1.25 thread@.5,.62*1.3 batu:stand@.76,.9*.5 "Hiệp khách không cắt, lần theo từng sợi của chính mình: Tô Bà Bà, sư phụ, Tiểu Mộc, Hàn Phong, rồi buộc thêm một sợi mới vào tay bà"',
       'heaven/sky dusk +redthread +petals @.6,.72,1.5 hero:bow@.3,.9*1.1 godc04:talk@.71,.88*1.3 thread@.34,.58*1.2 "Kẻ đến để nối thì ta đánh sao được, sợi này ta giữ cho ngươi"',
     ],
     'g:s5': [

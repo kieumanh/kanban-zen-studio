@@ -7,30 +7,30 @@
 (function () {
   const ROLES = { giup: 'Giúp đỡ', can: 'Gây khó', amsat: 'Ám sát', thu: 'Thử thách' };
   const CAST = [
-    { id: 'batu', name: 'Bà Tư', title: 'Chủ quán trà chân núi Vân Mộng', bio: 'Người cưu mang hiệp khách ở quán trà từ thuở còn nằm trong giỏ, cho gánh nước kiếm cơm. Quạt lò cả đời, không biết võ, biết người.', meets: [
+    { id: 'batu', name: 'Tô Bà Bà', title: 'Chủ quán trà chân núi Vân Mộng', bio: 'Người cưu mang hiệp khách ở quán trà từ thuở còn nằm trong giỏ, cho gánh nước kiếm cơm. Quạt lò cả đời, không biết võ, biết người.', meets: [
       { from: 1, to: 14, kind: 'giup', title: 'Chén trà nghỉ chân', pages: [
-        ['ke', 'talk', '{Name} xuống núi mua muối, ghé lại quán trà cũ. Bà Tư vẫn ngồi quạt lò, như chưa từng có ai rời đi.'],
+        ['ke', 'talk', '{Name} xuống núi mua muối, ghé lại quán trà cũ. Tô Bà Bà vẫn ngồi quạt lò, như chưa từng có ai rời đi.'],
         ['batu', 'talk', 'Ngồi xuống uống chén trà đã. Ta thấy con đi đâu cũng vội như bị ma đuổi.'],
         ['hero', 'talk', 'Con còn nhiều việc lắm, bà ơi. Gánh nước, luyện kiếm, chép kinh…'],
         ['batu', 'zen', 'Ấm trà ngon phải chờ nước sôi rồi để lắng một chút. Người cũng vậy. Uống xong rồi đi, đi sẽ nhanh hơn.'],
       ], lesson: 'Một quãng nghỉ ngắn giữa các việc giúp đầu óc tỉnh lại. Nghỉ năm phút không làm ta chậm đi.' },
       { from: 30, to: 60, kind: 'giup', title: 'Tấm biển trước quán', pages: [
-        ['ke', 'talk', 'Danh tiếng {name} đã vang khắp nơi. Bà Tư treo một tấm biển trước quán: "Nơi {name} từng gánh nước".'],
+        ['ke', 'talk', 'Danh tiếng {name} đã vang khắp nơi. Tô Bà Bà treo một tấm biển trước quán: "Nơi {name} từng gánh nước".'],
         ['batu', 'talk', 'Khách đến đông lắm, ai cũng hỏi chuyện con. Ta chỉ kể: hồi ấy con làm đổ nước suốt.'],
         ['hero', 'talk', 'Bà kể vậy, người ta cười con mất.'],
         ['batu', 'zen', 'Cười thì có sao. Người ta cần biết cao thủ cũng từng đổ nước. Thế họ mới dám bắt đầu.'],
       ], lesson: 'Đừng giấu những ngày vụng về. Chúng là bằng chứng rằng ai cũng có thể bắt đầu từ con số không.' },
     ] },
-    { id: 'luc', name: 'Lục Lục', title: 'Tiểu khất dưới gầm cầu Thanh Khê', bio: 'Đứa trẻ ăn mày tai thính mắt tinh, sau lập cả một mạng lưới tin tức của lũ trẻ gầm cầu.', meets: [
+    { id: 'luc', name: 'Tiểu Lục Tử', title: 'Tiểu khất dưới gầm cầu Thanh Khê', bio: 'Đứa trẻ ăn mày tai thính mắt tinh, sau lập cả một mạng lưới tin tức của lũ trẻ gầm cầu.', meets: [
       { from: 3, to: 25, kind: 'giup', title: 'Nửa cái bánh, nửa cái tin', pages: [
-        ['ke', 'talk', 'Dưới gầm cầu Thanh Khê có một đứa bé ăn mày tên Lục Lục. {Name} chia cho nó nửa cái bánh bao.'],
-        ['luc', 'talk', 'Ăn của {y} nửa cái bánh, Lục Lục trả nửa cái tin: đêm nay có người của Huyết Nguyệt Giáo đi qua lối rừng trúc.'],
+        ['ke', 'talk', 'Dưới gầm cầu Thanh Khê có một đứa bé ăn mày tên Tiểu Lục Tử. {Name} chia cho nó nửa cái bánh bao.'],
+        ['luc', 'talk', 'Ăn của {y} nửa cái bánh, Tiểu Lục Tử trả nửa cái tin: đêm nay có người của Huyết Nguyệt Giáo đi qua lối rừng trúc.'],
         ['ke', 'martial', 'Nhờ tin ấy, {y} kịp đổi đường, tránh được một toán phục kích.'],
       ], lesson: 'Một việc tử tế nhỏ thường quay về theo cách không ngờ. Hãy giữ quan hệ tốt với những người quanh mình.' },
       { from: 36, to: 60, kind: 'giup', title: 'Bảng tin gầm cầu', pages: [
-        ['luc', 'talk', 'Giờ Lục Lục có ba mươi đứa bạn ở ba mươi gầm cầu. Nghe được gì cũng chạy về báo. Bọn này làm một tấm bảng như của Tiểu Mộc!'],
+        ['luc', 'talk', 'Giờ Tiểu Lục Tử có ba mươi đứa bạn ở ba mươi gầm cầu. Nghe được gì cũng chạy về báo. Bọn này làm một tấm bảng như của Tiểu Mộc!'],
         ['ke', 'zen', 'Bảng tin của lũ trẻ có ba cột: Nghe được, Đang kiểm, Chắc chắn. Nhờ nó, {name} biết trước ba nơi Huyết Nguyệt Giáo sắp đến.'],
-        ['hero', 'talk', 'Ngươi còn giỏi hơn thám báo của triều đình đấy, Lục Lục.'],
+        ['hero', 'talk', 'Ngươi còn giỏi hơn thám báo của triều đình đấy, Tiểu Lục Tử.'],
       ], lesson: 'Thông tin chỉ có ích khi được sắp xếp. Phân rõ điều mới nghe, điều đang kiểm và điều đã chắc chắn.' },
     ] },
     { id: 'cuu', name: 'Thiết Cửu', title: 'Thợ rèn trấn Thanh Khê', bio: 'Lò rèn của lão từng nguội ba ngày vì Mê Hồn Hương. Lão nợ hiệp khách một lò lửa.', meets: [
@@ -170,15 +170,15 @@
         ['ke', 'zen', 'Túy Tăng đổ vò rượu xuống suối: "Vậy bần tăng tỉnh lại một ngày, đi cùng ngươi một quãng."'],
       ], lesson: 'Né tránh vấn đề chỉ làm nó lớn lên trong im lặng. Can đảm nhìn rõ là bước đầu để giải quyết.' },
     ] },
-    { id: 'daoly', name: 'Đào Lý', title: 'Cặp song sinh gánh xiếc', bio: 'Hai chị em giống nhau như hai giọt nước, nghịch như hai con sóc.', meets: [
+    { id: 'daoly', name: 'Đào Nhi · Lý Nhi', title: 'Cặp song sinh gánh xiếc', bio: 'Hai chị em giống nhau như hai giọt nước, nghịch như hai con sóc.', meets: [
       { from: 10, to: 40, kind: 'can', title: 'Hai cái bóng tinh nghịch', pages: [
-        ['daoly', 'talk', 'Đào đây! Lý đây! Đoán xem ai đang cầm túi gạo của ngươi?'],
+        ['daoly', 'talk', 'Đào Nhi đây! Lý Nhi đây! Đoán xem ai đang cầm túi gạo của ngươi?'],
         ['ke', 'talk', 'Hai cô bé song sinh nhảy nhót quanh {name}, chuyền túi gạo qua lại. Đuổi đứa này, đứa kia đã chạy mất.'],
         ['hero', 'taichi', 'Tại hạ đứng yên, chỉ nhìn túi gạo. Chuyền tới lần thứ mười thì hai đứa mỏi tay, túi gạo rơi trúng lòng tại hạ.'],
       ], lesson: 'Khi bị kéo về hai phía, đừng đuổi theo từng thứ. Giữ mắt vào điều quan trọng nhất và chờ đúng lúc.' },
       { from: 41, to: 80, kind: 'giup', title: 'Gánh xiếc cứu người', pages: [
         ['daoly', 'talk', 'Năm nay Huyết Nguyệt Giáo lại bắt người trong hội đèn! Bọn ta biết lối vào gánh xiếc của Thiên Diện.'],
-        ['ke', 'martial', 'Đào giả làm Lý, Lý giả làm Đào. Thiên Diện nghìn mặt mà không nhận ra ai là ai. {Name} theo hai cô bé cứu được hai mươi người.'],
+        ['ke', 'martial', 'Đào Nhi giả làm Lý Nhi, Lý Nhi giả làm Đào Nhi. Thiên Diện nghìn mặt mà không nhận ra ai là ai. {Name} theo hai cô bé cứu được hai mươi người.'],
       ], lesson: 'Người gây phiền hôm qua có thể là đồng minh hôm nay. Đừng đóng cửa với ai chỉ vì một lần va chạm.' },
     ] },
     { id: 'vongtinh', name: 'Vọng Tinh Bà', title: 'Bà thầy bói mù nhìn sao', bio: 'Mắt mù từ trẻ, nhưng đêm nào cũng ngồi "nhìn" sao trời.', meets: [
@@ -211,7 +211,7 @@
       ], lesson: 'Gặp một luật lệ bất hợp lý, đôi khi giải pháp tốt nhất là đổi cách làm, để vấn đề tự biến mất.' },
       { from: 71, to: 95, kind: 'can', title: 'Cổng thành lúc nửa đêm', pages: [
         ['trinhho', 'moon', 'Huyết Nguyệt Giáo hứa cho bản quan lên chức tri phủ nếu mở cổng thành cho chúng.'],
-        ['ke', 'martial', 'Đêm ấy, cổng thành mở. Nhưng ngoài cổng không phải quân Huyết Nguyệt, mà là dân chân núi cùng Lục Lục và lũ trẻ đã báo tin từ trước.'],
+        ['ke', 'martial', 'Đêm ấy, cổng thành mở. Nhưng ngoài cổng không phải quân Huyết Nguyệt, mà là dân chân núi cùng Tiểu Lục Tử và lũ trẻ đã báo tin từ trước.'],
       ], lesson: 'Kế hoạch nào cũng cần dự phòng cho lúc người khác không giữ lời. Chuẩn bị trước giúp ta không bị động.' },
     ] },
     { id: 'moclao', name: 'Mộc Lão', title: 'Tiều phu già, cao thủ ẩn danh', bio: 'Mỗi ngày chặt một nhát rìu, ba năm hạ một cây cổ thụ.', meets: [

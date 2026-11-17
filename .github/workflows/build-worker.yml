@@ -188,6 +188,8 @@ jobs:
           node tests/growth-godlook-browser.mjs
           # v2.26.0 (Thiên Cang Chân Dung): ba mươi sáu Thiên Cang mỗi vị một dáng; Phương Thìn có nơi riêng (Mương mây).
           node tests/growth-thiencang-browser.mjs
+          # v2.27.0 (Hán Danh): mọi nhân vật mang tên Hán Việt, không đổi mã nhân vật hay lịch kỳ ngộ.
+          node tests/growth-handanh-browser.mjs
           node tests/growth-scene-browser.mjs
           node tests/note-chips-browser.mjs
           node tests/checklist-focus-ring-browser.mjs

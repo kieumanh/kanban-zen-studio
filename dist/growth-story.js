@@ -384,7 +384,10 @@
   }
 
   // ---- Khung Giang hồ kỳ ngộ (v2.7.0) ---------------------------------------------------------------------------------------
-  const initials = (n) => n.split(/\s+/).filter(Boolean).slice(-2).map((w) => w[0]).join('').toUpperCase();
+  // Tên thường lấy chữ đầu của hai tiếng cuối; cặp nhân vật ("Đào Nhi · Lý Nhi") lấy chữ đầu của mỗi người.
+  const initials = (n) =>
+    (n.includes(' · ') ? n.split(' · ').map((p) => p.trim().split(/\s+/)[0]) : n.split(/\s+/).filter(Boolean).slice(-2))
+      .map((w) => w[0]).join('').toUpperCase();
   function metCount() {
     if (!started()) return 0;
     const lv = level();
