@@ -194,6 +194,8 @@ jobs:
           node tests/growth-quyen1-browser.mjs
           # v2.29.0 (Lò Nhà Nhóm Sẵn): Quyển Hai, truyện cấp 30–50 dài thêm 24 trang có tranh riêng.
           node tests/growth-quyen2-browser.mjs
+          # v2.30.0 (Chiếc Bánh Nguội): Quyển Ba, truyện cấp 55–75 dài thêm 20 trang có tranh riêng.
+          node tests/growth-quyen3-browser.mjs
           node tests/growth-scene-browser.mjs
           node tests/note-chips-browser.mjs
           node tests/checklist-focus-ring-browser.mjs
