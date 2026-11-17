@@ -680,6 +680,10 @@ export function validWorkspace(d) {
             str(t.tag, 40) &&
             str(t.due, 10) &&
             validDate(t.due) &&
+            // v2.52.0 (Việc Chờ Người Khác): tên người đang chờ và ngày nhắc hỏi lại (tùy chọn).
+            (t.waitFor === undefined || str(t.waitFor, 60)) &&
+            (t.waitUntil === undefined ||
+              (str(t.waitUntil, 10) && validDate(t.waitUntil))) &&
             p.columns.includes(t.col) &&
             (!t.labels ||
               (Array.isArray(t.labels) &&

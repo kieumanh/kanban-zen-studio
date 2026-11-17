@@ -168,3 +168,4 @@ tests/push-names-browser.mjs
 tests/capacity-warning-browser.mjs
 tests/share-target-browser.mjs
 tests/share-target-offline-browser.mjs
+tests/waiting-browser.mjs

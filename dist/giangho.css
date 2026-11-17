@@ -7308,6 +7308,23 @@
 :root[data-style=giangho] .zen-share-status {
     color: #8c1e38
 }
+:root[data-style=giangho] .task-card-wait {
+    background: #f6eedf;
+    color: #572627
+}
+:root[data-style=giangho] .task-card-wait.is-due {
+    background: #fff1e3;
+    color: #673407
+}
+:root[data-style=giangho] .wf-wait-panel .wait-row {
+    border-top: 1px solid #eeddc5
+}
+:root[data-style=giangho] .wf-wait-panel .wait-row:first-of-type {
+    border-top: 0
+}
+:root[data-style=giangho] .wf-wait-panel .wait-row.is-due .wait-when {
+    color: #673407
+}
 :root[data-style=giangho][data-theme=dark] {
     --bg: #18130c;
     --paper: #1e1811;
@@ -14566,6 +14583,23 @@
 }
 :root[data-style=giangho][data-theme=dark] .zen-share-status {
     color: #ffc1c6
+}
+:root[data-style=giangho][data-theme=dark] .task-card-wait {
+    background: #140e08;
+    color: #eed6c6
+}
+:root[data-style=giangho][data-theme=dark] .task-card-wait.is-due {
+    background: #17120b;
+    color: #fcccad
+}
+:root[data-style=giangho][data-theme=dark] .wf-wait-panel .wait-row {
+    border-top: 1px solid #433830
+}
+:root[data-style=giangho][data-theme=dark] .wf-wait-panel .wait-row:first-of-type {
+    border-top: 0
+}
+:root[data-style=giangho][data-theme=dark] .wf-wait-panel .wait-row.is-due .wait-when {
+    color: #fcccad
 }
 
 /* ---- Họa tiết Giang hồ viết tay (v1.86.0 · Chu Mặc) ------------------------------------------------------------------------

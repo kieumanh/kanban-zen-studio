@@ -576,6 +576,18 @@
     'Hãy nhập tiêu đề.': 'Hãy ghi tiêu đề.',
     'Bản chỉ xem không lưu được.': 'Bản chỉ xem không cất được.',
     'Dự án': { to: 'Đại sự', in: '.zen-share [data-share-project]' },
+    // v2.52.0 (Việc Chờ Người Khác): trình sửa việc, thẻ việc, khối Tổng quan, chuông (waiting.js).
+    'Đang chờ người khác': 'Đang đợi hồi âm',
+    'Đang chờ ai': 'Đang đợi ai hồi âm',
+    'Nhắc hỏi lại vào ngày': 'Hẹn ngày hỏi lại',
+    'Chọn nhanh ngày nhắc': 'Chọn nhanh ngày hẹn',
+    'Để trống tên nếu không chờ ai. Đến ngày hẹn, việc hiện ở chuông và Tổng quan để bạn hỏi lại.': 'Để trống tên nếu không đợi ai. Đến ngày hẹn, nhiệm vụ hiện ở Truyền thư và Tổng đàn để các hạ hỏi lại.',
+    'Đang chờ': [
+      { to: 'Đang đợi hồi âm', in: '.wf-wait-panel h2' },
+      { to: 'Đang đợi', in: '.wait-label' },
+    ],
+    'Đã có phản hồi': 'Đã có hồi âm',
+    'Đã ghi nhận phản hồi, việc không còn ở mục Đang chờ.': 'Đã ghi nhận hồi âm, nhiệm vụ không còn ở mục Đang đợi.',
     'Chưa lưu được ghi chú. Hãy thử lại.': 'Chưa cất được quyển. Hãy thử lại.',
     'Chưa lưu được việc. Hãy thử lại.': 'Chưa cất được nhiệm vụ. Hãy thử lại.',
     'Nội dung quá dài: ghi chú tối đa 150 ký tự tiêu đề và 10.000 ký tự nội dung.': 'Nội dung quá dài: quyển tối đa 150 ký tự tiêu đề và 10.000 ký tự nội dung.',
@@ -905,6 +917,10 @@
     [/^(\d+)\/(\d+) việc hoàn thành · (\d+)% tiến độ$/, '$1/$2 nhiệm vụ công thành · $3% tiến cảnh', '.archive-projects', 'việc hoàn thành'],
     [/^(\d+) công việc · Lưu trữ$/, '$1 nhiệm vụ · Phong ấn', MAIN, ' · Lưu trữ'],
     [/^(Công việc|Ghi chú|Dự án|Mục checklist) · (\d+)$/, (s, k, n) => ({ 'Công việc': 'Nhiệm vụ', 'Ghi chú': 'Quyển', 'Dự án': 'Đại sự', 'Mục checklist': 'Chiêu' })[k] + ' · ' + n, '.recycle-filters', ' · '],
+    [/^Quá hẹn hỏi lại (\d+) ngày$/, 'Lỡ hẹn hỏi lại $1 ngày', '.wait-when', 'Quá hẹn hỏi lại '],
+    [/^Nhắc lại (\d{2}[-/]\d{2})$/, 'Hẹn hỏi lại $1', '.wait-when', 'Nhắc lại '],
+    [/^Nhắc lại sau (\d+) ngày$/, 'Hẹn lại sau $1 ngày', '.wait-actions', 'Nhắc lại sau '],
+    [/^Sẽ nhắc lại sau (\d+) ngày\.$/, 'Sẽ hẹn lại sau $1 ngày.', '#toast, .toast, [role=status]', 'Sẽ nhắc lại sau '],
     [/^Đã lưu vào Ghi chú: (.+)$/, 'Đã cất vào Tàng thư: $1', '#toast, .toast, [role=status]', 'Đã lưu vào Ghi chú: '],
     [/^Đã thêm việc “(.+)” vào (.+)$/, 'Đã thêm nhiệm vụ “$1” vào $2', '#toast, .toast, [role=status]', 'Đã thêm việc “'],
     [/^Dữ liệu đồng bộ đã dùng (\d+)%: (.+) \/ 20 MB\.$/, 'Dữ liệu thông mạch đã dùng $1%: $2 / 20 MB.', '.capacity-warning strong', 'Dữ liệu đồng bộ đã dùng'],
@@ -942,7 +958,7 @@
     // Tên cột (người dùng đặt), trạng thái theo cột, ô chọn cột / dự án
     '.wf-column-name', '.studio-column-tabs', '.wf-state-choices', 'select[name=col]', 'select[name=project]', '.task-project-picker summary', '.task-project-choice-copy strong',
     // Tên và mô tả việc, dự án, từ khóa, nhãn
-    '.task-card h3', '.task-name', '.work-task-row strong', '.project-card h3', '.project-card > p', '.tag', '.wf-card-keywords > :not(.matrix-chip)', '.wf-comment', '.wf-comment-text', '.task-next-step > :not(span:first-child)', '.dashboard-progress-row strong', '.gantt-labels li', '.gantt-bar-label', '.project-note-picker label',
+    '.task-card h3', '.task-name', '.work-task-row strong', '.project-card h3', '.project-card > p', '.tag', '.wait-who', '.wf-card-keywords > :not(.matrix-chip)', '.wf-comment', '.wf-comment-text', '.task-next-step > :not(span:first-child)', '.dashboard-progress-row strong', '.gantt-labels li', '.gantt-bar-label', '.project-note-picker label',
     // Nhật khóa, Bế quan, Hoàng lịch: tên việc / môn, tên dự án, ghi chú cảm nhận
     // Tàng thư, Ngân khố, Bảo khố: tiêu đề / nội dung / nhóm quyển, đại sự để liên kết, hạng mục và ghi chú khoản thu chi, gợi ý hạng mục
     // (bấm gợi ý là chép chữ vào ô nhập nên phải giữ nguyên), tên tệp

@@ -2647,3 +2647,73 @@ body select:not([multiple]):not([size]):not([data-zen-native]):not(.wf-original-
   justify-content: flex-end;
 }
 
+
+/* v2.52.0 (Việc Chờ Người Khác): thẻ việc, khối “Đang chờ” ở Tổng quan, hai ô trong trình sửa việc (dist/waiting.js). */
+.task-card-wait {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 6px;
+  margin: 8px 0 0;
+  padding: 6px 10px;
+  border-radius: 12px;
+  background: #f1ecf8;
+  color: #4a3b66;
+  font-size: 12px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+.task-card-wait.is-due {
+  background: #fff1e3;
+  color: #7a3f0d;
+}
+.task-card-wait .wait-who {
+  font-weight: 700;
+}
+.wf-wait-panel {
+  margin-top: 16px;
+}
+.wf-wait-panel h2 small {
+  font-weight: 500;
+}
+.wf-wait-panel .wait-row {
+  display: grid;
+  gap: 2px;
+  padding: 6px 0;
+  border-top: 1px solid #e8dff0;
+}
+.wf-wait-panel .wait-row:first-of-type {
+  border-top: 0;
+}
+.wf-wait-panel .wait-row .work-task-row {
+  width: 100%;
+}
+.wf-wait-panel .wait-who {
+  font-weight: 700;
+}
+.wf-wait-panel .wait-row.is-due .wait-when {
+  color: #7a3f0d;
+  font-weight: 700;
+}
+.wf-wait-panel .wait-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 16px;
+  padding: 0 8px;
+}
+.wf-wait-panel .wait-actions .text-btn {
+  min-height: 44px;
+}
+.zen-wait .zen-wait-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 4px 0 8px;
+}
+.zen-wait .zen-wait-presets .btn {
+  min-height: 44px;
+}
+.zen-wait input[type='date'] {
+  min-height: 44px;
+  border-radius: 12px;
+}

@@ -4158,6 +4158,20 @@
 :root[data-theme=dark] .zen-share-status {
     color: #feb3ba
 }
+:root[data-theme=dark] .task-card-wait {
+    background: #110e15;
+    color: #d6caf1
+}
+:root[data-theme=dark] .task-card-wait.is-due {
+    background: #141118;
+    color: #f5c19f
+}
+:root[data-theme=dark] .wf-wait-panel .wait-row {
+    border-top: 1px solid #3d3843
+}
+:root[data-theme=dark] .wf-wait-panel .wait-row.is-due .wait-when {
+    color: #f5c19f
+}
 
 :root[data-theme=dark] {
   color-scheme: dark;
