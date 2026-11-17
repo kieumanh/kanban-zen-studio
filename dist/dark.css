@@ -4138,6 +4138,12 @@
     background: #1b1720;
     color: #dcd3ec
 }
+:root[data-theme=dark] .capacity-panel.capacity-warning {
+    border-left: 4px solid #c4852f
+}
+:root[data-theme=dark] .capacity-panel.capacity-warning.capacity-high, :root[data-theme=dark] .capacity-panel.capacity-warning.capacity-full {
+    border-left-color: #c4455b
+}
 
 :root[data-theme=dark] {
   color-scheme: dark;

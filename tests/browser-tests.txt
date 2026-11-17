@@ -165,3 +165,4 @@ tests/select-style-browser.mjs
 tests/shortcuts-browser.mjs
 tests/growth-ledger-keys-browser.mjs
 tests/push-names-browser.mjs
+tests/capacity-warning-browser.mjs

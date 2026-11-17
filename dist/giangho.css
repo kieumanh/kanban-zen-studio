@@ -7284,6 +7284,12 @@
     background: #f6ecdc;
     color: #311f13
 }
+:root[data-style=giangho] .capacity-panel.capacity-warning {
+    border-left: 4px solid #b7791f
+}
+:root[data-style=giangho] .capacity-panel.capacity-warning.capacity-high, :root[data-style=giangho] .capacity-panel.capacity-warning.capacity-full {
+    border-left-color: #b63850
+}
 :root[data-style=giangho][data-theme=dark] {
     --bg: #18130c;
     --paper: #1e1811;
@@ -14518,6 +14524,12 @@
     border: 1px solid #5c4736;
     background: #1e1710;
     color: #f5dccc
+}
+:root[data-style=giangho][data-theme=dark] .capacity-panel.capacity-warning {
+    border-left: 4px solid #c4852f
+}
+:root[data-style=giangho][data-theme=dark] .capacity-panel.capacity-warning.capacity-high, :root[data-style=giangho][data-theme=dark] .capacity-panel.capacity-warning.capacity-full {
+    border-left-color: #c4455b
 }
 
 /* ---- Họa tiết Giang hồ viết tay (v1.86.0 · Chu Mặc) ------------------------------------------------------------------------

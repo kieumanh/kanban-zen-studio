@@ -2531,3 +2531,19 @@ body select:not([multiple]):not([size]):not([data-zen-native]):not(.wf-original-
   }
 }
 
+/* v2.50.0 (Báo Đầy Dữ Liệu): khung báo mức dùng dữ liệu đồng bộ ở đầu Cài đặt, từ 70% trở lên. Nền và chữ lấy từ .capacity-panel (đã theo giao diện sáng, tối, Giang hồ); chỉ thêm vạch màu bên trái. */
+.capacity-panel.capacity-warning {
+  margin-top: 0;
+  margin-bottom: 14px;
+  border-left: 4px solid #b7791f;
+}
+.capacity-panel.capacity-warning.capacity-high,
+.capacity-panel.capacity-warning.capacity-full {
+  border-left-color: #b63850;
+}
+.capacity-warning p {
+  margin: 0 0 8px;
+}
+.capacity-warning .help-actions {
+  margin-top: 10px;
+}
