@@ -1,0 +1,59 @@
+{
+  "takenOn": "2026-11-18",
+  "database": "kanban-zen-studio (d8ebf96e-eb66-4e8b-9668-a3d6da1ec455)",
+  "method": "Truy vấn chỉ-đọc sqlite_master và pragma_table_info qua Cloudflare API đã kết nối. Không đọc dữ liệu người dùng. Mỗi cột ghi dạng tên:kiểu:bắt-buộc:mặc-định:khóa-chính, đúng thứ tự cột trên D1.",
+  "refresh": "Làm mới tệp này sau mỗi lần áp dụng migration mới lên D1 (cùng lúc cập nhật migrations/production-receipt.json).",
+  "tables": {
+    "attachments": "id:TEXT:0:NULL:1|user_id:TEXT:1:NULL:0|project_id:TEXT:1:NULL:0|task_id:TEXT:1:'':0|name:TEXT:1:NULL:0|content:TEXT:1:NULL:0|size:INTEGER:1:NULL:0|created:INTEGER:1:NULL:0|deleted:INTEGER:1:0:0",
+    "board_shares": "token_hash:TEXT:0:NULL:1|user_id:TEXT:1:NULL:0|data:TEXT:1:NULL:0|expires:INTEGER:1:NULL:0",
+    "deliveries": "user_id:TEXT:1:NULL:1|day:TEXT:1:NULL:2|channel:TEXT:1:NULL:3|status:TEXT:1:NULL:0",
+    "note_reminder_schedule": "user_id:TEXT:1:NULL:1|note_id:TEXT:1:NULL:2|fire_at:INTEGER:1:NULL:0|expires:INTEGER:1:NULL:0|schedule_key:TEXT:1:NULL:0|payload:TEXT:1:NULL:0|queued:INTEGER:1:0:0",
+    "note_versions": "user_id:TEXT:1:NULL:1|note_id:TEXT:1:NULL:2|revision:INTEGER:1:NULL:3|saved:INTEGER:1:NULL:0|data:TEXT:1:NULL:0",
+    "notification_jobs": "user_id:TEXT:1:NULL:1|day:TEXT:1:NULL:2|channel:TEXT:1:NULL:3|subject:TEXT:1:NULL:0|body:TEXT:1:NULL:0|snapshot:TEXT:1:'':0|status:TEXT:1:'pending':0|lease_until:INTEGER:1:0:0|attempts:INTEGER:1:0:0|last_error:TEXT:1:'':0|html:TEXT:1:'':0",
+    "notification_preferences": "user_id:TEXT:0:NULL:1|weekly_reports:INTEGER:1:0:0|weekly_hour:INTEGER:1:8:0|repeat_alerts:INTEGER:1:1:0|weekly_day:INTEGER:1:0:0",
+    "notification_receipts": "user_id:TEXT:1:NULL:1|receipt_key:TEXT:1:NULL:2|read_at:INTEGER:1:NULL:0",
+    "object_files": "id:TEXT:0:NULL:1|user_id:TEXT:1:NULL:0|object_key:TEXT:1:NULL:0|upload_id:TEXT:1:NULL:0|name:TEXT:1:NULL:0|mime:TEXT:1:NULL:0|size:INTEGER:1:NULL:0|scope:TEXT:1:NULL:0|state:TEXT:1:NULL:0|created:INTEGER:1:NULL:0|deleted:INTEGER:1:0:0",
+    "object_parts": "file_id:TEXT:1:NULL:1|part:INTEGER:1:NULL:2|etag:TEXT:1:NULL:0",
+    "profiles": "user_id:TEXT:0:NULL:1|name:TEXT:1:'':0|birthday:TEXT:1:'':0|avatar:TEXT:1:'':0",
+    "rate_limits": "key:TEXT:0:NULL:1|count:INTEGER:1:NULL:0|expires:INTEGER:1:NULL:0",
+    "reminder_settings": "user_id:TEXT:0:NULL:1|hour:INTEGER:1:8:0|interval_days:INTEGER:1:1:0",
+    "report_shares": "id:TEXT:0:NULL:1|token_hash:TEXT:1:NULL:0|user_id:TEXT:1:NULL:0|title:TEXT:1:NULL:0|html:TEXT:1:NULL:0|password_hash:TEXT:1:'':0|created:INTEGER:1:NULL:0|expires:INTEGER:1:NULL:0",
+    "report_snapshots": "user_id:TEXT:1:NULL:1|day:TEXT:1:NULL:2|data:TEXT:1:NULL:0",
+    "sessions": "token_hash:TEXT:0:NULL:1|user_id:TEXT:1:NULL:0|expires:INTEGER:1:NULL:0|remembered:INTEGER:1:0:0|reauth_at:INTEGER:1:0:0",
+    "subscriptions": "endpoint:TEXT:0:NULL:1|user_id:TEXT:1:NULL:0",
+    "tokens": "token_hash:TEXT:0:NULL:1|user_id:TEXT:1:NULL:0|kind:TEXT:1:NULL:0|expires:INTEGER:1:NULL:0",
+    "users": "id:TEXT:0:NULL:1|email:TEXT:1:NULL:0|password_hash:TEXT:1:NULL:0|verified:INTEGER:0:0:0|email_reminders:INTEGER:0:0:0|created:INTEGER:1:NULL:0",
+    "workspace_entities": "user_id:TEXT:1:NULL:1|entity_key:TEXT:1:NULL:2|data:TEXT:1:NULL:0",
+    "workspace_pending": "user_id:TEXT:1:NULL:1|upload_id:TEXT:1:NULL:2|entity_key:TEXT:1:NULL:3|data:TEXT:1:NULL:0",
+    "workspace_state": "user_id:TEXT:0:NULL:1|revision:INTEGER:1:NULL:0|nonce:TEXT:1:NULL:0|total_bytes:INTEGER:1:0:0",
+    "workspace_transfers": "user_id:TEXT:0:NULL:1|upload_id:TEXT:1:NULL:0|revision:INTEGER:1:NULL:0|expected:INTEGER:1:NULL:0|expires:INTEGER:1:NULL:0",
+    "workspaces": "user_id:TEXT:0:NULL:1|data:TEXT:1:NULL:0|revision:INTEGER:0:0:0"
+  },
+  "indexes": [
+    "attachments_owner",
+    "note_reminder_due",
+    "note_versions_saved",
+    "notification_jobs_pending",
+    "object_owner_scope",
+    "rate_limits_expires",
+    "report_shares_expiry",
+    "report_shares_owner",
+    "sessions_expires",
+    "sessions_user",
+    "subscriptions_user",
+    "tokens_expires",
+    "tokens_user_kind"
+  ],
+  "triggers": [
+    "note_schedule_delete",
+    "note_schedule_insert",
+    "note_schedule_update"
+  ],
+  "outsideApp": {
+    "d1_migrations": "Bảng hệ thống của Wrangler/D1 ghi các migration đã áp dụng.",
+    "zen_ai_budget": "Không có trong mã của kho này (không tệp SQL, không câu lệnh nào dùng).",
+    "zen_ai_feedback": "Không có trong mã của kho này.",
+    "zen_ai_owner": "Không có trong mã của kho này.",
+    "zen_ai_reports": "Không có trong mã của kho này."
+  }
+}
