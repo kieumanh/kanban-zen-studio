@@ -1,0 +1,162 @@
+# Danh sách bài kiểm thử trình duyệt chạy trong CI (từ v2.43.0), mỗi dòng một bài: "tests/<tên>-browser.mjs [giây ước tính]".
+# scripts/run-browser-tests.mjs chia các bài vào các nhóm chạy song song (xem ma trận "browser" trong .github/workflows/build-worker.yml).
+# Bài mới: thêm một dòng vào cuối danh sách này. tests/ci-browser-groups.mjs (chạy trong npm test) báo lỗi nếu có bài *-browser.mjs
+# chưa nằm ở đây hoặc danh sách ghi bài không tồn tại, nên không thể quên bài nào. Con số ước tính chỉ để chia nhóm cho đều, không làm bỏ bài nào.
+tests/workflow111-browser.mjs 85
+tests/report-layout-browser.mjs
+tests/offline-browser.mjs
+tests/tablet-layout-browser.mjs
+tests/nav-frame-browser.mjs
+tests/kanban-card-browser.mjs
+tests/project-header-browser.mjs
+tests/display-menu-browser.mjs
+tests/compact-default-browser.mjs
+tests/language-browser.mjs 35
+tests/a11y-contrast-browser.mjs 30
+tests/a11y-interaction-browser.mjs 38
+tests/task-list-browser.mjs
+tests/notice-browser.mjs
+tests/save-state-browser.mjs
+tests/compact-checks-browser.mjs
+tests/sync-alerts-browser.mjs 29
+tests/a11y-dialogs-browser.mjs
+tests/gantt-touch-browser.mjs
+tests/calendar-agenda-browser.mjs
+tests/motif-removed-browser.mjs
+tests/pin-panel-browser.mjs
+tests/done-card-browser.mjs
+tests/delete-zone-browser.mjs
+tests/theme-browser.mjs
+tests/theme-contrast-browser.mjs 150
+tests/startup-ready-browser.mjs
+tests/theme-gantt-browser.mjs
+tests/project-delete-target-browser.mjs
+tests/trash-clear-browser.mjs
+tests/welcome-slots-browser.mjs
+tests/timeline-removed-browser.mjs
+tests/theme-toggle-browser.mjs
+tests/notifications-ui-browser.mjs
+tests/quick-notes-browser.mjs
+tests/checklist-browser.mjs
+tests/focus-button-browser.mjs
+tests/focus-hover-browser.mjs
+tests/focus-edit-browser.mjs
+tests/close-animation-browser.mjs
+tests/note-art-soft-browser.mjs
+tests/settings-collapse-browser.mjs
+tests/checklist-progress-browser.mjs
+tests/welcome-flow-browser.mjs 26
+tests/welcome-long-quote-browser.mjs
+tests/pin-tasks-browser.mjs
+tests/checklist-tight-browser.mjs
+tests/checklist-number-browser.mjs
+tests/habit-remind-picker-browser.mjs
+tests/rich-text-escape-browser.mjs
+tests/completion-milestone-browser.mjs
+tests/auto-unpin-done-browser.mjs
+tests/release-notice-buttons-browser.mjs
+tests/gantt-hide-done-browser.mjs
+tests/rounded-view-checklist-browser.mjs
+tests/focus-edit-race-browser.mjs
+tests/task-exit-prompt-browser.mjs
+tests/checklist-no-overflow-browser.mjs
+tests/add-check-symmetry-browser.mjs
+tests/task-pin-shortcut-browser.mjs
+tests/exit-buttons-sync-browser.mjs
+tests/task-clean-close-browser.mjs
+tests/mobile-menu-views-browser.mjs
+tests/daily-habits-browser.mjs
+tests/daily-habits-report-browser.mjs
+tests/theme-choice-browser.mjs
+tests/habit-goal-project-browser.mjs
+tests/login-remember-browser.mjs
+tests/habit-today-icon-browser.mjs
+tests/ux-polish-browser.mjs
+tests/nav-groups-browser.mjs
+tests/release-log-browser.mjs
+tests/habit-mobile-polish-browser.mjs
+tests/habit-rest-history-browser.mjs
+tests/habit-reminder-browser.mjs
+tests/logout-cleanup-browser.mjs
+tests/board-share-link-browser.mjs
+tests/focus-refresh-button-browser.mjs
+tests/habits-sticky-bar-browser.mjs
+tests/habit-progress-layout-browser.mjs
+tests/habit-notes-browser.mjs
+tests/habit-reorder-browser.mjs
+tests/habit-history-report-browser.mjs
+tests/habit-nudge-browser.mjs
+tests/project-tab-wrap-browser.mjs
+tests/project-tab-compact-browser.mjs
+tests/growth-browser.mjs
+tests/growth-report-browser.mjs
+tests/growth-notify-browser.mjs
+tests/growth-spend-browser.mjs
+tests/growth-wuxia-browser.mjs
+tests/growth-levels-browser.mjs
+tests/growth-story-browser.mjs
+tests/growth-tale-browser.mjs
+tests/growth-meet-browser.mjs
+tests/growth-foes-browser.mjs
+tests/growth-path-browser.mjs
+tests/growth-ach-browser.mjs
+tests/giangho-style-browser.mjs 18
+tests/giangho-lex-browser.mjs
+tests/giangho-work-browser.mjs
+tests/giangho-daily-browser.mjs
+tests/giangho-treasure-browser.mjs
+tests/giangho-settings-browser.mjs
+tests/giangho-perf-browser.mjs
+tests/giangho-title-font-browser.mjs
+tests/growth-midchapter-browser.mjs
+tests/growth-gods-browser.mjs
+tests/growth-godpath-browser.mjs
+tests/growth-art2d-browser.mjs
+tests/growth-motion-browser.mjs
+tests/growth-network-browser.mjs
+tests/growth-phuong-browser.mjs
+tests/growth-godlook-browser.mjs
+tests/growth-thiencang-browser.mjs
+tests/growth-handanh-browser.mjs
+tests/growth-quyen1-browser.mjs
+tests/growth-quyen2-browser.mjs
+tests/growth-quyen3-browser.mjs
+tests/growth-quyen4-browser.mjs
+tests/growth-emblem-browser.mjs
+tests/growth-pace-browser.mjs
+tests/growth-store-browser.mjs
+tests/quickadd-browser.mjs
+tests/naming-browser.mjs 16
+tests/lazy-load-browser.mjs 20
+tests/phone-head-browser.mjs 25
+tests/bottom-bar-browser.mjs 20
+tests/side-menu-kho-browser.mjs 10
+tests/today-first-browser.mjs 37
+tests/phone-calendar-browser.mjs 11
+tests/growth-scene-browser.mjs
+tests/note-chips-browser.mjs
+tests/checklist-focus-ring-browser.mjs
+tests/giangho-coverage-browser.mjs 67
+tests/giangho-guide-browser.mjs
+tests/giangho-fx-browser.mjs
+tests/giangho-lunar-browser.mjs
+tests/giangho-sync-browser.mjs
+tests/giangho-columns-browser.mjs
+tests/focus-sound-browser.mjs
+tests/settings-groups-browser.mjs
+tests/device-audit-browser.mjs 20
+tests/gantt-edge-route-browser.mjs
+tests/note-paste-lines-browser.mjs
+tests/topbar-center-browser.mjs
+tests/habit-today-frame-browser.mjs
+tests/top-tools-compact-browser.mjs
+tests/habit-today-align-browser.mjs
+tests/task-editor-compact-browser.mjs
+tests/budget-browser.mjs
+tests/budget-dashboard-browser.mjs
+tests/budget-breakeven-browser.mjs
+tests/finance-report-browser.mjs
+tests/finance-share-browser.mjs
+tests/perf-dates-browser.mjs
+tests/dashboard-context-browser.mjs
+tests/diagnostics-browser.mjs

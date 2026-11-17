@@ -18,8 +18,9 @@ permissions:
   contents: write
 jobs:
   build:
+    name: Build and unit tests
     runs-on: ubuntu-latest
-    timeout-minutes: 35
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -33,6 +34,34 @@ jobs:
         run: node scripts/build.mjs
       - name: Run tests
         run: npm test
+      # v2.43.0: bản dựng đã qua lint và npm test được giữ lại; job deploy đẩy đúng các tệp này lên Cloudflare.
+      - name: Keep the verified build for deployment
+        uses: actions/upload-artifact@v4
+        with:
+          name: verified-build-${{ github.run_id }}
+          path: |
+            worker-api.mjs
+            public/
+          retention-days: 7
+  # v2.43.0: bài kiểm thử trình duyệt chạy song song theo nhóm (danh sách ở tests/browser-tests.txt, chia nhóm ở scripts/run-browser-tests.mjs).
+  # Cổng triển khai không đổi: job deploy chỉ chạy khi job build và mọi nhóm browser đều xanh.
+  browser:
+    name: Browser tests ${{ matrix.group }}/5
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        group: [1, 2, 3, 4, 5]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Install development tools
+        run: npm ci
+      - name: Build Worker
+        run: node scripts/build.mjs
       # v1.74.0: bước này từng đỏ 3 lần liên tiếp chỉ vì máy chủ GitHub không phân giải được tên miền kho apt
       # ("Temporary failure resolving azure.archive.ubuntu.com"), trước khi bất kỳ test hay bước triển khai nào chạy.
       # Chỉ thêm thử lại có giới hạn quanh phần CÀI ĐẶT; không đổi test nào, không bỏ qua test nào.
@@ -63,196 +92,31 @@ jobs:
             sleep $((attempt * 20))
           done
       - name: Verify established workflows on mobile tablet desktop
-        run: |
-          node tests/workflow111-browser.mjs
-          node tests/report-layout-browser.mjs
-          node tests/offline-browser.mjs
-          node tests/tablet-layout-browser.mjs
-          node tests/nav-frame-browser.mjs
-          node tests/kanban-card-browser.mjs
-          node tests/project-header-browser.mjs
-          node tests/display-menu-browser.mjs
-          node tests/compact-default-browser.mjs
-          node tests/language-browser.mjs
-          node tests/a11y-contrast-browser.mjs
-          node tests/a11y-interaction-browser.mjs
-          node tests/task-list-browser.mjs
-          node tests/notice-browser.mjs
-          node tests/save-state-browser.mjs
-          node tests/compact-checks-browser.mjs
-          node tests/sync-alerts-browser.mjs
-          node tests/a11y-dialogs-browser.mjs
-          node tests/gantt-touch-browser.mjs
-          node tests/calendar-agenda-browser.mjs
-          node tests/motif-removed-browser.mjs
-          node tests/pin-panel-browser.mjs
-          node tests/done-card-browser.mjs
-          node tests/delete-zone-browser.mjs
-          node tests/theme-browser.mjs
-          node tests/theme-contrast-browser.mjs
-          node tests/startup-ready-browser.mjs
-          node tests/theme-gantt-browser.mjs
-          node tests/project-delete-target-browser.mjs
-          node tests/trash-clear-browser.mjs
-          node tests/welcome-slots-browser.mjs
-          node tests/timeline-removed-browser.mjs
-          node tests/theme-toggle-browser.mjs
-          node tests/notifications-ui-browser.mjs
-          node tests/quick-notes-browser.mjs
-          node tests/checklist-browser.mjs
-          node tests/focus-button-browser.mjs
-          node tests/focus-hover-browser.mjs
-          node tests/focus-edit-browser.mjs
-          node tests/close-animation-browser.mjs
-          node tests/note-art-soft-browser.mjs
-          node tests/settings-collapse-browser.mjs
-          node tests/checklist-progress-browser.mjs
-          node tests/welcome-flow-browser.mjs
-          node tests/welcome-long-quote-browser.mjs
-          node tests/pin-tasks-browser.mjs
-          node tests/checklist-tight-browser.mjs
-          node tests/checklist-number-browser.mjs
-          node tests/habit-remind-picker-browser.mjs
-          node tests/rich-text-escape-browser.mjs
-          node tests/completion-milestone-browser.mjs
-          node tests/auto-unpin-done-browser.mjs
-          node tests/release-notice-buttons-browser.mjs
-          node tests/gantt-hide-done-browser.mjs
-          node tests/rounded-view-checklist-browser.mjs
-          node tests/focus-edit-race-browser.mjs
-          node tests/task-exit-prompt-browser.mjs
-          node tests/checklist-no-overflow-browser.mjs
-          node tests/add-check-symmetry-browser.mjs
-          node tests/task-pin-shortcut-browser.mjs
-          node tests/exit-buttons-sync-browser.mjs
-          node tests/task-clean-close-browser.mjs
-          node tests/mobile-menu-views-browser.mjs
-          node tests/daily-habits-browser.mjs
-          node tests/daily-habits-report-browser.mjs
-          node tests/theme-choice-browser.mjs
-          node tests/habit-goal-project-browser.mjs
-          node tests/login-remember-browser.mjs
-          node tests/habit-today-icon-browser.mjs
-          node tests/ux-polish-browser.mjs
-          node tests/nav-groups-browser.mjs
-          node tests/release-log-browser.mjs
-          node tests/habit-mobile-polish-browser.mjs
-          node tests/habit-rest-history-browser.mjs
-          node tests/habit-reminder-browser.mjs
-          node tests/logout-cleanup-browser.mjs
-          node tests/board-share-link-browser.mjs
-          node tests/focus-refresh-button-browser.mjs
-          node tests/habits-sticky-bar-browser.mjs
-          node tests/habit-progress-layout-browser.mjs
-          node tests/habit-notes-browser.mjs
-          node tests/habit-reorder-browser.mjs
-          node tests/habit-history-report-browser.mjs
-          node tests/habit-nudge-browser.mjs
-          node tests/project-tab-wrap-browser.mjs
-          node tests/project-tab-compact-browser.mjs
-          node tests/growth-browser.mjs
-          node tests/growth-report-browser.mjs
-          node tests/growth-notify-browser.mjs
-          node tests/growth-spend-browser.mjs
-          node tests/growth-wuxia-browser.mjs
-          node tests/growth-levels-browser.mjs
-          node tests/growth-story-browser.mjs
-          node tests/growth-tale-browser.mjs
-          node tests/growth-meet-browser.mjs
-          node tests/growth-foes-browser.mjs
-          node tests/growth-path-browser.mjs
-          node tests/growth-ach-browser.mjs
-          node tests/giangho-style-browser.mjs
-          node tests/giangho-lex-browser.mjs
-          node tests/giangho-work-browser.mjs
-          node tests/giangho-daily-browser.mjs
-          node tests/giangho-treasure-browser.mjs
-          node tests/giangho-settings-browser.mjs
-          node tests/giangho-perf-browser.mjs
-          node tests/giangho-title-font-browser.mjs
-          # v2.12.0 (Thiên Môn Ký): chương truyện mở giữa cấp (97,5 … 99,8) theo tu vi; lộ trình ghi cấp lẻ.
-          node tests/growth-midchapter-browser.mjs
-          # v2.13.0 (Thần Giới): 5 Thần Vương, 12 Phương thần, 36 Thiên Cang tinh; khung Thần giới và Thiên đồ.
-          node tests/growth-gods-browser.mjs
-          # v2.14.0 (Thần Lộ): lĩnh ngộ tám quy luật, thắng 35 Thiên Cang, 12 Phương thần, ngang tài Thần Vương; chiến ký.
-          node tests/growth-godpath-browser.mjs
-          # v2.21.0 (Kiếm Ảnh Trở Về): hiệp khách và phe ác trở lại tranh 2D; bỏ lõi 3D cùng hai bài kiểm của nó.
-          node tests/growth-art2d-browser.mjs
-          # v2.22.0 (Sinh Khí): hiệp khách 2D chớp mắt, liếc, nói ngắt nghỉ, thở, nhìn theo con trỏ, nhảy chào; giảm chuyển động thì đứng yên.
-          node tests/growth-motion-browser.mjs
-          # v2.23.0 (Liên Mạch): Bát phương đồ thành mạng lưới liên kết, thang tự co giãn.
-          node tests/growth-network-browser.mjs
-          # v2.24.0 (Thập Nhị Phương): mười một Phương thần có nơi riêng trong Thần giới.
-          node tests/growth-phuong-browser.mjs
-          # v2.25.0 (Chân Dung Phương Thần): mỗi Phương thần một dáng riêng (mã nhân vật god<phương> để vẫn thuộc nhóm thần).
-          node tests/growth-godlook-browser.mjs
-          # v2.26.0 (Thiên Cang Chân Dung): ba mươi sáu Thiên Cang mỗi vị một dáng; Phương Thìn có nơi riêng (Mương mây).
-          node tests/growth-thiencang-browser.mjs
-          # v2.27.0 (Hán Danh): mọi nhân vật mang tên Hán Việt, không đổi mã nhân vật hay lịch kỳ ngộ.
-          node tests/growth-handanh-browser.mjs
-          # v2.28.0 (Tiếng Gánh Nước): Quyển Một, truyện cấp 0–25 dài thêm 32 trang có tranh riêng.
-          node tests/growth-quyen1-browser.mjs
-          # v2.29.0 (Lò Nhà Nhóm Sẵn): Quyển Hai, truyện cấp 30–50 dài thêm 24 trang có tranh riêng.
-          node tests/growth-quyen2-browser.mjs
-          # v2.30.0 (Chiếc Bánh Nguội): Quyển Ba, truyện cấp 55–75 dài thêm 20 trang có tranh riêng.
-          node tests/growth-quyen3-browser.mjs
-          # v2.31.0 (Mắt Xích Cuối): Quyển Bốn, truyện cấp 80–95 dài thêm 26 trang có tranh riêng; cấp 96–100 giữ nguyên.
-          node tests/growth-quyen4-browser.mjs
-          # v2.32.0 (Huy Hiệu Bách Cấp): mỗi cấp một huy hiệu riêng (103 hình), khung dày dần theo cảnh giới; trang Tu vi, thang cấp, thẻ lên cấp, đột phá, thanh bên.
-          node tests/growth-emblem-browser.mjs
-          # v2.33.0 (Tam Niên Thành Thần): công thức điểm tích lũy mới — hai năm đi hết 90 cấp đầu, thêm một năm thì thành Thần ở cấp 100 (6.134 điểm); không ai tụt cấp.
-          node tests/growth-pace-browser.mjs
-          # v2.34.0 (Tàng Bảo Các): kho vật phẩm trong trang Tu vi — sáu món, bà chủ tư vấn theo điểm đang có, bảng quy đổi nhập tay đủ tám mạch (không giá định sẵn).
-          node tests/growth-store-browser.mjs
-          # v2.35.0 (Thêm Nhanh): gõ một câu “Gọi anh Sơn mai 9h #farm” → việc có hạn (ngày, giờ) và dự án; nút + trên thanh trên, xem trước, bảng lệnh; câu dễ nhầm giữ nguyên.
-          node tests/quickadd-browser.mjs
-          # v2.36.0 (Một Tên Một Trang): menu = tiêu đề trang = đường dẫn cho Phân bổ tài nguyên, Chế độ tập trung, Tài nguyên, Lưu trữ…; không còn nhãn tiếng Anh “RESOURCE VIEWS”.
-          node tests/naming-browser.mjs
-          # v2.37.0 (Tải Theo Nhu Cầu): mã Điểm tích lũy, Giang hồ và nhật ký phát hành chỉ tải khi cần; lần mở đầu nhẹ đi khoảng một nửa, không mất lần hỏi điểm.
-          node tests/lazy-load-browser.mjs
-          # v2.38.0 (Đầu Trang Điện Thoại Gọn): trên điện thoại, dải dự án và thanh Bảng / Lịch / Gantt chỉ hiện ở ba trang của một dự án.
-          node tests/phone-head-browser.mjs
-          # v2.39.0 (Thanh Dưới Điện Thoại): thanh điều hướng dưới đáy trên điện thoại — Tổng quan · Bảng · + Thêm nhanh · Hằng ngày · Ghi chú.
-          node tests/bottom-bar-browser.mjs
-          # v2.40.0 (Menu Gọn): menu bên còn 8 mục chính; Tài nguyên, Lưu trữ, Thùng rác, Phiên bản gom vào nhóm "Kho".
-          node tests/side-menu-kho-browser.mjs
-          # v2.41.0 (Hôm Nay Làm Gì): Tổng quan mở đầu bằng khối "Hôm nay làm gì"; dải N việc quá hạn nằm ngay dưới nó.
-          node tests/today-first-browser.mjs
-          # v2.42.0 (Lịch Điện Thoại): lưới tháng ≤700px chỉ còn số ngày và chấm màu; việc của ngày nằm ngay dưới lưới.
-          node tests/phone-calendar-browser.mjs
-          node tests/growth-scene-browser.mjs
-          node tests/note-chips-browser.mjs
-          node tests/checklist-focus-ring-browser.mjs
-          node tests/giangho-coverage-browser.mjs
-          node tests/giangho-guide-browser.mjs
-          node tests/giangho-fx-browser.mjs
-          node tests/giangho-lunar-browser.mjs
-          node tests/giangho-sync-browser.mjs
-          node tests/giangho-columns-browser.mjs
-          node tests/focus-sound-browser.mjs
-          node tests/settings-groups-browser.mjs
-          node tests/device-audit-browser.mjs
-          node tests/gantt-edge-route-browser.mjs
-          node tests/note-paste-lines-browser.mjs
-          node tests/topbar-center-browser.mjs
-          node tests/habit-today-frame-browser.mjs
-          node tests/top-tools-compact-browser.mjs
-          node tests/habit-today-align-browser.mjs
-          node tests/task-editor-compact-browser.mjs
-          node tests/budget-browser.mjs
-          node tests/budget-dashboard-browser.mjs
-          node tests/budget-breakeven-browser.mjs
-          node tests/finance-report-browser.mjs
-          node tests/finance-share-browser.mjs
-          node tests/perf-dates-browser.mjs
-          node tests/dashboard-context-browser.mjs
-          node tests/diagnostics-browser.mjs
+        run: node scripts/run-browser-tests.mjs --group ${{ matrix.group }} --of 5
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: ui-regression-${{ github.run_id }}
+          name: ui-regression-${{ github.run_id }}-${{ matrix.group }}
           path: qa/
           retention-days: 7
+          if-no-files-found: ignore
+  deploy:
+    name: Deploy to Cloudflare
+    needs: [build, browser]
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Download the verified build
+        uses: actions/download-artifact@v4
+        with:
+          name: verified-build-${{ github.run_id }}
+          path: .
+      - name: Check the verified build is complete
+        run: test -f worker-api.mjs && test -d public
       - name: Check Cloudflare deployment credentials
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
