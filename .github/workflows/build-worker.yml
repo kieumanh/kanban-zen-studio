@@ -178,6 +178,8 @@ jobs:
           node tests/growth-godpath-browser.mjs
           # v2.21.0 (Kiếm Ảnh Trở Về): hiệp khách và phe ác trở lại tranh 2D; bỏ lõi 3D cùng hai bài kiểm của nó.
           node tests/growth-art2d-browser.mjs
+          # v2.22.0 (Sinh Khí): hiệp khách 2D chớp mắt, liếc, nói ngắt nghỉ, thở, nhìn theo con trỏ, nhảy chào; giảm chuyển động thì đứng yên.
+          node tests/growth-motion-browser.mjs
           node tests/growth-scene-browser.mjs
           node tests/note-chips-browser.mjs
           node tests/checklist-focus-ring-browser.mjs

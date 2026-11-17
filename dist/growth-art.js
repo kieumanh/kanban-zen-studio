@@ -6,6 +6,7 @@
 // Bốn tư thế (giữ nguyên mã để dữ liệu và lựa chọn cũ vẫn đúng): talk = cười nói (nam cầm quạt), martial = luyện kiếm (vung kiếm, có vệt kiếm khí),
 // taichi = thái cực (vòng âm dương xoay sau lưng), zen = tọa thiền trên đá (khí tụ, hạt sáng bay lên).
 // Hoạt họa nằm trong growth.css; mọi chuyển động phụ (tóc, dải lụa, ngọc bội, tay áo) lệch pha nhau cho mềm và tự nhiên.
+// v2.22.0 (Sinh Khí): thêm các nhóm gr-torso (thở, vạt áo lay), gr-gaze (tròng mắt và điểm sáng: liếc, nhìn theo con trỏ), gr-brows (nhướn mày khi nói).
 // zenHero.svg(hero, pose) trả về chuỗi SVG nhân vật; zenHero.scene() trả về phông sơn thủy cho sân khấu.
 (function () {
   const SKIN = '#ffe3cf', BLUSH = '#ff9fb2', INK = '#231a2b';
@@ -97,19 +98,23 @@
   }
   function face(h, open, talk) {
     const brows =
-      h === 'nam'
+      '<g class="gr-brows">' +
+      (h === 'nam'
         ? '<path d="M92,71 Q84,66 75,67 M108,71 Q116,66 125,67" stroke="' + INK + '" stroke-width="3" fill="none" stroke-linecap="round"/>'
-        : '<path d="M76,71 q8,-5 16,-1 M108,70 q8,-4 16,1" stroke="' + INK + '" stroke-width="1.8" fill="none" stroke-linecap="round" opacity=".6"/>';
+        : '<path d="M76,71 q8,-5 16,-1 M108,70 q8,-4 16,1" stroke="' + INK + '" stroke-width="1.8" fill="none" stroke-linecap="round" opacity=".6"/>') +
+      '</g>';
     let eyes;
     if (!open) eyes = '<path d="M77,86 q7,6 14,0 M109,86 q7,6 14,0" stroke="' + INK + '" stroke-width="2.6" fill="none" stroke-linecap="round"/>';
     else if (h === 'nam')
       eyes =
-        '<g class="gr-eyes"><path d="M77,82 q7,-5 14,0" stroke="' + INK + '" stroke-width="2.4" fill="none" stroke-linecap="round"/><ellipse cx="84" cy="85" rx="4.8" ry="5.8" fill="' + INK + '"/><circle cx="85.8" cy="82.8" r="1.8" fill="#fff"/>' +
-        '<path d="M109,82 q7,-5 14,0" stroke="' + INK + '" stroke-width="2.4" fill="none" stroke-linecap="round"/><ellipse cx="116" cy="85" rx="4.8" ry="5.8" fill="' + INK + '"/><circle cx="117.8" cy="82.8" r="1.8" fill="#fff"/></g>';
+        '<g class="gr-eyes"><path d="M77,82 q7,-5 14,0 M109,82 q7,-5 14,0" stroke="' + INK + '" stroke-width="2.4" fill="none" stroke-linecap="round"/>' +
+        '<g class="gr-gaze"><ellipse cx="84" cy="85" rx="4.8" ry="5.8" fill="' + INK + '"/><circle cx="85.8" cy="82.8" r="1.8" fill="#fff"/>' +
+        '<ellipse cx="116" cy="85" rx="4.8" ry="5.8" fill="' + INK + '"/><circle cx="117.8" cy="82.8" r="1.8" fill="#fff"/></g></g>';
     else
       eyes =
-        '<g class="gr-eyes"><ellipse cx="84" cy="85" rx="5.4" ry="7" fill="' + INK + '"/><circle cx="86" cy="82" r="2.2" fill="#fff"/><circle cx="82.5" cy="88" r="1" fill="#fff" opacity=".8"/><path d="M78,80 l-4,-3 M79,78 l-3,-4" stroke="' + INK + '" stroke-width="1.5" stroke-linecap="round"/>' +
-        '<ellipse cx="116" cy="85" rx="5.4" ry="7" fill="' + INK + '"/><circle cx="118" cy="82" r="2.2" fill="#fff"/><circle cx="114.5" cy="88" r="1" fill="#fff" opacity=".8"/><path d="M122,80 l4,-3 M121,78 l3,-4" stroke="' + INK + '" stroke-width="1.5" stroke-linecap="round"/></g>';
+        '<g class="gr-eyes"><g class="gr-gaze"><ellipse cx="84" cy="85" rx="5.4" ry="7" fill="' + INK + '"/><circle cx="86" cy="82" r="2.2" fill="#fff"/><circle cx="82.5" cy="88" r="1" fill="#fff" opacity=".8"/>' +
+        '<ellipse cx="116" cy="85" rx="5.4" ry="7" fill="' + INK + '"/><circle cx="118" cy="82" r="2.2" fill="#fff"/><circle cx="114.5" cy="88" r="1" fill="#fff" opacity=".8"/></g>' +
+        '<path d="M78,80 l-4,-3 M79,78 l-3,-4 M122,80 l4,-3 M121,78 l3,-4" stroke="' + INK + '" stroke-width="1.5" stroke-linecap="round"/></g>';
     const mouth = talk
       ? '<ellipse class="gr-mouth" cx="100" cy="99" rx="4.6" ry="3.8" fill="#b8445e"/>'
       : h === 'nam'
@@ -226,7 +231,7 @@
     return (
       '<svg class="gr-hero" data-pose="' + p + '" data-hero="' + h + '" viewBox="0 0 200 232" role="img" aria-label="' + HERO_LABEL[h] + ' · ' + POSES.find((x) => x.id === p).label + '">' +
       ground + behind +
-      '<g class="' + bodyCls + '">' + back(h, c, p) + lower + torso(h, c, kind) +
+      '<g class="' + bodyCls + '">' + back(h, c, p) + lower + '<g class="gr-torso">' + torso(h, c, kind) + '</g>' +
       '<g class="gr-head">' + face(h, open, talk) + hairFront(h, c) + '</g>' + arms + front + '</g></svg>'
     );
   }

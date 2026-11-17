@@ -381,6 +381,47 @@
     poseTimer = setTimeout(tick, 4500);
   }
 
+  // v2.22.0 (Sinh Khí): mắt và đầu hiệp khách nhìn theo con trỏ (chuột, bút; không áp cho cảm ứng); chạm vào nhân vật thì nhảy chào.
+  // Mã chỉ đặt hai biến CSS --gr-gx, --gr-gy (từ −1 đến 1) trên khung #gr-figure, mọi chuyển động nằm trong growth.css.
+  // Giảm chuyển động thì không làm gì cả.
+  let lookRaf = 0, lookX = 0, lookY = 0;
+  const lookSet = (nx, ny) => {
+    const fig = document.querySelector('#gr-figure');
+    if (!fig) return;
+    fig.style.setProperty('--gr-gx', nx.toFixed(3));
+    fig.style.setProperty('--gr-gy', ny.toFixed(3));
+  };
+  document.addEventListener('pointermove', (e) => {
+    if (view !== 'growth' || e.pointerType === 'touch' || reduced()) return;
+    lookX = e.clientX;
+    lookY = e.clientY;
+    if (lookRaf) return;
+    lookRaf = requestAnimationFrame(() => {
+      lookRaf = 0;
+      const fig = document.querySelector('#gr-figure');
+      if (!fig) return;
+      const r = fig.getBoundingClientRect(), clamp = (v) => Math.max(-1, Math.min(1, v));
+      lookSet(clamp((lookX - (r.left + r.width / 2)) / Math.max(160, r.width)), clamp((lookY - (r.top + r.height * 0.36)) / Math.max(160, r.height)));
+    });
+  }, { passive: true });
+  // Con trỏ rời cửa sổ hoặc cửa sổ mất tiêu điểm: mắt trở về giữa.
+  document.addEventListener('pointerout', (e) => {
+    if (!e.relatedTarget) lookSet(0, 0);
+  });
+  window.addEventListener('blur', () => lookSet(0, 0));
+  document.addEventListener('click', (e) => {
+    const fig = e.target.closest?.('#gr-figure');
+    if (!fig || reduced() || fig.classList.contains('is-hop')) return;
+    fig.classList.add('is-hop');
+    const done = (ev) => {
+      if (ev && ev.target !== fig) return;
+      fig.classList.remove('is-hop');
+      fig.removeEventListener('animationend', done);
+    };
+    fig.addEventListener('animationend', done);
+    setTimeout(done, 1100);
+  });
+
   // ---- Điều hướng ---------------------------------------------------------------------------------------------------------
   function addNav() {
     const anchor = document.querySelector('.sidebar [data-view="budget"]');
