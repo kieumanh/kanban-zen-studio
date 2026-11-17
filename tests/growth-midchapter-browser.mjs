@@ -1,18 +1,19 @@
 // v2.12.0 (Thiên Môn Ký): chương giữa cấp của Truyện ký. Cấp 98–100 kéo dài nhiều tháng (thang gấp đôi, v2.10.0) nên chặng 97–100
 // có 7 chương mở giữa chừng một cấp. Cấp lẻ = cấp + phần đã đi của đường lên cấp kế tiếp: 97,5 là nửa đường từ cấp 97 lên 98.
-//  1. Mốc tu vi của chương giữa cấp: tuviAt(97.5) = 4.852; tuviAt(99.2) = 6.541,6; cấp nguyên trùng LEVEL_AT.
-//  2. Cộng điểm qua mốc 4.852 mà chưa lên cấp: chương "Mười một chiếc ghế" tự mở; dấu đã đọc notice:tale-97.5; không có nghi thức
+//  1. Mốc tu vi của chương giữa cấp: tuviAt(97.5) = 4.470; tuviAt(99.2) = 5.314,8; cấp nguyên trùng LEVEL_AT.
+//  2. Cộng điểm qua mốc 4.470 mà chưa lên cấp: chương "Mười một chiếc ghế" tự mở; dấu đã đọc notice:tale-97.5; không có nghi thức
 //     Đột phá; dữ liệu Tu vi không thêm khóa nào.
 //  3. Lộ trình tu luyện: chặng có cấp lẻ ghi "cấp 97–97,5", "cấp 97,5–98", bốn vạch theo phần tu vi đã đi; khối "đang ở đây" ghi
 //     "đã đi N% chặng"; chương chưa tới ghi "Mở ở cấp 99,6".
 //  4. Bảng vàng đếm cả chương giữa cấp đã đọc.
+// v2.33.0: thang điểm mới (cấp 97 ở 4.342, cấp 98 ở 4.598, cấp 100 ở 6.134) nên các mốc giữa cấp thấp hơn v2.12.0.
 // Kiểm ở 390 (chạm), 820 (chạm), 1440 px; bảng vừa màn hình, không tràn ngang, không lỗi trang.
 import assert from 'node:assert/strict';
 import { startHarness } from './lib/browser-harness.mjs';
 
 const day = (n) => new Date(Date.now() + n * 864e5).toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
 const project = { id: 'p1', name: 'Dự án A', description: '', color: '#7950c8', icon: '✺', columns: ['Idea', 'List', 'Doing', 'Done'], columnNames: { Idea: 'Ý tưởng', List: 'Việc cần làm', Doing: 'Đang thực hiện', Done: 'Hoàn thành' }, tasks: [{ id: 'p1t0', title: 'Gửi báo cáo', col: 'Doing', description: '', due: day(3), tag: 'Công việc', priority: 'q2', checks: [] }] };
-// half = số nửa điểm. 9702 nửa điểm = 4.851 điểm: cấp 97 (4.596), còn 1 điểm tới mốc 97,5 (4.852).
+// half = số nửa điểm. 8938 nửa điểm = 4.469 điểm: cấp 97 (4.342), còn 1 điểm tới mốc 97,5 (4.470).
 const growth = (half) => ({ v: 1, hero: 'nu', name: 'Lam Y', since: day(-400), log: [{ id: 'e1', d: day(-1), s: 'task', k: 'task:e1', n: 'Việc cũ', p: [half, 0, 0, 0, 0, 0, 0, 0] }] });
 const seed = (half) => () => ({ schema: 1, projects: [structuredClone(project)], notes: [], growth: growth(half) });
 const noOverflow = (page) => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth);
@@ -37,17 +38,17 @@ async function finishTask(page) {
   await page.mouse.move(2, 2);
 }
 
-const h = await startHarness({ seed: seed(9702) });
+const h = await startHarness({ seed: seed(8938) });
 try {
   // 1. Mốc tu vi.
   {
-    const { context, page } = await h.open(1440, { workspace: seed(9702)() });
+    const { context, page } = await h.open(1440, { workspace: seed(8938)() });
     await h.show(page, 'growth');
     const m = await page.evaluate(() => {
       const g = window.zenGrowth;
       return { at: [97, 97.5, 98, 98.3, 98.7, 99, 99.2, 99.4, 99.6, 99.8, 100, 103, 104].map((x) => +g.tuviAt(x).toFixed(2)), whole: [0, 1, 10, 90, 100, 103].every((n) => g.tuviAt(n) === g.LEVEL_AT[n]), mid: window.zenTale.CHAPTERS.map((c) => c.lv).filter((x) => !Number.isInteger(x)) };
     });
-    assert.deepEqual(m.at, [4596, 4852, 5108, 5415.2, 5824.8, 6132, 6541.6, 6951.2, 7360.8, 7770.4, 8180, 14324, 14324], 'mốc tu vi của cấp lẻ: phần thập phân nhân với điểm của cấp kế tiếp');
+    assert.deepEqual(m.at, [4342, 4470, 4598, 4751.6, 4956.4, 5110, 5314.8, 5519.6, 5724.4, 5929.2, 6134, 12278, 12278], 'mốc tu vi của cấp lẻ: phần thập phân nhân với điểm của cấp kế tiếp');
     assert.equal(m.whole, true, 'cấp nguyên trùng LEVEL_AT');
     assert.deepEqual(m.mid, [97.5, 98.3, 98.7, 99.2, 99.4, 99.6, 99.8], 'bảy chương giữa cấp');
     await context.close();
@@ -61,7 +62,7 @@ try {
     const at = ' (' + width + 'px)';
     // 2. Qua mốc 97,5 mà chưa lên cấp.
     {
-      const { context, page, server } = await h.open(width, { touch, workspace: seed(9702)() });
+      const { context, page, server } = await h.open(width, { touch, workspace: seed(8938)() });
       const errors = [];
       page.on('pageerror', (e) => errors.push(e.message));
       await finishTask(page);
@@ -69,7 +70,7 @@ try {
       assert.equal(await page.locator('dialog.gr-breakthrough').count(), 0, 'chưa lên cấp: không có nghi thức Đột phá' + at);
       const r = await page.evaluate(() => {
         const d = document.querySelector('dialog.gr-story[open]'), b = d.getBoundingClientRect();
-        return { eyebrow: d.querySelector('.gr-story-head .eyebrow').textContent, title: d.querySelector('#gr-story-title').textContent, fits: b.left >= 0 && b.right <= innerWidth && b.top >= 0 && b.bottom <= innerHeight, level: window.zenGrowth.realmOf(4852).level };
+        return { eyebrow: d.querySelector('.gr-story-head .eyebrow').textContent, title: d.querySelector('#gr-story-title').textContent, fits: b.left >= 0 && b.right <= innerWidth && b.top >= 0 && b.bottom <= innerHeight, level: window.zenGrowth.realmOf(4470).level };
       });
       assert.equal(r.eyebrow, 'TRUYỆN KÝ GIANG HỒ · CHƯƠNG 29 / 38', 'chương giữa cấp tự mở' + at);
       assert.equal(r.title, 'Mười một chiếc ghế', 'đúng chương của mốc 97,5' + at);
@@ -80,11 +81,11 @@ try {
       await page.waitForFunction(() => readReceiptKeys.has('notice:tale-97.5'));
       assert.ok(server.receipts.includes('notice:tale-97.5'), 'dấu đã đọc của chương giữa cấp: ' + server.receipts + at);
       assert.deepEqual(Object.keys(server.workspace.growth).sort(), ['hero', 'log', 'name', 'since', 'spend', 'v'], 'dữ liệu Tu vi không thêm khóa mới' + at);
-      // 3. Lộ trình: 4.852 điểm, vừa tới mốc 97,5; chặng kế là 97,5 → 98 (chương 30, mở ở 5.108).
+      // 3. Lộ trình: 4.470 điểm, vừa tới mốc 97,5; chặng kế là 97,5 → 98 (chương 30, mở ở 4.598).
       await h.show(page, 'growth');
       const s = await stages(page);
       assert.equal(s.where, 'Lam Y đang ở chặng 30/38 · tiến về “Trăng không lặn”', 'đang ở chặng nào' + at);
-      assert.match(s.sub, /^Cấp 97 · Võ lâm chí tôn · .+ · đã đi 0% chặng · còn 256 điểm tới chương 30$/, 'chi tiết vị trí: ' + s.sub + at);
+      assert.match(s.sub, /^Cấp 97 · Võ lâm chí tôn · .+ · đã đi 0% chặng · còn 128 điểm tới chương 30$/, 'chi tiết vị trí: ' + s.sub + at);
       assert.deepEqual(s.bar, ['Tiến trình chặng 30 (cấp 97,5–98)', '0'], 'thanh tiến trình chặng' + at);
       const [c28, c29, c30, c31] = [27, 28, 29, 30].map((i) => s.list[i]); // danh sách chặng không gồm Khai cuộc
       assert.deepEqual([c28.title, c28.sub, c28.segs, c28.on], ['Sứ giả áo bạc', 'Chặng 28 · cấp 97', 1, 1], 'chặng nguyên cấp: mỗi cấp một vạch' + at);
@@ -97,9 +98,9 @@ try {
       assert.deepEqual(errors, [], 'không lỗi trang' + at);
       await context.close();
     }
-    // 3 + 4. 7.200 điểm: giữa 99,4 (6.951,2) và 99,6 (7.360,8), đã đi 60% chặng → 2/4 vạch; còn 160,8 điểm, làm tròn lên bước 0,5 là 161; Bảng vàng đếm chương giữa cấp.
+    // 3 + 4. 5.642,5 điểm: giữa 99,4 (5.519,6) và 99,6 (5.724,4), đã đi 60% chặng → 2/4 vạch; còn 81,9 điểm, làm tròn lên bước 0,5 là 82; Bảng vàng đếm chương giữa cấp.
     {
-      const { context, page } = await h.open(width, { touch, workspace: seed(14400)(), receiptsSeed: ['notice:tale-97.5', 'notice:tale-98.3', 'notice:tale-98.7', 'notice:tale-99.2', 'notice:tale-99.4'] });
+      const { context, page } = await h.open(width, { touch, workspace: seed(11285)(), receiptsSeed: ['notice:tale-97.5', 'notice:tale-98.3', 'notice:tale-98.7', 'notice:tale-99.2', 'notice:tale-99.4'] });
       const errors = [];
       page.on('pageerror', (e) => errors.push(e.message));
       // Bảng vàng chỉ đếm khi dấu đã đọc của tài khoản đã tải xong.
@@ -107,7 +108,7 @@ try {
       await h.show(page, 'growth');
       const s = await stages(page);
       assert.equal(s.where, 'Lam Y đang ở chặng 36/38 · tiến về “Món nợ một gáo nước”', 'đang ở chặng nào' + at);
-      assert.match(s.sub, /đã đi 60% chặng · còn 161 điểm tới chương 36$/, 'phần đã đi của chặng: ' + s.sub + at);
+      assert.match(s.sub, /đã đi 60% chặng · còn 82 điểm tới chương 36$/, 'phần đã đi của chặng: ' + s.sub + at);
       assert.deepEqual(s.bar, ['Tiến trình chặng 36 (cấp 99,4–99,6)', '60'], 'thanh tiến trình chặng' + at);
       const c35 = s.list[34], c36 = s.list[35], c37 = s.list[36], c38 = s.list[37];
       assert.deepEqual([c35.title, c35.sub, c35.tag, c35.on], ['Mười ổ khóa', 'Chặng 35 · cấp 99,2–99,4', 'Đã đọc', 4], 'chương giữa cấp đã đọc theo dấu máy chủ' + at);

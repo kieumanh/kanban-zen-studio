@@ -200,6 +200,8 @@ jobs:
           node tests/growth-quyen4-browser.mjs
           # v2.32.0 (Huy Hiệu Bách Cấp): mỗi cấp một huy hiệu riêng (103 hình), khung dày dần theo cảnh giới; trang Tu vi, thang cấp, thẻ lên cấp, đột phá, thanh bên.
           node tests/growth-emblem-browser.mjs
+          # v2.33.0 (Tam Niên Thành Thần): công thức điểm tích lũy mới — hai năm đi hết 90 cấp đầu, thêm một năm thì thành Thần ở cấp 100 (6.134 điểm); không ai tụt cấp.
+          node tests/growth-pace-browser.mjs
           node tests/growth-scene-browser.mjs
           node tests/note-chips-browser.mjs
           node tests/checklist-focus-ring-browser.mjs

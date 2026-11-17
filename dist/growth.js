@@ -44,10 +44,11 @@
   //  - Cảnh giới bắt đầu ở cấp 10, 20 … 90 (Sơ nhập giang hồ: cấp 1–9). Cấp 100 thành Thần (Thần cảnh); trên Thần còn 3 thần cấp,
   //    cấp 103 là Thần Vương.
   //  - Cấp 10, 20 … 90 là ải đột phá: tốn chừng ba lần cấp thường của cảnh giới trước (hai ải đầu gấp bảy).
-  //  - v2.10.0 (Thiên Môn): từ cấp 91, mỗi cấp tốn gấp đôi cấp trước: 4 · 8 · 16 … 1.024 (cấp 99); cấp 100 (ải thành Thần) tốn
-  //    2.048 điểm, bằng cả chín cấp trước cộng lại, là ải nặng nhất của cõi người.
-  //  - Tổng tới cấp 100 = 8.180 điểm (thang v2.5.0: 8.184). Mỗi mốc đều không cao hơn thang trước nên không ai tụt cấp.
-  //  - Mỗi thần cấp 2.048 điểm; cấp 103 = 14.324 điểm.
+  //  - v2.10.0 (Thiên Môn): từ cấp 91, mỗi cấp tốn gấp đôi cấp trước; cấp 100 (ải thành Thần) là ải nặng nhất của cõi người.
+  //  - v2.33.0 (Tam Niên Thành Thần): nhịp chuẩn 5,6 điểm mỗi ngày (chừng 5–6 việc). Cấp 1–90 giữ nguyên: 4.088 điểm = hai năm.
+  //    Cấp 91–100 hạ từ 4 · 8 … 1.024 · 2.048 xuống 2 · 4 · 8 … 512 · 1.024 (tổng 2.046 điểm = một năm), nên cấp 100 = 6.134 điểm
+  //    (thang v2.10.0: 8.180). Mỗi mốc đều không cao hơn thang trước nên không ai tụt cấp.
+  //  - Mỗi thần cấp vẫn 2.048 điểm; cấp 103 = 12.278 điểm.
   //  - Tính theo tổng điểm đã tu luyện (không trừ phần đổi bảo vật) nên cấp không bao giờ tụt.
   const REALMS = ['Sơ nhập giang hồ', 'Tam lưu cao thủ', 'Nhị lưu cao thủ', 'Nhất lưu cao thủ', 'Tuyệt đỉnh cao thủ', 'Tiên thiên cao thủ', 'Tông sư', 'Đại tông sư', 'Thiên nhân hợp nhất', 'Võ lâm chí tôn', 'Thần cảnh'];
   const REALM_FROM = [1, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 104]; // cấp đầu của mỗi cảnh giới (phần tử cuối: chặn trên)
@@ -70,9 +71,10 @@
   const LEVEL_MAX = 103, GOD = 100;
   // Điểm cho mỗi cấp thường của từng cảnh giới (chỉ số = cảnh giới − 1) và cho ải đột phá ở cấp 10, 20 … 90.
   // Cảnh giới 10 (Võ lâm chí tôn): NORMAL[9] là điểm của cấp 91; từ đó mỗi cấp gấp đôi cấp trước, tới cấp 100.
-  const NORMAL = [0.5, 1, 2.5, 5, 10.5, 21, 42.5, 85, 170.5, 4, 2048];
+  const NORMAL = [0.5, 1, 2.5, 5, 10.5, 21, 42.5, 85, 170.5, 2, 2048];
   const GATE = [3.5, 7, 9.5, 19, 33.5, 67, 129.5, 259, 513.5];
   const DOUBLE_FROM = 91;
+  const PACE = 5.6; // điểm mỗi ngày dùng làm chuẩn dựng thang: 90 cấp đầu = 730 ngày, cấp 91–100 = 365 ngày
   const isGate = (n) => n % 10 === 0 && n >= 10 && n <= GOD;
   const levelCost = (n) => (n >= DOUBLE_FROM && n <= GOD ? NORMAL[9] * 2 ** (n - DOUBLE_FROM) : isGate(n) ? GATE[n / 10 - 1] : NORMAL[Math.min(10, Math.floor(n / 10))]);
   const LEVEL_AT = [0];
@@ -184,6 +186,9 @@
     const from = REALM_FROM[i - 1], to = REALM_FROM[i] - 1;
     return { i, name: REALMS[i - 1], note: REALM_NOTE[i - 1], from, to, cost: NORMAL[i - 1], costTo: i === 10 ? levelCost(to) : 0, gate: isGate(from) ? levelCost(from) : 0, at: LEVEL_AT[from], end: LEVEL_AT[to], levels: LEVEL_NAMES.slice(from, to + 1) };
   }
+  // Lời nêu cách tính từ cấp 91 và nhịp chuẩn của thang (dùng ở bảng thang và Tâm pháp tu luyện); con số lấy từ thang nên không lỗi thời.
+  const doublingText = () => [0, 1, 2].map((k) => fmt(NORMAL[9] * 2 ** k)).join(', ') + ' … ' + fmt(levelCost(GOD - 1));
+  const paceText = () => 'khoảng ' + String(PACE).replace('.', ',') + ' điểm mỗi ngày (chừng 5–6 việc): hai năm đi hết 90 cấp đầu, thêm một năm thì thành Thần ở cấp ' + GOD;
   // Thang cấp: mỗi cảnh giới một dòng (dòng hiện tại được tô), kèm danh xưng từng cấp (cấp hiện tại được tô).
   function scaleTable(r) {
     const rows = REALMS.map((_, k) => {
@@ -196,7 +201,7 @@
         x.levels.map((n, j) => { const lv = x.from + j; return '<li class="' + (lv === r.level ? 'is-now' : lv < r.level ? 'is-done' : 'is-locked') + '"' + (lv === r.level ? ' aria-current="true"' : '') + (isGate(lv) ? ' data-gate' : '') + '>' + (window.zenEmblem ? '<span class="gr-names-zem" data-zem="' + lv + '"></span>' : '') + '<b>' + lv + '</b> ' + n + '</li>'; }).join('') + '</ol></li>';
     }).join('');
     return '<details class="gr-scale"><summary>Xem thang 103 cấp</summary><div class="gr-scale-wrap"><table><thead><tr><th scope="col">Cảnh giới</th><th scope="col">Cấp</th><th scope="col">Mỗi cấp</th><th scope="col">Tổng tu vi</th></tr></thead><tbody>' + rows + '</tbody></table></div>' +
-      '<p class="help-copy">Ải đột phá là cấp đầu của mỗi cảnh giới (cấp 10, 20 … 100), tốn chừng ba lần cấp thường; số điểm của ải ghi dưới điểm mỗi cấp. Từ cấp 91, mỗi cấp tốn gấp đôi cấp trước: 4, 8, 16 … 1.024 điểm; cấp 100 tốn 2.048 điểm, bằng cả chín cấp trước cộng lại. Cấp 100 thành Thần; ba thần cấp sau dẫn tới Thần Vương.</p>' + (window.zenEmblem ? '<p class="help-copy">Mỗi cấp một huy hiệu riêng: khung dày dần theo cảnh giới, ngọc trên vành sáng thêm theo từng cấp. Huy hiệu chưa đạt còn mờ.</p>' : '') + '<ol class="gr-names-list" aria-label="Danh xưng 103 cấp">' + names + '</ol></details>';
+      '<p class="help-copy">Ải đột phá là cấp đầu của mỗi cảnh giới (cấp 10, 20 … 100), tốn chừng ba lần cấp thường; số điểm của ải ghi dưới điểm mỗi cấp. Từ cấp 91, mỗi cấp tốn gấp đôi cấp trước: ' + doublingText() + ' điểm; cấp 100 tốn ' + fmt(levelCost(GOD)) + ' điểm, gần bằng cả chín cấp trước cộng lại. Cấp 100 thành Thần; ba thần cấp sau dẫn tới Thần Vương, mỗi thần cấp ' + fmt(NORMAL[10]) + ' điểm.</p><p class="help-copy gr-pace">Thang dựng theo nhịp ' + paceText() + '.</p>' + (window.zenEmblem ? '<p class="help-copy">Mỗi cấp một huy hiệu riêng: khung dày dần theo cảnh giới, ngọc trên vành sáng thêm theo từng cấp. Huy hiệu chưa đạt còn mờ.</p>' : '') + '<ol class="gr-names-list" aria-label="Danh xưng 103 cấp">' + names + '</ol></details>';
   }
   function extremes(s) {
     const mx = Math.max(...s), mn = Math.min(...s);
@@ -352,7 +357,7 @@
       : 'Sở trường: <strong>' + ex.top.name + '</strong> (' + fmt(ex.mx) + ') · Cần khổ luyện: <strong>' + ex.low.name + '</strong> (' + fmt(ex.mn) + ')';
     return '<div class="gr-page">' + heading('GIANG HỒ TU LUYỆN', 'Tu vi của ' + esc(heroName()), sub, '<div class="gr-head-actions"><button type="button" class="btn primary" data-gr-spend>Đổi bảo vật</button><button type="button" class="btn" data-gr-report>Xem báo cáo tu luyện</button><button type="button" class="btn" data-gr-change>Đổi hiệp khách</button></div>') +
       '<div class="gr-grid">' + stage(s) + '<section class="panel gr-radar-panel" aria-label="Bát phương đồ nội lực"><h2>Bát phương đồ</h2><div class="gr-radar-wrap" id="gr-radar">' + radar(s) + '</div><p class="gr-summary">' + summary + '</p>' + wallet(s) + '</section></div>' +
-      (window.zenStory ? window.zenStory.panel() : '') + (window.zenGods ? window.zenGods.panel() : '') /* v2.13.0 Thần giới */ + (window.zenAch ? window.zenAch.panel() : '') /* v1.99.0 Bảng vàng */ + axisRows(s) + history() + spendPanel() + '<section class="panel gr-how"><h2>Tâm pháp tu luyện</h2><ul class="gr-how-list"><li>Mỗi việc hoàn thành cho các hạ <strong>2 lần vận công</strong> (1 điểm). Bảng vận công hiện ra trước lời chúc mừng.</li><li>Mỗi lần bấm <strong>+</strong> dồn 0,5 điểm vào mạch đã chọn; dồn cả hai lần vào một mạch cũng được.</li><li>Mỗi việc chỉ được vận công một lần.</li><li>Bấm <strong>Đổi bảo vật</strong> để ghi lại món đã mua hoặc quy đổi; tu vi bị trừ khỏi Bát phương đồ. Ghi nhầm thì sửa hoặc hủy quy đổi để hoàn điểm. Cấp và cảnh giới tính theo tổng tu vi đã luyện nên không tụt khi đổi bảo vật.</li><li><strong>100 cấp</strong> chia 10 cảnh giới, mỗi cấp một danh xưng. Cảnh giới sau tốn chừng gấp đôi cảnh giới trước: 0,5 điểm mỗi cấp ở Sơ nhập giang hồ, 1 điểm ở Tam lưu cao thủ… 170,5 điểm ở Thiên nhân hợp nhất.</li><li>Cấp 10, 20 … 90 là <strong>ải đột phá</strong> sang cảnh giới mới, tốn chừng ba lần cấp thường.</li><li>Từ cấp 91, <strong>mỗi cấp tốn gấp đôi cấp trước</strong>: 4, 8, 16 … 1.024 điểm ở cấp 99. Cấp 100 là ải nặng nhất: 2.048 điểm, bằng cả chín cấp trước cộng lại. Đủ 8.180 điểm thì đột phá thành Thần. Trên Thần còn 3 thần cấp tới <strong>Thần Vương</strong>, mỗi thần cấp 2.048 điểm.</li><li>Từ cấp 100, <strong>đủ điểm chưa đủ để lên cấp</strong>: còn phải lĩnh ngộ tám quy luật tự nhiên (điểm đã tích lũy của tám chỉ số) và thắng các vị thần đang giữ ngôi. Xem khung Thần giới.</li></ul>' + scaleTable(r) + '</section></div>';
+      (window.zenStory ? window.zenStory.panel() : '') + (window.zenGods ? window.zenGods.panel() : '') /* v2.13.0 Thần giới */ + (window.zenAch ? window.zenAch.panel() : '') /* v1.99.0 Bảng vàng */ + axisRows(s) + history() + spendPanel() + '<section class="panel gr-how"><h2>Tâm pháp tu luyện</h2><ul class="gr-how-list"><li>Mỗi việc hoàn thành cho các hạ <strong>2 lần vận công</strong> (1 điểm). Bảng vận công hiện ra trước lời chúc mừng.</li><li>Mỗi lần bấm <strong>+</strong> dồn 0,5 điểm vào mạch đã chọn; dồn cả hai lần vào một mạch cũng được.</li><li>Mỗi việc chỉ được vận công một lần.</li><li>Bấm <strong>Đổi bảo vật</strong> để ghi lại món đã mua hoặc quy đổi; tu vi bị trừ khỏi Bát phương đồ. Ghi nhầm thì sửa hoặc hủy quy đổi để hoàn điểm. Cấp và cảnh giới tính theo tổng tu vi đã luyện nên không tụt khi đổi bảo vật.</li><li><strong>100 cấp</strong> chia 10 cảnh giới, mỗi cấp một danh xưng. Cảnh giới sau tốn chừng gấp đôi cảnh giới trước: 0,5 điểm mỗi cấp ở Sơ nhập giang hồ, 1 điểm ở Tam lưu cao thủ… 170,5 điểm ở Thiên nhân hợp nhất.</li><li>Cấp 10, 20 … 90 là <strong>ải đột phá</strong> sang cảnh giới mới, tốn chừng ba lần cấp thường.</li><li><strong>Nhịp chuẩn</strong> của thang: ' + paceText() + '.</li><li>Từ cấp 91, <strong>mỗi cấp tốn gấp đôi cấp trước</strong>: ' + doublingText() + ' điểm ở cấp 99. Cấp 100 là ải nặng nhất: ' + fmt(levelCost(GOD)) + ' điểm, gần bằng cả chín cấp trước cộng lại. Đủ ' + fmt(LEVEL_AT[GOD]) + ' điểm thì đột phá thành Thần. Trên Thần còn 3 thần cấp tới <strong>Thần Vương</strong>, mỗi thần cấp ' + fmt(NORMAL[10]) + ' điểm.</li><li>Từ cấp 100, <strong>đủ điểm chưa đủ để lên cấp</strong>: còn phải lĩnh ngộ tám quy luật tự nhiên (điểm đã tích lũy của tám chỉ số) và thắng các vị thần đang giữ ngôi. Xem khung Thần giới.</li></ul>' + scaleTable(r) + '</section></div>';
   }
 
   // ---- Hoạt họa nhân vật --------------------------------------------------------------------------------------------------

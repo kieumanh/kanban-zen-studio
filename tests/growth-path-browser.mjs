@@ -54,9 +54,10 @@ try {
       assert.deepEqual(r.realms.slice(0, 4), [['is-done', '✓', 'Đã qua', null], ['is-done', '✓', 'Đã qua', null], ['is-now', '3', 'Đang tu luyện', 'true'], ['is-todo', '4', 'Chưa tới', null]], 'trạng thái cảnh giới' + at);
       assert.equal(r.heads[0], 'Cấp 1–9 · 0,5 điểm mỗi cấp · tu vi 0,5–4,5', 'cảnh giới 1: không có ải' + at);
       assert.equal(r.heads[2], 'Cấp 20–29 · ải đột phá 7 · 2,5 điểm mỗi cấp · tu vi 24–46,5', 'cảnh giới 3: cấp, ải, điểm mỗi cấp, tu vi' + at);
-      // v2.10.0 (Thiên Môn): từ cấp 91 mỗi cấp gấp đôi cấp trước; ải cấp 100 = 2.048 điểm.
-      assert.equal(r.heads[9], 'Cấp 90–99 · ải đột phá 513,5 · mỗi cấp gấp đôi cấp trước, 4 → 1.024 điểm · tu vi 4.088–6.132', 'Võ lâm chí tôn' + at);
-      assert.equal(r.heads[10], 'Cấp 100–103 · ải đột phá 2.048 · 2.048 điểm mỗi cấp · tu vi 8.180–14.324', 'Thần cảnh' + at);
+      // v2.10.0 (Thiên Môn): từ cấp 91 mỗi cấp gấp đôi cấp trước. v2.33.0 (Tam Niên Thành Thần): cấp 91 = 2 điểm, ải cấp 100 = 1.024 điểm,
+      // cấp 100 = 6.134 điểm (hai năm tới cấp 90, thêm một năm thành Thần ở nhịp 5,6 điểm mỗi ngày); thần cấp vẫn 2.048 điểm mỗi cấp.
+      assert.equal(r.heads[9], 'Cấp 90–99 · ải đột phá 513,5 · mỗi cấp gấp đôi cấp trước, 2 → 512 điểm · tu vi 4.088–5.110', 'Võ lâm chí tôn' + at);
+      assert.equal(r.heads[10], 'Cấp 100–103 · ải đột phá 1.024 · 2.048 điểm mỗi cấp · tu vi 6.134–12.278', 'Thần cảnh' + at);
       assert.equal(r.stages.length, 38, '38 chặng' + at);
       assert.deepEqual(r.stages.map((s) => s.on), [5, 5, 5, 5, 2, ...Array(33).fill(0)], 'vạch cấp của từng chặng' + at);
       assert.deepEqual(r.stages.slice(0, 6).map((s) => s.button), [true, true, true, true, false, false], 'chặng đã qua đọc được chương' + at);
