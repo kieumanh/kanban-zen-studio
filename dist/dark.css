@@ -4172,6 +4172,47 @@
 :root[data-theme=dark] .wf-wait-panel .wait-row.is-due .wait-when {
     color: #f5c19f
 }
+:root[data-theme=dark] .zen-review {
+    border: 1px solid #49404f;
+    background: #1b181f;
+    color: #dcd3ec
+}
+:root[data-theme=dark] .zen-review::backdrop {
+    background: rgba(48,34,57,0.376)
+}
+:root[data-theme=dark] .zen-review-weeks .btn.active {
+    border-color: #845cd6;
+    background: #1c1822;
+    color: #d8cdfe
+}
+:root[data-theme=dark] .zen-review-lead {
+    color: #d0c3da
+}
+:root[data-theme=dark] .zen-review-sec {
+    border-top: 1px solid #3d3843
+}
+:root[data-theme=dark] .zen-review-sec h3 small {
+    color: #d0c3da
+}
+:root[data-theme=dark] .zen-review-list small, :root[data-theme=dark] .zen-review-pick small, :root[data-theme=dark] .zen-review-hint, :root[data-theme=dark] .zen-review-empty, :root[data-theme=dark] .zen-review-more {
+    color: #d0c3da
+}
+:root[data-theme=dark] .zen-review-pick {
+    border: 1px solid #433c49
+}
+:root[data-theme=dark] .zen-review-pick:has(input:checked) {
+    border-color: #845cd6;
+    background: #131017
+}
+:root[data-theme=dark] .zen-review-count {
+    color: #d6caf1
+}
+:root[data-theme=dark] .zen-review-status {
+    color: #feb3ba
+}
+:root[data-theme=dark] .wf-review-panel p {
+    color: #d0c3da
+}
 
 :root[data-theme=dark] {
   color-scheme: dark;

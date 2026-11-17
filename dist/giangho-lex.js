@@ -576,6 +576,39 @@
     'Hãy nhập tiêu đề.': 'Hãy ghi tiêu đề.',
     'Bản chỉ xem không lưu được.': 'Bản chỉ xem không cất được.',
     'Dự án': { to: 'Đại sự', in: '.zen-share [data-share-project]' },
+    // v2.54.0 (Ôn Tuần): hộp thoại ôn tuần, lời mời và khối “Việc trọng tâm” ở Tổng quan, lệnh trong bảng lệnh (weekly-review.js).
+    'Ôn tuần': 'Kiểm điểm tuần',
+    'Đóng Ôn tuần': 'Đóng Kiểm điểm tuần',
+    'Chọn tuần cần ôn': 'Chọn tuần cần kiểm điểm',
+    'Bắt đầu ôn tuần': 'Bắt đầu kiểm điểm tuần',
+    'Chọn 3 việc cho tuần tới': 'Chọn 3 nhiệm vụ cho tuần tới',
+    'Việc trọng tâm tuần này': 'Nhiệm vụ trọng tâm tuần này',
+    'Lưu lựa chọn': 'Cất lựa chọn',
+    'Đã xong': [
+      { to: 'Công thành', in: '.zen-review h3' },
+      { to: 'Công thành', in: '.review-focus-row small' },
+    ],
+    'Chưa xong': { to: 'Chưa thành', in: '.zen-review h3' },
+    'Việc hằng ngày': { to: 'Nhật khóa', in: '.zen-review h3' },
+    'Thu chi': { to: 'Ngân khố', in: '.zen-review h3' },
+    'Đang làm': { to: 'Đang hành sự', in: '.zen-review-when' },
+    'Thu': { to: 'Thu ngân', in: '.zen-review-money' },
+    'Chi': { to: 'Xuất ngân', in: '.zen-review-money' },
+    'Dư': { to: 'Thặng dư', in: '.zen-review-money' },
+    'Hụt': { to: 'Thâm hụt', in: '.zen-review-money' },
+    'Sắp sang tuần mới. Dành vài phút nhìn lại tuần qua và chọn tối đa 3 việc cho tuần tới.': 'Sắp sang tuần mới. Dành vài phút nhìn lại tuần qua và chọn tối đa 3 nhiệm vụ cho tuần tới.',
+    'Chưa có việc nào được ghi nhận hoàn thành trong tuần này. Ôn tuần chỉ nhận việc xong từ khi tính năng này bắt đầu ghi ngày hoàn thành.': 'Chưa có nhiệm vụ nào được ghi nhận công thành trong tuần này. Kiểm điểm tuần chỉ nhận nhiệm vụ công thành từ khi bí kíp này bắt đầu ghi ngày.',
+    'Không còn việc nào dở dang đến hết tuần này.': 'Không còn nhiệm vụ nào dở dang đến hết tuần này.',
+    'Chưa có việc hằng ngày nào trong tuần này.': 'Chưa có môn nhật khóa nào trong tuần này.',
+    'Tuần này chưa ghi khoản thu chi nào.': 'Tuần này chưa ghi khoản ngân khố nào.',
+    'Không còn việc nào đang mở để chọn.': 'Không còn nhiệm vụ nào đang mở để chọn.',
+    'Tối đa 3 việc. Danh sách được lưu thành một ghi chú để bạn tích dần.': 'Tối đa 3 nhiệm vụ. Danh sách được cất thành một quyển trong Tàng thư để các hạ đánh dấu dần.',
+    'Bản chỉ xem không dùng được Ôn tuần.': 'Bản chỉ xem không dùng được Kiểm điểm tuần.',
+    'Hãy đóng hộp thoại đang mở trước khi ôn tuần.': 'Hãy đóng hộp thoại đang mở trước khi kiểm điểm tuần.',
+    'Hãy chọn ít nhất một việc.': 'Hãy chọn ít nhất một nhiệm vụ.',
+    'Các việc đã chọn không còn nữa. Hãy chọn lại.': 'Các nhiệm vụ đã chọn không còn nữa. Hãy chọn lại.',
+    'Tối đa 500 ghi chú. Hãy xóa bớt một ghi chú rồi lưu lại.': 'Tối đa 500 quyển. Hãy xóa bớt một quyển rồi cất lại.',
+    'Chưa lưu được. Hãy thử lại.': 'Chưa cất được. Hãy thử lại.',
     // v2.52.0 (Việc Chờ Người Khác): trình sửa việc, thẻ việc, khối Tổng quan, chuông (waiting.js).
     'Đang chờ người khác': 'Đang đợi hồi âm',
     'Đang chờ ai': 'Đang đợi ai hồi âm',
@@ -921,6 +954,16 @@
     [/^Nhắc lại (\d{2}[-/]\d{2})$/, 'Hẹn hỏi lại $1', '.wait-when', 'Nhắc lại '],
     [/^Nhắc lại sau (\d+) ngày$/, 'Hẹn lại sau $1 ngày', '.wait-actions', 'Nhắc lại sau '],
     [/^Sẽ nhắc lại sau (\d+) ngày\.$/, 'Sẽ hẹn lại sau $1 ngày.', '#toast, .toast, [role=status]', 'Sẽ nhắc lại sau '],
+    // v2.54.0 (Ôn Tuần)
+    [/^(\d+) việc$/, '$1 nhiệm vụ', '.zen-review h3 small', 'việc'],
+    [/^(\d+)\/(\d+) lượt · (\d+)%$/, '$1/$2 lần luyện · $3%', '.zen-review h3 small', 'lượt'],
+    [/^(\d+)\/(\d+) lần$/, '$1/$2 lần luyện', '.zen-review-list small', ' lần'],
+    [/^và (\d+) việc nữa$/, 'và $1 nhiệm vụ nữa', '.zen-review-more', 'việc nữa'],
+    [/^Chọn việc cho tuần (.+)$/, 'Chọn nhiệm vụ cho tuần $1', '.zen-review h3', 'Chọn việc'],
+    [/^Quá hạn (\d+) ngày$/, 'Lỡ hẹn $1 ngày', '.zen-review-when', 'Quá hạn'],
+    [/^Hạn (\d{2}\/\d{2})$/, 'Kỳ hạn $1', '.zen-review-when', 'Hạn '],
+    [/^(\d+)\/(\d+) xong$/, '$1/$2 công thành', '.wf-review-panel h2 small', ' xong'],
+    [/^Đã lưu (\d+) việc cho tuần (.+) vào Ghi chú\.$/, 'Đã cất $1 nhiệm vụ cho tuần $2 vào Tàng thư.', '#toast, .toast, [role=status]', 'Đã lưu '],
     [/^Đã lưu vào Ghi chú: (.+)$/, 'Đã cất vào Tàng thư: $1', '#toast, .toast, [role=status]', 'Đã lưu vào Ghi chú: '],
     [/^Đã thêm việc “(.+)” vào (.+)$/, 'Đã thêm nhiệm vụ “$1” vào $2', '#toast, .toast, [role=status]', 'Đã thêm việc “'],
     [/^Dữ liệu đồng bộ đã dùng (\d+)%: (.+) \/ 20 MB\.$/, 'Dữ liệu thông mạch đã dùng $1%: $2 / 20 MB.', '.capacity-warning strong', 'Dữ liệu đồng bộ đã dùng'],
@@ -958,7 +1001,7 @@
     // Tên cột (người dùng đặt), trạng thái theo cột, ô chọn cột / dự án
     '.wf-column-name', '.studio-column-tabs', '.wf-state-choices', 'select[name=col]', 'select[name=project]', '.task-project-picker summary', '.task-project-choice-copy strong',
     // Tên và mô tả việc, dự án, từ khóa, nhãn
-    '.task-card h3', '.task-name', '.work-task-row strong', '.project-card h3', '.project-card > p', '.tag', '.wait-who', '.wf-card-keywords > :not(.matrix-chip)', '.wf-comment', '.wf-comment-text', '.task-next-step > :not(span:first-child)', '.dashboard-progress-row strong', '.gantt-labels li', '.gantt-bar-label', '.project-note-picker label',
+    '.task-card h3', '.task-name', '.work-task-row strong', '.project-card h3', '.project-card > p', '.tag', '.wait-who', '.zen-review-list strong', '.zen-review-pick strong', '.zen-review-proj', '.wf-card-keywords > :not(.matrix-chip)', '.wf-comment', '.wf-comment-text', '.task-next-step > :not(span:first-child)', '.dashboard-progress-row strong', '.gantt-labels li', '.gantt-bar-label', '.project-note-picker label',
     // Nhật khóa, Bế quan, Hoàng lịch: tên việc / môn, tên dự án, ghi chú cảm nhận
     // Tàng thư, Ngân khố, Bảo khố: tiêu đề / nội dung / nhóm quyển, đại sự để liên kết, hạng mục và ghi chú khoản thu chi, gợi ý hạng mục
     // (bấm gợi ý là chép chữ vào ô nhập nên phải giữ nguyên), tên tệp
@@ -1237,6 +1280,7 @@
     'Thêm nhanh bằng một câu': 'Ghi nhanh bằng một câu',
     'Tìm kiếm toàn bộ nội dung': 'Truy tìm khắp giang hồ',
     'Xem phím tắt': 'Xem khẩu quyết phím',
+    'Ôn tuần': 'Kiểm điểm tuần',
   };
   const command = (label) => {
     if (COMMANDS[label]) return [COMMANDS[label], label];

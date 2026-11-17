@@ -4172,6 +4172,47 @@
 :root[data-contrast=high] .wf-wait-panel .wait-row.is-due .wait-when {
     color: #060606
 }
+:root[data-contrast=high] .zen-review {
+    border: 1px solid #18151a;
+    background: #ffffff;
+    color: #060606
+}
+:root[data-contrast=high] .zen-review::backdrop {
+    background: rgba(48,34,57,0.376)
+}
+:root[data-contrast=high] .zen-review-weeks .btn.active {
+    border-color: #18102b;
+    background: #ffffff;
+    color: #060606
+}
+:root[data-contrast=high] .zen-review-lead {
+    color: #060606
+}
+:root[data-contrast=high] .zen-review-sec {
+    border-top: 1px solid #171519
+}
+:root[data-contrast=high] .zen-review-sec h3 small {
+    color: #060606
+}
+:root[data-contrast=high] .zen-review-list small, :root[data-contrast=high] .zen-review-pick small, :root[data-contrast=high] .zen-review-hint, :root[data-contrast=high] .zen-review-empty, :root[data-contrast=high] .zen-review-more {
+    color: #060606
+}
+:root[data-contrast=high] .zen-review-pick {
+    border: 1px solid #17151a
+}
+:root[data-contrast=high] .zen-review-pick:has(input:checked) {
+    border-color: #18102b;
+    background: #ffffff
+}
+:root[data-contrast=high] .zen-review-count {
+    color: #060606
+}
+:root[data-contrast=high] .zen-review-status {
+    color: #060606
+}
+:root[data-contrast=high] .wf-review-panel p {
+    color: #060606
+}
 :root[data-theme=dark][data-contrast=high] {
     --bg: #030303;
     --paper: #030303;
@@ -8343,6 +8384,47 @@
     border-top: 1px solid #cecece
 }
 :root[data-theme=dark][data-contrast=high] .wf-wait-panel .wait-row.is-due .wait-when {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .zen-review {
+    border: 1px solid #cecece;
+    background: #030303;
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .zen-review::backdrop {
+    background: rgba(48,34,57,0.376)
+}
+:root[data-theme=dark][data-contrast=high] .zen-review-weeks .btn.active {
+    border-color: #cecece;
+    background: #030303;
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .zen-review-lead {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .zen-review-sec {
+    border-top: 1px solid #cecece
+}
+:root[data-theme=dark][data-contrast=high] .zen-review-sec h3 small {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .zen-review-list small, :root[data-theme=dark][data-contrast=high] .zen-review-pick small, :root[data-theme=dark][data-contrast=high] .zen-review-hint, :root[data-theme=dark][data-contrast=high] .zen-review-empty, :root[data-theme=dark][data-contrast=high] .zen-review-more {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .zen-review-pick {
+    border: 1px solid #cecece
+}
+:root[data-theme=dark][data-contrast=high] .zen-review-pick:has(input:checked) {
+    border-color: #cecece;
+    background: #030303
+}
+:root[data-theme=dark][data-contrast=high] .zen-review-count {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .zen-review-status {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .wf-review-panel p {
     color: #f5f5f5
 }
 /* v1.16.2 — nút "Làm mới" ở Chế độ tập trung: quy tắc cũ (.focus-check-updates, nền trắng, chữ tím) đã bị quy tắc nút chính ghi đè ở chế độ thường, nhưng bản sao có tiền tố chủ đề lại nặng hơn nên thắng và làm nút trắng chữ trắng. Đặt lại nền nút chính. */

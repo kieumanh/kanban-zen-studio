@@ -2717,3 +2717,169 @@ body select:not([multiple]):not([size]):not([data-zen-native]):not(.wf-original-
   min-height: 44px;
   border-radius: 12px;
 }
+
+/* v2.54.0 (Ôn Tuần): hộp thoại ôn tuần và hai khối ở Tổng quan (dist/weekly-review.js). */
+.zen-review {
+  width: min(560px, calc(100vw - 28px));
+  max-height: 90dvh;
+  padding: 20px;
+  border: 1px solid #d8c9e4;
+  border-radius: 20px;
+  background: #fffdfd;
+  color: #352a44;
+  box-shadow: 0 24px 80px #352a4430;
+  overflow: auto;
+}
+.zen-review::backdrop {
+  background: #30223960;
+  backdrop-filter: blur(4px);
+}
+.zen-review header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.zen-review h2 {
+  margin: 0;
+  font-size: 20px;
+}
+.zen-review .exit-x {
+  min-width: 44px;
+  min-height: 44px;
+}
+.zen-review-weeks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+.zen-review-weeks .btn {
+  min-height: 44px;
+}
+.zen-review-weeks .btn.active {
+  border-color: #7950c8;
+  background: #efe7fa;
+  color: #3d2a66;
+  font-weight: 700;
+}
+.zen-review-lead {
+  margin: 10px 0 0;
+  color: #685974;
+  font-size: 14px;
+}
+.zen-review-sec {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid #e8dff0;
+}
+.zen-review-sec h3 {
+  margin: 0 0 8px;
+  font-size: 16px;
+}
+.zen-review-sec h3 small {
+  color: #685974;
+  font-size: 13px;
+  font-weight: 500;
+}
+.zen-review-list {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.zen-review-list li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 2px 12px;
+  overflow-wrap: anywhere;
+}
+.zen-review-list small,
+.zen-review-pick small,
+.zen-review-hint,
+.zen-review-empty,
+.zen-review-more {
+  color: #685974;
+  font-size: 13px;
+}
+.zen-review-empty,
+.zen-review-hint,
+.zen-review-more {
+  margin: 0 0 8px;
+}
+.zen-review-money {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 18px;
+  margin: 0;
+  font-size: 14px;
+}
+.zen-review-choices {
+  display: grid;
+  gap: 6px;
+}
+.zen-review-pick {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  padding: 6px 10px;
+  border: 1px solid #e0d4ec;
+  border-radius: 14px;
+  overflow-wrap: anywhere;
+}
+.zen-review-pick input {
+  flex: none;
+  width: 22px;
+  height: 22px;
+}
+.zen-review-pick span {
+  display: grid;
+  gap: 1px;
+}
+.zen-review-pick:has(input:checked) {
+  border-color: #7950c8;
+  background: #f5effc;
+}
+.zen-review-pick:has(input:disabled) {
+  opacity: 0.6;
+}
+.zen-review-count {
+  margin: 8px 0 0;
+  color: #4a3b66;
+  font-size: 14px;
+  font-weight: 600;
+}
+.zen-review-status {
+  min-height: 1.4em;
+  margin: 12px 0 0;
+  color: #9d2f45;
+  font-size: 14px;
+}
+.zen-review-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 8px;
+}
+.wf-review-panel {
+  margin-top: 16px;
+}
+.wf-review-panel h2 small {
+  font-weight: 500;
+}
+.wf-review-panel p {
+  margin: 0 0 12px;
+  color: #685974;
+}
+.wf-review-focus .review-focus-row {
+  width: 100%;
+}
+.wf-review-focus .review-focus-row.is-done strong {
+  text-decoration: line-through;
+  text-decoration-thickness: 1px;
+}

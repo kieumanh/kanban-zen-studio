@@ -7325,6 +7325,51 @@
 :root[data-style=giangho] .wf-wait-panel .wait-row.is-due .wait-when {
     color: #673407
 }
+:root[data-style=giangho] .zen-review {
+    border: 1px solid #dfc9a9;
+    background: #fffcf6;
+    color: #311f13;
+    box-shadow: 0 24px 80px rgba(63,43,27,0.188)
+}
+:root[data-style=giangho] .zen-review::backdrop {
+    background: rgba(53,37,18,0.376)
+}
+:root[data-style=giangho] .zen-review-weeks .btn.active {
+    border-color: #b44148;
+    background: #f5ead6;
+    color: #530c15
+}
+:root[data-style=giangho] .zen-review-lead {
+    color: #624d40
+}
+:root[data-style=giangho] .zen-review-sec {
+    border-top: 1px solid #eeddc5
+}
+:root[data-style=giangho] .zen-review-sec h3 small {
+    color: #624d40
+}
+:root[data-style=giangho] .zen-review-list small, :root[data-style=giangho] .zen-review-pick small, :root[data-style=giangho] .zen-review-hint, :root[data-style=giangho] .zen-review-empty, :root[data-style=giangho] .zen-review-more {
+    color: #624d40
+}
+:root[data-style=giangho] .zen-review-pick {
+    border: 1px solid #e8d3b5
+}
+:root[data-style=giangho] .zen-review-pick:has(input:checked) {
+    border-color: #b44148;
+    background: #faf1e1
+}
+:root[data-style=giangho] .zen-review-count {
+    color: #572627
+}
+:root[data-style=giangho] .zen-review-status {
+    color: #8c1e38
+}
+:root[data-style=giangho] .wf-review-panel p {
+    color: #624d40
+}
+:root[data-style=giangho] .wf-review-focus .review-focus-row.is-done strong {
+    text-decoration: line-through
+}
 :root[data-style=giangho][data-theme=dark] {
     --bg: #18130c;
     --paper: #1e1811;
@@ -14600,6 +14645,51 @@
 }
 :root[data-style=giangho][data-theme=dark] .wf-wait-panel .wait-row.is-due .wait-when {
     color: #fcccad
+}
+:root[data-style=giangho][data-theme=dark] .zen-review {
+    border: 1px solid #504135;
+    background: #1e1811;
+    color: #f5dccc;
+    box-shadow: 0 24px 80px rgba(200,179,163,0.188)
+}
+:root[data-style=giangho][data-theme=dark] .zen-review::backdrop {
+    background: rgba(53,37,18,0.376)
+}
+:root[data-style=giangho][data-theme=dark] .zen-review-weeks .btn.active {
+    border-color: #c24d53;
+    background: #21180f;
+    color: #ffd3d1
+}
+:root[data-style=giangho][data-theme=dark] .zen-review-lead {
+    color: #e5cdbe
+}
+:root[data-style=giangho][data-theme=dark] .zen-review-sec {
+    border-top: 1px solid #433830
+}
+:root[data-style=giangho][data-theme=dark] .zen-review-sec h3 small {
+    color: #e5cdbe
+}
+:root[data-style=giangho][data-theme=dark] .zen-review-list small, :root[data-style=giangho][data-theme=dark] .zen-review-pick small, :root[data-style=giangho][data-theme=dark] .zen-review-hint, :root[data-style=giangho][data-theme=dark] .zen-review-empty, :root[data-style=giangho][data-theme=dark] .zen-review-more {
+    color: #e5cdbe
+}
+:root[data-style=giangho][data-theme=dark] .zen-review-pick {
+    border: 1px solid #493c32
+}
+:root[data-style=giangho][data-theme=dark] .zen-review-pick:has(input:checked) {
+    border-color: #c24d53;
+    background: #16110a
+}
+:root[data-style=giangho][data-theme=dark] .zen-review-count {
+    color: #eed6c6
+}
+:root[data-style=giangho][data-theme=dark] .zen-review-status {
+    color: #ffc1c6
+}
+:root[data-style=giangho][data-theme=dark] .wf-review-panel p {
+    color: #e5cdbe
+}
+:root[data-style=giangho][data-theme=dark] .wf-review-focus .review-focus-row.is-done strong {
+    text-decoration: line-through
 }
 
 /* ---- Họa tiết Giang hồ viết tay (v1.86.0 · Chu Mặc) ------------------------------------------------------------------------

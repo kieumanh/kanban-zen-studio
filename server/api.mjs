@@ -684,6 +684,8 @@ export function validWorkspace(d) {
             (t.waitFor === undefined || str(t.waitFor, 60)) &&
             (t.waitUntil === undefined ||
               (str(t.waitUntil, 10) && validDate(t.waitUntil))) &&
+            (t.doneAt === undefined ||
+              (str(t.doneAt, 10) && validDate(t.doneAt))) &&
             p.columns.includes(t.col) &&
             (!t.labels ||
               (Array.isArray(t.labels) &&

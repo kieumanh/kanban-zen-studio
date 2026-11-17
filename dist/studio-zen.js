@@ -112,6 +112,8 @@
     list.push({label:'Cài đặt',run:()=>accountPanel()});
     // v2.46.0 (Bảng Phím Tắt): bảng liệt kê phím tắt (shortcuts.js); cũng mở bằng phím “?”.
     list.push({label:'Xem phím tắt',hint:'?',run:()=>window.zenShortcuts?.open()});
+    // v2.54.0 (Ôn Tuần): ôn lại tuần và chọn tối đa 3 việc cho tuần tới (weekly-review.js).
+    list.push({label:'Ôn tuần',hint:'Chọn 3 việc cho tuần tới',run:()=>window.zenWeeklyReview?.open()});
     // v1.16.0: đổi giao diện từ bảng lệnh.
     if(window.zenTheme){[['Giao diện sáng','light'],['Giao diện tối','dark'],['Giao diện theo hệ thống','system']].forEach(([label,value])=>list.push({label,hint:'Màu sắc',run:()=>{window.zenTheme.setTheme(value);notify('Đã chọn: '+label.toLocaleLowerCase('vi')+'.');}}));list.push({label:'Bật / tắt tương phản cao',hint:'Màu sắc',run:()=>{const high=window.zenTheme.state().high;window.zenTheme.setContrast(high?'normal':'high');notify(high?'Đã tắt tương phản cao.':'Đã bật tương phản cao.');}});}
     // v1.86.0: đổi phong cách Thiền / Giang hồ từ bảng lệnh.
