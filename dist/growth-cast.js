@@ -81,6 +81,42 @@
     goddau: { name: 'Thu Liễm', robe: '#c9784a', trim: '#f4d8b0', sash: '#7a3a1a', hair: '#e8e0d0', kind: 'straw', ghost: true, hold: 'staff', stoop: 3 },
     godtuat: { name: 'Trấn Thủ', robe: '#7a2a3a', trim: '#c8b8e0', sash: '#2a1e34', hair: '#15131a', kind: 'helm2', ghost: true, hold: 'spear', s: 1.16 },
     godhoi: { name: 'Phong Đăng', robe: '#9a4a6a', trim: '#f0d0c0', sash: '#5a2a20', hair: '#e8e4da', kind: 'oldman', ghost: true, hold: 'staff', stoop: 4 },
+    // v2.26.0 (Thiên Cang Chân Dung): ba mươi sáu Thiên Cang mỗi vị một dáng riêng — Thiên Hình (hinh) và Phong Đăng (godhoi) đã có từ trước,
+    // ba mươi bốn vị còn lại thêm ở đây: sắc áo khác nhau ít nhất 40 đơn vị màu, mỗi vị một kiểu đầu / vật cầm / vóc người / nét riêng ở bóng.
+    godc01: { name: 'Minh Báo', robe: '#4a1a2a', trim: '#e8c9a0', sash: '#c9a04a', hair: '#1a1216', kind: 'hat', ghost: true, hold: 'scroll' },
+    godc02: { name: 'Thông Bảo', robe: '#653a78', trim: '#f0d070', sash: '#c9a04a', hair: '#15131a', kind: 'turban', ghost: true, hold: 'abacus', s: 1.06 },
+    godc03: { name: 'Tịch Chiếu', robe: '#9683c6', trim: '#e6defa', sash: '#5a4a8a', hair: '#e8e4f4', kind: 'veil', ghost: true, hold: null, train: '#b8a8e0', s: 0.98 },
+    godc04: { name: 'Kết Duyên', robe: '#d8708a', trim: '#ffe0e6', sash: '#a8283c', hair: '#15131a', kind: 'pins', ghost: true, hold: 'thread', s: 0.94 },
+    godc05: { name: 'Xuân Sinh', robe: '#9ad07a', trim: '#f0f8d0', sash: '#4a8a3a', hair: '#2a2a1a', kind: 'sprout', ghost: true, hold: 'pot', s: 0.82 },
+    godc06: { name: 'Động Vi', robe: '#24644d', trim: '#d0e8d8', sash: '#c9a04a', hair: '#efeae0', kind: 'oldman', ghost: true, hold: 'book', dipper: '#f0d070', stoop: 5 },
+    godc07: { name: 'Tích Vi', robe: '#9ba0aa', trim: '#d8dce4', sash: '#5a5e68', hair: '#2a2024', kind: 'band', ghost: true, hold: 'stone', s: 1.06 },
+    godc08: { name: 'Thái Hòa', robe: '#f0e16a', robe2: '#34346e', split: 'h', trim: '#fff6c0', sash: '#c9a04a', hair: '#15131a', kind: 'long', ghost: true, hold: 'scale', halo: ['#f6d060', '#8a8ad8'] },
+    godc09: { name: 'Chính Quả', robe: '#bae9b9', trim: '#ffffff', sash: '#5aa86a', hair: '#f4fff4', kind: 'longhat', ghost: true, hold: 'soul', s: 1.04 },
+    godc10: { name: 'Lưu Kim', robe: '#2a50b0', trim: '#c9d8ff', sash: '#f0d070', hair: '#15131a', kind: 'ponytail', ghost: true, hold: 'ladle', s: 0.96 },
+    godc11: { name: 'An Lan', robe: '#2a8aa8', trim: '#d0f0f8', sash: '#f4f0e0', hair: '#d8f4ff', kind: 'long', ghost: true, hold: 'trident', ripple: '#bfeaf4', s: 1.1 },
+    godc12: { name: 'Đồng Tâm', robe: '#a8553a', trim: '#f0d890', sash: '#6a2a1a', hair: '#15131a', kind: 'helm2', ghost: true, hold: 'banner', cape: '#7a2a1e', s: 1.08 },
+    godc13: { name: 'Kiện Hành', robe: '#e0f6f8', trim: '#ffffff', sash: '#6a9aa8', hair: '#cfd8dc', kind: 'fur', ghost: true, hold: 'staff', s: 1.1, stoop: 2 },
+    godc14: { name: 'Cách Vật', robe: '#a8883a', trim: '#f0e4b0', sash: '#5a4620', hair: '#1c1620', kind: 'knot', ghost: true, hold: 'compass', goggles: true },
+    godc15: { name: 'Khai Sơn', robe: '#4a4a44', trim: '#aaa89c', sash: '#2a2a26', hair: '#d8d4c8', kind: 'monk', ghost: true, hold: 'chisel', s: 1.12 },
+    godc16: { name: 'Trú Dạ', robe: '#f08a3a', robe2: '#2a2030', split: 'v', trim: '#ffd09a', sash: '#8a3a1a', hair: '#2a2030', kind: 'long', ghost: true, hold: 'gong', s: 1.04 },
+    godc17: { name: 'Hồi Hướng', robe: '#a89a78', trim: '#e0d6b8', sash: '#6a5a38', hair: '#d8d4c8', kind: 'scarf', ghost: true, hold: 'yoke', stoop: 8 },
+    godc18: { name: 'Tán Tụ', robe: '#a0c8f0', trim: '#ffffff', sash: '#5a88c0', hair: '#f4f8ff', kind: 'cloudcap', ghost: true, hold: 'crook', s: 1.02 },
+    godc19: { name: 'Chỉ Thủy', robe: '#7ad0c8', trim: '#e0f8f4', sash: '#2a8a82', hair: '#dff6f2', kind: 'long', ghost: true, hold: null, ripple: '#bff0ea', s: 0.96 },
+    godc20: { name: 'Tri Âm', robe: '#e8a0a0', trim: '#fff0f0', sash: '#b8505a', hair: '#2a2024', kind: 'knot', ghost: true, hold: 'horn', ears: true, s: 0.98 },
+    godc21: { name: 'Dưỡng Chính', robe: '#5aa890', trim: '#e0f4ec', sash: '#2a7a68', hair: '#1c1620', kind: 'bun', ghost: true, hold: 'herbs', s: 0.98 },
+    godc22: { name: 'Vấn Tân', robe: '#809b6e', trim: '#d8e4cc', sash: '#4a5a3a', hair: '#d0ccc0', kind: 'straw', ghost: true, hold: 'oar', s: 1.04 },
+    godc23: { name: 'Trì Hằng', robe: '#d2911f', trim: '#ffe6a0', sash: '#7a4a10', hair: '#15131a', kind: 'hood', ghost: true, hold: 'lamp', s: 1.02 },
+    godc24: { name: 'Trương Thỉ', robe: '#5e762c', trim: '#d0dca0', sash: '#3a4a18', hair: '#1c1620', kind: 'feathercap', ghost: true, hold: 'bow', s: 1.06 },
+    godc25: { name: 'Thiện Căn', robe: '#2a3a2a', trim: '#8ab88a', sash: '#4a6a3a', hair: '#0d1413', kind: 'cowl', ghost: true, hold: 'seedbag', s: 0.94 },
+    godc26: { name: 'Tiết Độ', robe: '#c8b28a', trim: '#f0e6c8', sash: '#8a6a3a', hair: '#2a2024', kind: 'hat', ghost: true, hold: 'jar', s: 1.08 },
+    godc27: { name: 'Định Phong', robe: '#7e8c96', trim: '#dfe6ea', sash: '#4a5864', hair: '#e8ecee', kind: 'long', ghost: true, hold: null, swirl: '#e6eef2', s: 1.02 },
+    godc28: { name: 'Hòa Quang', robe: '#8a7660', trim: '#d8ccb8', sash: '#5a4a38', hair: '#d8d2c4', kind: 'scarf', ghost: true, hold: 'basket', glow: '#ffe6a0', s: 0.94 },
+    godc29: { name: 'Cố Bản', robe: '#754a1f', trim: '#d8b078', sash: '#3a2410', hair: '#1c1620', kind: 'band', ghost: true, hold: 'spade', s: 1.06 },
+    godc30: { name: 'Minh Kính', robe: '#b0c2c4', trim: '#ffffff', sash: '#6a8a94', hair: '#e6f0f4', kind: 'circlet', ghost: true, hold: 'mirror2' },
+    godc31: { name: 'Đại Thành', robe: '#d2681f', trim: '#cfd6df', sash: '#6a2a0a', hair: '#4a3a30', kind: 'helm', ghost: true, hold: 'hammer', s: 1.2 },
+    godc32: { name: 'Tiêu Dao', robe: '#5a7aa0', trim: '#d0def0', sash: '#2a3a58', hair: '#d8d4c8', kind: 'straw', ghost: true, hold: 'sword', hold2: 'gourd' },
+    godc35: { name: 'Vô Ba', robe: '#15171d', trim: '#a8b8d8', sash: '#4a5878', hair: '#e8ecf4', kind: 'plume', ghost: true, hold: 'sword', cape: '#2a3448', s: 1.22 },
+    godc36: { name: 'Hằng Nguyệt', robe: '#98a8d8', trim: '#f0f4ff', sash: '#5a6aa8', hair: '#f4f6ff', kind: 'crown', ghost: true, hold: null, moon: '#eef2ff' },
   };
   // ---- Tư thế --------------------------------------------------------------------------------------------------------------------
   // legs: kiểu chân; hands: [tay trái, tay phải] (toạ độ trong khung người, chân ở y=0, đỉnh đầu ở y≈-100); lean: độ ngả của thân trên.
@@ -138,9 +174,16 @@
   function head(L, ink) {
     const skin = L.glass ? '#dff3f6' : '#e8c9a8', hair = L.hair, k = L.kind;
     let s = '';
+    // v2.26.0: vầng trăng (đĩa sáng) hoặc vầng sáng một / hai sắc nằm sau đầu.
+    if (L.moon) s += '<circle cx="0" cy="-93" r="12.8" fill="' + L.moon + '" opacity=".88"/><circle cx="-4.8" cy="-99.4" r="2.1" fill="' + mix(L.moon, '#7080b8', 0.35) + '" opacity=".45"/><circle cx="5.4" cy="-87" r="1.5" fill="' + mix(L.moon, '#7080b8', 0.35) + '" opacity=".45"/>';
+    if (L.halo) {
+      const hc = Array.isArray(L.halo) ? L.halo : [L.halo, L.halo];
+      s += '<path d="M0,-105.8 A12.8,12.8 0 0 0 0,-80.2" stroke="' + hc[0] + '" stroke-width="1.7" fill="none" opacity=".85"/><path d="M0,-105.8 A12.8,12.8 0 0 1 0,-80.2" stroke="' + hc[1] + '" stroke-width="1.7" fill="none" opacity=".85"/>';
+    }
     const back = (k === 'long' || k === 'mask' || k === 'fox') ? '<path class="sc-hair" d="M-6.4,-93 C-9,-80 -8,-66 -5,-54 L5,-54 C8,-66 9,-80 6.4,-93Z" fill="' + hair + '"/>' : '';
     s += back;
     s += '<rect x="-2.4" y="-89" width="4.8" height="5" fill="' + skin + '"/>';
+    if (L.ears) s += '<path d="M-6,-95 Q-10.8,-96 -9.6,-87.6 Q-7.8,-88.8 -6,-91Z M6,-95 Q10.8,-96 9.6,-87.6 Q7.8,-88.8 6,-91Z" fill="' + skin + '"/>';
     s += '<circle cx="0" cy="-93" r="6.4" fill="' + skin + '"/>';
     const cap = '<path d="M-6.7,-92 A6.7,6.7 0 0 1 6.7,-92 Q3.5,-96.5 0,-95.6 Q-3.5,-96.5 -6.7,-92Z" fill="' + hair + '"/>';
     if (k === 'knot') s += cap + '<circle cx="0" cy="-101" r="3" fill="' + hair + '"/><path d="M-3,-98 h6" stroke="' + L.sash + '" stroke-width="1.2"/>';
@@ -157,7 +200,29 @@
     else if (k === 'long') s += cap + '<path d="M-6.5,-92 C-9,-80 -8,-68 -6,-58" stroke="' + hair + '" stroke-width="2.4" fill="none"/>';
     else if (k === 'mask') s += cap + '<circle cx="0" cy="-93" r="5.6" fill="#f3f1ec"/><path d="M-2.2,-97 A5.4,5.4 0 1 0 -2.2,-89 A3.6,3.6 0 1 1 -2.2,-97Z" fill="#2a2430"/>';
     else if (k === 'fox') s += cap + '<path d="M-6,-95 L-8,-104 L-2.4,-97Z M6,-95 L8,-104 L2.4,-97Z" fill="#f4f0f6"/><path d="M-5.8,-93 Q0,-99 5.8,-93 L0,-86Z" fill="#f4f0f6"/><path d="M-3,-92.5 l2,0.6 M3,-92.5 l-2,0.6" stroke="#c0305a" stroke-width="1.2"/>';
+    // v2.26.0 (Thiên Cang Chân Dung): thêm kiểu đầu để ba mươi sáu Thiên Cang mỗi vị một dáng.
+    else if (k === 'hat') s += cap + '<rect x="-6.4" y="-101" width="12.8" height="6.2" rx="1.3" fill="' + hair + '"/><path d="M-6.4,-96.6 H6.4" stroke="' + L.trim + '" stroke-width=".9"/><rect x="-15" y="-98.6" width="9.6" height="2" rx="1" fill="' + hair + '"/><rect x="5.4" y="-98.6" width="9.6" height="2" rx="1" fill="' + hair + '"/>';
+    else if (k === 'turban') s += '<path d="M-7.3,-91 A7.3,7.3 0 0 1 7.3,-91 L7.5,-90 Q0,-87.4 -7.5,-90Z" fill="' + L.trim + '"/><path d="M-6.6,-96 Q0,-99.4 6.6,-96 M-7,-93.4 Q0,-96.8 7,-93.4" stroke="' + L.sash + '" stroke-width=".9" fill="none"/><path d="M5,-99 Q10.6,-105 13,-99 Q9,-97.4 5,-99Z" fill="' + L.trim + '"/>';
+    else if (k === 'pins') s += cap + '<circle cx="0" cy="-100.6" r="3.3" fill="' + hair + '"/><path d="M-3.4,-99 L-11.5,-105 M-2.4,-101 L-8,-108.4 M3.4,-99 L11.5,-105 M2.4,-101 L8,-108.4" stroke="#f2cf6a" stroke-width="1" stroke-linecap="round"/><circle cx="-11.5" cy="-105" r="1.4" fill="' + L.sash + '"/><circle cx="11.5" cy="-105" r="1.4" fill="' + L.sash + '"/><circle cx="-8" cy="-108.4" r="1.1" fill="' + L.sash + '"/><circle cx="8" cy="-108.4" r="1.1" fill="' + L.sash + '"/>';
+    else if (k === 'sprout') s += cap + '<circle cx="0" cy="-100.2" r="3.4" fill="' + hair + '"/><path d="M0,-102 Q-9.4,-109.6 -11,-102 Q-4.6,-99.8 0,-102Z M0,-102 Q9.4,-109.6 11,-102 Q4.6,-99.8 0,-102Z" fill="#6ac85a"/><path d="M0,-102 V-107" stroke="#4a9a3a" stroke-width="1.2"/>';
+    else if (k === 'longhat') s += cap + '<path d="M-5.6,-94.6 L-3.4,-127 Q0,-129.4 3.4,-127 L5.6,-94.6 Q0,-91.8 -5.6,-94.6Z" fill="' + L.trim + '" stroke="' + L.sash + '" stroke-width=".9"/><path d="M-5.2,-101 H5.2" stroke="' + L.sash + '" stroke-width="2"/><path d="M0,-123 V-105" stroke="' + L.sash + '" stroke-width="1.6" stroke-dasharray="3 1.8" opacity=".85"/><path d="M0,-128 Q6.4,-124 5,-114" stroke="' + L.sash + '" stroke-width="1" fill="none"/>';
+    else if (k === 'ponytail') s += cap + '<circle cx="4.4" cy="-98.8" r="1.8" fill="' + L.sash + '"/><path d="M4.6,-98.6 Q15,-101 19.4,-90 Q14.6,-95.4 6,-95.8Z" fill="' + hair + '"/>';
+    else if (k === 'fur') {
+      let r = '';
+      for (let i = 0; i < 9; i++) {
+        const a = ((-190 + i * 25) * Math.PI) / 180;
+        r += '<circle cx="' + f(Math.cos(a) * 8) + '" cy="' + f(-93 + Math.sin(a) * 8) + '" r="3.1" fill="' + hair + '"/>';
+      }
+      s += '<path d="M-8.4,-92 A8.4,8.4 0 0 1 8.4,-92Z" fill="' + hair + '"/>' + r;
+    }
+    else if (k === 'feathercap') s += cap + '<path d="M-7.6,-94 L0,-105.6 L7.6,-94 Q0,-91.6 -7.6,-94Z" fill="' + L.robe + '"/><path d="M3.4,-100 Q14,-114 21,-107 Q13.6,-107.4 5.4,-97.6Z" fill="#efe8d4"/><path d="M3.8,-99.4 Q13,-106.6 20.6,-107" stroke="' + L.sash + '" stroke-width=".8" fill="none"/>';
+    else if (k === 'cloudcap') s += cap + '<circle cx="-4.6" cy="-98.4" r="4.2" fill="#fff"/><circle cx="0.4" cy="-101.4" r="5.2" fill="#fff"/><circle cx="5.6" cy="-98.2" r="4.2" fill="#fff"/><path d="M-8.4,-95.4 H8.4" stroke="' + mix(L.robe, '#ffffff', 0.2) + '" stroke-width="1.6" opacity=".6"/>';
+    else if (k === 'circlet') s += cap + '<path d="M-6.8,-95.6 Q0,-99 6.8,-95.6" stroke="#e6ecf8" stroke-width="1.8" fill="none"/><circle cx="0" cy="-97.2" r="2.1" fill="#8ad0f4"/><path d="M-6.8,-95.6 l-1.6,5 M6.8,-95.6 l1.6,5" stroke="#e6ecf8" stroke-width="1"/>';
+    else if (k === 'plume') s += '<path d="M-7.6,-92 A7.6,7.6 0 0 1 7.6,-92 L7.6,-89.6 L-7.6,-89.6Z" fill="#cfd6df"/><path d="M-7.6,-92 L-8.2,-86.6 L-5,-86.6 M7.6,-92 L8.2,-86.6 L5,-86.6" stroke="#aab4c2" stroke-width="1.4" fill="none"/><path d="M0,-99.6 C-3,-111 5,-120 15,-117 C9,-114.6 5,-108 3.4,-99.6Z" fill="' + L.trim + '"/><path d="M0,-99.6 V-101" stroke="#cfd6df" stroke-width="2"/>';
+    else if (k === 'band') s += cap + '<circle cx="0" cy="-100.6" r="3" fill="' + hair + '"/><path d="M-6.8,-96.2 Q0,-98.4 6.8,-96.2" stroke="' + L.sash + '" stroke-width="2"/><path d="M6.6,-96.4 L11.6,-93.6 M6.4,-96.8 L11.2,-98.6" stroke="' + L.sash + '" stroke-width="1.3" stroke-linecap="round"/>';
+    else if (k === 'veil') s += cap + '<path d="M-8.2,-96.4 Q0,-104.6 8.2,-96.4 L13,-62 Q0,-55 -13,-62Z" fill="' + mix(L.robe, '#ffffff', 0.38) + '" opacity=".5"/><path d="M-8.2,-96.4 Q0,-104.6 8.2,-96.4" stroke="' + L.trim + '" stroke-width="1.2" fill="none"/>';
     else s += cap;
+    if (L.goggles) s += '<path d="M-6.7,-96.2 Q0,-99 6.7,-96.2" stroke="#6a4a24" stroke-width="1.6" fill="none"/><circle cx="-3.1" cy="-97.4" r="2.7" fill="#bfe8f0" stroke="#b08a3a" stroke-width="1.1"/><circle cx="3.1" cy="-97.4" r="2.7" fill="#bfe8f0" stroke="#b08a3a" stroke-width="1.1"/><path d="M-3.4,-98.4 l1.2,-0.8" stroke="#fff" stroke-width=".8"/>';
     return s;
   }
   // ---- Vật cầm trong tay -------------------------------------------------------------------------------------------------------------
@@ -178,6 +243,33 @@
       case 'hammer': return g('<path d="M0,6 L0,-22" stroke="#6b4a2c" stroke-width="2.4"/><rect x="-7" y="-30" width="14" height="9" fill="#4a4e58"/>', 18);
       case 'spear': return g('<path d="M0,26 L0,-66" stroke="#6b4a2c" stroke-width="2.2"/><path d="M0,-66 L-3,-58 L3,-58Z M0,-80 L3,-66 L-3,-66Z" fill="#cfd6df"/><path d="M0,-62 l0,6" stroke="#b8344a" stroke-width="3"/>', 0);
       case 'box': return g('<rect x="-9" y="2" width="18" height="14" rx="2" fill="#8a5a36"/><rect x="-9" y="2" width="18" height="4" fill="#6b4226"/>', 0);
+      // v2.26.0 (Thiên Cang Chân Dung): vật cầm của ba mươi sáu Thiên Cang.
+      case 'scroll': return g('<rect x="-10" y="-7" width="20" height="11" rx="2" fill="#efe4c4" stroke="#8a6a3c" stroke-width="1"/><path d="M-6,-3 h12 M-6,0 h9" stroke="#8a6a3c" stroke-width=".8"/><circle cx="-10" cy="-1.5" r="2.8" fill="#b8863a"/><circle cx="10" cy="-1.5" r="2.8" fill="#b8863a"/><path d="M0,4 V14" stroke="#b8344a" stroke-width="1.4"/>', -4);
+      case 'abacus': return g('<rect x="-11" y="-10" width="22" height="14" rx="1.6" fill="#d9a85a" stroke="#6b4226" stroke-width="1.4"/><path d="M-5.5,-10 V4 M0,-10 V4 M5.5,-10 V4 M-11,-4 H11" stroke="#6b4226" stroke-width="1"/><path d="M-5.5,-7 h0 M0,-7 h0 M5.5,-7 h0 M-5.5,0 h0 M-5.5,2 h0 M0,0.4 h0 M5.5,-0.6 h0 M5.5,1.6 h0" stroke="#fff3c0" stroke-width="3" stroke-linecap="round"/>', -8);
+      case 'thread': return g('<path d="M0,0 C11,-15 24,-5 15,9 C9,18 -6,10 4,-3" stroke="#d6405a" stroke-width="1.7" fill="none"/><path d="M2,1 Q17,14 9,32 M0,3 Q-12,18 -3,36 M14,9 Q26,22 21,38" stroke="#e8506a" stroke-width="1.2" fill="none" opacity=".85"/><circle cx="15" cy="9" r="1.6" fill="#ffd0d8"/>', 0);
+      case 'pot': return g('<path d="M-7,5 H7 L5,15 H-5Z" fill="#a8683a"/><path d="M-7.6,4 H7.6" stroke="#7a4a24" stroke-width="2"/><path d="M0,4 V-6" stroke="#4a9a3a" stroke-width="1.8"/><path d="M0,-3 Q-9,-4 -10,-11 Q-3,-10 0,-3Z M0,-6 Q9,-7 10,-14 Q3,-13 0,-6Z" fill="#6ac85a"/>', 0);
+      case 'book': return g('<rect x="-9" y="-12" width="17" height="4.2" fill="#4a6a9a"/><rect x="-10" y="-8" width="18" height="4.2" fill="#9a4a4a"/><rect x="-9" y="-4" width="17" height="4.2" fill="#c9a15a"/><path d="M-9,-10 h17 M-10,-6 h18 M-9,-2 h17" stroke="#f4ecd0" stroke-width=".7" opacity=".8"/>', 0);
+      case 'stone': return g('<rect x="-9" y="-8" width="18" height="11" rx="1.8" fill="#aab0b8" stroke="#5a6068" stroke-width="1"/><path d="M-9,-2.6 H9 M-2,-8 V-2.6 M3,-2.6 V3" stroke="#5a6068" stroke-width=".8"/>', 0);
+      case 'scale': return g('<path d="M0,8 V-28 M-15,-23 H15" stroke="#8a6a24" stroke-width="2"/><path d="M-15,-23 L-19,-9 M-15,-23 L-11,-9 M15,-23 L11,-9 M15,-23 L19,-9" stroke="#8a6a24" stroke-width=".9"/><path d="M-20,-9 H-10 Q-15,-3 -20,-9Z" fill="#f0c96a"/><path d="M10,-9 H20 Q15,-3 10,-9Z" fill="#cfd8ec"/><circle cx="0" cy="-30" r="2.4" fill="#e6c36a"/>', 0);
+      case 'soul': return g('<path d="M0,10 V-40" stroke="#6b4a2c" stroke-width="1.8" stroke-linecap="round"/><path d="M0,-40 H12" stroke="#6b4a2c" stroke-width="1.6"/><ellipse cx="12" cy="-32" rx="6.4" ry="8" fill="#c8f6dc" stroke="#4a9a7a" stroke-width="1.2"/><path d="M12,-40 V-43 M7,-32 h10" stroke="#4a9a7a" stroke-width="1"/><ellipse cx="12" cy="-32" rx="3" ry="4.4" fill="#fffbe0"/>', 0);
+      case 'ladle': return g('<path d="M0,12 L1,-34" stroke="#b8c4d4" stroke-width="2.2" stroke-linecap="round"/><ellipse cx="1.4" cy="-40" rx="8" ry="6.2" fill="#e8eef6" stroke="#8a96a8" stroke-width="1.2"/><ellipse cx="1.4" cy="-41" rx="5.6" ry="3.6" fill="#9ab8f0" opacity=".8"/>', 6);
+      case 'trident': return g('<path d="M0,26 L0,-64" stroke="#6b4a2c" stroke-width="2.2"/><path d="M-8.4,-62 L-7,-77 L-5.6,-62Z M-1.4,-62 L0,-84 L1.4,-62Z M5.6,-62 L7,-77 L8.4,-62Z" fill="#d4dce6"/><path d="M-8.4,-62 H8.4" stroke="#d4dce6" stroke-width="2"/>', 0);
+      case 'banner': return g('<path d="M0,26 V-72" stroke="#6b4a2c" stroke-width="2.4"/><path d="M0,-72 H28 L22,-62 L28,-52 H0Z" fill="' + L.sash + '" stroke="' + L.trim + '" stroke-width="1"/><circle cx="10" cy="-62" r="3.4" fill="' + L.trim + '"/>', 0);
+      case 'compass': return g('<path d="M0,-3 L-9,26 M0,-3 L9,26" stroke="#b08a4a" stroke-width="2.4" stroke-linecap="round"/><circle cx="0" cy="-3" r="3" fill="#d9b04a" stroke="#6b4a2c" stroke-width="1"/><path d="M-6,14 H6" stroke="#6b4a2c" stroke-width="1.2"/>', 0);
+      case 'chisel': return g('<path d="M0,10 L0,-28" stroke="#6b4a2c" stroke-width="3.4" stroke-linecap="round"/><path d="M-2.4,-28 L2.4,-28 L0.8,-46 L-0.8,-46Z" fill="#cfd6df" stroke="#8a929c" stroke-width=".8"/><rect x="-5" y="-30" width="10" height="3" fill="#8a929c"/>', 12);
+      case 'gong': return g('<path d="M0,6 V-30" stroke="#6b4a2c" stroke-width="2"/><path d="M-14,-30 H14 M-12,-30 V-26 M12,-30 V-26" stroke="#6b4a2c" stroke-width="1.4"/><circle cx="0" cy="-17" r="10.4" fill="#d9b04a" stroke="#8a6a24" stroke-width="1.4"/><circle cx="0" cy="-17" r="4" fill="#f0d070"/>', 0);
+      case 'yoke': return g('<g transform="translate(' + f(-hx) + ' ' + f(-84 - hy) + ') rotate(' + -(L.stoop || 0) + ')"><path d="M-36,-2 L34,2" stroke="#6b4a2c" stroke-width="2.8" stroke-linecap="round"/><path d="M-32,-1.8 V22 M30,1.6 V26" stroke="#9a7a4a" stroke-width="1"/><path d="M-42,22 Q-32,36 -22,22Z" fill="#c9a869" stroke="#8a6a34" stroke-width="1"/><path d="M20,26 Q30,40 40,26Z" fill="#c9a869" stroke="#8a6a34" stroke-width="1"/></g>', 0);
+      case 'crook': return g('<path d="M0,26 L0,-56 Q0,-70 -9,-68 Q-14.4,-66 -12,-59" stroke="#8a6a44" stroke-width="2.6" fill="none" stroke-linecap="round"/>', 0);
+      case 'horn': return g('<path d="M-6,4 Q-8,-14 4,-22 Q14,-26 18,-18 Q8,-18 6,-6 Q4,2 -6,4Z" fill="#e8d8b0" stroke="#8a6a34" stroke-width="1.2"/><path d="M-6,4 Q-3,-1 2,-2" stroke="#8a6a34" stroke-width="1" fill="none"/>', -10);
+      case 'herbs': return g('<path d="M0,3 L-7,-20 M0,3 L0,-24 M0,3 L7,-20" stroke="#4a7a3a" stroke-width="1.6"/><path d="M-7,-20 Q-13,-24 -11,-29 Q-6,-26 -7,-20Z M0,-24 Q-5,-29 0,-34 Q5,-29 0,-24Z M7,-20 Q13,-24 11,-29 Q6,-26 7,-20Z" fill="#6ac85a"/><path d="M-3,1 h6" stroke="' + L.sash + '" stroke-width="2.4"/>', 0);
+      case 'oar': return g('<path d="M0,-62 L0,16" stroke="#8a6a44" stroke-width="2.4"/><path d="M-4.6,14 H4.6 L3.6,40 Q0,44 -3.6,40Z" fill="#b8905a" stroke="#6b4a2c" stroke-width="1"/>', 0);
+      case 'bow': return g('<path d="M-3,-38 Q-20,0 -3,38" stroke="#6b4a2c" stroke-width="2.6" fill="none" stroke-linecap="round"/><path d="M-3,-38 L-3,38" stroke="#e8e0cc" stroke-width=".9"/><path d="M-3,0 H24" stroke="#c9b078" stroke-width="1.4"/><path d="M24,0 l-4,-2.4 v4.8Z" fill="#cfd6df"/>', 0);
+      case 'seedbag': return g('<path d="M-8,4 Q-10,-8 -4,-14 H4 Q10,-8 8,4Z" fill="#8a6a4a" stroke="#4a3a2a" stroke-width="1"/><path d="M-4,-14 L-5,-18 H5 L4,-14" fill="#6a4a2a"/><path d="M-4,-13 Q0,-11 4,-13" stroke="#e6d08a" stroke-width="1.2" fill="none"/><circle cx="11" cy="6" r="1.3" fill="#e6d08a"/><circle cx="14" cy="10" r="1.3" fill="#e6d08a"/><circle cx="9" cy="12" r="1.3" fill="#e6d08a"/>', 0);
+      case 'jar': return g('<path d="M-8,-12 Q-13,0 -8,10 H8 Q13,0 8,-12Z" fill="#c08a4a" stroke="#6b4226" stroke-width="1.2"/><rect x="-6.4" y="-16.4" width="12.8" height="4.6" rx="1" fill="#8a5a36"/><path d="M-9,-3 H9" stroke="#6b4226" stroke-width=".9"/><path d="M-2,-2 h4 v5 h-4Z" fill="#efe0b0"/>', 0);
+      case 'basket': return g('<path d="M-10,-2 Q0,13 10,-2Z" fill="#c9a869" stroke="#8a6a34" stroke-width="1"/><path d="M-10,-2 Q0,-24 10,-2" stroke="#8a6a34" stroke-width="1.5" fill="none"/><path d="M-6,0 L-5,8 M0,1 V10 M6,0 L5,8" stroke="#8a6a34" stroke-width=".8"/><path d="M-4,-4 q3,-8 0,-9 M1,-4 q4,-8 1,-10" stroke="#6ac85a" stroke-width="1.4" fill="none"/>', 0);
+      case 'mirror2': return g('<rect x="-9" y="-26" width="18" height="22" rx="3" fill="#aab6c6" stroke="#6a7a8c" stroke-width="1.8"/><rect x="-6.4" y="-23.4" width="12.8" height="17" rx="2" fill="#e6f0fa"/><path d="M-4,-21 L2,-9" stroke="#fff" stroke-width="1.4" opacity=".8"/><path d="M0,-4 V10" stroke="#6a7a8c" stroke-width="3.2" stroke-linecap="round"/>', 0);
+      case 'gourd': return g('<path d="M0,0 V7" stroke="#6b4a2c" stroke-width="1.2"/><g transform="translate(0 31)"><path d="M0,2 C-8,-2 -8,-12 -3.4,-14.6 C-6.4,-18.6 -2.4,-25 1.6,-25 C5.6,-25 8.4,-18.6 4.8,-14.6 C9.4,-12 8,-2 0,2Z" fill="#c98a3a" stroke="#7a5018" stroke-width="1"/><path d="M1.6,-25.4 V-30" stroke="#6b4a2c" stroke-width="1.6"/><path d="M-3,-14.6 Q1,-12.6 5,-14.6" stroke="#7a5018" stroke-width=".9" fill="none"/></g>', 0);
+      case 'spade': return g('<path d="M0,26 L0,-52" stroke="#6b4a2c" stroke-width="2.6" stroke-linecap="round"/><path d="M-4.4,-52 h8.8" stroke="#6b4a2c" stroke-width="3" stroke-linecap="round"/><path d="M-6,26 H6 L5,40 Q0,45 -5,40Z" fill="#aeb4bc" stroke="#6a7078" stroke-width="1"/>', 0);
       default: return '';
     }
   }
@@ -196,10 +288,33 @@
     if (!L.ghost) s += '<ellipse cx="0" cy="1.4" rx="' + f(20 * (Pz.legs === 'wide' || Pz.legs === 'sit' || Pz.legs === 'lunge' ? 1.5 : 1)) + '" ry="3.4" fill="' + ink + '" opacity=".28"/>';
     // vật phía sau lưng (đòn gánh gác vai nằm sau đầu)
     let after = '';
+    const ghostGrad = (col) => c.lin('gh' + col.slice(1), [[0, col, 0.92], [0.6, col, 0.7], [1, col, 0]]);
+    // v2.26.0 (Thiên Cang Chân Dung): nét riêng phía sau thân — quầng sáng, gió, sóng, áo choàng, đuôi voan.
+    if (L.glow) s += K.glow(c, 0, -58, 42, L.glow, 0.6);
+    if (L.swirl) s += '<g fill="none" stroke="' + L.swirl + '" stroke-width="1.3" stroke-linecap="round" opacity=".72"><path d="M-36,-70 Q-26,-80 -16,-72 T4,-74"/><path d="M12,-52 Q24,-62 34,-54 T50,-56"/><path d="M-40,-36 Q-28,-46 -18,-38 T2,-40"/><path d="M18,-22 Q30,-30 40,-22 T54,-24"/></g>';
+    if (L.ripple) s += '<g fill="none" stroke="' + L.ripple + '" opacity=".8"><ellipse cx="0" cy="1.5" rx="21" ry="3.6" stroke-width="1.2"/><ellipse cx="0" cy="1.5" rx="32" ry="5.4" stroke-width=".9" opacity=".6"/><ellipse cx="0" cy="1.5" rx="44" ry="7.2" stroke-width=".7" opacity=".35"/></g>';
+    if (L.cape) {
+      const cp = 'M-8,-84 C-21,-70 -28,-36 -33,-3 Q0,8 33,-3 C28,-36 21,-70 8,-84Z';
+      s += '<path d="' + cp + '" fill="' + (L.ghost ? ghostGrad(L.cape) : L.cape) + '"/><path d="' + cp + '" fill="none" stroke="' + L.trim + '" stroke-width=".8" opacity=".4"/>';
+    }
+    if (L.train) s += '<path d="M4,-72 C30,-67 48,-40 68,-8 Q62,-1 53,-6 C38,-16 22,-26 4,-40Z" fill="' + L.train + '" opacity=".5"/><path d="M4,-60 C24,-54 40,-34 56,-12" stroke="' + L.trim + '" stroke-width=".8" fill="none" opacity=".5"/>';
     // thân dưới
     const skirt = SKIRT[Pz.legs] || SKIRT.stand;
-    const fade = L.ghost ? c.lin('gh' + robe.slice(1), [[0, robe, 0.92], [0.6, robe, 0.7], [1, robe, 0]]) : g;
-    s += '<path d="' + skirt + '" fill="' + fade + '"/>';
+    const fade = L.ghost ? ghostGrad(robe) : g;
+    // Áo hai sắc: 'h' = thân trên một màu, váy một màu; 'v' = nửa trái nửa phải (phần phải phủ bằng clipPath).
+    const robe2 = L.split && L.robe2 ? L.robe2 : null;
+    const fade2 = !robe2 ? null : L.ghost ? ghostGrad(robe2) : c.lin('fg' + robe2.slice(1), [[0, mix(robe2, '#ffffff', 0.22)], [0.55, robe2], [1, mix(robe2, ink, P.dark ? 0.55 : 0.35)]]);
+    let half = '';
+    if (L.split === 'v') {
+      const cid = c.id + 'cpR';
+      if (!c.cpR) {
+        c.cpR = 1;
+        c.defs.push('<clipPath id="' + cid + '"><rect x="0" y="-140" width="90" height="170"/></clipPath>');
+      }
+      half = ' clip-path="url(#' + cid + ')"';
+    }
+    s += '<path d="' + skirt + '" fill="' + (L.split === 'h' ? fade2 : fade) + '"/>';
+    if (half) s += '<path d="' + skirt + '" fill="' + fade2 + '"' + half + '/>';
     if (!L.ghost) {
       s += '<path d="' + skirt + '" fill="none" stroke="' + L.trim + '" stroke-width="1.2" opacity=".35" stroke-dasharray="0 0"/>';
       for (const ft of FEET[Pz.legs] || []) s += '<ellipse cx="' + ft[0] + '" cy="' + ft[1] + '" rx="5.2" ry="2.4" fill="' + mix(ink, '#000', 0.2) + '"/>';
@@ -207,8 +322,12 @@
     // thân trên (xoay quanh hông khi ngả người)
     const pivot = -46 + drop;
     s += '<g transform="translate(0 ' + drop + ') rotate(' + stoop + ' 0 -46)">';
-    s += '<path d="M-9,-85 Q-10.8,-66 -8.2,-46 L8.2,-46 Q10.8,-66 9,-85 Q0,-89.5 -9,-85Z" fill="' + fade + '"/>';
+    const torso = 'M-9,-85 Q-10.8,-66 -8.2,-46 L8.2,-46 Q10.8,-66 9,-85 Q0,-89.5 -9,-85Z';
+    s += '<path d="' + torso + '" fill="' + fade + '"/>';
+    if (half) s += '<path d="' + torso + '" fill="' + fade2 + '"' + half + '/>';
     s += '<path d="M-3.4,-87 L0,-72 L3.4,-87Z" fill="' + L.trim + '" opacity=".9"/>';
+    // Bảy sao Bắc Đẩu thêu trước ngực (Động Vi).
+    if (L.dipper) s += '<path d="M-6,-76 L-3.4,-73.2 L-0.4,-71.6 L2,-67.6 L6.4,-68.6 L5.6,-62.4 L1.2,-62.8 L2,-67.6" stroke="' + L.dipper + '" stroke-width=".6" fill="none" opacity=".7"/>' + [[-6, -76], [-3.4, -73.2], [-0.4, -71.6], [2, -67.6], [6.4, -68.6], [5.6, -62.4], [1.2, -62.8]].map((q) => '<circle cx="' + q[0] + '" cy="' + q[1] + '" r="1.15" fill="' + L.dipper + '"/>').join('');
     s += '<path d="M-8.4,-52 Q0,-49.4 8.4,-52 L8.2,-46.4 Q0,-44 -8.2,-46.4Z" fill="' + L.sash + '"/>';
     if (L.glass) s += '<path d="M-6,-82 L-3,-56 M5,-80 L2,-54 M-8,-70 L8,-66" stroke="#ffffff" stroke-width="1" opacity=".7"/>';
     // cánh tay
@@ -218,11 +337,11 @@
       extra.push(armPts([-7, -80], [-24, -60], 1), armPts([7, -80], [26, -58], -1), armPts([-6, -78], [-19, -88], 1), armPts([6, -78], [22, -92], -1));
     }
     if (Pz.pole) after += '<path d="M-38,-86 L38,-80" stroke="#2a2018" stroke-width="2.8" stroke-linecap="round"/><g class="sc-sway" style="transform-origin:-34px -86px"><path d="M-34,-86 L-34,-66" stroke="#6b4a2c" stroke-width="1"/><path d="M-42,-66 h16 l-2,16 h-12Z" fill="#8a6a44"/><ellipse cx="-34" cy="-66" rx="8" ry="1.8" fill="#9fc6d8"/></g><g class="sc-sway" style="transform-origin:34px -80px"><path d="M34,-80 L34,-60" stroke="#6b4a2c" stroke-width="1"/><path d="M26,-60 h16 l-2,16 h-12Z" fill="#8a6a44"/><ellipse cx="34" cy="-60" rx="8" ry="1.8" fill="#9fc6d8"/></g>';
-    const sleeve = (a, w) => '<path d="M' + a.map(pt0).join(' L') + '" stroke="' + robe + '" stroke-width="' + w + '" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="' + (L.ghost ? 0.88 : 1) + '"/>';
+    const sleeve = (a, w, col) => '<path d="M' + a.map(pt0).join(' L') + '" stroke="' + (col || robe) + '" stroke-width="' + w + '" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="' + (L.ghost ? 0.88 : 1) + '"/>';
     const pt0 = (p) => f(p[0]) + ',' + f(p[1]);
     for (const a of extra) s += sleeve(a, 4.4) + '<circle cx="' + f(a[2][0]) + '" cy="' + f(a[2][1]) + '" r="1.9" fill="#e8c9a8"/>';
     for (const a of arms) {
-      s += sleeve(a, 6.8);
+      s += sleeve(a, 6.8, L.split === 'v' && a === arms[1] ? robe2 : null);
       const e = a[1], h = a[2];
       const ux = h[0] - e[0], uy = h[1] - e[1], d = Math.hypot(ux, uy) || 1;
       s += '<path d="M' + f(h[0] - (ux / d) * 5) + ',' + f(h[1] - (uy / d) * 5) + ' L' + f(h[0]) + ',' + f(h[1]) + '" stroke="' + L.trim + '" stroke-width="8" stroke-linecap="round" opacity=".92"/>';
@@ -235,6 +354,10 @@
     if (hold && !Pz.pole) {
       const r = arms[1][2];
       s += holding(hold, r[0], r[1], L, ink);
+    }
+    if (L.hold2 && !Pz.pole) {
+      const l = arms[0][2];
+      s += holding(L.hold2, l[0], l[1], L, ink);
     }
     s += after + '</g></g>';
     return s;

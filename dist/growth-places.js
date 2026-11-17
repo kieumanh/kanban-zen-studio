@@ -408,7 +408,7 @@
     for (let i = 0; i < 6; i++) set += '<path d="' + smooth(Array.from({ length: 7 }, (_, k) => [-100 + k * 290, 880 + i * 36 + between(r, -10, 10)])) + '" stroke="' + mix(h.cloud, P.ink, 0.12) + '" stroke-width="3" fill="none" opacity=".45"/>';
     return { place: 'Biển mây Thần giới', far, mid, set, fg: h.sea(960, 2, '#ffffff', 0.85), ground: () => 836, depth: () => 1, hot: [800, 300] };
   };
-  // ---- v2.24.0 (Thập Nhị Phương): nơi riêng của mười một Phương thần (Phương Thìn đã có biển mây từ v2.20.0) ----------------
+  // ---- v2.24.0 (Thập Nhị Phương): nơi riêng của mười một Phương thần (Phương Thìn có biển mây từ v2.20.0, đến v2.26.0 có mương mây riêng ở cuối phần này) ----------------
   // Cùng mặt đất y = 836 như mọi cảnh Thần giới; trời lấy theo giờ của từng trang, cảnh chỉ thêm đất, vật và ánh sáng riêng.
   const floor = (c, id, top, bot, lift) => '<path d="M-100,1100 L-100,' + (840 + (lift || 0)) + ' Q800,' + (822 + (lift || 0)) + ' 1700,' + (840 + (lift || 0)) + ' L1700,1100Z" fill="' + c.lin(id, [[0, top], [1, bot]]) + '"/>';
   const stars = (r, n, y1, op) => { let s = ''; for (let i = 0; i < n; i++) s += '<circle cx="' + f(r() * W) + '" cy="' + f(Math.pow(r(), 1.4) * y1) + '" r="' + f(0.6 + r() * 1.4) + '" fill="#fff" opacity="' + f(op * (0.4 + r() * 0.6)) + '"/>'; return s; };
@@ -553,6 +553,67 @@
     for (let i = 0; i < 9; i++) { const x = 900 + i * 80, y = 880 + (i % 3) * 40; set += '<path d="M' + x + ',' + y + ' q-6,-18 -12,-24 M' + x + ',' + y + ' q4,-20 12,-26" stroke="#7ac85a" stroke-width="3" fill="none" stroke-linecap="round"/>'; }
     set += '<path d="M120,836 V700 M90,730 H150" stroke="' + mix('#5a4030', P.ink, 0.2) + '" stroke-width="6"/><circle cx="120" cy="690" r="16" fill="' + mix('#c9a06a', P.ink, 0.3) + '"/>';
     return { place: 'Ruộng trăng đỏ Phương Hợi', far, mid, set, fg: '', ground: () => 836, depth: () => 1, hot: [800, 240] };
+  };
+  // Phương Thìn (v2.26.0): mương mây — ruộng mây xếp bậc ở hai bên, mương dẫn mưa chạy xa dần về chân trời, guồng nước quay, cột đo mưa,
+  // và con rồng mây uốn chữ S trên trời (Vân Vũ phương thần cưỡi nó đi nắm hết mưa của Thần giới).
+  HEAVEN.thin = (c, r, h) => {
+    const P = c.P, cloud = h.cloud, gold = h.gold;
+    const water = mix('#8cbbe6', P.ink, P.dark ? 0.4 : 0.04), foam = mix('#eef7ff', P.ink, P.dark ? 0.4 : 0);
+    const wood = mix('#7a5a3a', P.ink, 0.2), stone = mix('#d9d3c2', P.ink, P.dark ? 0.45 : 0.08), jade = mix('#8fcdb8', P.ink, P.dark ? 0.4 : 0.1);
+    // Rồng mây: thân là chuỗi vầng mây thu nhỏ dần về phía đuôi; đầu có sừng, râu và mắt vàng.
+    const N = 30, bodyY = (t) => 440 - Math.sin(t * Math.PI * 2.2) * 120 - t * 170, hx = 1230, hy = bodyY(1);
+    let far = '<g opacity="' + (P.dark ? 0.55 : 0.86) + '">';
+    for (let i = 0; i < N; i++) {
+      const t = i / (N - 1), x = lerp(-60, hx, t), y = bodyY(t), rr = 14 + 30 * Math.pow(t, 0.85);
+      if (i % 3 === 1) far += '<path d="M' + f(x - 8) + ',' + f(y - rr + 3) + ' L' + f(x + 2) + ',' + f(y - rr - 16) + ' L' + f(x + 10) + ',' + f(y - rr + 3) + 'Z" fill="' + mix(cloud, gold, 0.25) + '"/>';
+      far += '<circle cx="' + f(x) + '" cy="' + f(y) + '" r="' + f(rr) + '" fill="' + cloud + '"/>';
+    }
+    far += '<path d="' + smooth(Array.from({ length: 16 }, (_, i) => [lerp(-60, hx, i / 15), bodyY(i / 15) + 3 + 12 * (i / 15)])) + '" stroke="' + mix(cloud, P.haze, 0.5) + '" stroke-width="3" fill="none" opacity=".6"/>';
+    far += '<g transform="translate(' + hx + ' ' + f(hy) + ')"><path d="M-34,-24 C0,-46 62,-44 100,-16 C114,-6 112,12 96,18 C62,38 8,40 -30,26Z" fill="' + cloud + '"/>'
+      + '<path d="M-4,-34 C-14,-72 -46,-86 -82,-80 C-54,-68 -34,-52 -22,-30Z M14,-38 C10,-70 -8,-90 -34,-98 C-20,-76 -6,-58 0,-38Z" fill="' + mix(cloud, gold, 0.3) + '"/>'
+      + '<path d="M94,0 C140,-8 176,10 196,44 M92,12 C134,30 150,64 148,98" stroke="' + cloud + '" stroke-width="3.2" fill="none" stroke-linecap="round"/>'
+      + '<path d="M-20,22 C20,32 70,28 100,14" stroke="' + mix(cloud, P.ink, 0.15) + '" stroke-width="2" fill="none" opacity=".6"/>'
+      + '<circle cx="34" cy="-12" r="5.6" fill="#ffd25a"/><circle cx="35" cy="-12" r="2.1" fill="#3a2410"/><circle cx="96" cy="-2" r="1.8" fill="' + mix(cloud, P.ink, 0.35) + '"/></g></g>'
+      + glow(c, hx + 34, hy - 12, 44, '#ffd25a', 0.45);
+    // Ruộng mây bậc thang: mỗi bậc một dải mây bo tròn có mương nước chạy dọc, nước đổ xuống bậc dưới ở đầu trong.
+    let mid = '';
+    const terraces = (xEdge, dir, n, y0, op) => {
+      let s = '';
+      for (let i = 0; i < n; i++) {
+        const w = 480 - i * 70, y = y0 - i * 68, x = dir < 0 ? xEdge : xEdge - w, xe = dir < 0 ? xEdge + w - 26 : xEdge - w + 26;
+        s += rect(x, y, w, 42, mix(cloud, P.haze, 0.12 + i * 0.04), ' rx="21" opacity="' + op + '"') + rect(x + 18, y + 9, w - 36, 7, water, ' rx="3.5" opacity="' + f(op * 0.9) + '"');
+        if (i) s += '<path d="M' + f(xe) + ',' + f(y + 22) + ' v68" stroke="' + water + '" stroke-width="6" opacity="' + f(op * 0.7) + '"/><path d="M' + f(xe - 5) + ',' + f(y + 40) + ' v40 M' + f(xe + 5) + ',' + f(y + 34) + ' v46" stroke="' + foam + '" stroke-width="1.6" opacity="' + f(op * 0.6) + '"/>';
+      }
+      return s;
+    };
+    mid += terraces(-70, -1, 5, 744, 0.55) + terraces(1670, 1, 5, 744, 0.55);
+    mid += pagoda(c, 1450, 470, 104, 3, mix(gold, P.ink, 0.35)) + pagoda(c, 160, 470, 84, 2, mix(gold, P.ink, 0.35));
+    // Cột đo mưa: trụ ngọc có vạch, miệng phễu vàng hứng mưa, nước dâng trong ruột cột.
+    mid += rect(1168, 470, 26, 330, jade) + rect(1175, 690, 12, 110, water, ' opacity=".9"') + '<path d="M1144,470 H1218 L1198,502 H1164Z" fill="' + gold + '"/>';
+    for (let i = 0; i < 9; i++) mid += '<path d="M1168,' + (510 + i * 31) + ' h' + (i % 2 ? 9 : 15) + '" stroke="' + mix(jade, P.ink, 0.45) + '" stroke-width="1.6"/>';
+    mid += mist(c, r, 640, 2, 0.4, mix(cloud, P.haze, 0.3));
+    // Mặt đất mây có mương dẫn mưa chạy xa dần về chân trời; bờ mương xếp đá.
+    let set = floor(c, 'thf', '#ffffff', mix(cloud, P.ink, 0.14));
+    const wat = c.lin('thw', [[0, mix(water, '#ffffff', 0.3)], [1, water]]);
+    for (const [xb, xt, wb, wt] of [[150, 640, 170, 20], [640, 760, 120, 14], [1000, 880, 120, 14], [1450, 960, 170, 20]]) {
+      set += '<path d="M' + f(xb - wb / 2 - 14) + ',1100 L' + f(xb + wb / 2 + 14) + ',1100 L' + f(xt + wt / 2 + 3) + ',842 L' + f(xt - wt / 2 - 3) + ',842Z" fill="' + stone + '"/>'
+        + '<path d="M' + f(xb - wb / 2) + ',1100 L' + f(xb + wb / 2) + ',1100 L' + f(xt + wt / 2) + ',842 L' + f(xt - wt / 2) + ',842Z" fill="' + wat + '"/>'
+        + '<path d="M' + f(xb - wb / 5) + ',1100 L' + f(xt - wt / 5) + ',842 M' + f(xb + wb / 4) + ',1100 L' + f(xt + wt / 4) + ',842" stroke="' + foam + '" stroke-width="2.2" opacity=".55"/>';
+    }
+    // Cống đá chặn mương giữa: hai trụ và tấm ván, nâng lên là nước chảy ra ruộng.
+    set += rect(545, 934, 20, 62, stone) + rect(715, 934, 20, 62, stone) + rect(545, 950, 190, 9, wood) + rect(630, 920, 8, 32, wood);
+    // Guồng nước bên trái: bánh gỗ mười hai nan, gầu hứng nước ở vành, quay rất chậm.
+    const wx = 170, wy = 706, wr = 132;
+    set += '<g class="sc-spin" style="transform-origin:' + wx + 'px ' + wy + 'px"><circle cx="' + wx + '" cy="' + wy + '" r="' + wr + '" fill="none" stroke="' + wood + '" stroke-width="10"/>';
+    for (let i = 0; i < 12; i++) {
+      const a = (i * Math.PI) / 6, ca = Math.cos(a), sa = Math.sin(a);
+      set += '<path d="M' + wx + ',' + wy + ' L' + f(wx + ca * wr) + ',' + f(wy + sa * wr) + '" stroke="' + wood + '" stroke-width="5"/><path d="M' + f(wx + ca * (wr - 4) - sa * 11) + ',' + f(wy + sa * (wr - 4) + ca * 11) + ' L' + f(wx + ca * (wr + 14) - sa * 11) + ',' + f(wy + sa * (wr + 14) + ca * 11) + ' L' + f(wx + ca * (wr + 14) + sa * 11) + ',' + f(wy + sa * (wr + 14) - ca * 11) + ' L' + f(wx + ca * (wr - 4) + sa * 11) + ',' + f(wy + sa * (wr - 4) - ca * 11) + 'Z" fill="' + mix(wood, '#ffffff', 0.12) + '"/>';
+    }
+    set += '</g><circle cx="' + wx + '" cy="' + wy + '" r="14" fill="' + mix(wood, P.ink, 0.2) + '"/><path d="M' + (wx - 70) + ',836 L' + wx + ',' + wy + ' L' + (wx + 70) + ',836" stroke="' + wood + '" stroke-width="9" fill="none" stroke-linejoin="round"/>';
+    // Cận cảnh: mây ướt phủ chân khung và vài vũng mưa gợn tròn.
+    let fg = h.sea(960, 2, '#ffffff', 0.82);
+    for (const [x, y, w] of [[250, 1020, 96], [1300, 1040, 128]]) fg += '<ellipse cx="' + x + '" cy="' + y + '" rx="' + w + '" ry="' + f(w * 0.16) + '" fill="' + water + '" opacity=".55"/><ellipse cx="' + x + '" cy="' + y + '" rx="' + f(w * 0.5) + '" ry="' + f(w * 0.08) + '" fill="none" stroke="' + foam + '" stroke-width="2" class="sc-ring"/>';
+    return { place: 'Mương mây Phương Thìn', far, mid, set, fg, ground: () => 836, depth: () => 1, hot: [1000, 260] };
   };
   SETS.heaven = (c, v) => {
     const P = c.P, r = c.rnd('hv');
