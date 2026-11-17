@@ -7162,6 +7162,28 @@
         outline: 2px solid #b44148
     }
 }
+:root[data-style=giangho] .quick-add-btn {
+    color: #6d2328
+}
+:root[data-style=giangho] .qa-preview {
+    border: 1px solid #ebd9be;
+    background: #fdf7ec
+}
+:root[data-style=giangho] .qa-row dt {
+    color: #624d40
+}
+:root[data-style=giangho] .qa-row dd {
+    color: #311f13
+}
+:root[data-style=giangho] .qa-muted {
+    color: #624d40
+}
+:root[data-style=giangho] .qa-warn {
+    color: #7e2b0c
+}
+:root[data-style=giangho] .qa-empty {
+    color: #624d40
+}
 :root[data-style=giangho][data-theme=dark] {
     --bg: #18130c;
     --paper: #1e1811;
@@ -14274,6 +14296,28 @@
         border-color: #c24d53;
         outline: 2px solid #c24d53
     }
+}
+:root[data-style=giangho][data-theme=dark] .quick-add-btn {
+    color: #fccac8
+}
+:root[data-style=giangho][data-theme=dark] .qa-preview {
+    border: 1px solid #453a32;
+    background: #1a150e
+}
+:root[data-style=giangho][data-theme=dark] .qa-row dt {
+    color: #e5cdbe
+}
+:root[data-style=giangho][data-theme=dark] .qa-row dd {
+    color: #f5dccc
+}
+:root[data-style=giangho][data-theme=dark] .qa-muted {
+    color: #e5cdbe
+}
+:root[data-style=giangho][data-theme=dark] .qa-warn {
+    color: #fdc7b5
+}
+:root[data-style=giangho][data-theme=dark] .qa-empty {
+    color: #e5cdbe
 }
 
 /* ---- Họa tiết Giang hồ viết tay (v1.86.0 · Chu Mặc) ------------------------------------------------------------------------

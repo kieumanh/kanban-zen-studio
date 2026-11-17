@@ -2166,3 +2166,28 @@ dialog[open] button[aria-label^="Đóng"],
   :is(#editor, .zen-fe-form) .zen-check-add textarea:focus { outline: none; }
   .zen-check-add:has(textarea:focus) { border-color: #7950c8; outline: 2px solid #7950c8; outline-offset: -2px; }
 }
+
+/* v2.35.0 (Thêm Nhanh): nút “+” trên thanh trên và hộp gõ một câu có xem trước. Nút dùng .icon-btn nên mang đúng kích thước chạm của thanh trên. */
+.quick-add-btn svg { width: 20px; height: 20px; }
+.quick-add-btn { color: #5d3c7a; }
+body.signed-out .quick-add-btn { display: none; }
+.qa-preview { display: grid; gap: 10px; margin: 14px 0 6px; padding: 14px 16px; border: 1px solid #e5daee; border-radius: 16px; background: #faf6fd; }
+.qa-row { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 10px; align-items: baseline; margin: 0; }
+.qa-row dt { margin: 0; font-size: 12px; font-weight: 700; letter-spacing: 0.04em; color: #685974; }
+.qa-row dd { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; margin: 0; font-size: 15px; font-weight: 600; line-height: 1.45; color: #352a44; overflow-wrap: anywhere; }
+.qa-row dd small { flex: 1 0 100%; font-size: 12px; font-weight: 400; }
+.qa-dot { display: inline-block; flex: none; width: 10px; height: 10px; border-radius: 50%; }
+.qa-muted { font-weight: 400; color: #685974; }
+.qa-warn { font-weight: 600; color: #8e3a1d; }
+.qa-empty { margin: 0; font-size: 14px; line-height: 1.5; color: #685974; }
+.qa-hint { margin-top: 10px; line-height: 1.55; }
+@media (max-width: 700px) {
+  .qa-row { grid-template-columns: 56px minmax(0, 1fr); }
+}
+/* Nút “+” là phần tử thứ ba của cụm nút bên phải nên cột phải được nới đủ cho nó, nếu không cụm nút lấn sang ô tìm kiếm. */
+@media (max-width: 700px) {
+  .topbar { grid-template-columns: 48px minmax(0, 1fr) 96px; }
+}
+@media (min-width: 701px) {
+  .topbar { grid-template-columns: minmax(0, 1fr) minmax(0, min(420px, 34vw)) minmax(min-content, 1fr); }
+}

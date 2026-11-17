@@ -4043,6 +4043,28 @@
         outline: 2px solid #845cd6
     }
 }
+:root[data-theme=dark] .quick-add-btn {
+    color: #dcc1f7
+}
+:root[data-theme=dark] .qa-preview {
+    border: 1px solid #403a45;
+    background: #17141b
+}
+:root[data-theme=dark] .qa-row dt {
+    color: #d0c3da
+}
+:root[data-theme=dark] .qa-row dd {
+    color: #dcd3ec
+}
+:root[data-theme=dark] .qa-muted {
+    color: #d0c3da
+}
+:root[data-theme=dark] .qa-warn {
+    color: #fbbaa4
+}
+:root[data-theme=dark] .qa-empty {
+    color: #d0c3da
+}
 
 :root[data-theme=dark] {
   color-scheme: dark;

@@ -204,6 +204,8 @@ jobs:
           node tests/growth-pace-browser.mjs
           # v2.34.0 (Tàng Bảo Các): kho vật phẩm trong trang Tu vi — sáu món, bà chủ tư vấn theo điểm đang có, bảng quy đổi nhập tay đủ tám mạch (không giá định sẵn).
           node tests/growth-store-browser.mjs
+          # v2.35.0 (Thêm Nhanh): gõ một câu “Gọi anh Sơn mai 9h #farm” → việc có hạn (ngày, giờ) và dự án; nút + trên thanh trên, xem trước, bảng lệnh; câu dễ nhầm giữ nguyên.
+          node tests/quickadd-browser.mjs
           node tests/growth-scene-browser.mjs
           node tests/note-chips-browser.mjs
           node tests/checklist-focus-ring-browser.mjs

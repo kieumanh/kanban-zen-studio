@@ -107,7 +107,7 @@
     });
   }
   function actions(){
-    const list=[{label:'Tạo công việc mới',hint:'C',run:()=>{const p=project();if(p&&editable())taskForm(p);else if(editable())projectForm();}},{label:'Tìm kiếm toàn bộ nội dung',run:()=>document.querySelector('#search')?.focus()},{label:'Thẻ gọn / đầy đủ',run:()=>{localWrite('zen-compact',String(!compact()));render();}}];
+    const list=[{label:'Tạo công việc mới',hint:'C',run:()=>{const p=project();if(p&&editable())taskForm(p);else if(editable())projectForm();}},{label:'Thêm nhanh bằng một câu',hint:'Gõ “Gọi anh Sơn mai 9h #farm”',run:()=>window.zenQuick?.open()},{label:'Tìm kiếm toàn bộ nội dung',run:()=>document.querySelector('#search')?.focus()},{label:'Thẻ gọn / đầy đủ',run:()=>{localWrite('zen-compact',String(!compact()));render();}}];
     [['dashboard','Tổng quan'],['projects','Bảng Kanban'],['budget','Phân bổ tài nguyên'],['habits','Việc hằng ngày'],['focus','Chế độ tập trung'],['notes','Ghi chú'],['calendar','Lịch'],['gantt','Gantt']].forEach(([v,label])=>list.push({label,run:()=>go(v)}));
     list.push({label:'Cài đặt',run:()=>accountPanel()});
     // v1.16.0: đổi giao diện từ bảng lệnh.
