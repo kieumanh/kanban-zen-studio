@@ -126,6 +126,12 @@
     // Tổng đàn
     'Xem việc quá hạn': 'Xem nhiệm vụ lỡ hẹn',
     'Cần làm hôm nay': 'Nhiệm vụ hôm nay',
+    // v2.41.0 (Hôm Nay Làm Gì): khối đầu trang Tổng quan
+    'Hôm nay làm gì': 'Hôm nay hành sự gì',
+    'Nên làm trước': 'Nên ra tay trước',
+    'Xem việc hôm nay →': 'Xem nhiệm vụ hôm nay →',
+    'Xem tất cả việc hôm nay →': 'Xem mọi nhiệm vụ hôm nay →',
+    'Bạn đang rảnh tay. Thêm một việc nhỏ cho hôm nay nhé.': 'Các hạ đang rảnh tay. Thêm một nhiệm vụ nhỏ cho hôm nay nhé.',
     'Hôm nay chưa có việc nào đến hạn.': 'Hôm nay chưa có nhiệm vụ nào tới kỳ.',
     'Quá hạn & sắp đến hạn': 'Lỡ hẹn & sắp tới kỳ',
     'Mở danh sách quá hạn →': 'Mở danh sách lỡ hẹn →',
@@ -251,7 +257,7 @@
     'Tìm ghi chú theo tiêu đề…': 'Truy tìm quyển theo tiêu đề…',
   }))
     add(k, v);
-  for (const [k, v] of Object.entries(GROUPS)) add(k, { to: v, in: '.work-legend, .stat-label, .wf-today-plan h2, .dashboard-plan-part h3, .wf-focus-group > h2' });
+  for (const [k, v] of Object.entries(GROUPS)) add(k, { to: v, in: '.work-legend, .stat-label, .wf-today-plan h2, .wf-today-now h2, .dashboard-plan-part h3, .wf-focus-group > h2' });
 
   // ---- v1.89.0 (Nhật Khóa): Hoàng lịch, Bế quan, Nhật khóa ------------------------------------------------------------------
   const HB_LEVEL = { 'Xuất sắc': 'Thâm hậu', 'Tốt': 'Vững vàng', 'Đang hình thành': 'Đang thành hình', 'Cần nâng đỡ': 'Cần khổ luyện' };

@@ -1,5 +1,5 @@
 /* v1.15.4 · dashboard priority, concise task cards, and predictable editing */
-.wf-today-plan{grid-template-columns:repeat(3,minmax(0,1fr));margin:0 0 22px}
+.wf-today-plan{grid-template-columns:repeat(2,minmax(0,1fr));margin:0 0 22px}
 .wf-today-plan>article{min-width:0}
 .wf-today-plan h2{align-items:flex-start;line-height:1.4}
 .dashboard-plan-part{padding-top:10px;margin-top:10px;border-top:1px solid #eee6f3}
@@ -80,14 +80,19 @@
 }
 @media(prefers-reduced-motion:reduce){.task-card.wf-task-card{transition:none!important}}
 
-/* v1.72.0 · Tổng quan theo ngữ cảnh: nhóm rỗng thu gọn, đầu trang điện thoại gọn */
-.wf-today-plan.has-empty-today{grid-template-columns:repeat(2,minmax(0,1fr))}
-.wf-today-plan .plan-empty-today{grid-column:1/-1;order:3;display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;min-height:0;padding:12px 16px}
-.wf-today-plan .plan-empty-today h2{margin:0;font-size:14px}
-.wf-today-plan .plan-empty-today p{margin:0;font-size:12px}
+/* v1.72.0 · Tổng quan theo ngữ cảnh: đầu trang điện thoại gọn */
+/* v2.41.0 · Hôm nay làm gì: khối riêng đứng đầu trang (xem dashboard.js); hai thẻ Quá hạn / Đang thực hiện giữ màu cũ theo lớp, không theo thứ tự */
+.wf-today-now{margin:0 0 16px;padding:20px 22px;border-top:3px solid #8a68b7;background:#fcfaff}
+.wf-today-now h2{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:0 0 6px;font-size:20px;line-height:1.4}
+.wf-today-now h2 small{font-size:12px;font-weight:600}
+.wf-today-now>.text-btn{display:inline-flex;min-height:38px;align-items:center;margin-top:8px;padding:6px 0;color:#76519b;font-weight:650}
+.wf-today-now.is-empty{padding-bottom:16px}
+.wf-today-now .dashboard-plan-part{margin-top:8px}
+.wf-today-plan>article.plan-late{border-top-color:#d27787;background:#fffafb}
+.wf-today-plan>article.plan-doing{border-top-color:#69a391;background:#f9fdfb}
 @media(max-width:700px){
- .wf-today-plan.has-empty-today{grid-template-columns:1fr}
- .wf-today-plan .plan-empty-today{padding:10px 14px}
+ .wf-today-now{padding:16px;margin-bottom:10px}
+ .wf-today-now h2{font-size:17px}
  .page-heading.dashboard-heading{display:flex;flex-direction:row;align-items:center;justify-content:space-between;gap:12px;margin:12px 0 12px}
  .page-heading.dashboard-heading .eyebrow,.page-heading.dashboard-heading .subtext{display:none}
  .page-heading.dashboard-heading h1{margin:0;font-size:22px;line-height:1.25}

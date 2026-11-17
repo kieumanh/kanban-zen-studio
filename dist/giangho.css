@@ -3718,6 +3718,21 @@
     background: #fffcf6 !important;
     border-top: 1px solid #f1e5d2
 }
+:root[data-style=giangho] .wf-today-now {
+    border-top: 3px solid #b95a5d;
+    background: #fef9f0
+}
+:root[data-style=giangho] .wf-today-now>.text-btn {
+    color: #8e363b
+}
+:root[data-style=giangho] .wf-today-plan>article.plan-late {
+    border-top-color: #d47879;
+    background: #fefaf1
+}
+:root[data-style=giangho] .wf-today-plan>article.plan-doing {
+    border-top-color: #69a391;
+    background: #fffaf2
+}
 :root[data-style=giangho] {
     --brand-purple: #bc3643;
     --bg: #fbf4e8;
@@ -10881,6 +10896,21 @@
 :root[data-style=giangho][data-theme=dark] #editor.task-editor .modal-foot {
     background: #1e1811 !important;
     border-top: 1px solid #3f352d
+}
+:root[data-style=giangho][data-theme=dark] .wf-today-now {
+    border-top: 3px solid #c66668;
+    background: #1e1811
+}
+:root[data-style=giangho][data-theme=dark] .wf-today-now>.text-btn {
+    color: #fdbfbd
+}
+:root[data-style=giangho][data-theme=dark] .wf-today-plan>article.plan-late {
+    border-top-color: #e18485;
+    background: #1e1811
+}
+:root[data-style=giangho][data-theme=dark] .wf-today-plan>article.plan-doing {
+    border-top-color: #75b09d;
+    background: #1e1811
 }
 :root[data-style=giangho][data-theme=dark] {
     --brand-purple: #bc3643;

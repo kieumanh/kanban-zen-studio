@@ -216,6 +216,8 @@ jobs:
           node tests/bottom-bar-browser.mjs
           # v2.40.0 (Menu Gọn): menu bên còn 8 mục chính; Tài nguyên, Lưu trữ, Thùng rác, Phiên bản gom vào nhóm "Kho".
           node tests/side-menu-kho-browser.mjs
+          # v2.41.0 (Hôm Nay Làm Gì): Tổng quan mở đầu bằng khối "Hôm nay làm gì"; dải N việc quá hạn nằm ngay dưới nó.
+          node tests/today-first-browser.mjs
           node tests/growth-scene-browser.mjs
           node tests/note-chips-browser.mjs
           node tests/checklist-focus-ring-browser.mjs

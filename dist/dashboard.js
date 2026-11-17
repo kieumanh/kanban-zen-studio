@@ -98,22 +98,37 @@ function refreshDashboardPlan(){
  const upcoming=tasks.filter(t=>dashboardDateMatches(t,'upcoming')).sort((a,b)=>dashboardDeadline(a).localeCompare(dashboardDeadline(b)));
  const doing=tasks.filter(t=>t.col==='Doing');
  const lists=[
-  {title:'Cần làm hôm nay',items:todayTasks,filter:'today',button:'Xem việc hôm nay'},
-  {title:'Quá hạn & sắp đến hạn',items:[...late,...upcoming],parts:[['Quá hạn',late],['Sắp đến hạn · 7 ngày',upcoming]],filter:'attention',button:'Xem danh sách'},
-  {title:'Đang thực hiện',items:doing,filter:'doing',button:'Xem việc đang làm'}
+  {title:'Quá hạn & sắp đến hạn',items:[...late,...upcoming],parts:[['Quá hạn',late],['Sắp đến hạn · 7 ngày',upcoming]],filter:'attention',button:'Xem danh sách',tone:'late'},
+  {title:'Đang thực hiện',items:doing,filter:'doing',button:'Xem việc đang làm',tone:'doing'}
  ];
  section.setAttribute('aria-label','Việc cần ưu tiên');
 // v1.72.0: Tổng quan theo ngữ cảnh. Nhóm rỗng không chiếm chỗ và không có nút dẫn tới danh sách rỗng:
-//  - "Cần làm hôm nay" rỗng thu thành một dòng (xuống cuối, cả chiều ngang) thay vì một thẻ cao bằng hai thẻ còn lại;
 //  - phần "Quá hạn"/"Sắp đến hạn"/"Đang thực hiện" không có việc chỉ còn một dòng chữ, bỏ nút "Mở danh sách" cho danh sách trống.
- section.classList.toggle('has-empty-today',!todayTasks.length);
+// v2.41.0 (Hôm Nay Làm Gì): "Cần làm hôm nay" thành khối riêng "Hôm nay làm gì" đứng ĐẦU trang, kể cả khi trống (khi đó gợi ý vài việc nên làm trước,
+//  thay cho dòng thu nhỏ ở cuối); thanh nhắc "N việc quá hạn" xuống ngay dưới khối này (xem dashboardPlaceStrip). Hai thẻ còn lại giữ nguyên.
  section.innerHTML=lists.map(group=>{
-  if(group.filter==='today'&&!group.items.length)return '<article class="panel plan-empty-today"><h2>'+group.title+' <small>0 việc</small></h2><p class="subtext">Hôm nay chưa có việc nào đến hạn.</p></article>';
   const empty=text=>'<p class="subtext">'+text+'</p>';
   const body=group.parts?group.parts.map(([title,items])=>'<div class="dashboard-plan-part"><h3>'+title+' <small>'+items.length+'</small></h3>'+(items.length?workTaskList(items,3)+'<button type="button" class="text-btn" data-dashboard-filter="'+(title==='Quá hạn'?'overdue':'upcoming')+'">Mở danh sách '+title.toLocaleLowerCase('vi')+' →</button>':empty('Không có việc '+title.split(' · ')[0].toLocaleLowerCase('vi')+'.'))+'</div>').join(''):(group.items.length?workTaskList(group.items,4)+'<button type="button" class="text-btn" data-dashboard-filter="'+group.filter+'">'+group.button+' →</button>':empty('Không có công việc trong nhóm này.'));
-  return '<article class="panel"><h2>'+group.title+' <small>'+group.items.length+' việc</small></h2>'+body+'</article>';
+  return '<article class="panel plan-'+group.tone+'"><h2>'+group.title+' <small>'+group.items.length+' việc</small></h2>'+body+'</article>';
  }).join('');
+ let now=$('#main .wf-today-now');
+ if(!now){now=document.createElement('section');now.className='panel wf-today-now';section.before(now);}
+ now.setAttribute('aria-label','Hôm nay làm gì');
+ const first=todayTasks.slice(0,5),more=todayTasks.length-first.length;
+ const next=[...late,...doing.filter(t=>!late.includes(t))].slice(0,3);
+ now.classList.toggle('is-empty',!todayTasks.length);
+ now.innerHTML='<h2>Hôm nay làm gì <small>'+todayTasks.length+' việc</small></h2>'+(todayTasks.length
+  ?workTaskList(first,5)+'<button type="button" class="text-btn" data-dashboard-filter="today">'+(more>0?'Xem tất cả việc hôm nay':'Xem việc hôm nay')+' →</button>'
+  :'<p class="subtext">Hôm nay chưa có việc nào đến hạn.</p>'+(next.length?'<div class="dashboard-plan-part"><h3>Nên làm trước <small>'+next.length+'</small></h3>'+workTaskList(next,3)+'</div>':'<p class="subtext">Bạn đang rảnh tay. Thêm một việc nhỏ cho hôm nay nhé.</p>'));
+ dashboardPlaceStrip();
 }
+// Thanh nhắc hạn (do refreshDueAlerts chèn lên đầu #main) nằm ngay dưới khối "Hôm nay làm gì" ở trang Tổng quan.
+function dashboardPlaceStrip(){
+ if(view!=='dashboard')return;
+ const now=document.querySelector('#main .wf-today-now'),strip=document.querySelector('#due-alert-strip');
+ if(now&&strip&&strip.previousElementSibling!==now)now.after(strip);
+}
+{const main=document.querySelector('#main');if(main)new MutationObserver(dashboardPlaceStrip).observe(main,{childList:true});}
 const dashboardPlanRenderBefore=render;
 render=function(){dashboardPlanRenderBefore();if(view==='dashboard')refreshDashboardPlan();};
 

@@ -1,6 +1,8 @@
 // v1.72.0: Tổng quan theo ngữ cảnh. Nhóm rỗng không chiếm chỗ; đầu trang điện thoại gọn. Kiểm ở 390 (chạm) / 820 (chạm) / 1440px.
-// A. Hôm nay rỗng + có việc quá hạn: "Cần làm hôm nay" thành một dòng cuối, cả chiều ngang; thẻ quá hạn lên đầu; phần rỗng không có nút.
-// B. Hôm nay CÓ việc: thẻ "Cần làm hôm nay" như cũ (danh sách + nút), không có dòng thu gọn.
+// A. Hôm nay rỗng + có việc quá hạn: thẻ quá hạn đứng trước thẻ đang thực hiện; phần rỗng không có nút.
+// B. Hôm nay CÓ việc: khối "Hôm nay làm gì" liệt kê việc và có nút xem.
+// v2.41.0 (Hôm Nay Làm Gì): "Cần làm hôm nay" không còn là dòng thu gọn ở cuối mà là khối riêng "Hôm nay làm gì" đứng đầu (xem tests/today-first-browser.mjs);
+// ở đây A và B chỉ đổi phần nói về dòng thu gọn, mọi khẳng định còn lại (nút/phần rỗng, đầu trang điện thoại, bộ lọc, không tràn ngang) giữ nguyên.
 // C. Điện thoại: đầu trang (lời chào + nút) thấp hơn 100px, bỏ dòng mô tả; tên dự án trong thẻ không bẻ dòng.
 // D. Nút "Mở danh sách quá hạn" vẫn mở đúng danh sách; không tràn ngang.
 import assert from 'node:assert/strict';
@@ -30,13 +32,10 @@ try {
         const parts = [...plan.querySelectorAll('.dashboard-plan-part')].map((d) => ({ title: d.querySelector('h3').firstChild.textContent.trim(), n: d.querySelector('h3 small').textContent, buttons: [...d.querySelectorAll('[data-dashboard-filter]')].map((b) => b.dataset.dashboardFilter), note: d.querySelector(':scope > p.subtext')?.textContent || '' }));
         return { cls: plan.className, arts, parts, planW: plan.getBoundingClientRect().width, overflow: document.documentElement.scrollWidth - innerWidth };
       });
-      const today = r.arts.find((a) => a.title === 'Cần làm hôm nay'), late = r.arts.find((a) => a.title.startsWith('Quá hạn')), doing = r.arts.find((a) => a.title === 'Đang thực hiện');
-      assert.ok(today.empty, width + 'px: hôm nay rỗng phải là dòng thu gọn');
-      assert.ok(r.cls.includes('has-empty-today'), width + 'px: lớp has-empty-today');
-      assert.ok(today.h <= 80, width + 'px: dòng hôm nay rỗng phải thấp (≤80px), thấy ' + Math.round(today.h));
-      assert.ok(today.top > late.top && today.top >= doing.top, width + 'px: dòng hôm nay rỗng nằm cuối');
+      const late = r.arts.find((a) => a.title.startsWith('Quá hạn')), doing = r.arts.find((a) => a.title === 'Đang thực hiện');
+      assert.equal(r.arts.length, 2, width + 'px: khối ưu tiên chỉ còn hai thẻ (Quá hạn, Đang thực hiện)');
+      assert.ok(!r.arts.some((a) => a.empty) && !r.cls.includes('has-empty-today'), width + 'px: không còn dòng hôm nay thu gọn ở cuối');
       assert.ok(late.top <= doing.top, width + 'px: thẻ quá hạn lên đầu');
-      assert.ok(today.w >= r.planW - 2, width + 'px: dòng hôm nay rỗng rộng bằng cả khối, thấy ' + Math.round(today.w) + '/' + Math.round(r.planW));
       const upcoming = r.parts.find((p) => p.title.startsWith('Sắp đến hạn'));
       assert.equal(upcoming.n, '0');
       assert.deepEqual(upcoming.buttons, [], width + 'px: phần sắp đến hạn rỗng không có nút mở danh sách');
@@ -65,7 +64,7 @@ try {
       } else {
         assert.ok(m.sub, width + 'px: máy tính vẫn có dòng mô tả');
       }
-      console.log(width + 'px A/C/D ok · dòng hôm nay ' + Math.round(today.h) + 'px, đầu trang ' + Math.round(m.headH) + 'px');
+      console.log(width + 'px A/C/D ok · đầu trang ' + Math.round(m.headH) + 'px');
       await context.close();
     }
     // ---- B: hôm nay có việc ----
@@ -74,10 +73,10 @@ try {
       await page.waitForSelector('.wf-today-plan article');
       const r = await page.evaluate(() => {
         const plan = document.querySelector('.wf-today-plan');
-        const today = [...plan.querySelectorAll(':scope > article')].find((a) => a.querySelector('h2').firstChild.textContent.trim() === 'Cần làm hôm nay');
-        return { cls: plan.className, empty: today.classList.contains('plan-empty-today'), text: today.textContent, button: !!today.querySelector('[data-dashboard-filter="today"]'), count: today.querySelector('h2 small').textContent, overflow: document.documentElement.scrollWidth - innerWidth };
+        const today = document.querySelector('.wf-today-now');
+        return { cls: plan.className, empty: today.classList.contains('is-empty'), text: today.textContent, button: !!today.querySelector('[data-dashboard-filter="today"]'), count: today.querySelector('h2 small').textContent, overflow: document.documentElement.scrollWidth - innerWidth };
       });
-      assert.ok(!r.empty && !r.cls.includes('has-empty-today'), width + 'px: có việc hôm nay thì không thu gọn');
+      assert.ok(!r.empty && !r.cls.includes('has-empty-today'), width + 'px: có việc hôm nay thì khối hôm nay không ở trạng thái trống');
       assert.ok(r.text.includes('Việc hạn hôm nay'), width + 'px: thẻ hôm nay liệt kê việc');
       assert.ok(r.button, width + 'px: thẻ hôm nay có nút xem việc hôm nay');
       assert.equal(r.count, '1 việc');

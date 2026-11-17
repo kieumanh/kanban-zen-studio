@@ -45,12 +45,12 @@ try {
     const { context, page, server } = await h.open(width, { touch, now: '2026-11-12T09:00:00+07:00', setup: GH });
     const errors = [];
     page.on('pageerror', (e) => errors.push(e.message));
-    // 1a. Tổng đàn.
+    // 1a. Tổng đàn. (v2.41.0: khối “Cần làm hôm nay” thành “Hôm nay làm gì” → Giang hồ “Hôm nay hành sự gì”.)
     await h.show(page, 'dashboard');
     const main = await page.locator('#main').innerText();
-    for (const t of ['nhiệm vụ lỡ hẹn', 'Lỡ hẹn & sắp tới kỳ', 'Nhiệm vụ hôm nay', 'Đại sự đang hành hoặc vừa mở', 'Mọi đại sự →', 'Tổng đại sự', 'Tiến cảnh tổng thể', 'Toàn cảnh giang hồ', 'Tiến cảnh từng đại sự', 'đơn vị công thành', 'Kỳ hạn'])
+    for (const t of ['nhiệm vụ lỡ hẹn', 'Lỡ hẹn & sắp tới kỳ', 'Hôm nay hành sự gì', 'Đại sự đang hành hoặc vừa mở', 'Mọi đại sự →', 'Tổng đại sự', 'Tiến cảnh tổng thể', 'Toàn cảnh giang hồ', 'Tiến cảnh từng đại sự', 'đơn vị công thành', 'Kỳ hạn'])
       assert.ok(main.includes(t), 'Tổng đàn có chữ “' + t + '”' + at);
-    for (const t of ['việc quá hạn', 'Quá hạn & sắp đến hạn', 'Cần làm hôm nay', 'Tổng dự án', 'Tiến độ tổng thể', 'Bức tranh công việc']) assert.ok(!main.includes(t), 'Tổng đàn không còn “' + t + '”' + at);
+    for (const t of ['việc quá hạn', 'Quá hạn & sắp đến hạn', 'Cần làm hôm nay', 'Hôm nay làm gì', 'Tổng dự án', 'Tiến độ tổng thể', 'Bức tranh công việc']) assert.ok(!main.includes(t), 'Tổng đàn không còn “' + t + '”' + at);
     assert.ok((await text(page, '.project-card h3')).includes('Đang thực hiện'), 'tên dự án "Đang thực hiện" giữ nguyên' + at);
     // 1b. Bảng cáo thị.
     await h.show(page, 'projects');

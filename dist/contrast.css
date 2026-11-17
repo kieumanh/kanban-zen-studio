@@ -2634,6 +2634,21 @@
     background: #ffffff !important;
     border-top: 1px solid #171518
 }
+:root[data-contrast=high] .wf-today-now {
+    border-top: 3px solid #191224;
+    background: #ffffff
+}
+:root[data-contrast=high] .wf-today-now>.text-btn {
+    color: #060606
+}
+:root[data-contrast=high] .wf-today-plan>article.plan-late {
+    border-top-color: #230f13;
+    background: #ffffff
+}
+:root[data-contrast=high] .wf-today-plan>article.plan-doing {
+    border-top-color: #0c1915;
+    background: #ffffff
+}
 :root[data-contrast=high] {
     --bg: #ffffff;
     --paper: #ffffff;
@@ -6718,6 +6733,21 @@
 :root[data-theme=dark][data-contrast=high] #editor.task-editor .modal-foot {
     background: #030303 !important;
     border-top: 1px solid #cecece
+}
+:root[data-theme=dark][data-contrast=high] .wf-today-now {
+    border-top: 3px solid #cecece;
+    background: #030303
+}
+:root[data-theme=dark][data-contrast=high] .wf-today-now>.text-btn {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .wf-today-plan>article.plan-late {
+    border-top-color: #cecece;
+    background: #030303
+}
+:root[data-theme=dark][data-contrast=high] .wf-today-plan>article.plan-doing {
+    border-top-color: #cecece;
+    background: #030303
 }
 :root[data-theme=dark][data-contrast=high] {
     --bg: #030303;

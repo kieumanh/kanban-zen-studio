@@ -2633,6 +2633,21 @@
     background: #1b181f !important;
     border-top: 1px solid #3a3540
 }
+:root[data-theme=dark] .wf-today-now {
+    border-top: 3px solid #9674c4;
+    background: #1b181f
+}
+:root[data-theme=dark] .wf-today-now>.text-btn {
+    color: #d5b9f6
+}
+:root[data-theme=dark] .wf-today-plan>article.plan-late {
+    border-top-color: #e08393;
+    background: #1b181f
+}
+:root[data-theme=dark] .wf-today-plan>article.plan-doing {
+    border-top-color: #75b09d;
+    background: #1b181f
+}
 :root[data-theme=dark] {
     --bg: #151219;
     --paper: #1b181f;
