@@ -176,9 +176,8 @@ jobs:
           node tests/growth-gods-browser.mjs
           # v2.14.0 (Thần Lộ): lĩnh ngộ tám quy luật, thắng 35 Thiên Cang, 12 Phương thần, ngang tài Thần Vương; chiến ký.
           node tests/growth-godpath-browser.mjs
-          node tests/growth-body3d-browser.mjs
-          # v2.16.0 (Ma Ảnh): phe ác dựng 3D bằng lõi growth-rig.js.
-          node tests/growth-foe3d-browser.mjs
+          # v2.21.0 (Kiếm Ảnh Trở Về): hiệp khách và phe ác trở lại tranh 2D; bỏ lõi 3D cùng hai bài kiểm của nó.
+          node tests/growth-art2d-browser.mjs
           node tests/growth-scene-browser.mjs
           node tests/note-chips-browser.mjs
           node tests/checklist-focus-ring-browser.mjs

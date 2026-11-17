@@ -3093,9 +3093,6 @@
 :root[data-contrast=high] .bg-be-key-dot {
     border: 3px solid #060606
 }
-:root[data-contrast=high] .gr-form strong i {
-    color: #060606
-}
 :root[data-contrast=high] .gr-chip:hover {
     background: #ffffff
 }
@@ -7118,9 +7115,6 @@
 }
 :root[data-theme=dark][data-contrast=high] .bg-be-key-dot {
     border: 3px solid #cecece
-}
-:root[data-theme=dark][data-contrast=high] .gr-form strong i {
-    color: #f5f5f5
 }
 :root[data-theme=dark][data-contrast=high] .gr-chip:hover {
     background: #030303
