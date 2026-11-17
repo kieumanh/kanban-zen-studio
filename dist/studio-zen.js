@@ -165,6 +165,17 @@
     return result;
   };
 })();
+/* v2.38.0 (Đầu Trang Điện Thoại Gọn): dải dự án (#tabs) và thanh chế độ xem Bảng / Lịch / Gantt chỉ có nghĩa khi đang xem một dự án.
+   Gắn lớp zen-project-view lên <body> đúng ở ba trang đó; CSS (≤700px) ẩn hai thanh ở mọi trang khác để nhường chỗ cho nội dung. */
+(() => {
+  const PROJECT_VIEWS = ['projects', 'calendar', 'gantt'];
+  const before = render;
+  render = function (...args) {
+    const result = before.apply(this, args);
+    document.body.classList.toggle('zen-project-view', PROJECT_VIEWS.includes(view));
+    return result;
+  };
+})();
 /* v1.15.41: hộp thoại có tên đọc được và tiêu điểm đầu hợp lý. Mọi <dialog> gọi showModal() đều qua đây (hộp thoại dùng chung #editor, báo cáo, chia sẻ...). */
 (() => {
   const nativeShow = HTMLDialogElement.prototype.showModal;

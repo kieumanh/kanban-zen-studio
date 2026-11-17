@@ -2191,3 +2191,11 @@ body.signed-out .quick-add-btn { display: none; }
 @media (min-width: 701px) {
   .topbar { grid-template-columns: minmax(0, 1fr) minmax(0, min(420px, 34vw)) minmax(min-content, 1fr); }
 }
+
+/* v2.38.0 (Đầu Trang Điện Thoại Gọn): trên điện thoại, dải dự án và thanh Bảng / Lịch / Gantt chỉ hiện ở ba trang đó (xem studio-zen.js). Trước đây chúng chiếm khoảng 135px trên cùng của mọi trang (tổng đầu trang ≈ 190/844px). */
+@media (max-width: 700px) {
+  body:not(.zen-project-view) #tabs,
+  body:not(.zen-project-view) .mobile-viewbar {
+    display: none !important;
+  }
+}
