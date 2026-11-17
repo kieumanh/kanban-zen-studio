@@ -10,7 +10,33 @@ document.addEventListener('toggle',e=>{if(!e.target.matches('.zen-focus-notes,.z
 const zenUsabilityFocus=wfPaintFocus;
 wfPaintFocus=function(){zenUsabilityFocus();if(view!=='focus'||!_WF.focus)return;const aside=document.querySelector('.wf-focus-workspace>aside');if(!aside)return;const details=document.createElement('details');details.className='zen-focus-notes';const noteState=zenFocusNoteState.get(_WF.focus.p+':'+_WF.focus.t)||{};details.open=!!noteState.notes;const summary=document.createElement('summary');summary.textContent='Ghi chú liên quan';aside.before(details);details.append(summary,aside);const actions=aside.querySelector('.wf-focus-note-actions');if(actions){const manage=document.createElement('details');manage.className='zen-focus-manage';manage.open=!!noteState.manage;manage.innerHTML='<summary>Quản lý ghi chú liên kết</summary>';actions.before(manage);manage.append(actions);aside.querySelectorAll('[data-focus-unlink]').forEach(button=>manage.append(button));}};
 const zenUsabilityCalendar=workCalendar;
-workCalendar=function(){const html=zenUsabilityCalendar();if(!matchMedia('(max-width:700px)').matches)return html;const template=document.createElement('template');template.innerHTML=html;const calendarEvents=scheduleEvents();template.content.querySelectorAll('.month-cell').forEach(cell=>{const time=cell.querySelector('time');if(!time)return;const day=time.dateTime,count=zenCalendarDayEvents(calendarEvents,day).length;const button=document.createElement('button');button.type='button';button.dataset.zenSelectDay=day;button.className='zen-calendar-date';button.setAttribute('aria-pressed',String(day===zenCalendarDay));button.setAttribute('aria-label',day+', '+count+' công việc');button.textContent=time.textContent+(count?' · '+count:'');time.replaceWith(button);});const monthPrefix=calendarYear+'-'+String(calendarMonth+1).padStart(2,'0');if(!zenCalendarDay.startsWith(monthPrefix))zenCalendarDay=monthPrefix+'-01';const events=zenCalendarDayEvents(calendarEvents,zenCalendarDay);return template.innerHTML+'<section class="panel zen-day-agenda"><h2>Lịch ngày '+esc(dateLabel(zenCalendarDay))+'</h2>'+(events.map(t=>'<button type="button" class="zen-agenda-task" data-task="'+esc(t.id)+'" data-pid="'+esc(t.project.id)+'"><strong>'+esc(t.title)+'</strong><span>'+esc(t.project.name)+' · '+esc(zenCalendarEventTime(t,zenCalendarDay)||'Cả ngày')+'</span><span>'+taskPct(t)+'% hoàn thành · Đổi lịch trong chi tiết</span></button>').join('')||'<p>Chưa có công việc trong ngày này.</p>')+'</section>';};
+// v2.42.0 (Lịch Điện Thoại): ≤700px, ô ngày chỉ còn số ngày và tối đa 3 chấm màu (màu dự án) thay cho tên việc bị cắt thành 3 dòng; tên việc nằm ở
+// "Lịch ngày" ngay dưới lưới (trước đó nằm dưới cả mục Chưa lên lịch). Chạm một ngày để chọn ngày; chạm một việc trong "Lịch ngày" để mở việc.
+workCalendar=function(){
+ const html=zenUsabilityCalendar();
+ if(!matchMedia('(max-width:700px)').matches)return html;
+ const template=document.createElement('template');template.innerHTML=html;
+ const calendarEvents=scheduleEvents();
+ template.content.querySelectorAll('.month-cell').forEach(cell=>{
+  const time=cell.querySelector('time');if(!time)return;
+  const day=time.dateTime,dayEvents=zenCalendarDayEvents(calendarEvents,day),count=dayEvents.length;
+  const button=document.createElement('button');button.type='button';button.dataset.zenSelectDay=day;button.className='zen-calendar-date';
+  button.setAttribute('aria-pressed',String(day===zenCalendarDay));button.setAttribute('aria-label',day+', '+count+' công việc');button.textContent=time.textContent;time.replaceWith(button);
+  cell.querySelectorAll('.month-lanes,.month-event').forEach(node=>node.remove());
+  if(!count)return;
+  const dots=dayEvents.slice(0,3).map(t=>t.project.color);
+  cell.insertAdjacentHTML('beforeend','<span class="zen-cal-dots" aria-hidden="true">'+dots.map(color=>'<i style="--dot:'+esc(color)+'"></i>').join('')+(count>3?'<b>+</b>':'')+'</span>');
+ });
+ const monthPrefix=calendarYear+'-'+String(calendarMonth+1).padStart(2,'0');if(!zenCalendarDay.startsWith(monthPrefix))zenCalendarDay=monthPrefix+'-01';
+ const events=zenCalendarDayEvents(calendarEvents,zenCalendarDay);
+ const agenda=document.createElement('section');agenda.className='panel zen-day-agenda';
+ agenda.innerHTML='<h2>Lịch ngày '+esc(dateLabel(zenCalendarDay))+(zenCalendarDay===today()?' <em>Hôm nay</em>':'')+'</h2>'+(events.map(t=>'<button type="button" class="zen-agenda-task" data-task="'+esc(t.id)+'" data-pid="'+esc(t.project.id)+'" style="--event-color:'+esc(t.project.color)+'"><strong>'+esc(t.title)+'</strong><span>'+esc(t.project.name)+' · '+esc(zenCalendarEventTime(t,zenCalendarDay)||'Cả ngày')+'</span><span>'+taskPct(t)+'% hoàn thành · Đổi lịch trong chi tiết</span></button>').join('')||'<p>Chưa có công việc trong ngày này.</p>');
+ const scroll=template.content.querySelector('.month-scroll');
+ if(scroll)scroll.after(agenda);else template.content.append(agenda);
+ const help=template.content.querySelector('.help-copy');
+ if(help&&help.textContent.startsWith('Chạm vào công việc'))help.textContent='Chạm vào một ngày để xem việc của ngày đó. Việc chưa đặt ngày nằm ở mục Chưa lên lịch bên dưới.';
+ return template.innerHTML;
+};
 const zenUsabilityFinish=finishGanttDrag;
 finishGanttDrag=function(commit){const g=ganttPointer,before=g&&{start:g.task.start,end:g.task.end,due:g.task.due};zenUsabilityFinish(commit);if(commit&&g&&g.days){const t=project(g.pid)?.tasks.find(t=>t.id===g.id);if(t&&JSON.stringify([t.start,t.end,t.due])!==g.original){zenScheduleUndo={pid:g.pid,id:g.id,before,after:JSON.stringify([t.start,t.end,t.due])};document.querySelector('#main')?.insertAdjacentHTML('afterbegin','<aside class="zen-schedule-feedback" role="status">Đã đổi lịch: '+esc(t.title)+' · '+esc(dateLabel(t.start?.slice(0,10)||t.due))+' → '+esc(dateLabel(t.end?.slice(0,10)||t.due))+' <button type="button" class="btn" data-zen-schedule-undo>Hoàn tác</button><button type="button" class="btn" data-task="'+esc(t.id)+'" data-pid="'+esc(g.pid)+'">Chỉnh ngày</button></aside>');}}};
 const zenUsabilitySync=syncStatus;

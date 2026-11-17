@@ -389,7 +389,7 @@
 }
 :root[data-style=giangho] .side-bottom > .gh-rank.has-emblem {
   position: relative;
-  min-height: 62px;
+  min-height: 64px;
   padding-bottom: 14px;
 }
 :root[data-style=giangho] .gh-rank.has-emblem .gh-rank-seal {
@@ -512,9 +512,19 @@
   color: var(--gh-seal-text);
 }
 @media (max-width: 700px) {
+  /* v2.42.0 (Lịch Điện Thoại): nút ngày phủ cả ô (xem studio-zen.css), nên ngày âm nằm ngay dưới số ngày, chấm màu ở đáy ô. */
+  :root[data-style=giangho] .month-grid .month-cell {
+    min-height: 64px;
+  }
   :root[data-style=giangho] .month-cell .gh-lunar {
-    margin: -4px 0 2px;
+    position: absolute;
+    top: 26px;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    margin: 0;
     font-size: 12px;
+    pointer-events: none;
   }
   :root[data-style=giangho] .month-cell .gh-term {
     display: none;

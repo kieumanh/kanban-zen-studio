@@ -218,6 +218,8 @@ jobs:
           node tests/side-menu-kho-browser.mjs
           # v2.41.0 (Hôm Nay Làm Gì): Tổng quan mở đầu bằng khối "Hôm nay làm gì"; dải N việc quá hạn nằm ngay dưới nó.
           node tests/today-first-browser.mjs
+          # v2.42.0 (Lịch Điện Thoại): lưới tháng ≤700px chỉ còn số ngày và chấm màu; việc của ngày nằm ngay dưới lưới.
+          node tests/phone-calendar-browser.mjs
           node tests/growth-scene-browser.mjs
           node tests/note-chips-browser.mjs
           node tests/checklist-focus-ring-browser.mjs

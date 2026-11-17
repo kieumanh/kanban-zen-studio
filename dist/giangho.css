@@ -7228,6 +7228,31 @@
         box-shadow: 0 6px 16px rgba(163,48,58,0.271)
     }
 }
+@media (max-width: 700px) {
+    :root[data-style=giangho] .month-grid .zen-calendar-date[aria-pressed='true'] {
+        background: #f3e5cd;
+        color: #530110;
+        box-shadow: inset 0 3px 0 #b44148
+    }
+    :root[data-style=giangho] .month-grid .month-cell.today .zen-calendar-date {
+        box-shadow: inset 0 0 0 2px #b44148
+    }
+    :root[data-style=giangho] .zen-cal-dots i {
+        background: var(--dot, #bc3643);
+        box-shadow: 0 0 0 1.5px #fffbf6
+    }
+    :root[data-style=giangho] .zen-cal-dots b {
+        background: #940524;
+        color: #ffffff
+    }
+    :root[data-style=giangho] .zen-day-agenda h2 em {
+        background: #f7eddb;
+        color: #7d001c
+    }
+    :root[data-style=giangho] .zen-agenda-task {
+        border-left: 5px solid var(--event-color, #b44148)
+    }
+}
 :root[data-style=giangho][data-theme=dark] {
     --bg: #18130c;
     --paper: #1e1811;
@@ -14407,6 +14432,31 @@
         box-shadow: 0 6px 16px rgba(254,149,150,0.271)
     }
 }
+@media (max-width: 700px) {
+    :root[data-style=giangho][data-theme=dark] .month-grid .zen-calendar-date[aria-pressed='true'] {
+        background: #251a0e;
+        color: #fcd5d4;
+        box-shadow: inset 0 3px 0 #c24d53
+    }
+    :root[data-style=giangho][data-theme=dark] .month-grid .month-cell.today .zen-calendar-date {
+        box-shadow: inset 0 0 0 2px #c24d53
+    }
+    :root[data-style=giangho][data-theme=dark] .zen-cal-dots i {
+        background: var(--dot, #bc3643);
+        box-shadow: 0 0 0 1.5px #362c24
+    }
+    :root[data-style=giangho][data-theme=dark] .zen-cal-dots b {
+        background: #940524;
+        color: #ffffff
+    }
+    :root[data-style=giangho][data-theme=dark] .zen-day-agenda h2 em {
+        background: #140e08;
+        color: #fec9c8
+    }
+    :root[data-style=giangho][data-theme=dark] .zen-agenda-task {
+        border-left: 5px solid var(--event-color, #c24d53)
+    }
+}
 
 /* ---- Họa tiết Giang hồ viết tay (v1.86.0 · Chu Mặc) ------------------------------------------------------------------------
    Chép nguyên vào cuối dist/giangho.css bởi scripts/generate-themes.mjs. Quy tắc: không dùng !important (thắng bằng độ ưu tiên
@@ -14798,7 +14848,7 @@
 }
 :root[data-style=giangho] .side-bottom > .gh-rank.has-emblem {
   position: relative;
-  min-height: 62px;
+  min-height: 64px;
   padding-bottom: 14px;
 }
 :root[data-style=giangho] .gh-rank.has-emblem .gh-rank-seal {
@@ -14921,9 +14971,19 @@
   color: var(--gh-seal-text);
 }
 @media (max-width: 700px) {
+  /* v2.42.0 (Lịch Điện Thoại): nút ngày phủ cả ô (xem studio-zen.css), nên ngày âm nằm ngay dưới số ngày, chấm màu ở đáy ô. */
+  :root[data-style=giangho] .month-grid .month-cell {
+    min-height: 64px;
+  }
   :root[data-style=giangho] .month-cell .gh-lunar {
-    margin: -4px 0 2px;
+    position: absolute;
+    top: 26px;
+    left: 0;
+    right: 0;
+    z-index: 1;
+    margin: 0;
     font-size: 12px;
+    pointer-events: none;
   }
   :root[data-style=giangho] .month-cell .gh-term {
     display: none;

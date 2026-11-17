@@ -1682,3 +1682,16 @@ save = function (...args) {
   if (bell) new MutationObserver(syncDot).observe(bell, { childList: true, subtree: true });
   syncDot();
 })();
+
+// v2.42.0 (Lịch Điện Thoại): ≤700px, trang Lịch đặt thẻ tiến độ dự án xuống dưới "Lịch ngày", để lưới tháng và danh sách việc của ngày nằm ngay trong màn hình đầu.
+(() => {
+  const phone = matchMedia('(max-width: 700px)');
+  const before = render;
+  render = function () {
+    before();
+    if (view !== 'calendar' || !phone.matches) return;
+    const summary = document.querySelector('#main > .project-view-summary'),
+      agenda = document.querySelector('#main > .zen-day-agenda');
+    if (summary && agenda && agenda.nextElementSibling !== summary) agenda.after(summary);
+  };
+})();

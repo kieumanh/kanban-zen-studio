@@ -4099,6 +4099,19 @@
         color: #d3c4fe
     }
 }
+@media (max-width: 700px) {
+    :root[data-theme=dark] .month-grid .zen-calendar-date[aria-pressed='true'] {
+        background: #1f1927;
+        color: #dacdfe
+    }
+    :root[data-theme=dark] .zen-day-agenda h2 em {
+        background: #110e15;
+        color: #d3c4fe
+    }
+    :root[data-theme=dark] .zen-agenda-task {
+        border-left: 5px solid var(--event-color, #845cd6)
+    }
+}
 
 :root[data-theme=dark] {
   color-scheme: dark;

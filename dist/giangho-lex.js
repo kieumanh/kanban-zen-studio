@@ -267,6 +267,7 @@
     'Danh sách': { to: 'Liệt kê', in: '.zen-cal-mode' },
     'Hạn': { to: 'Kỳ hạn', in: '.zen-event-kind' },
     'Chạm vào công việc để xem chi tiết. Công việc chưa đặt ngày nằm ở mục Chưa lên lịch bên dưới.': 'Chạm vào nhiệm vụ để xem tường tận. Nhiệm vụ chưa định ngày nằm ở mục Chưa định ngày bên dưới.',
+    'Chạm vào một ngày để xem việc của ngày đó. Việc chưa đặt ngày nằm ở mục Chưa lên lịch bên dưới.': 'Chạm vào một ngày để xem nhiệm vụ của ngày đó. Nhiệm vụ chưa định ngày nằm ở mục Chưa định ngày bên dưới.',
     'Chưa lên lịch': { to: 'Chưa định ngày', in: '.zen-unscheduled' },
     'Mọi công việc đã có lịch hoặc hạn.': 'Mọi nhiệm vụ đã có ngày hoặc kỳ hạn.',
     'Kiểu hiển thị lịch': 'Kiểu hiển thị Hoàng lịch',

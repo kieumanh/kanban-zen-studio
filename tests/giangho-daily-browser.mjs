@@ -46,7 +46,9 @@ try {
     hasNot(main, ['Chạm vào công việc', 'Mọi công việc đã có lịch'], 'Hoàng lịch' + at);
     // Lưới tháng (chữ nằm trực tiếp trong nút) hoặc liệt kê (thẻ strong), tùy kiểu xem mặc định của thiết bị.
     const events = await page.evaluate(() => [...[...document.querySelectorAll('.month-event')].map((e) => [...e.childNodes].filter((n) => n.nodeType === 3).map((n) => n.nodeValue.trim()).join('')), ...[...document.querySelectorAll('.zen-ma-body strong')].map((e) => e.textContent.trim())]);
-    assert.ok(events.includes('Hạn'), 'việc tên "Hạn" giữ nguyên trên lịch: ' + events + at);
+    // v2.42.0: lưới tháng ≤700px chỉ còn số ngày và chấm màu; tên việc nằm ở "Sự vụ trong ngày" sau khi chạm ngày (kiểm ở nhánh điện thoại bên dưới).
+    if (width <= 700) assert.equal(await page.locator('.month-event').count(), 0, 'lưới tháng trên điện thoại không còn tên việc: ' + events + at);
+    else assert.ok(events.includes('Hạn'), 'việc tên "Hạn" giữ nguyên trên lịch: ' + events + at);
     assert.equal(await page.locator('#main .page-heading .subtext').first().innerText(), 'Chưa lên lịch', 'tên dự án "Chưa lên lịch" giữ nguyên' + at);
     assert.equal(await noOverflow(page), true, 'lịch không tràn ngang' + at);
     if (await page.locator('.zen-cal-mode').count()) {

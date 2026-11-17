@@ -1,6 +1,8 @@
 // v1.82.0: rà soát giao diện ở 3 kích thước — điện thoại 390 px (chạm), máy tính bảng 820 px (chạm), máy tính để bàn 1440 px (chuột).
-// A. Lịch: hàng tiêu đề thứ chỉ cao theo chữ; ô lịch trên điện thoại chỉ hiện tối đa 3 dòng tên việc (tên đầy đủ nằm ở "Lịch ngày");
+// A. Lịch: hàng tiêu đề thứ chỉ cao theo chữ; ô lịch trên điện thoại không để tên việc dài làm cao ô (tên đầy đủ nằm ở "Lịch ngày");
 //    ô ngày không còn cao 150 px khi trống.
+//    v2.42.0 (Lịch Điện Thoại): ô lịch ≤700px chỉ còn số ngày và chấm màu thay cho tên việc bị cắt 3 dòng; phần kiểm "tên dài không làm cao ô"
+//    đổi thành "mọi ô cùng thấp dù có tên rất dài" (xem thêm tests/phone-calendar-browser.mjs).
 // B. Thiết bị cảm ứng: mọi nút, liên kết, ô chọn bấm được đều có cạnh ngắn ≥ 38 px (ô tích nhỏ nằm trong nhãn đủ lớn thì được tính theo nhãn).
 // C. Không tràn ngang ở các màn hình chính và hộp thoại chính, cả ba kích thước.
 import assert from 'node:assert/strict';
@@ -67,17 +69,14 @@ try {
     const m = await page.evaluate(() => {
       const head = document.querySelector('.month-weekday').getBoundingClientRect().height;
       const cells = [...document.querySelectorAll('.month-cell')].map((c) => c.getBoundingClientRect().height);
-      const ev = [...document.querySelectorAll('.month-event')].map((e) => ({ title: e.title, h: e.getBoundingClientRect().height, clamp: getComputedStyle(e).webkitLineClamp }));
-      return { head, minCell: Math.min(...cells), ev };
+      const maxCell = Math.max(...cells);
+      const labels = document.querySelectorAll('.month-cell .month-event, .month-cell .month-lanes').length;
+      return { head, minCell: Math.min(...cells), maxCell, labels };
     });
     assert.ok(m.head < 60, 'hàng tiêu đề thứ chỉ cao theo chữ, không phải 150 px (390px): ' + m.head);
     assert.ok(m.minCell <= 100, 'ô ngày trống thấp lại (390px): ' + m.minCell);
-    const long = m.ev.find((e) => e.title.startsWith(LONG));
-    assert.ok(long, 'có thẻ việc tên rất dài trong ô lịch');
-    assert.equal(long.clamp, '3', 'ô lịch trên điện thoại giới hạn 3 dòng tên việc');
-    assert.ok(long.h <= 62, 'thẻ việc tên dài chỉ cao tối đa 3 dòng (không phải hàng trăm px): ' + long.h);
-    const huge = m.ev.find((e) => e.title.startsWith(NOSPACE));
-    assert.ok(huge && huge.h <= 62, 'tên dài không có khoảng trắng cũng không làm ô cao vọt: ' + (huge && huge.h));
+    assert.ok(m.maxCell <= 100, 'ô có việc tên rất dài vẫn thấp như ô trống (390px): ' + m.maxCell);
+    assert.equal(m.labels, 0, 'ô lịch trên điện thoại không còn tên việc, chỉ có chấm màu (390px)');
     assert.equal(await noOverflow(page), 0, 'lịch không tràn ngang (390px)');
     // Tên đầy đủ vẫn đọc được ở "Lịch ngày" sau khi chạm vào ngày.
     await page.click('[data-zen-select-day="2026-11-01"]');

@@ -2309,3 +2309,95 @@ body.signed-out .quick-add-btn { display: none; }
     bottom: calc(84px + env(safe-area-inset-bottom));
   }
 }
+
+/* v2.42.0 (Lịch Điện Thoại): lưới tháng ≤700px chỉ còn số ngày và tối đa 3 chấm màu của dự án; nguyên ô là vùng chạm; "Lịch ngày" nằm ngay dưới lưới. */
+@media (max-width: 700px) {
+  .month-grid .month-cell {
+    position: relative;
+    min-height: 52px;
+    padding: 0;
+  }
+  .month-grid .zen-calendar-date {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    width: 100%;
+    min-width: 0;
+    min-height: 0;
+    max-width: 100%;
+    padding: 5px 0 0;
+    border-radius: 0;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  /* Ngày được chọn: nền tím nhạt + chữ đậm (không đảo sang chữ trắng), nên chấm, dấu "+" và ngày âm nằm trên nền ô vẫn đủ tương phản. */
+  .month-grid .zen-calendar-date[aria-pressed='true'] {
+    background: #ece2fa;
+    color: #3d2466;
+    box-shadow: inset 0 3px 0 #7950c8;
+    font-weight: 800;
+  }
+  .month-grid .month-cell.today .zen-calendar-date {
+    font-weight: 800;
+    box-shadow: inset 0 0 0 2px #7950c8;
+  }
+  .zen-cal-dots {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    pointer-events: none;
+  }
+  .zen-cal-dots i {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--dot, #7950c8);
+    box-shadow: 0 0 0 1.5px #ffffff;
+  }
+  /* Trang Lịch: bỏ nhãn nhỏ và dòng mô tả của tiêu đề để lưới và "Lịch ngày" lên cao hơn. */
+  #main:has(.zen-day-agenda) > .page-heading .eyebrow,
+  #main:has(.zen-day-agenda) > .page-heading .subtext {
+    display: none;
+  }
+  #main:has(.zen-day-agenda) > .page-heading {
+    margin-bottom: 8px;
+  }
+  .zen-cal-dots b {
+    min-width: 14px;
+    padding: 1px 2px;
+    border-radius: 999px;
+    background: #5a2f9c;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+  }
+  .zen-day-agenda {
+    margin-top: 14px;
+  }
+  .zen-day-agenda h2 em {
+    margin-left: 6px;
+    padding: 2px 9px;
+    border-radius: 999px;
+    background: #f2ebfb;
+    color: #5a2f9c;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 700;
+    vertical-align: middle;
+  }
+  .zen-agenda-task {
+    gap: 4px;
+    margin: 8px 0 0;
+    padding: 12px 14px;
+    border-left: 5px solid var(--event-color, #7950c8);
+  }
+}
