@@ -330,6 +330,11 @@
     "text/javascript; charset=utf-8"
   ],
   [
+    "/growth-emblem.js",
+    "growth-emblem.js",
+    "text/javascript; charset=utf-8"
+  ],
+  [
     "/growth.js",
     "growth.js",
     "text/javascript; charset=utf-8"

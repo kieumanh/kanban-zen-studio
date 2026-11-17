@@ -382,6 +382,54 @@
   color: var(--zen-text-muted, #6b5a4c);
 }
 
+/* v2.32.0 (Huy Hiệu Bách Cấp): ấn tròn trên thanh bên đổi thành huy hiệu của cấp hiện tại; số cấp thành chấm nhỏ ở góc, vòng tiến cấp
+   thành thanh mảnh dưới thẻ. Chưa nhập cấp (hoặc thiếu tệp huy hiệu) thì giữ ấn tròn cũ. */
+:root[data-style=giangho] .gh-rank-emblem {
+  display: none;
+}
+:root[data-style=giangho] .side-bottom > .gh-rank.has-emblem {
+  position: relative;
+  min-height: 62px;
+  padding-bottom: 14px;
+}
+:root[data-style=giangho] .gh-rank.has-emblem .gh-rank-seal {
+  position: relative;
+  display: block;
+  width: 44px;
+  height: 44px;
+  border-radius: 0;
+  background: none;
+}
+:root[data-style=giangho] .gh-rank.has-emblem .gh-rank-emblem {
+  display: block;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.28));
+}
+:root[data-style=giangho] .gh-rank.has-emblem .gh-rank-seal b {
+  position: absolute;
+  right: -6px;
+  bottom: -4px;
+  width: auto;
+  min-width: 20px;
+  height: 18px;
+  padding: 0 4px;
+  border: 1.5px solid var(--gh-seal);
+  border-radius: 999px;
+  font-size: 10.5px;
+  line-height: 1;
+}
+:root[data-style=giangho] .gh-rank.has-emblem::after {
+  content: '';
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 5px;
+  height: 3px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--gh-seal) calc(var(--gh-rank-pct, 0) * 1%), var(--gh-line) 0);
+}
+
 /* Ấn chương: ảnh đại diện mặc định (chữ viết tắt) thành con dấu vuông bo góc, viền son kép trên nền giấy. Màu chữ giữ theo quy tắc
    tương phản sẵn có của ứng dụng (studio-zen.css ép màu chữ ảnh đại diện), nên nền là giấy sáng / mực tối thay vì nền son. */
 :root[data-style=giangho] .avatar:not(.has-photo) {

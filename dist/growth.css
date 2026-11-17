@@ -841,3 +841,38 @@ dialog.gr-story.is-god .gr-story-head .eyebrow{color:#2f5fa8}
 @keyframes sc-flash{0%,83%,100%{opacity:0}84%{opacity:.5}86%{opacity:0}88%{opacity:.4}92%{opacity:0}}
 @keyframes sc-wave{0%,100%{transform:skewY(0)}50%{transform:skewY(3deg)}}
 }
+
+/* v2.32.0 (Huy Hiệu Bách Cấp): mỗi cấp một huy hiệu riêng (dist/growth-emblem.js). Hình dựng bằng SVG <symbol> dùng chung trong trang;
+   khung dày dần theo cảnh giới, ngọc trên vành sáng thêm theo từng cấp. Kích thước do lớp chứa quyết định; không dùng style nội tuyến. */
+.zem-sprite{position:absolute;width:0;height:0;overflow:hidden;pointer-events:none}
+.zem{display:block;width:100%;height:100%;overflow:visible;forced-color-adjust:none}
+/* Khối cảnh giới: huy hiệu bên trái, chữ bên phải. */
+.gr-realm.has-emblem{grid-template-columns:auto minmax(0,1fr);column-gap:14px;row-gap:6px;align-items:center}
+.gr-realm.has-emblem>:not(.gr-emblem){grid-column:2;min-width:0}
+.gr-realm.has-emblem>.gr-emblem{grid-column:1;grid-row:1/span 4;align-self:center}
+.gr-emblem{--zem-glint:rgb(255 255 255/.5);position:relative;display:block;width:88px;height:88px}
+.gr-emblem .zem{filter:drop-shadow(0 2px 3px rgb(58 42 33/.3))}
+.gr-emblem:not(.is-empty)::after{content:'';position:absolute;inset:14%;border-radius:50%;pointer-events:none;background:linear-gradient(115deg,transparent 40%,var(--zem-glint) 50%,transparent 60%) 170% 0/260% 100% no-repeat;animation:zem-glint 8s ease-in-out 1.5s infinite}
+.gr-emblem.is-empty::before{content:'';position:absolute;inset:14%;border:2px dashed color-mix(in srgb,var(--gr-gold) 65%,var(--gr-line));border-radius:50%}
+:root[data-theme=dark] .gr-emblem .zem{filter:drop-shadow(0 2px 4px rgb(0 0 0/.5))}
+@keyframes zem-glint{0%,60%{background-position:170% 0}100%{background-position:-70% 0}}
+/* Danh sách 103 cấp: mỗi cấp một viên thuốc có huy hiệu nhỏ; cấp chưa đạt còn mờ. */
+.gr-names li{display:flex;align-items:center;gap:6px;padding-left:4px}
+.gr-names-zem{flex:none;display:block;width:24px;height:24px}
+.gr-names li.is-locked .gr-names-zem{opacity:.4;filter:grayscale(1)}
+.gr-names li.is-now .gr-names-zem{filter:drop-shadow(0 0 3px color-mix(in srgb,var(--gr-gold) 75%,transparent))}
+/* Nghi thức Đột phá: huy hiệu cấp mới gắn bên hiệp khách như tấm huân chương. */
+.gr-bt-emblem{position:absolute;left:calc(50% + 34px);bottom:2px;width:88px;height:88px;filter:drop-shadow(0 3px 5px rgb(40 20 10/.35));animation:gr-bt-medal .9s .55s cubic-bezier(.2,.9,.25,1.15) both}
+@keyframes gr-bt-medal{0%{opacity:0;transform:scale(1.7) rotate(-14deg)}100%{opacity:1;transform:none}}
+dialog.gr-breakthrough.is-still .gr-bt-emblem{animation:none}
+/* Thẻ "Huy hiệu mới" khi lên cấp thường: nổi dưới thanh đầu trang vài giây, không chặn thao tác. */
+.zem-pop{--gr-paper:#fdf8ef;--gr-line:#e8dcc6;--gr-ink:#3a2a21;--gr-seal-text:#a32c40;--zem-shadow:0 8px 28px rgb(58 42 33/.22);position:fixed;left:50%;top:calc(84px + env(safe-area-inset-top));z-index:95;display:flex;align-items:center;gap:12px;width:max-content;max-width:calc(100vw - 28px);padding:8px 20px 8px 10px;border:1px solid var(--gr-line);border-radius:999px;background:var(--gr-paper);color:var(--gr-ink);box-shadow:var(--zem-shadow);transform:translateX(-50%);animation:zem-pop 4.8s ease both;pointer-events:none}
+:root[data-theme=dark] .zem-pop{--gr-paper:#241f2b;--gr-line:#3d3448;--gr-ink:#efe6d8;--gr-seal-text:#f0a3b0;--zem-shadow:0 8px 28px rgb(0 0 0/.5)}
+.zem-pop-badge{flex:none;width:52px;height:52px;filter:drop-shadow(0 2px 3px rgb(58 42 33/.3))}
+.zem-pop-text{min-width:0}
+.zem-pop-text small{display:block;font-size:11.5px;font-weight:700;letter-spacing:.06em;color:var(--gr-seal-text)}
+.zem-pop-text strong{display:block;font:600 15px/1.3 var(--serif);overflow-wrap:anywhere}
+@keyframes zem-pop{0%{opacity:0;transform:translate(-50%,-16px) scale(.94)}8%{opacity:1;transform:translate(-50%,0) scale(1)}88%{opacity:1;transform:translate(-50%,0) scale(1)}100%{opacity:0;transform:translate(-50%,-8px) scale(.98)}}
+@keyframes zem-pop-fade{0%{opacity:0}8%{opacity:1}88%{opacity:1}100%{opacity:0}}
+@media (max-width:520px){.gr-emblem{width:72px;height:72px}.gr-realm.has-emblem{column-gap:10px}}
+@media (prefers-reduced-motion:reduce){.gr-emblem:not(.is-empty)::after{animation:none;display:none}.gr-bt-emblem{animation:none}.zem-pop{animation:zem-pop-fade 4.8s linear both}}

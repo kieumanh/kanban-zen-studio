@@ -198,6 +198,8 @@ jobs:
           node tests/growth-quyen3-browser.mjs
           # v2.31.0 (Mắt Xích Cuối): Quyển Bốn, truyện cấp 80–95 dài thêm 26 trang có tranh riêng; cấp 96–100 giữ nguyên.
           node tests/growth-quyen4-browser.mjs
+          # v2.32.0 (Huy Hiệu Bách Cấp): mỗi cấp một huy hiệu riêng (103 hình), khung dày dần theo cảnh giới; trang Tu vi, thang cấp, thẻ lên cấp, đột phá, thanh bên.
+          node tests/growth-emblem-browser.mjs
           node tests/growth-scene-browser.mjs
           node tests/note-chips-browser.mjs
           node tests/checklist-focus-ring-browser.mjs

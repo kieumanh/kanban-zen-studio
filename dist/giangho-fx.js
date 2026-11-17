@@ -6,6 +6,7 @@
 //  3. Danh hiệu trên thanh bên (Giang hồ, đã có Tu vi): cảnh giới · danh xưng cấp (v2.5.0), cấp và vòng tiến cảnh tới cấp kế; bấm để mở Tu vi.
 //  4. Nghi thức Đột phá (Tu vi, cả hai phong cách): lưu công lực mà bước sang cảnh giới mới thì hiện một bảng nghi thức; chương truyện
 //     ký (nếu có) mở sau khi khép bảng. Tắt cùng "Thông báo điểm nghiệp" trong Cài đặt → Thông báo.
+// v2.32.0: danh hiệu trên thanh bên và nghi thức Đột phá mang huy hiệu của cấp hiện tại (dist/growth-emblem.js).
 // Tắt 1 và 2 ở Cài đặt → Giao diện → "Hiệu ứng ấn son, nén hương" (zen-gh-fx, theme.js).
 (() => {
   const root = document.documentElement;
@@ -116,7 +117,7 @@
       box = document.createElement('button');
       box.type = 'button';
       box.className = 'gh-rank';
-      box.innerHTML = '<span class="gh-rank-seal"><b></b></span><span class="gh-rank-text"><strong></strong><small></small></span>';
+      box.innerHTML = '<span class="gh-rank-seal"><span class="gh-rank-emblem" aria-hidden="true"></span><b></b></span><span class="gh-rank-text"><strong></strong><small></small></span>';
       box.addEventListener('click', () => {
         document.querySelector('.sidebar')?.classList.remove('open');
         if (typeof go === 'function') go('growth');
@@ -124,6 +125,13 @@
       slot.prepend(box);
     }
     box.style.setProperty('--gh-rank-pct', r.pct);
+    // v2.32.0 (Huy Hiệu Bách Cấp): ấn tròn đổi thành huy hiệu của cấp hiện tại (số cấp thành chấm nhỏ ở góc); thanh tiến cấp nằm dưới thẻ.
+    const Z = window.zenEmblem, em = box.querySelector('.gh-rank-emblem'), lv = Z && r.level ? String(r.level) : '';
+    box.classList.toggle('has-emblem', !!lv);
+    if (em && em.dataset.level !== lv) {
+      em.dataset.level = lv;
+      em.innerHTML = lv ? Z.html(r.level) : '';
+    }
     box.querySelector('b').textContent = r.level;
     box.querySelector('strong').textContent = r.name;
     box.querySelector('small').textContent = (r.title || 'Chưa nhập cảnh giới') + ' · ' + next;
@@ -150,6 +158,8 @@
     // v2.5.0: cấp 100 là đột phá thành Thần (Thần cảnh), lời nghi thức riêng.
     const god = r.god && r.level === (G.GOD || 100);
     const who = name(G.heroName ? G.heroName() : 'Hiệp khách');
+    // v2.32.0: huy hiệu của cấp vừa đạt gắn bên hiệp khách như tấm huân chương.
+    const emblem = window.zenEmblem && r.level ? '<div class="gr-bt-emblem" data-level="' + r.level + '">' + window.zenEmblem.html(r.level) + '</div>' : '';
     const d = document.createElement('dialog');
     d.className = 'gr-breakthrough' + (reduce() ? ' is-still' : '');
     d.setAttribute('aria-labelledby', 'gr-bt-title');
@@ -157,7 +167,9 @@
     d.innerHTML =
       '<form method="dialog"><div class="gr-bt-stage" aria-hidden="true"><i class="gr-bt-ring"></i><i class="gr-bt-ring is-2"></i><i class="gr-bt-ring is-3"></i><div class="gr-bt-hero">' +
       art +
-      '</div></div><p class="eyebrow">' +
+      '</div>' +
+      emblem +
+      '</div><p class="eyebrow">' +
       (god ? 'ĐỘT PHÁ THÀNH THẦN' : 'ĐỘT PHÁ CẢNH GIỚI') +
       '</p><h2 id="gr-bt-title">' +
       name(r.name) +

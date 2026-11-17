@@ -5935,6 +5935,21 @@
     color: #f8f1e4;
     background: rgba(21,13,5,0.58)
 }
+:root[data-style=giangho] .gr-emblem:not(.is-empty)::after {
+    background: linear-gradient(115deg,transparent 40%,var(--zem-glint) 50%,transparent 60%) 170% 0/260% 100% no-repeat
+}
+:root[data-style=giangho] .gr-emblem.is-empty::before {
+    border: 2px dashed color-mix(in srgb,var(--gr-gold) 65%,var(--gr-line))
+}
+:root[data-style=giangho] .zem-pop {
+    border: 1px solid var(--gr-line);
+    background: var(--gr-paper);
+    color: var(--gr-ink);
+    box-shadow: var(--zem-shadow)
+}
+:root[data-style=giangho] .zem-pop-text small {
+    color: var(--gr-seal-text)
+}
 :root[data-style=giangho] {
     --muted: #685345;
     --text-muted: #685345
@@ -12922,6 +12937,21 @@
     color: #f8f1e4;
     background: rgba(21,13,5,0.58)
 }
+:root[data-style=giangho][data-theme=dark] .gr-emblem:not(.is-empty)::after {
+    background: linear-gradient(115deg,transparent 40%,var(--zem-glint) 50%,transparent 60%) 170% 0/260% 100% no-repeat
+}
+:root[data-style=giangho][data-theme=dark] .gr-emblem.is-empty::before {
+    border: 2px dashed color-mix(in srgb,var(--gr-gold) 65%,var(--gr-line))
+}
+:root[data-style=giangho][data-theme=dark] .zem-pop {
+    border: 1px solid var(--gr-line);
+    background: var(--gr-paper);
+    color: var(--gr-ink);
+    box-shadow: var(--zem-shadow)
+}
+:root[data-style=giangho][data-theme=dark] .zem-pop-text small {
+    color: var(--gr-seal-text)
+}
 :root[data-style=giangho][data-theme=dark] {
     --muted: #e1ccbf;
     --text-muted: #e1ccbf
@@ -14405,6 +14435,54 @@
   font-size: 11.5px;
   line-height: 1.3;
   color: var(--zen-text-muted, #6b5a4c);
+}
+
+/* v2.32.0 (Huy Hiệu Bách Cấp): ấn tròn trên thanh bên đổi thành huy hiệu của cấp hiện tại; số cấp thành chấm nhỏ ở góc, vòng tiến cấp
+   thành thanh mảnh dưới thẻ. Chưa nhập cấp (hoặc thiếu tệp huy hiệu) thì giữ ấn tròn cũ. */
+:root[data-style=giangho] .gh-rank-emblem {
+  display: none;
+}
+:root[data-style=giangho] .side-bottom > .gh-rank.has-emblem {
+  position: relative;
+  min-height: 62px;
+  padding-bottom: 14px;
+}
+:root[data-style=giangho] .gh-rank.has-emblem .gh-rank-seal {
+  position: relative;
+  display: block;
+  width: 44px;
+  height: 44px;
+  border-radius: 0;
+  background: none;
+}
+:root[data-style=giangho] .gh-rank.has-emblem .gh-rank-emblem {
+  display: block;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 1px 2px rgb(0 0 0 / 0.28));
+}
+:root[data-style=giangho] .gh-rank.has-emblem .gh-rank-seal b {
+  position: absolute;
+  right: -6px;
+  bottom: -4px;
+  width: auto;
+  min-width: 20px;
+  height: 18px;
+  padding: 0 4px;
+  border: 1.5px solid var(--gh-seal);
+  border-radius: 999px;
+  font-size: 10.5px;
+  line-height: 1;
+}
+:root[data-style=giangho] .gh-rank.has-emblem::after {
+  content: '';
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 5px;
+  height: 3px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, var(--gh-seal) calc(var(--gh-rank-pct, 0) * 1%), var(--gh-line) 0);
 }
 
 /* Ấn chương: ảnh đại diện mặc định (chữ viết tắt) thành con dấu vuông bo góc, viền son kép trên nền giấy. Màu chữ giữ theo quy tắc

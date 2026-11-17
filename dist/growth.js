@@ -193,10 +193,10 @@
     const names = REALMS.map((_, k) => {
       const x = realmInfo(k + 1);
       return '<li class="gr-names-realm' + (x.i === r.realm ? ' is-now' : '') + '"><strong>' + x.name + '</strong><small>' + esc(x.note) + '</small><ol class="gr-names" start="' + x.from + '">' +
-        x.levels.map((n, j) => { const lv = x.from + j; return '<li' + (lv === r.level ? ' class="is-now" aria-current="true"' : lv < r.level ? ' class="is-done"' : '') + (isGate(lv) ? ' data-gate' : '') + '><b>' + lv + '</b> ' + n + '</li>'; }).join('') + '</ol></li>';
+        x.levels.map((n, j) => { const lv = x.from + j; return '<li class="' + (lv === r.level ? 'is-now' : lv < r.level ? 'is-done' : 'is-locked') + '"' + (lv === r.level ? ' aria-current="true"' : '') + (isGate(lv) ? ' data-gate' : '') + '>' + (window.zenEmblem ? '<span class="gr-names-zem" data-zem="' + lv + '"></span>' : '') + '<b>' + lv + '</b> ' + n + '</li>'; }).join('') + '</ol></li>';
     }).join('');
     return '<details class="gr-scale"><summary>Xem thang 103 cấp</summary><div class="gr-scale-wrap"><table><thead><tr><th scope="col">Cảnh giới</th><th scope="col">Cấp</th><th scope="col">Mỗi cấp</th><th scope="col">Tổng tu vi</th></tr></thead><tbody>' + rows + '</tbody></table></div>' +
-      '<p class="help-copy">Ải đột phá là cấp đầu của mỗi cảnh giới (cấp 10, 20 … 100), tốn chừng ba lần cấp thường; số điểm của ải ghi dưới điểm mỗi cấp. Từ cấp 91, mỗi cấp tốn gấp đôi cấp trước: 4, 8, 16 … 1.024 điểm; cấp 100 tốn 2.048 điểm, bằng cả chín cấp trước cộng lại. Cấp 100 thành Thần; ba thần cấp sau dẫn tới Thần Vương.</p><ol class="gr-names-list" aria-label="Danh xưng 103 cấp">' + names + '</ol></details>';
+      '<p class="help-copy">Ải đột phá là cấp đầu của mỗi cảnh giới (cấp 10, 20 … 100), tốn chừng ba lần cấp thường; số điểm của ải ghi dưới điểm mỗi cấp. Từ cấp 91, mỗi cấp tốn gấp đôi cấp trước: 4, 8, 16 … 1.024 điểm; cấp 100 tốn 2.048 điểm, bằng cả chín cấp trước cộng lại. Cấp 100 thành Thần; ba thần cấp sau dẫn tới Thần Vương.</p>' + (window.zenEmblem ? '<p class="help-copy">Mỗi cấp một huy hiệu riêng: khung dày dần theo cảnh giới, ngọc trên vành sáng thêm theo từng cấp. Huy hiệu chưa đạt còn mờ.</p>' : '') + '<ol class="gr-names-list" aria-label="Danh xưng 103 cấp">' + names + '</ol></details>';
   }
   function extremes(s) {
     const mx = Math.max(...s), mn = Math.min(...s);
@@ -300,7 +300,10 @@
   function realmBlock(r) {
     const ahead = r.top ? 'đã đạt Thần Vương, cấp tối cao' : r.held ? 'đã đủ điểm lên cấp ' + (r.level + 1) + ' · còn thiếu chiến tích ở Thần giới' : !r.level ? 'còn ' + fmt(r.need) + ' điểm để nhập cấp 1' : 'còn ' + fmt(r.need) + ' điểm lên cấp ' + (r.level + 1) + (r.breakthrough ? ' · ' + (r.level + 1 === GOD ? 'đột phá thành Thần' : 'đột phá ' + r.next) : '');
     const ladder = REALMS.map((name, i) => '<li class="' + (i + 1 < r.realm ? 'is-done' : i + 1 === r.realm ? 'is-now' : '') + '" title="' + name + '"></li>').join('');
-    return '<div class="gr-realm"><div class="gr-realm-top"><span class="gr-realm-name">' + r.name + '</span><span class="gr-rank">' + (r.level ? levelLabel(r.level).replace(/^(.+?)\//, '<b>$1</b>/') + ' · ' + r.title : 'Chưa nhập cấp') + '</span></div>' +
+    // v2.32.0 (Huy Hiệu Bách Cấp): huy hiệu riêng của cấp hiện tại nằm bên trái khối cảnh giới; chưa nhập cấp thì để một ô trống nét đứt.
+    const Z = window.zenEmblem;
+    const badge = !Z ? '' : r.level ? '<span class="gr-emblem" data-level="' + r.level + '" role="img" aria-label="' + esc(Z.label(r.level, r.title)) + '">' + Z.html(r.level) + '</span>' : '<span class="gr-emblem is-empty" aria-hidden="true"></span>';
+    return '<div class="gr-realm' + (badge ? ' has-emblem' : '') + '">' + badge + '<div class="gr-realm-top"><span class="gr-realm-name">' + r.name + '</span><span class="gr-rank">' + (r.level ? levelLabel(r.level).replace(/^(.+?)\//, '<b>$1</b>/') + ' · ' + r.title : 'Chưa nhập cấp') + '</span></div>' +
       '<small class="gr-realm-ahead">' + fmt(earnedTotal()) + ' điểm tu vi · ' + ahead + '</small>' +
       '<div class="progress" role="progressbar" aria-label="' + (r.top ? 'Đã đạt cấp ' + LEVEL_MAX : 'Tiến tới cấp ' + (r.level + 1)) + '" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + r.pct + '"><span style="width:' + r.pct + '%"></span></div>' +
       '<ol class="gr-ladder" role="img" aria-label="Cảnh giới ' + r.realm + ' trên ' + REALMS.length + '">' + ladder + '</ol></div>';
@@ -508,6 +511,7 @@
     let toastText = '';
     let crossing = null;
     let breakthroughTo = null;
+    let emblemTo = null;
     if (commit && a.spent > 0) {
       const entry = { id: uid(), d: today(), s: a.source, k: a.key, n: String(a.title || '').slice(0, 120), p: a.add.slice() };
       if (!a.key) delete entry.k;
@@ -524,7 +528,11 @@
         // v1.97.0 (Ấn Son): đột phá sang cảnh giới mới (từ Tam lưu cao thủ, cấp 10 trở lên) thì mở thêm nghi thức Đột phá
         // (giangho-fx.js); câu chúc vẫn ở thông báo. Bước vào Sơ nhập giang hồ ở điểm đầu tiên là khởi đầu, không phải đột phá.
         if (after.realm !== before.realm && after.realm >= 2 && window.zenFx?.breakthrough) breakthroughTo = after;
-        else if (after.level > before.level) parts.push('Chúc mừng! ' + heroName() + ' lên cấp ' + after.level + ' · ' + after.title + ' (' + after.name + ').');
+        else if (after.level > before.level) {
+          parts.push('Chúc mừng! ' + heroName() + ' lên cấp ' + after.level + ' · ' + after.title + ' (' + after.name + ').');
+          // v2.32.0 (Huy Hiệu Bách Cấp): lên cấp thường thì hiện thẻ huy hiệu mới của cấp vừa đạt (đột phá đã có huy hiệu trong nghi thức).
+          emblemTo = [after.level, after.title, after.level - before.level > 1 ? 'vượt ' + (after.level - before.level) + ' cấp' : ''];
+        }
         toastText = parts.join(' ');
       }
     }
@@ -535,11 +543,18 @@
     if (typeof a.then === 'function') a.then();
     if (toastText) notify(toastText);
     window.zenFx?.rank();
+    if (emblemTo) emblemWhenFree(...emblemTo);
     // v1.92.0: vượt mốc 5 cấp thì mở chương truyện ký tương ứng (growth-story.js); v1.97.0: sau nghi thức Đột phá nếu có.
     // v2.12.0: chương giữa cấp mở theo tu vi, nên báo cả khi chưa lên cấp.
     const story = () => crossing && crossing[3] > crossing[2] && window.zenStory?.crossed(...crossing);
     if (breakthroughTo) window.zenFx.breakthrough(breakthroughTo, story);
     else story();
+  }
+  // v2.32.0: thẻ huy hiệu mới chỉ hiện khi người dùng nhìn thấy được (chờ hộp thoại như chương truyện đóng, tối đa ~24 giây).
+  function emblemWhenFree(level, title, more, tries = 0) {
+    if (!window.zenEmblem?.pop) return;
+    if (tries < 60 && document.querySelector('dialog[open]')) return setTimeout(() => emblemWhenFree(level, title, more, tries + 1), 400);
+    window.zenEmblem.pop(level, title, more);
   }
   // Giữ sổ cái trong giới hạn: gộp các dòng cũ nhất thành một dòng "tổng hợp".
   function compact() {
@@ -997,4 +1012,14 @@
       paintFigure();
     }
   });
+  // v2.32.0: huy hiệu của danh sách 103 cấp chỉ dựng khi mở thang (103 hình mất vài chục mili giây, người không mở thì khỏi tốn).
+  document.addEventListener(
+    'toggle',
+    (e) => {
+      const d = e.target;
+      if (!window.zenEmblem || !d?.classList?.contains('gr-scale') || !d.open) return;
+      d.querySelectorAll('.gr-names-zem:empty').forEach((el) => (el.innerHTML = window.zenEmblem.html(+el.dataset.zem)));
+    },
+    true,
+  );
 })();
