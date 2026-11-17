@@ -281,7 +281,7 @@ body:not(.wf-is-focused) .zen-music{display:none!important}
 /* Keep icon filters outside the scrolling results rather than overlaying them. */
 #editor .icon-picker-panel{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;min-width:0;max-height:none!important;overflow:visible!important;padding:14px!important}
 #editor .icon-library-tools{position:static!important;inset:auto!important;z-index:auto;display:grid;gap:10px;padding:0;background:#fff}
-#editor .icon-library-tools input,#editor .icon-library-tools select{box-sizing:border-box;width:100%;min-width:0;min-height:44px;border:1px solid #e1d5eb;border-radius:10px;padding:9px 11px}
+#editor .icon-library-tools input{box-sizing:border-box;width:100%;min-width:0;min-height:44px;border:1px solid #e1d5eb;border-radius:10px;padding:9px 11px}#editor .icon-library-tools select{box-sizing:border-box;width:100%;min-width:0}
 #editor .icon-library-tools label{display:grid;grid-template-columns:42px minmax(0,1fr);gap:8px;align-items:center;margin:0}
 #editor .icon-result-count{margin:0!important;padding:0;font-size:11px}
 #editor .icon-library-results{max-height:280px!important;overflow-y:auto!important;overflow-x:hidden;overscroll-behavior:contain;scrollbar-width:thin;margin:0;padding:5px;gap:6px;grid-template-columns:repeat(auto-fill,minmax(42px,1fr));border:1px solid #eee7f2;border-radius:12px;background:#fcfaff}

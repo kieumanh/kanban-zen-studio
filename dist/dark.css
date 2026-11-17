@@ -2416,7 +2416,7 @@
 :root[data-theme=dark] #editor .icon-library-tools {
     background: #1b181f
 }
-:root[data-theme=dark] #editor .icon-library-tools input, :root[data-theme=dark] #editor .icon-library-tools select {
+:root[data-theme=dark] #editor .icon-library-tools input {
     border: 1px solid #423c48
 }
 :root[data-theme=dark] #editor .icon-library-results {
@@ -4114,6 +4114,10 @@
 }
 :root[data-theme=dark] .zen-empty-art {
     color: #cab8fe
+}
+:root[data-theme=dark] body select:not([multiple]):not([size]):not([data-zen-native]):not(.wf-original-select) {
+    background-color: #1b181f;
+    color: #ddd1ee
 }
 
 :root[data-theme=dark] {

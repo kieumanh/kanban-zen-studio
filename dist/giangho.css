@@ -3449,7 +3449,7 @@
 :root[data-style=giangho] #editor .icon-library-tools {
     background: #fffefb
 }
-:root[data-style=giangho] #editor .icon-library-tools input, :root[data-style=giangho] #editor .icon-library-tools select {
+:root[data-style=giangho] #editor .icon-library-tools input {
     border: 1px solid #e8d4b7
 }
 :root[data-style=giangho] #editor .icon-library-results {
@@ -7259,6 +7259,11 @@
 :root[data-style=giangho] .zen-empty-art .tint {
     fill: #fbebe1
 }
+:root[data-style=giangho] body select:not([multiple]):not([size]):not([data-zen-native]):not(.wf-original-select) {
+    background-color: #fffefb;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%238a7f93' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    color: #322114
+}
 :root[data-style=giangho][data-theme=dark] {
     --bg: #18130c;
     --paper: #1e1811;
@@ -10659,7 +10664,7 @@
 :root[data-style=giangho][data-theme=dark] #editor .icon-library-tools {
     background: #1e1811
 }
-:root[data-style=giangho][data-theme=dark] #editor .icon-library-tools input, :root[data-style=giangho][data-theme=dark] #editor .icon-library-tools select {
+:root[data-style=giangho][data-theme=dark] #editor .icon-library-tools input {
     border: 1px solid #483c33
 }
 :root[data-style=giangho][data-theme=dark] #editor .icon-library-results {
@@ -14468,6 +14473,11 @@
 }
 :root[data-style=giangho][data-theme=dark] .zen-empty-art .tint {
     fill: #fbebe1
+}
+:root[data-style=giangho][data-theme=dark] body select:not([multiple]):not([size]):not([data-zen-native]):not(.wf-original-select) {
+    background-color: #1e1811;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%238a7f93' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+    color: #f4dccc
 }
 
 /* ---- Họa tiết Giang hồ viết tay (v1.86.0 · Chu Mặc) ------------------------------------------------------------------------

@@ -2417,7 +2417,7 @@
 :root[data-contrast=high] #editor .icon-library-tools {
     background: #ffffff
 }
-:root[data-contrast=high] #editor .icon-library-tools input, :root[data-contrast=high] #editor .icon-library-tools select {
+:root[data-contrast=high] #editor .icon-library-tools input {
     border: 1px solid #171519
 }
 :root[data-contrast=high] #editor .icon-library-results {
@@ -4114,6 +4114,9 @@
     }
 }
 :root[data-contrast=high] .zen-empty-art {
+    color: #060606
+}
+:root[data-contrast=high] body select:not([multiple]):not([size]):not([data-zen-native]):not(.wf-original-select) {
     color: #060606
 }
 :root[data-theme=dark][data-contrast=high] {
@@ -6533,7 +6536,7 @@
 :root[data-theme=dark][data-contrast=high] #editor .icon-library-tools {
     background: #030303
 }
-:root[data-theme=dark][data-contrast=high] #editor .icon-library-tools input, :root[data-theme=dark][data-contrast=high] #editor .icon-library-tools select {
+:root[data-theme=dark][data-contrast=high] #editor .icon-library-tools input {
     border: 1px solid #cecece
 }
 :root[data-theme=dark][data-contrast=high] #editor .icon-library-results {
@@ -8230,6 +8233,10 @@
     }
 }
 :root[data-theme=dark][data-contrast=high] .zen-empty-art {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] body select:not([multiple]):not([size]):not([data-zen-native]):not(.wf-original-select) {
+    background-color: #030303;
     color: #f5f5f5
 }
 /* v1.16.2 — nút "Làm mới" ở Chế độ tập trung: quy tắc cũ (.focus-check-updates, nền trắng, chữ tím) đã bị quy tắc nút chính ghi đè ở chế độ thường, nhưng bản sao có tiền tố chủ đề lại nặng hơn nên thắng và làm nút trắng chữ trắng. Đặt lại nền nút chính. */

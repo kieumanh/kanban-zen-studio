@@ -2429,3 +2429,27 @@ body.signed-out .quick-add-btn { display: none; }
   min-height: 44px;
   margin-top: 2px;
 }
+
+/* v2.45.0 (Ô Chọn Chung Một Kiểu): mọi ô chọn (select) cùng một dáng: bo tròn 12 px, viền một nét (màu viền theo --zen-field-border ở trên),
+   mũi tên là hình SVG nhỏ màu xám trung tính (đạt 3:1 trên mọi nền: sáng, tối, tương phản cao, Giang hồ; không dùng gradient vì các bài kiểm tương phản coi điểm dừng gradient là màu nền), cao ≥ 44 px. Ô chọn nhiều dòng (multiple / size) và
+   ô cần giữ dáng riêng (data-zen-native) không bị đổi; cỡ chữ 14 px (16 px ở điện thoại theo quy tắc chung của usability.css, tránh trình duyệt tự phóng to khi chạm). */
+body select:not([multiple]):not([size]):not([data-zen-native]):not(.wf-original-select) {
+  appearance: none;
+  -webkit-appearance: none;
+  min-height: 44px;
+  padding-block: 10px;
+  padding-inline: 14px 38px;
+  border-style: solid;
+  border-width: 1px;
+  border-radius: 12px;
+  background-color: #ffffff;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%238a7f93' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-position: right 14px center;
+  background-size: 12px 8px;
+  background-repeat: no-repeat;
+  color: #382a48;
+  font-size: 14px;
+  line-height: 1.4;
+  text-overflow: ellipsis;
+}
+
