@@ -66,7 +66,7 @@ try {
     // Bế quan.
     await h.show(page, 'focus');
     main = await page.locator('#main').innerText();
-    has(main, ['Chọn nhiệm vụ để bế quan', '3 nhiệm vụ trọng yếu', 'Lỡ hẹn', 'Bế quan →', 'công thành'], 'Bế quan' + at);
+    has(main, ['CHỌN NHIỆM VỤ ĐỂ BẾ QUAN', '3 nhiệm vụ trọng yếu', 'Lỡ hẹn', 'Bế quan →', 'công thành'], 'Bế quan' + at);
     await page.locator('#main [data-wf-focus]').first().click();
     await page.waitForSelector('.studio-pomodoro');
     await page.evaluate(() => (document.querySelector('.studio-pomodoro').open = true));

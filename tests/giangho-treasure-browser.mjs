@@ -56,7 +56,7 @@ try {
     // Ngân khố.
     await h.show(page, 'budget');
     let main = await page.locator('#main').innerText();
-    has(main, ['Ngân lượng theo đại sự', 'Đã xuất ngân', 'Đã thu ngân', 'Hồi vốn', 'Đồ hòa vốn', 'Xuất ngân cộng dồn', 'Ngân lưu theo tháng', 'Xuất ngân theo đại sự', 'Tình trạng từng đại sự'], 'Ngân khố' + at);
+    has(main, ['NGÂN LƯỢNG THEO ĐẠI SỰ', 'Đã xuất ngân', 'Đã thu ngân', 'Hồi vốn', 'Đồ hòa vốn', 'Xuất ngân cộng dồn', 'Ngân lưu theo tháng', 'Xuất ngân theo đại sự', 'Tình trạng từng đại sự'], 'Ngân khố' + at);
     const names = await page.evaluate(() => [...document.querySelectorAll('.bg-project-name')].map((e) => e.textContent.trim()));
     assert.ok(names.includes('Chi theo dự án'), 'tên dự án giữ nguyên: ' + names + at);
     assert.equal(await noOverflow(page), true, 'ngân khố không tràn ngang' + at);

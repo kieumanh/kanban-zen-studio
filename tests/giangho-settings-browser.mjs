@@ -93,7 +93,7 @@ try {
     // Phong ấn: đại sự tên "Lưu trữ", nhiệm vụ tên "Khôi phục".
     await h.show(page, 'archive');
     let main = await page.locator('#main').innerText();
-    has(main, ['PHONG ẤN', 'Đại sự tạm phong ấn', 'nhiệm vụ công thành', 'Xem đại sự', 'Giải ấn để làm tiếp', 'Nhiệm vụ đã phong ấn'], 'Phong ấn' + at);
+    has(main, ['ĐẠI SỰ TẠM PHONG ẤN', 'Phong ấn', 'nhiệm vụ công thành', 'Xem đại sự', 'Giải ấn để làm tiếp', 'Nhiệm vụ đã phong ấn'], 'Phong ấn' + at);
     assert.ok((await page.locator('.archive-projects h3').first().innerText()).includes('Lưu trữ'), 'tên đại sự "Lưu trữ" giữ nguyên' + at);
     assert.equal((await page.locator('.wf-archive-row strong').first().innerText()).trim(), 'Khôi phục', 'tên nhiệm vụ "Khôi phục" giữ nguyên' + at);
     assert.equal((await page.locator('.wf-archive-row [data-wf-archive]').first().innerText()).trim(), 'Giải ấn', 'nút giải ấn nhiệm vụ' + at);

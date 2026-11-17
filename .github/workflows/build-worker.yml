@@ -206,6 +206,8 @@ jobs:
           node tests/growth-store-browser.mjs
           # v2.35.0 (Thêm Nhanh): gõ một câu “Gọi anh Sơn mai 9h #farm” → việc có hạn (ngày, giờ) và dự án; nút + trên thanh trên, xem trước, bảng lệnh; câu dễ nhầm giữ nguyên.
           node tests/quickadd-browser.mjs
+          # v2.36.0 (Một Tên Một Trang): menu = tiêu đề trang = đường dẫn cho Phân bổ tài nguyên, Chế độ tập trung, Tài nguyên, Lưu trữ…; không còn nhãn tiếng Anh “RESOURCE VIEWS”.
+          node tests/naming-browser.mjs
           node tests/growth-scene-browser.mjs
           node tests/note-chips-browser.mjs
           node tests/checklist-focus-ring-browser.mjs

@@ -334,6 +334,15 @@ try {
       assert.ok(c !== null, 'có phần tử ' + s + at);
       assert.ok(c >= 4.5, 'chữ ' + s + ' đủ tương phản (' + c.toFixed(2) + ')' + at);
     }
+    if (style === 'giangho') {
+      // Giọng giang hồ (từ v2.36.0): nút, tiêu đề, nhãn, ba dòng xem trước và lời hướng dẫn không còn giọng Thiền.
+      await page.waitForFunction(() => document.querySelector('#editor-body h2')?.textContent === 'Ghi nhanh');
+      assert.equal(await page.getAttribute('#quick-add-btn', 'aria-label'), 'Ghi nhanh một nhiệm vụ bằng một câu', 'nút trên thanh trên' + at);
+      assert.deepEqual(await page.locator('.qa-row dt').allInnerTexts(), ['Nhiệm vụ', 'Kỳ hạn', 'Đại sự'], 'nhãn ba dòng xem trước' + at);
+      assert.match(await page.locator('#editor-body .field').first().innerText(), /^Truyền một câu/, 'nhãn ô gõ' + at);
+      await page.fill('#qa-line', '');
+      await page.waitForFunction(() => /nhiệm vụ.*đại sự/.test(document.querySelector('.qa-empty')?.textContent || ''));
+    }
     await page.fill('#qa-line', '');
     await settle(page);
     const c = await contrast(page, '.qa-empty');

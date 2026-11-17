@@ -332,7 +332,7 @@
     const p = select();
     const intro = p ? 'Ghi khoản chi (đầu tư) và khoản thu (thu hồi) của dự án này.' : 'Ghi chi và thu hồi cho từng dự án để biết nên tiếp tục hay tạm dừng.';
     const back = p ? '<nav class="bg-nav" aria-label="Điều hướng Phân bổ tài nguyên"><button type="button" class="btn bg-back" data-bg-back aria-label="Quay lại tất cả dự án">' + BACK_ICON + 'Tất cả dự án</button></nav>' : '';
-    return '<div class="bg-page">' + back + heading('PHÂN BỔ TÀI NGUYÊN', p ? esc(p.name) : 'Đầu tư theo dự án', intro, p ? '' : '<button type="button" class="btn bg-email-btn" data-bg-email>Báo cáo email hằng tuần</button>') + (contentReadOnly ? '<p class="bg-hint">Bản chia sẻ chỉ có quyền xem: không thêm hoặc sửa được khoản nào.</p>' : '') + scopeSelect() + (p ? detail(p) : overview()) + '</div>';
+    return '<div class="bg-page">' + back + heading(p ? 'PHÂN BỔ TÀI NGUYÊN' : 'ĐẦU TƯ THEO DỰ ÁN', p ? esc(p.name) : 'Phân bổ tài nguyên', intro, p ? '' : '<button type="button" class="btn bg-email-btn" data-bg-email>Báo cáo email hằng tuần</button>') + (contentReadOnly ? '<p class="bg-hint">Bản chia sẻ chỉ có quyền xem: không thêm hoặc sửa được khoản nào.</p>' : '') + scopeSelect() + (p ? detail(p) : overview()) + '</div>';
   }
 
   // ---- Điều hướng ------------------------------------------------------------------------------------------------------

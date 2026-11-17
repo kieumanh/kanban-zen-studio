@@ -38,12 +38,12 @@ const HEADINGS = {
   dashboard: ['MỖI NGÀY, MỘT TẦNG CÔNG LỰC', 'Bình minh đã lên, hôm nay các hạ hành hiệp nơi đâu?'],
   calendar: ['HOÀNG LỊCH NHIỆM VỤ', 'Hoàng lịch'],
   gantt: ['TRẬN ĐỒ ĐẠI SỰ', 'Trận đồ'],
-  focus: ['NHẤT TÂM BẤT LOẠN', 'Chọn nhiệm vụ để bế quan'],
+  focus: ['CHỌN NHIỆM VỤ ĐỂ BẾ QUAN', 'Bế quan'],
   habits: [null, 'Nhật khóa'],
   notes: ['TÀNG THƯ CÁC', 'Tàng thư'],
-  budget: ['NGÂN KHỐ', 'Ngân lượng theo đại sự'],
+  budget: ['NGÂN LƯỢNG THEO ĐẠI SỰ', 'Ngân khố'],
   resources: ['BẢO KHỐ', 'Bảo khố'],
-  archive: ['PHONG ẤN', 'Đại sự tạm phong ấn'],
+  archive: ['ĐẠI SỰ TẠM PHONG ẤN', 'Phong ấn'],
   trash: ['NHẶT LẠI HOẶC DỌN SẠCH', 'Phế tích'],
 };
 const CRUMB = { dashboard: 'Tổng đàn', calendar: 'Hoàng lịch · Ghi chú', gantt: 'Trận đồ · Ghi chú', focus: 'Bế quan', habits: 'Nhật khóa', notes: 'Tàng thư', budget: 'Ngân khố', resources: 'Bảo khố', archive: 'Phong ấn', trash: 'Phế tích', versions: 'Biên niên', growth: 'Tu vi' };
