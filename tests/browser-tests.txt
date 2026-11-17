@@ -160,3 +160,4 @@ tests/finance-share-browser.mjs
 tests/perf-dates-browser.mjs
 tests/dashboard-context-browser.mjs
 tests/diagnostics-browser.mjs
+tests/empty-states-browser.mjs

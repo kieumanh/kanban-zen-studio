@@ -7253,6 +7253,12 @@
         border-left: 5px solid var(--event-color, #b44148)
     }
 }
+:root[data-style=giangho] .zen-empty-art {
+    color: #ab2435
+}
+:root[data-style=giangho] .zen-empty-art .tint {
+    fill: #fbebe1
+}
 :root[data-style=giangho][data-theme=dark] {
     --bg: #18130c;
     --paper: #1e1811;
@@ -14456,6 +14462,12 @@
     :root[data-style=giangho][data-theme=dark] .zen-agenda-task {
         border-left: 5px solid var(--event-color, #c24d53)
     }
+}
+:root[data-style=giangho][data-theme=dark] .zen-empty-art {
+    color: #febab9
+}
+:root[data-style=giangho][data-theme=dark] .zen-empty-art .tint {
+    fill: #fbebe1
 }
 
 /* ---- Họa tiết Giang hồ viết tay (v1.86.0 · Chu Mặc) ------------------------------------------------------------------------

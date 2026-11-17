@@ -721,6 +721,12 @@
     ['Hằng ngày', { to: 'Nhật khóa', in: '.zbb-label' }],
     ['Ghi chú', { to: 'Tàng thư', in: '.zbb-label' }],
     ['Kho', { to: 'Hậu viện', in: '.nav-more-summary' }],
+    // v2.44.0 (Trang Trống Có Hồn): nút hành động chính trong khối trang trống (dist/empty-states.js).
+    ['Chưa có dự án. Bắt đầu với nút “Tạo dự án”.', { to: 'Chưa có đại sự. Bắt đầu với nút “Khởi đại sự”.', in: MAIN }],
+    ['Tạo dự án', { to: 'Khởi đại sự', in: '.zen-empty-action' }],
+    ['Ghi chú mới', { to: 'Chép quyển mới', in: '.zen-empty-action' }],
+    ['Xem dự án', { to: 'Xem đại sự', in: '.zen-empty-action' }],
+    ['Tải tệp lên', { to: 'Cất vào bảo khố', in: '.zen-empty-action' }],
     ['Công việc cần chú ý', { to: 'Nhiệm vụ cần chú ý', in: 'h2:has(~ .due-work-tabs)' }],
     ['Đăng xuất', { to: 'Hạ sơn', in: '#editor-form:has([data-confirm=signout]) .modal-foot' }],
     ['Tổng kết tuần', { to: 'Chiến báo tuần', in: '.report-dialog-toolbar' }],
