@@ -530,13 +530,54 @@
     if (tries < 60 && document.querySelector('dialog[open]')) return setTimeout(() => emblemWhenFree(level, title, more, tries + 1), 400);
     window.zenEmblem.pop(level, title, more);
   }
-  // Giữ sổ cái trong giới hạn: gộp các dòng cũ nhất thành một dòng "tổng hợp".
+  // Giữ sổ cái trong giới hạn: gộp các dòng cũ nhất thành các dòng "tổng hợp" (v2.47.0: vẫn giữ mã của việc đã cộng điểm).
+  // Mã chống cộng trùng của việc ("task:<id>") của các dòng bị gộp được đóng gói vào trường k của dòng tổng hợp dưới dạng danh sách id cách nhau
+  // bằng dấu cách (bỏ tiền tố "task:" cho gọn), mỗi dòng ≤ 120 ký tự, đúng giới hạn sẵn có của k nên không đổi dạng dữ liệu. Điểm của từng dòng
+  // gộp được cộng đúng vào dòng tổng hợp chứa mã của nó nên tổng điểm mỗi chỉ số không đổi. Việc cũ làm lại sẽ không được cộng điểm lần nữa.
+  // Nếu sau khi đóng gói sổ vẫn quá dài, gộp bớt các dòng tổng hợp CŨ NHẤT thành một dòng không mã (bỏ mã của việc xưa nhất trước): ưu tiên luôn
+  // lưu được điểm mới, còn mã của các việc gần đây vẫn giữ.
+  const KEY_MAX = 120;
+  const TASK_ID = /^[A-Za-z0-9_-]{1,100}$/;
+  const archivedIds = (e) => (e.k ? e.k.split(' ').filter(Boolean) : []);
+  const isScored = (g, key) => g.log.some((e) => e.k === key || (e.s === 'archive' && key.startsWith('task:') && archivedIds(e).includes(key.slice(5))));
   function compact() {
     const g = data.growth;
     if (g.log.length <= LOG_MAX - 100) return;
-    const old = g.log.splice(0, 500), p = Array(8).fill(0);
-    old.forEach((e) => e.p.forEach((v, i) => (p[i] += v)));
-    g.log.unshift({ id: 'a' + uid().replace(/[^A-Za-z0-9_-]/g, '').slice(0, 24), d: old.at(-1).d, s: 'archive', n: 'Tổng hợp ' + old.length + ' lần cộng đầu tiên', p });
+    const old = g.log.splice(0, 500);
+    const sum = (list) => {
+      const p = Array(8).fill(0);
+      list.forEach((e) => e.p.forEach((v, i) => (p[i] += v)));
+      return p;
+    };
+    const makeEntry = (list, ids) => {
+      const entry = { id: 'a' + uid().replace(/[^A-Za-z0-9_-]/g, '').slice(0, 24), d: list.at(-1).d, s: 'archive', n: 'Tổng hợp ' + list.length + ' lần cộng', p: sum(list) };
+      if (ids.length) entry.k = ids.join(' ');
+      return entry;
+    };
+    const packed = [];
+    let list = [], ids = [], used = 0;
+    const flush = () => {
+      if (list.length) packed.push({ list, entry: makeEntry(list, ids) });
+      list = [];
+      ids = [];
+      used = 0;
+    };
+    for (const e of old) {
+      const own = (e.s === 'archive' ? archivedIds(e) : e.k && e.k.startsWith('task:') ? [e.k.slice(5)] : []).filter((id) => TASK_ID.test(id));
+      const need = own.reduce((n, id) => n + id.length + 1, 0);
+      if (list.length && used + need > KEY_MAX + 1) flush();
+      list.push(e);
+      ids.push(...own);
+      used += need;
+    }
+    flush();
+    // Quá dài: gộp các dòng tổng hợp cũ nhất (đầu danh sách) thành một dòng không mã, vừa đủ để sổ còn chỗ lưu điểm mới.
+    const over = g.log.length + packed.length - (LOG_MAX - 300);
+    if (over > 0) {
+      const head = packed.splice(0, Math.min(over + 1, packed.length));
+      packed.unshift({ entry: makeEntry(head.flatMap((x) => x.list), []) });
+    }
+    g.log.unshift(...packed.map((x) => x.entry));
   }
   function openAward(opt) {
     if (award) closeAward(false);
@@ -572,15 +613,15 @@
     const args = arguments;
     const task = ctx && kind !== 'check' ? data.projects.flatMap((p) => p.tasks).find((t) => t.id === ctx.id) : null;
     const g = growth();
-    if (!g || contentReadOnly || !task || task.col !== 'Done' || Date.now() - ctx.at > 3000 || g.log.some((e) => e.k === 'task:' + task.id)) return baseCelebrate.apply(this, args);
+    if (!g || contentReadOnly || !task || task.col !== 'Done' || Date.now() - ctx.at > 3000 || isScored(g, 'task:' + task.id)) return baseCelebrate.apply(this, args);
     openAward({ source: 'task', key: 'task:' + task.id, title: task.title, steps: TASK_STEPS, then: () => baseCelebrate.apply(window, args) });
   };
   // Việc hằng ngày vừa đủ chuỗi 7, 14, 21… ngày liền (habits.js gọi sau khi tích): hỏi điểm một lần cho mỗi việc mỗi ngày.
   function habitStreak(h, n) {
     const g = growth(), key = ('habit:' + h.id + ':' + today()).slice(0, 120);
-    if (!g || contentReadOnly || g.log.some((e) => e.k === key)) return;
+    if (!g || contentReadOnly || isScored(g, key)) return;
     setTimeout(() => {
-      if (award || !growth() || growth().log.some((e) => e.k === key)) return;
+      if (award || !growth() || isScored(growth(), key)) return;
       openAward({ source: 'habit', key, title: h.name + ' · ' + n + ' ngày liền', lead: 'Hảo công phu! “' + h.name + '” đã khổ luyện đủ ' + n + ' ngày liền.', steps: HABIT_STEPS });
     }, 600);
   }

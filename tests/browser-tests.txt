@@ -163,3 +163,4 @@ tests/diagnostics-browser.mjs
 tests/empty-states-browser.mjs
 tests/select-style-browser.mjs
 tests/shortcuts-browser.mjs
+tests/growth-ledger-keys-browser.mjs
