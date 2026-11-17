@@ -47,8 +47,9 @@ document.addEventListener('change',event=>{
 });
 
 // v1.25.0: nhóm menu bên trái. Chỉ sắp xếp lại các nút sẵn có (giữ nguyên data-view, không tạo mục mới).
-// Mục ít dùng (Lưu trữ, Thùng rác) nằm trong "Thêm" thu gọn; tự mở khi đang ở một trong hai mục đó.
-const NAV_MORE_VIEWS=['archive','trash'];
+// v2.40.0 (Menu Gọn): mục ít dùng nằm trong nhóm "Kho" thu gọn: Tài nguyên, Lưu trữ, Thùng rác, Phiên bản (trước đó "Thêm" chỉ có Lưu trữ
+// và Thùng rác, còn Tài nguyên và Phiên bản đứng riêng). Menu chính còn 8 mục; nhóm tự mở khi đang ở một trong bốn trang đó.
+const NAV_MORE_VIEWS=['resources','archive','trash','versions'];
 function navGroupLabel(key,text){const el=document.createElement('div');el.className='navlabel nav-group-label';el.dataset.navLabel=key;el.textContent=text;return el;}
 function arrangeNavGroups(){
  const nav=document.querySelector('.sidebar nav');
@@ -56,18 +57,16 @@ function arrangeNavGroups(){
  const place=(key,text,anchor)=>{if(anchor&&!nav.querySelector(':scope>[data-nav-label='+key+']'))anchor.before(navGroupLabel(key,text));};
  place('work','Làm việc',nav.querySelector(':scope>[data-view=dashboard]'));
  place('ideas','Ý tưởng',nav.querySelector(':scope>[data-view=notes]'));
- const notes=nav.querySelector(':scope>[data-view=notes]'),resources=nav.querySelector(':scope>[data-view=resources]');
- if(notes&&resources&&notes.nextElementSibling!==resources)notes.after(resources);
+ const buttons=NAV_MORE_VIEWS.map(v=>document.querySelector('.sidebar [data-view='+v+']')).filter(Boolean);
  let more=nav.querySelector(':scope>details.nav-more');
- const first=nav.querySelector('[data-view='+NAV_MORE_VIEWS[0]+']');
- if(!more&&first){
+ if(!more&&buttons.length){
   more=document.createElement('details');
   more.className='nav-more';
-  more.innerHTML='<summary class="nav-more-summary">Thêm</summary>';
-  first.before(more);
+  more.innerHTML='<summary class="nav-more-summary">Kho</summary>';
+  nav.append(more);
  }
  if(!more)return;
- for(const v of NAV_MORE_VIEWS){const b=nav.querySelector('[data-view='+v+']');if(b&&b.parentElement!==more)more.append(b);}
+ if(buttons.some((b,i)=>more.children[i+1]!==b))for(const b of buttons)more.append(b);
  if(NAV_MORE_VIEWS.includes(view))more.open=true;
 }
 const navGroupsBeforeRender=render;

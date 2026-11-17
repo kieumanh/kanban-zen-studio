@@ -713,7 +713,7 @@
     ['Thêm', { to: 'Ghi nhanh', in: '.zbb-label' }],
     ['Hằng ngày', { to: 'Nhật khóa', in: '.zbb-label' }],
     ['Ghi chú', { to: 'Tàng thư', in: '.zbb-label' }],
-    ['Thêm', { to: 'Hậu viện', in: '.nav-more-summary' }],
+    ['Kho', { to: 'Hậu viện', in: '.nav-more-summary' }],
     ['Công việc cần chú ý', { to: 'Nhiệm vụ cần chú ý', in: 'h2:has(~ .due-work-tabs)' }],
     ['Đăng xuất', { to: 'Hạ sơn', in: '#editor-form:has([data-confirm=signout]) .modal-foot' }],
     ['Tổng kết tuần', { to: 'Chiến báo tuần', in: '.report-dialog-toolbar' }],
