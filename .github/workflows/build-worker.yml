@@ -184,6 +184,8 @@ jobs:
           node tests/growth-network-browser.mjs
           # v2.24.0 (Thập Nhị Phương): mười một Phương thần có nơi riêng trong Thần giới.
           node tests/growth-phuong-browser.mjs
+          # v2.25.0 (Chân Dung Phương Thần): mỗi Phương thần một dáng riêng (mã nhân vật god<phương> để vẫn thuộc nhóm thần).
+          node tests/growth-godlook-browser.mjs
           node tests/growth-scene-browser.mjs
           node tests/note-chips-browser.mjs
           node tests/checklist-focus-ring-browser.mjs

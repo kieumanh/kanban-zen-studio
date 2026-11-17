@@ -67,6 +67,20 @@
     godj: { name: 'Thần giới', robe: '#b8e0cc', trim: '#ffffff', sash: '#4a9a7a', hair: '#f4fff8', kind: 'crown', ghost: true, hold: null },
     godb: { name: 'Thần giới', robe: '#b4c8f0', trim: '#ffffff', sash: '#5a78c0', hair: '#f4f8ff', kind: 'crown', ghost: true, hold: null },
     godr: { name: 'Thần giới', robe: '#f0c0c8', trim: '#ffffff', sash: '#c0506a', hair: '#fff4f6', kind: 'crown', ghost: true, hold: null },
+    // v2.25.0 (Chân Dung Phương Thần): mười hai Phương thần mỗi vị một dáng riêng — sắc áo theo phương, kiểu đầu, vật cầm, vóc người —
+    // vẫn mờ chân như hồn để nhận ra là thần.
+    godty: { name: 'Huyền Minh', robe: '#3a4a7a', trim: '#9aa8e0', sash: '#1e2848', hair: '#e8ecff', kind: 'long', ghost: true, hold: null, s: 1.04 },
+    godsuu: { name: 'Hậu Tải', robe: '#7a5a48', trim: '#e8d8b8', sash: '#3a2a20', hair: '#efeae0', kind: 'scarf', ghost: true, hold: 'staff', s: 0.92, stoop: 8 },
+    goddan: { name: 'Khai Dương', robe: '#ffb36a', trim: '#fff2d0', sash: '#d8743a', hair: '#2a2024', kind: 'knot', ghost: true, hold: null, s: 0.88 },
+    godmao: { name: 'Thanh Mộc', robe: '#4f8a52', trim: '#cfe8c0', sash: '#5a4030', hair: '#d8e8c8', kind: 'straw', ghost: true, hold: 'staff', s: 1.16 },
+    godthin: { name: 'Vân Vũ', robe: '#6a8ac8', trim: '#e0ecff', sash: '#3a5a98', hair: '#f4f8ff', kind: 'crown', ghost: true, hold: 'fan', s: 1.06 },
+    godtyj: { name: 'Xích Diễm', robe: '#d84a3a', trim: '#ffd08a', sash: '#7a1a1a', hair: '#ff9a4a', kind: 'long', ghost: true, hold: null, s: 1.08 },
+    godngo: { name: 'Chính Dương', robe: '#f4e2a0', trim: '#ffffff', sash: '#c8962a', hair: '#fffaf0', kind: 'crown', ghost: true, hold: 'mirror' },
+    godmui: { name: 'Phong Nhiêu', robe: '#c9a04a', trim: '#f4e4b0', sash: '#7a5a20', hair: '#2a2024', kind: 'bun', ghost: true, hold: 'box', s: 1.12 },
+    godthan: { name: 'Kim Cương', robe: '#4a7078', trim: '#e0e6f0', sash: '#3a4250', hair: '#15131a', kind: 'helm2', ghost: true, hold: 'sword', s: 1.1 },
+    goddau: { name: 'Thu Liễm', robe: '#c9784a', trim: '#f4d8b0', sash: '#7a3a1a', hair: '#e8e0d0', kind: 'straw', ghost: true, hold: 'staff', stoop: 3 },
+    godtuat: { name: 'Trấn Thủ', robe: '#7a2a3a', trim: '#c8b8e0', sash: '#2a1e34', hair: '#15131a', kind: 'helm2', ghost: true, hold: 'spear', s: 1.16 },
+    godhoi: { name: 'Phong Đăng', robe: '#9a4a6a', trim: '#f0d0c0', sash: '#5a2a20', hair: '#e8e4da', kind: 'oldman', ghost: true, hold: 'staff', stoop: 4 },
   };
   // ---- Tư thế --------------------------------------------------------------------------------------------------------------------
   // legs: kiểu chân; hands: [tay trái, tay phải] (toạ độ trong khung người, chân ở y=0, đỉnh đầu ở y≈-100); lean: độ ngả của thân trên.
