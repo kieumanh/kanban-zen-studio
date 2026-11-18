@@ -516,6 +516,7 @@
     // Phong ấn
     ['Xem dự án', { to: 'Xem đại sự', in: '.archive-projects' }],
     ['Khôi phục', { to: 'Giải ấn', in: '.wf-archive-row, [data-project-archive]' }],
+    ['Khôi phục', { to: 'Hoàn nguyên', in: '.zen-backup-actions' }],
     ['Lưu trữ', { to: 'Phong ấn', in: '[data-project-archive]' }],
     ['Dọn sạch Thùng rác', { to: 'Dọn sạch Phế tích', in: 'dialog' }],
     // Phế tích: loại mục trên thẻ
@@ -576,6 +577,18 @@
     'Hãy nhập tiêu đề.': 'Hãy ghi tiêu đề.',
     'Bản chỉ xem không lưu được.': 'Bản chỉ xem không cất được.',
     'Dự án': { to: 'Đại sự', in: '.zen-share [data-share-project]' },
+    // v2.55.0 (Sao Lưu Hằng Tuần): khối sao lục ở Cài đặt → Dữ liệu & đồng bộ (backups.js).
+    'Sao lưu hằng tuần': 'Sao lục hằng tuần',
+    'Sao lưu ngay': 'Sao lục ngay',
+    'Tải lại danh sách': 'Duyệt lại danh sách',
+    'Khôi phục bản này': 'Hoàn nguyên bản này',
+    'Xóa bản sao': 'Hủy bản sao lục',
+    'Đang tải danh sách…': 'Đang duyệt danh sách…',
+    'Kho sao lưu trên máy chủ chưa sẵn sàng nên chưa lưu hay khôi phục được lúc này.': 'Kho sao lục trên máy chủ chưa sẵn sàng nên chưa cất hay hoàn nguyên được lúc này.',
+    'Mỗi Chủ nhật, hệ thống tự lưu một bản dữ liệu của bạn lên máy chủ và bỏ qua tuần bạn không đổi gì.': 'Mỗi Chủ nhật, hệ thống tự cất một bản dữ liệu của các hạ lên máy chủ và bỏ qua tuần các hạ không đổi gì.',
+    'Sao lưu tự động đang tắt; bạn vẫn sao lưu và khôi phục thủ công được.': 'Sao lục tự hành đang tắt; các hạ vẫn sao lục và hoàn nguyên tự tay được.',
+    'Có thể khôi phục về một ngày bất kỳ; dữ liệu hiện tại luôn được lưu thành bản “Trước khi khôi phục” nên vẫn quay lại được. Tệp đính kèm không nằm trong bản sao lưu.': 'Có thể hoàn nguyên về một ngày bất kỳ; dữ liệu hiện tại luôn được cất thành bản “Trước lúc hoàn nguyên” nên vẫn quay lại được. Tệp đính kèm không nằm trong bản sao lục.',
+    'Chưa có bản sao lưu nào. Bản đầu tiên sẽ được lưu vào Chủ nhật tới, hoặc bấm “Sao lưu ngay”.': 'Chưa có bản sao lục nào. Bản đầu tiên sẽ được cất vào Chủ nhật tới, hoặc bấm “Sao lục ngay”.',
     // v2.54.0 (Ôn Tuần): hộp thoại ôn tuần, lời mời và khối “Việc trọng tâm” ở Tổng quan, lệnh trong bảng lệnh (weekly-review.js).
     'Ôn tuần': 'Kiểm điểm tuần',
     'Đóng Ôn tuần': 'Đóng Kiểm điểm tuần',
@@ -848,6 +861,22 @@
 
   // Mẫu có phần thay đổi: [biểu thức, chữ mới hoặc hàm, vùng (tùy chọn), chữ bắt buộc có (lọc nhanh trước khi thử biểu thức)].
   // Câu tóm tắt của chuông (nhãn nút ở thanh trên, dòng đầu hộp thoại Truyền thư): đổi từng cụm, giữ nguyên các con số.
+  // v2.55.0 (Sao Lưu Hằng Tuần): câu trạng thái của khối sao lục ghép từ nhiều đoạn (kể cả lời máy chủ), nên đổi từng từ.
+  const backupWords = (s) =>
+    s
+      .replaceAll('Trước khi khôi phục', 'Trước lúc hoàn nguyên')
+      .replaceAll('bản sao lưu', 'bản sao lục')
+      .replaceAll('sao lưu', 'sao lục')
+      .replaceAll('Sao lưu', 'Sao lục')
+      .replaceAll('khôi phục', 'hoàn nguyên')
+      .replaceAll('Khôi phục', 'Hoàn nguyên')
+      .replaceAll('đồng bộ', 'thông mạch')
+      .replaceAll('Hãy thông mạch', 'Hãy thông mạch')
+      .replaceAll('dự án', 'đại sự')
+      .replaceAll('bản sao ', 'bản sao lục ')
+      .replaceAll('Đã xóa bản sao.', 'Đã hủy bản sao lục.')
+      .replaceAll('Thủ công', 'Tự tay')
+      .replaceAll('Tự động', 'Tự hành');
   const noticeWords = (s) =>
     s
       .replace(/([Kk])hông có việc quá hạn hay đến hạn/g, '$1hông có nhiệm vụ lỡ hẹn hay tới kỳ')
@@ -954,6 +983,15 @@
     [/^Nhắc lại (\d{2}[-/]\d{2})$/, 'Hẹn hỏi lại $1', '.wait-when', 'Nhắc lại '],
     [/^Nhắc lại sau (\d+) ngày$/, 'Hẹn lại sau $1 ngày', '.wait-actions', 'Nhắc lại sau '],
     [/^Sẽ nhắc lại sau (\d+) ngày\.$/, 'Sẽ hẹn lại sau $1 ngày.', '#toast, .toast, [role=status]', 'Sẽ nhắc lại sau '],
+    // v2.55.0 (Sao Lưu Hằng Tuần)
+    [/^(Tự động|Thủ công|Trước khi khôi phục) · (\d{2}\/\d{2}\/\d{4}(?: \d{2}:\d{2})?)$/, (s, k, when) => ({ 'Tự động': 'Tự hành', 'Thủ công': 'Tự tay', 'Trước khi khôi phục': 'Trước lúc hoàn nguyên' })[k] + ' · ' + when, '.zen-backup-main', ' · '],
+    [/^(\d+) dự án · (\d+) việc · (\d+) ghi chú · (.+)$/, '$1 đại sự · $2 nhiệm vụ · $3 quyển · $4', '.zen-backup-main', ' ghi chú · '],
+    [/^Giữ (\d+) bản tự động gần nhất; bản thủ công và bản “Trước khi khôi phục” giữ (\d+) bản mỗi loại\.$/, 'Giữ $1 bản tự hành gần nhất; bản tự tay và bản “Trước lúc hoàn nguyên” giữ $2 bản mỗi loại.', MAIN, 'bản tự động gần nhất'],
+    [/^Khôi phục dữ liệu về bản (.+)\? Dữ liệu hiện tại sẽ được lưu thành bản “Trước khi khôi phục”\.$/, 'Hoàn nguyên dữ liệu về bản $1? Dữ liệu hiện tại sẽ được cất thành bản “Trước lúc hoàn nguyên”.', '.zen-backup-ask', 'Khôi phục dữ liệu về bản'],
+    [/^Xóa bản sao (.+)\? Không hoàn lại được\.$/, 'Hủy bản sao lục $1? Không hoàn lại được.', '.zen-backup-ask', 'Xóa bản sao '],
+    [/^Chưa tải được danh sách: (.+)$/, (s) => 'Chưa duyệt được danh sách: ' + backupWords(s.slice('Chưa tải được danh sách: '.length)), MAIN, 'Chưa tải được danh sách'],
+    [/^Đã khôi phục dữ liệu về bản (.+)\. Dữ liệu trước đó nằm trong mục “Trước khi khôi phục”\.$/, 'Đã hoàn nguyên dữ liệu về bản $1. Dữ liệu trước đó nằm trong mục “Trước lúc hoàn nguyên”.', '#toast, .toast, [role=status]', 'Đã khôi phục dữ liệu về bản '],
+    ...['sao lưu', 'bản sao', 'khôi phục'].map((quick) => [/^.+$/, (s) => backupWords(s), '.zen-backups-status', quick]),
     // v2.54.0 (Ôn Tuần)
     [/^(\d+) việc$/, '$1 nhiệm vụ', '.zen-review h3 small', 'việc'],
     [/^(\d+)\/(\d+) lượt · (\d+)%$/, '$1/$2 lần luyện · $3%', '.zen-review h3 small', 'lượt'],

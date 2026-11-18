@@ -8,6 +8,7 @@ import {
   activeNoteReminder,
 } from './api.mjs';
 import { purgeStorage } from './storage.mjs';
+import { weeklyBackup } from './backups.mjs';
 import { readWorkspace, purgeWorkspaceV2 } from './workspace-store.mjs';
 import {
   reportDate,
@@ -346,6 +347,17 @@ export async function notificationDaily(env, now = new Date()) {
         .prepare('DELETE FROM report_snapshots WHERE day<?')
         .bind(shiftDay(day, -100)),
     ]);
+  // v2.55.0: sao lưu hằng tuần vào R2 (Chủ nhật 02:00–05:59 giờ Việt Nam). Lỗi ở đây không được làm hỏng việc nhắc việc.
+  try {
+    await weeklyBackup(env, now, { day, hour, weekday });
+  } catch (e) {
+    console.log(
+      JSON.stringify({
+        event: 'weekly_backup_error',
+        message: scrubClientText(e?.message, 120),
+      }),
+    );
+  }
 }
 async function queueNotification(db, userId, day, channel, report) {
   const text =

@@ -51,6 +51,7 @@ function validDependencies(p) {
 import { reportSharePublic, reportShareOwner } from './report-sharing.mjs';
 import { resourceList } from './resources.mjs';
 import { assetAPI, purgeStorage } from './storage.mjs';
+import { backupAPI } from './backups.mjs';
 import {
   reportDate,
   shiftDay,
@@ -1039,6 +1040,11 @@ export async function api(request, env) {
     }
     if (path.startsWith('/api/assets')) {
       const result = await assetAPI(request, env, u);
+      if (result) return result;
+    }
+    // v2.55.0: bản sao lưu hằng tuần trong R2, danh sách / tạo / đọc / xóa (server/backups.mjs).
+    if (path === '/api/backups' || path.startsWith('/api/backups/')) {
+      const result = await backupAPI(request, env, u);
       if (result) return result;
     }
     // v1.24.0: đăng xuất mọi thiết bị. Chỉ xóa phiên của chính người dùng; không đụng dữ liệu công việc.

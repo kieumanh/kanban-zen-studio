@@ -170,3 +170,4 @@ tests/share-target-browser.mjs
 tests/share-target-offline-browser.mjs
 tests/waiting-browser.mjs
 tests/weekly-review-browser.mjs
+tests/backups-browser.mjs

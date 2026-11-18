@@ -2883,3 +2883,82 @@ body select:not([multiple]):not([size]):not([data-zen-native]):not(.wf-original-
   text-decoration: line-through;
   text-decoration-thickness: 1px;
 }
+
+/* v2.55.0 (Sao Lưu Hằng Tuần): khối sao lưu ở Cài đặt → Dữ liệu & đồng bộ (dist/backups.js). */
+.zen-backups {
+  display: grid;
+  gap: 10px;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #e0d4ec;
+}
+.zen-backups h4 {
+  margin: 0;
+}
+.zen-backups-intro {
+  display: grid;
+  gap: 6px;
+}
+.zen-backups .help-copy {
+  margin: 0;
+}
+.zen-backup-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.zen-backup-actions .btn {
+  min-height: 44px;
+  border-radius: 12px;
+}
+.zen-backups-status {
+  min-height: 1.4em;
+  margin: 0;
+  color: #4a3b66;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+.zen-backups-status[data-tone='error'] {
+  color: #9d2f45;
+}
+.zen-backups-list {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.zen-backup-row {
+  display: grid;
+  gap: 8px;
+  padding: 10px 12px;
+  border: 1px solid #e0d4ec;
+  border-radius: 14px;
+  overflow-wrap: anywhere;
+}
+.zen-backup-row[data-kind='restore'] {
+  background: #f9f5fd;
+}
+.zen-backup-main {
+  display: grid;
+  gap: 2px;
+}
+.zen-backup-main small,
+.zen-backups-empty {
+  color: #685974;
+  font-size: 13px;
+}
+.zen-backups-empty {
+  padding: 4px 2px;
+}
+.zen-backup-ask {
+  display: grid;
+  gap: 8px;
+  padding: 10px;
+  border-radius: 12px;
+  background: #f5effc;
+}
+.zen-backup-ask p {
+  margin: 0;
+  font-size: 14px;
+}

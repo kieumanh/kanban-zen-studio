@@ -4213,6 +4213,27 @@
 :root[data-theme=dark] .wf-review-panel p {
     color: #d0c3da
 }
+:root[data-theme=dark] .zen-backups {
+    border-top: 1px solid #433c49
+}
+:root[data-theme=dark] .zen-backups-status {
+    color: #d6caf1
+}
+:root[data-theme=dark] .zen-backups-status[data-tone='error'] {
+    color: #feb3ba
+}
+:root[data-theme=dark] .zen-backup-row {
+    border: 1px solid #433c49
+}
+:root[data-theme=dark] .zen-backup-row[data-kind='restore'] {
+    background: #17131b
+}
+:root[data-theme=dark] .zen-backup-main small, :root[data-theme=dark] .zen-backups-empty {
+    color: #d0c3da
+}
+:root[data-theme=dark] .zen-backup-ask {
+    background: #131017
+}
 
 :root[data-theme=dark] {
   color-scheme: dark;
