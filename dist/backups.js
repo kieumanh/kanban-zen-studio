@@ -81,7 +81,7 @@
                 (ask === 'restore' ? 'Khôi phục bản này' : 'Xóa bản sao') +
                 '</button><button type="button" class="btn" data-zen-backup="cancel">Giữ nguyên</button></div></div>'
               : '<div class="zen-backup-actions"><button type="button" class="btn" data-zen-backup="restore" data-id="' + id + '" aria-label="Khôi phục về ' + esc(label(item)) + '"' +
-                (lock ? ' disabled' : '') + '>Khôi phục</button><button type="button" class="btn" data-zen-backup="delete" data-id="' + id + '" aria-label="Xóa ' + esc(label(item)) + '"' +
+                (lock ? ' disabled' : '') + '>Khôi phục</button><button type="button" class="btn" data-zen-backup="delete" data-id="' + id + '" aria-label="Xóa bản sao ' + esc(label(item)) + '"' +
                 (busy ? ' disabled' : '') + '>Xóa</button></div>') +
             '</li>'
           );

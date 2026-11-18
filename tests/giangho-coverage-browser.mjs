@@ -4,6 +4,8 @@
 // thông báo, quá hạn, hoàn thành, tiến độ, báo cáo, lưu trữ, thùng rác, cài đặt, đăng nhập, mật khẩu, tài khoản, bạn…).
 // Màn hình mới mà quên thêm chữ vào dist/giangho-lex.js sẽ làm test này báo đỏ. Chữ được giữ có chủ đích nằm trong ALLOW, kèm lý do.
 // Kiểm ở 390 (chạm), 820 (chạm), 1440 px. Dữ liệu mẫu dùng tên trung tính để mọi từ bị bắt đều là chữ giao diện.
+// v2.56.0 (Hán Việt Đủ Bộ): thêm các màn của v2.51–v2.55 (Đang đợi hồi âm, hộp Ôn tuần / Kiểm điểm tuần, hộp cất nội dung được chia sẻ,
+// khối Sao lục ở Cài đặt, thông báo của chúng) và thêm bảy từ Thiền vào danh sách bắt (phản hồi, đang chờ, ôn tuần, sao lưu, khôi phục, chia sẻ, đến lúc).
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { startHarness, makeProject } from './lib/browser-harness.mjs';
@@ -11,7 +13,7 @@ import { startHarness, makeProject } from './lib/browser-harness.mjs';
 const src = readFileSync(new URL('../dist/giangho-lex.js', import.meta.url), 'utf8');
 const at0 = src.indexOf('const SKIP = [');
 const SKIP = new Function('return ' + src.slice(at0 + 'const SKIP = '.length, src.indexOf("].join(', ');", at0) + 1))().join(', ');
-const KW = ['công việc', 'việc', 'dự án', 'ghi chú', 'checklist', 'thông báo', 'quá hạn', 'đến hạn', 'hoàn thành', 'tiến độ', 'báo cáo', 'lưu trữ', 'thùng rác', 'cài đặt', 'đăng nhập', 'đăng xuất', 'mật khẩu', 'tài khoản', 'bạn', 'tập trung', 'tài nguyên'];
+const KW = ['công việc', 'việc', 'dự án', 'ghi chú', 'checklist', 'thông báo', 'quá hạn', 'đến hạn', 'hoàn thành', 'tiến độ', 'báo cáo', 'lưu trữ', 'thùng rác', 'cài đặt', 'đăng nhập', 'đăng xuất', 'mật khẩu', 'tài khoản', 'bạn', 'tập trung', 'tài nguyên', 'phản hồi', 'đang chờ', 'ôn tuần', 'sao lưu', 'khôi phục', 'chia sẻ', 'đến lúc'];
 // Giữ có chủ đích (bảng thuật ngữ đã duyệt, mục "Giữ nguyên"):
 const ALLOW = [
   /^@aria-label: Cơ quan · cài đặt tài khoản$/, // nút Cơ quan đọc cả hai nghĩa
@@ -22,6 +24,10 @@ const ALLOW = [
   /^Ghi chú$/, // ô "Ghi chú" của một khoản thu chi (lời ghi kèm), không phải một quyển Tàng thư
   /ám hiệu \(mật khẩu\)/i, // ô mật khẩu ghi "Ám hiệu (mật khẩu)" để giữ nghĩa cho mọi người (v1.91.0)
   /^@title: Nghĩa thường: /, // v1.96.0: title nghĩa thường cố ý ghi chữ cũ (rê chuột / trình đọc màn hình)
+  // v2.56.0: “khôi phục” ở Phế tích. Từ này đã là Hán Việt, bài giangho-settings-browser (v1.91.0) kỳ vọng đúng chữ “Khôi phục” ở trang Phế tích; mỗi nơi một từ theo nghĩa:
+  // Phong ấn → “Giải ấn”, Sao lục → “Hoàn nguyên”, Phế tích → “Khôi phục”.
+  /^Khôi phục$/, // nút khôi phục từng mục trong Phế tích
+  /Phế tích.*khôi phục/, // ba câu giải thích của Phế tích (xóa một mục, xóa đại sự, trang Phế tích)
 ];
 const vn = (back) => new Date(Date.parse('2026-11-12T09:00:00+07:00') - back * 86400000 + 7 * 3600000).toISOString().slice(0, 10);
 const neutral = (p) => {
@@ -33,14 +39,22 @@ const neutral = (p) => {
   });
   return p;
 };
+// v2.56.0: ba việc đang chờ người khác (hai đã đến hẹn), hai việc có ngày hoàn thành, một ghi chú việc trọng tâm của tuần 09–15/11.
+const withNewFeatures = (p1) => {
+  Object.assign(p1.tasks[0], { waitFor: 'Người A', waitUntil: '2026-11-10' });
+  Object.assign(p1.tasks[1], { waitFor: 'Người B', waitUntil: '2026-11-20' });
+  Object.assign(p1.tasks[2], { waitFor: 'Người C', waitUntil: '2026-11-10' }); // còn đến hẹn sau khi bấm “Đã có hồi âm” ở việc đầu: Truyền thư có dòng “Tới lúc hỏi lại”
+  for (const t of p1.tasks) if (t.col === 'Done') t.doneAt = '2026-11-11';
+  return p1;
+};
 const seed = () => ({
   schema: 1,
   projects: [
-    neutral(makeProject('p1', 'Alpha', '#7950c8', 10, { ledger: [{ id: 'e1', type: 'out', amount: 5000000, category: 'Thiết bị', note: '', date: vn(20) }, { id: 'e2', type: 'in', amount: 2000000, category: 'Doanh thu', note: '', date: vn(3) }] })),
+    withNewFeatures(neutral(makeProject('p1', 'Alpha', '#7950c8', 10, { ledger: [{ id: 'e1', type: 'out', amount: 5000000, category: 'Thiết bị', note: '', date: vn(20) }, { id: 'e2', type: 'in', amount: 2000000, category: 'Doanh thu', note: '', date: vn(3) }] }))),
     neutral(makeProject('p2', 'Beta', '#2e7d5b', 4)),
     { ...neutral(makeProject('p3', 'Gamma', '#e78c56', 2)), archived: true },
   ],
-  notes: [{ id: 'n1', type: 'note', title: 'Sổ tay', text: 'Nội dung A', url: '', group: 'Nhóm A', color: '#7950c8' }],
+  notes: [{ id: 'n1', type: 'note', title: 'Sổ tay', text: 'Nội dung A', url: '', group: 'Nhóm A', color: '#7950c8' }, { id: 'wk-2026-11-09', type: 'todo', title: 'Tuần A', text: '', url: '', group: '', color: '#7950c8', items: [{ text: 'Mục A', done: false }], weekPicks: [{ p: 'p1', t: 'p1t0' }], weekOf: '2026-11-09' }],
   dailyHabits: [{ id: 'h1', name: 'Đi bộ', icon: '🚶', color: '#2e7d5b', createdAt: '2026-10-01', goal: 7, done: [vn(1), vn(2), vn(3)] }],
   trash: [{ id: 'tr1', at: Date.now() - 1000, kind: 'note', name: 'Cũ A', payload: JSON.stringify({ id: 'n9', type: 'note', title: 'Cũ A', text: '', url: '', group: '', color: '#7950c8' }), parent: '' }],
 });
@@ -93,7 +107,17 @@ try {
       const list = (await leftovers(page, root)).filter((s) => !ALLOW.some((re) => re.test(s)));
       if (list.length) found[name] = list;
     };
-    const { context, page } = await h.open(width, { touch, now: '2026-11-12T09:00:00+07:00', setup: GH });
+    // v2.56.0: /api/backups giả để khối Sao lục ở Cài đặt có đủ dòng mà kiểm.
+    const BACKUPS = { available: true, auto: true, keep: { auto: 8, other: 5 }, items: [
+      { id: '2026-11-08-auto', kind: 'auto', createdAt: '2026-11-07T20:00:00.000Z', revision: 3, size: 4096, projects: 2, tasks: 8, notes: 1 },
+      { id: '2026-11-10T101500-manual', kind: 'manual', createdAt: '2026-11-10T03:15:00.000Z', revision: 4, size: 2048, projects: 2, tasks: 9, notes: 1 },
+      { id: '2026-11-11T083000-restore', kind: 'restore', createdAt: '2026-11-11T01:30:00.000Z', revision: 5, size: 3072, projects: 3, tasks: 10, notes: 1 },
+    ] };
+    const setup = async (ctx) => {
+      await GH(ctx);
+      await ctx.page.route('**/api/backups**', (route) => route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(BACKUPS) }));
+    };
+    const { context, page } = await h.open(width, { touch, now: '2026-11-12T09:00:00+07:00', setup });
     const errors = [];
     page.on('pageerror', (e) => errors.push(e.message));
     for (const v of ['dashboard', 'projects', 'calendar', 'gantt', 'growth', 'budget', 'habits', 'focus', 'notes', 'resources', 'archive', 'trash']) {
@@ -136,10 +160,29 @@ try {
     await page.evaluate(() => document.querySelectorAll('dialog[open] details').forEach((d) => (d.open = true)));
     await check('soạn quyển', 'dialog[open]');
     await close(page);
+    // v2.56.0: các màn mới của v2.51–v2.55 (Đang đợi hồi âm, Kiểm điểm tuần, cất nội dung được truyền tới, Sao lục).
+    await h.show(page, 'dashboard');
+    await page.waitForSelector('#main .wf-wait-panel');
+    await check('Đang đợi hồi âm (Tổng đàn)', '#main');
+    await page.locator('#main .wf-wait-panel [data-wait-got]').first().click();
+    await page.waitForFunction(() => document.querySelector('#toast')?.classList.contains('show'));
+    await check('truyền thư sau khi ghi hồi âm', '#toast');
+    await h.show(page, 'projects', 'p1');
+    await page.waitForSelector('.task-card .wait-label');
+    await check('thẻ nhiệm vụ đang đợi hồi âm', '#main');
+    await page.evaluate(() => window.zenWeeklyReview.open());
+    await page.waitForSelector('dialog.zen-review[open]');
+    await check('Kiểm điểm tuần', 'dialog[open]');
+    await close(page);
+    await page.evaluate(() => window.zenShareTarget.open({ title: 'Tiêu đề A', text: 'Nội dung A', url: '' }));
+    await page.waitForSelector('dialog.zen-share[open]');
+    await check('cất nội dung được truyền tới', 'dialog[open]');
+    await close(page);
     await page.evaluate(() => accountPanel());
     await page.waitForFunction(() => document.querySelector('dialog[open] #editor-body.wf-settings'));
     await page.waitForTimeout(500);
     await page.evaluate(() => document.querySelectorAll('dialog[open] details').forEach((d) => (d.open = true)));
+    await page.waitForSelector('#zen-backups .zen-backup-row');
     await check('Cơ quan', 'dialog[open]');
     await page.click('#sign-out');
     await page.waitForFunction(() => document.querySelector('dialog[open] [data-confirm=signout]'));
@@ -176,6 +219,7 @@ try {
       await auth.page.evaluate((m) => authScreen(m), mode);
       const list = (await leftovers(auth.page, '#auth-screen')).filter((s) => !ALLOW.some((re) => re.test(s)));
       if (list.length) authFound[mode] = list;
+      if (mode === 'forgot') assert.equal((await auth.page.locator('#auth-form button[type=submit]').innerText()).trim(), 'Gửi thư lấy lại ám hiệu', 'nút quên ám hiệu' + at);
     }
     assert.deepEqual(authFound, {}, 'màn hình Nhập môn còn chữ giọng Thiền' + at);
     await auth.context.close();

@@ -513,6 +513,7 @@
     ['quan trọng', { to: 'trọng yếu', in: '.notice-stats' }],
     ['Xem chi tiết', { to: 'Xem tường tận', in: '.release-actions' }],
     ['Đến giờ nhắc việc', { to: 'Tới giờ luyện nhật khóa', in: '.notice-item' }],
+    ['Đến lúc hỏi lại', { to: 'Tới lúc hỏi lại', in: '.notice-item' }],
     // Phong ấn
     ['Xem dự án', { to: 'Xem đại sự', in: '.archive-projects' }],
     ['Khôi phục', { to: 'Giải ấn', in: '.wf-archive-row, [data-project-archive]' }],
@@ -538,6 +539,7 @@
     ['Quên mật khẩu', { to: 'Quên ám hiệu', in: AUTH }],
     ['Mật khẩu mới', { to: 'Ám hiệu mới', in: AUTH }],
     ['Lưu mật khẩu', { to: 'Lưu ám hiệu', in: AUTH }],
+    ['Gửi liên kết khôi phục', { to: 'Gửi thư lấy lại ám hiệu', in: AUTH }],
     ['Hiện mật khẩu', { to: 'Hiện ám hiệu (mật khẩu)', in: AUTH }],
     ['Ẩn mật khẩu', { to: 'Ẩn ám hiệu (mật khẩu)', in: AUTH }],
     // Thông báo nhanh và dòng trạng thái: "Đã lưu" → "Đã ghi vào sổ"
@@ -992,6 +994,8 @@
     [/^Chưa tải được danh sách: (.+)$/, (s) => 'Chưa duyệt được danh sách: ' + backupWords(s.slice('Chưa tải được danh sách: '.length)), MAIN, 'Chưa tải được danh sách'],
     [/^Đã khôi phục dữ liệu về bản (.+)\. Dữ liệu trước đó nằm trong mục “Trước khi khôi phục”\.$/, 'Đã hoàn nguyên dữ liệu về bản $1. Dữ liệu trước đó nằm trong mục “Trước lúc hoàn nguyên”.', '#toast, .toast, [role=status]', 'Đã khôi phục dữ liệu về bản '],
     ...['sao lưu', 'bản sao', 'khôi phục'].map((quick) => [/^.+$/, (s) => backupWords(s), '.zen-backups-status', quick]),
+    [/^Khôi phục về (.+)$/, (s, label) => 'Hoàn nguyên về ' + backupWords(label), '.zen-backup-actions', 'Khôi phục về '],
+    [/^Xóa bản sao (.+)$/, (s, label) => 'Hủy bản sao lục ' + backupWords(label), '.zen-backup-actions', 'Xóa bản sao '],
     // v2.54.0 (Ôn Tuần)
     [/^(\d+) việc$/, '$1 nhiệm vụ', '.zen-review h3 small', 'việc'],
     [/^(\d+)\/(\d+) lượt · (\d+)%$/, '$1/$2 lần luyện · $3%', '.zen-review h3 small', 'lượt'],
