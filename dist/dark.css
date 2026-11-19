@@ -3405,6 +3405,9 @@
 :root[data-theme=dark] .gr-store-chip input:checked+span {
     color: #ffffff
 }
+:root[data-theme=dark] dialog.gr-sow::backdrop {
+    background: rgba(48,37,28,0.533)
+}
 :root[data-theme=dark] {
     --muted: #ccc2d7;
     --text-muted: #ccc2d7

@@ -592,22 +592,30 @@
   }
   function openAward(opt) {
     if (award) closeAward(false);
+    // v2.66.0 (Gieo Nhân): việc đã gieo nhân cho một phương thì công lực dồn sẵn vào phương ấy; người dùng chỉ cần bấm Lưu (hoặc Hoàn tác để dồn chỗ khác).
+    const pre = opt.axis ? AXES.findIndex((x) => x.id === opt.axis) : -1;
     const d = document.createElement('dialog');
     d.id = 'growth-award';
     d.className = 'gr-award';
     d.setAttribute('aria-labelledby', 'gr-award-title');
-    d.innerHTML = '<form method="dialog" class="gr-award-form"><header><span class="eyebrow">GIANG HỒ TU LUYỆN</span><h2 id="gr-award-title">Vận công bồi bổ</h2><p class="help-copy">' + (opt.lead ? esc(opt.lead) + ' ' : opt.title ? 'Các hạ vừa hoàn thành “' + esc(opt.title) + '”. ' : '') + (opt.intro || 'Chọn mạch muốn dồn công lực.') + '</p></header>' +
+    d.innerHTML = '<form method="dialog" class="gr-award-form"><header><span class="eyebrow">GIANG HỒ TU LUYỆN</span><h2 id="gr-award-title">Vận công bồi bổ</h2><p class="help-copy">' + (opt.lead ? esc(opt.lead) + ' ' : opt.title ? 'Các hạ vừa hoàn thành “' + esc(opt.title) + '”. ' : '') + (opt.intro || 'Chọn mạch muốn dồn công lực.') + '</p>' + (pre >= 0 ? '<p class="help-copy gr-sown">Nhiệm vụ này đã gieo nhân cho <strong>' + AXES[pre].name + '</strong>, nên công lực đã dồn sẵn vào phương ấy. Bấm Lưu công lực để ghi nhận, hoặc bấm Hoàn tác hai lần để dồn sang phương khác.</p>' : '') + '</header>' +
       '<p class="gr-budget" aria-live="polite"></p><div class="gr-cols" role="group" aria-label="Bát mạch"></div><p class="gr-live sr-only" role="status" aria-live="polite"></p>' +
       '<footer class="gr-award-foot"><button type="button" class="btn ghost" data-gr-undo>Hoàn tác</button><span class="gr-grow"></span><button type="button" class="btn" data-gr-skip>Để sau</button><button type="button" class="btn primary" data-gr-save>Lưu công lực</button></footer></form>';
     document.body.append(d);
     award = { source: opt.source, key: opt.key, title: opt.title, steps: opt.steps, spent: 0, add: Array(8).fill(0), stack: [], last: null, el: d, then: opt.then };
+    if (pre >= 0) {
+      award.add[pre] = opt.steps;
+      award.spent = opt.steps;
+      award.stack = Array(opt.steps).fill(pre);
+      award.last = pre;
+    }
     d.addEventListener('cancel', (e) => {
       e.preventDefault();
       closeAward(false);
     });
     paintAward();
     d.showModal();
-    d.querySelector('.gr-plus')?.focus();
+    (pre >= 0 ? d.querySelector('[data-gr-save]') : d.querySelector('.gr-plus'))?.focus(); // đã dồn sẵn thì các nút + đã khóa, tiêu điểm vào nút Lưu
   }
 
   // Việc vừa hoàn thành: completionKindFor() luôn được gọi ngay trước celebrateCompletion() nên dùng nó để biết đó là việc nào.
@@ -625,7 +633,7 @@
     const task = ctx && kind !== 'check' ? data.projects.flatMap((p) => p.tasks).find((t) => t.id === ctx.id) : null;
     const g = growth();
     if (!g || contentReadOnly || !task || task.col !== 'Done' || Date.now() - ctx.at > 3000 || isScored(g, 'task:' + task.id)) return baseCelebrate.apply(this, args);
-    openAward({ source: 'task', key: 'task:' + task.id, title: task.title, steps: TASK_STEPS, then: () => baseCelebrate.apply(window, args) });
+    openAward({ source: 'task', key: 'task:' + task.id, title: task.title, steps: TASK_STEPS, axis: task.axis, then: () => baseCelebrate.apply(window, args) });
   };
   // Việc hằng ngày vừa đủ chuỗi 7, 14, 21… ngày liền (habits.js gọi sau khi tích): hỏi điểm một lần cho mỗi việc mỗi ngày.
   function habitStreak(h, n) {
@@ -829,14 +837,17 @@
       ? 'Tám phương đang ngang nhau (' + fmt(s[0]) + ' điểm mỗi phương). Gợi ý bắt đầu từ <strong>' + a.name + '</strong>; các hạ cũng có thể chọn phương khác tùy ý.'
       : 'Phương yếu nhất hiện nay là <strong>' + a.name + '</strong> (' + fmt(s[w]) + ' điểm, thấp nhất trong tám phương; mức trung bình ' + fmt1(rep.mean) + ').' + (tied.length ? ' ' + tied.map((i) => AXES[i].name).join(', ') + ' cũng thấp ngang.' : '');
     const when = last ? 'Lần gần nhất bồi bổ phương này: ' + dayLabel(last, t) + (daysAgo(t, last) ? ' (' + daysAgo(t, last) + ' ngày trước).' : ' (hôm nay).') : 'Phương này chưa từng được bồi bổ.';
-    const list = (arr) => '<ul>' + arr.map((x) => '<li>' + esc(x) + '</li>').join('') + '</ul>';
+    // v2.66.0 (Gieo Nhân): mỗi gợi ý Nhân có nút “Gieo nhân” (growth-sow.js) tạo việc mang sẵn phương này.
+    const sow = window.zenSow;
+    const list = (arr, kind) => '<ul>' + arr.map((x) => '<li><span class="gr-sow-text">' + esc(x) + '</span>' + (sow ? sow.button(a.id, kind, x) : '') + '</li>').join('') + '</ul>';
     return '<section class="panel gr-cult" aria-label="Gợi ý tu luyện theo phương yếu nhất" data-axis="' + a.id + '" style="--c:' + a.color + '"><h2>Gợi ý tu luyện theo phương yếu nhất</h2>' +
       '<p class="gr-cult-lead">' + lead + '</p><p class="gr-cult-when">' + when + '</p>' +
       '<p class="gr-karma gr-cult-karma"><strong>' + KARMA.name + '</strong> <small>' + KARMA.sub + '</small> <span>' + KARMA.means + '</span></p>' +
       '<ol class="gr-cult-steps">' +
-      '<li data-step="self"><small>Nhân · cho mình</small><h3>Gieo cho chính mình</h3>' + list(plan.self) + '</li>' +
-      '<li data-step="give"><small>Nhân · cho người</small><h3>Gieo cho người</h3>' + list(plan.give) + '</li>' +
+      '<li data-step="self"><small>Nhân · cho mình</small><h3>Gieo cho chính mình</h3>' + list(plan.self, 'self') + '</li>' +
+      '<li data-step="give"><small>Nhân · cho người</small><h3>Gieo cho người</h3>' + list(plan.give, 'give') + '</li>' +
       '<li data-step="fruit"><small>Quả · về mình</small><h3>Quả trổ về ' + a.name + '</h3><p>' + esc(plan.fruit) + '</p></li></ol>' +
+      (sow ? sow.summary() : '') +
       '<p class="help-copy">Làm xong một việc, hoàn thành nó trong ứng dụng rồi dồn điểm vào ' + a.name + ' ở bảng vận công để Bát phương đồ ghi nhận. Việc giúp người cũng tính cho phương ấy: gieo ở đâu, quả về đó.</p></section>';
   }
   function reportPage() {

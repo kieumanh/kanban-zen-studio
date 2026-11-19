@@ -180,3 +180,4 @@ tests/growth-cultivate-browser.mjs
 tests/worklist-browser.mjs
 tests/worklist-report-browser.mjs
 tests/worklist-report-range-browser.mjs
+tests/growth-sow-browser.mjs

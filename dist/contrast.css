@@ -3406,6 +3406,9 @@
 :root[data-contrast=high] .gr-store-chip input:checked+span {
     color: #ffffff
 }
+:root[data-contrast=high] dialog.gr-sow::backdrop {
+    background: rgba(48,37,28,0.533)
+}
 :root[data-contrast=high] {
     --muted: #060606;
     --text-muted: #060606
@@ -7827,6 +7830,9 @@
 }
 :root[data-theme=dark][data-contrast=high] .gr-store-chip input:checked+span {
     color: #ffffff
+}
+:root[data-theme=dark][data-contrast=high] dialog.gr-sow::backdrop {
+    background: rgba(48,37,28,0.533)
 }
 :root[data-theme=dark][data-contrast=high] {
     --muted: #f5f5f5;

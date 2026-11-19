@@ -102,7 +102,9 @@ const read = (page) =>
     const q = (s) => el.querySelector(s);
     const step = (k) =>
       [
-        ...el.querySelectorAll('.gr-cult-steps > li[data-step="' + k + '"] li'),
+        ...el.querySelectorAll(
+          '.gr-cult-steps > li[data-step="' + k + '"] li .gr-sow-text',
+        ),
       ].map((x) => x.textContent);
     const clean = (s) => s.replace(/\s+/g, ' ').trim();
     return {

@@ -6178,6 +6178,32 @@
     border-color: var(--gr-gold);
     box-shadow: 0 0 0 1px var(--gr-gold)
 }
+:root[data-style=giangho] .gr-sow-sum {
+    border: 1px solid var(--line);
+    background: var(--paper)
+}
+:root[data-style=giangho] .gr-sow-sum:focus-visible {
+    outline: 2px solid var(--c,currentColor)
+}
+:root[data-style=giangho] dialog.gr-sow {
+    border-top: 4px solid var(--c,currentColor)
+}
+:root[data-style=giangho] dialog.gr-sow::backdrop {
+    background: rgba(48,37,28,0.533)
+}
+:root[data-style=giangho] .gr-sow-err {
+    border: 1px solid currentColor
+}
+:root[data-style=giangho] .gr-sown {
+    border-left: 3px solid var(--gr-seal,currentColor);
+    background: color-mix(in srgb,var(--gr-seal,currentColor) 8%,transparent)
+}
+:root[data-style=giangho] .task-card-sow {
+    color: var(--muted)
+}
+:root[data-style=giangho] .task-card-sow i {
+    background: var(--c)
+}
 :root[data-style=giangho] {
     --muted: #685345;
     --text-muted: #685345
@@ -13832,6 +13858,32 @@
 :root[data-style=giangho][data-theme=dark] .gr-spend-row.is-fit input {
     border-color: var(--gr-gold);
     box-shadow: 0 0 0 1px var(--gr-gold)
+}
+:root[data-style=giangho][data-theme=dark] .gr-sow-sum {
+    border: 1px solid var(--line);
+    background: var(--paper)
+}
+:root[data-style=giangho][data-theme=dark] .gr-sow-sum:focus-visible {
+    outline: 2px solid var(--c,currentColor)
+}
+:root[data-style=giangho][data-theme=dark] dialog.gr-sow {
+    border-top: 4px solid var(--c,currentColor)
+}
+:root[data-style=giangho][data-theme=dark] dialog.gr-sow::backdrop {
+    background: rgba(48,37,28,0.533)
+}
+:root[data-style=giangho][data-theme=dark] .gr-sow-err {
+    border: 1px solid currentColor
+}
+:root[data-style=giangho][data-theme=dark] .gr-sown {
+    border-left: 3px solid var(--gr-seal,currentColor);
+    background: color-mix(in srgb,var(--gr-seal,currentColor) 8%,transparent)
+}
+:root[data-style=giangho][data-theme=dark] .task-card-sow {
+    color: var(--muted)
+}
+:root[data-style=giangho][data-theme=dark] .task-card-sow i {
+    background: var(--c)
 }
 :root[data-style=giangho][data-theme=dark] {
     --muted: #e1ccbf;

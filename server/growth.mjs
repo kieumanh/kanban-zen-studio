@@ -8,6 +8,17 @@
 // (hai thiết bị cùng quy đổi lúc chưa đồng bộ vẫn phải lưu được); phía giao diện chặn vượt số dư và hiển thị số dư không âm.
 // Lưu theo sổ cái (mỗi lần cộng là một dòng có id) để hai thiết bị cùng cộng điểm vẫn gộp được theo id.
 export const GROWTH_AXIS_COUNT = 8;
+// v2.66.0 (Gieo Nhân): mã tám phương mà một việc có thể mang sẵn (trường tùy chọn `axis` ngay trên việc). Cùng mã với AXES trong dist/growth.js.
+export const GROWTH_AXIS_IDS = [
+  'dao',
+  'tai',
+  'tam',
+  'duyen',
+  'than',
+  'tri',
+  'nghe',
+  'gia',
+];
 export const GROWTH_LOG_MAX = 3000;
 export const GROWTH_SPEND_MAX = 500;
 const GROWTH_SOURCES = ['task', 'habit', 'archive'];
