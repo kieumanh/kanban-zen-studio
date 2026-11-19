@@ -650,6 +650,13 @@
     'Chọn hiệp khách ở mục Điểm tích lũy để bật thông báo điểm nghiệp và gợi ý cải thiện hằng tuần.': 'Chọn hiệp khách ở mục Tu vi để bật truyền thư điểm nghiệp và gợi ý cải thiện hằng tuần.',
     'Mở Điểm tích lũy': 'Mở Tu vi',
     'Gộp cuối ngày: xong việc không hiện bảng vận công, việc vào hàng chờ để chia một lượt ở trang Điểm tích lũy.': 'Gộp cuối ngày: công thành không mở bảng vận công, nhiệm vụ vào hàng chờ để chia một lượt ở mục Tu vi.',
+    // v2.71.0 (Thám Báo): khối Chỉ số ẩn danh ở Cài đặt.
+    'Mỗi ngày, mỗi thiết bị gửi tối đa một dấu cho mỗi màn hình hoặc tính năng đã mở (ví dụ “Điểm tích lũy”, “Thêm nhanh”) cùng số phiên bản ứng dụng. Không kèm tên, email, nội dung việc hay ghi chú, mã tài khoản hay địa chỉ IP. Dấu này chỉ để biết nên cải thiện phần nào. Áp dụng cho thiết bị này; trình duyệt bật “Do Not Track” hoặc Global Privacy Control thì không gửi.':
+      'Mỗi ngày, mỗi máy chỉ gửi tối đa một dấu cho mỗi mục hoặc môn đã mở (ví dụ “Tu vi”, “Thêm nhanh”) cùng số phiên bản. Không kèm tên, thư truyền, nội dung nhiệm vụ hay tàng thư, mã danh tính hay địa chỉ IP. Dấu này chỉ để biết nên cải thiện phần nào. Áp dụng cho máy này; trình duyệt bật “Do Not Track” hoặc Global Privacy Control thì không gửi.',
+    'Chia sẻ chỉ số ẩn danh từ thiết bị này': 'Cho phép gửi dấu vết ẩn danh từ máy này',
+    'Báo lỗi tự động khi một đoạn mã của ứng dụng bị lỗi là mục riêng, không nằm trong công tắc này.': 'Báo lỗi tự động khi một đoạn mã gặp lỗi là mục riêng, không nằm trong công tắc này.',
+    'Đã bật chỉ số ẩn danh trên thiết bị này.': 'Đã mở gửi dấu vết ẩn danh trên máy này.',
+    'Đã tắt chỉ số ẩn danh trên thiết bị này. Thiết bị này không gửi dấu dùng nào nữa.': 'Đã khóa gửi dấu vết ẩn danh trên máy này. Máy này không gửi dấu nào nữa.',
     'Đã bật gộp cuối ngày.': 'Đã bật gộp cuối ngày.',
     'Đã trở lại hỏi từng việc.': 'Đã trở lại hỏi từng nhiệm vụ.',
     'Tiến độ dự án và những việc nên ưu tiên cho tuần tới.': 'Tiến cảnh đại sự và những nhiệm vụ nên ưu tiên cho tuần tới.',

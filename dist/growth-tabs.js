@@ -54,6 +54,7 @@
   function go(id, opt) {
     if (!ids.includes(id)) return false;
     tab = id;
+    window.zenUsage?.mark('growth-' + id); // v2.71.0: tab nào được mở (đo theo thiết bị-ngày)
     try {
       localStorage.setItem(KEY, id);
     } catch {

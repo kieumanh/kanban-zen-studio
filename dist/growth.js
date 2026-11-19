@@ -506,6 +506,7 @@
       if (!entry.n) delete entry.n;
       const t0 = earnedTotal(), s0 = earnedScores(), before = realmOf(t0, s0);
       if (!wfSave(() => { data.growth.log.push(entry); data.growth.spend ||= []; compact(); if (a.source === 'task') window.zenQueue?.clear(a.key); })) return notify('Chưa lưu được điểm. Hãy thử lại.');
+      if (a.source === 'task') window.zenUsage?.mark('award-save');
       const t1 = earnedTotal(), s1 = earnedScores(), after = realmOf(t1, s1);
       crossing = [before.level, after.level, t0, t1, s0, s1];
       // Thông báo điểm nghiệp (bật mặc định, tắt ở Cài đặt → Thông báo): lên cấp, đột phá cảnh giới mới; với việc hằng ngày còn báo số điểm vừa cộng.
@@ -595,7 +596,10 @@
   }
   // v2.67.0 (Tích Công): bấm Để sau (hoặc Esc) ở bảng của một việc thì việc không mất điểm: vào hàng chờ vận công (growth-queue.js).
   function deferAward(how) {
-    if (award && award.source === 'task' && award.key) window.zenQueue?.defer(award.key.slice(5), award.title, award.queued, how);
+    if (award && award.source === 'task' && award.key) {
+      window.zenQueue?.defer(award.key.slice(5), award.title, award.queued, how);
+      if (how !== 'auto') window.zenUsage?.mark('award-later'); // v2.71.0: đo tỉ lệ Để sau (bấm tay hoặc Esc), không đếm lần bảng bị thay chỗ
+    }
   }
   function openAward(opt) {
     if (award) {
@@ -890,6 +894,7 @@
   }
   // Cho các phần sau (đủ 7 ngày tích lũy, báo cáo) dùng chung.
   function openReport() {
+    window.zenUsage?.mark('open-report');
     changing = false;
     reporting = true;
     go('growth');
@@ -1179,6 +1184,7 @@
     if (t.hasAttribute('data-gr-save')) return closeAward(true);
     if (t.hasAttribute('data-gr-report') || t.hasAttribute('data-gr-back')) {
       reporting = t.hasAttribute('data-gr-report');
+      if (reporting) window.zenUsage?.mark('open-report');
       stopTimer();
       render();
       return window.scrollTo({ top: 0, left: 0 });

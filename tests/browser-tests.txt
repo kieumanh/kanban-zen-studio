@@ -185,3 +185,4 @@ tests/growth-queue-browser.mjs
 tests/growth-tabs-browser.mjs
 tests/growth-goal-browser.mjs
 tests/growth-hoiquang-browser.mjs
+tests/diagnostics-usage-browser.mjs

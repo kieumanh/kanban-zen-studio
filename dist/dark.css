@@ -4425,6 +4425,9 @@
 :root[data-theme=dark] .wlr-fixname small {
     color: #d0c3da
 }
+:root[data-theme=dark] .usage-block {
+    border-top: 1px solid #3d3843
+}
 
 :root[data-theme=dark] {
   color-scheme: dark;

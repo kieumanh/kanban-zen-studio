@@ -3759,3 +3759,24 @@ body select:not([multiple]):not([size]):not([data-zen-native]):not(.wf-original-
   min-height: 44px;
   border-radius: 12px;
 }
+
+/* v2.71.0 (Thám Báo): khối Chỉ số ẩn danh ở Cài đặt (không dùng lớp nf-block của nhóm Thông báo). */
+.usage-block {
+  display: grid;
+  gap: 10px;
+  min-width: 0;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid #e8dff0;
+}
+.usage-block > h4 {
+  margin: 0;
+  font-size: 17px;
+}
+.usage-block .help-copy {
+  margin: 0;
+}
+.usage-block .check-row {
+  min-height: 44px;
+  align-items: center;
+}

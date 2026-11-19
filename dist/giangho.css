@@ -7793,6 +7793,9 @@
 :root[data-style=giangho] .wlr-fixname small {
     color: #624d40
 }
+:root[data-style=giangho] .usage-block {
+    border-top: 1px solid #eeddc5
+}
 :root[data-style=giangho][data-theme=dark] {
     --bg: #18130c;
     --paper: #1e1811;
@@ -15536,6 +15539,9 @@
 }
 :root[data-style=giangho][data-theme=dark] .wlr-fixname small {
     color: #e5cdbe
+}
+:root[data-style=giangho][data-theme=dark] .usage-block {
+    border-top: 1px solid #433830
 }
 
 /* ---- Họa tiết Giang hồ viết tay (v1.86.0 · Chu Mặc) ------------------------------------------------------------------------

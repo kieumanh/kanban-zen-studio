@@ -426,6 +426,7 @@
       p.tasks.pop();
       return { ok: false, message: 'Chưa lưu được việc mới.' };
     }
+    window.zenUsage?.mark('quickadd'); // v2.71.0: đo số thiết bị dùng Thêm nhanh mỗi ngày
     const bits = [`Đã thêm “${r.title}”`];
     if (r.date) bits.push('Hạn ' + describe(r, ctx.today));
     bits.push(p.name);
