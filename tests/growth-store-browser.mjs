@@ -6,10 +6,10 @@ import assert from 'node:assert/strict';
 import { startHarness } from './lib/browser-harness.mjs';
 
 const day = (n) => new Date(Date.now() + n * 864e5).toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
-// Nửa điểm → điểm: Nghiệp quả 120 · Tài lộc 300 · Tâm cảnh 80 · Nhân duyên 45 · Thể lực 260 · Trí tuệ 410 · Sự nghiệp 150 · Tinh thần 95 = 1.460 điểm.
+// Nửa điểm → điểm: Đạo tâm 120 · Tài lộc 300 · Tâm cảnh 80 · Nhân duyên 45 · Thân thể 260 · Trí tuệ 410 · Sự nghiệp 150 · Gia đạo 95 = 1.460 điểm.
 const RICH = [240, 600, 160, 90, 520, 820, 300, 190];
-const THIN = [1, 0, 0, 0, 0, 0, 0, 0]; // đúng 0,5 điểm ở Nghiệp quả
-const AXES = ['Nghiệp quả', 'Tài lộc', 'Tâm cảnh', 'Nhân duyên', 'Thể lực', 'Trí tuệ', 'Sự nghiệp', 'Tinh thần'];
+const THIN = [1, 0, 0, 0, 0, 0, 0, 0]; // đúng 0,5 điểm ở Đạo tâm
+const AXES = ['Đạo tâm', 'Tài lộc', 'Tâm cảnh', 'Nhân duyên', 'Thân thể', 'Trí tuệ', 'Sự nghiệp', 'Gia đạo'];
 const withGrowth = (p, spend = []) => () => ({
   schema: 1,
   projects: [],
@@ -121,12 +121,12 @@ try {
     assert.deepEqual(a.rich.rich, [5, 1]);
     assert.match(a.rich.item, /^Chọn một món rồi bấm “Hỏi bà chủ”/, 'chưa chọn món thì mời chọn');
     for (const k of ['zero', 'thin', 'rich', 'troRich']) assert.equal(a[k].close, 'Giá do các hạ tự định theo cảm nhận của mình; tám mạch nào cũng trả được, nhiều hay ít đều tùy tâm.', 'câu chốt: giá do người chơi tự định');
-    assert.equal(a.troRich.fit, 'Món này hợp mạch Thể lực, Tâm cảnh. Đang có Thể lực (260), Tâm cảnh (80): lấy từ đó thì thuận nhất.');
+    assert.equal(a.troRich.fit, 'Món này hợp mạch Thân thể, Tâm cảnh. Đang có Thân thể (260), Tâm cảnh (80): lấy từ đó thì thuận nhất.');
     assert.deepEqual(a.troRich.fitAxes, [4, 2]);
-    assert.match(a.troEmpty.fit, /các mạch ấy đang trống\. Lấy từ Tinh thần cũng được\./, 'mạch hợp đang trống thì gợi ý mạch khác');
-    assert.equal(a.troZero.fit, 'Món này hợp mạch Thể lực, Tâm cảnh.');
+    assert.match(a.troEmpty.fit, /các mạch ấy đang trống\. Lấy từ Gia đạo cũng được\./, 'mạch hợp đang trống thì gợi ý mạch khác');
+    assert.equal(a.troZero.fit, 'Món này hợp mạch Thân thể, Tâm cảnh.');
     assert.equal(a.hintRich, 'Nên lấy từ Sự nghiệp 150, Tài lộc 300, Nhân duyên 45.');
-    assert.match(a.hintEmpty, /^Mạch hợp \(Thể lực, Tâm cảnh\) đang trống/);
+    assert.match(a.hintEmpty, /^Mạch hợp \(Thân thể, Tâm cảnh\) đang trống/);
     assert.equal(a.hintZero, 'Chưa có tu vi để quy đổi.');
     await context.close();
   }
@@ -162,7 +162,7 @@ try {
         const it = item(page, id);
         assert.equal(await it.locator('.gr-store-pic svg.gr-st-pic').count(), 1, 'hình món ' + id + at);
         assert.equal(await it.locator('.gr-store-pay i').count(), 8, 'món ' + id + ' trả được bằng cả tám mạch' + at);
-        assert.match(await it.locator('.gr-store-pay').getAttribute('aria-label'), /Trả được bằng cả tám mạch: Nghiệp quả, .*Tinh thần/);
+        assert.match(await it.locator('.gr-store-pay').getAttribute('aria-label'), /Trả được bằng cả tám mạch: Đạo tâm, .*Gia đạo/);
         for (const sel of ['[data-gr-shop-ask]', '[data-gr-shop-buy]']) {
           const b = await it.locator(sel).boundingBox();
           assert.ok(b.height >= minBtn && b.width >= (touch ? 80 : 60), 'nút ' + sel + ' của ' + id + ' đủ lớn' + at);
@@ -187,10 +187,10 @@ try {
       await h.show(page, 'growth');
       await page.click('[data-gr-shop-ask="tro"]');
       assert.equal(await page.evaluate(() => document.activeElement?.dataset.grShopAsk), 'tro', 'con trỏ vẫn ở nút Hỏi bà chủ' + at);
-      assert.match(await text(page.locator('.gr-store-say')), /Nhà trọ lo chỗ nằm yên cho thân và chỗ nghỉ cho tâm.*Món này hợp mạch Thể lực, Tâm cảnh\. Đang có Thể lực \(260\), Tâm cảnh \(80\): lấy từ đó thì thuận nhất\./, 'tư vấn Nhà trọ' + at);
+      assert.match(await text(page.locator('.gr-store-say')), /Nhà trọ lo chỗ nằm yên cho thân và chỗ nghỉ cho tâm.*Món này hợp mạch Thân thể, Tâm cảnh\. Đang có Thân thể \(260\), Tâm cảnh \(80\): lấy từ đó thì thuận nhất\./, 'tư vấn Nhà trọ' + at);
       assert.equal(await page.locator('.gr-store-item.is-asked').count(), 1);
       assert.equal(await item(page, 'tro').evaluate((n) => n.classList.contains('is-asked')), true, 'thẻ được hỏi được đánh dấu' + at);
-      assert.deepEqual(await page.evaluate(() => [...document.querySelectorAll('.gr-store-bars li.is-fit span')].map((n) => n.textContent)), ['Tâm cảnh', 'Thể lực'], 'đánh dấu hai mạch hợp' + at);
+      assert.deepEqual(await page.evaluate(() => [...document.querySelectorAll('.gr-store-bars li.is-fit span')].map((n) => n.textContent)), ['Tâm cảnh', 'Thân thể'], 'đánh dấu hai mạch hợp' + at);
       await settle(page);
       const [bd1, bd2] = await page.evaluate(() => ['tro', 'son'].map((id) => getComputedStyle(document.querySelector('.gr-store-item[data-item="' + id + '"]')).borderTopColor));
       assert.notEqual(bd1, bd2, 'thẻ được hỏi có viền khác' + at);
@@ -210,7 +210,7 @@ try {
       await h.show(page, 'growth');
       const checked = (id) => page.evaluate((i) => document.querySelector('.gr-store-item[data-item="' + i + '"] input:checked')?.value, id);
       assert.deepEqual([await checked('kip'), await checked('ruong'), await checked('ai')], ['tt', 'tt', 'gemini'], 'loại mặc định' + at);
-      assert.equal(await text(item(page, 'kip').locator('.gr-store-hint')), 'Nên lấy từ Trí tuệ 410, Tinh thần 95.', 'bí kíp tinh thần hợp Trí tuệ, Tinh thần' + at);
+      assert.equal(await text(item(page, 'kip').locator('.gr-store-hint')), 'Nên lấy từ Trí tuệ 410, Đạo tâm 120.', 'bí kíp tinh thần hợp Trí tuệ, Đạo tâm' + at);
       await item(page, 'kip').locator('.gr-store-chip', { hasText: 'Vật chất' }).click();
       assert.equal(await checked('kip'), 'vc');
       assert.equal(await checked('ruong'), 'tt', 'đổi loại ở món này không đổi món kia' + at);
@@ -252,20 +252,20 @@ try {
       assert.equal(await page.locator('.gr-spend-dlg header .eyebrow').innerText(), 'TÀNG BẢO CÁC');
       assert.equal(await page.locator('#gr-spend-title').innerText(), 'Bảng quy đổi · Nhà trọ');
       assert.match(await text(page.locator('.gr-spend-dlg header .help-copy')), /Không có giá định sẵn.*ít hay nhiều đều được, mạch nào cũng trả được/);
-      assert.match(await text(page.locator('.gr-store-strip')), /^Liễu Linh Lung Nhà trọ lo chỗ nằm yên.*Món này hợp mạch Thể lực, Tâm cảnh\..*Giá do các hạ tự định/, 'lời bà chủ trong bảng quy đổi' + at);
+      assert.match(await text(page.locator('.gr-store-strip')), /^Liễu Linh Lung Nhà trọ lo chỗ nằm yên.*Món này hợp mạch Thân thể, Tâm cảnh\..*Giá do các hạ tự định/, 'lời bà chủ trong bảng quy đổi' + at);
       assert.equal(await page.locator('.gr-store-strip svg.gr-st-face').count(), 1);
       assert.equal(await page.locator('.gr-spend-dlg input[name="n"]').inputValue(), 'Nhà trọ', 'tên điền sẵn' + at);
       assert.equal(await page.evaluate(() => document.activeElement?.id), 'gr-spend-title', 'con trỏ ở tiêu đề: không bật bàn phím, không cuộn mất lời bà chủ' + at);
       await page.keyboard.press('Tab');
       assert.equal(await page.evaluate(() => document.activeElement?.name), 'n', 'Tab đi tới ô tên' + at);
       assert.equal(await page.locator('.gr-spend-row').count(), 8, 'đủ tám mạch để trừ' + at);
-      assert.deepEqual(await page.evaluate(() => [...document.querySelectorAll('.gr-spend-row.is-fit .gr-axis-head strong')].map((n) => n.textContent)), ['Tâm cảnh', 'Thể lực'], 'hai mạch hợp được đánh dấu' + at);
+      assert.deepEqual(await page.evaluate(() => [...document.querySelectorAll('.gr-spend-row.is-fit .gr-axis-head strong')].map((n) => n.textContent)), ['Tâm cảnh', 'Thân thể'], 'hai mạch hợp được đánh dấu' + at);
       assert.equal(await page.locator('.gr-fit-tag').first().innerText(), 'hợp món này');
       const state = await page.evaluate(() => [...document.querySelectorAll('[data-gr-spend-axis]')].map((n) => ({ v: n.value, max: n.max, dis: n.disabled, ro: n.readOnly })));
       assert.deepEqual(state.map((s) => s.v), ['', '', '', '', '', '', '', ''], 'không điền sẵn số điểm nào' + at);
       assert.deepEqual(state.map((s) => s.max), ['120', '300', '80', '45', '260', '410', '150', '95'], 'mỗi mạch trừ được tối đa bằng số dư' + at);
       assert.ok(state.every((s) => !s.dis && !s.ro), 'cả tám ô đều nhập tay được' + at);
-      assert.match(await page.locator('[data-gr-spend-axis="0"]').getAttribute('aria-label'), /^Điểm trừ ở Nghiệp quả, đang có 120$/);
+      assert.match(await page.locator('[data-gr-spend-axis="0"]').getAttribute('aria-label'), /^Điểm trừ ở Đạo tâm, đang có 120$/);
       const box = await page.locator('#growth-spend').boundingBox();
       assert.ok(box.x >= 0 && box.x + box.width <= width + 0.5 && box.y >= 0, 'bảng nằm trong màn hình' + at);
       assert.equal(await noOverflow(page), true, 'mở bảng không tràn ngang' + at);
@@ -301,7 +301,7 @@ try {
       assert.equal(await text(item(page, 'son').locator('.gr-store-used')), 'Đã đổi 1 lần · 36 điểm', 'thẻ hiện số lần đã đổi' + at);
       assert.equal(await item(page, 'tro').locator('.gr-store-used').count(), 0, 'món chưa đổi thì không có dòng đã đổi' + at);
       assert.match(await text(page.locator('.gr-store-say')), /Tu vi các hạ đang có 1\.424 điểm; dồi dào nhất là Trí tuệ \(404\), kế đó Tài lộc \(298\)\./, 'lời chào cập nhật theo điểm còn lại' + at);
-      assert.match(await text(item(page, 'son').locator('.gr-store-hint')), /^Nên lấy từ Tâm cảnh 77, Tinh thần 87, Nhân duyên 41\.$/, 'gợi ý cập nhật theo điểm còn lại' + at);
+      assert.match(await text(item(page, 'son').locator('.gr-store-hint')), /^Nên lấy từ Tâm cảnh 77, Gia đạo 87, Nhân duyên 41\.$/, 'gợi ý cập nhật theo điểm còn lại' + at);
       assert.match(await text(page.locator('.gr-spend')), /Sơn trang/, 'dòng nằm trong sổ quy đổi chung' + at);
       // Đổi tiếp một món khác, tự sửa tên và ghi chú theo ý mình.
       await openBuy(page, 'tro');
@@ -324,14 +324,14 @@ try {
       const { context, page, server } = await h.open(width, { touch, workspace: withGrowth(THIN)() });
       await h.show(page, 'growth');
       assert.match(await text(page.locator('.gr-store-say')), /Tu vi các hạ còn mỏng, mới 0,5 điểm\. Mỏng cũng không sao: đổi ít vẫn được/, 'ít điểm: lời bà chủ' + at);
-      assert.equal(await text(item(page, 'tro').locator('.gr-store-hint')), 'Mạch hợp (Thể lực, Tâm cảnh) đang trống; lấy từ mạch khác cũng được.', 'mạch hợp trống thì gợi ý' + at);
+      assert.equal(await text(item(page, 'tro').locator('.gr-store-hint')), 'Mạch hợp (Thân thể, Tâm cảnh) đang trống; lấy từ mạch khác cũng được.', 'mạch hợp trống thì gợi ý' + at);
       assert.equal(await page.locator('[data-gr-shop-buy="tro"]').isDisabled(), false, 'nút Quy đổi không bị khóa khi điểm ít' + at);
       await openBuy(page, 'tro');
       assert.equal(await axis(page, 0).getAttribute('max'), '0.5');
       assert.equal(await axis(page, 1).getAttribute('max'), '0', 'mạch hết điểm không trừ được' + at);
       await axis(page, 0).fill('1');
       await page.click('.gr-spend-dlg [type=submit]');
-      assert.match(await page.locator('.gr-spend-msg').innerText(), /Nghiệp quả chỉ còn 0,5 điểm, chưa đủ để trừ 1\./, 'không trừ quá số dư' + at);
+      assert.match(await page.locator('.gr-spend-msg').innerText(), /Đạo tâm chỉ còn 0,5 điểm, chưa đủ để trừ 1\./, 'không trừ quá số dư' + at);
       assert.equal(savedSpend(server).length, 0);
       await axis(page, 0).fill('0.5');
       await page.click('.gr-spend-dlg [type=submit]');

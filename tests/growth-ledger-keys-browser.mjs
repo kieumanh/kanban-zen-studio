@@ -73,7 +73,7 @@ try {
       assert.ok(log.length <= N - 300, 'sổ ngắn đi rõ rệt (' + N + ' → ' + log.length + ')' + at);
       assert.ok(log.length <= LOG_LIMIT - 400, 'dưới ngưỡng gộp lần sau' + at);
       assert.ok(log.some((e) => e.s === 'archive') && log.every((e) => !e.k || e.k.length <= 120), 'có dòng tổng hợp, mọi k ≤ 120 ký tự' + at);
-      // Tổng điểm: sổ cũ + 1 lần cộng 0,5 điểm (1 nửa điểm) ở Nghiệp quả.
+      // Tổng điểm: sổ cũ + 1 lần cộng 0,5 điểm (1 nửa điểm) ở Đạo tâm.
       assert.deepEqual(total(log), before.map((v, i) => v + (i === 0 ? 1 : 0)), 'tổng điểm mỗi chỉ số không đổi' + at);
       const kept = keysOf(log);
       for (let i = 0; i < 500; i++) assert.ok(kept.has('task:old' + i), 'mã task:old' + i + ' còn trong sổ' + at);

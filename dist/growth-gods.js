@@ -92,7 +92,7 @@
     { lv: 103, name: 'Thần Vương', note: 'Kế thừa ngôi của một Thần Vương gác ngôi.' },
   ];
 
-  // ---- v2.14.0 (Thần Lộ): tám quy luật tự nhiên, mỗi quy luật ứng với một chỉ số của Tu vi (cùng thứ tự zenGrowth.AXES) -------------
+  // ---- v2.14.0 (Thần Lộ): tám quy luật tự nhiên, mỗi quy luật ứng với một chỉ số của Tu vi (cùng thứ tự zenGrowth.AXES; v2.59.0: Âm Dương ứng với Gia đạo) -------------
   // Lĩnh ngộ một quy luật = điểm đã tích lũy của chỉ số ấy (không trừ phần đã phân bổ), nên không bao giờ giảm.
   const LAWS = [
     ['Nhân Quả', 'Gieo gì gặt nấy; việc nhỏ hôm nay là quả của ngày sau.', 'Việc tốt nhỏ làm hôm nay là hạt giống của ngày sau. Giữ một lời hứa, giúp một người, rồi quên đi; sổ vẫn ghi.'],
@@ -102,7 +102,7 @@
     ['Sinh Trưởng', 'Thân có mùa của nó: dưỡng đủ thì lớn, ép quá thì gãy.', 'Thân thể có mùa của nó. Ngủ đủ, vận động đều, đừng ép mình lớn nhanh hơn sức.'],
     ['Minh Lý', 'Hiểu đúng một việc thì trăm việc sáng theo.', 'Hỏi đúng câu hỏi quý hơn biết nhiều câu trả lời. Dám nói "chưa biết", rồi quan sát cho kỹ.'],
     ['Tích Lũy', 'Nước chảy đá mòn; lượng đủ thì chất đổi.', 'Việc lớn là nhiều việc nhỏ xếp khít nhau. Hãy đặt cho xong viên đá của hôm nay.'],
-    ['Âm Dương', 'Có căng có chùng, có làm có nghỉ, đời mới bền.', 'Có căng phải có chùng. Nghỉ ngơi và niềm vui không phải phần thưởng, mà là một nửa của nhịp làm việc.'],
+    ['Âm Dương', 'Có căng có chùng, có làm có nghỉ, đời mới bền.', 'Có căng phải có chùng. Nghỉ ngơi và niềm vui không phải phần thưởng, mà là một nửa của nhịp sống; trong nhà, đó là bữa cơm chung, lời hỏi han, lúc cả nhà cùng chùng xuống.'],
   ].map(([name, gist, lesson], i) => ({ i, name, gist, lesson }));
 
   // Tinh đấu: mỗi Thiên Cang ra một đề trong chính việc mình trấn giữ. [cảnh, lời thách, cách hiệp khách thắng, lời nhận thua].

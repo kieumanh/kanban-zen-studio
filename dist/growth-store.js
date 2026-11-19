@@ -361,9 +361,9 @@
 
   // ---- Vật phẩm ----------------------------------------------------------------------------------------------------------------
   // fit = các mạch (chỉ số 0–7 của Bát phương đồ) hợp với món; chỉ để gợi ý, món nào cũng trả được bằng cả tám mạch.
-  // Mạch: 0 Nghiệp quả · 1 Tài lộc · 2 Tâm cảnh · 3 Nhân duyên · 4 Thể lực · 5 Trí tuệ · 6 Sự nghiệp · 7 Tinh thần.
+  // Phương: 0 Đạo tâm · 1 Tài lộc · 2 Tâm cảnh · 3 Nhân duyên · 4 Thân thể · 5 Trí tuệ · 6 Sự nghiệp · 7 Gia đạo (v2.59.0; trước: 0 Nghiệp quả, 4 Thể lực, 7 Tinh thần).
   const KIP_PICK = (n) => [
-    { id: 'tt', label: 'Tinh thần', pic: 'book-tt', fit: [5, 7], name: 'tinh thần (' + n + ' quyển)', say: 'Bí kíp tinh thần nuôi trí và nuôi thần: sách điện tử, khóa học, âm thanh, đọc xong còn mang theo được.' },
+    { id: 'tt', label: 'Tinh thần', pic: 'book-tt', fit: [5, 0], name: 'tinh thần (' + n + ' quyển)', say: 'Bí kíp tinh thần nuôi trí và nuôi thần: sách điện tử, khóa học, âm thanh, đọc xong còn mang theo được.' },
     { id: 'vc', label: 'Vật chất', pic: 'book-vc', fit: [5, 1], name: 'vật chất (' + n + ' quyển)', say: 'Bí kíp vật chất là sách giấy cầm trên tay: nặng túi hơn, nhưng để được lâu trên giá.' },
   ];
   const ITEMS = [

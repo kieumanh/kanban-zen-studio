@@ -3146,6 +3146,9 @@
     border-color: #845cd6;
     background: #141118
 }
+:root[data-theme=dark] .gr-karma {
+    border: 1px dashed color-mix(in srgb,var(--gr-gold,#bd9539) 55%,var(--line))
+}
 :root[data-theme=dark] dialog.gr-award::backdrop {
     background: rgba(48,37,28,0.533)
 }

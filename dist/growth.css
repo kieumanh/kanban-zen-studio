@@ -191,10 +191,15 @@
 .gr-name{max-width:560px}
 .gr-name input{display:block;width:100%;border:1px solid var(--line);border-radius:8px;padding:10px;margin-top:6px;font-size:16px;background:var(--paper);color:var(--ink)}
 .gr-start-actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
-.gr-guide-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 24px;margin-top:12px}
-.gr-guide-list li{display:flex;gap:12px;align-items:flex-start}
+.gr-guide-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:12px}
+.gr-guide-list li{display:flex;gap:12px;align-items:flex-start;padding:14px;border:1px solid color-mix(in srgb,var(--c) 22%,var(--line));border-radius:16px;background:color-mix(in srgb,var(--c) 7%,var(--paper))}
 .gr-guide-list p{font-size:13px;color:var(--muted);margin-top:2px}
 .gr-guide-list small{display:inline;margin-left:4px}
+.gr-guide-no{color:var(--c);font-variant-numeric:tabular-nums}
+.gr-karma{margin:12px 0 0;padding:12px 14px;border:1px dashed color-mix(in srgb,var(--gr-gold,#b0892a) 55%,var(--line));border-radius:16px;background:color-mix(in srgb,#b0892a 8%,var(--paper));font-size:13px;line-height:1.6}
+.gr-karma strong{font-size:14px}
+.gr-karma small{display:inline;margin-left:6px;color:var(--muted)}
+.gr-karma span{display:block;margin-top:2px;color:var(--muted)}
 /* bảng cộng điểm */
 dialog.gr-award{max-width:640px;width:calc(100% - 16px);padding:20px 16px 16px}
 dialog.gr-award::backdrop{background:#30251c88}

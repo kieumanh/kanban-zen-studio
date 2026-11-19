@@ -4992,7 +4992,24 @@
     background: var(--paper);
     color: var(--ink)
 }
+:root[data-style=giangho] .gr-guide-list li {
+    border: 1px solid color-mix(in srgb,var(--c) 22%,var(--line));
+    background: color-mix(in srgb,var(--c) 7%,var(--paper))
+}
 :root[data-style=giangho] .gr-guide-list p {
+    color: var(--muted)
+}
+:root[data-style=giangho] .gr-guide-no {
+    color: var(--c)
+}
+:root[data-style=giangho] .gr-karma {
+    border: 1px dashed color-mix(in srgb,var(--gr-gold,#b0892a) 55%,var(--line));
+    background: color-mix(in srgb,#b0892a 8%,var(--paper))
+}
+:root[data-style=giangho] .gr-karma small {
+    color: var(--muted)
+}
+:root[data-style=giangho] .gr-karma span {
     color: var(--muted)
 }
 :root[data-style=giangho] dialog.gr-award::backdrop {
@@ -12334,7 +12351,24 @@
     background: var(--paper);
     color: var(--ink)
 }
+:root[data-style=giangho][data-theme=dark] .gr-guide-list li {
+    border: 1px solid color-mix(in srgb,var(--c) 22%,var(--line));
+    background: color-mix(in srgb,var(--c) 7%,var(--paper))
+}
 :root[data-style=giangho][data-theme=dark] .gr-guide-list p {
+    color: var(--muted)
+}
+:root[data-style=giangho][data-theme=dark] .gr-guide-no {
+    color: var(--c)
+}
+:root[data-style=giangho][data-theme=dark] .gr-karma {
+    border: 1px dashed color-mix(in srgb,var(--gr-gold,#bd9539) 55%,var(--line));
+    background: color-mix(in srgb,#b0892a 8%,var(--paper))
+}
+:root[data-style=giangho][data-theme=dark] .gr-karma small {
+    color: var(--muted)
+}
+:root[data-style=giangho][data-theme=dark] .gr-karma span {
     color: var(--muted)
 }
 :root[data-style=giangho][data-theme=dark] dialog.gr-award::backdrop {

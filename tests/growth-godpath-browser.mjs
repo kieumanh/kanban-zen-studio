@@ -20,7 +20,7 @@ import { startHarness } from './lib/browser-harness.mjs';
 
 const day = (n) => new Date(Date.now() + n * 864e5).toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
 const project = { id: 'p1', name: 'Dự án A', description: '', color: '#7950c8', icon: '✺', columns: ['Idea', 'List', 'Doing', 'Done'], columnNames: { Idea: 'Ý tưởng', List: 'Việc cần làm', Doing: 'Đang thực hiện', Done: 'Hoàn thành' }, tasks: [{ id: 'p1t0', title: 'Ngồi thiền', col: 'Doing', description: '', due: day(3), tag: 'Công việc', priority: 'q2', checks: [] }] };
-// p = số nửa điểm của tám chỉ số (Nghiệp quả, Tài lộc, Tâm cảnh, Nhân duyên, Thể lực, Trí tuệ, Sự nghiệp, Tinh thần).
+// p = số nửa điểm của tám chỉ số (Đạo tâm, Tài lộc, Tâm cảnh, Nhân duyên, Thân thể, Trí tuệ, Sự nghiệp, Gia đạo).
 const seed = (p) => () => ({ schema: 1, projects: [structuredClone(project)], notes: [], growth: { v: 1, hero: 'nu', name: 'Lam Y', since: day(-900), log: [{ id: 'e1', d: day(-1), s: 'task', k: 'task:e1', n: 'Việc cũ', p }] } });
 const one = (half) => [half, 0, 0, 0, 0, 0, 0, 0];
 const even = (half) => Array(8).fill(half / 8);
@@ -87,7 +87,7 @@ try {
         mono, bad: [g.entry('g:s36'), g.entry('g:s0'), g.entry('g:l13'), g.entry('g:x')].every((x) => x === null), locked: [g.entry('g:s3').ok, g.entry('g:l12').ok, g.entry('g:k').ok, g.entry('g:s2').ok],
       };
     });
-    assert.deepEqual(m.laws, ['Nhân Quả=Nghiệp quả', 'Lưu Thông=Tài lộc', 'Tĩnh Động=Tâm cảnh', 'Tương Sinh=Nhân duyên', 'Sinh Trưởng=Thể lực', 'Minh Lý=Trí tuệ', 'Tích Lũy=Sự nghiệp', 'Âm Dương=Tinh thần'], 'tám quy luật ứng với tám chỉ số');
+    assert.deepEqual(m.laws, ['Nhân Quả=Đạo tâm', 'Lưu Thông=Tài lộc', 'Tĩnh Động=Tâm cảnh', 'Tương Sinh=Nhân duyên', 'Sinh Trưởng=Thân thể', 'Minh Lý=Trí tuệ', 'Tích Lũy=Sự nghiệp', 'Âm Dương=Gia đạo'], 'tám quy luật ứng với tám chỉ số');
     assert.ok(m.lawText && m.texts && m.unique, 'quy luật và mọi trận đều có lời riêng, mỗi đoạn ≤ 240 ký tự');
     assert.equal(m.rivals, 35, 'ba mươi lăm Thiên Cang còn lại');
     assert.ok(m.starLaw, 'Thiên Cang thứ k hỏi quy luật theo vòng tám');
@@ -134,7 +134,7 @@ try {
       assert.match(r.next.cls, /is-locked/, 'chưa có trận nào' + at);
       assert.equal(r.next.text, 'Thành Thần ở cấp 100 thì trận đầu tiên mở: Minh Báo tinh quân, phương Tý.', 'trận đầu tiên chờ ở cấp 100' + at);
       assert.deepEqual(r.rules, ['Đủ 8.182 điểm tu vi và thắng cả 35 Thiên Cang còn lại.', 'Đủ 10.230 điểm tu vi và thắng 12 Phương thần.', 'Đủ 12.278 điểm tu vi, lĩnh ngộ cả tám quy luật từ 1.200, và ngang tài với Trường Lưu Thần Vương.'], 'điều kiện lên từng thần cấp' + at);
-      assert.deepEqual(r.laws.map((x) => x.slice(0, 3)), [['Nhân Quả', 'Nghiệp quả', '30'], ['Lưu Thông', 'Tài lộc', '0'], ['Tĩnh Động', 'Tâm cảnh', '0'], ['Tương Sinh', 'Nhân duyên', '0'], ['Sinh Trưởng', 'Thể lực', '0'], ['Minh Lý', 'Trí tuệ', '0'], ['Tích Lũy', 'Sự nghiệp', '0'], ['Âm Dương', 'Tinh thần', '0']], 'lĩnh ngộ hiện có của tám quy luật' + at);
+      assert.deepEqual(r.laws.map((x) => x.slice(0, 3)), [['Nhân Quả', 'Đạo tâm', '30'], ['Lưu Thông', 'Tài lộc', '0'], ['Tĩnh Động', 'Tâm cảnh', '0'], ['Tương Sinh', 'Nhân duyên', '0'], ['Sinh Trưởng', 'Thân thể', '0'], ['Minh Lý', 'Trí tuệ', '0'], ['Tích Lũy', 'Sự nghiệp', '0'], ['Âm Dương', 'Gia đạo', '0']], 'lĩnh ngộ hiện có của tám quy luật' + at);
       assert.ok(r.stars.every((s) => !s.read && s.tag !== 'Đã thắng' && s.tag !== 'Trận kế tiếp'), 'chưa có chiến tích' + at);
       assert.equal(r.stars[0].need, 'Quy luật Nhân Quả · cần 150', 'mỗi Thiên Cang ghi quy luật và mức cần' + at);
       assert.equal(r.regions[4].need, 'Quy luật Lưu Thông, Tương Sinh · cần 725', 'mỗi phương ghi hai quy luật và mức cần' + at);

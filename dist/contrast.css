@@ -3147,6 +3147,9 @@
     border-color: #18102b;
     background: #ffffff
 }
+:root[data-contrast=high] .gr-karma {
+    border: 1px dashed color-mix(in srgb,var(--gr-gold,#1d1503) 55%,var(--line))
+}
 :root[data-contrast=high] dialog.gr-award::backdrop {
     background: rgba(48,37,28,0.533)
 }
@@ -7380,6 +7383,9 @@
 :root[data-theme=dark][data-contrast=high] .gr-card.is-on {
     border-color: #cecece;
     background: #030303
+}
+:root[data-theme=dark][data-contrast=high] .gr-karma {
+    border: 1px dashed color-mix(in srgb,var(--gr-gold,#cecece) 55%,var(--line))
 }
 :root[data-theme=dark][data-contrast=high] dialog.gr-award::backdrop {
     background: rgba(48,37,28,0.533)

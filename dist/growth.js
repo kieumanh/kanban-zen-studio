@@ -12,32 +12,39 @@
   const { LOG_MAX, SPEND_MAX } = window.zenGrowthValid.limits; // cùng giới hạn với bộ kiểm ở lazy.js
   const TIERS = [5, 10, 20, 40, 80, 160, 320, 640, 1280, 2560, 5120];
   // Thứ tự các chỉ số là cố định (chỉ số p[i] trong sổ cái); không đổi thứ tự sau khi đã phát hành.
+  // v2.59.0 (Bát Phương Mới): tám phương diện vun bồi cuộc sống — Tài lộc, Tâm cảnh, Nhân duyên, Thân thể, Trí tuệ, Sự nghiệp, Đạo tâm, Gia đạo.
+  // Sổ cái KHÔNG đổi: các ô p[1…6] giữ nguyên ý nghĩa (Thể lực → Thân thể chỉ đổi tên); ô p[0] (trước là Nghiệp quả) nay là Đạo tâm
+  // (tu tập, từ bi, thiện hạnh — gần nghĩa nhất) và ô p[7] (trước là Tinh thần) nay là Gia đạo. Nghiệp quả được nâng lên làm nguyên lý bao trùm cả
+  // tám phương (KARMA bên dưới): việc làm ở phương nào cũng là hạt giống, quả trổ về chính phương ấy.
+  // no = số thứ tự hiển thị ở Hướng dẫn tám phương (theo thứ tự chuẩn Tài lộc → Gia đạo); khác với chỉ số ô trong sổ cái.
   const AXES = [
-    { id: 'nghiep', name: 'Nghiệp quả', sub: 'Phước đức · thiện hạnh', color: '#b0892a', icon: 'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z M12 3a4.5 4.5 0 0 0 0 9 4.5 4.5 0 0 1 0 9',
-      means: 'Việc thiện, lời nói đúng, giúp người không đòi đáp, hóa giải điều chưa tròn.',
-      ideas: ['Giúp ai đó một việc nhỏ', 'Giữ đúng lời đã hứa', 'Cho đi, quyên góp, làm từ thiện', 'Xin lỗi hoặc hóa giải một hiềm khích'] },
-    { id: 'tai', name: 'Tài lộc', sub: 'Ngân lượng · gia sản', color: '#2e7d5b', icon: 'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z M14.6 9.3c-.6-.8-1.5-1.3-2.6-1.3-1.5 0-2.6.8-2.6 2 0 2.7 5.2 1.4 5.2 4.1 0 1.2-1.1 2-2.6 2-1.1 0-2.1-.5-2.7-1.4 M12 6.5V8 M12 16v1.5',
-      means: 'Thu nhập, tiết kiệm, đầu tư, nợ nần và kỷ luật chi tiêu.',
+    { id: 'dao', no: 7, name: 'Đạo tâm', sub: 'Tu tập · đạo hạnh', color: '#b0892a', icon: 'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z M12 3a4.5 4.5 0 0 0 0 9 4.5 4.5 0 0 1 0 9',
+      means: 'Chánh niệm, từ bi, giới hạnh và tinh tấn: thiện hạnh, lời nói đúng, giúp người không đòi đáp, hóa giải điều chưa tròn.',
+      ideas: ['Ngồi thiền hoặc niệm một khắc', 'Giúp ai đó một việc nhỏ, không đòi đáp', 'Giữ đúng lời đã hứa', 'Xin lỗi hoặc hóa giải một hiềm khích'] },
+    { id: 'tai', no: 1, name: 'Tài lộc', sub: 'Tài chính · vật chất', color: '#2e7d5b', icon: 'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z M14.6 9.3c-.6-.8-1.5-1.3-2.6-1.3-1.5 0-2.6.8-2.6 2 0 2.7 5.2 1.4 5.2 4.1 0 1.2-1.1 2-2.6 2-1.1 0-2.1-.5-2.7-1.4 M12 6.5V8 M12 16v1.5',
+      means: 'Tạo lập, quản lý và tích lũy tài sản: thu nhập, tiết kiệm, đầu tư, nợ nần và kỷ luật chi tiêu.',
       ideas: ['Ghi chép thu chi', 'Hoàn thành việc tạo ra thu nhập', 'Tiết kiệm hoặc trả bớt nợ', 'Học một kiến thức tài chính'] },
-    { id: 'tam', name: 'Tâm cảnh', sub: 'Tâm pháp · an định', color: '#7950c8', icon: 'M12 21c-5-2-8-6-8-11 3 0 6 1 8 4 2-3 5-4 8-4 0 5-3 9-8 11z M12 14V6',
-      means: 'Sự an định trong tâm, thiền, cảm xúc ổn, ngủ nghỉ và buông bỏ lo âu.',
-      ideas: ['Ngồi thiền hoặc thở có ý thức', 'Viết nhật ký, gọi tên cảm xúc', 'Dành thời gian yên tĩnh', 'Buông một việc không cần ôm'] },
-    { id: 'duyen', name: 'Nhân duyên', sub: 'Thân hữu · đồng môn', color: '#d65380', icon: 'M12 20s-8-4.6-8-10.5A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 8 2.5C20 15.4 12 20 12 20z',
-      means: 'Gia đình, bạn bè, đồng nghiệp, cộng đồng và sự kết nối chân thành.',
-      ideas: ['Gọi hoặc nhắn hỏi thăm người thân', 'Dành thời gian trọn vẹn cho gia đình', 'Cảm ơn hoặc động viên ai đó', 'Tham gia một hoạt động cộng đồng'] },
-    { id: 'than', name: 'Thể lực', sub: 'Gân cốt · khí huyết', color: '#c8553d', icon: 'M13 3 6 13h5l-1 8 8-11h-5z',
-      means: 'Vận động, ăn uống, giấc ngủ và chăm sóc cơ thể.',
+    { id: 'tam', no: 2, name: 'Tâm cảnh', sub: 'Cảm xúc · nội tâm', color: '#7950c8', icon: 'M12 21c-5-2-8-6-8-11 3 0 6 1 8 4 2-3 5-4 8-4 0 5-3 9-8 11z M12 14V6',
+      means: 'An ổn, cân bằng và làm chủ cảm xúc: tâm yên, ngủ nghỉ ngon, buông bỏ lo âu, giữ niềm vui sống.',
+      ideas: ['Thở có ý thức khi bực bội', 'Viết nhật ký, gọi tên cảm xúc', 'Dành thời gian yên tĩnh', 'Buông một việc không cần ôm'] },
+    { id: 'duyen', no: 3, name: 'Nhân duyên', sub: 'Quan hệ · kết nối', color: '#d65380', icon: 'M12 20s-8-4.6-8-10.5A4.5 4.5 0 0 1 12 7a4.5 4.5 0 0 1 8 2.5C20 15.4 12 20 12 20z',
+      means: 'Bạn bè, tình cảm, đồng nghiệp, cộng đồng và hợp tác: sự kết nối chân thành.',
+      ideas: ['Nhắn hỏi thăm một người bạn', 'Cảm ơn hoặc động viên ai đó', 'Tham gia một hoạt động cộng đồng', 'Cùng người khác làm xong một việc chung'] },
+    { id: 'than', no: 4, name: 'Thân thể', sub: 'Sức khỏe · sinh lực', color: '#c8553d', icon: 'M13 3 6 13h5l-1 8 8-11h-5z',
+      means: 'Thể chất, dinh dưỡng, vận động và nghỉ ngơi: chăm sóc cơ thể, giấc ngủ, ăn uống.',
       ideas: ['Đi bộ, tập võ, vận động', 'Ngủ đủ và đúng giờ', 'Ăn uống lành mạnh', 'Khám sức khỏe định kỳ'] },
-    { id: 'tri', name: 'Trí tuệ', sub: 'Kinh thư · kiến văn', color: '#3a6fb0', icon: 'M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z M4 19V5 M9 7h6',
-      means: 'Học hỏi, đọc sách, kỹ năng mới và khả năng nhìn lại chính mình.',
+    { id: 'tri', no: 5, name: 'Trí tuệ', sub: 'Tri thức · nhận thức', color: '#3a6fb0', icon: 'M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z M4 19V5 M9 7h6',
+      means: 'Học hỏi, tư duy, hiểu biết và sáng suốt: đọc sách, kỹ năng mới, sáng tạo và khả năng nhìn lại chính mình.',
       ideas: ['Đọc một chương sách', 'Học một khóa hoặc bài mới', 'Luyện một kỹ năng', 'Viết lại điều đã học được'] },
-    { id: 'nghe', name: 'Sự nghiệp', sub: 'Đại nghiệp · sứ mệnh', color: '#2f7f9d', icon: 'M4 21V4 M4 5h12l-2 4 2 4H4',
-      means: 'Tiến độ công việc chính, dự án, đóng góp chuyên môn và sứ mệnh nghề nghiệp.',
+    { id: 'nghe', no: 6, name: 'Sự nghiệp', sub: 'Công việc · cống hiến', color: '#2f7f9d', icon: 'M4 21V4 M4 5h12l-2 4 2 4H4',
+      means: 'Năng lực tạo giá trị và phụng sự: tiến độ công việc chính, dự án, đóng góp chuyên môn và sứ mệnh nghề nghiệp.',
       ideas: ['Hoàn thành việc quan trọng của dự án', 'Giải quyết việc tồn đọng', 'Hoàn thiện một sản phẩm', 'Chia sẻ chuyên môn cho người khác'] },
-    { id: 'vui', name: 'Tinh thần', sub: 'Tiêu dao · sáng tạo · nghỉ ngơi', color: '#e07a2e', icon: 'M12 3v3 M12 18v3 M3 12h3 M18 12h3 M5.6 5.6l2.1 2.1 M16.3 16.3l2.1 2.1 M18.4 5.6l-2.1 2.1 M7.7 16.3l-2.1 2.1 M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z',
-      means: 'Niềm vui sống, sở thích, sáng tạo, nghỉ ngơi và nếp sống gọn gàng.',
-      ideas: ['Làm một việc mình yêu thích', 'Sáng tạo hoặc thử điều mới', 'Dọn dẹp, sắp xếp chỗ ở', 'Nghỉ ngơi trọn vẹn, đi chơi'] },
+    { id: 'gia', no: 8, name: 'Gia đạo', sub: 'Gia đình · hòa hợp', color: '#e07a2e', icon: 'M3 11 12 4l9 7 M5 10v10h14V10 M10 20v-6h4v6',
+      means: 'Hiếu kính, chăm sóc và vun bồi tình thân: cha mẹ, vợ chồng, con cái, tổ ấm gọn gàng và hòa thuận.',
+      ideas: ['Gọi hoặc về thăm cha mẹ, người thân', 'Dành thời gian trọn vẹn cho gia đình', 'Dọn dẹp, sắp xếp tổ ấm', 'Nấu một bữa cho cả nhà'] },
   ];
+  // Nghiệp quả: nguyên lý bao trùm tám phương (không phải một phương riêng). Dùng ở Hướng dẫn tám phương và (từ v2.62.0) ở Nhân quả.
+  const KARMA = { name: 'Nghiệp quả', sub: 'Nhân quả · gieo gặt', means: 'Mọi việc làm ở bất kỳ phương nào, kể cả việc giúp người, đều là hạt giống; quả trổ về chính phương ấy trong đời mình. Làm điều lành cho người là cách bồi đắp chính mình.' };
   const HEROES = { nam: { label: 'Nam', title: 'Thiếu hiệp', desc: 'Kiếm khách áo lam' }, nu: { label: 'Nữ', title: 'Nữ hiệp', desc: 'Hồng y kiếm khách' } };
   // v2.5.0 (Thăng Thiên): thang 103 cấp, mỗi cấp một danh xưng, 11 cảnh giới (thay thang v1.85.0: 10 cảnh giới × 10 trọng).
   //  - Cảnh giới bắt đầu ở cấp 10, 20 … 90 (Sơ nhập giang hồ: cấp 1–9). Cấp 100 thành Thần (Thần cảnh); trên Thần còn 3 thần cấp,
@@ -222,7 +229,7 @@
       const dy = sn < -0.5 ? -14 : sn > 0.5 ? 6 : -6;
       return '<text class="gr-label" x="' + f(x) + '" y="' + f(y + dy) + '" text-anchor="' + anchor + '">' + esc(a.name) + '</text><text class="gr-value" x="' + f(x) + '" y="' + f(y + dy + 16) + '" text-anchor="' + anchor + '">' + fmt(vals[i]) + '</text>';
     }).join('');
-    // Số của vòng nằm giữa hai nan Nghiệp quả và Tài lộc để không đè lên chấm.
+    // Số của vòng nằm giữa hai nan Đạo tâm và Tài lộc để không đè lên chấm.
     const ringVal = (k, v) => { const r = R0 + ((R - R0) * k) / 4, a = (-67.5 * Math.PI) / 180; return '<text class="gr-ring-val" x="' + f(CX + r * Math.cos(a)) + '" y="' + f(CY + r * Math.sin(a) + 4) + '" text-anchor="middle">' + fmt(v) + '</text>'; };
     const label = 'Bát phương đồ 8 mạch: ' + AXES.map((a, i) => a.name + ' ' + fmt(vals[i])).join(', ') + '. Thang tối đa ' + fmt(top) + ' điểm. Tám mạch nối thành mạng lưới, hai mạch cùng mạnh thì đường nối đậm.';
     return '<svg class="gr-radar" viewBox="0 0 400 384" role="img" aria-label="' + esc(label) + '"><defs>' + grads + '</defs>' + rings + spokes + '<g class="gr-webs">' + web.join('') + '</g><polygon class="gr-area" points="' + area + '"/><g class="gr-links">' + links + '</g><circle class="gr-hub" cx="' + CX + '" cy="' + CY + '" r="3"/>' + dots + labels + ringVal(2, top / 4) + ringVal(4, top) + '</svg>';
@@ -249,9 +256,11 @@
       '<label class="field gr-name">Danh hiệu giang hồ (không bắt buộc)<input type="text" maxlength="30" data-gr-name placeholder="' + HEROES[pickHero].title + '" value="' + esc(cur?.name || '') + '"></label>' +
       '<div class="gr-start-actions"><button type="button" class="btn primary" data-gr-confirm>' + (cur ? 'Lưu hiệp khách' : 'Bước vào giang hồ') + '</button>' + (cur ? '<button type="button" class="btn" data-gr-cancel>Hủy</button>' : '') + '</div></section>' + axesGuide();
   }
+  // v2.59.0: "Tám phương diện vun bồi cuộc sống" — mỗi phương một thẻ có số thứ tự, tên, nhãn phụ và lời mô tả; Nghiệp quả đứng trên cả tám phương.
   function axesGuide() {
-    return '<section class="panel gr-guide"><h2>Bát mạch của một đời người</h2><p class="help-copy">Mỗi mạch khởi đầu từ 0. Hoàn thành việc để dồn công lực vào mạch vừa bồi bổ. Nối 8 điểm lại thành Bát phương đồ: thấy ngay mạch nào thâm hậu, mạch nào cần khổ luyện.</p><ul class="gr-guide-list">' +
-      AXES.map((a) => '<li style="--c:' + a.color + '"><span class="gr-guide-ico">' + iconSvg('gr-' + a.id, 20) + '</span><div><strong>' + a.name + '</strong> <small>' + a.sub + '</small><p>' + a.means + '</p></div></li>').join('') + '</ul></section>';
+    return '<section class="panel gr-guide"><h2>Tám phương diện vun bồi cuộc sống</h2><p class="help-copy">Mỗi phương khởi đầu từ 0. Hoàn thành việc để dồn công lực vào phương vừa bồi bổ. Nối 8 điểm lại thành Bát phương đồ: thấy ngay phương nào thâm hậu, phương nào cần khổ luyện.</p>' +
+      '<p class="gr-karma"><strong>' + KARMA.name + '</strong> <small>' + KARMA.sub + '</small><span>' + KARMA.means + '</span></p><ol class="gr-guide-list">' +
+      AXES.slice().sort((x, y) => x.no - y.no).map((a) => '<li style="--c:' + a.color + '"><span class="gr-guide-ico">' + iconSvg('gr-' + a.id, 20) + '</span><div><strong><span class="gr-guide-no" aria-hidden="true">' + a.no + '.</span> ' + a.name + '</strong> <small>' + a.sub + '</small><p>' + a.means + '</p></div></li>').join('') + '</ol></section>';
   }
   function bubbleText(pose, s) {
     const t = earnedTotal(), ex = extremes(s);
@@ -676,7 +685,7 @@
   function tipsOf(rep) {
     const tips = [];
     if (rep.earned === 0) {
-      tips.push({ kind: 'start', title: 'Khởi bước từ việc nhỏ', text: 'Hoàn thành một việc bất kỳ rồi dồn 1 điểm vào mạch vừa bồi bổ. Chỉ cần vài việc là Bát phương đồ bắt đầu thành hình.', ideas: ['Ghi lại một khoản chi hôm nay (Tài lộc)', 'Nhắn hỏi thăm một người thân (Nhân duyên)', 'Đi bộ 10 phút (Thể lực)'] });
+      tips.push({ kind: 'start', title: 'Khởi bước từ việc nhỏ', text: 'Hoàn thành một việc bất kỳ rồi dồn 1 điểm vào mạch vừa bồi bổ. Chỉ cần vài việc là Bát phương đồ bắt đầu thành hình.', ideas: ['Ghi lại một khoản chi hôm nay (Tài lộc)', 'Nhắn hỏi thăm một người thân (Nhân duyên)', 'Đi bộ 10 phút (Thân thể)'] });
       return tips;
     }
     const { last, prev } = rep.week;

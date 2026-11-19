@@ -5,7 +5,7 @@ import assert from 'node:assert/strict';
 import { startHarness } from './lib/browser-harness.mjs';
 
 const day = (n) => new Date(Date.now() + n * 864e5).toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
-// Đã tích lũy (nửa điểm → điểm): Nghiệp quả 10 · Tài lộc 6 · Tâm cảnh 4 · Sự nghiệp 8 · Tinh thần 2 = 30 điểm (v2.5.0: cấp 22, cảnh giới Nhị lưu cao thủ; thang v1.85.0: cấp 20, Tam lưu cao thủ).
+// Đã tích lũy (nửa điểm → điểm): Đạo tâm 10 · Tài lộc 6 · Tâm cảnh 4 · Sự nghiệp 8 · Gia đạo 2 = 30 điểm (v2.5.0: cấp 22, cảnh giới Nhị lưu cao thủ; thang v1.85.0: cấp 20, Tam lưu cao thủ).
 const GROWTH = {
   v: 1,
   hero: 'nam',
@@ -78,10 +78,10 @@ try {
       await axis(page, 0).fill('11');
       assert.equal(await page.locator('.gr-spend-row').nth(0).evaluate((n) => n.classList.contains('is-over')), true, 'ô vượt số dư được tô báo lỗi' + at);
       await page.click('.gr-spend-dlg [type=submit]');
-      assert.match(await msg(page), /Nghiệp quả chỉ còn 10 điểm/, 'báo vượt số dư' + at);
+      assert.match(await msg(page), /Đạo tâm chỉ còn 10 điểm/, 'báo vượt số dư' + at);
       await axis(page, 0).fill('1.3');
       await page.click('.gr-spend-dlg [type=submit]');
-      assert.match(await msg(page), /Nghiệp quả chưa đúng.*bậc 0,5/, 'báo bậc lẻ' + at);
+      assert.match(await msg(page), /Đạo tâm chưa đúng.*bậc 0,5/, 'báo bậc lẻ' + at);
       await axis(page, 0).fill('');
       await page.fill('.gr-spend-dlg input[name="d"]', day(5));
       await axis(page, 0).fill('1');
@@ -209,7 +209,7 @@ try {
       assert.deepEqual(await radarValues(page), ['6', '3,5', '2,5', '0', '0', '0', '5', '1'], 'khôi phục xong điểm bị trừ lại' + at);
       await until(() => savedSpend(server)[0]?.x === undefined, 'lưu trạng thái khôi phục' + at);
 
-      // Hủy, rồi dùng hết Nghiệp quả cho lần quy đổi khác → khôi phục lần đầu bị chặn vì thiếu điểm.
+      // Hủy, rồi dùng hết Đạo tâm cho lần quy đổi khác → khôi phục lần đầu bị chặn vì thiếu điểm.
       await page.click('[data-gr-spend-void]');
       await page.waitForSelector('.gr-spend-item.is-void');
       await page.click('[data-gr-spend]');
@@ -218,11 +218,11 @@ try {
       await axis(page, 0).fill('10');
       await page.click('.gr-spend-dlg [type=submit]');
       await page.waitForSelector('#growth-spend', { state: 'detached' });
-      assert.deepEqual(await radarValues(page), ['0', '6', '4', '0', '0', '0', '8', '2'], 'dùng hết Nghiệp quả' + at);
+      assert.deepEqual(await radarValues(page), ['0', '6', '4', '0', '0', '0', '8', '2'], 'dùng hết Đạo tâm' + at);
       assert.equal(await page.locator('.gr-spend-item').count(), 2, 'hai dòng, mới nhất ở trên' + at);
       assert.match(await page.locator('.gr-spend-item').first().innerText(), /Quà tặng mình/, 'dòng mới nhất ở đầu danh sách' + at);
       await page.click('[data-gr-spend-restore]');
-      assert.match(await toast(page), /Chưa đủ điểm ở Nghiệp quả để khôi phục \(đang có 0, cần 4\)/, 'khôi phục bị chặn khi thiếu điểm' + at);
+      assert.match(await toast(page), /Chưa đủ điểm ở Đạo tâm để khôi phục \(đang có 0, cần 4\)/, 'khôi phục bị chặn khi thiếu điểm' + at);
       assert.equal(await page.locator('.gr-spend-item.is-void').count(), 1, 'dòng vẫn ở trạng thái đã hủy' + at);
 
       // Xóa hẳn dòng đã hủy: có xác nhận, giữ lại thì không mất gì.

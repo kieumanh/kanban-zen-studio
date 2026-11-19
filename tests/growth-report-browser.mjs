@@ -65,7 +65,7 @@ try {
       assert.equal(await noOverflow(page), true, 'không tràn ngang' + at);
       for (let i = 0; i < 4; i++) await page.click('[data-gr-plus="2"]'); // Tâm cảnh +2
       await page.click('[data-gr-plus="3"]'); // Nhân duyên +0,5
-      await page.click('[data-gr-plus="4"]'); // Thể lực +0,5
+      await page.click('[data-gr-plus="4"]'); // Thân thể +0,5
       assert.equal(await page.locator('[data-gr-save]').isDisabled(), false);
       await page.click('[data-gr-save]');
       await page.waitForFunction(() => !document.querySelector('#growth-award'));
@@ -148,10 +148,10 @@ try {
       const rows = await page.evaluate(() => Object.fromEntries([...document.querySelectorAll('.gr-eval-row')].map((r) => [r.dataset.axis, { level: r.querySelector('.gr-level').textContent.trim(), score: r.querySelector('.gr-eval-score').textContent.trim() }])));
       assert.equal(Object.keys(rows).length, 8, 'đánh giá đủ 8 chỉ số' + at);
       assert.deepEqual(rows.nghe, { level: 'Thâm hậu', score: '2,5' }, 'Sự nghiệp mạnh' + at);
-      assert.deepEqual(rows.nghiep, { level: 'Thâm hậu', score: '1,5' });
+      assert.deepEqual(rows.dao, { level: 'Thâm hậu', score: '1,5' });
       assert.deepEqual(rows.tam, { level: 'Vững vàng', score: '1' });
       assert.deepEqual(rows.than, { level: 'Vững vàng', score: '1' });
-      assert.deepEqual(rows.vui, { level: 'Cần khổ luyện', score: '0,5' });
+      assert.deepEqual(rows.gia, { level: 'Cần khổ luyện', score: '0,5' });
       assert.deepEqual(rows.tai, { level: 'Chưa khai mạch', score: '0' });
       assert.match(await page.locator('.gr-balance').innerText(), /Thiên lệch rõ/, 'đánh giá cân bằng' + at);
       const tips = await page.evaluate(() => [...document.querySelectorAll('[data-tip="weak"]')].map((t) => ({ axis: t.dataset.axis, ideas: t.querySelectorAll('li').length, title: t.querySelector('h3').textContent.trim() })));
