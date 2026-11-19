@@ -176,3 +176,4 @@ tests/giangho-seal-browser.mjs
 tests/growth-axes-browser.mjs
 tests/growth-history-browser.mjs
 tests/growth-strengths-browser.mjs
+tests/growth-cultivate-browser.mjs

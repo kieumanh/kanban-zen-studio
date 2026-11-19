@@ -261,7 +261,7 @@
   // v2.59.0: "Tám phương diện vun bồi cuộc sống" — mỗi phương một thẻ có số thứ tự, tên, nhãn phụ và lời mô tả; Nghiệp quả đứng trên cả tám phương.
   function axesGuide() {
     return '<section class="panel gr-guide"><h2>Tám phương diện vun bồi cuộc sống</h2><p class="help-copy">Mỗi phương khởi đầu từ 0. Hoàn thành việc để dồn công lực vào phương vừa bồi bổ. Nối 8 điểm lại thành Bát phương đồ: thấy ngay phương nào thâm hậu, phương nào cần khổ luyện.</p>' +
-      '<p class="gr-karma"><strong>' + KARMA.name + '</strong> <small>' + KARMA.sub + '</small><span>' + KARMA.means + '</span></p><ol class="gr-guide-list">' +
+      '<p class="gr-karma"><strong>' + KARMA.name + '</strong> <small>' + KARMA.sub + '</small> <span>' + KARMA.means + '</span></p><ol class="gr-guide-list">' +
       AXES.slice().sort((x, y) => x.no - y.no).map((a) => '<li style="--c:' + a.color + '"><span class="gr-guide-ico">' + iconSvg('gr-' + a.id, 20) + '</span><div><strong><span class="gr-guide-no" aria-hidden="true">' + a.no + '.</span> ' + a.name + '</strong> <small>' + a.sub + '</small><p>' + a.means + '</p></div></li>').join('') + '</ol></section>';
   }
   function bubbleText(pose, s) {
@@ -796,6 +796,49 @@
         : '<div class="gr-sw-grid"><div class="gr-sw-col" data-col="strong"><h3>Sở trường <small>' + high.length + ' phương</small></h3>' + (strong || '<p class="help-copy">Chưa phương nào vượt trội.</p>') + '</div>' +
           '<div class="gr-sw-col" data-col="weak"><h3>Khiếm khuyết <small>' + low.length + ' phương</small></h3>' + (weak || '<p class="help-copy">Chưa có khiếm khuyết rõ: không phương nào dưới ba phần tư mức trung bình.</p>') + rest + '</div></div>') + '</section>';
   }
+  // ---- Gợi ý tu luyện theo phương yếu nhất, theo nhân quả (v2.62.0) --------------------------------------------------------
+  // Lấy phương thấp nhất (đồng điểm: theo thứ tự ô cố định) rồi áp dụng Nghiệp quả (KARMA): việc làm ở phương nào là hạt giống, quả trổ về chính phương ấy.
+  // Mỗi phương có hai việc gieo cho mình, hai việc gieo cho người và một câu nói quả trở về mình ra sao: giúp người ở đúng phương mình yếu cũng chính là bồi
+  // bổ cho mình. Chỉ đọc điểm và sổ, không ghi gì.
+  const KARMA_PLAN = {
+    dao: { self: ['Ngồi thiền hoặc niệm một khắc mỗi sáng', 'Giữ đúng một lời đã hứa hôm nay'], give: ['Làm một việc thiện nhỏ mà không để ai biết', 'Xin lỗi hoặc hóa giải một hiềm khích với người khác'], fruit: 'Người gieo thiện hạnh thì lòng tự nhẹ, giới hạnh tự vững: việc lành cho người là hạt giống của chính đạo tâm mình.' },
+    tai: { self: ['Ghi chép thu chi hôm nay', 'Tiết kiệm hoặc trả bớt một khoản nợ nhỏ'], give: ['Giúp người quen một việc mưu sinh: giới thiệu việc, chỉ cách làm', 'Trả công sòng phẳng, đúng hẹn cho người làm việc cho mình'], fruit: 'Giúp người có kế sinh nhai thì tiếng tốt và cơ hội quay về; sòng phẳng với người thì chữ tín nuôi chính tài lộc của mình.' },
+    tam: { self: ['Thở có ý thức ba hơi khi bực bội', 'Viết ba dòng gọi tên cảm xúc hôm nay'], give: ['Lắng nghe một người nói hết lời mà không ngắt', 'Nói một lời trấn an với người đang lo lắng'], fruit: 'An ủi người thì lòng mình cũng dịu; kiên nhẫn lắng nghe là luyện chính tâm cảnh của mình.' },
+    duyen: { self: ['Nhắn hỏi thăm một người bạn lâu chưa nói chuyện', 'Cảm ơn ai đó đã giúp mình'], give: ['Giới thiệu hai người có thể giúp nhau', 'Có mặt bên một người đang cần người ở cạnh'], fruit: 'Mở lối cho người thì mạng lưới thân hữu của mình rộng ra; ai gieo tình thì gặt tình.' },
+    than: { self: ['Đi bộ hoặc vận động mười lăm phút', 'Ngủ đúng giờ tối nay'], give: ['Rủ người thân hoặc bạn cùng đi bộ', 'Nấu hoặc chia sẻ một món ăn lành mạnh cho người khác'], fruit: 'Rủ người cùng tập thì thói quen của mình bền hơn; chăm cho người ăn lành ngủ tốt cũng là học cách chăm thân mình.' },
+    tri: { self: ['Đọc một chương sách', 'Viết lại một điều đã học hôm nay'], give: ['Chỉ cho người khác một điều mình biết', 'Chia sẻ một tài liệu hay cho người đang cần'], fruit: 'Dạy người là cách học sâu nhất: điều chia sẻ ra được hiểu rõ thêm, trí tuệ của mình dày lên.' },
+    nghe: { self: ['Hoàn thành một việc quan trọng của dự án', 'Giải quyết một việc tồn đọng'], give: ['Chia sẻ chuyên môn cho một đồng nghiệp trẻ', 'Giúp đồng nghiệp gỡ vướng một việc của họ'], fruit: 'Giúp người làm tốt việc của họ thì đội nhóm mạnh lên, uy tín và cơ hội về với sự nghiệp của mình.' },
+    gia: { self: ['Gọi hoặc về thăm cha mẹ, người thân', 'Dọn dẹp một góc nhà cho gọn gàng'], give: ['Phụ giúp người nhà một việc mà không đợi nhờ', 'Nấu một bữa cho cả nhà'], fruit: 'Gieo hiếu và sự chăm sóc trong nhà thì tổ ấm hòa thuận, và tổ ấm ấy lại là nơi nâng đỡ chính mình.' },
+  };
+  // Phương thấp nhất (đồng điểm: ô đứng trước), các phương thấp ngang nó, và cả tám phương có bằng nhau không.
+  function weakestOf(s) {
+    let w = 0;
+    s.forEach((v, i) => { if (v < s[w]) w = i; });
+    return { w, tied: s.map((_, i) => i).filter((i) => i !== w && s[i] === s[w]), even: Math.max(...s) === Math.min(...s) };
+  }
+  // Ngày gần nhất (không muộn hơn t) phương i được cộng điểm; '' nếu chưa lần nào.
+  function lastTrained(g, i, t) {
+    let d = '';
+    for (const e of g.log) if (e.p[i] > 0 && e.d <= t && e.d > d) d = e.d;
+    return d;
+  }
+  function cultivatePanel(rep, t) {
+    if (!rep.total) return '';
+    const g = growth(), s = rep.scores, { w, tied, even } = weakestOf(s), a = AXES[w], plan = KARMA_PLAN[a.id], last = lastTrained(g, w, t);
+    const lead = even
+      ? 'Tám phương đang ngang nhau (' + fmt(s[0]) + ' điểm mỗi phương). Gợi ý bắt đầu từ <strong>' + a.name + '</strong>; các hạ cũng có thể chọn phương khác tùy ý.'
+      : 'Phương yếu nhất hiện nay là <strong>' + a.name + '</strong> (' + fmt(s[w]) + ' điểm, thấp nhất trong tám phương; mức trung bình ' + fmt1(rep.mean) + ').' + (tied.length ? ' ' + tied.map((i) => AXES[i].name).join(', ') + ' cũng thấp ngang.' : '');
+    const when = last ? 'Lần gần nhất bồi bổ phương này: ' + dayLabel(last, t) + (daysAgo(t, last) ? ' (' + daysAgo(t, last) + ' ngày trước).' : ' (hôm nay).') : 'Phương này chưa từng được bồi bổ.';
+    const list = (arr) => '<ul>' + arr.map((x) => '<li>' + esc(x) + '</li>').join('') + '</ul>';
+    return '<section class="panel gr-cult" aria-label="Gợi ý tu luyện theo phương yếu nhất" data-axis="' + a.id + '" style="--c:' + a.color + '"><h2>Gợi ý tu luyện theo phương yếu nhất</h2>' +
+      '<p class="gr-cult-lead">' + lead + '</p><p class="gr-cult-when">' + when + '</p>' +
+      '<p class="gr-karma gr-cult-karma"><strong>' + KARMA.name + '</strong> <small>' + KARMA.sub + '</small> <span>' + KARMA.means + '</span></p>' +
+      '<ol class="gr-cult-steps">' +
+      '<li data-step="self"><small>Nhân · cho mình</small><h3>Gieo cho chính mình</h3>' + list(plan.self) + '</li>' +
+      '<li data-step="give"><small>Nhân · cho người</small><h3>Gieo cho người</h3>' + list(plan.give) + '</li>' +
+      '<li data-step="fruit"><small>Quả · về mình</small><h3>Quả trổ về ' + a.name + '</h3><p>' + esc(plan.fruit) + '</p></li></ol>' +
+      '<p class="help-copy">Làm xong một việc, hoàn thành nó trong ứng dụng rồi dồn điểm vào ' + a.name + ' ở bảng vận công để Bát phương đồ ghi nhận. Việc giúp người cũng tính cho phương ấy: gieo ở đâu, quả về đó.</p></section>';
+  }
   function reportPage() {
     const rep = buildReport(), r = rep.realm, s = rep.scores, t = rep.t;
     const head = heading('GIANG HỒ TU LUYỆN', 'Báo cáo tu luyện', 'Cập nhật ' + t.slice(8, 10) + '/' + t.slice(5, 7) + ' · ' + esc(heroName()), '<div class="gr-head-actions"><button type="button" class="btn" data-gr-back>← Quay lại</button></div>');
@@ -813,7 +856,7 @@
     const notes = tips.filter((x) => x.kind !== 'weak'), weak = tips.filter((x) => x.kind === 'weak');
     return '<div class="gr-page gr-report">' + head + tiles +
       '<div class="gr-rep-grid"><section class="panel gr-radar-panel" aria-label="Bát phương đồ"><h2>Bát phương đồ</h2><div class="gr-radar-wrap">' + radar(s) + '</div><p class="gr-summary">Sở trường: <strong>' + rep.extremes.top.name + '</strong> (' + fmt(rep.extremes.mx) + ') · Cần khổ luyện: <strong>' + rep.extremes.low.name + '</strong> (' + fmt(rep.extremes.mn) + ')</p></section>' +
-      '<section class="panel gr-eval"><h2>Luận từng mạch</h2>' + bal + '<ul class="gr-eval-list">' + rows + '</ul></section></div>' + historyPanel(t) + strengthPanel(rep) +
+      '<section class="panel gr-eval"><h2>Luận từng mạch</h2>' + bal + '<ul class="gr-eval-list">' + rows + '</ul></section></div>' + historyPanel(t) + strengthPanel(rep) + cultivatePanel(rep, t) +
       '<section class="panel gr-tips"><h2>Bí kíp cải thiện</h2><div class="gr-tip-list">' + notes.map(tipCard).join('') + '</div><h3 class="gr-tips-sub">Mạch nên khổ luyện trước</h3><div class="gr-tip-list">' + weak.map(tipCard).join('') + '</div><p class="help-copy">Bí kíp dựa trên điểm các hạ tự cộng nên chỉ mang tính gợi ý.</p></section></div>';
   }
   // Cho các phần sau (đủ 7 ngày tích lũy, báo cáo) dùng chung.
