@@ -5139,6 +5139,35 @@
 :root[data-style=giangho] .gr-hist-row small {
     color: var(--muted)
 }
+:root[data-style=giangho] .gr-sw-col>h3 {
+    color: var(--ink)
+}
+:root[data-style=giangho] .gr-sw-col>h3 small {
+    color: var(--muted)
+}
+:root[data-style=giangho] .gr-sw-card {
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--c);
+    background: var(--paper)
+}
+:root[data-style=giangho] .gr-sw-card h4 small {
+    color: var(--muted)
+}
+:root[data-style=giangho] .gr-sw-card.is-strong {
+    background: color-mix(in srgb,var(--c) 6%,var(--paper))
+}
+:root[data-style=giangho] .gr-sw-goal {
+    color: var(--ink)
+}
+:root[data-style=giangho] .gr-sw-use {
+    color: var(--muted)
+}
+:root[data-style=giangho] .gr-sw-use strong, :root[data-style=giangho] .gr-sw-goal strong {
+    color: var(--ink)
+}
+:root[data-style=giangho] .gr-sw-even {
+    border: 1px dashed var(--line)
+}
 :root[data-style=giangho] .gr-wallet>div {
     border: 1px solid var(--line);
     background: var(--paper)
@@ -12533,6 +12562,35 @@
 }
 :root[data-style=giangho][data-theme=dark] .gr-hist-row small {
     color: var(--muted)
+}
+:root[data-style=giangho][data-theme=dark] .gr-sw-col>h3 {
+    color: var(--ink)
+}
+:root[data-style=giangho][data-theme=dark] .gr-sw-col>h3 small {
+    color: var(--muted)
+}
+:root[data-style=giangho][data-theme=dark] .gr-sw-card {
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--c);
+    background: var(--paper)
+}
+:root[data-style=giangho][data-theme=dark] .gr-sw-card h4 small {
+    color: var(--muted)
+}
+:root[data-style=giangho][data-theme=dark] .gr-sw-card.is-strong {
+    background: color-mix(in srgb,var(--c) 6%,var(--paper))
+}
+:root[data-style=giangho][data-theme=dark] .gr-sw-goal {
+    color: var(--ink)
+}
+:root[data-style=giangho][data-theme=dark] .gr-sw-use {
+    color: var(--muted)
+}
+:root[data-style=giangho][data-theme=dark] .gr-sw-use strong, :root[data-style=giangho][data-theme=dark] .gr-sw-goal strong {
+    color: var(--ink)
+}
+:root[data-style=giangho][data-theme=dark] .gr-sw-even {
+    border: 1px dashed var(--line)
 }
 :root[data-style=giangho][data-theme=dark] .gr-wallet>div {
     border: 1px solid var(--line);

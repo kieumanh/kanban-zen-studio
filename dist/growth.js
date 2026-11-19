@@ -753,6 +753,49 @@
       '<div class="gr-hist-body"><p class="gr-hist-sum" role="status">' + sum + '</p>' + none + '<ul class="gr-hist-list">' + rows + '</ul></div></div>' +
       '<p class="help-copy">Mốc so sánh là điểm cuối ngày được chọn. Tăng tính theo các lần vận công trong sổ; giảm tính theo các lần đổi bảo vật chưa hủy.</p></section>';
   }
+  // ---- Sở trường và khiếm khuyết (v2.61.0) ---------------------------------------------------------------------------------
+  // Dựa trên mức trung bình của tám phương (cùng ngưỡng với “Luận từng mạch”): sở trường = từ 1,25 lần trung bình trở lên; khiếm khuyết = dưới 0,75 lần
+  // hoặc chưa khai mạch (0 điểm). Mỗi khiếm khuyết có mục tiêu gần (số điểm để thoát vùng cần khổ luyện, quy ra số việc, mỗi việc 1 điểm), vài việc gợi ý
+  // của chính phương đó, và cách mượn sức sở trường mạnh nhất (LEVER) để kéo phương yếu lên. Chỉ đọc điểm, không ghi gì.
+  const LEVER = {
+    dao: 'Lấy sự tĩnh và lòng từ bi làm nền: trước khi làm việc ở phương yếu, hít thở một lúc và phát nguyện việc ấy giúp ích cho ai đó, rồi mới bắt đầu.',
+    tai: 'Dùng nguồn lực dư: dành một khoản nhỏ có chủ đích (khóa học, dụng cụ, buổi tập, món quà cho người thân) để nuôi phương yếu.',
+    tam: 'Dùng sự an định: đặt cho phương yếu một khung giờ yên tĩnh cố định mỗi ngày, làm chậm và đều, không ép mình.',
+    duyen: 'Rủ người cùng làm: tìm một người bạn đồng hành cho việc ở phương yếu, có người nhắc nhau sẽ bền hơn.',
+    than: 'Dùng sinh lực: tranh thủ lúc khỏe nhất trong ngày để làm việc ở phương yếu, nhất là việc cần kiên trì.',
+    tri: 'Dùng khả năng học: tìm hiểu một bài, một cuốn sách hay một người thầy về phương yếu, rồi viết lại điều đã học.',
+    nghe: 'Dùng kỷ luật công việc: biến phương yếu thành một việc nhỏ có hạn chót trong danh sách, hoàn thành như một nhiệm vụ.',
+    gia: 'Dùng sự gắn bó: lồng việc ở phương yếu vào sinh hoạt gia đình (đi dạo cùng nhà, bữa cơm chung, cùng nhau học một điều).',
+  };
+  const SW_WEAK_MAX = 4, SW_STRONG_MAX = 3;
+  const lever = (id, to) => LEVER[id].replace(/phương yếu/g, to); // câu LEVER nói về “phương yếu”: thay bằng tên phương đang nói tới
+  function strengthsOf(rep) {
+    const s = rep.scores, mean = rep.mean, idx = AXES.map((_, i) => i);
+    const high = idx.filter((i) => levelOf(s[i], mean).id === 'high').sort((x, y) => s[y] - s[x] || x - y);
+    const low = idx.filter((i) => ['low', 'none'].includes(levelOf(s[i], mean).id)).sort((x, y) => s[x] - s[y] || x - y);
+    return { high, low };
+  }
+  // Điểm cần thêm để phương i lên tới ba phần tư mức trung bình (ngưỡng thoát “Cần khổ luyện”), làm tròn lên bội của 0,5; tối thiểu 0,5.
+  const gapTo = (v, mean) => Math.max(STEP, Math.ceil((mean * 0.75 - v) / STEP - 1e-9) * STEP);
+  function strengthPanel(rep) {
+    if (!rep.total) return '';
+    const s = rep.scores, mean = rep.mean, { high, low } = strengthsOf(rep), lead = high.length ? AXES[high[0]] : null; // lead: sở trường mạnh nhất
+    const head = (a, note) => '<h4><span class="gr-axis-ico">' + iconSvg('gr-' + a.id, 18) + '</span>' + a.name + '<small>' + note + '</small></h4>';
+    const card = (i, kind, body) => '<article class="gr-sw-card is-' + kind + '" data-axis="' + AXES[i].id + '" style="--c:' + AXES[i].color + '">' + body + '</article>';
+    const strong = high.slice(0, SW_STRONG_MAX).map((i) => card(i, 'strong', head(AXES[i], fmt(s[i]) + ' điểm · gấp ' + fmt1(s[i] / mean) + ' lần trung bình') + '<p>' + esc(AXES[i].means) + '</p><p class="gr-sw-use"><strong>Phát huy:</strong> ' + esc(lever(AXES[i].id, 'các phương còn yếu')) + '</p>')).join('');
+    const weak = low.slice(0, SW_WEAK_MAX).map((i) => {
+      const a = AXES[i], need = gapTo(s[i], mean), n = Math.ceil(need - 1e-9);
+      return card(i, 'weak', head(a, fmt(s[i]) + ' điểm · ' + (s[i] ? 'bằng ' + Math.round((s[i] / mean) * 100) + '% trung bình' : 'chưa khai mạch')) +
+        '<p class="gr-sw-goal"><strong>Mục tiêu gần:</strong> thêm ' + fmt(need) + ' điểm (khoảng ' + (n <= 1 ? 'một' : n) + ' việc) để thoát vùng cần khổ luyện.</p><ul>' + a.ideas.slice(0, 2).map((x) => '<li>' + esc(x) + '</li>').join('') + '</ul>' +
+        (lead ? '<p class="gr-sw-use"><strong>Mượn sức ' + lead.name + ':</strong> ' + esc(lever(lead.id, a.name)) + '</p>' : ''));
+    }).join('');
+    const rest = low.length > SW_WEAK_MAX ? '<p class="help-copy">Còn ' + (low.length - SW_WEAK_MAX) + ' phương dưới mức nữa: ' + low.slice(SW_WEAK_MAX).map((i) => AXES[i].name).join(', ') + '.</p>' : '';
+    const even = !high.length && !low.length;
+    return '<section class="panel gr-sw" aria-label="Sở trường và khiếm khuyết"><h2>Sở trường và khiếm khuyết</h2><p class="help-copy">Mức trung bình hiện tại là ' + fmt1(mean) + ' điểm mỗi phương. Sở trường là phương từ 1,25 lần trung bình trở lên; khiếm khuyết là phương dưới 0,75 lần hoặc chưa khai mạch.</p>' +
+      (even ? '<p class="gr-sw-even">Tám phương đang khá đều: chưa có sở trường vượt trội hay khiếm khuyết rõ rệt. Cứ giữ nhịp, hoặc chọn một phương để nâng lên.</p>'
+        : '<div class="gr-sw-grid"><div class="gr-sw-col" data-col="strong"><h3>Sở trường <small>' + high.length + ' phương</small></h3>' + (strong || '<p class="help-copy">Chưa phương nào vượt trội.</p>') + '</div>' +
+          '<div class="gr-sw-col" data-col="weak"><h3>Khiếm khuyết <small>' + low.length + ' phương</small></h3>' + (weak || '<p class="help-copy">Chưa có khiếm khuyết rõ: không phương nào dưới ba phần tư mức trung bình.</p>') + rest + '</div></div>') + '</section>';
+  }
   function reportPage() {
     const rep = buildReport(), r = rep.realm, s = rep.scores, t = rep.t;
     const head = heading('GIANG HỒ TU LUYỆN', 'Báo cáo tu luyện', 'Cập nhật ' + t.slice(8, 10) + '/' + t.slice(5, 7) + ' · ' + esc(heroName()), '<div class="gr-head-actions"><button type="button" class="btn" data-gr-back>← Quay lại</button></div>');
@@ -770,7 +813,7 @@
     const notes = tips.filter((x) => x.kind !== 'weak'), weak = tips.filter((x) => x.kind === 'weak');
     return '<div class="gr-page gr-report">' + head + tiles +
       '<div class="gr-rep-grid"><section class="panel gr-radar-panel" aria-label="Bát phương đồ"><h2>Bát phương đồ</h2><div class="gr-radar-wrap">' + radar(s) + '</div><p class="gr-summary">Sở trường: <strong>' + rep.extremes.top.name + '</strong> (' + fmt(rep.extremes.mx) + ') · Cần khổ luyện: <strong>' + rep.extremes.low.name + '</strong> (' + fmt(rep.extremes.mn) + ')</p></section>' +
-      '<section class="panel gr-eval"><h2>Luận từng mạch</h2>' + bal + '<ul class="gr-eval-list">' + rows + '</ul></section></div>' + historyPanel(t) +
+      '<section class="panel gr-eval"><h2>Luận từng mạch</h2>' + bal + '<ul class="gr-eval-list">' + rows + '</ul></section></div>' + historyPanel(t) + strengthPanel(rep) +
       '<section class="panel gr-tips"><h2>Bí kíp cải thiện</h2><div class="gr-tip-list">' + notes.map(tipCard).join('') + '</div><h3 class="gr-tips-sub">Mạch nên khổ luyện trước</h3><div class="gr-tip-list">' + weak.map(tipCard).join('') + '</div><p class="help-copy">Bí kíp dựa trên điểm các hạ tự cộng nên chỉ mang tính gợi ý.</p></section></div>';
   }
   // Cho các phần sau (đủ 7 ngày tích lũy, báo cáo) dùng chung.
