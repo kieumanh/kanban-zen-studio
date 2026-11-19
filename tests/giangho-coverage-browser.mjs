@@ -6,6 +6,7 @@
 // Kiểm ở 390 (chạm), 820 (chạm), 1440 px. Dữ liệu mẫu dùng tên trung tính để mọi từ bị bắt đều là chữ giao diện.
 // v2.56.0 (Hán Việt Đủ Bộ): thêm các màn của v2.51–v2.55 (Đang đợi hồi âm, hộp Ôn tuần / Kiểm điểm tuần, hộp cất nội dung được chia sẻ,
 // khối Sao lục ở Cài đặt, thông báo của chúng) và thêm bảy từ Thiền vào danh sách bắt (phản hồi, đang chờ, ôn tuần, sao lưu, khôi phục, chia sẻ, đến lúc).
+// v2.63.1 (Liên Hoàn Lệnh): thêm trang Liên hoàn lệnh (khung ghi thêm, tìm không thấy, chuỗi trống, thông báo khi ghi vào / gỡ khỏi chuỗi) vào bài canh gác.
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { startHarness, makeProject } from './lib/browser-harness.mjs';
@@ -56,6 +57,7 @@ const seed = () => ({
   ],
   notes: [{ id: 'n1', type: 'note', title: 'Sổ tay', text: 'Nội dung A', url: '', group: 'Nhóm A', color: '#7950c8' }, { id: 'wk-2026-11-09', type: 'todo', title: 'Tuần A', text: '', url: '', group: '', color: '#7950c8', items: [{ text: 'Mục A', done: false }], weekPicks: [{ p: 'p1', t: 'p1t0' }], weekOf: '2026-11-09' }],
   dailyHabits: [{ id: 'h1', name: 'Đi bộ', icon: '🚶', color: '#2e7d5b', createdAt: '2026-10-01', goal: 7, done: [vn(1), vn(2), vn(3)] }],
+  worklist: { v: 1, items: [{ t: 'p1t1', a: '2026-11-10' }, { t: 'p2t0', a: '2026-11-11' }, { t: 'p1t4', a: '2026-11-11' }, { t: 'p1t5', a: '2026-11-03', x: '2026-11-08' }] },
   trash: [{ id: 'tr1', at: Date.now() - 1000, kind: 'note', name: 'Cũ A', payload: JSON.stringify({ id: 'n9', type: 'note', title: 'Cũ A', text: '', url: '', group: '', color: '#7950c8' }), parent: '' }],
 });
 const GH = ({ context }) => context.addInitScript(() => localStorage.setItem('zen-style', 'giangho'));
@@ -120,10 +122,31 @@ try {
     const { context, page } = await h.open(width, { touch, now: '2026-11-12T09:00:00+07:00', setup });
     const errors = [];
     page.on('pageerror', (e) => errors.push(e.message));
-    for (const v of ['dashboard', 'projects', 'calendar', 'gantt', 'growth', 'budget', 'habits', 'focus', 'notes', 'resources', 'archive', 'trash']) {
+    for (const v of ['dashboard', 'projects', 'calendar', 'gantt', 'growth', 'budget', 'habits', 'focus', 'worklist', 'notes', 'resources', 'archive', 'trash']) {
       await h.show(page, v, 'p1');
       await check('màn ' + v, v === 'dashboard' ? 'body' : '#main');
     }
+    // v2.63.1: Liên hoàn lệnh — khung ghi thêm, thông báo khi gỡ / ghi vào, tìm không thấy, chuỗi trống.
+    await h.show(page, 'worklist');
+    await page.waitForSelector('#main .wl-chain');
+    await page.evaluate(() => document.querySelectorAll('#main details').forEach((d) => (d.open = true)));
+    await check('Liên hoàn lệnh (khung ghi thêm)', '#main');
+    await page.locator('#main [data-wl-drop]').first().click();
+    await page.waitForFunction(() => document.querySelector('#toast')?.classList.contains('show'));
+    await check('truyền thư khi gỡ khỏi chuỗi', '#toast');
+    await h.show(page, 'worklist');
+    await page.evaluate(() => (document.querySelector('.wl-picker').open = true));
+    await page.locator('#main [data-wl-add]').first().click();
+    await page.waitForFunction(() => document.querySelector('#toast')?.classList.contains('show'));
+    await check('truyền thư khi ghi vào chuỗi', '#toast');
+    await page.locator('#main [data-wl-search]').fill('zzzz-khong-co-viec-nay');
+    await check('Liên hoàn lệnh (tìm không thấy)', '#main');
+    await page.evaluate(() => {
+      data.worklist = { v: 1, items: [] };
+      render();
+    });
+    await page.waitForSelector('#main .wl-empty');
+    await check('Liên hoàn lệnh (chuỗi trống)', '#main');
     await h.show(page, 'budget');
     await page.locator('.bg-project').first().click();
     await page.waitForSelector('.bg-actions');

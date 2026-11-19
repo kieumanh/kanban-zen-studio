@@ -901,6 +901,34 @@
     'Chưa ghi nhận lần đồng bộ thành công trên thiết bị này': 'Thiết bị này chưa ghi nhận lần thông mạch thành công nào',
   };
   const syncWords = (s) => SYNC_WORDS[s] || s.replace(/^Đã đồng bộ lúc/, 'Đã thông mạch lúc').replace(/^Chưa đồng bộ được/, 'Chưa thông mạch được');
+  // ---- v2.63.1 (Liên Hoàn Lệnh): trang chuỗi việc ưu tiên xuyên dự án (worklist.js) --------------------------------------------------------
+  // Chữ dài, chỉ có ở trang này: đổi nguyên câu. Chữ ngắn dễ trùng nội dung người dùng (Khẩn cấp, Thường…): chỉ đổi trong đúng vùng của nó.
+  for (const [plain, gh] of Object.entries({
+    'CHUỖI VIỆC XUYÊN DỰ ÁN': 'CHUỖI NHIỆM VỤ XUYÊN ĐẠI SỰ',
+    'Những việc cần làm sớm, xếp theo thứ tự bạn chọn, không phân biệt dự án. Xong việc thì tự rời chuỗi; chưa xong thì ở nguyên chỗ cũ cho tới khi bạn gỡ.':
+      'Những nhiệm vụ cần xuất chiêu sớm, xếp theo thứ tự các hạ định, bất kể đại sự nào. Nhiệm vụ công thành thì tự rời chuỗi; chưa xong thì ở yên chỗ cũ cho tới khi các hạ gỡ.',
+    'Mở một việc bất kỳ rồi bấm “Liên hoàn lệnh” cạnh nút “Chế độ tập trung”, hoặc chọn việc ở khung bên dưới. Việc nào xong sẽ tự rời chuỗi.':
+      'Mở một nhiệm vụ bất kỳ rồi bấm “Liên hoàn lệnh” cạnh nút “Bế quan”, hoặc chọn nhiệm vụ ở khung bên dưới. Nhiệm vụ nào công thành sẽ tự rời chuỗi.',
+    'Ghi thêm việc vào chuỗi': 'Ghi thêm nhiệm vụ vào chuỗi',
+    'Tìm việc theo tên hoặc dự án': 'Tìm nhiệm vụ theo tên hoặc đại sự',
+    'Mọi việc chưa xong đều đã nằm trong chuỗi.': 'Mọi nhiệm vụ chưa thành đều đã nằm trong chuỗi.',
+    'Không có việc nào khớp.': 'Không có nhiệm vụ nào khớp.',
+    'Gỡ việc này khỏi Liên hoàn lệnh': 'Gỡ nhiệm vụ này khỏi Liên hoàn lệnh',
+    'Ghi việc này vào Liên hoàn lệnh để làm sớm': 'Ghi nhiệm vụ này vào Liên hoàn lệnh để xuất chiêu sớm',
+    'Liên hoàn lệnh: chuỗi việc ưu tiên xuyên mọi dự án': 'Liên hoàn lệnh: chuỗi nhiệm vụ ưu tiên xuyên mọi đại sự',
+  }))
+    add(plain, gh);
+  for (const [plain, to, scope] of [
+    ['việc trong chuỗi', 'nhiệm vụ trong chuỗi', '.wl-sum'],
+    ['khẩn cấp', 'hỏa tốc', '.wl-sum'],
+    ['quá hạn', 'lỡ hẹn', '.wl-sum'],
+    ['dự án', 'đại sự', '.wl-sum'],
+    ['Màu dự án', 'Màu đại sự', '.wl-legend'],
+    ['Khẩn cấp', 'Hỏa tốc', '.wl-chip-urgent'],
+    ['Chưa phân loại', 'Chưa định cấp', '.wl-chip-calm'],
+    ['Thường', 'Thứ yếu', '.wl-chip-calm'],
+  ])
+    add(plain, { to, in: scope });
   const PATTERNS = [
     [/^Thông báo · .+$/, bell, '.topbar', 'Thông báo · '],
     [/^(Lịch|Gantt) · (.+)$/, (s, a, b) => (currentView() === VIEW_OF[a] ? NAV[a][0] + ' · ' + b : s), '#crumb', ' · '],
@@ -1029,6 +1057,13 @@
     [/^Hoàn thành (.+)$/, 'Công thành chiêu $1', '.card-check-control', 'Hoàn thành '],
     [/^(\d{4}-\d\d-\d\d), (\d+) công việc$/, '$1, $2 nhiệm vụ', MAIN, ' công việc'],
     [/^(\d+) dự án đang chạy · Về tổng quan$/, '$1 đại sự đang vận hành · Về Tổng đàn', '.tab-home', 'dự án đang chạy'],
+    // v2.63.1 (Liên Hoàn Lệnh)
+    [/^(\d+)% hoàn thành( · \d+\/\d+ mục)?$/, (s, a, b) => a + '% công thành' + (b || ''), '.wl-meta', '% hoàn thành'],
+    [/^Hạn (.+)$/, 'Kỳ hạn $1', '.wl-chip', 'Hạn '],
+    [/^Quá hạn · (.+)$/, 'Lỡ hẹn · $1', '.wl-chip', 'Quá hạn · '],
+    [/^Bế quan, tập trung làm: (.+)$/, 'Bế quan chuyên tâm: $1', '.wl-focus', 'Bế quan, tập trung làm: '],
+    [/^Còn (\d+) việc nữa\. Gõ tên để thu hẹp\.$/, 'Còn $1 nhiệm vụ nữa. Gõ tên để thu hẹp.', '.wl-pick-empty', 'việc nữa'],
+    [/^Liên hoàn lệnh chứa tối đa (\d+) việc\. Hãy gỡ bớt việc đã qua trước khi ghi thêm\.$/, 'Liên hoàn lệnh chứa tối đa $1 nhiệm vụ. Hãy gỡ bớt nhiệm vụ đã qua trước khi ghi thêm.', NOTE, 'chứa tối đa'],
   ];
   // Nội dung người dùng và vùng không đổi chữ.
   const SKIP = [
@@ -1054,6 +1089,8 @@
     '.archive-projects h3', '.wf-archive-row .text-btn', '.recycle-name h3', '.recycle-select', '.help-copy:has(~ .purge-warning)', 'dialog .help-copy > strong', '.notice-item:not(.release-notice) > span:not(.notice-tag):not(.notice-detail-link)',
     // Dòng trạng thái trong hộp thoại nhiệm vụ: ứng dụng tự đặt lại chữ mỗi khi hộp thoại đổi (studio-zen.js mirror), không đổi để khỏi giằng co.
     '.zen-task-save-status',
+    // v2.63.1: Liên hoàn lệnh — tên việc, tên dự án (nhãn màu, danh sách ghi thêm) là nội dung người dùng.
+    '.wl-title', '.wl-card .wl-chip-project', '.wl-pick strong', '.wl-pick .wl-chip-project',
   ].join(', ');
   // Phần tử mà chữ NẰM TRỰC TIẾP bên trong là nội dung người dùng (phần tử con như nhãn "Hạn", mức cấp bách vẫn được đổi).
   const DIRECT_SKIP = 'button.month-event';

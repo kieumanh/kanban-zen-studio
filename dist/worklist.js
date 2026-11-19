@@ -297,6 +297,8 @@
     button.dataset.view = 'worklist';
     button.setAttribute('aria-pressed', String(view === 'worklist'));
     button.title = NAME + ': chuỗi việc ưu tiên xuyên mọi dự án';
+    // Thanh điện thoại chỉ đủ chỗ cho nhãn rút gọn; tên đầy đủ vẫn là tên đọc của nút (nhãn nhìn thấy nằm trọn trong tên đọc).
+    if (label !== NAME) button.setAttribute('aria-label', NAME);
     button.innerHTML = svgIcon('worklist') + '<span>' + label + '</span>';
     box.append(button);
   }

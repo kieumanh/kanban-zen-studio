@@ -149,9 +149,13 @@ try {
       sidebar: [...document.querySelectorAll('.sidebar .view-options .view-mode')].map((b) => b.textContent.trim()),
       phone: [...document.querySelectorAll('.mobile-viewbar .view-mode')].map((b) => b.textContent.trim()),
     }));
-    const expected = ['Bảng Kanban', 'Lịch', 'Gantt'];
+    // v2.63.0: thêm chế độ xem thứ tư “Liên hoàn lệnh” (chuỗi việc ưu tiên xuyên dự án); ba chế độ cũ giữ nguyên tên và thứ tự.
+    // Thanh điện thoại chỉ đủ chỗ cho nhãn rút gọn “Liên hoàn”, tên đọc (aria-label) vẫn là “Liên hoàn lệnh”.
+    const expected = ['Bảng Kanban', 'Lịch', 'Gantt', 'Liên hoàn lệnh'];
+    const expectedPhone = ['Bảng Kanban', 'Lịch', 'Gantt', 'Liên hoàn'];
     assert.deepEqual(names.sidebar, expected, `tên chế độ xem ở thanh bên (${width}px): ${JSON.stringify(names.sidebar)}`);
-    assert.deepEqual(names.phone, expected, `tên chế độ xem ở thanh trên điện thoại (${width}px): ${JSON.stringify(names.phone)}`);
+    assert.deepEqual(names.phone, expectedPhone, `tên chế độ xem ở thanh trên điện thoại (${width}px): ${JSON.stringify(names.phone)}`);
+    assert.equal(await page.locator('.mobile-viewbar [data-view=worklist]').getAttribute('aria-label'), 'Liên hoàn lệnh', `tên đọc đầy đủ của nút rút gọn (${width}px)`);
     await show(page, 'calendar');
     const calendarHead = await page.evaluate(() => ({ h1: document.querySelector('#main h1').textContent.trim(), crumb: document.querySelector('#crumb').textContent.trim() }));
     assert.equal(calendarHead.h1, 'Lịch', `tiêu đề màn Lịch (${width}px): ${calendarHead.h1}`);
