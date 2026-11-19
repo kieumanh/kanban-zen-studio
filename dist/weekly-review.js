@@ -4,6 +4,8 @@
 // Việc xong trước khi có tính năng này không có ngày nên không vào mục “Đã xong”. (2) Lựa chọn lưu thành một ghi chú dạng checklist, id cố định “wk-<thứ Hai của tuần>”,
 // kèm trường weekPicks (id dự án + id việc) để Tổng quan hiện đúng việc; ghi chú vẫn mở và sửa được như mọi ghi chú.
 // Hiện ở: bảng lệnh (“Ôn tuần”), Tổng quan (lời mời cuối tuần + khối “Việc trọng tâm tuần này”).
+// v2.70.0 (Hồi Quang): thêm khối “Bát phương” (chỉ đọc sổ cái Điểm tích lũy, không ghi gì): phương tăng nhiều nhất trong tuần, phương bị bỏ quên và hai gợi ý Nhân
+// cho phương ấy kèm nút “Gieo nhân” (growth-sow.js) để chọn một nhân cho tuần tới. Người chưa bắt đầu Điểm tích lũy không thấy khối này.
 (() => {
   const PICK_MAX = 3;
   const LIST_MAX = 8;
@@ -53,6 +55,26 @@
     return baseSave.apply(this, arguments);
   };
 
+  // ---- Bát phương trong tuần (v2.70.0) ----------------------------------------------------------------------------------------
+  // Điểm cộng từng phương trong tuần (các lần vận công có ngày trong [mon, sun], theo sổ cái). Tăng nhiều nhất = phương cộng nhiều điểm nhất (>0);
+  // bị bỏ quên = phương không được cộng điểm nào trong tuần, nếu nhiều phương thì lấy phương đang có điểm thấp nhất (hòa thì theo thứ tự tám phương).
+  // Không có Điểm tích lũy (chưa bắt đầu, hoặc chưa tải xong, hoặc tu vi còn 0) thì trả null và khối ẩn.
+  function octaOf(mon, sun) {
+    const Z = window.zenGrowth;
+    if (!Z || Z.stub || !Z.started?.() || !Array.isArray(Z.AXES)) return null;
+    const g = Z.growth();
+    const now = Z.scores();
+    if (!g || !Array.isArray(g.log) || !(Z.total(now) > 0)) return null;
+    const gain = Z.AXES.map(() => 0);
+    for (const e of g.log) if (isDay(e.d) && e.d >= mon && e.d <= sun && Array.isArray(e.p)) e.p.forEach((v, i) => i < gain.length && (gain[i] += v * Z.STEP));
+    const top = Math.max(...gain);
+    const best = top > 0 ? gain.indexOf(top) : -1;
+    const quiet = gain.map((v, i) => i).filter((i) => gain[i] === 0);
+    let lost = -1;
+    for (const i of quiet) if (lost < 0 || now[i] < now[lost]) lost = i;
+    const plan = lost >= 0 ? Z.planOf?.(Z.AXES[lost].id) : null;
+    return { best: best >= 0 ? { axis: Z.AXES[best], pts: top } : null, lost: lost >= 0 ? { axis: Z.AXES[lost], score: now[lost] } : null, seeds: plan ? [['self', plan.self?.[0]], ['give', plan.give?.[0]]].filter((x) => x[1]) : [], fmt: Z.fmt };
+  }
   // ---- Số liệu một tuần ------------------------------------------------------------------------------------------------------
   function gather(mon) {
     const sun = plus(mon, 6);
@@ -94,7 +116,7 @@
         else if (e.type === 'out') outgoing += e.amount;
       }
     }
-    return { mon, sun, done, unfinished, candidates, habits, planned, achieved, money: { incoming, outgoing, entries } };
+    return { mon, sun, done, unfinished, candidates, habits, planned, achieved, money: { incoming, outgoing, entries }, octa: octaOf(mon, sun) };
   }
 
   // ---- Ghi chú “việc tuần” ---------------------------------------------------------------------------------------------------
@@ -162,6 +184,20 @@
         (rows.length > LIST_MAX ? '<p class="zen-review-more">và ' + (rows.length - LIST_MAX) + ' việc nữa</p>' : '')
       : '<p class="zen-review-empty">' + empty + '</p>';
 
+  function octaHTML(o) {
+    if (!o) return '';
+    const f = o.fmt;
+    const up = o.best ? '<p class="zen-review-octa-up">Tăng nhiều nhất: <b>' + esc(o.best.axis.name) + '</b> (+' + esc(f(o.best.pts)) + ' điểm).</p>' : '<p class="zen-review-octa-up">Tuần này chưa vận công vào phương nào.</p>';
+    const lost = o.lost ? '<p class="zen-review-octa-lost">Bị bỏ quên: <b>' + esc(o.lost.axis.name) + '</b> (không được bồi bổ tuần này, đang ' + esc(f(o.lost.score)) + ' điểm).</p>' : '<p class="zen-review-octa-lost">Cả tám phương đều được bồi bổ trong tuần.</p>';
+    const sow = window.zenSow;
+    const seeds =
+      o.lost && o.seeds.length && sow
+        ? '<p class="zen-review-hint">Chọn một nhân cho tuần tới:</p><ul class="zen-review-seeds">' +
+          o.seeds.map(([kind, text]) => '<li><span>' + esc(text) + '</span>' + sow.button(o.lost.axis.id, kind, text) + '</li>').join('') +
+          '</ul>'
+        : '';
+    return '<section class="zen-review-sec zen-review-octa" data-review-sec="octa"><h3>Bát phương</h3>' + up + lost + seeds + '</section>';
+  }
   function bodyHTML(week) {
     const next = plus(week.mon, 7);
     const existing = picksOf(picksNote(next)).map((x) => x.p + '|' + x.t);
@@ -183,6 +219,7 @@
           '</ul>'
         : '<p class="zen-review-empty">Chưa có việc hằng ngày nào trong tuần này.</p>') +
       '</section>' +
+      octaHTML(week.octa) +
       '<section class="zen-review-sec" data-review-sec="money"><h3>Thu chi</h3>' +
       (m.entries
         ? '<p class="zen-review-money"><span>Thu <b>' + money(m.incoming) + '</b></span><span>Chi <b>' + money(m.outgoing) + '</b></span><span>' +
@@ -277,6 +314,18 @@
     paint();
     dialog.showModal();
     dialog.querySelector('.zen-review-weeks .active, [data-review-close]')?.focus();
+    // Điểm tích lũy nạp lười: người đã có dữ liệu mà chưa nạp xong thì nạp rồi vẽ lại để khối Bát phương hiện (không đụng lựa chọn đã tích).
+    if (data.growth && window.zenLazy && !window.zenLazy.ready('growth'))
+      window.zenLazy.load('growth').then(
+        () => {
+          if (!dialog) return;
+          const keep = pickedValues().map((x) => x.join('|'));
+          paint();
+          dialog.querySelectorAll('input[name=pick]').forEach((i) => (i.checked = keep.includes(i.value)));
+          syncCount();
+        },
+        () => {},
+      );
   }
 
   // ---- Tổng quan -------------------------------------------------------------------------------------------------------------

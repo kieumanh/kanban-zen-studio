@@ -901,7 +901,7 @@
     render();
     document.querySelector('[data-gr-hist="' + histSel + '"]')?.focus({ preventScroll: true });
   });
-  window.zenGrowth = { TASK_STEPS, isScored, AXES, started, scores, earnedScores, spentScores, total, realmOf, myRealm, realmInfo, levelLabel, tuviAt, REALMS, REALM_FROM, LEVEL_NAMES, LEVEL_AT, LEVEL_MAX, GOD, extremes, fmt, openAward, growth, STEP, iconSvg, habitStreak, buildReport, tipsOf, openReport, heroName, openSpend };
+  window.zenGrowth = { TASK_STEPS, isScored, AXES, started, scores, earnedScores, spentScores, total, realmOf, myRealm, realmInfo, levelLabel, tuviAt, REALMS, REALM_FROM, LEVEL_NAMES, LEVEL_AT, LEVEL_MAX, GOD, extremes, fmt, openAward, growth, STEP, iconSvg, habitStreak, buildReport, tipsOf, openReport, heroName, openSpend, planOf: (id) => KARMA_PLAN[id] };
 
   // ---- Sử dụng điểm (v1.81.0) ---------------------------------------------------------------------------------------------
   // Form ghi vật phẩm đã mua / quy đổi và số điểm trừ ở từng chỉ số. Mỗi lần quy đổi là một dòng trong data.growth.spend;
@@ -993,6 +993,7 @@
       '<div class="gr-spend-fields"><label class="field gr-spend-name">Bảo vật / nội dung quy đổi<input type="text" name="n" maxlength="120" autocomplete="off" placeholder="Ví dụ: tai nghe mới, bữa tối ngoài, một ngày nghỉ" value="' + esc(old?.n || pre?.name || '') + '"></label>' +
       '<label class="field">Ngày quy đổi<input type="date" name="d" max="' + today() + '" value="' + esc(old?.d || today()) + '"></label>' +
       '<label class="field gr-spend-note">Ghi chú (không bắt buộc)<textarea name="note" rows="2" maxlength="300" placeholder="Nơi mua, giá tiền, lý do thưởng cho bản thân…">' + esc(old?.note || '') + '</textarea></label></div>' +
+      (!old && window.zenLedger ? window.zenLedger.fieldset() : '') +
       '<section class="gr-spend-split" aria-labelledby="gr-spend-split-title"><h3 id="gr-spend-split-title">Trừ tu vi ở từng mạch</h3>' +
       '<div class="gr-spend-quick"><label class="field">Tổng điểm cần chia<input type="number" inputmode="decimal" min="0" step="0.5" data-gr-spend-quick placeholder="0"></label><button type="button" class="btn" data-gr-spend-split>Chia theo tỷ lệ</button></div><p class="help-copy gr-spend-hint">Chia nhanh theo tỷ lệ tu vi đang có ở từng mạch; sau đó vẫn chỉnh được từng ô.</p>' +
       '<ul class="gr-spend-rows">' + rows + '</ul><p class="gr-spend-sum" aria-live="polite"></p></section>' +
@@ -1051,6 +1052,9 @@
     if (!isDate(day)) return fail('Hãy chọn ngày quy đổi.', f.elements.d);
     if (day > today()) return fail('Ngày quy đổi không được ở tương lai.', f.elements.d);
     if (note.length > 300) return fail('Ghi chú tối đa 300 ký tự.', f.elements.note);
+    // v2.70.0 (Hồi Quang): số tiền tùy chọn để ghi luôn một khoản chi vào Thu chi (growth-ledger.js); chỉ cho lần quy đổi mới.
+    const money = !sd.id && window.zenLedger ? window.zenLedger.read(f) : { amount: 0 };
+    if (money.error) return fail(money.error, f.elements[money.field]);
     const { p, bad } = readSpend();
     if (bad.length) return fail('Điểm ở ' + AXES[bad[0]].name + ' chưa đúng. Hãy nhập số từ 0 trở lên, theo bậc 0,5.', sd.inputs[bad[0]]);
     const avail = balancesHalf(sd.id || undefined), over = p.findIndex((v, i) => v > avail[i]);
@@ -1058,7 +1062,9 @@
     const first = p.findIndex((v) => v > 0);
     if (first < 0) return fail('Hãy nhập số điểm quy đổi ở ít nhất một chỉ số.', sd.inputs[0]);
     const editing = !!sd.id;
+    let ledgerProject = null;
     const ok = wfSave(() => {
+      ledgerProject = null;
       const g = data.growth;
       g.spend ||= [];
       if (editing) {
@@ -1073,13 +1079,14 @@
         const e = { id: uid(), d: day, n: name, p };
         if (note) e.note = note;
         g.spend.push(e);
+        if (money.amount > 0) ledgerProject = window.zenLedger.add(money, name, day);
       }
     });
     if (!ok) return;
     closeSpend();
     if (view === 'growth') render();
     const points = fmt(p.reduce((a, b) => a + b, 0) * STEP);
-    notify(editing ? 'Đã cập nhật lần quy đổi “' + name + '” (' + points + ' điểm).' : sd.owner ? 'Chưởng quỹ ' + sd.owner + ' nhận ' + points + ' điểm, giao “' + name + '”. Tu vi hiện có: ' + fmt(total(scores())) + '.' : 'Đã quy đổi ' + points + ' điểm cho “' + name + '”. Tu vi hiện có: ' + fmt(total(scores())) + '.');
+    notify((editing ? 'Đã cập nhật lần quy đổi “' + name + '” (' + points + ' điểm).' : sd.owner ? 'Chưởng quỹ ' + sd.owner + ' nhận ' + points + ' điểm, giao “' + name + '”. Tu vi hiện có: ' + fmt(total(scores())) + '.' : 'Đã quy đổi ' + points + ' điểm cho “' + name + '”. Tu vi hiện có: ' + fmt(total(scores())) + '.') + (window.zenLedger ? window.zenLedger.note(money, ledgerProject) : ''));
   }
   const spendById = (id) => (growth()?.spend || []).find((e) => e.id === id);
   function voidSpend(id) {

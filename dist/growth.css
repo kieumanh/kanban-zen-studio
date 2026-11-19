@@ -1088,3 +1088,11 @@ dialog.gr-sow .btn{min-height:44px;border-radius:12px}
 .gr-goal-state{margin:10px 0 0;font-size:13px;color:var(--muted)}
 .gr-goal .btn,.gr-cult-more .btn{min-height:44px;border-radius:12px}
 .gr-cult-more{margin:10px 0 0}
+/* v2.70.0 (Hồi Quang): ô tùy chọn ghi khoản chi vào Thu chi trong hộp Đổi bảo vật. */
+.gr-spend-money{margin:14px 0 0;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--paper)}
+.gr-spend-money h3{margin:0 0 4px;font-size:15px}
+.gr-spend-money h3 small{color:var(--muted);font-size:13px;font-weight:500}
+.gr-spend-money .help-copy{margin:0 0 8px}
+.gr-spend-money-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+.gr-spend-money-row .field input,.gr-spend-money-row .field select{min-height:44px;border-radius:12px}
+@media (max-width:520px){.gr-spend-money-row{grid-template-columns:minmax(0,1fr)}}

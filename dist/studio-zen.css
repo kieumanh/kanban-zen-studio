@@ -3732,3 +3732,30 @@ body select:not([multiple]):not([size]):not([data-zen-native]):not(.wf-original-
   min-height: 44px;
   border-radius: 12px;
 }
+
+/* v2.70.0 (Hồi Quang): khối Bát phương trong Ôn tuần. */
+.zen-review-octa p {
+  margin: 0 0 6px;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+.zen-review-seeds {
+  display: grid;
+  gap: 8px;
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.zen-review-seeds li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px 12px;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+.zen-review-seeds .btn {
+  min-height: 44px;
+  border-radius: 12px;
+}

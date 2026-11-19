@@ -6260,6 +6260,13 @@
 :root[data-style=giangho] .gr-goal-state {
     color: var(--muted)
 }
+:root[data-style=giangho] .gr-spend-money {
+    border: 1px solid var(--line);
+    background: var(--paper)
+}
+:root[data-style=giangho] .gr-spend-money h3 small {
+    color: var(--muted)
+}
 :root[data-style=giangho] {
     --muted: #685345;
     --text-muted: #685345
@@ -13995,6 +14002,13 @@
     color: inherit
 }
 :root[data-style=giangho][data-theme=dark] .gr-goal-state {
+    color: var(--muted)
+}
+:root[data-style=giangho][data-theme=dark] .gr-spend-money {
+    border: 1px solid var(--line);
+    background: var(--paper)
+}
+:root[data-style=giangho][data-theme=dark] .gr-spend-money h3 small {
     color: var(--muted)
 }
 :root[data-style=giangho][data-theme=dark] {
