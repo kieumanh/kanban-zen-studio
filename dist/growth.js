@@ -844,14 +844,19 @@
   }
   function cultivatePanel(rep, t) {
     if (!rep.total) return '';
-    const g = growth(), s = rep.scores, { w, tied, even } = weakestOf(s), a = AXES[w], plan = KARMA_PLAN[a.id], last = lastTrained(g, w, t);
-    const lead = even
+    const g = growth(), s = rep.scores;
+    // v2.69.0 (Tâm Nguyện): có tâm nguyện riêng (growth-goal.js) thì chọn phương hụt nhiều nhất so với mục tiêu; cân bằng thì giữ cách chọn cũ (điểm thấp nhất).
+    const goal = window.zenGoal ? window.zenGoal.focus(s, (i) => lastTrained(g, i, t)) : null;
+    const { w, tied, even } = goal ? { w: goal.w, tied: [], even: false } : weakestOf(s), a = AXES[w], plan = KARMA_PLAN[a.id], last = lastTrained(g, w, t);
+    const lead = goal
+      ? 'Theo tâm nguyện của các hạ, phương cần bồi bổ nhất lúc này là <strong>' + a.name + '</strong> (hiện ' + fmt(s[w]) + ' điểm, tâm nguyện ứng khoảng ' + fmt(Math.round(goal.target[w] * 2) / 2) + ' điểm).' + (goal.near.length > 1 ? ' ' + goal.near.filter((i) => i !== w).map((i) => AXES[i].name).join(', ') + ' cũng hụt ngang; chọn phương lâu chưa được bồi bổ hơn.' : '')
+      : even
       ? 'Tám phương đang ngang nhau (' + fmt(s[0]) + ' điểm mỗi phương). Gợi ý bắt đầu từ <strong>' + a.name + '</strong>; các hạ cũng có thể chọn phương khác tùy ý.'
       : 'Phương yếu nhất hiện nay là <strong>' + a.name + '</strong> (' + fmt(s[w]) + ' điểm, thấp nhất trong tám phương; mức trung bình ' + fmt1(rep.mean) + ').' + (tied.length ? ' ' + tied.map((i) => AXES[i].name).join(', ') + ' cũng thấp ngang.' : '');
     const when = last ? 'Lần gần nhất bồi bổ phương này: ' + dayLabel(last, t) + (daysAgo(t, last) ? ' (' + daysAgo(t, last) + ' ngày trước).' : ' (hôm nay).') : 'Phương này chưa từng được bồi bổ.';
     // v2.66.0 (Gieo Nhân): mỗi gợi ý Nhân có nút “Gieo nhân” (growth-sow.js) tạo việc mang sẵn phương này.
     const sow = window.zenSow;
-    const list = (arr, kind) => '<ul>' + arr.map((x) => '<li><span class="gr-sow-text">' + esc(x) + '</span>' + (sow ? sow.button(a.id, kind, x) : '') + '</li>').join('') + '</ul>';
+    const list = (arr, kind) => '<ul>' + (window.zenGoal ? window.zenGoal.pick(a.id, kind, arr) : arr).map((x) => '<li><span class="gr-sow-text">' + esc(x) + '</span>' + (sow ? sow.button(a.id, kind, x) : '') + '</li>').join('') + '</ul>';
     return '<section class="panel gr-cult" aria-label="Gợi ý tu luyện theo phương yếu nhất" data-axis="' + a.id + '" style="--c:' + a.color + '"><h2>Gợi ý tu luyện theo phương yếu nhất</h2>' +
       '<p class="gr-cult-lead">' + lead + '</p><p class="gr-cult-when">' + when + '</p>' +
       '<p class="gr-karma gr-cult-karma"><strong>' + KARMA.name + '</strong> <small>' + KARMA.sub + '</small> <span>' + KARMA.means + '</span></p>' +
@@ -859,6 +864,7 @@
       '<li data-step="self"><small>Nhân · cho mình</small><h3>Gieo cho chính mình</h3>' + list(plan.self, 'self') + '</li>' +
       '<li data-step="give"><small>Nhân · cho người</small><h3>Gieo cho người</h3>' + list(plan.give, 'give') + '</li>' +
       '<li data-step="fruit"><small>Quả · về mình</small><h3>Quả trổ về ' + a.name + '</h3><p>' + esc(plan.fruit) + '</p></li></ol>' +
+      (window.zenGoal && window.zenGoal.hasMore(a.id) ? window.zenGoal.nextButton() : '') +
       (sow ? sow.summary() : '') +
       '<p class="help-copy">Làm xong một việc, hoàn thành nó trong ứng dụng rồi dồn điểm vào ' + a.name + ' ở bảng vận công để Bát phương đồ ghi nhận. Việc giúp người cũng tính cho phương ấy: gieo ở đâu, quả về đó.</p></section>';
   }
@@ -879,7 +885,7 @@
     const notes = tips.filter((x) => x.kind !== 'weak'), weak = tips.filter((x) => x.kind === 'weak');
     return '<div class="gr-page gr-report">' + head + tiles +
       '<div class="gr-rep-grid"><section class="panel gr-radar-panel" aria-label="Bát phương đồ"><h2>Bát phương đồ</h2><div class="gr-radar-wrap">' + radar(s) + '</div><p class="gr-summary">Sở trường: <strong>' + rep.extremes.top.name + '</strong> (' + fmt(rep.extremes.mx) + ') · Cần khổ luyện: <strong>' + rep.extremes.low.name + '</strong> (' + fmt(rep.extremes.mn) + ')</p></section>' +
-      '<section class="panel gr-eval"><h2>Luận từng mạch</h2>' + bal + '<ul class="gr-eval-list">' + rows + '</ul></section></div>' + historyPanel(t) + strengthPanel(rep) + cultivatePanel(rep, t) +
+      '<section class="panel gr-eval"><h2>Luận từng mạch</h2>' + bal + '<ul class="gr-eval-list">' + rows + '</ul></section></div>' + historyPanel(t) + strengthPanel(rep) + (window.zenGoal ? window.zenGoal.panel(rep) : '') + cultivatePanel(rep, t) +
       '<section class="panel gr-tips"><h2>Bí kíp cải thiện</h2><div class="gr-tip-list">' + notes.map(tipCard).join('') + '</div><h3 class="gr-tips-sub">Mạch nên khổ luyện trước</h3><div class="gr-tip-list">' + weak.map(tipCard).join('') + '</div><p class="help-copy">Bí kíp dựa trên điểm các hạ tự cộng nên chỉ mang tính gợi ý.</p></section></div>';
   }
   // Cho các phần sau (đủ 7 ngày tích lũy, báo cáo) dùng chung.

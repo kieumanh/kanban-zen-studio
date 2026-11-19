@@ -6238,6 +6238,28 @@
 :root[data-style=giangho] .gr-tab-lock {
     color: var(--muted)
 }
+:root[data-style=giangho] .gr-goal {
+    border: 1px solid var(--line);
+    background: var(--paper)
+}
+:root[data-style=giangho] .gr-goal h2:focus {
+    outline: none
+}
+:root[data-style=giangho] .gr-goal-list li {
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--c,var(--line))
+}
+:root[data-style=giangho] .gr-goal-name small {
+    color: var(--muted)
+}
+:root[data-style=giangho] .gr-goal-row select {
+    border: 1px solid var(--line);
+    background: var(--paper);
+    color: inherit
+}
+:root[data-style=giangho] .gr-goal-state {
+    color: var(--muted)
+}
 :root[data-style=giangho] {
     --muted: #685345;
     --text-muted: #685345
@@ -13951,6 +13973,28 @@
     outline: none
 }
 :root[data-style=giangho][data-theme=dark] .gr-tab-lock {
+    color: var(--muted)
+}
+:root[data-style=giangho][data-theme=dark] .gr-goal {
+    border: 1px solid var(--line);
+    background: var(--paper)
+}
+:root[data-style=giangho][data-theme=dark] .gr-goal h2:focus {
+    outline: none
+}
+:root[data-style=giangho][data-theme=dark] .gr-goal-list li {
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--c,var(--line))
+}
+:root[data-style=giangho][data-theme=dark] .gr-goal-name small {
+    color: var(--muted)
+}
+:root[data-style=giangho][data-theme=dark] .gr-goal-row select {
+    border: 1px solid var(--line);
+    background: var(--paper);
+    color: inherit
+}
+:root[data-style=giangho][data-theme=dark] .gr-goal-state {
     color: var(--muted)
 }
 :root[data-style=giangho][data-theme=dark] {

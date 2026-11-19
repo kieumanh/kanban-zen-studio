@@ -440,6 +440,11 @@
     "text/javascript; charset=utf-8"
   ],
   [
+    "/growth-goal.js",
+    "growth-goal.js",
+    "text/javascript; charset=utf-8"
+  ],
+  [
     "/growth-scene.js",
     "growth-scene.js",
     "text/javascript; charset=utf-8"

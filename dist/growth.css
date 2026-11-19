@@ -1074,3 +1074,17 @@ dialog.gr-sow .btn{min-height:44px;border-radius:12px}
 .gr-tabpanel{margin:14px 0 0}
 .gr-tabpanel:focus{outline:none}
 .gr-tab-lock{margin:12px 0 0;color:var(--muted)}
+/* v2.69.0 Tâm Nguyện */
+.gr-goal{margin:14px 0 0;padding:14px 16px;border:1px solid var(--line);border-radius:16px;background:var(--paper)}
+.gr-goal h2{margin:0;font-size:18px}
+.gr-goal h2:focus{outline:none}
+.gr-goal .help-copy{margin:6px 0 0}
+.gr-goal-list{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:8px}
+.gr-goal-list li{border:1px solid var(--line);border-left:4px solid var(--c,var(--line));border-radius:12px}
+.gr-goal-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 12px;padding:8px 12px}
+.gr-goal-name{display:grid;flex:1 1 200px;min-width:0;overflow-wrap:anywhere}
+.gr-goal-name small{color:var(--muted)}
+.gr-goal-row select{min-height:44px;min-width:150px;padding:0 10px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:inherit;font:inherit}
+.gr-goal-state{margin:10px 0 0;font-size:13px;color:var(--muted)}
+.gr-goal .btn,.gr-cult-more .btn{min-height:44px;border-radius:12px}
+.gr-cult-more{margin:10px 0 0}
