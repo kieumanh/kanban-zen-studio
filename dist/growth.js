@@ -198,10 +198,10 @@
     const p = 10 ** Math.floor(Math.log10(mx));
     return [1, 2, 4, 6, 8, 10].find((n) => n * p >= mx - 1e-9) * p;
   };
-  function radar(s, pending) {
+  function radar(s, pending, ghost) {
     const CX = 200, CY = 192, R = 112, R0 = 16, add = pending || Array(8).fill(0), id = 'gr-rd' + ++radarSeq;
     const vals = s.map((v, i) => v + add[i] * STEP);
-    const top = radarTop(Math.max(...vals));
+    const top = radarTop(Math.max(...vals, ...(ghost || [])));
     const rad = (v) => R0 + (R - R0) * Math.sqrt(Math.max(0, Math.min(1, v / top)));
     const ang = (i) => ((-90 + i * 45) * Math.PI) / 180;
     const pt = (i, r) => [CX + r * Math.cos(ang(i)), CY + r * Math.sin(ang(i))];
@@ -222,6 +222,8 @@
     const grads = AXES.map((a, i) => { const j = (i + 1) % 8; return '<linearGradient id="' + id + '-' + i + '" gradientUnits="userSpaceOnUse" x1="' + f(P[i][0]) + '" y1="' + f(P[i][1]) + '" x2="' + f(P[j][0]) + '" y2="' + f(P[j][1]) + '"><stop offset="0" stop-color="' + a.color + '"/><stop offset="1" stop-color="' + AXES[j].color + '"/></linearGradient>'; }).join('');
     const links = AXES.map((_, i) => { const j = (i + 1) % 8; return '<line class="gr-link" data-pair="' + i + '-' + j + '" x1="' + f(P[i][0]) + '" y1="' + f(P[i][1]) + '" x2="' + f(P[j][0]) + '" y2="' + f(P[j][1]) + '" stroke="url(#' + id + '-' + i + ')"/>'; }).join('');
     const area = P.map((q) => q.map(f).join(',')).join(' ');
+    // v2.60.0: ghost = điểm tám phương ở mốc so sánh, vẽ nét đứt đè lên để thấy phương nào nở ra, phương nào co lại.
+    const ghostPoly = ghost ? '<polygon class="gr-ghost" points="' + ghost.map((v, i) => pt(i, rad(v)).map(f).join(',')).join(' ') + '"/>' : '';
     const dots = AXES.map((a, i) => '<circle class="gr-halo" cx="' + f(P[i][0]) + '" cy="' + f(P[i][1]) + '" r="11" style="fill:' + a.color + '"/><circle class="gr-dot" cx="' + f(P[i][0]) + '" cy="' + f(P[i][1]) + '" r="6.5" style="fill:' + a.color + '"/>').join('');
     const labels = AXES.map((a, i) => {
       const [x, y] = pt(i, R + 22), c = Math.cos(ang(i)), sn = Math.sin(ang(i));
@@ -231,8 +233,8 @@
     }).join('');
     // Số của vòng nằm giữa hai nan Đạo tâm và Tài lộc để không đè lên chấm.
     const ringVal = (k, v) => { const r = R0 + ((R - R0) * k) / 4, a = (-67.5 * Math.PI) / 180; return '<text class="gr-ring-val" x="' + f(CX + r * Math.cos(a)) + '" y="' + f(CY + r * Math.sin(a) + 4) + '" text-anchor="middle">' + fmt(v) + '</text>'; };
-    const label = 'Bát phương đồ 8 mạch: ' + AXES.map((a, i) => a.name + ' ' + fmt(vals[i])).join(', ') + '. Thang tối đa ' + fmt(top) + ' điểm. Tám mạch nối thành mạng lưới, hai mạch cùng mạnh thì đường nối đậm.';
-    return '<svg class="gr-radar" viewBox="0 0 400 384" role="img" aria-label="' + esc(label) + '"><defs>' + grads + '</defs>' + rings + spokes + '<g class="gr-webs">' + web.join('') + '</g><polygon class="gr-area" points="' + area + '"/><g class="gr-links">' + links + '</g><circle class="gr-hub" cx="' + CX + '" cy="' + CY + '" r="3"/>' + dots + labels + ringVal(2, top / 4) + ringVal(4, top) + '</svg>';
+    const label = 'Bát phương đồ 8 mạch: ' + AXES.map((a, i) => a.name + ' ' + fmt(vals[i])).join(', ') + '. Thang tối đa ' + fmt(top) + ' điểm. Tám mạch nối thành mạng lưới, hai mạch cùng mạnh thì đường nối đậm.' + (ghost ? ' Nét đứt là mốc so sánh: ' + AXES.map((a, i) => a.name + ' ' + fmt(ghost[i])).join(', ') + '.' : '');
+    return '<svg class="gr-radar" viewBox="0 0 400 384" role="img" aria-label="' + esc(label) + '"><defs>' + grads + '</defs>' + rings + spokes + '<g class="gr-webs">' + web.join('') + '</g><polygon class="gr-area" points="' + area + '"/>' + ghostPoly + '<g class="gr-links">' + links + '</g><circle class="gr-hub" cx="' + CX + '" cy="' + CY + '" r="3"/>' + dots + labels + ringVal(2, top / 4) + ringVal(4, top) + '</svg>';
   }
 
   // ---- Trang Điểm tích lũy ------------------------------------------------------------------------------------------------
@@ -706,6 +708,51 @@
     return '<article class="gr-tip" data-tip="' + t.kind + '"' + (t.axis ? ' data-axis="' + t.axis + '" style="--c:' + t.color + '"' : '') + '><h3>' + esc(t.title) + '</h3><p>' + esc(t.text) + '</p>' +
       (t.ideas ? '<ul>' + t.ideas.map((x) => '<li>' + esc(x) + '</li>').join('') + '</ul>' : '') + '</article>';
   }
+  // ---- Lịch sử biến chuyển Bát phương đồ (v2.60.0) ------------------------------------------------------------------------
+  // Xem Bát phương đồ nay so với hôm qua / 1 tháng trước / 3 tháng trước: mỗi phương tăng hay giảm bao nhiêu, nhờ việc nào (các lần vận công
+  // trong sổ cái) và vì đâu (các lần đổi bảo vật chưa hủy). Chỉ đọc sổ cái, không ghi gì.
+  const HIST = [{ id: 0, label: 'Hôm nay', days: 1 }, { id: 1, label: '1 tháng trước', days: 30 }, { id: 3, label: '3 tháng trước', days: 90 }];
+  let histSel = 1;
+  // Điểm từng phương hết ngày d: các lần cộng có ngày ≤ d trừ các lần quy đổi (chưa hủy) có ngày ≤ d, không âm (cùng cách tính với scores()).
+  function scoresAt(g, d) {
+    const a = Array(8).fill(0), sp = Array(8).fill(0);
+    for (const e of g.log) if (e.d <= d) e.p.forEach((v, i) => (a[i] += v));
+    for (const e of activeSpend(g)) if (e.d <= d) e.p.forEach((v, i) => (sp[i] += v));
+    return a.map((v, i) => Math.max(0, v - sp[i]) * STEP);
+  }
+  // Các việc làm điểm từng phương tăng (lần vận công) và giảm (lần đổi bảo vật) trong khoảng (from, to], nhiều điểm nhất lên trước.
+  function movesBetween(g, from, to) {
+    const up = AXES.map(() => []), down = AXES.map(() => []);
+    const by = (x, y) => y.pts - x.pts || (x.d < y.d ? 1 : x.d > y.d ? -1 : 0);
+    for (const e of g.log) if (e.d > from && e.d <= to) e.p.forEach((v, i) => v && up[i].push({ n: e.n || SOURCE_LABEL[e.s], pts: v * STEP, d: e.d }));
+    for (const e of activeSpend(g)) if (e.d > from && e.d <= to) e.p.forEach((v, i) => v && down[i].push({ n: e.n, pts: v * STEP, d: e.d }));
+    return { up: up.map((l) => l.sort(by)), down: down.map((l) => l.sort(by)) };
+  }
+  const signed = (v) => (v > 0 ? '+' : v < 0 ? '−' : '') + fmt(Math.abs(v));
+  const dayLabel = (d, t) => d.slice(8, 10) + '/' + d.slice(5, 7) + (d.slice(0, 4) === t.slice(0, 4) ? '' : '/' + d.slice(0, 4));
+  function historyPanel(t) {
+    const g = growth(), now = scores(), h = HIST.find((x) => x.id === histSel) || HIST[1], from = dayShift(t, -h.days);
+    const then = scoresAt(g, from), mv = movesBetween(g, from, t), dm = now.map((v, i) => v - then[i]);
+    const tabs = '<div class="gr-hist-tabs" role="group" aria-label="Chọn mốc so sánh">' + HIST.map((x) => '<button type="button" class="gr-chip' + (x.id === h.id ? ' is-on' : '') + '" data-gr-hist="' + x.id + '" aria-pressed="' + (x.id === h.id) + '">' + x.label + '</button>').join('') + '</div>';
+    const rise = dm.filter((v) => v > 0).length, fall = dm.filter((v) => v < 0).length, net = total(now) - total(then);
+    const best = dm.indexOf(Math.max(...dm)), still = AXES.filter((_, i) => dm[i] === 0).map((a) => a.name);
+    const quiet = !mv.up.some((l) => l.length) && !mv.down.some((l) => l.length);
+    const sum = quiet
+      ? 'Từ ' + dayLabel(from, t) + ' đến nay chưa có lần vận công hay đổi bảo vật nào, Bát phương đồ đứng yên.'
+      : 'Từ ' + dayLabel(from, t) + ' đến nay, tu vi hiện có <strong>' + signed(net) + '</strong> điểm: ' + rise + ' phương tăng, ' + fall + ' phương giảm' +
+        (dm[best] > 0 ? '. Tiến nhiều nhất: <strong>' + AXES[best].name + '</strong> (' + signed(dm[best]) + ')' : '') + (still.length && still.length < 8 ? '. Đứng yên: ' + still.join(', ') : '') + '.';
+    const none = total(then) === 0 ? '<p class="help-copy gr-hist-note">Ở mốc này chưa có điểm nào: mọi điểm hiện có là tích lũy từ đó đến nay.</p>' : '';
+    const list = (arr, sign) => arr.slice(0, 2).map((x) => esc(x.n) + ' ' + sign + fmt(x.pts)).join('; ') + (arr.length > 2 ? '; và ' + (arr.length - 2) + ' việc khác' : '');
+    const rows = AXES.map((a, i) => {
+      const d = dm[i], cls = d > 0 ? 'up' : d < 0 ? 'down' : 'flat', up = mv.up[i], down = mv.down[i];
+      const why = [up.length ? '<span class="gr-why-up">Tăng nhờ: ' + list(up, '+') + '</span>' : '', down.length ? '<span class="gr-why-down">Giảm vì đổi: ' + list(down, '−') + '</span>' : ''].filter(Boolean).join(' ') || '<span class="gr-why-none">Không có biến động</span>';
+      return '<li class="gr-hist-row is-' + cls + '" data-axis="' + a.id + '" style="--c:' + a.color + '"><span class="gr-axis-ico">' + iconSvg('gr-' + a.id, 18) + '</span><div class="gr-hist-main"><div class="gr-axis-head"><strong>' + a.name + '</strong><span class="gr-hist-nums"><span class="gr-hist-then">' + fmt(then[i]) + '</span> → <b>' + fmt(now[i]) + '</b></span><em class="gr-delta">' + (d > 0 ? '▲ ' : d < 0 ? '▼ ' : '■ ') + signed(d) + '</em></div><small>' + why + '</small></div></li>';
+    }).join('');
+    return '<section class="panel gr-hist" aria-label="Lịch sử biến chuyển Bát phương đồ"><h2>Lịch sử biến chuyển Bát phương đồ</h2>' + tabs +
+      '<div class="gr-hist-grid"><div class="gr-hist-radar"><div class="gr-radar-wrap">' + radar(now, null, then) + '</div><p class="gr-legend"><span class="gr-key-now"></span>Hôm nay <span class="gr-key-then"></span>Ngày ' + dayLabel(from, t) + '</p></div>' +
+      '<div class="gr-hist-body"><p class="gr-hist-sum" role="status">' + sum + '</p>' + none + '<ul class="gr-hist-list">' + rows + '</ul></div></div>' +
+      '<p class="help-copy">Mốc so sánh là điểm cuối ngày được chọn. Tăng tính theo các lần vận công trong sổ; giảm tính theo các lần đổi bảo vật chưa hủy.</p></section>';
+  }
   function reportPage() {
     const rep = buildReport(), r = rep.realm, s = rep.scores, t = rep.t;
     const head = heading('GIANG HỒ TU LUYỆN', 'Báo cáo tu luyện', 'Cập nhật ' + t.slice(8, 10) + '/' + t.slice(5, 7) + ' · ' + esc(heroName()), '<div class="gr-head-actions"><button type="button" class="btn" data-gr-back>← Quay lại</button></div>');
@@ -723,7 +770,7 @@
     const notes = tips.filter((x) => x.kind !== 'weak'), weak = tips.filter((x) => x.kind === 'weak');
     return '<div class="gr-page gr-report">' + head + tiles +
       '<div class="gr-rep-grid"><section class="panel gr-radar-panel" aria-label="Bát phương đồ"><h2>Bát phương đồ</h2><div class="gr-radar-wrap">' + radar(s) + '</div><p class="gr-summary">Sở trường: <strong>' + rep.extremes.top.name + '</strong> (' + fmt(rep.extremes.mx) + ') · Cần khổ luyện: <strong>' + rep.extremes.low.name + '</strong> (' + fmt(rep.extremes.mn) + ')</p></section>' +
-      '<section class="panel gr-eval"><h2>Luận từng mạch</h2>' + bal + '<ul class="gr-eval-list">' + rows + '</ul></section></div>' +
+      '<section class="panel gr-eval"><h2>Luận từng mạch</h2>' + bal + '<ul class="gr-eval-list">' + rows + '</ul></section></div>' + historyPanel(t) +
       '<section class="panel gr-tips"><h2>Bí kíp cải thiện</h2><div class="gr-tip-list">' + notes.map(tipCard).join('') + '</div><h3 class="gr-tips-sub">Mạch nên khổ luyện trước</h3><div class="gr-tip-list">' + weak.map(tipCard).join('') + '</div><p class="help-copy">Bí kíp dựa trên điểm các hạ tự cộng nên chỉ mang tính gợi ý.</p></section></div>';
   }
   // Cho các phần sau (đủ 7 ngày tích lũy, báo cáo) dùng chung.
@@ -732,6 +779,13 @@
     reporting = true;
     go('growth');
   }
+  document.addEventListener('click', (e) => {
+    const b = e.target.closest?.('[data-gr-hist]');
+    if (!b || !reporting || view !== 'growth') return;
+    histSel = +b.dataset.grHist;
+    render();
+    document.querySelector('[data-gr-hist="' + histSel + '"]')?.focus({ preventScroll: true });
+  });
   window.zenGrowth = { AXES, started, scores, earnedScores, spentScores, total, realmOf, myRealm, realmInfo, levelLabel, tuviAt, REALMS, REALM_FROM, LEVEL_NAMES, LEVEL_AT, LEVEL_MAX, GOD, extremes, fmt, openAward, growth, STEP, iconSvg, habitStreak, buildReport, tipsOf, openReport, heroName, openSpend };
 
   // ---- Sử dụng điểm (v1.81.0) ---------------------------------------------------------------------------------------------

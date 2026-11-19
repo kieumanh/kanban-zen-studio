@@ -5103,6 +5103,42 @@
 :root[data-style=giangho] .gr-tips-sub {
     color: var(--ink)
 }
+:root[data-style=giangho] .gr-ghost {
+    fill: none;
+    stroke: var(--muted)
+}
+:root[data-style=giangho] .gr-legend {
+    color: var(--muted)
+}
+:root[data-style=giangho] .gr-key-now {
+    border-top: 3px solid #b44148
+}
+:root[data-style=giangho] .gr-key-then {
+    border-top: 2px dashed var(--muted)
+}
+:root[data-style=giangho] .gr-hist-row {
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--c);
+    background: var(--paper)
+}
+:root[data-style=giangho] .gr-hist-nums {
+    color: var(--muted)
+}
+:root[data-style=giangho] .gr-hist-nums b {
+    color: var(--ink)
+}
+:root[data-style=giangho] .gr-hist-row.is-up .gr-delta {
+    color: #176a3d
+}
+:root[data-style=giangho] .gr-hist-row.is-down .gr-delta {
+    color: #a33120
+}
+:root[data-style=giangho] .gr-hist-row.is-flat .gr-delta {
+    color: #68564b
+}
+:root[data-style=giangho] .gr-hist-row small {
+    color: var(--muted)
+}
 :root[data-style=giangho] .gr-wallet>div {
     border: 1px solid var(--line);
     background: var(--paper)
@@ -12461,6 +12497,42 @@
 }
 :root[data-style=giangho][data-theme=dark] .gr-tips-sub {
     color: var(--ink)
+}
+:root[data-style=giangho][data-theme=dark] .gr-ghost {
+    fill: none;
+    stroke: var(--muted)
+}
+:root[data-style=giangho][data-theme=dark] .gr-legend {
+    color: var(--muted)
+}
+:root[data-style=giangho][data-theme=dark] .gr-key-now {
+    border-top: 3px solid #c24d53
+}
+:root[data-style=giangho][data-theme=dark] .gr-key-then {
+    border-top: 2px dashed var(--muted)
+}
+:root[data-style=giangho][data-theme=dark] .gr-hist-row {
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--c);
+    background: var(--paper)
+}
+:root[data-style=giangho][data-theme=dark] .gr-hist-nums {
+    color: var(--muted)
+}
+:root[data-style=giangho][data-theme=dark] .gr-hist-nums b {
+    color: var(--ink)
+}
+:root[data-style=giangho][data-theme=dark] .gr-hist-row.is-up .gr-delta {
+    color: #a3e2b7
+}
+:root[data-style=giangho][data-theme=dark] .gr-hist-row.is-down .gr-delta {
+    color: #fcbdb1
+}
+:root[data-style=giangho][data-theme=dark] .gr-hist-row.is-flat .gr-delta {
+    color: #dccdc3
+}
+:root[data-style=giangho][data-theme=dark] .gr-hist-row small {
+    color: var(--muted)
 }
 :root[data-style=giangho][data-theme=dark] .gr-wallet>div {
     border: 1px solid var(--line);

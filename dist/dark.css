@@ -3182,6 +3182,18 @@
 :root[data-theme=dark] .gr-tip {
     border-left: 4px solid var(--c,#845cd6)
 }
+:root[data-theme=dark] .gr-key-now {
+    border-top: 3px solid #845cd6
+}
+:root[data-theme=dark] .gr-hist-row.is-up .gr-delta {
+    color: #99d8ad
+}
+:root[data-theme=dark] .gr-hist-row.is-down .gr-delta {
+    color: #fcafa0
+}
+:root[data-theme=dark] .gr-hist-row.is-flat .gr-delta {
+    color: #c8c4d3
+}
 :root[data-theme=dark] .gr-wallet [data-wallet=left] b {
     color: #cab8fe
 }
