@@ -2688,6 +2688,9 @@
 :root[data-theme=dark] .release-ver {
     background: rgba(121,80,200,0.078)
 }
+:root[data-theme=dark] .rw-modes .btn.active {
+    border-color: var(--c,#845cd6)
+}
 :root[data-theme=dark] .zen-row-overdue .zen-due-label {
     color: #fab5b8
 }

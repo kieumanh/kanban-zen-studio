@@ -255,6 +255,7 @@ try {
     await wait(500);
     assert.equal(await page.evaluate(() => RELEASES.length), 0, 'đi qua các trang khác không nạp nhật ký');
     assert.deepEqual(st.urls.filter((u) => /\/releases(?:\.[0-9a-f]{16})?\.js$/.test(u)), [], 'không có yêu cầu tải releases.js');
+    await page.evaluate(() => localStorage.setItem('zen-versions-mode', 'each')); // v2.72.0: trang Phiên bản mặc định xem theo tuần; bài này kiểm cách xem từng phiên bản
     await page.evaluate(() => go('versions'));
     await page.waitForFunction(() => document.querySelectorAll('.release-card').length >= 40, null, { timeout: 15000 });
     assert.ok(st.urls.some((u) => /\/releases(?:\.[0-9a-f]{16})?\.js$/.test(u)), 'đã tải releases.js');

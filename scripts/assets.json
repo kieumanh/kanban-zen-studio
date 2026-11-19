@@ -75,6 +75,11 @@
     "text/javascript; charset=utf-8"
   ],
   [
+    "/release-weeks.js",
+    "release-weeks.js",
+    "text/javascript; charset=utf-8"
+  ],
+  [
     "/taskux.js",
     "taskux.js",
     "text/javascript; charset=utf-8"

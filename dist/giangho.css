@@ -3815,6 +3815,9 @@
 :root[data-style=giangho] .release-card ul {
     color: var(--ink)
 }
+:root[data-style=giangho] .rw-modes .btn.active {
+    border-color: var(--c,#b44148)
+}
 :root[data-style=giangho] .zen-row-overdue .zen-due-label {
     color: #94092f
 }
@@ -11561,6 +11564,9 @@
 }
 :root[data-style=giangho][data-theme=dark] .release-card ul {
     color: var(--ink)
+}
+:root[data-style=giangho][data-theme=dark] .rw-modes .btn.active {
+    border-color: var(--c,#c24d53)
 }
 :root[data-style=giangho][data-theme=dark] .zen-row-overdue .zen-due-label {
     color: #fcc3c5

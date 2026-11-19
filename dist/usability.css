@@ -20,3 +20,10 @@
 .release-tag{font-size:12px;font-weight:700;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:3px 10px}
 .release-card ul{margin:0;padding-left:20px;display:grid;gap:4px;font-size:14px;line-height:1.55;color:var(--ink)}
 @media(max-width:600px){.release-card{padding:14px}.release-card h4{font-size:15px}}
+/* v2.72.0 (Tuần Mới): nhật ký phát triển theo tuần. */
+.rw-modes{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 12px}
+.rw-modes .btn{min-height:44px;border-radius:12px}
+.rw-modes .btn.active{border-color:var(--c,#7950c8);font-weight:700}
+.release-week li strong{font-weight:700}
+.release-week header .release-ver{font-weight:700}
+[data-rw-more]{min-height:44px;border-radius:12px;margin-top:12px}

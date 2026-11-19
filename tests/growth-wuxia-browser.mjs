@@ -172,6 +172,7 @@ try {
     // 6. Nhật ký phiên bản: số phiên bản kèm tên Hán Việt.
     {
       const { context, page } = await h.open(width, { touch, workspace: ws('nam')() });
+      await page.evaluate(() => localStorage.setItem('zen-versions-mode', 'each')); // v2.72.0: trang Phiên bản mặc định xem theo tuần; bài này kiểm cách xem từng phiên bản
       await h.show(page, 'versions');
       await page.waitForSelector('.release-log .release-card');
       const ver = await page.evaluate(() => [...document.querySelectorAll('.release-log .release-ver')].map((n) => n.textContent.trim()));

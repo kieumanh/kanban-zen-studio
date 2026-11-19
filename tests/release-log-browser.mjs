@@ -9,6 +9,7 @@ try {
   for (const [width, touch] of [[390, true], [820, false], [1440, false]]) {
     const at = ' (' + width + 'px)';
     const { page } = await h.open(width, { touch, workspace: seed() });
+    await page.evaluate(() => localStorage.setItem('zen-versions-mode', 'each')); // v2.72.0: trang Phiên bản mặc định xem theo tuần; bài này kiểm cách xem từng phiên bản
     await h.show(page, 'versions');
     await page.waitForSelector('.release-log .release-card');
 
