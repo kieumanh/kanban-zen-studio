@@ -7586,6 +7586,100 @@
     background: #eaf6ef;
     color: #0a4c32
 }
+:root[data-style=giangho] .wlr-chip {
+    border: 1px solid #e2ccab;
+    background: #fffcf6;
+    color: #572627
+}
+:root[data-style=giangho] .wlr-chip.is-on {
+    border-color: #b44148;
+    background: #f4e9d5;
+    color: #530c15
+}
+:root[data-style=giangho] .wlr-kpis li {
+    border: 1px solid #eeddc5;
+    background: #fffcf6
+}
+:root[data-style=giangho] .wlr-kpis b {
+    color: #311f13
+}
+:root[data-style=giangho] .wlr-label {
+    color: #572627
+}
+:root[data-style=giangho] .wlr-kpis small {
+    color: #624d40
+}
+:root[data-style=giangho] .wlr-oldest {
+    color: #572627
+}
+:root[data-style=giangho] .wlr-card {
+    border: 1px solid #eeddc5;
+    background: #fffcf6
+}
+:root[data-style=giangho] .wlr-legend {
+    color: #572627
+}
+:root[data-style=giangho] .wlr-legend b {
+    color: #311f13
+}
+:root[data-style=giangho] .wlr-key-added {
+    background: var(--wl-a)
+}
+:root[data-style=giangho] .wlr-key-done {
+    background: var(--wl-d)
+}
+:root[data-style=giangho] .wlr-y span {
+    color: #624d40
+}
+:root[data-style=giangho] .wlr-plot {
+    border-bottom: 1px solid var(--wl-axis)
+}
+:root[data-style=giangho] .wlr-gl {
+    border-top: 1px solid var(--wl-grid)
+}
+:root[data-style=giangho] .wlr-day:hover {
+    background: var(--wl-hover)
+}
+:root[data-style=giangho] .wlr-added {
+    background: var(--wl-a)
+}
+:root[data-style=giangho] .wlr-done {
+    background: var(--wl-d)
+}
+:root[data-style=giangho] .wlr-x span {
+    color: #624d40
+}
+:root[data-style=giangho] .wlr-name {
+    color: #311f13
+}
+:root[data-style=giangho] .wlr-track {
+    background: var(--wl-grid)
+}
+:root[data-style=giangho] .wlr-rank b {
+    color: #311f13
+}
+:root[data-style=giangho] .wlr-age b {
+    color: #311f13
+}
+:root[data-style=giangho] .wlr-age-bar {
+    border-bottom: 1px solid var(--wl-axis)
+}
+:root[data-style=giangho] .wlr-age-bar i {
+    background: var(--age)
+}
+:root[data-style=giangho] .wlr-age small {
+    color: #624d40
+}
+:root[data-style=giangho] .wlr-tables caption {
+    color: #572627
+}
+:root[data-style=giangho] .wlr-tables th, :root[data-style=giangho] .wlr-tables td {
+    border-bottom: 1px solid #eeddc5;
+    color: #311f13
+}
+:root[data-style=giangho] .wlr-tables thead th {
+    color: #624d40
+}
 :root[data-style=giangho][data-theme=dark] {
     --bg: #18130c;
     --paper: #1e1811;
@@ -15122,6 +15216,100 @@
     border-color: #3b8966;
     background: #16110b;
     color: #b7e5cc
+}
+:root[data-style=giangho][data-theme=dark] .wlr-chip {
+    border: 1px solid #4e3f34;
+    background: #1e1811;
+    color: #eed6c6
+}
+:root[data-style=giangho][data-theme=dark] .wlr-chip.is-on {
+    border-color: #c24d53;
+    background: #211910;
+    color: #ffd3d1
+}
+:root[data-style=giangho][data-theme=dark] .wlr-kpis li {
+    border: 1px solid #433830;
+    background: #1e1811
+}
+:root[data-style=giangho][data-theme=dark] .wlr-kpis b {
+    color: #f5dccc
+}
+:root[data-style=giangho][data-theme=dark] .wlr-label {
+    color: #eed6c6
+}
+:root[data-style=giangho][data-theme=dark] .wlr-kpis small {
+    color: #e5cdbe
+}
+:root[data-style=giangho][data-theme=dark] .wlr-oldest {
+    color: #eed6c6
+}
+:root[data-style=giangho][data-theme=dark] .wlr-card {
+    border: 1px solid #433830;
+    background: #1e1811
+}
+:root[data-style=giangho][data-theme=dark] .wlr-legend {
+    color: #eed6c6
+}
+:root[data-style=giangho][data-theme=dark] .wlr-legend b {
+    color: #f5dccc
+}
+:root[data-style=giangho][data-theme=dark] .wlr-key-added {
+    background: var(--wl-a)
+}
+:root[data-style=giangho][data-theme=dark] .wlr-key-done {
+    background: var(--wl-d)
+}
+:root[data-style=giangho][data-theme=dark] .wlr-y span {
+    color: #e5cdbe
+}
+:root[data-style=giangho][data-theme=dark] .wlr-plot {
+    border-bottom: 1px solid var(--wl-axis)
+}
+:root[data-style=giangho][data-theme=dark] .wlr-gl {
+    border-top: 1px solid var(--wl-grid)
+}
+:root[data-style=giangho][data-theme=dark] .wlr-day:hover {
+    background: var(--wl-hover)
+}
+:root[data-style=giangho][data-theme=dark] .wlr-added {
+    background: var(--wl-a)
+}
+:root[data-style=giangho][data-theme=dark] .wlr-done {
+    background: var(--wl-d)
+}
+:root[data-style=giangho][data-theme=dark] .wlr-x span {
+    color: #e5cdbe
+}
+:root[data-style=giangho][data-theme=dark] .wlr-name {
+    color: #f5dccc
+}
+:root[data-style=giangho][data-theme=dark] .wlr-track {
+    background: var(--wl-grid)
+}
+:root[data-style=giangho][data-theme=dark] .wlr-rank b {
+    color: #f5dccc
+}
+:root[data-style=giangho][data-theme=dark] .wlr-age b {
+    color: #f5dccc
+}
+:root[data-style=giangho][data-theme=dark] .wlr-age-bar {
+    border-bottom: 1px solid var(--wl-axis)
+}
+:root[data-style=giangho][data-theme=dark] .wlr-age-bar i {
+    background: var(--age)
+}
+:root[data-style=giangho][data-theme=dark] .wlr-age small {
+    color: #e5cdbe
+}
+:root[data-style=giangho][data-theme=dark] .wlr-tables caption {
+    color: #eed6c6
+}
+:root[data-style=giangho][data-theme=dark] .wlr-tables th, :root[data-style=giangho][data-theme=dark] .wlr-tables td {
+    border-bottom: 1px solid #433830;
+    color: #f5dccc
+}
+:root[data-style=giangho][data-theme=dark] .wlr-tables thead th {
+    color: #e5cdbe
 }
 
 /* ---- Họa tiết Giang hồ viết tay (v1.86.0 · Chu Mặc) ------------------------------------------------------------------------

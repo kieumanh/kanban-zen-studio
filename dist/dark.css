@@ -4334,6 +4334,70 @@
     background: #141018;
     color: #aedbc2
 }
+:root[data-theme=dark] .wlr-chip {
+    border: 1px solid #463f4f;
+    background: #1b181f;
+    color: #d6caf1
+}
+:root[data-theme=dark] .wlr-chip.is-on {
+    border-color: #845cd6;
+    background: #1d1822;
+    color: #d8cdfe
+}
+:root[data-theme=dark] .wlr-kpis li {
+    border: 1px solid #3d3843;
+    background: #1b181f
+}
+:root[data-theme=dark] .wlr-kpis b {
+    color: #dcd3ec
+}
+:root[data-theme=dark] .wlr-label {
+    color: #d6caf1
+}
+:root[data-theme=dark] .wlr-kpis small {
+    color: #d0c3da
+}
+:root[data-theme=dark] .wlr-oldest {
+    color: #d6caf1
+}
+:root[data-theme=dark] .wlr-card {
+    border: 1px solid #3d3843;
+    background: #1b181f
+}
+:root[data-theme=dark] .wlr-legend {
+    color: #d6caf1
+}
+:root[data-theme=dark] .wlr-legend b {
+    color: #dcd3ec
+}
+:root[data-theme=dark] .wlr-y span {
+    color: #d0c3da
+}
+:root[data-theme=dark] .wlr-x span {
+    color: #d0c3da
+}
+:root[data-theme=dark] .wlr-name {
+    color: #dcd3ec
+}
+:root[data-theme=dark] .wlr-rank b {
+    color: #dcd3ec
+}
+:root[data-theme=dark] .wlr-age b {
+    color: #dcd3ec
+}
+:root[data-theme=dark] .wlr-age small {
+    color: #d0c3da
+}
+:root[data-theme=dark] .wlr-tables caption {
+    color: #d6caf1
+}
+:root[data-theme=dark] .wlr-tables th, :root[data-theme=dark] .wlr-tables td {
+    border-bottom: 1px solid #3d3843;
+    color: #dcd3ec
+}
+:root[data-theme=dark] .wlr-tables thead th {
+    color: #d0c3da
+}
 
 :root[data-theme=dark] {
   color-scheme: dark;

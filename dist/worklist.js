@@ -60,6 +60,21 @@
     return out;
   }
   const has = (id) => rows().some((r) => r.t.id === id);
+  // Mọi dòng của chuỗi (kể cả đã gỡ, việc đã xong), bỏ dòng trùng; t / p có thể trống nếu việc đã bị xóa. Dùng cho báo cáo (worklist-report.js).
+  function all() {
+    const by = index(),
+      seen = new Set(),
+      out = [];
+    for (const e of raw()) {
+      if (!e.x) {
+        if (seen.has(e.t)) continue;
+        seen.add(e.t);
+      }
+      const hit = by.get(e.t);
+      out.push({ e, t: hit && hit.t, p: hit && hit.p });
+    }
+    return out;
+  }
 
   // ---- Ghi chuỗi (lưu không được thì trả lại như cũ) ----------------------------------------------------------------------------
   function mutate(change) {
@@ -192,11 +207,12 @@
       ? '<ol class="wl-chain" aria-label="' + NAME + '">' + list.map((r, i) => item(r, i, list.length)).join('') + '</ol>'
       : '<div class="panel wl-empty"><h2>Chuỗi còn trống</h2><p class="subtext">Mở một việc bất kỳ rồi bấm “' + NAME + '” cạnh nút “Chế độ tập trung”, hoặc chọn việc ở khung bên dưới. Việc nào xong sẽ tự rời chuỗi.</p></div>';
     return (
-      heading('CHUỖI VIỆC XUYÊN DỰ ÁN', NAME, 'Những việc cần làm sớm, xếp theo thứ tự bạn chọn, không phân biệt dự án. Xong việc thì tự rời chuỗi; chưa xong thì ở nguyên chỗ cũ cho tới khi bạn gỡ.') +
+      heading('CHUỖI VIỆC XUYÊN DỰ ÁN', NAME, 'Những việc cần làm sớm, xếp theo thứ tự bạn chọn, không phân biệt dự án. Xong việc thì tự rời chuỗi; chưa xong thì ở nguyên chỗ cũ cho tới khi bạn gỡ.', window.zenWorklistReport ? '<button type="button" class="btn wl-jump" data-wlr-jump>Xem báo cáo</button>' : '') +
       '<ul class="wl-sum" aria-label="Tóm tắt chuỗi">' + stat(list.length, 'việc trong chuỗi') + stat(urgent, 'khẩn cấp') + stat(late, 'quá hạn') + stat(projects, 'dự án') + '</ul>' +
       '<p class="wl-legend" aria-label="Sắc hiệu"><span class="wl-key">Sắc hiệu</span><span class="wl-chip wl-chip-project" style="--pc:#7950c8">Màu dự án</span><span class="wl-chip wl-chip-urgent">Khẩn cấp</span><span class="wl-chip wl-chip-key">Trọng yếu</span></p>' +
       body +
-      '<details class="panel wl-picker"' + (pickOpen ? ' open' : '') + '><summary>Ghi thêm việc vào chuỗi</summary><label class="field"><span>Tìm việc theo tên hoặc dự án</span><input type="search" data-wl-search value="' + esc(pickQuery) + '" autocomplete="off"></label><ul class="wl-pick-list">' + pickList(pickQuery) + '</ul></details>'
+      '<details class="panel wl-picker"' + (pickOpen ? ' open' : '') + '><summary>Ghi thêm việc vào chuỗi</summary><label class="field"><span>Tìm việc theo tên hoặc dự án</span><input type="search" data-wl-search value="' + esc(pickQuery) + '" autocomplete="off"></label><ul class="wl-pick-list">' + pickList(pickQuery) + '</ul></details>' +
+      (window.zenWorklistReport ? window.zenWorklistReport.panel() : '')
     );
   }
   function paint() {
@@ -309,5 +325,5 @@
     bar4.classList.add('wl-four');
   }
 
-  window.zenWorklist = { rows, has, add, drop, move, valid: validWorklist, name: NAME };
+  window.zenWorklist = { rows, all, has, add, drop, move, valid: validWorklist, name: NAME };
 })();

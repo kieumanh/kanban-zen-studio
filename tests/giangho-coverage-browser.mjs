@@ -7,6 +7,7 @@
 // v2.56.0 (Hán Việt Đủ Bộ): thêm các màn của v2.51–v2.55 (Đang đợi hồi âm, hộp Ôn tuần / Kiểm điểm tuần, hộp cất nội dung được chia sẻ,
 // khối Sao lục ở Cài đặt, thông báo của chúng) và thêm bảy từ Thiền vào danh sách bắt (phản hồi, đang chờ, ôn tuần, sao lưu, khôi phục, chia sẻ, đến lúc).
 // v2.63.1 (Liên Hoàn Lệnh): thêm trang Liên hoàn lệnh (khung ghi thêm, tìm không thấy, chuỗi trống, thông báo khi ghi vào / gỡ khỏi chuỗi) vào bài canh gác.
+// v2.64.0 (Báo Cáo Liên Hoàn): thêm báo cáo đính kèm (số liệu, biểu đồ, bảng, nút khoảng ngày).
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { startHarness, makeProject } from './lib/browser-harness.mjs';
@@ -126,11 +127,13 @@ try {
       await h.show(page, v, 'p1');
       await check('màn ' + v, v === 'dashboard' ? 'body' : '#main');
     }
-    // v2.63.1: Liên hoàn lệnh — khung ghi thêm, thông báo khi gỡ / ghi vào, tìm không thấy, chuỗi trống.
+    // v2.63.1: Liên hoàn lệnh — khung ghi thêm, bảng số liệu, thông báo khi gỡ / ghi vào.
     await h.show(page, 'worklist');
-    await page.waitForSelector('#main .wl-chain');
+    await page.waitForSelector('#wl-report .wlr-kpis');
     await page.evaluate(() => document.querySelectorAll('#main details').forEach((d) => (d.open = true)));
-    await check('Liên hoàn lệnh (khung ghi thêm)', '#main');
+    await check('Liên hoàn lệnh (khung ghi thêm, bảng số liệu)', '#main');
+    await page.locator('#main [data-wlr-period="30"]').click();
+    await check('Liên hoàn lệnh (báo cáo ba mươi ngày)', '#main');
     await page.locator('#main [data-wl-drop]').first().click();
     await page.waitForFunction(() => document.querySelector('#toast')?.classList.contains('show'));
     await check('truyền thư khi gỡ khỏi chuỗi', '#toast');

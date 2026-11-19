@@ -178,3 +178,4 @@ tests/growth-history-browser.mjs
 tests/growth-strengths-browser.mjs
 tests/growth-cultivate-browser.mjs
 tests/worklist-browser.mjs
+tests/worklist-report-browser.mjs

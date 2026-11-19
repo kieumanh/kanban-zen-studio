@@ -929,6 +929,28 @@
     ['Thường', 'Thứ yếu', '.wl-chip-calm'],
   ])
     add(plain, { to, in: scope });
+  // ---- v2.64.0 (Báo Cáo Liên Hoàn): báo cáo đính kèm cuối trang chuỗi (worklist-report.js) ---------------------------------------------------
+  for (const [plain, gh] of Object.entries({
+    'Báo cáo Liên hoàn lệnh': 'Chiến báo Liên hoàn lệnh',
+    'Chuỗi đang trống, không có việc nào nằm chờ.': 'Chuỗi đang trống, không có nhiệm vụ nào nằm chờ.',
+    'Chưa có số liệu. Báo cáo sẽ hiện ngay khi bạn ghi việc đầu tiên vào chuỗi.': 'Chưa có số liệu. Chiến báo sẽ hiện ngay khi các hạ ghi nhiệm vụ đầu tiên vào chuỗi.',
+    'Ghi vào và hoàn thành theo ngày': 'Ghi vào và công thành theo ngày',
+    'Việc còn trong chuỗi theo dự án': 'Nhiệm vụ còn trong chuỗi theo đại sự',
+    'Tuổi của việc còn trong chuỗi': 'Tuổi của nhiệm vụ còn trong chuỗi',
+    'Việc nằm lâu nhất trong chuỗi:': 'Nhiệm vụ nằm lâu nhất trong chuỗi:',
+  }))
+    add(plain, gh);
+  for (const [plain, to, scope] of [
+    ['Xem báo cáo', 'Xem chiến báo', '.wl-jump'],
+    ['Theo dự án', 'Theo đại sự', '.wlr-card'],
+    ['Đã xong', 'Công thành', '.wlr-label, .wlr-legend, .wlr-tables th'],
+    ['Tỉ lệ xong', 'Tỉ lệ công thành', '.wlr-label'],
+    ['Từ ghi đến xong', 'Từ ghi đến công thành', '.wlr-label'],
+    ['trung bình mỗi việc', 'trung bình mỗi nhiệm vụ', '.wlr-kpis small'],
+    ['Dự án', 'Đại sự', '.wlr-tables th'],
+    ['Số việc', 'Số nhiệm vụ', '.wlr-tables th'],
+  ])
+    add(plain, { to, in: scope });
   const PATTERNS = [
     [/^Thông báo · .+$/, bell, '.topbar', 'Thông báo · '],
     [/^(Lịch|Gantt) · (.+)$/, (s, a, b) => (currentView() === VIEW_OF[a] ? NAV[a][0] + ' · ' + b : s), '#crumb', ' · '],
@@ -1064,6 +1086,14 @@
     [/^Bế quan, tập trung làm: (.+)$/, 'Bế quan chuyên tâm: $1', '.wl-focus', 'Bế quan, tập trung làm: '],
     [/^Còn (\d+) việc nữa\. Gõ tên để thu hẹp\.$/, 'Còn $1 nhiệm vụ nữa. Gõ tên để thu hẹp.', '.wl-pick-empty', 'việc nữa'],
     [/^Liên hoàn lệnh chứa tối đa (\d+) việc\. Hãy gỡ bớt việc đã qua trước khi ghi thêm\.$/, 'Liên hoàn lệnh chứa tối đa $1 nhiệm vụ. Hãy gỡ bớt nhiệm vụ đã qua trước khi ghi thêm.', NOTE, 'chứa tối đa'],
+    // v2.64.0 (Báo Cáo Liên Hoàn)
+    [/^Chưa có việc nào ghi vào hay xong trong (\d+) ngày qua\.$/, 'Chưa có nhiệm vụ nào ghi vào hay công thành trong $1 ngày qua.', '.wlr-quiet', 'Chưa có việc nào'],
+    [/^xong \/ \(xong \+ gỡ\), trong (\d+) ngày qua$/, 'công thành / (công thành + gỡ), trong $1 ngày qua', '.wlr-kpis small', 'xong / ('],
+    [/^Có (\d+) việc đã xong nhưng không rõ ngày xong \(hoàn thành từ trước khi ứng dụng ghi ngày xong\), nên không nằm trong biểu đồ theo ngày\.$/, 'Có $1 nhiệm vụ đã công thành nhưng không rõ ngày công thành (công thành từ trước khi ứng dụng ghi ngày), nên không nằm trong biểu đồ theo ngày.', '.wlr-card .help-copy', 'không rõ ngày xong'],
+    [/^Còn (\d+) dự án khác$/, 'Còn $1 đại sự khác', '.wlr-rank', ' dự án khác'],
+    [/^Tuổi của việc còn trong chuỗi: (.+)$/, 'Tuổi của nhiệm vụ còn trong chuỗi: $1', '.wlr-ages', 'Tuổi của việc'],
+    [/^Biểu đồ cột (\d+) ngày: ghi vào (\d+), đã xong (\d+)\. Xem bảng số liệu bên dưới\.$/, 'Biểu đồ cột $1 ngày: ghi vào $2, công thành $3. Xem bảng số liệu bên dưới.', '.wlr-plot', 'Biểu đồ cột'],
+    [/^(\d{2}\/\d{2}) · Ghi vào (\d+) · Đã xong (\d+)$/, '$1 · Ghi vào $2 · Công thành $3', '.wlr-day', ' · Đã xong'],
   ];
   // Nội dung người dùng và vùng không đổi chữ.
   const SKIP = [
@@ -1091,6 +1121,8 @@
     '.zen-task-save-status',
     // v2.63.1: Liên hoàn lệnh — tên việc, tên dự án (nhãn màu, danh sách ghi thêm) là nội dung người dùng.
     '.wl-title', '.wl-card .wl-chip-project', '.wl-pick strong', '.wl-pick .wl-chip-project',
+    // v2.64.0: báo cáo — tên dự án (thanh xếp hạng, bảng), tên việc nằm lâu nhất.
+    '.wlr-name', '.wlr-oldest strong', '.wlr-tables tbody th',
   ].join(', ');
   // Phần tử mà chữ NẰM TRỰC TIẾP bên trong là nội dung người dùng (phần tử con như nhãn "Hạn", mức cấp bách vẫn được đổi).
   const DIRECT_SKIP = 'button.month-event';
