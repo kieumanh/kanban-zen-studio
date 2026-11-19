@@ -8,6 +8,7 @@
 //  Kiểm ở 390 (chạm), 820 (chạm), 1440 px; không tràn ngang, không lỗi trang.
 import assert from 'node:assert/strict';
 import { startHarness } from './lib/browser-harness.mjs';
+import { openGrowthTab } from './lib/growth-tab.mjs';
 
 const day = (n) => new Date(Date.now() + n * 864e5).toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
 // 60 nửa điểm = 30 điểm: cấp 22 (đã qua Miên Hồ ở 10, Thiên Diện ở 15, Lôi Tốc ở 20; sắp gặp Khúc U ở 25).
@@ -20,6 +21,7 @@ try {
   {
     const { context, page } = await h.open(1440, { workspace: seed(60)() });
     await h.show(page, 'growth');
+    await openGrowthTab(page, 'all');
     const t = await page.evaluate(() => {
       const box = document.createElement('div');
       box.innerHTML = window.zenFoe.IDS.map((id) => window.zenFoe.svg(id)).join('');
@@ -44,6 +46,7 @@ try {
     const still = await h.open(390, { touch: true, workspace: seed(60)() });
     await still.page.emulateMedia({ reducedMotion: 'reduce' });
     await h.show(still.page, 'growth');
+    await openGrowthTab(still.page, 'all');
     const moving = await still.page.evaluate(() => [...document.querySelectorAll('.gr-route svg.gr-foe *')].filter((el) => getComputedStyle(el).animationName !== 'none').length);
     assert.equal(moving, 0, 'giảm chuyển động: tranh đứng yên');
     await still.context.close();
@@ -59,6 +62,7 @@ try {
     const errors = [];
     page.on('pageerror', (e) => errors.push(e.message));
     await h.show(page, 'growth');
+    await openGrowthTab(page, 'all');
     await page.waitForSelector('.gr-route-panel');
     // 3. Khung Huyết Nguyệt lộ.
     const r = await page.evaluate(() => {

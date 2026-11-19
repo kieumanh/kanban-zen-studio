@@ -17,6 +17,7 @@
 // Kiểm ở 390 (chạm), 820 (chạm), 1440 px; không tràn ngang, không lỗi trang.
 import assert from 'node:assert/strict';
 import { startHarness } from './lib/browser-harness.mjs';
+import { openGrowthTab } from './lib/growth-tab.mjs';
 
 const day = (n) => new Date(Date.now() + n * 864e5).toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
 const project = { id: 'p1', name: 'Dự án A', description: '', color: '#7950c8', icon: '✺', columns: ['Idea', 'List', 'Doing', 'Done'], columnNames: { Idea: 'Ý tưởng', List: 'Việc cần làm', Doing: 'Đang thực hiện', Done: 'Hoàn thành' }, tasks: [{ id: 'p1t0', title: 'Ngồi thiền', col: 'Doing', description: '', due: day(3), tag: 'Công việc', priority: 'q2', checks: [] }] };
@@ -59,6 +60,7 @@ try {
   {
     const { context, page } = await h.open(1440, { workspace: seed(WALK)() });
     await h.show(page, 'growth');
+    await openGrowthTab(page, 'all');
     const m = await page.evaluate(() => {
       const g = window.zenGods, G = window.zenGrowth, ev = (t) => Array(8).fill(t / 8), one = (t) => [t, 0, 0, 0, 0, 0, 0, 0];
       const texts = [...g.STARS.slice(0, 35).flatMap((s) => [s.scene, s.say, s.win, s.lose]), ...g.LORDS.slice(0, 11).flatMap((l) => [l.scene, l.say, l.win, l.lose, l.land])];
@@ -129,6 +131,7 @@ try {
     {
       const { context, page, errors } = await open(one(60));
       await h.show(page, 'growth');
+      await openGrowthTab(page, 'all');
       const r = await read(page);
       assert.match(r.road, /^Từ cấp 100, đủ điểm tu vi chưa đủ để lên cấp\. Mỗi thần cấp còn cần lĩnh ngộ quy luật tự nhiên và thắng các vị thần đang giữ ngôi/, 'lời dẫn đường lên Thần Vương' + at);
       assert.match(r.next.cls, /is-locked/, 'chưa có trận nào' + at);
@@ -147,6 +150,7 @@ try {
     {
       const { context, page, errors } = await open(one(16364));
       await h.show(page, 'growth');
+      await openGrowthTab(page, 'all');
       const r = await read(page);
       assert.equal(r.rank, 'Cấp 100/100 · Thành Thần', 'vẫn ở cấp 100' + at);
       assert.equal(r.ahead, '8.182 điểm tu vi · đã đủ điểm lên cấp 101 · còn thiếu chiến tích ở Thần giới', 'trang nói rõ vì sao chưa lên cấp' + at);
@@ -162,6 +166,7 @@ try {
     {
       const { context, page, server, errors } = await open(WALK);
       await h.show(page, 'growth');
+      await openGrowthTab(page, 'all');
       const r = await read(page);
       assert.equal(r.ahead, '7.000 điểm tu vi · còn 1.182 điểm lên cấp 101', 'chưa đủ điểm thì vẫn đếm điểm' + at);
       assert.deepEqual(r.now.map((x) => x[2]), ['', 'Đã thắng 2/35', 'Đã thắng 0/12', 'Chưa giao đấu'], 'chiến tích trên thứ bậc' + at);
@@ -222,6 +227,7 @@ try {
       await page.waitForFunction(() => readReceiptKeys.has('notice:god-s3'));
       assert.deepEqual(Object.keys(server.workspace.growth).sort(), ['hero', 'log', 'name', 'since', 'spend', 'v'], 'dữ liệu Tu vi không thêm khóa mới' + at);
       await h.show(page, 'growth');
+      await openGrowthTab(page, 'all');
       const r = await read(page);
       assert.equal(r.now[1][2], 'Đã thắng 10/35', 'chiến tích tăng' + at);
       assert.equal(r.next.id, 'g:s11', 'trận kế tiếp là trận cần thêm lĩnh ngộ' + at);
@@ -236,6 +242,7 @@ try {
     {
       const { context, page, errors } = await open(even(18000));
       await h.show(page, 'growth');
+      await openGrowthTab(page, 'all');
       const r = await read(page);
       assert.equal(r.rank, 'Thần cấp 1/3 · Thượng Thần', 'đã lên Thượng Thần' + at);
       assert.deepEqual(r.now.map((x) => x[1]), [null, 'step', null, null], 'bậc hiện tại' + at);
@@ -266,6 +273,7 @@ try {
     {
       const { context, page, errors } = await open([3070, 3070, 3070, 3070, 3070, 3070, 3070, 3066]);
       await h.show(page, 'growth');
+      await openGrowthTab(page, 'all');
       const r = await read(page);
       assert.equal(r.rank, 'Thần cấp 3/3 · Thần Vương', 'Thần Vương' + at);
       assert.deepEqual(r.now.map((x) => x[2]), ['', 'Đã thắng 35/35', 'Đã thắng 12/12', 'Đã ngang tài'], 'mọi trận đã thắng' + at);

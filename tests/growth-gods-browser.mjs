@@ -12,6 +12,7 @@
 // Kiểm ở 390 (chạm), 820 (chạm, tối), 1440 px; không tràn ngang, không lỗi trang.
 import assert from 'node:assert/strict';
 import { startHarness } from './lib/browser-harness.mjs';
+import { openGrowthTab } from './lib/growth-tab.mjs';
 
 const day = (n) => new Date(Date.now() + n * 864e5).toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
 // half = số nửa điểm: 60 → 30 điểm (cấp 22); 16360 → 8.180 điểm (cấp 100).
@@ -44,6 +45,7 @@ try {
   {
     const { context, page } = await h.open(1440, { workspace: seed(60)() });
     await h.show(page, 'growth');
+    await openGrowthTab(page, 'all');
     const d = await page.evaluate(() => ({ g: window.zenGods, names: window.zenGrowth.LEVEL_NAMES.slice(100), said: window.zenTale.CHAPTERS.find((c) => c.lv === 97).pages.map((p) => p[2]).join(' ') }));
     const { KINGS, LORDS, STARS, RANKS, SEAT, VACANT } = d.g;
     assert.deepEqual([KINGS.length, LORDS.length, STARS.length], [5, 12, 36], '5 Thần Vương, 12 Phương thần, 36 Thiên Cang tinh');
@@ -62,6 +64,7 @@ try {
     // Chưa chọn hiệp khách: không có khung.
     const fresh = await h.open(390, { touch: true, workspace: { schema: 1, projects: [], notes: [] } });
     await h.show(fresh.page, 'growth');
+    await openGrowthTab(fresh.page, 'all');
     assert.equal(await fresh.page.locator('.gr-gods-panel').count(), 0, 'chưa chọn hiệp khách thì chưa có khung Thần giới');
     await fresh.context.close();
   }
@@ -79,6 +82,7 @@ try {
       const errors = [];
       page.on('pageerror', (e) => errors.push(e.message));
       await h.show(page, 'growth');
+      await openGrowthTab(page, 'all');
       const r = await read(page);
       assert.match(r.head, /^Thần giới\s*Mở ở cấp 100$/, 'tiêu đề khi chưa thành Thần' + at);
       assert.match(r.lead, /Phía sau Thiên Môn.*Lam Y sẽ kế thừa một ngôi trong ba mươi sáu Thiên Cang/, 'lời dẫn' + at);
@@ -110,6 +114,7 @@ try {
       page.on('pageerror', (e) => errors.push(e.message));
       await page.emulateMedia({ reducedMotion: 'reduce', colorScheme: theme });
       await h.show(page, 'growth');
+      await openGrowthTab(page, 'all');
       const r = await read(page);
       assert.match(r.head, /^Thần giới\s*Ngôi Hằng Nguyệt · phương Hợi$/, 'tiêu đề khi đã thành Thần' + at);
       assert.match(r.lead, /^Lam Y đã qua Thiên Môn và kế thừa ngôi Hằng Nguyệt, ngôi thứ 36 của Thiên Cang, thuộc phương Hợi\./, 'lời dẫn' + at);

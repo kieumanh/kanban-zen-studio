@@ -6,6 +6,7 @@
 // Kiểm ở 390 (chạm), 820 (chạm), 1440 px; sáng và tối.
 import assert from 'node:assert/strict';
 import { startHarness, makeProject } from './lib/browser-harness.mjs';
+import { openGrowthTab } from './lib/growth-tab.mjs';
 
 const day = (n) => new Date(Date.now() + n * 864e5).toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
 const seed = () => ({ schema: 1, notes: [], projects: [makeProject('p1', 'Alpha', '#7950c8', 6)], growth: { v: 1, hero: 'nam', since: day(-40), log: [{ id: 'e1', d: day(-1), s: 'task', k: 'task:e1', n: 'Việc cũ', p: [60, 0, 0, 0, 0, 0, 0, 0] }] } });
@@ -27,6 +28,7 @@ try {
       const errors = [];
       page.on('pageerror', (e) => errors.push(e.message));
       await h.show(page, 'growth');
+      await openGrowthTab(page, 'all');
       await page.evaluate(() => document.fonts.ready);
       const f = await page.evaluate(async (vi) => {
         await document.fonts.load("400 24px 'Potta One'", vi);
@@ -73,6 +75,7 @@ try {
       const requests = [];
       const { context, page } = await h.open(width, { touch, colorScheme: theme, setup: ({ context, page }) => (page.on('request', (r) => requests.push(r.url())), style('zen')({ context, page })) });
       await h.show(page, 'growth');
+      await openGrowthTab(page, 'all');
       await page.evaluate(() => document.fonts.ready);
       assert.doesNotMatch(await page.evaluate(() => getComputedStyle(document.querySelector('#main h1')).fontFamily), /Potta One/, 'Thiền: tiêu đề không đổi' + at);
       assert.ok(!requests.some((u) => /potta-one/i.test(u)), 'Thiền không tải phông Potta One' + at);

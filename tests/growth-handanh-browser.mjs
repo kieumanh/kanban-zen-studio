@@ -8,6 +8,7 @@
 //     kiểm ở 390, 820, 1440 px, không tràn ngang, không lỗi trang.
 import assert from 'node:assert/strict';
 import { startHarness } from './lib/browser-harness.mjs';
+import { openGrowthTab } from './lib/growth-tab.mjs';
 
 const day = (n) =>
   new Date(Date.now() + n * 864e5).toLocaleDateString('en-CA', {
@@ -124,6 +125,7 @@ try {
     const errors = [];
     page.on('pageerror', (e) => errors.push(String(e)));
     await h.show(page, 'growth');
+    await openGrowthTab(page, 'all');
     const d = await page.evaluate(
       ([LOOK_NAMES, OLD]) => {
         const Z = window.zenScene;
@@ -228,6 +230,7 @@ try {
     const errors = [];
     page.on('pageerror', (e) => errors.push(String(e)));
     await h.show(page, 'growth');
+    await openGrowthTab(page, 'all');
     await page.waitForSelector('.gr-meet-panel');
     const cards = await page.evaluate(() =>
       Object.fromEntries(

@@ -1066,3 +1066,11 @@ dialog.gr-sow .btn{min-height:44px;border-radius:12px}
 .gr-queue-list li{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 12px;padding:8px 12px;border:1px solid var(--line);border-radius:12px}
 .gr-queue-name{display:grid;flex:1 1 200px;min-width:0;overflow-wrap:anywhere}
 .gr-queue-name small{color:var(--muted)}
+/* v2.68.0 Phân Đường */
+.gr-tabs{display:flex;gap:6px;margin:14px 0 0;padding:0 0 4px;overflow-x:auto;scrollbar-width:thin}
+.gr-tab{flex:0 0 auto;min-height:44px;padding:0 16px;border:1px solid var(--line);border-radius:12px;background:var(--paper);color:inherit;font:inherit;font-size:14px;cursor:pointer}
+.gr-tab[aria-selected=true]{border-color:var(--gr-seal,currentColor);font-weight:700;box-shadow:inset 0 -3px 0 var(--gr-seal,currentColor)}
+.gr-tab:focus-visible{outline:2px solid var(--gr-seal,currentColor);outline-offset:2px}
+.gr-tabpanel{margin:14px 0 0}
+.gr-tabpanel:focus{outline:none}
+.gr-tab-lock{margin:12px 0 0;color:var(--muted)}

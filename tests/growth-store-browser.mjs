@@ -4,6 +4,7 @@
 // Kiểm tra ở 390 (chạm), 820, 1440 px, hai kiểu giao diện, sáng/tối/tương phản cao, giảm chuyển động.
 import assert from 'node:assert/strict';
 import { startHarness } from './lib/browser-harness.mjs';
+import { openGrowthTab } from './lib/growth-tab.mjs';
 
 const day = (n) => new Date(Date.now() + n * 864e5).toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
 // Nửa điểm → điểm: Đạo tâm 120 · Tài lộc 300 · Tâm cảnh 80 · Nhân duyên 45 · Thân thể 260 · Trí tuệ 410 · Sự nghiệp 150 · Gia đạo 95 = 1.460 điểm.
@@ -76,6 +77,7 @@ try {
   {
     const { context, page } = await h.open(1440, { workspace: rich() });
     await h.show(page, 'growth');
+    await openGrowthTab(page, 'all');
     const info = await page.evaluate(() => ({
       ids: zenStore.ITEMS.map((i) => i.id),
       names: zenStore.ITEMS.map((i) => i.name),
@@ -99,6 +101,7 @@ try {
   {
     const { context, page } = await h.open(1440, { workspace: rich() });
     await h.show(page, 'growth');
+    await openGrowthTab(page, 'all');
     const bal = [120, 300, 80, 45, 260, 410, 150, 95], zero = [0, 0, 0, 0, 0, 0, 0, 0];
     const a = await page.evaluate(([bal, zero]) => {
       const it = (id) => zenStore.ITEMS.find((x) => x.id === id);
@@ -143,6 +146,7 @@ try {
     {
       const { context, page } = await h.open(width, { touch, workspace: rich() });
       await h.show(page, 'growth');
+      await openGrowthTab(page, 'all');
       assert.equal(await page.locator('#gr-store').count(), 1, 'có đúng một khung Tàng Bảo Các' + at);
       assert.match(await text(page.locator('#gr-store-title')), /^Tàng Bảo Các kho vật phẩm$/);
       assert.match(await text(page.locator('.gr-store > .help-copy')), /Tiệm không niêm yết giá.*có bao nhiêu điểm cũng đổi được/, 'lời dẫn nói rõ không có giá định sẵn' + at);
@@ -185,6 +189,7 @@ try {
     {
       const { context, page } = await h.open(width, { touch, workspace: rich() });
       await h.show(page, 'growth');
+      await openGrowthTab(page, 'all');
       await page.click('[data-gr-shop-ask="tro"]');
       assert.equal(await page.evaluate(() => document.activeElement?.dataset.grShopAsk), 'tro', 'con trỏ vẫn ở nút Hỏi bà chủ' + at);
       assert.match(await text(page.locator('.gr-store-say')), /Nhà trọ lo chỗ nằm yên cho thân và chỗ nghỉ cho tâm.*Món này hợp mạch Thân thể, Tâm cảnh\. Đang có Thân thể \(260\), Tâm cảnh \(80\): lấy từ đó thì thuận nhất\./, 'tư vấn Nhà trọ' + at);
@@ -208,6 +213,7 @@ try {
     {
       const { context, page } = await h.open(width, { touch, workspace: rich() });
       await h.show(page, 'growth');
+      await openGrowthTab(page, 'all');
       const checked = (id) => page.evaluate((i) => document.querySelector('.gr-store-item[data-item="' + i + '"] input:checked')?.value, id);
       assert.deepEqual([await checked('kip'), await checked('ruong'), await checked('ai')], ['tt', 'tt', 'gemini'], 'loại mặc định' + at);
       assert.equal(await text(item(page, 'kip').locator('.gr-store-hint')), 'Nên lấy từ Trí tuệ 410, Đạo tâm 120.', 'bí kíp tinh thần hợp Trí tuệ, Đạo tâm' + at);
@@ -247,6 +253,7 @@ try {
     {
       const { context, page, server } = await h.open(width, { touch, workspace: rich() });
       await h.show(page, 'growth');
+      await openGrowthTab(page, 'all');
       assert.equal(await page.locator('[data-gr-spend]').count(), 1, 'nút Sử dụng điểm cũ vẫn còn' + at);
       await openBuy(page, 'tro');
       assert.equal(await page.locator('.gr-spend-dlg header .eyebrow').innerText(), 'TÀNG BẢO CÁC');
@@ -281,6 +288,7 @@ try {
     {
       const { context, page, server } = await h.open(width, { touch, workspace: rich() });
       await h.show(page, 'growth');
+      await openGrowthTab(page, 'all');
       assert.deepEqual(await radarValues(page), ['120', '300', '80', '45', '260', '410', '150', '95'], 'điểm ban đầu' + at);
       await openBuy(page, 'son');
       for (let i = 0; i < 8; i++) await axis(page, i).fill(String(i + 1));
@@ -323,6 +331,7 @@ try {
     {
       const { context, page, server } = await h.open(width, { touch, workspace: withGrowth(THIN)() });
       await h.show(page, 'growth');
+      await openGrowthTab(page, 'all');
       assert.match(await text(page.locator('.gr-store-say')), /Tu vi các hạ còn mỏng, mới 0,5 điểm\. Mỏng cũng không sao: đổi ít vẫn được/, 'ít điểm: lời bà chủ' + at);
       assert.equal(await text(item(page, 'tro').locator('.gr-store-hint')), 'Mạch hợp (Thân thể, Tâm cảnh) đang trống; lấy từ mạch khác cũng được.', 'mạch hợp trống thì gợi ý' + at);
       assert.equal(await page.locator('[data-gr-shop-buy="tro"]').isDisabled(), false, 'nút Quy đổi không bị khóa khi điểm ít' + at);
@@ -352,6 +361,7 @@ try {
     {
       const { context, page, server } = await h.open(width, { touch, workspace: rich() });
       await h.show(page, 'growth');
+      await openGrowthTab(page, 'all');
       await openBuy(page, 'nhan');
       assert.deepEqual(await page.evaluate(() => [...document.querySelectorAll('.gr-spend-row.is-fit .gr-axis-head strong')].map((n) => n.textContent)), ['Tài lộc', 'Nhân duyên', 'Sự nghiệp'], 'Thiên Lý Nhãn hợp Tài lộc, Nhân duyên, Sự nghiệp' + at);
       assert.equal(await page.locator('.gr-spend-dlg input[name="n"]').inputValue(), 'Thiên Lý Nhãn (camera)');
@@ -376,6 +386,7 @@ try {
       ];
       const { context, page, server } = await h.open(width, { touch, workspace: withGrowth(RICH, spend)() });
       await h.show(page, 'growth');
+      await openGrowthTab(page, 'all');
       assert.equal(await text(item(page, 'tro').locator('.gr-store-used')), 'Đã đổi 2 lần · 4 điểm', 'không tính lần đã hủy và món khác' + at);
       assert.equal(await item(page, 'son').locator('.gr-store-used').count(), 0);
       await page.click('[data-gr-spend-void="s1"]');
@@ -388,6 +399,7 @@ try {
     {
       const { context, page, server } = await h.open(width, { touch, workspace: rich() });
       await h.show(page, 'growth');
+      await openGrowthTab(page, 'all');
       await page.evaluate(() => {
         contentReadOnly = true;
       });
@@ -406,15 +418,18 @@ try {
     const moving = (page) => page.evaluate(() => [...document.querySelectorAll('.gr-store *')].filter((el) => getComputedStyle(el).animationName !== 'none').length);
     const calm = await h.open(390, { touch: true, reducedMotion: 'reduce', workspace: rich() });
     await h.show(calm.page, 'growth');
+    await openGrowthTab(calm.page, 'all');
     assert.equal(await moving(calm.page), 0, 'giảm chuyển động: tranh đứng yên');
     assert.equal(await calm.page.locator('.gr-st-scene animate, .gr-st-scene animateTransform, .gr-st-scene animateMotion, .gr-st-scene set').count(), 0, 'không dùng SMIL');
     await calm.context.close();
     const live = await h.open(1440, { workspace: rich() });
     await h.show(live.page, 'growth');
+    await openGrowthTab(live.page, 'all');
     assert.ok((await moving(live.page)) >= 4, 'bình thường: đèn lồng, hơi trà, quạt, mắt chớp có chuyển động nhẹ');
     await live.context.close();
     const forced = await h.open(1440, { forcedColors: 'active', workspace: rich() });
     await h.show(forced.page, 'growth');
+    await openGrowthTab(forced.page, 'all');
     assert.equal(await forced.page.evaluate(() => getComputedStyle(document.querySelector('.gr-st-scene')).forcedColorAdjust), 'none', 'ép màu: tranh giữ màu riêng');
     assert.equal(await forced.page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), true);
     await forced.context.close();
@@ -431,6 +446,7 @@ try {
     const at = ' (' + width + 'px ' + style + ' ' + (opts.colorScheme || opts.contrast || 'sáng') + ')';
     const { context, page } = await h.open(width, { touch: width < 700, workspace: rich(), setup: setStyle(style), ...opts });
     await h.show(page, 'growth');
+    await openGrowthTab(page, 'all');
     await page.click('[data-gr-shop-ask="tro"]');
     await settle(page);
     const sels = ['.gr-store-blurb', '.gr-store-hint', '.gr-store-say p', '.gr-store-close', '.gr-store-bars li span', '.gr-store-bars li em', '.gr-store-tag', '.gr-store-owner small', '.gr-store-name h3', '.gr-store-item .btn:not(.primary)', '.gr-store-chip:has(input:not(:checked)) span', '.gr-store-chip:has(input:checked) span'];

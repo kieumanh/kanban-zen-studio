@@ -5,6 +5,7 @@
 // nút chính màu son, cảnh giới như ấn son); giao diện tối vẫn đọc được.
 import assert from 'node:assert/strict';
 import { startHarness } from './lib/browser-harness.mjs';
+import { openGrowthTab } from './lib/growth-tab.mjs';
 
 const NOW = '2026-11-12T09:00:00+07:00';
 const growth = (hero) => ({
@@ -32,6 +33,7 @@ try {
       const errors = [];
       page.on('pageerror', (e) => errors.push(e.message));
       await h.show(page, 'growth');
+      await openGrowthTab(page, 'all');
       await page.waitForSelector('#gr-figure svg.gr-hero');
       const s = await page.evaluate(() => ({
         scene: !!document.querySelector('.gr-stage-bg > svg.gr-scene[aria-hidden="true"]'),
@@ -82,6 +84,7 @@ try {
     {
       const { context, page } = await h.open(width, { touch, workspace: ws('nu')(), now: NOW });
       await h.show(page, 'growth');
+      await openGrowthTab(page, 'all');
       await page.waitForSelector('#gr-figure svg.gr-hero[data-hero="nu"]');
       const parts = await page.evaluate(() => ['gr-bodao', 'gr-scarf', 'gr-hipsword', 'gr-sash'].filter((c) => document.querySelector('#gr-figure .' + c)));
       assert.deepEqual(parts, ['gr-bodao', 'gr-scarf', 'gr-hipsword', 'gr-sash'], 'nữ hiệp có trâm bộ dao, lụa khoác, kiếm bên hông, dải thắt lưng' + at);
@@ -97,6 +100,7 @@ try {
       const { context, page } = await h.open(width, { touch, workspace: ws('nam')(), now: NOW });
       await page.emulateMedia({ reducedMotion: 'reduce' });
       await h.show(page, 'growth');
+      await openGrowthTab(page, 'all');
       await page.waitForSelector('#gr-figure svg.gr-hero');
       await page.click('[data-gr-pose="martial"]');
       assert.deepEqual(await figures(page), ['martial'], 'không có hình cũ mờ dần khi giảm chuyển động' + at);
@@ -109,6 +113,7 @@ try {
     {
       const { context, page } = await h.open(width, { touch, workspace: ws('nu')(), now: NOW });
       await h.show(page, 'growth');
+      await openGrowthTab(page, 'all');
       await page.waitForSelector('#gr-figure svg.gr-hero');
       const OLD = /Nhân vật|Biểu đồ|Sử dụng điểm|Điểm hiện có|Phàm nhân|Trúc cơ|Cách tích điểm|Lịch sử cộng điểm|Điểm từng chỉ số|Tự động|Cười nói|Tập võ|Đi quyền|Ngồi thiền|Tiên tử/;
       const pageText = await page.locator('#main').innerText();
@@ -149,6 +154,7 @@ try {
     {
       const { context, page } = await h.open(width, { touch, workspace: ws('nam')(), now: NOW, colorScheme: 'dark' });
       await h.show(page, 'growth');
+      await openGrowthTab(page, 'all');
       await page.waitForSelector('#gr-figure svg.gr-hero');
       const c = await page.evaluate(() => {
         const lum = (s) => { const [r, g, b] = s.match(/\d+(\.\d+)?/g).slice(0, 3).map(Number).map((v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4; }); return 0.2126 * r + 0.7152 * g + 0.0722 * b; };

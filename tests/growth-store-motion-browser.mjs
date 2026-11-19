@@ -4,6 +4,7 @@
 // thì đứng yên hoàn toàn.
 import assert from 'node:assert/strict';
 import { startHarness } from './lib/browser-harness.mjs';
+import { openGrowthTab } from './lib/growth-tab.mjs';
 
 const day = (n) => new Date(Date.now() + n * 864e5).toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
 const rich = () => ({ schema: 1, projects: [], notes: [], growth: { v: 1, hero: 'nu', name: 'Lam Y', since: day(-200), log: [{ id: 'e1', d: day(-1), s: 'task', k: 'task:e1', n: 'Việc cũ', p: [240, 600, 160, 90, 520, 820, 300, 190] }], spend: [] } });
@@ -22,6 +23,7 @@ try {
     const at = ' (' + width + 'px)';
     const { context, page } = await h.open(width, { touch: width < 700, workspace: rich() });
     await h.show(page, 'growth');
+    await openGrowthTab(page, 'all');
     // Đo vị trí lúc đứng yên (hộp bao đã xoay thì không còn khớp viewBox); gỡ lại sau khi đo.
     const still = await page.addStyleTag({ content: '.gr-st-scene,.gr-st-scene *{animation:none!important}' });
     const info = await page.evaluate(() => {
@@ -96,6 +98,7 @@ try {
   {
     const { context, page } = await h.open(1440, { workspace: rich() });
     await h.show(page, 'growth');
+    await openGrowthTab(page, 'all');
     const talk = () => page.evaluate(() => ({ on: document.querySelector('.gr-st-scene').classList.contains('is-talk'), anims: document.getAnimations().filter((a) => ['gr-st-nod', 'gr-st-fanwave'].includes(a.animationName)).map((a) => a.animationName).sort() }));
     assert.deepEqual(await talk(), { on: false, anims: [] }, 'chưa hỏi thì chưa phản ứng');
     await page.click('[data-gr-shop-ask="tro"]');
@@ -113,6 +116,7 @@ try {
   {
     const { context, page } = await h.open(390, { touch: true, reducedMotion: 'reduce', workspace: rich() });
     await h.show(page, 'growth');
+    await openGrowthTab(page, 'all');
     const count = () => page.evaluate(() => { const sc = document.querySelector('.gr-st-scene'); return document.getAnimations().filter((a) => a.effect?.target && sc.contains(a.effect.target)).length; });
     assert.equal(await count(), 0, 'giảm chuyển động: không hoạt họa nào');
     assert.equal(await page.evaluate(() => getComputedStyle(document.querySelector('.gr-st-lids')).opacity), '0', 'mí mắt không che mắt khi đứng yên');
@@ -125,6 +129,7 @@ try {
   {
     const { context, page } = await h.open(820, { workspace: rich() });
     await h.show(page, 'growth');
+    await openGrowthTab(page, 'all');
     assert.equal(await page.locator('.gr-store-face svg.gr-st-face circle[fill="#7fd0b0"]').count(), 1, 'chân dung có hạt ngọc xanh');
     assert.equal(await page.locator('.gr-store-face svg.gr-st-face .gr-st-lids').count(), 0);
     await context.close();

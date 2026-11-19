@@ -8,6 +8,7 @@
 // Kiểm ở 390 (chạm), 820 (chạm), 1440 px.
 import assert from 'node:assert/strict';
 import { startHarness, makeProject } from './lib/browser-harness.mjs';
+import { openGrowthTab } from './lib/growth-tab.mjs';
 
 const NOW = '2026-11-12T09:00:00+07:00';
 const day = (n) => new Date(Date.parse(NOW) + n * 864e5 + 7 * 3600e3).toISOString().slice(0, 10);
@@ -63,6 +64,7 @@ try {
       const errors = [];
       page.on('pageerror', (e) => errors.push(e.message));
       await h.show(page, 'growth');
+      await openGrowthTab(page, 'all');
       await page.waitForSelector('.gr-ach-panel');
       let p = await panel(page);
       assert.equal(p.items, 20, '20 danh hiệu' + at);
@@ -100,6 +102,7 @@ try {
       const stories = [5, 10, 15, 20, 25].map((n) => 'notice:story-' + n);
       const { context, page, server } = await h.open(width, { touch, now: NOW, receiptsSeed: [...seen, ...stories] });
       await h.show(page, 'growth');
+      await openGrowthTab(page, 'all');
       await page.waitForFunction(() => /Bảng vàng/.test(document.querySelector('#toast')?.textContent || ''));
       assert.equal(await page.locator('#toast').textContent(), 'Bảng vàng: đạt 2 danh hiệu mới — Tàng thư sơ khai, Nghe kể giang hồ.', 'báo gộp các danh hiệu chưa báo' + at);
       await page.waitForFunction(() => readReceiptKeys.has('notice:ach-story-5'));
@@ -111,6 +114,7 @@ try {
     {
       const { context, page, server } = await h.open(width, { touch, now: NOW, workspace: seed(false)() });
       await h.show(page, 'growth');
+      await openGrowthTab(page, 'all');
       await page.waitForTimeout(600);
       assert.equal(await page.locator('.gr-ach-panel').count(), 0, 'chưa bắt đầu Tu vi thì không có Bảng vàng' + at);
       assert.equal(server.receipts.filter((k) => k.startsWith('notice:ach-')).length, 0, 'không ghi biên nhận' + at);

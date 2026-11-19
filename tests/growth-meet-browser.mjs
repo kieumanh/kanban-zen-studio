@@ -16,6 +16,7 @@
 //  Kiểm ở 390 (chạm), 820 (chạm), 1440 px; không tràn ngang, không lỗi trang.
 import assert from 'node:assert/strict';
 import { startHarness } from './lib/browser-harness.mjs';
+import { openGrowthTab } from './lib/growth-tab.mjs';
 
 const day = (n) => new Date(Date.now() + n * 864e5).toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
 const project = { id: 'p1', name: 'Dự án A', description: '', color: '#7950c8', icon: '✺', columns: ['Idea', 'List', 'Doing', 'Done'], columnNames: { Idea: 'Ý tưởng', List: 'Việc cần làm', Doing: 'Đang thực hiện', Done: 'Hoàn thành' }, tasks: [{ id: 'p1t0', title: 'Gửi báo cáo', col: 'Doing', description: '', due: day(3), tag: 'Công việc', priority: 'q2', checks: [] }] };
@@ -30,6 +31,7 @@ try {
   {
     const { context, page } = await h.open(1440, { workspace: seed(20)() });
     await h.show(page, 'growth');
+    await openGrowthTab(page, 'all');
     const d = await page.evaluate(() => ({
       cast: window.zenMeet.CAST, roles: window.zenMeet.ROLES, who: window.zenTale.WHO, chapters: window.zenTale.CHAPTERS.map((c) => c.lv),
       plan: window.zenStory.schedule().map((m) => ({ id: m.id, lv: m.lv, from: m.meet.from, to: m.meet.to })),
@@ -106,6 +108,7 @@ try {
     assert.deepEqual(Object.keys(server.workspace.growth).sort(), ['hero', 'log', 'since', 'spend', 'v'], 'không thêm khóa vào dữ liệu Tu vi' + at);
     // 4. Khung Giang hồ kỳ ngộ.
     await h.show(page, 'growth');
+    await openGrowthTab(page, 'all');
     await page.waitForSelector('.gr-meet-panel');
     const p = await page.evaluate((id) => {
       const box = document.querySelector('.gr-meet-panel');

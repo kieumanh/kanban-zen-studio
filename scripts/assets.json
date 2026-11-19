@@ -435,6 +435,11 @@
     "text/javascript; charset=utf-8"
   ],
   [
+    "/growth-tabs.js",
+    "growth-tabs.js",
+    "text/javascript; charset=utf-8"
+  ],
+  [
     "/growth-scene.js",
     "growth-scene.js",
     "text/javascript; charset=utf-8"

@@ -10,6 +10,7 @@
 //     không chỗ thay chưa điền, không tràn ngang, không lỗi trang.
 import assert from 'node:assert/strict';
 import { startHarness } from './lib/browser-harness.mjs';
+import { openGrowthTab } from './lib/growth-tab.mjs';
 
 const day = (n) =>
   new Date(Date.now() + n * 864e5).toLocaleDateString('en-CA', {
@@ -109,6 +110,7 @@ try {
   {
     const { context, page } = await h.open(1440, { workspace: seed() });
     await h.show(page, 'growth');
+    await openGrowthTab(page, 'all');
     const d = await page.evaluate(
       ([PAGES]) => {
         const C = window.zenTale.CHAPTERS;
@@ -230,6 +232,7 @@ try {
     const errors = [];
     page.on('pageerror', (e) => errors.push(String(e)));
     await h.show(page, 'growth');
+    await openGrowthTab(page, 'all');
     for (const [lvText, n] of Object.entries(PAGES)) {
       await page.click('[data-gr-story="' + lvText + '"]');
       await page.waitForSelector('dialog.gr-story[open]');

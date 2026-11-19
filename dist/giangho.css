@@ -6220,6 +6220,24 @@
 :root[data-style=giangho] .gr-queue-name small {
     color: var(--muted)
 }
+:root[data-style=giangho] .gr-tab {
+    border: 1px solid var(--line);
+    background: var(--paper);
+    color: inherit
+}
+:root[data-style=giangho] .gr-tab[aria-selected=true] {
+    border-color: var(--gr-seal,currentColor);
+    box-shadow: inset 0 -3px 0 var(--gr-seal,currentColor)
+}
+:root[data-style=giangho] .gr-tab:focus-visible {
+    outline: 2px solid var(--gr-seal,currentColor)
+}
+:root[data-style=giangho] .gr-tabpanel:focus {
+    outline: none
+}
+:root[data-style=giangho] .gr-tab-lock {
+    color: var(--muted)
+}
 :root[data-style=giangho] {
     --muted: #685345;
     --text-muted: #685345
@@ -13915,6 +13933,24 @@
     border: 1px solid var(--line)
 }
 :root[data-style=giangho][data-theme=dark] .gr-queue-name small {
+    color: var(--muted)
+}
+:root[data-style=giangho][data-theme=dark] .gr-tab {
+    border: 1px solid var(--line);
+    background: var(--paper);
+    color: inherit
+}
+:root[data-style=giangho][data-theme=dark] .gr-tab[aria-selected=true] {
+    border-color: var(--gr-seal,currentColor);
+    box-shadow: inset 0 -3px 0 var(--gr-seal,currentColor)
+}
+:root[data-style=giangho][data-theme=dark] .gr-tab:focus-visible {
+    outline: 2px solid var(--gr-seal,currentColor)
+}
+:root[data-style=giangho][data-theme=dark] .gr-tabpanel:focus {
+    outline: none
+}
+:root[data-style=giangho][data-theme=dark] .gr-tab-lock {
     color: var(--muted)
 }
 :root[data-style=giangho][data-theme=dark] {

@@ -23,6 +23,7 @@
 //     vượt mốc. Bảng vàng vẫn giữ danh hiệu đọc truyện đã đạt nhờ truyện cũ.
 import assert from 'node:assert/strict';
 import { startHarness } from './lib/browser-harness.mjs';
+import { openGrowthTab } from './lib/growth-tab.mjs';
 
 const day = (n) => new Date(Date.now() + n * 864e5).toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
 const project = { id: 'p1', name: 'Dự án A', description: '', color: '#7950c8', icon: '✺', columns: ['Idea', 'List', 'Doing', 'Done'], columnNames: { Idea: 'Ý tưởng', List: 'Việc cần làm', Doing: 'Đang thực hiện', Done: 'Hoàn thành' }, tasks: [{ id: 'p1t0', title: 'Gửi báo cáo', col: 'Doing', description: '', due: day(3), tag: 'Công việc', priority: 'q2', checks: [] }] };
@@ -58,6 +59,7 @@ try {
   {
     const { context, page } = await h.open(1440, { workspace: seed(growth(14))() });
     await h.show(page, 'growth');
+    await openGrowthTab(page, 'all');
     const t = await page.evaluate(() => window.zenTale);
     const C = t.CHAPTERS;
     const lv = C.map((c) => c.lv);
@@ -188,6 +190,7 @@ try {
     assert.ok(server.receipts.includes('notice:tale-10') && !server.receipts.includes('notice:tale-5'), 'dấu đã đọc dùng khóa mới' + at);
     // Lộ trình: chương mới ở cấp đã qua là "Chưa đọc"; Bảng vàng giữ danh hiệu đọc 5 chương nhờ truyện cũ.
     await h.show(page, 'growth');
+    await openGrowthTab(page, 'all');
     const list = await page.evaluate(() => [...document.querySelectorAll('.gr-ch')].slice(0, 4).map((li) => [li.querySelector('strong').textContent, li.querySelector('.gr-ch-tag').textContent]));
     assert.deepEqual(list, [['Trăng trong thùng nước', 'Chưa đọc'], ['Trăm chuyến nước', 'Chưa đọc'], ['Trấn ngủ say', 'Đã đọc'], ['Hội đèn nghìn mặt', 'Mở ở cấp 15']], 'chương mới theo khóa mới' + at);
     assert.equal(await page.locator('.gr-ach[data-ach="story-5"] .gr-ach-state').textContent(), 'Đã đạt', 'Bảng vàng giữ danh hiệu đọc truyện đã đạt' + at);

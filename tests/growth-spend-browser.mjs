@@ -3,6 +3,7 @@
 // Kiểm tra ở 390 (chạm), 820, 1440 px: không tràn ngang, form nằm gọn trong màn hình, nút và ô nhập đủ vùng chạm.
 import assert from 'node:assert/strict';
 import { startHarness } from './lib/browser-harness.mjs';
+import { openGrowthTab } from './lib/growth-tab.mjs';
 
 const day = (n) => new Date(Date.now() + n * 864e5).toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
 // Đã tích lũy (nửa điểm → điểm): Đạo tâm 10 · Tài lộc 6 · Tâm cảnh 4 · Sự nghiệp 8 · Gia đạo 2 = 30 điểm (v2.5.0: cấp 22, cảnh giới Nhị lưu cao thủ; thang v1.85.0: cấp 20, Tam lưu cao thủ).
@@ -50,6 +51,7 @@ try {
     {
       const { context, page } = await h.open(width, { touch, workspace: seed() });
       await h.show(page, 'growth');
+      await openGrowthTab(page, 'all');
       assert.deepEqual(await wallet(page), { left: '30', earned: '30', spent: '0' }, 'ví điểm lúc đầu' + at);
       assert.equal(await page.locator('.gr-realm-name').innerText(), 'Nhị lưu cao thủ', 'đủ 30 điểm là cấp 22, Nhị lưu cao thủ' + at);
       assert.match(await page.locator('.gr-spend').innerText(), /Chưa có lần quy đổi nào/, 'mục quy đổi trống' + at);
@@ -62,6 +64,7 @@ try {
     {
       const { context, page, server } = await h.open(width, { touch, workspace: seed() });
       await h.show(page, 'growth');
+      await openGrowthTab(page, 'all');
       await page.click('[data-gr-spend]');
       await page.waitForSelector('#growth-spend[open]');
       assert.equal(await page.locator('.gr-spend-row').count(), 8, 'đủ 8 chỉ số để trừ' + at);
@@ -141,6 +144,7 @@ try {
       const old = { id: 's1', d: day(-1), n: 'Tai nghe mới', note: 'Mua online', p: [8, 5, 3, 0, 0, 0, 6, 2] };
       const { context, page, server } = await h.open(width, { touch, workspace: withSpend([old])() });
       await h.show(page, 'growth');
+      await openGrowthTab(page, 'all');
       assert.deepEqual(await radarValues(page), ['6', '3,5', '2,5', '0', '0', '0', '5', '1'], 'dữ liệu có sẵn đã trừ điểm' + at);
       assert.ok((await page.locator('[data-gr-spend-edit]').boundingBox()).height >= minBtn, 'nút Sửa đủ lớn' + at);
       assert.ok((await page.locator('[data-gr-spend-void]').boundingBox()).height >= minBtn, 'nút Hủy quy đổi đủ lớn' + at);
@@ -192,6 +196,7 @@ try {
       const first = { id: 's1', d: day(-1), n: 'Tai nghe mới', p: [8, 5, 3, 0, 0, 0, 6, 2] };
       const { context, page, server } = await h.open(width, { touch, workspace: withSpend([first])() });
       await h.show(page, 'growth');
+      await openGrowthTab(page, 'all');
       await page.click('[data-gr-spend-void]');
       await page.waitForSelector('.gr-spend-item.is-void');
       assert.match(await toast(page), /Đã hủy quy đổi “Tai nghe mới”, hoàn lại 12 điểm/, 'thông báo hủy' + at);
@@ -253,6 +258,7 @@ try {
       ];
       const { context, page } = await h.open(width, { touch, workspace: withSpend(over)() });
       await h.show(page, 'growth');
+      await openGrowthTab(page, 'all');
       assert.deepEqual(await radarValues(page), ['0', '6', '4', '0', '0', '0', '8', '2'], 'số dư không bao giờ âm' + at);
       assert.equal(await page.locator('.gr-spend-item').count(), 2);
       assert.equal(await noOverflow(page), true, 'không tràn ngang' + at);
@@ -263,6 +269,7 @@ try {
       const all = [{ id: 'a1', d: day(-1), n: 'Chuyến đi', p: [20, 12, 8, 0, 0, 0, 16, 4] }];
       const { context, page } = await h.open(width, { touch, workspace: withSpend(all)() });
       await h.show(page, 'growth');
+      await openGrowthTab(page, 'all');
       assert.deepEqual(await radarValues(page), Array(8).fill('0'), 'quy đổi hết thì 8 chỉ số về 0' + at);
       assert.equal(await page.locator('.gr-realm-name').innerText(), 'Nhị lưu cao thủ', 'quy đổi hết vẫn giữ cảnh giới' + at);
       assert.match(await page.locator('.gr-summary').innerText(), /đang ở 0 sau khi đổi bảo vật/, 'tóm tắt khi hết điểm' + at);
@@ -283,6 +290,7 @@ try {
       const part = [{ id: 'p1', d: day(-1), n: 'Tai nghe', p: [8, 5, 3, 0, 0, 0, 6, 2] }];
       const { context, page } = await h.open(width, { touch, workspace: withSpend(part)() });
       await h.show(page, 'growth');
+      await openGrowthTab(page, 'all');
       await page.click('[data-gr-report]');
       await page.waitForSelector('.gr-report');
       const tiles = await page.evaluate(() => Object.fromEntries([...document.querySelectorAll('.gr-tile')].map((t) => [t.dataset.tile, t.textContent.replace(/\s+/g, ' ').trim()])));
@@ -296,6 +304,7 @@ try {
       const many = Array.from({ length: 12 }, (_, i) => ({ id: 'm' + i, d: day(-1), n: 'Món số ' + (i + 1), p: [1, 0, 0, 0, 0, 0, 0, 0] }));
       const { context, page } = await h.open(width, { touch, workspace: withSpend(many)() });
       await h.show(page, 'growth');
+      await openGrowthTab(page, 'all');
       assert.equal(await page.locator('.gr-spend-item').count(), 10, 'mặc định 10 dòng' + at);
       assert.match(await page.locator('.gr-spend-item').first().innerText(), /Món số 12/, 'mới nhất ở đầu' + at);
       await page.click('[data-gr-spend-more]');
@@ -311,6 +320,7 @@ try {
       const keep = [{ id: 'k1', d: day(-1), n: 'Giữ lại', p: [2, 0, 0, 0, 0, 0, 0, 0] }];
       const { context, page, server } = await h.open(width, { touch, workspace: withSpend(keep)() });
       await h.show(page, 'growth');
+      await openGrowthTab(page, 'all');
       await page.click('[data-gr-change]');
       await page.locator('.gr-card input[value="nu"]').check({ force: true });
       await page.click('[data-gr-confirm]');
@@ -338,6 +348,7 @@ try {
     {
       const { context, page, server } = await h.open(width, { touch, workspace: withSpend([{ id: 'g1', d: day(-1), n: 'Quà', p: [8, 0, 0, 0, 0, 0, 0, 0] }])() });
       await h.show(page, 'growth');
+      await openGrowthTab(page, 'all');
       await page.evaluate(() => window.zenGrowth.openAward({ source: 'task', key: 'task:zz', title: 'Việc thử', steps: 2 }));
       await page.waitForSelector('#growth-award[open]');
       assert.equal(await page.locator('.gr-col-val').first().innerText(), '6', 'bảng cộng điểm bắt đầu từ số dư hiện có' + at);

@@ -10,6 +10,7 @@
 //  4. Nữ hiệp vẽ áo đỏ, thiếu hiệp vẽ áo xanh ngọc; đóng sách gỡ tranh sạch, không để lại bộ theo dõi.
 import assert from 'node:assert/strict';
 import { startHarness } from './lib/browser-harness.mjs';
+import { openGrowthTab } from './lib/growth-tab.mjs';
 
 const day = (n) => new Date(Date.now() + n * 864e5).toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
 const project = { id: 'p1', name: 'Dự án A', description: '', color: '#7950c8', icon: '✺', columns: ['Idea', 'List', 'Doing', 'Done'], columnNames: { Idea: 'Ý tưởng', List: 'Việc cần làm', Doing: 'Đang làm', Done: 'Xong' }, tasks: [] };
@@ -39,6 +40,7 @@ try {
     const errors = [];
     page.on('pageerror', (e) => errors.push(String(e)));
     await h.show(page, 'growth');
+    await openGrowthTab(page, 'all');
     const r = await page.evaluate(() => {
       const Z = window.zenScene, PL = window.zenPlates, bad = [];
       const sig = (s) => JSON.stringify([s.s, s.t, s.f.map((q) => [q.who, q.pose, q.x]), s.p.map((q) => q.id), s.c]);
@@ -158,6 +160,7 @@ try {
     const errors = [];
     page.on('pageerror', (e) => errors.push(String(e)));
     await h.show(page, 'growth');
+    await openGrowthTab(page, 'all');
     await page.click('[data-gr-story="0"]');
     await page.waitForSelector('dialog.gr-story[open] .gr-story-art .sc');
     const seen = new Set(), places = new Set();
@@ -206,6 +209,7 @@ try {
     const errors = [];
     page.on('pageerror', (e) => errors.push(String(e)));
     await h.show(page, 'growth');
+    await openGrowthTab(page, 'all');
     await page.click('[data-gr-story="50"]'); // chương có 5 cặp trang liền nhau cùng nơi-giờ nhưng đổi người
     await page.waitForSelector('dialog.gr-story[open] .gr-story-art .sc');
     const keys = [];
@@ -231,6 +235,7 @@ try {
     const errors = [];
     page.on('pageerror', (e) => errors.push(String(e)));
     await h.show(page, 'growth');
+    await openGrowthTab(page, 'all');
     await page.click('[data-gr-story="0"]');
     await page.waitForSelector('dialog.gr-story[open] .gr-story-art .sc');
     for (let i = 0; i < 4; i++) {

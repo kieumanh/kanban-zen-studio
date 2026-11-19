@@ -4,6 +4,7 @@
 // Mỗi việc chỉ được hỏi điểm một lần. Kiểm tra ở 390 (chạm), 820, 1440 px: không tràn ngang, nút + đủ vùng chạm.
 import assert from 'node:assert/strict';
 import { startHarness, makeProject } from './lib/browser-harness.mjs';
+import { openGrowthTab } from './lib/growth-tab.mjs';
 
 const seed = (growth) => () => {
   const p = makeProject('p1', 'Khóa tu mùa thu', '#7950c8', 4);
@@ -61,6 +62,7 @@ try {
     {
       const { context, page, server } = await h.open(width, { touch, workspace: seed()() });
       await h.show(page, 'growth');
+      await openGrowthTab(page, 'all');
       assert.equal(await page.locator('.gr-card').count(), 2, 'có hai nhân vật để chọn' + at);
       assert.equal(await page.locator('.gr-card svg.gr-hero').count(), 2, 'nhân vật vẽ bằng SVG' + at);
       assert.equal(await noOverflow(page), true, 'trang chọn nhân vật không tràn ngang' + at);
@@ -159,6 +161,7 @@ try {
       // Trang điểm: Đạo tâm 1 + 0,5 = 1,5; Tâm cảnh 0,5; Sự nghiệp 0,5; Gia đạo 0,5.
       await page.evaluate(() => document.querySelector('.completion-close')?.click());
       await h.show(page, 'growth');
+      await openGrowthTab(page, 'all');
       const vals = await page.evaluate(() => [...document.querySelectorAll('.gr-radar .gr-value')].map((n) => n.textContent));
       assert.deepEqual(vals, ['1,5', '0', '0,5', '0', '0', '0', '0,5', '0,5'], 'biểu đồ cộng đúng điểm' + at);
       assert.match(await page.locator('.gr-summary').innerText(), /Sở trường:\s*Đạo tâm.*Cần khổ luyện:\s*Tài lộc/, 'tóm tắt mạnh yếu' + at);
@@ -220,6 +223,7 @@ try {
       const { context, page } = await h.open(width, { touch, workspace: seed(GROWTH)() });
       await page.emulateMedia({ reducedMotion: 'reduce' });
       await h.show(page, 'growth');
+      await openGrowthTab(page, 'all');
       await page.waitForSelector('#gr-figure svg.gr-hero');
       const names = await page.evaluate(() => [...document.querySelectorAll('#gr-figure svg *')].map((n) => getComputedStyle(n).animationName).filter((n) => n && n !== 'none'));
       assert.deepEqual(names, [], 'giảm chuyển động thì không còn hoạt họa' + at);

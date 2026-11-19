@@ -182,3 +182,4 @@ tests/worklist-report-browser.mjs
 tests/worklist-report-range-browser.mjs
 tests/growth-sow-browser.mjs
 tests/growth-queue-browser.mjs
+tests/growth-tabs-browser.mjs

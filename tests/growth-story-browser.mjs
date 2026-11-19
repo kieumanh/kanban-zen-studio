@@ -13,6 +13,7 @@
 //  4. Bảng vừa màn hình, không tràn ngang, không lỗi trang.
 import assert from 'node:assert/strict';
 import { startHarness } from './lib/browser-harness.mjs';
+import { openGrowthTab } from './lib/growth-tab.mjs';
 
 const day = (n) => new Date(Date.now() + n * 864e5).toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
 const project = { id: 'p1', name: 'Dự án A', description: '', color: '#7950c8', icon: '✺', columns: ['Idea', 'List', 'Doing', 'Done'], columnNames: { Idea: 'Ý tưởng', List: 'Việc cần làm', Doing: 'Đang thực hiện', Done: 'Hoàn thành' }, tasks: [{ id: 'p1t0', title: 'Gửi báo cáo', col: 'Doing', description: '', due: day(3), tag: 'Công việc', priority: 'q2', checks: [] }] };
@@ -93,6 +94,7 @@ try {
     assert.deepEqual(Object.keys(server.workspace.growth).sort(), ['hero', 'log', 'name', 'since', 'spend', 'v'], 'dữ liệu Tu vi không thêm khóa mới' + at);
     // 3. Khung Truyện ký trong trang Tu vi.
     await h.show(page, 'growth');
+    await openGrowthTab(page, 'all');
     const list = await page.evaluate(() => [...document.querySelectorAll('.gr-ch')].map((li) => [li.querySelector('strong').textContent, li.querySelector('.gr-ch-tag').textContent, !!li.querySelector('button')]));
     assert.equal(list.length, 39, 'Khai cuộc + 38 chương' + at);
     assert.deepEqual(list[0], ['Trăng trong thùng nước', 'Chưa đọc', true], 'Khai cuộc đọc được, chưa đọc' + at);
@@ -132,7 +134,9 @@ try {
   {
     const { context, page } = await h.open(820, { touch: true, workspace: seed(null)() });
     await h.show(page, 'growth');
+    await openGrowthTab(page, 'all');
     await page.click('[data-gr-confirm]');
+    await openGrowthTab(page, 'all');
     await page.waitForSelector('.gr-story-panel');
     await wait(600);
     assert.equal(await story(page), null, 'chọn hiệp khách không bật hộp thoại (chương đầu ở cấp 5)');

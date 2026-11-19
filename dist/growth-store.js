@@ -507,6 +507,7 @@
     G().openSpend(undefined, { name: nameOf(it), fit: fitOf(it), strip: strip(it), eyebrow: 'TÀNG BẢO CÁC', title: 'Bảng quy đổi · ' + it.name, owner: OWNER.name });
   }
   function go() {
+    if (!document.getElementById('gr-store')) window.zenTabs?.go('store', { focus: false }); // v2.68.0: Tàng Bảo Các nằm ở tab riêng
     const box = document.getElementById('gr-store');
     if (!box) return;
     box.scrollIntoView({ block: 'start', behavior: reduce() ? 'auto' : 'smooth' });

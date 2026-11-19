@@ -8,6 +8,7 @@
 // trạng thái từng cảnh giới, vạch 5 cấp của từng chặng, chặng đã qua đọc được chương, dấu đã đọc từ máy chủ, không tràn ngang.
 import assert from 'node:assert/strict';
 import { startHarness } from './lib/browser-harness.mjs';
+import { openGrowthTab } from './lib/growth-tab.mjs';
 
 const day = (n) => new Date(Date.now() + n * 864e5).toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
 // half = số nửa điểm đã tích lũy.
@@ -43,6 +44,7 @@ try {
       const errors = [];
       page.on('pageerror', (e) => errors.push(e.message));
       await h.show(page, 'growth');
+      await openGrowthTab(page, 'all');
       // Dấu đã đọc của tài khoản tải xong thì khung vẽ lại: chương 1 thành "Đã đọc".
       await page.waitForFunction(() => document.querySelector('.gr-path .gr-ch .gr-ch-tag')?.textContent === 'Đã đọc');
       const r = await read(page);
@@ -83,6 +85,7 @@ try {
     ]) {
       const { context, page } = await h.open(width, { touch, workspace: seed(half)() });
       await h.show(page, 'growth');
+      await openGrowthTab(page, 'all');
       const r = await read(page);
       assert.equal(r.where, where, 'đang ở đâu (' + half / 2 + ' điểm)' + at);
       assert.equal(r.sub, sub, 'chi tiết (' + half / 2 + ' điểm)' + at);

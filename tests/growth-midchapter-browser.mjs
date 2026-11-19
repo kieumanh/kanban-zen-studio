@@ -10,6 +10,7 @@
 // Kiểm ở 390 (chạm), 820 (chạm), 1440 px; bảng vừa màn hình, không tràn ngang, không lỗi trang.
 import assert from 'node:assert/strict';
 import { startHarness } from './lib/browser-harness.mjs';
+import { openGrowthTab } from './lib/growth-tab.mjs';
 
 const day = (n) => new Date(Date.now() + n * 864e5).toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
 const project = { id: 'p1', name: 'Dự án A', description: '', color: '#7950c8', icon: '✺', columns: ['Idea', 'List', 'Doing', 'Done'], columnNames: { Idea: 'Ý tưởng', List: 'Việc cần làm', Doing: 'Đang thực hiện', Done: 'Hoàn thành' }, tasks: [{ id: 'p1t0', title: 'Gửi báo cáo', col: 'Doing', description: '', due: day(3), tag: 'Công việc', priority: 'q2', checks: [] }] };
@@ -44,6 +45,7 @@ try {
   {
     const { context, page } = await h.open(1440, { workspace: seed(8938)() });
     await h.show(page, 'growth');
+    await openGrowthTab(page, 'all');
     const m = await page.evaluate(() => {
       const g = window.zenGrowth;
       return { at: [97, 97.5, 98, 98.3, 98.7, 99, 99.2, 99.4, 99.6, 99.8, 100, 103, 104].map((x) => +g.tuviAt(x).toFixed(2)), whole: [0, 1, 10, 90, 100, 103].every((n) => g.tuviAt(n) === g.LEVEL_AT[n]), mid: window.zenTale.CHAPTERS.map((c) => c.lv).filter((x) => !Number.isInteger(x)) };
@@ -83,6 +85,7 @@ try {
       assert.deepEqual(Object.keys(server.workspace.growth).sort(), ['hero', 'log', 'name', 'since', 'spend', 'v'], 'dữ liệu Tu vi không thêm khóa mới' + at);
       // 3. Lộ trình: 4.470 điểm, vừa tới mốc 97,5; chặng kế là 97,5 → 98 (chương 30, mở ở 4.598).
       await h.show(page, 'growth');
+      await openGrowthTab(page, 'all');
       const s = await stages(page);
       assert.equal(s.where, 'Lam Y đang ở chặng 30/38 · tiến về “Trăng không lặn”', 'đang ở chặng nào' + at);
       assert.match(s.sub, /^Cấp 97 · Võ lâm chí tôn · .+ · đã đi 0% chặng · còn 128 điểm tới chương 30$/, 'chi tiết vị trí: ' + s.sub + at);
@@ -106,6 +109,7 @@ try {
       // Bảng vàng chỉ đếm khi dấu đã đọc của tài khoản đã tải xong.
       await page.waitForFunction(() => typeof readReceiptLoaded !== 'undefined' && readReceiptLoaded);
       await h.show(page, 'growth');
+      await openGrowthTab(page, 'all');
       const s = await stages(page);
       assert.equal(s.where, 'Lam Y đang ở chặng 36/38 · tiến về “Món nợ một gáo nước”', 'đang ở chặng nào' + at);
       assert.match(s.sub, /đã đi 60% chặng · còn 82 điểm tới chương 36$/, 'phần đã đi của chặng: ' + s.sub + at);
