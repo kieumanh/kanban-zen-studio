@@ -4398,6 +4398,30 @@
 :root[data-contrast=high] .wlr-tables thead th {
     color: #060606
 }
+:root[data-contrast=high] .wlr-custom {
+    color: #060606
+}
+:root[data-contrast=high] .wlr-custom input {
+    border: 1px solid #17151a;
+    background: #ffffff;
+    color: #060606
+}
+:root[data-contrast=high] .wlr-custom input:focus-visible, :root[data-contrast=high] .wlr-fixbtn:focus-visible, :root[data-contrast=high] .wlr-fix summary:focus-visible {
+    outline: 2px solid #18102b
+}
+:root[data-contrast=high] .wlr-hint {
+    color: #060606
+}
+:root[data-contrast=high] .wlr-fixrow {
+    border: 1px solid #171519;
+    background: #ffffff
+}
+:root[data-contrast=high] .wlr-fixtitle {
+    color: #060606
+}
+:root[data-contrast=high] .wlr-fixname small {
+    color: #060606
+}
 :root[data-theme=dark][data-contrast=high] {
     --bg: #030303;
     --paper: #030303;
@@ -8795,6 +8819,30 @@
     color: #f5f5f5
 }
 :root[data-theme=dark][data-contrast=high] .wlr-tables thead th {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .wlr-custom {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .wlr-custom input {
+    border: 1px solid #cecece;
+    background: #030303;
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .wlr-custom input:focus-visible, :root[data-theme=dark][data-contrast=high] .wlr-fixbtn:focus-visible, :root[data-theme=dark][data-contrast=high] .wlr-fix summary:focus-visible {
+    outline: 2px solid #cecece
+}
+:root[data-theme=dark][data-contrast=high] .wlr-hint {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .wlr-fixrow {
+    border: 1px solid #cecece;
+    background: #030303
+}
+:root[data-theme=dark][data-contrast=high] .wlr-fixtitle {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .wlr-fixname small {
     color: #f5f5f5
 }
 /* v1.16.2 — nút "Làm mới" ở Chế độ tập trung: quy tắc cũ (.focus-check-updates, nền trắng, chữ tím) đã bị quy tắc nút chính ghi đè ở chế độ thường, nhưng bản sao có tiền tố chủ đề lại nặng hơn nên thắng và làm nút trắng chữ trắng. Đặt lại nền nút chính. */

@@ -951,6 +951,19 @@
     ['Số việc', 'Số nhiệm vụ', '.wlr-tables th'],
   ])
     add(plain, { to, in: scope });
+  // ---- v2.65.0 (Chiến Báo Hoàn Thiện): biểu đồ theo tuần, khung bổ sung ngày xong ----------------------------------------------------------
+  for (const [plain, gh] of Object.entries({
+    'Ghi vào và hoàn thành theo tuần': 'Ghi vào và công thành theo tuần',
+    'Bổ sung ngày xong': 'Bổ sung ngày công thành',
+    'Chọn ngày thật sự xong rồi bấm Lưu ngày cho từng việc. Ứng dụng không tự đoán ngày.': 'Chọn ngày công thành thật sự rồi bấm Ghi ngày cho từng nhiệm vụ. Hệ thống không tự đoán ngày.',
+    'Chưa lưu được ngày xong. Hãy thử lại.': 'Chưa ghi được ngày công thành. Hãy thử lại.',
+  }))
+    add(plain, gh);
+  for (const [plain, to, scope] of [
+    ['Lưu ngày', 'Ghi ngày', '.wlr-fixbtn'],
+    ['Ngày xong', 'Ngày công thành', '.wlr-custom'],
+  ])
+    add(plain, { to, in: scope });
   const PATTERNS = [
     [/^Thông báo · .+$/, bell, '.topbar', 'Thông báo · '],
     [/^(Lịch|Gantt) · (.+)$/, (s, a, b) => (currentView() === VIEW_OF[a] ? NAV[a][0] + ' · ' + b : s), '#crumb', ' · '],
@@ -1093,7 +1106,9 @@
     [/^Còn (\d+) dự án khác$/, 'Còn $1 đại sự khác', '.wlr-rank', ' dự án khác'],
     [/^Tuổi của việc còn trong chuỗi: (.+)$/, 'Tuổi của nhiệm vụ còn trong chuỗi: $1', '.wlr-ages', 'Tuổi của việc'],
     [/^Biểu đồ cột (\d+) ngày: ghi vào (\d+), đã xong (\d+)\. Xem bảng số liệu bên dưới\.$/, 'Biểu đồ cột $1 ngày: ghi vào $2, công thành $3. Xem bảng số liệu bên dưới.', '.wlr-plot', 'Biểu đồ cột'],
-    [/^(\d{2}\/\d{2}) · Ghi vào (\d+) · Đã xong (\d+)$/, '$1 · Ghi vào $2 · Công thành $3', '.wlr-day', ' · Đã xong'],
+    [/^(\d{2}\/\d{2}(?:–\d{2}\/\d{2})?) · Ghi vào (\d+) · Đã xong (\d+)$/, '$1 · Ghi vào $2 · Công thành $3', '.wlr-day', ' · Đã xong'],
+    // v2.65.0 (Chiến Báo Hoàn Thiện)
+    [/^(trong \d+ ngày qua) · chưa tính (\d+) việc chưa rõ ngày xong$/, '$1 · chưa tính $2 nhiệm vụ chưa rõ ngày công thành', '.wlr-kpis small', ' · chưa tính'],
   ];
   // Nội dung người dùng và vùng không đổi chữ.
   const SKIP = [

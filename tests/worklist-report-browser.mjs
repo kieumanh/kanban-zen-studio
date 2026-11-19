@@ -709,7 +709,7 @@ try {
         open: 2,
         ages: [2, 0, 0, 0],
         oldestAge: 0,
-        periods: [7, 14, 30],
+        periods: [7, 14, 30, 60, 90],
       },
       'hàm số liệu: xong trước ngày ghi tính chờ 0, gỡ ngoài khoảng không tính, dự án lưu trữ không còn là việc chờ, ngày hỏng không vỡ',
     );

@@ -4398,6 +4398,30 @@
 :root[data-theme=dark] .wlr-tables thead th {
     color: #d0c3da
 }
+:root[data-theme=dark] .wlr-custom {
+    color: #d6caf1
+}
+:root[data-theme=dark] .wlr-custom input {
+    border: 1px solid #463f4f;
+    background: #1b181f;
+    color: #dcd3ec
+}
+:root[data-theme=dark] .wlr-custom input:focus-visible, :root[data-theme=dark] .wlr-fixbtn:focus-visible, :root[data-theme=dark] .wlr-fix summary:focus-visible {
+    outline: 2px solid #845cd6
+}
+:root[data-theme=dark] .wlr-hint {
+    color: #d0c3da
+}
+:root[data-theme=dark] .wlr-fixrow {
+    border: 1px solid #3d3843;
+    background: #1b181f
+}
+:root[data-theme=dark] .wlr-fixtitle {
+    color: #dcd3ec
+}
+:root[data-theme=dark] .wlr-fixname small {
+    color: #d0c3da
+}
 
 :root[data-theme=dark] {
   color-scheme: dark;

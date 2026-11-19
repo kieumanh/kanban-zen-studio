@@ -58,7 +58,7 @@ const seed = () => ({
   ],
   notes: [{ id: 'n1', type: 'note', title: 'Sổ tay', text: 'Nội dung A', url: '', group: 'Nhóm A', color: '#7950c8' }, { id: 'wk-2026-11-09', type: 'todo', title: 'Tuần A', text: '', url: '', group: '', color: '#7950c8', items: [{ text: 'Mục A', done: false }], weekPicks: [{ p: 'p1', t: 'p1t0' }], weekOf: '2026-11-09' }],
   dailyHabits: [{ id: 'h1', name: 'Đi bộ', icon: '🚶', color: '#2e7d5b', createdAt: '2026-10-01', goal: 7, done: [vn(1), vn(2), vn(3)] }],
-  worklist: { v: 1, items: [{ t: 'p1t1', a: '2026-11-10' }, { t: 'p2t0', a: '2026-11-11' }, { t: 'p1t4', a: '2026-11-11' }, { t: 'p1t5', a: '2026-11-03', x: '2026-11-08' }] },
+  worklist: { v: 1, items: [{ t: 'p1t1', a: '2026-11-10' }, { t: 'p2t0', a: '2026-11-11' }, { t: 'p1t4', a: '2026-11-11' }, { t: 'p1t5', a: '2026-11-03', x: '2026-11-08' }, { t: 'p2t3', a: '2026-11-05' }] }, // v2.65.0: p2t3 đã xong nhưng không có doneAt → có khung “Bổ sung ngày xong”
   trash: [{ id: 'tr1', at: Date.now() - 1000, kind: 'note', name: 'Cũ A', payload: JSON.stringify({ id: 'n9', type: 'note', title: 'Cũ A', text: '', url: '', group: '', color: '#7950c8' }), parent: '' }],
 });
 const GH = ({ context }) => context.addInitScript(() => localStorage.setItem('zen-style', 'giangho'));
@@ -134,6 +134,10 @@ try {
     await check('Liên hoàn lệnh (khung ghi thêm, bảng số liệu)', '#main');
     await page.locator('#main [data-wlr-period="30"]').click();
     await check('Liên hoàn lệnh (báo cáo ba mươi ngày)', '#main');
+    // v2.65.0: khoảng dài gộp theo tuần, ô số ngày, khung bổ sung ngày xong.
+    await page.locator('#main [data-wlr-period="60"]').click();
+    await page.evaluate(() => document.querySelectorAll('#main details').forEach((d) => (d.open = true)));
+    await check('Liên hoàn lệnh (báo cáo sáu mươi ngày theo tuần, bổ sung ngày xong)', '#main');
     await page.locator('#main [data-wl-drop]').first().click();
     await page.waitForFunction(() => document.querySelector('#toast')?.classList.contains('show'));
     await check('truyền thư khi gỡ khỏi chuỗi', '#toast');

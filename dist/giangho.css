@@ -7680,6 +7680,30 @@
 :root[data-style=giangho] .wlr-tables thead th {
     color: #624d40
 }
+:root[data-style=giangho] .wlr-custom {
+    color: #572627
+}
+:root[data-style=giangho] .wlr-custom input {
+    border: 1px solid #e2ccab;
+    background: #fffcf6;
+    color: #311f13
+}
+:root[data-style=giangho] .wlr-custom input:focus-visible, :root[data-style=giangho] .wlr-fixbtn:focus-visible, :root[data-style=giangho] .wlr-fix summary:focus-visible {
+    outline: 2px solid #b44148
+}
+:root[data-style=giangho] .wlr-hint {
+    color: #624d40
+}
+:root[data-style=giangho] .wlr-fixrow {
+    border: 1px solid #eeddc5;
+    background: #fffcf6
+}
+:root[data-style=giangho] .wlr-fixtitle {
+    color: #311f13
+}
+:root[data-style=giangho] .wlr-fixname small {
+    color: #624d40
+}
 :root[data-style=giangho][data-theme=dark] {
     --bg: #18130c;
     --paper: #1e1811;
@@ -15309,6 +15333,30 @@
     color: #f5dccc
 }
 :root[data-style=giangho][data-theme=dark] .wlr-tables thead th {
+    color: #e5cdbe
+}
+:root[data-style=giangho][data-theme=dark] .wlr-custom {
+    color: #eed6c6
+}
+:root[data-style=giangho][data-theme=dark] .wlr-custom input {
+    border: 1px solid #4e3f34;
+    background: #1e1811;
+    color: #f5dccc
+}
+:root[data-style=giangho][data-theme=dark] .wlr-custom input:focus-visible, :root[data-style=giangho][data-theme=dark] .wlr-fixbtn:focus-visible, :root[data-style=giangho][data-theme=dark] .wlr-fix summary:focus-visible {
+    outline: 2px solid #c24d53
+}
+:root[data-style=giangho][data-theme=dark] .wlr-hint {
+    color: #e5cdbe
+}
+:root[data-style=giangho][data-theme=dark] .wlr-fixrow {
+    border: 1px solid #433830;
+    background: #1e1811
+}
+:root[data-style=giangho][data-theme=dark] .wlr-fixtitle {
+    color: #f5dccc
+}
+:root[data-style=giangho][data-theme=dark] .wlr-fixname small {
     color: #e5cdbe
 }
 

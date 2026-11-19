@@ -3653,3 +3653,82 @@ body select:not([multiple]):not([size]):not([data-zen-native]):not(.wf-original-
     padding: 12px;
   }
 }
+/* v2.65.0 (Chiến Báo Hoàn Thiện): ô nhập số ngày, gợi ý, biểu đồ theo tuần và khung bổ sung ngày xong của báo cáo Liên hoàn lệnh. */
+.wlr-custom {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #4a3b66;
+}
+.wlr-custom input {
+  min-height: 44px;
+  box-sizing: border-box;
+  padding: 0 12px;
+  border: 1px solid #d9cce8;
+  border-radius: 12px;
+  background: #fffdfd;
+  color: #352a44;
+  font: inherit;
+  font-size: 14px;
+}
+.wlr-days {
+  width: 88px;
+}
+.wlr-custom input:focus-visible,
+.wlr-fixbtn:focus-visible,
+.wlr-fix summary:focus-visible {
+  outline: 2px solid #7950c8;
+  outline-offset: 2px;
+}
+.wlr-hint {
+  flex-basis: 100%;
+  font-size: 12px;
+  color: #685974;
+}
+.wlr-fix {
+  margin-top: 6px;
+}
+.wlr-fix summary {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.wlr-fixlist {
+  display: grid;
+  gap: 8px;
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.wlr-fixrow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+  padding: 10px 12px;
+  border: 1px solid #e8dff0;
+  border-radius: 12px;
+  background: #fffdfd;
+}
+.wlr-fixname {
+  display: grid;
+  flex: 1 1 200px;
+  min-width: 0;
+}
+.wlr-fixtitle {
+  font-size: 13px;
+  color: #352a44;
+  overflow-wrap: anywhere;
+}
+.wlr-fixname small {
+  color: #685974;
+}
+.wlr-fixbtn {
+  min-height: 44px;
+  border-radius: 12px;
+}
