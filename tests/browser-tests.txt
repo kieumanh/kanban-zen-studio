@@ -172,3 +172,4 @@ tests/waiting-browser.mjs
 tests/weekly-review-browser.mjs
 tests/backups-browser.mjs
 tests/growth-store-motion-browser.mjs
+tests/giangho-seal-browser.mjs

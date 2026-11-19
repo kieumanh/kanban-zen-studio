@@ -13,7 +13,30 @@
   const reduce = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
   const gh = () => root.dataset.style === 'giangho';
   const fxOn = () => gh() && root.dataset.ghFx !== 'off';
-  const SEAL = '<span>Công<br>thành</span>';
+  // Ấn triện kiểu kiếm hiệp (v2.58.0): khối son sứt mẻ, chữ và khung khắc lõm (khoét bằng mặt nạ nên nền thấu qua, sáng hay tối đều đẹp),
+  // vết mực mòn, góc vân. Mọi chi tiết cố định (một con dấu thật chỉ có một khuôn), chỉ vẽ bằng thuộc tính SVG nên chạy dưới CSP chặt.
+  // Chữ nằm trong mặt nạ nên textContent vẫn là “Công”“thành” (CSS viết hoa).
+  const SEAL_BODY = 'M6.2,5.5L11.2,5.4L14.8,3.0L21.3,3.5L26.3,2.8L31.9,3.2L38.1,2.3L43.4,2.7L49.9,3.2L56.1,3.0L61.2,3.1L68.0,2.7L73.1,2.7L79.5,2.3L84.6,2.3L88.4,5.3L94.5,5.5L94.8,11.6L96.5,14.9L96.8,20.3L96.6,25.9L97.4,32.5L96.6,37.9L96.4,44.1L96.8,50.4L97.1,55.5L96.7,61.6L97.0,67.7L97.2,73.7L97.6,79.8L96.4,85.8L94.7,88.4L93.8,93.2L89.0,94.5L84.7,97.5L79.6,97.3L73.1,96.3L67.6,97.1L61.2,96.5L56.4,96.8L50.3,96.7L44.0,97.6L37.8,96.4L32.9,97.2L25.8,96.8L20.4,96.6L14.2,96.4L11.3,95.0L6.4,93.5L4.6,88.6L2.8,85.0L3.1,79.3L2.9,73.1L3.2,67.2L3.4,62.4L3.7,55.2L3.6,50.0L2.9,43.6L2.4,38.1L3.5,32.3L3.1,26.2L2.8,20.5L3.2,15.3L4.7,11.3Z';
+  const SEAL_CUT =
+    // khung trong, hai mảnh trang trí (kim cương) ở giữa cạnh trên và dưới, góc khoét tròn
+    '<rect x="9" y="9" width="82" height="82" rx="2" fill="none" stroke="#000" stroke-width="1.7"/>' +
+    '<path d="M50,5.6 L54.2,9 L50,12.4 L45.8,9 Z M50,87.6 L54.2,91 L50,94.4 L45.8,91 Z" fill="#000"/>' +
+    '<g fill="#000"><circle cx="9" cy="9" r="3.4"/><circle cx="91" cy="9" r="3.4"/><circle cx="9" cy="91" r="3.4"/><circle cx="91" cy="91" r="3.4"/></g>' +
+    // đường gươm ngang giữa hai hàng chữ: thân thon, chuôi ở trái, mũi ở phải
+    '<path d="M17,50.5 L21,48.8 L83,50.5 L21,52.2 Z" fill="#000"/><path d="M17,47.2 L17,53.8" stroke="#000" stroke-width="1.6" stroke-linecap="round"/>' +
+    // chữ
+    '<text class="gh-seal-txt" x="50" y="43" text-anchor="middle" font-size="26" textLength="64" lengthAdjust="spacingAndGlyphs" fill="#000">Công</text>' +
+    '<text class="gh-seal-txt" x="50" y="78" text-anchor="middle" font-size="22" textLength="64" lengthAdjust="spacingAndGlyphs" fill="#000">thành</text>' +
+    // mực mòn: chấm li ti, vệt xước, vết sứt ở mép
+    '<g fill="#000"><circle cx="91.1" cy="89.1" r="1.0"/><circle cx="43.1" cy="93.0" r="1.6"/><circle cx="36.9" cy="35.0" r="0.8"/><circle cx="72.1" cy="33.3" r="0.6"/><circle cx="66.5" cy="26.6" r="0.5"/><circle cx="39.3" cy="13.8" r="0.5"/><circle cx="73.2" cy="68.7" r="0.8"/><circle cx="65.6" cy="13.7" r="0.5"/><circle cx="77.6" cy="15.1" r="1.5"/><circle cx="91.3" cy="56.1" r="0.8"/><circle cx="25.1" cy="83.5" r="1.5"/><circle cx="77.3" cy="66.2" r="0.5"/><circle cx="28.7" cy="21.3" r="0.6"/><circle cx="30.0" cy="47.9" r="0.7"/><circle cx="12.5" cy="69.8" r="0.5"/><circle cx="65.3" cy="41.5" r="1.5"/><circle cx="54.3" cy="68.8" r="1.0"/><circle cx="36.7" cy="18.3" r="1.6"/><circle cx="49.5" cy="84.4" r="1.1"/><circle cx="46.4" cy="75.4" r="1.3"/><circle cx="76.9" cy="62.5" r="1.1"/><circle cx="43.2" cy="7.9" r="0.5"/><circle cx="71.2" cy="80.8" r="1.0"/><circle cx="93.4" cy="55.4" r="0.8"/><circle cx="76.4" cy="33.0" r="0.5"/><circle cx="28.2" cy="60.8" r="0.5"/><circle cx="25.6" cy="22.3" r="0.7"/><circle cx="53.1" cy="62.1" r="1.2"/><circle cx="70.5" cy="91.2" r="0.5"/><circle cx="49.9" cy="75.5" r="1.3"/><circle cx="8.2" cy="61.8" r="1.2"/><circle cx="75.4" cy="67.9" r="0.6"/><circle cx="57.1" cy="20.6" r="0.7"/><circle cx="18.3" cy="10.9" r="0.5"/><circle cx="86.0" cy="66.3" r="0.7"/><circle cx="79.8" cy="13.4" r="0.8"/><circle cx="15.6" cy="39.1" r="0.8"/><circle cx="23.9" cy="80.5" r="1.0"/><circle cx="6.4" cy="74.4" r="0.6"/><circle cx="85.9" cy="84.9" r="1.2"/><circle cx="88.1" cy="62.1" r="0.7"/><circle cx="41.8" cy="66.9" r="1.1"/><circle cx="66.7" cy="41.7" r="1.5"/><circle cx="16.5" cy="67.6" r="0.7"/><circle cx="24.9" cy="12.8" r="1.4"/><circle cx="46.4" cy="73.9" r="1.0"/><circle cx="4.5" cy="28" r="2.6"/><circle cx="97" cy="60" r="3.1"/><circle cx="51" cy="3" r="2.2"/><circle cx="71" cy="97" r="3.4"/><circle cx="21" cy="96.5" r="2.4"/><circle cx="96.5" cy="13" r="2.1"/><circle cx="3.5" cy="72" r="1.9"/><circle cx="36" cy="3.5" r="1.6"/><circle cx="88" cy="96" r="2.0"/></g><g stroke="#000" fill="none" stroke-linecap="round"><path d="M35.4,63.6l-5.4,5.5" stroke-width="0.6"/><path d="M72.9,81.5l0.2,5.3" stroke-width="0.6"/><path d="M37.9,70.8l2.0,2.5" stroke-width="0.8"/><path d="M17.5,46.5l-4.2,4.1" stroke-width="0.7"/><path d="M24.8,22.7l0.2,4.5" stroke-width="0.6"/><path d="M40.2,34.0l-3.3,4.2" stroke-width="1.0"/><path d="M54.6,37.0l-4.4,1.4" stroke-width="0.8"/></g>';
+  let sealSeq = 0;
+  function sealSvg() {
+    const id = 'gh-sm' + ++sealSeq;
+    return (
+      '<svg class="gh-seal-svg" viewBox="0 0 100 100" focusable="false" aria-hidden="true"><defs><mask id="' + id + '" maskUnits="userSpaceOnUse" x="0" y="0" width="100" height="100"><rect width="100" height="100" fill="#fff"/>' + SEAL_CUT + '</mask></defs>' +
+      '<path class="gh-seal-body" d="' + SEAL_BODY + '" stroke-width="1.4" stroke-linejoin="round" mask="url(#' + id + ')"/></svg>'
+    );
+  }
 
   // ---- 1. Ấn son công thành ----------------------------------------------------------------------------------------------------
   // completionKindFor(p, t) luôn được gọi ngay trước celebrateCompletion() (như growth.js) nên dùng nó để biết việc vừa xong.
@@ -48,7 +71,7 @@
     const s = document.createElement('span');
     s.className = 'gh-stamp' + (reduce() ? ' is-still' : '');
     s.setAttribute('aria-hidden', 'true');
-    s.innerHTML = SEAL;
+    s.innerHTML = sealSvg();
     card.append(s);
     setTimeout(() => s.classList.add('is-fading'), 3000);
     setTimeout(() => s.remove(), 3700);
@@ -63,7 +86,7 @@
     const seal = document.createElement('span');
     seal.className = 'gh-overlay-seal';
     seal.setAttribute('aria-hidden', 'true');
-    seal.innerHTML = SEAL;
+    seal.innerHTML = sealSvg();
     card.prepend(seal);
   }
   const watch = (host) =>
@@ -193,5 +216,5 @@
     d.querySelector('button').focus();
   }
 
-  window.zenFx = { breakthrough, rank, incense, stampCard, sealOverlay };
+  window.zenFx = { breakthrough, rank, incense, stampCard, sealOverlay, sealSvg };
 })();

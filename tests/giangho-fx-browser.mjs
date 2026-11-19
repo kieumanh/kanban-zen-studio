@@ -56,11 +56,11 @@ try {
       const overlay = await page.evaluate(() => ({
         seal: document.querySelector('.gh-overlay-seal').textContent,
         fireworks: getComputedStyle(document.querySelector('.completion-overlay .completion-fireworks')).display,
-        border: getComputedStyle(document.querySelector('.gh-overlay-seal')).borderTopColor,
+        fill: getComputedStyle(document.querySelector('.gh-overlay-seal .gh-seal-body')).fill,
       }));
       assert.equal(overlay.seal, 'Côngthành', 'lời chúc mang con dấu Công thành' + at);
       assert.equal(overlay.fireworks, 'none', 'không còn pháo hoa tím hồng' + at);
-      assert.equal(overlay.border, 'rgb(184, 52, 74)', 'viền son' + at);
+      assert.equal(overlay.fill, 'rgb(184, 52, 74)', 'khối ấn màu son' + at); // v2.58.0: ấn triện SVG thay khung viền
       await page.waitForSelector('.task-card[data-task="' + id + '"] .gh-stamp');
       await page.waitForTimeout(800); // đo sau khi dấu đã đóng xong (lúc đầu phóng to 2 lần)
       const stamp = await page.evaluate((id) => {

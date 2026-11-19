@@ -181,29 +181,34 @@
 }
 :root[data-style=giangho] .gh-stamp,
 :root[data-style=giangho] .gh-overlay-seal {
-  display: grid;
-  place-items: center;
-  border: 2px solid var(--gh-seal);
-  border-radius: 8px;
+  display: block;
   color: var(--gh-seal);
-  background: rgba(255, 250, 242, 0.86);
+}
+/* v2.58.0: ấn triện kiểu kiếm hiệp, vẽ bằng SVG (dist/giangho-fx.js sealSvg): khối son sứt mẻ, chữ và khung khắc lõm, vết mực mòn. */
+:root[data-style=giangho] .gh-seal-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+:root[data-style=giangho] .gh-seal-body {
+  fill: var(--gh-seal);
+  stroke: var(--gh-seal);
+  opacity: 0.94;
+}
+:root[data-style=giangho] .gh-seal-txt {
   font-family: var(--gh-serif);
-  font-weight: 700;
-  line-height: 1.05;
-  text-align: center;
+  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
-  box-shadow: inset 0 0 0 3px rgba(255, 250, 242, 0.86), inset 0 0 0 4px var(--gh-seal);
 }
 :root[data-style=giangho] .gh-stamp {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 8px;
+  right: 8px;
   z-index: 3;
-  width: 58px;
-  height: 58px;
-  font-size: 12px;
-  transform: rotate(-12deg);
+  width: 66px;
+  height: 66px;
+  transform: rotate(-9deg);
   pointer-events: none;
   animation: gh-stamp 0.62s cubic-bezier(0.2, 0.9, 0.25, 1.15) both;
 }
@@ -212,19 +217,32 @@
   transition: opacity 0.6s ease;
 }
 :root[data-style=giangho] .gh-overlay-seal {
+  position: relative;
   flex: 0 0 auto;
-  width: 64px;
-  height: 64px;
-  font-size: 13px;
-  transform: rotate(-8deg);
+  width: 76px;
+  height: 76px;
+  transform: rotate(-7deg);
   animation: gh-stamp 0.7s cubic-bezier(0.2, 0.9, 0.25, 1.15) 0.1s both;
+}
+/* Sóng ấn: khi con dấu đóng xuống, một vòng son loang ra rồi tan. */
+:root[data-style=giangho] .gh-stamp::after,
+:root[data-style=giangho] .gh-overlay-seal::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 2px solid var(--gh-seal);
+  border-radius: 10px;
+  opacity: 0;
+  animation: gh-stamp-ring 0.8s ease-out 0.55s both;
 }
 :root[data-style=giangho] .completion-overlay.gh-sealed .completion-fireworks,
 :root[data-style=giangho] .completion-overlay.gh-sealed .completion-icon {
   display: none;
 }
 :root[data-style=giangho] .gh-stamp.is-still,
-:root[data-style=giangho] .completion-overlay.is-still .gh-overlay-seal {
+:root[data-style=giangho] .completion-overlay.is-still .gh-overlay-seal,
+:root[data-style=giangho] .gh-stamp.is-still::after,
+:root[data-style=giangho] .completion-overlay.is-still .gh-overlay-seal::after {
   animation: none;
 }
 @keyframes gh-stamp {
@@ -234,17 +252,22 @@
   }
   60% {
     opacity: 1;
-    transform: scale(0.92) rotate(-10deg);
+    transform: scale(0.92) rotate(-8deg);
   }
   100% {
     opacity: 1;
-    transform: scale(1) rotate(-12deg);
+    transform: scale(1) rotate(-9deg);
   }
 }
-:root[data-style=giangho][data-theme=dark] .gh-stamp,
-:root[data-style=giangho][data-theme=dark] .gh-overlay-seal {
-  background: rgba(36, 30, 25, 0.9);
-  box-shadow: inset 0 0 0 3px rgba(36, 30, 25, 0.9), inset 0 0 0 4px var(--gh-seal);
+@keyframes gh-stamp-ring {
+  0% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.32);
+  }
 }
 
 /* Nén hương: que hương đứng cạnh đồng hồ, phần đã cháy (--burn 0…1) thành tro, đốm lửa và khói khi đang đếm. */
@@ -448,6 +471,8 @@
 @media (prefers-reduced-motion: reduce) {
   :root[data-style=giangho] .gh-stamp,
   :root[data-style=giangho] .gh-overlay-seal,
+  :root[data-style=giangho] .gh-stamp::after,
+  :root[data-style=giangho] .gh-overlay-seal::after,
   :root[data-style=giangho] .gh-incense.is-lit .gh-incense-smoke {
     animation: none;
   }
