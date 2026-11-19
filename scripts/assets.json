@@ -430,6 +430,11 @@
     "text/javascript; charset=utf-8"
   ],
   [
+    "/growth-queue.js",
+    "growth-queue.js",
+    "text/javascript; charset=utf-8"
+  ],
+  [
     "/growth-scene.js",
     "growth-scene.js",
     "text/javascript; charset=utf-8"

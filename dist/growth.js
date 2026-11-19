@@ -336,7 +336,7 @@
       ? earnedTotal() === 0 ? 'Bát mạch đều ở 0. Hoàn thành một việc để khai mạch.' : 'Tu vi hiện có đang ở 0 sau khi đổi bảo vật. Hoàn thành việc để tu luyện tiếp.'
       : 'Sở trường: <strong>' + ex.top.name + '</strong> (' + fmt(ex.mx) + ') · Cần khổ luyện: <strong>' + ex.low.name + '</strong> (' + fmt(ex.mn) + ')';
     return '<div class="gr-page">' + heading('GIANG HỒ TU LUYỆN', 'Tu vi của ' + esc(heroName()), sub, '<div class="gr-head-actions"><button type="button" class="btn primary" data-gr-spend>Đổi bảo vật</button><button type="button" class="btn" data-gr-report>Xem báo cáo tu luyện</button><button type="button" class="btn" data-gr-change>Đổi hiệp khách</button></div>') +
-      '<div class="gr-grid">' + stage(s) + '<section class="panel gr-radar-panel" aria-label="Bát phương đồ nội lực"><h2>Bát phương đồ</h2><div class="gr-radar-wrap" id="gr-radar">' + radar(s) + '</div><p class="gr-summary">' + summary + '</p>' + wallet(s) + (window.zenStore ? '<p class="gr-store-go"><button type="button" class="btn" data-gr-store-go>Ghé Tàng Bảo Các</button></p>' : '') + '</section></div>' +
+      (window.zenQueue ? window.zenQueue.card() : '') + '<div class="gr-grid">' + stage(s) + '<section class="panel gr-radar-panel" aria-label="Bát phương đồ nội lực"><h2>Bát phương đồ</h2><div class="gr-radar-wrap" id="gr-radar">' + radar(s) + '</div><p class="gr-summary">' + summary + '</p>' + wallet(s) + (window.zenStore ? '<p class="gr-store-go"><button type="button" class="btn" data-gr-store-go>Ghé Tàng Bảo Các</button></p>' : '') + '</section></div>' +
       (window.zenStory ? window.zenStory.panel() : '') + (window.zenGods ? window.zenGods.panel() : '') /* v2.13.0 Thần giới */ + (window.zenAch ? window.zenAch.panel() : '') /* v1.99.0 Bảng vàng */ + axisRows(s) + history() + (window.zenStore ? window.zenStore.panel() : '') /* v2.34.0 Tàng Bảo Các */ + spendPanel() + '<section class="panel gr-how"><h2>Tâm pháp tu luyện</h2><ul class="gr-how-list"><li>Mỗi việc hoàn thành cho các hạ <strong>2 lần vận công</strong> (1 điểm). Bảng vận công hiện ra trước lời chúc mừng.</li><li>Mỗi lần bấm <strong>+</strong> dồn 0,5 điểm vào mạch đã chọn; dồn cả hai lần vào một mạch cũng được.</li><li>Mỗi việc chỉ được vận công một lần.</li><li>Bấm <strong>Đổi bảo vật</strong> để ghi lại món đã mua hoặc quy đổi; tu vi bị trừ khỏi Bát phương đồ. Ghi nhầm thì sửa hoặc hủy quy đổi để hoàn điểm. Cấp và cảnh giới tính theo tổng tu vi đã luyện nên không tụt khi đổi bảo vật.</li><li><strong>100 cấp</strong> chia 10 cảnh giới, mỗi cấp một danh xưng. Cảnh giới sau tốn chừng gấp đôi cảnh giới trước: 0,5 điểm mỗi cấp ở Sơ nhập giang hồ, 1 điểm ở Tam lưu cao thủ… 170,5 điểm ở Thiên nhân hợp nhất.</li><li>Cấp 10, 20 … 90 là <strong>ải đột phá</strong> sang cảnh giới mới, tốn chừng ba lần cấp thường.</li><li><strong>Nhịp chuẩn</strong> của thang: ' + paceText() + '.</li><li>Từ cấp 91, <strong>mỗi cấp tốn gấp đôi cấp trước</strong>: ' + doublingText() + ' điểm ở cấp 99. Cấp 100 là ải nặng nhất: ' + fmt(levelCost(GOD)) + ' điểm, gần bằng cả chín cấp trước cộng lại. Đủ ' + fmt(LEVEL_AT[GOD]) + ' điểm thì đột phá thành Thần. Trên Thần còn 3 thần cấp tới <strong>Thần Vương</strong>, mỗi thần cấp ' + fmt(NORMAL[10]) + ' điểm.</li><li>Từ cấp 100, <strong>đủ điểm chưa đủ để lên cấp</strong>: còn phải lĩnh ngộ tám quy luật tự nhiên (điểm đã tích lũy của tám chỉ số) và thắng các vị thần đang giữ ngôi. Xem khung Thần giới.</li></ul>' + scaleTable(r) + '</section></div>';
   }
 
@@ -502,7 +502,7 @@
       if (!a.key) delete entry.k;
       if (!entry.n) delete entry.n;
       const t0 = earnedTotal(), s0 = earnedScores(), before = realmOf(t0, s0);
-      if (!wfSave(() => { data.growth.log.push(entry); data.growth.spend ||= []; compact(); })) return notify('Chưa lưu được điểm. Hãy thử lại.');
+      if (!wfSave(() => { data.growth.log.push(entry); data.growth.spend ||= []; compact(); if (a.source === 'task') window.zenQueue?.clear(a.key); })) return notify('Chưa lưu được điểm. Hãy thử lại.');
       const t1 = earnedTotal(), s1 = earnedScores(), after = realmOf(t1, s1);
       crossing = [before.level, after.level, t0, t1, s0, s1];
       // Thông báo điểm nghiệp (bật mặc định, tắt ở Cài đặt → Thông báo): lên cấp, đột phá cảnh giới mới; với việc hằng ngày còn báo số điểm vừa cộng.
@@ -590,8 +590,15 @@
     }
     g.log.unshift(...packed.map((x) => x.entry));
   }
+  // v2.67.0 (Tích Công): bấm Để sau (hoặc Esc) ở bảng của một việc thì việc không mất điểm: vào hàng chờ vận công (growth-queue.js).
+  function deferAward(how) {
+    if (award && award.source === 'task' && award.key) window.zenQueue?.defer(award.key.slice(5), award.title, award.queued, how);
+  }
   function openAward(opt) {
-    if (award) closeAward(false);
+    if (award) {
+      deferAward('auto');
+      closeAward(false);
+    }
     // v2.66.0 (Gieo Nhân): việc đã gieo nhân cho một phương thì công lực dồn sẵn vào phương ấy; người dùng chỉ cần bấm Lưu (hoặc Hoàn tác để dồn chỗ khác).
     const pre = opt.axis ? AXES.findIndex((x) => x.id === opt.axis) : -1;
     const d = document.createElement('dialog');
@@ -602,7 +609,7 @@
       '<p class="gr-budget" aria-live="polite"></p><div class="gr-cols" role="group" aria-label="Bát mạch"></div><p class="gr-live sr-only" role="status" aria-live="polite"></p>' +
       '<footer class="gr-award-foot"><button type="button" class="btn ghost" data-gr-undo>Hoàn tác</button><span class="gr-grow"></span><button type="button" class="btn" data-gr-skip>Để sau</button><button type="button" class="btn primary" data-gr-save>Lưu công lực</button></footer></form>';
     document.body.append(d);
-    award = { source: opt.source, key: opt.key, title: opt.title, steps: opt.steps, spent: 0, add: Array(8).fill(0), stack: [], last: null, el: d, then: opt.then };
+    award = { source: opt.source, key: opt.key, title: opt.title, steps: opt.steps, spent: 0, add: Array(8).fill(0), stack: [], last: null, el: d, then: opt.then, queued: !!opt.queued };
     if (pre >= 0) {
       award.add[pre] = opt.steps;
       award.spent = opt.steps;
@@ -611,6 +618,7 @@
     }
     d.addEventListener('cancel', (e) => {
       e.preventDefault();
+      deferAward('esc');
       closeAward(false);
     });
     paintAward();
@@ -633,6 +641,7 @@
     const task = ctx && kind !== 'check' ? data.projects.flatMap((p) => p.tasks).find((t) => t.id === ctx.id) : null;
     const g = growth();
     if (!g || contentReadOnly || !task || task.col !== 'Done' || Date.now() - ctx.at > 3000 || isScored(g, 'task:' + task.id)) return baseCelebrate.apply(this, args);
+    if (window.zenQueue?.batch(task)) return baseCelebrate.apply(this, args);
     openAward({ source: 'task', key: 'task:' + task.id, title: task.title, steps: TASK_STEPS, axis: task.axis, then: () => baseCelebrate.apply(window, args) });
   };
   // Việc hằng ngày vừa đủ chuỗi 7, 14, 21… ngày liền (habits.js gọi sau khi tích): hỏi điểm một lần cho mỗi việc mỗi ngày.
@@ -883,7 +892,7 @@
     render();
     document.querySelector('[data-gr-hist="' + histSel + '"]')?.focus({ preventScroll: true });
   });
-  window.zenGrowth = { AXES, started, scores, earnedScores, spentScores, total, realmOf, myRealm, realmInfo, levelLabel, tuviAt, REALMS, REALM_FROM, LEVEL_NAMES, LEVEL_AT, LEVEL_MAX, GOD, extremes, fmt, openAward, growth, STEP, iconSvg, habitStreak, buildReport, tipsOf, openReport, heroName, openSpend };
+  window.zenGrowth = { TASK_STEPS, isScored, AXES, started, scores, earnedScores, spentScores, total, realmOf, myRealm, realmInfo, levelLabel, tuviAt, REALMS, REALM_FROM, LEVEL_NAMES, LEVEL_AT, LEVEL_MAX, GOD, extremes, fmt, openAward, growth, STEP, iconSvg, habitStreak, buildReport, tipsOf, openReport, heroName, openSpend };
 
   // ---- Sử dụng điểm (v1.81.0) ---------------------------------------------------------------------------------------------
   // Form ghi vật phẩm đã mua / quy đổi và số điểm trừ ở từng chỉ số. Mỗi lần quy đổi là một dòng trong data.growth.spend;
@@ -1147,7 +1156,10 @@
       award.last = award.stack.length ? award.stack.at(-1) : null;
       return paintAward();
     }
-    if (t.hasAttribute('data-gr-skip')) return closeAward(false);
+    if (t.hasAttribute('data-gr-skip')) {
+      deferAward('skip');
+      return closeAward(false);
+    }
     if (t.hasAttribute('data-gr-save')) return closeAward(true);
     if (t.hasAttribute('data-gr-report') || t.hasAttribute('data-gr-back')) {
       reporting = t.hasAttribute('data-gr-report');

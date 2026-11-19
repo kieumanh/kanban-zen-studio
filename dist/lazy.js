@@ -128,11 +128,12 @@
   function validGrowth(g) {
     if (g === undefined) return true;
     if (!g || typeof g !== 'object' || Array.isArray(g)) return false;
-    if (!Object.keys(g).every((k) => ['v', 'hero', 'name', 'since', 'log', 'notify', 'tips', 'spend'].includes(k))) return false;
+    if (!Object.keys(g).every((k) => ['v', 'hero', 'name', 'since', 'log', 'notify', 'tips', 'batch', 'spend'].includes(k))) return false;
     if (g.v !== 1 || !['nam', 'nu'].includes(g.hero) || !isDate(g.since)) return false;
     if (g.name !== undefined && (typeof g.name !== 'string' || g.name.length > 30)) return false;
     if (g.notify !== undefined && typeof g.notify !== 'boolean') return false;
     if (g.tips !== undefined && typeof g.tips !== 'boolean') return false;
+    if (g.batch !== undefined && typeof g.batch !== 'boolean') return false;
     if (!Array.isArray(g.log) || g.log.length > LOG_MAX) return false;
     const points = (p) => Array.isArray(p) && p.length === 8 && p.every((x) => Number.isInteger(x) && x >= 0 && x <= 1000000) && p.some((x) => x > 0);
     const seen = new Set();

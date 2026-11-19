@@ -1054,3 +1054,15 @@ dialog.gr-sow .btn{min-height:44px;border-radius:12px}
 .gr-sown{margin:8px 0 0;padding:8px 12px;border-left:3px solid var(--gr-seal,currentColor);border-radius:0 12px 12px 0;background:color-mix(in srgb,var(--gr-seal,currentColor) 8%,transparent)}
 .task-card-sow{display:inline-flex;align-items:center;gap:6px;margin:0 0 6px;font-size:12px;font-weight:600;color:var(--muted)}
 .task-card-sow i{flex:none;width:8px;height:8px;border-radius:50%;background:var(--c)}
+/* v2.67.0 Tích Công */
+.gr-queue{margin:14px 0 0;padding:14px 16px;border:1px solid var(--line);border-radius:16px;background:var(--paper)}
+.gr-queue:focus-visible{outline:2px solid var(--gr-seal,currentColor);outline-offset:2px}
+.gr-queue-head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px}
+.gr-queue-head h2{margin:0;font-size:18px}
+.gr-queue-head .btn,.gr-queue-list .btn{min-height:44px;border-radius:12px}
+.gr-queue-n{display:inline-block;min-width:24px;padding:0 8px;border-radius:12px;background:var(--line);font-size:13px;text-align:center}
+.gr-queue .help-copy{margin:6px 0 0}
+.gr-queue-list{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:8px}
+.gr-queue-list li{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 12px;padding:8px 12px;border:1px solid var(--line);border-radius:12px}
+.gr-queue-name{display:grid;flex:1 1 200px;min-width:0;overflow-wrap:anywhere}
+.gr-queue-name small{color:var(--muted)}

@@ -90,7 +90,8 @@
       const g = window.zenGrowth.growth(), ro = typeof contentReadOnly !== 'undefined' && contentReadOnly;
       gr.insertAdjacentHTML('beforeend', '<p class="help-copy">Đồng bộ theo tài khoản, áp dụng cho mọi thiết bị.</p>' +
         check('nf-growth-notify', g.notify !== false, 'Thông báo điểm nghiệp: báo số điểm vừa cộng, khi hiệp khách lên cấp và khi đột phá cảnh giới mới.', ro) +
-        check('nf-growth-tips', g.tips !== false, 'Gợi ý cải thiện hằng tuần: mỗi tuần một bí kíp trong chuông thông báo, dựa trên mạch đang yếu nhất.', ro) + '<p class="nf-status" role="status"></p>');
+        check('nf-growth-tips', g.tips !== false, 'Gợi ý cải thiện hằng tuần: mỗi tuần một bí kíp trong chuông thông báo, dựa trên mạch đang yếu nhất.', ro) +
+        check('nf-growth-batch', g.batch === true, 'Gộp cuối ngày: xong việc không hiện bảng vận công, việc vào hàng chờ để chia một lượt ở trang Điểm tích lũy.', ro) + '<p class="nf-status" role="status"></p>');
     } else {
       gr.insertAdjacentHTML('beforeend', '<p class="help-copy">Chọn hiệp khách ở mục Điểm tích lũy để bật thông báo điểm nghiệp và gợi ý cải thiện hằng tuần.</p><div><button type="button" class="btn" data-nf-open-growth>Mở Điểm tích lũy</button></div>');
     }
@@ -114,6 +115,12 @@
       localWrite(window.zenHabits.notifyKey(el.id === 'nf-habit-due' ? 'due' : 'nudge'), el.checked ? '1' : '0');
       refreshBell();
       status(el, el.checked ? 'Đã bật.' : 'Đã tắt trên thiết bị này.');
+    } else if (el.id === 'nf-growth-batch') {
+      if (!wfSave(() => { data.growth.batch = el.checked; })) {
+        el.checked = !el.checked;
+        return status(el, 'Chưa lưu được. Hãy thử lại.');
+      }
+      status(el, el.checked ? 'Đã bật gộp cuối ngày.' : 'Đã trở lại hỏi từng việc.');
     } else if (el.id === 'nf-growth-notify' || el.id === 'nf-growth-tips') {
       const key = el.id === 'nf-growth-notify' ? 'notify' : 'tips';
       if (!wfSave(() => { data.growth[key] = el.checked; })) {

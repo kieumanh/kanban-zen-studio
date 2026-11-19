@@ -6204,6 +6204,22 @@
 :root[data-style=giangho] .task-card-sow i {
     background: var(--c)
 }
+:root[data-style=giangho] .gr-queue {
+    border: 1px solid var(--line);
+    background: var(--paper)
+}
+:root[data-style=giangho] .gr-queue:focus-visible {
+    outline: 2px solid var(--gr-seal,currentColor)
+}
+:root[data-style=giangho] .gr-queue-n {
+    background: var(--line)
+}
+:root[data-style=giangho] .gr-queue-list li {
+    border: 1px solid var(--line)
+}
+:root[data-style=giangho] .gr-queue-name small {
+    color: var(--muted)
+}
 :root[data-style=giangho] {
     --muted: #685345;
     --text-muted: #685345
@@ -13884,6 +13900,22 @@
 }
 :root[data-style=giangho][data-theme=dark] .task-card-sow i {
     background: var(--c)
+}
+:root[data-style=giangho][data-theme=dark] .gr-queue {
+    border: 1px solid var(--line);
+    background: var(--paper)
+}
+:root[data-style=giangho][data-theme=dark] .gr-queue:focus-visible {
+    outline: 2px solid var(--gr-seal,currentColor)
+}
+:root[data-style=giangho][data-theme=dark] .gr-queue-n {
+    background: var(--line)
+}
+:root[data-style=giangho][data-theme=dark] .gr-queue-list li {
+    border: 1px solid var(--line)
+}
+:root[data-style=giangho][data-theme=dark] .gr-queue-name small {
+    color: var(--muted)
 }
 :root[data-style=giangho][data-theme=dark] {
     --muted: #e1ccbf;

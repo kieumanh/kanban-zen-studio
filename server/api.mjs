@@ -692,6 +692,7 @@ export function validWorkspace(d) {
               (str(t.doneAt, 10) && validDate(t.doneAt))) &&
             // v2.66.0 (Gieo Nhân): phương tu luyện mà việc mang sẵn (tùy chọn); không có là việc thường.
             (t.axis === undefined || GROWTH_AXIS_IDS.includes(t.axis)) &&
+            (t.xpWait === undefined || t.xpWait === true) &&
             p.columns.includes(t.col) &&
             (!t.labels ||
               (Array.isArray(t.labels) &&
