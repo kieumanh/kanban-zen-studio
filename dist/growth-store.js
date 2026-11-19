@@ -9,6 +9,7 @@
  *    (growth.js, openSpend) với tên món điền sẵn, hiệp khách tự nhập số điểm trừ ở từng mạch. Ghi vào sổ bảo vật (data.growth.spend) như mọi lần
  *    quy đổi khác nên không đổi lược đồ dữ liệu.
  *  - Chỉ vẽ bằng thuộc tính SVG (không style nội tuyến trong hình) nên chạy dưới CSP chặt.
+ *  - v2.57.0: tranh chia lớp (nền tĩnh + lớp đèn, tóc, thân, đầu, quạt, khói) để chuyển động chạy trên bộ ghép lớp; xem khối “Tranh quầy theo lớp”.
  *  API: zenStore.ITEMS, .OWNER, .scene(), .portrait(), .pic(mã, cỡ, màu), .advise(món, số dư), .hintOf, .panel(), .strip(món), .ask(mã), .buy(mã). */
 (() => {
   'use strict';
@@ -16,10 +17,11 @@
   const esc = (s) => String(s).replace(/[&<>"']/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[ch]);
 
   const f1 = (n) => (Math.round(n * 10) / 10).toString();
-  function lantern(x, y, s, cls) {
+  // Đèn lồng: chỉ vẽ hình (tâm ở x); hộp cắt và điểm treo do lamp() tính để đặt thành một lớp riêng.
+  function lantern(x, y, s) {
     const rx = 14 * s, ry = 16 * s, top = y - ry - 4 * s;
     return (
-      '<g transform="translate(' + x + ' 0)"><g class="gr-st-sway ' + (cls || '') + '">' +
+      '<g transform="translate(' + x + ' 0)">' +
       '<circle cx="0" cy="' + f1(y) + '" r="' + f1(34 * s) + '" fill="url(#gst-glow)"/>' +
       '<line x1="0" y1="12" x2="0" y2="' + f1(top) + '" stroke="#2a190e" stroke-width="1.4"/>' +
       '<rect x="' + f1(-6 * s) + '" y="' + f1(top) + '" width="' + f1(12 * s) + '" height="' + f1(4.5 * s) + '" rx="1.2" fill="#d4a84a"/>' +
@@ -28,7 +30,7 @@
       '<rect x="' + f1(-5.5 * s) + '" y="' + f1(y + ry - 1) + '" width="' + f1(11 * s) + '" height="' + f1(4 * s) + '" rx="1.2" fill="#d4a84a"/>' +
       '<line x1="0" y1="' + f1(y + ry + 3 * s) + '" x2="0" y2="' + f1(y + ry + 12 * s) + '" stroke="#d4a84a" stroke-width="1.2"/>' +
       '<path d="M' + f1(-3.5 * s) + ',' + f1(y + ry + 17 * s) + ' L0,' + f1(y + ry + 9 * s) + ' L' + f1(3.5 * s) + ',' + f1(y + ry + 17 * s) + '" fill="none" stroke="#c9382a" stroke-width="' + f1(1.6 * s) + '" stroke-linecap="round"/>' +
-      '</g></g>'
+      '</g>'
     );
   }
   function books(x, base, specs) {
@@ -93,7 +95,7 @@
     // sổ và bút
     s += '<g><path d="M250,166 L250,152 Q266,148 276,152 L276,166Z" fill="#f4e8cc"/><path d="M276,166 L276,152 Q286,148 302,152 L302,166Z" fill="#efe0bc"/><path d="M254,156 h16 M254,160 h16 M280,156 h18 M280,160 h14" stroke="#9a7a52" stroke-width="1" opacity=".7"/><path d="M276,152 L276,166" stroke="#b9996a" stroke-width="1"/><path d="M262,170 L296,140" stroke="#3a2316" stroke-width="2.2" stroke-linecap="round"/><path d="M296,140 L300,136" stroke="#f1dca0" stroke-width="2.6" stroke-linecap="round"/></g>';
     // chén trà
-    s += '<g><ellipse cx="311" cy="165" rx="9" ry="2.4" fill="#cdbba0"/><path d="M303,156 Q303,166 311,166 Q319,166 319,156Z" fill="#f7eedb"/><ellipse cx="311" cy="156" rx="8" ry="2.2" fill="#c98a4a"/><path class="gr-st-steam" d="M308,150 q-3,-5 0,-9 q3,-4 0,-8" fill="none" stroke="#fff" stroke-width="1.4" opacity=".55" stroke-linecap="round"/><path class="gr-st-steam gr-st-steam-b" d="M314,150 q3,-5 0,-9 q-3,-4 0,-8" fill="none" stroke="#fff" stroke-width="1.2" opacity=".45" stroke-linecap="round"/></g>';
+    s += '<g><ellipse cx="311" cy="165" rx="9" ry="2.4" fill="#cdbba0"/><path d="M303,156 Q303,166 311,166 Q319,166 319,156Z" fill="#f7eedb"/><ellipse cx="311" cy="156" rx="8" ry="2.2" fill="#c98a4a"/></g>';
     return s;
   }
 
@@ -137,7 +139,7 @@
     s += '<ellipse cx="190" cy="121" rx="6.5" ry="3.8" fill="#ff9fb2" opacity=".55"/><ellipse cx="230" cy="121" rx="6.5" ry="3.8" fill="#ff9fb2" opacity=".55"/>';
   
     const eye = (cx, dir) =>
-      '<g class="gr-st-eye"><ellipse cx="' + cx + '" cy="109" rx="7" ry="8" fill="#fffaf5"/><ellipse cx="' + (cx + dir * 0.6) + '" cy="110" rx="5.2" ry="6.8" fill="#3a2540"/><ellipse cx="' + (cx + dir * 0.6) + '" cy="112" rx="3.2" ry="3.8" fill="#6a4a78" opacity=".7"/><circle cx="' + (cx + dir * 2.2) + '" cy="106.6" r="2.1" fill="#fff"/><circle cx="' + (cx - dir * 1.6) + '" cy="113.2" r="1" fill="#fff" opacity=".85"/></g>' +
+      '<g><ellipse cx="' + cx + '" cy="109" rx="7" ry="8" fill="#fffaf5"/><ellipse cx="' + (cx + dir * 0.6) + '" cy="110" rx="5.2" ry="6.8" fill="#3a2540"/><ellipse cx="' + (cx + dir * 0.6) + '" cy="112" rx="3.2" ry="3.8" fill="#6a4a78" opacity=".7"/><circle cx="' + (cx + dir * 2.2) + '" cy="106.6" r="2.1" fill="#fff"/><circle cx="' + (cx - dir * 1.6) + '" cy="113.2" r="1" fill="#fff" opacity=".85"/></g>' +
       '<path d="M' + (cx - dir * 7.8) + ',108 Q' + cx + ',99.5 ' + (cx + dir * 7.8) + ',107.5" fill="none" stroke="' + INK + '" stroke-width="2.4" stroke-linecap="round"/><path d="M' + (cx + dir * 7.8) + ',107.5 L' + (cx + dir * 11) + ',104.6" stroke="' + INK + '" stroke-width="1.8" stroke-linecap="round"/><path d="M' + (cx + dir * 5) + ',103.6 L' + (cx + dir * 7.4) + ',100.2 M' + (cx + dir * 1.5) + ',101.6 L' + (cx + dir * 2.4) + ',98" stroke="' + INK + '" stroke-width="1.1" stroke-linecap="round"/>';
     s += eye(197, -1) + eye(223, 1);
     s += '<path d="M188,96 Q197,90.5 206,94.5 M214,94.5 Q223,90.5 232,96" fill="none" stroke="#2a2030" stroke-width="1.7" stroke-linecap="round"/>';
@@ -168,15 +170,25 @@
     let s = '';
     s += '<g transform="translate(183 62)"><circle r="10" fill="' + PINK + '"/><circle cx="-5" cy="-3" r="6.4" fill="#f6a9ba"/><circle cx="5" cy="-3" r="6.4" fill="#f6a9ba"/><circle cx="0" cy="4.4" r="6.6" fill="#f6a9ba"/><circle r="4.4" fill="#ffd0da"/><circle r="1.9" fill="#ffd45a"/><path d="M-9,-5 q4,-4 9,-4 M-7,6 q7,4 14,-1" stroke="#d96a88" stroke-width="1" fill="none" opacity=".7"/></g>';
     s += '<path d="M196,52 L252,72" stroke="' + GOLD + '" stroke-width="2.6" stroke-linecap="round"/><circle cx="252" cy="72" r="2.8" fill="' + GOLD + '"/>';
-    s += '<g class="gr-st-beads"><path d="M246,70 Q248,88 244,98 M252,72 Q256,92 252,104 M257,74 Q262,92 259,102" stroke="' + GOLD + '" stroke-width=".9" fill="none"/><circle cx="244" cy="99" r="2.2" fill="#fff4e6"/><circle cx="252" cy="105" r="2.4" fill="#7fd0b0"/><circle cx="259" cy="103" r="2.2" fill="#fff4e6"/></g>';
     s += '<path d="M181,128 L181,134" stroke="' + GOLD + '" stroke-width=".9"/><ellipse cx="181" cy="137" rx="2.2" ry="3.4" fill="#7fd0b0"/><path d="M239,128 L239,134" stroke="' + GOLD + '" stroke-width=".9"/><ellipse cx="239" cy="137" rx="2.2" ry="3.4" fill="#7fd0b0"/>';
   
     return s;
   }
 
+  // Chuỗi hạt ngọc treo ở trâm: lớp riêng để đung đưa độc lập với đầu.
+  function beads() {
+    return '<path d="M246,70 Q248,88 244,98 M252,72 Q256,92 252,104 M257,74 Q262,92 259,102" stroke="' + GOLD + '" stroke-width=".9" fill="none"/><circle cx="244" cy="99" r="2.2" fill="#fff4e6"/><circle cx="252" cy="105" r="2.4" fill="#7fd0b0"/><circle cx="259" cy="103" r="2.2" fill="#fff4e6"/>';
+  }
+  // Mí mắt khép: hai nửa elip da phủ mắt rồi vẽ nét mắt nhắm; chỉ đổi độ mờ nên chạy trên bộ ghép lớp.
+  function lids() {
+    let s = '';
+    for (const [cx, dir] of [[197, -1], [223, 1]]) s += '<ellipse cx="' + cx + '" cy="106.8" rx="12" ry="10.6" fill="' + SKIN + '"/><path d="M' + (cx - 7.4) + ',109.2 Q' + cx + ',113.6 ' + (cx + 7.4) + ',109.2" fill="none" stroke="' + INK + '" stroke-width="2.2" stroke-linecap="round"/><path d="M' + (cx + dir * 7.4) + ',109.2 L' + (cx + dir * 10.4) + ',107" stroke="' + INK + '" stroke-width="1.5" stroke-linecap="round"/>';
+    return s;
+  }
+
   function fanArm() {
     let s = '';
-    s += '<g class="gr-st-fan"><path d="M252,150 C268,148 282,136 288,120 L302,128 C296,148 276,166 256,172Z" fill="url(#gst-robe)"/><path d="M288,120 L302,128 L299,134 L284,126Z" fill="' + PINK + '"/>';
+    s += '<g><path d="M252,150 C268,148 282,136 288,120 L302,128 C296,148 276,166 256,172Z" fill="url(#gst-robe)"/><path d="M288,120 L302,128 L299,134 L284,126Z" fill="' + PINK + '"/>';
     s += '<path d="M296,128 L262,100 A44,44 0 0 1 322,98Z" fill="#fff0d8" stroke="' + GOLD + '" stroke-width="1.6" stroke-linejoin="round"/>';
     for (const a of [-142, -126, -110, -94, -78]) {
       const r = 44, ax = 296 + r * Math.cos((a * Math.PI) / 180), ay = 128 + r * Math.sin((a * Math.PI) / 180);
@@ -210,13 +222,61 @@
     s += '<g><rect x="376" y="206" width="30" height="16" rx="2" fill="#7a3a2a"/><rect x="376" y="206" width="30" height="3" fill="#9a5240"/><rect x="388" y="211" width="6" height="6" rx="1" fill="#f1dca0"/><circle cx="391" cy="214" r="1" fill="#5a2f22"/></g>';
     return s;
   }
+  // ---- Tranh quầy theo lớp -------------------------------------------------------------------------------------------------------
+  // Mọi phần chuyển động là một lớp SVG nhỏ (cắt theo hộp riêng) đặt chồng lên nền tĩnh và chỉ đổi transform/opacity bằng CSS, nên trình duyệt vẽ mỗi
+  // lớp một lần rồi ghép bằng bộ ghép lớp thay vì vẽ lại cả cảnh ở từng khung hình. Hộp viết theo tọa độ cảnh 420×260; vị trí tính ra phần trăm.
+  const SW = 420, SH = 260;
+  const pct = (v) => Math.round(v * 10000) / 100 + '%';
+  // Vị trí tuyệt đối của hộp `box` trong hộp cha `ref`, kèm điểm xoay `pivot` (tọa độ cảnh) nếu có.
+  function place(box, ref, pivot) {
+    const [x, y, w, h] = box, r = ref || [0, 0, SW, SH];
+    return 'left:' + pct((x - r[0]) / r[2]) + ';top:' + pct((y - r[1]) / r[3]) + ';width:' + pct(w / r[2]) + ';height:' + pct(h / r[3]) + (pivot ? ';transform-origin:' + pct((pivot[0] - x) / w) + ' ' + pct((pivot[1] - y) / h) : '');
+  }
+  function layer(cls, box, inner, pivot, ref) {
+    return '<svg class="gr-st-layer ' + cls + '" viewBox="' + box.join(' ') + '" preserveAspectRatio="none" style="' + place(box, ref, pivot) + '" aria-hidden="true" focusable="false">' + inner + '</svg>';
+  }
+  // Khung bọc tuyệt đối (div) để gắn một chuyển động lên cả nhóm lớp; mặc định phủ cả cảnh.
+  function wrap(cls, inner, box, pivot, ref) {
+    return '<div class="' + cls + '" style="' + place(box || [0, 0, SW, SH], ref, pivot) + '">' + inner + '</div>';
+  }
+  const BOX = {
+    hair: [164, 38, 92, 132],
+    body: [124, 128, 140, 56],
+    head: [166, 40, 104, 122],
+    beads: [240, 66, 26, 44],
+    lids: [184, 96, 52, 24],
+    fan: [244, 66, 92, 112],
+    front: [90, 132, 240, 98],
+    steam: [300, 128, 22, 24],
+  };
+  const PIVOT = { hair: [210, 132], body: [210, 184], head: [210, 146], beads: [252, 72], fan: [255, 160] };
+  // Đèn lồng treo từ xà ngang (y = 12): hộp ôm quầng sáng và tua, dư hai bên cho biên độ lắc.
+  function lamp(x, y, s, cls) {
+    const half = 34 * s + 4, top = Math.floor(y - 34 * s - 1), bottom = Math.ceil(Math.max(y + 34 * s, y + 33 * s) + 3);
+    return layer('gr-st-lamp ' + cls, [x - half, top, 2 * half, bottom - top], lantern(x, y, s), [x, 12]);
+  }
   function owner() {
-    return '<g class="gr-st-owner">' + hairBack() + torso() + neck() + leftArm() + face() + charm() + hairFront() + jewelry() + fanArm() + '</g>';
+    const head = BOX.head;
+    const headParts = layer('gr-st-part', head, face() + charm() + hairFront() + jewelry(), null, head) +
+      layer('gr-st-beads', BOX.beads, beads(), PIVOT.beads, head) +
+      layer('gr-st-lids', BOX.lids, lids(), null, head);
+    return wrap('gr-st-owner',
+      layer('gr-st-hair', BOX.hair, hairBack(), PIVOT.hair) +
+      layer('gr-st-body', BOX.body, torso() + neck() + leftArm(), PIVOT.body) +
+      wrap('gr-st-head', wrap('gr-st-nod', headParts, head, PIVOT.head, head), head, PIVOT.head) +
+      wrap('gr-st-fanw', layer('gr-st-fan', BOX.fan, fanArm(), PIVOT.fan), null, PIVOT.fan));
+  }
+  function front() {
+    return layer('gr-st-front', BOX.front, counter());
+  }
+  function steam() {
+    return layer('gr-st-steam', BOX.steam, '<path d="M308,150 q-3,-5 0,-9 q3,-4 0,-8" fill="none" stroke="#fff" stroke-width="1.4" opacity=".55" stroke-linecap="round"/>') +
+      layer('gr-st-steam gr-st-steam-b', BOX.steam, '<path d="M314,150 q3,-5 0,-9 q-3,-4 0,-8" fill="none" stroke="#fff" stroke-width="1.2" opacity=".45" stroke-linecap="round"/>');
   }
   // Chân dung tròn của bà chủ cho khung lời tư vấn (chỉ đầu và cổ áo, không dùng gradient nên đặt ở đâu cũng được).
   function portrait() {
     const collar = '<path d="M166,162 L170,152 Q188,143 204,141 L216,141 Q232,143 250,152 L254,162Z" fill="#2f9a8c"/><path d="M198,141 L210,160 L222,141 L228,142 L210,166 L192,142Z" fill="#fff3dc"/><path d="M192,142 L210,166 M228,142 L210,166" stroke="#d4a84a" stroke-width="1.4" fill="none"/>';
-    return '<svg class="gr-st-face" viewBox="160 40 112 120" role="img" aria-label="Chân dung bà chủ Liễu Linh Lung" focusable="false"><rect x="160" y="40" width="112" height="120" fill="#4a2c1c"/><circle cx="216" cy="98" r="52" fill="#6a432d"/>' + hairBack() + neck() + collar + face() + charm() + hairFront() + jewelry() + '</svg>';
+    return '<svg class="gr-st-face" viewBox="160 40 112 120" role="img" aria-label="Chân dung bà chủ Liễu Linh Lung" focusable="false"><rect x="160" y="40" width="112" height="120" fill="#4a2c1c"/><circle cx="216" cy="98" r="52" fill="#6a432d"/>' + hairBack() + neck() + collar + face() + charm() + hairFront() + jewelry() + beads() + '</svg>';
   }
 
   function scene() {
@@ -230,8 +290,11 @@
     let floor = '';
     for (let x = -40; x <= 460; x += 46) floor += '<line x1="' + (210 + (x - 210) * 0.62) + '" y1="206" x2="' + x + '" y2="260" stroke="#2a190e" stroke-width="1" opacity=".3"/>';
     floor += '<line x1="0" y1="226" x2="420" y2="226" stroke="#2a190e" stroke-width="1" opacity=".25"/><line x1="0" y1="244" x2="420" y2="244" stroke="#2a190e" stroke-width="1" opacity=".25"/>';
+    const label = 'Tàng Bảo Các: quầy hàng gỗ ấm đèn lồng, giá sách bí kíp và rương ở bên trái, nhà trọ, sơn trang, mắt thần và ba cuộn quân sư ở bên phải; bà chủ Liễu Linh Lung đứng sau quầy, tay cầm quạt, mỉm cười';
+    // Nền tĩnh (một SVG, chứa toàn bộ defs); phần chuyển động nằm ở các lớp chồng lên, theo đúng thứ tự vẽ cũ: đèn < bà chủ < quầy < khói trà.
     return (
-      '<svg class="gr-st-scene" viewBox="0 0 420 260" role="img" aria-label="Tàng Bảo Các: quầy hàng gỗ ấm đèn lồng, giá sách bí kíp và rương ở bên trái, nhà trọ, sơn trang, mắt thần và ba cuộn quân sư ở bên phải; bà chủ Liễu Linh Lung đứng sau quầy, tay cầm quạt, mỉm cười" focusable="false">' +
+      '<div class="gr-st-scene" role="img" aria-label="' + label + '">' +
+      '<svg class="gr-st-base" viewBox="0 0 420 260" aria-hidden="true" focusable="false">' +
       '<defs><linearGradient id="gst-wall" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6a432d"/><stop offset="1" stop-color="#46291b"/></linearGradient>' +
       '<linearGradient id="gst-floor" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7b5033"/><stop offset="1" stop-color="#4e301f"/></linearGradient>' +
       '<linearGradient id="gst-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1f2748"/><stop offset=".62" stop-color="#4a4f7e"/><stop offset="1" stop-color="#e2a98a"/></linearGradient>' +
@@ -245,10 +308,11 @@
       '<rect y="206" width="420" height="54" fill="url(#gst-floor)"/>' + floor +
       '<rect y="164" width="420" height="42" fill="#2a190e" opacity=".28"/>' +
       '<rect width="420" height="12" fill="#2a190e"/><rect y="12" width="420" height="2" fill="#7a5236"/>' +
-      win + leftShelf() + rightShelf() +
-      lantern(56, 33, .84, '') + lantern(364, 33, .84, 'gr-st-sway-b') + lantern(124, 31, .6, 'gr-st-sway-c') + lantern(296, 31, .6, '') + plaque() + floorStock() +
-      owner() + counter() +
-      '</svg>'
+      win + leftShelf() + rightShelf() + plaque() + floorStock() +
+      '</svg>' +
+      lamp(56, 33, .84, '') + lamp(364, 33, .84, 'gr-st-sway-b') + lamp(124, 31, .6, 'gr-st-sway-c') + lamp(296, 31, .6, '') +
+      owner() + front() + steam() +
+      '</div>'
     );
   }
 
@@ -415,9 +479,21 @@
     refreshTalk();
     document.querySelectorAll('.gr-store-item').forEach((li) => li.classList.toggle('is-asked', li.dataset.item === id));
   }
+  // Bà chủ gật đầu, phe phẩy quạt khi được hỏi; lớp is-talk tự gỡ sau khi cử động xong (không có chuyển động khi tắt hiệu ứng).
+  let talkTimer = 0;
+  function reactTalk() {
+    const sc = document.querySelector('.gr-st-scene');
+    if (!sc) return;
+    sc.classList.remove('is-talk');
+    void sc.offsetWidth;
+    sc.classList.add('is-talk');
+    clearTimeout(talkTimer);
+    talkTimer = setTimeout(() => sc.classList.remove('is-talk'), 1500);
+  }
   function ask(id) {
     if (!itemById(id)) return;
     mark(id);
+    reactTalk();
     const hero = document.querySelector('.gr-store-hero');
     if (hero) {
       const r = hero.getBoundingClientRect();
