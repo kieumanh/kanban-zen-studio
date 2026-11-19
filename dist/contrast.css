@@ -4249,6 +4249,91 @@
 :root[data-contrast=high] .zen-backup-ask {
     background: #ffffff
 }
+:root[data-contrast=high] .wl-sum li {
+    border: 1px solid #171519;
+    background: #ffffff
+}
+:root[data-contrast=high] .wl-sum b {
+    color: #060606
+}
+:root[data-contrast=high] .wl-sum span {
+    color: #060606
+}
+:root[data-contrast=high] .wl-key {
+    color: #060606
+}
+:root[data-contrast=high] .wl-chip {
+    border: 1px solid #17151a;
+    background: #ffffff;
+    color: #060606
+}
+:root[data-contrast=high] .wl-chip-project {
+    border-color: var(--pc, #18102b);
+    background: #ffffff;
+    color: #060606
+}
+:root[data-contrast=high] .wl-chip-urgent {
+    border-color: #1f1214;
+    background: #ffffff;
+    color: #060606
+}
+:root[data-contrast=high] .wl-chip-key {
+    border-color: #1c1505;
+    background: #ffffff;
+    color: #060606
+}
+:root[data-contrast=high] .wl-chip-calm, :root[data-contrast=high] .wl-chip-due {
+    border-color: #171518;
+    background: #ffffff;
+    color: #060606
+}
+:root[data-contrast=high] .wl-chip-late {
+    border-color: #1f1214;
+    background: #ffffff;
+    color: #060606
+}
+:root[data-contrast=high] .wl-item::before {
+    background: #ffffff
+}
+:root[data-contrast=high] .wl-node {
+    border: 2px solid var(--pc, #18102b);
+    background: #ffffff;
+    color: #060606
+}
+:root[data-contrast=high] .wl-card {
+    border: 1px solid #171519;
+    border-left: 4px solid var(--pc, #18102b);
+    background: #ffffff
+}
+:root[data-contrast=high] .wl-title {
+    color: #060606
+}
+:root[data-contrast=high] .wl-meta {
+    color: #060606
+}
+:root[data-contrast=high] .wl-pick {
+    border: 1px solid #171519;
+    background: #ffffff;
+    color: #060606
+}
+:root[data-contrast=high] .wl-pick:hover, :root[data-contrast=high] .wl-pick:focus-visible {
+    border-color: #181320;
+    background: #ffffff
+}
+:root[data-contrast=high] .wl-plus {
+    color: #060606
+}
+:root[data-contrast=high] .wl-pick-empty {
+    color: #060606
+}
+:root[data-contrast=high] .wl-add-shortcut .wl-tick {
+    color: #060606
+}
+:root[data-contrast=high] .wl-add-shortcut.is-on {
+    border-color: #091a12;
+    background: #ffffff;
+    color: #060606
+}
 :root[data-theme=dark][data-contrast=high] {
     --bg: #030303;
     --paper: #030303;
@@ -8498,6 +8583,91 @@
 }
 :root[data-theme=dark][data-contrast=high] .zen-backup-ask {
     background: #030303
+}
+:root[data-theme=dark][data-contrast=high] .wl-sum li {
+    border: 1px solid #cecece;
+    background: #030303
+}
+:root[data-theme=dark][data-contrast=high] .wl-sum b {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .wl-sum span {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .wl-key {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .wl-chip {
+    border: 1px solid #cecece;
+    background: #030303;
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .wl-chip-project {
+    border-color: var(--pc, #cecece);
+    background: #030303;
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .wl-chip-urgent {
+    border-color: #cecece;
+    background: #030303;
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .wl-chip-key {
+    border-color: #cecece;
+    background: #030303;
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .wl-chip-calm, :root[data-theme=dark][data-contrast=high] .wl-chip-due {
+    border-color: #cecece;
+    background: #030303;
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .wl-chip-late {
+    border-color: #cecece;
+    background: #030303;
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .wl-item::before {
+    background: #030303
+}
+:root[data-theme=dark][data-contrast=high] .wl-node {
+    border: 2px solid var(--pc, #cecece);
+    background: #030303;
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .wl-card {
+    border: 1px solid #cecece;
+    border-left: 4px solid var(--pc, #cecece);
+    background: #030303
+}
+:root[data-theme=dark][data-contrast=high] .wl-title {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .wl-meta {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .wl-pick {
+    border: 1px solid #cecece;
+    background: #030303;
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .wl-pick:hover, :root[data-theme=dark][data-contrast=high] .wl-pick:focus-visible {
+    border-color: #cecece;
+    background: #030303
+}
+:root[data-theme=dark][data-contrast=high] .wl-plus {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .wl-pick-empty {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .wl-add-shortcut .wl-tick {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .wl-add-shortcut.is-on {
+    border-color: #cecece;
+    background: #030303;
+    color: #f5f5f5
 }
 /* v1.16.2 — nút "Làm mới" ở Chế độ tập trung: quy tắc cũ (.focus-check-updates, nền trắng, chữ tím) đã bị quy tắc nút chính ghi đè ở chế độ thường, nhưng bản sao có tiền tố chủ đề lại nặng hơn nên thắng và làm nút trắng chữ trắng. Đặt lại nền nút chính. */
 :root[data-contrast=high] button.focus-check-updates,

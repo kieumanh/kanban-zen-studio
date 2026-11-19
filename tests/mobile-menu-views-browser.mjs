@@ -47,7 +47,8 @@ try {
     assert.equal(m.group, true, 'khung chế độ xem chưa hiện' + at);
     assert.deepEqual(
       m.modes.map((x) => x.view),
-      ['projects', 'calendar', 'gantt'],
+      // v2.63.0: thêm chế độ xem thứ tư “Liên hoàn lệnh” (chuỗi việc ưu tiên xuyên dự án), xếp sau Gantt.
+      ['projects', 'calendar', 'gantt', 'worklist'],
       at,
     );
     for (const x of m.modes) {

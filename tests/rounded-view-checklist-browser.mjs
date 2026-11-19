@@ -70,7 +70,8 @@ try {
         view.inside && view.buttonsInside,
         'khung hoặc nút nằm ngoài thanh bên' + at,
       );
-      assert.equal(view.count, 3, 'phải có 3 chế độ xem' + at);
+      // v2.63.0: Bảng Kanban / Lịch / Gantt và “Liên hoàn lệnh”.
+      assert.equal(view.count, 4, 'phải có 4 chế độ xem' + at);
       assert.ok(
         view.buttonRadius >= 12,
         'nút chế độ xem chưa bo tròn: ' + view.buttonRadius + at,

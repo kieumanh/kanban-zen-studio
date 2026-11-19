@@ -340,6 +340,11 @@
     "text/javascript; charset=utf-8"
   ],
   [
+    "/worklist.js",
+    "worklist.js",
+    "text/javascript; charset=utf-8"
+  ],
+  [
     "/weekly-review.js",
     "weekly-review.js",
     "text/javascript; charset=utf-8"

@@ -7493,6 +7493,99 @@
 :root[data-style=giangho] .zen-backup-ask {
     background: #faf1e1
 }
+:root[data-style=giangho] .wl-sum li {
+    border: 1px solid #eeddc5;
+    background: #fffcf6
+}
+:root[data-style=giangho] .wl-sum b {
+    color: #311f13
+}
+:root[data-style=giangho] .wl-sum span {
+    color: #624d40
+}
+:root[data-style=giangho] .wl-key {
+    color: #624d40
+}
+:root[data-style=giangho] .wl-chip {
+    border: 1px solid #e2ccab;
+    background: #faf1e1;
+    color: #572627
+}
+:root[data-style=giangho] .wl-chip-project {
+    border-color: var(--pc, #b44148);
+    background: #fffcf6;
+    color: #311f13
+}
+:root[data-style=giangho] .wl-chip-project::before {
+    background: var(--pc, #bc3643)
+}
+:root[data-style=giangho] .wl-chip-urgent {
+    border-color: #eaa9a8;
+    background: #f9f0e0;
+    color: #8c1e38
+}
+:root[data-style=giangho] .wl-chip-key {
+    border-color: #e6c878;
+    background: #fff5d9;
+    color: #683f00
+}
+:root[data-style=giangho] .wl-chip-calm, :root[data-style=giangho] .wl-chip-due {
+    border-color: #d7cbb9;
+    background: #f5efe6;
+    color: #4a382d
+}
+:root[data-style=giangho] .wl-chip-late {
+    border-color: #eaa9a8;
+    background: #fffefb;
+    color: #8c1e38
+}
+:root[data-style=giangho] .wl-item::before {
+    background: #e9b5b4
+}
+:root[data-style=giangho] .wl-node {
+    border: 2px solid var(--pc, #b44148);
+    background: #fffcf6;
+    color: #311f13
+}
+:root[data-style=giangho] .wl-card {
+    border: 1px solid #eeddc5;
+    border-left: 4px solid var(--pc, #b44148);
+    background: #fffcf6
+}
+:root[data-style=giangho] .wl-title {
+    border: 0;
+    background: none;
+    color: #311f13
+}
+:root[data-style=giangho] .wl-title:hover {
+    text-decoration: underline
+}
+:root[data-style=giangho] .wl-meta {
+    color: #624d40
+}
+:root[data-style=giangho] .wl-pick {
+    border: 1px solid #eeddc5;
+    background: #fffcf6;
+    color: #311f13
+}
+:root[data-style=giangho] .wl-pick:hover, :root[data-style=giangho] .wl-pick:focus-visible {
+    border-color: #e09796;
+    background: #fef7eb
+}
+:root[data-style=giangho] .wl-plus {
+    color: #9c0f29
+}
+:root[data-style=giangho] .wl-pick-empty {
+    color: #624d40
+}
+:root[data-style=giangho] .wl-add-shortcut .wl-tick {
+    color: #1c6e4d
+}
+:root[data-style=giangho] .wl-add-shortcut.is-on {
+    border-color: #2e7d5b;
+    background: #eaf6ef;
+    color: #0a4c32
+}
 :root[data-style=giangho][data-theme=dark] {
     --bg: #18130c;
     --paper: #1e1811;
@@ -14936,6 +15029,99 @@
 }
 :root[data-style=giangho][data-theme=dark] .zen-backup-ask {
     background: #16110a
+}
+:root[data-style=giangho][data-theme=dark] .wl-sum li {
+    border: 1px solid #433830;
+    background: #1e1811
+}
+:root[data-style=giangho][data-theme=dark] .wl-sum b {
+    color: #f5dccc
+}
+:root[data-style=giangho][data-theme=dark] .wl-sum span {
+    color: #e5cdbe
+}
+:root[data-style=giangho][data-theme=dark] .wl-key {
+    color: #e5cdbe
+}
+:root[data-style=giangho][data-theme=dark] .wl-chip {
+    border: 1px solid #4e3f34;
+    background: #16110a;
+    color: #eed6c6
+}
+:root[data-style=giangho][data-theme=dark] .wl-chip-project {
+    border-color: var(--pc, #c24d53);
+    background: #1e1811;
+    color: #f5dccc
+}
+:root[data-style=giangho][data-theme=dark] .wl-chip-project::before {
+    background: var(--pc, #bc3643)
+}
+:root[data-style=giangho][data-theme=dark] .wl-chip-urgent {
+    border-color: #cdb797;
+    background: #15100a;
+    color: #ffc1c6
+}
+:root[data-style=giangho][data-theme=dark] .wl-chip-key {
+    border-color: #56440d;
+    background: #18130d;
+    color: #f6cda0
+}
+:root[data-style=giangho][data-theme=dark] .wl-chip-calm, :root[data-style=giangho][data-theme=dark] .wl-chip-due {
+    border-color: #4c423a;
+    background: #150f09;
+    color: #e6d6cb
+}
+:root[data-style=giangho][data-theme=dark] .wl-chip-late {
+    border-color: #cdb797;
+    background: #1e1811;
+    color: #ffc1c6
+}
+:root[data-style=giangho][data-theme=dark] .wl-item::before {
+    background: #3e2e1a
+}
+:root[data-style=giangho][data-theme=dark] .wl-node {
+    border: 2px solid var(--pc, #c24d53);
+    background: #1e1811;
+    color: #f5dccc
+}
+:root[data-style=giangho][data-theme=dark] .wl-card {
+    border: 1px solid #433830;
+    border-left: 4px solid var(--pc, #c24d53);
+    background: #1e1811
+}
+:root[data-style=giangho][data-theme=dark] .wl-title {
+    border: 0;
+    background: none;
+    color: #f5dccc
+}
+:root[data-style=giangho][data-theme=dark] .wl-title:hover {
+    text-decoration: underline
+}
+:root[data-style=giangho][data-theme=dark] .wl-meta {
+    color: #e5cdbe
+}
+:root[data-style=giangho][data-theme=dark] .wl-pick {
+    border: 1px solid #433830;
+    background: #1e1811;
+    color: #f5dccc
+}
+:root[data-style=giangho][data-theme=dark] .wl-pick:hover, :root[data-style=giangho][data-theme=dark] .wl-pick:focus-visible {
+    border-color: #eea3a3;
+    background: #1a150e
+}
+:root[data-style=giangho][data-theme=dark] .wl-plus {
+    color: #fec0bf
+}
+:root[data-style=giangho][data-theme=dark] .wl-pick-empty {
+    color: #e5cdbe
+}
+:root[data-style=giangho][data-theme=dark] .wl-add-shortcut .wl-tick {
+    color: #a6dec1
+}
+:root[data-style=giangho][data-theme=dark] .wl-add-shortcut.is-on {
+    border-color: #3b8966;
+    background: #16110b;
+    color: #b7e5cc
 }
 
 /* ---- Họa tiết Giang hồ viết tay (v1.86.0 · Chu Mặc) ------------------------------------------------------------------------

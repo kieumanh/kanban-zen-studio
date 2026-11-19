@@ -4249,6 +4249,91 @@
 :root[data-theme=dark] .zen-backup-ask {
     background: #131017
 }
+:root[data-theme=dark] .wl-sum li {
+    border: 1px solid #3d3843;
+    background: #1b181f
+}
+:root[data-theme=dark] .wl-sum b {
+    color: #dcd3ec
+}
+:root[data-theme=dark] .wl-sum span {
+    color: #d0c3da
+}
+:root[data-theme=dark] .wl-key {
+    color: #d0c3da
+}
+:root[data-theme=dark] .wl-chip {
+    border: 1px solid #463f4f;
+    background: #131017;
+    color: #d6caf1
+}
+:root[data-theme=dark] .wl-chip-project {
+    border-color: var(--pc, #845cd6);
+    background: #1b181f;
+    color: #dcd3ec
+}
+:root[data-theme=dark] .wl-chip-urgent {
+    border-color: #eaa9b4;
+    background: #120f16;
+    color: #feb3ba
+}
+:root[data-theme=dark] .wl-chip-key {
+    border-color: #56440d;
+    background: #151219;
+    color: #ecc397
+}
+:root[data-theme=dark] .wl-chip-calm, :root[data-theme=dark] .wl-chip-due {
+    border-color: #46424d;
+    background: #120f16;
+    color: #d2ccdc
+}
+:root[data-theme=dark] .wl-chip-late {
+    border-color: #eaa9b4;
+    background: #1b181f;
+    color: #feb3ba
+}
+:root[data-theme=dark] .wl-item::before {
+    background: #372b45
+}
+:root[data-theme=dark] .wl-node {
+    border: 2px solid var(--pc, #845cd6);
+    background: #1b181f;
+    color: #dcd3ec
+}
+:root[data-theme=dark] .wl-card {
+    border: 1px solid #3d3843;
+    border-left: 4px solid var(--pc, #845cd6);
+    background: #1b181f
+}
+:root[data-theme=dark] .wl-title {
+    color: #dcd3ec
+}
+:root[data-theme=dark] .wl-meta {
+    color: #d0c3da
+}
+:root[data-theme=dark] .wl-pick {
+    border: 1px solid #3d3843;
+    background: #1b181f;
+    color: #dcd3ec
+}
+:root[data-theme=dark] .wl-pick:hover, :root[data-theme=dark] .wl-pick:focus-visible {
+    border-color: #c6ade9;
+    background: #17141b
+}
+:root[data-theme=dark] .wl-plus {
+    color: #cebdfb
+}
+:root[data-theme=dark] .wl-pick-empty {
+    color: #d0c3da
+}
+:root[data-theme=dark] .wl-add-shortcut .wl-tick {
+    color: #9cd4b7
+}
+:root[data-theme=dark] .wl-add-shortcut.is-on {
+    border-color: #3b8966;
+    background: #141018;
+    color: #aedbc2
+}
 
 :root[data-theme=dark] {
   color-scheme: dark;

@@ -28,18 +28,21 @@ try {
     }));
     assert.deepEqual(
       names.sidebar,
-      ['projects', 'calendar', 'gantt'],
+      // v2.63.0: sau Gantt có thêm “Liên hoàn lệnh”; Dòng thời gian vẫn không còn.
+      ['projects', 'calendar', 'gantt', 'worklist'],
       'menu bên trái' + at + JSON.stringify(names.sidebar),
     );
     assert.deepEqual(
       names.phone,
-      ['projects', 'calendar', 'gantt'],
+      ['projects', 'calendar', 'gantt', 'worklist'],
       'thanh điện thoại' + at + JSON.stringify(names.phone),
     );
     const visible = await page.evaluate(() => {
+      // v2.63.0: thanh điện thoại xét trước (trong DOM, thanh bên đứng trước nên trước đây ở 390 px lại đo nhầm khung trong thanh bên đang trượt ra ngoài màn hình).
       const bar = [
-        ...document.querySelectorAll('.mobile-viewbar, .sidebar .view-options'),
-      ].find((el) => el.getBoundingClientRect().width > 0);
+        document.querySelector('.mobile-viewbar'),
+        document.querySelector('.sidebar .view-options'),
+      ].find((el) => el && el.getBoundingClientRect().width > 0);
       const buttons = [...bar.querySelectorAll('.view-mode')].map((b) => {
         const r = b.getBoundingClientRect();
         return {
@@ -58,7 +61,7 @@ try {
         ),
       };
     });
-    assert.equal(visible.buttons.length, 3, 'số nút chế độ xem' + at);
+    assert.equal(visible.buttons.length, 4, 'số nút chế độ xem' + at);
     assert.ok(
       visible.buttons.every((b) => b.w >= 44 && !b.clipped),
       'nút bị hẹp hoặc bị cắt' + at + JSON.stringify(visible.buttons),
@@ -68,7 +71,7 @@ try {
       assert.equal(
         new Set(visible.buttons.map((b) => b.top)).size,
         1,
-        'ba nút phải nằm một hàng' + at,
+        'bốn nút phải nằm một hàng' + at,
       );
 
     // 2. Không còn hàm, nội dung hay chữ nào nhắc tới Dòng thời gian trên các màn hình còn lại và trong hướng dẫn.
