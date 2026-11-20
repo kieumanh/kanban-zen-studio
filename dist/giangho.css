@@ -6270,6 +6270,10 @@
 :root[data-style=giangho] .gr-spend-money h3 small {
     color: var(--muted)
 }
+:root[data-style=giangho] .sidebar .nav .nav-queue {
+    background: #bc3643;
+    color: #ffffff
+}
 :root[data-style=giangho] {
     --muted: #685345;
     --text-muted: #685345
@@ -14019,6 +14023,10 @@
 }
 :root[data-style=giangho][data-theme=dark] .gr-spend-money h3 small {
     color: var(--muted)
+}
+:root[data-style=giangho][data-theme=dark] .sidebar .nav .nav-queue {
+    background: #bc3643;
+    color: #ffffff
 }
 :root[data-style=giangho][data-theme=dark] {
     --muted: #e1ccbf;

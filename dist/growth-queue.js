@@ -125,5 +125,33 @@
     }
   });
 
-  window.zenQueue = { waiting, defer, batch, clear, card, isBatch };
+  // v2.73.0 (Chấm Chờ): chấm đếm số việc chờ vận công ngay trên mục “Điểm tích lũy” của thanh bên. Chỉ đọc: không đổi dữ liệu nào.
+  // Hết việc chờ thì gỡ chấm (và chỉ gỡ nhãn do chính chấm đặt); trên 99 việc hiện “99+”.
+  function badge(btn) {
+    if (!btn) return;
+    const n = waiting().length;
+    let dot = btn.querySelector('.nav-queue');
+    if (!n) {
+      if (dot) dot.remove();
+      if (btn.dataset.queueLabel) {
+        btn.removeAttribute('aria-label');
+        btn.removeAttribute('title');
+        delete btn.dataset.queueLabel;
+      }
+      return;
+    }
+    if (!dot) {
+      dot = document.createElement('span');
+      dot.className = 'nav-queue';
+      dot.setAttribute('aria-hidden', 'true');
+      btn.append(dot);
+    }
+    dot.textContent = n > 99 ? '99+' : String(n);
+    const label = 'Điểm tích lũy, ' + n + ' việc chờ vận công';
+    btn.setAttribute('aria-label', label);
+    btn.title = label;
+    btn.dataset.queueLabel = '1';
+  }
+
+  window.zenQueue = { waiting, defer, batch, clear, card, isBatch, badge };
 })();

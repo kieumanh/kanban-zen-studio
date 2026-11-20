@@ -1096,3 +1096,5 @@ dialog.gr-sow .btn{min-height:44px;border-radius:12px}
 .gr-spend-money-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
 .gr-spend-money-row .field input,.gr-spend-money-row .field select{min-height:44px;border-radius:12px}
 @media (max-width:520px){.gr-spend-money-row{grid-template-columns:minmax(0,1fr)}}
+/* v2.73.0 Chấm Chờ: chấm đếm việc chờ vận công ở thanh bên */
+.sidebar .nav .nav-queue{margin-left:auto;min-width:20px;height:20px;padding:0 6px;border-radius:999px;background:#7950c8;color:#fff;font-size:11px;font-weight:700;line-height:20px;text-align:center;font-variant-numeric:tabular-nums;flex:none}

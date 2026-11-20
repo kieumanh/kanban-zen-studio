@@ -452,6 +452,7 @@
     }
     if (anchor && anchor.previousElementSibling !== b) anchor.before(b);
     b.classList.toggle('active', view === 'growth');
+    if (window.zenQueue && window.zenQueue.badge) window.zenQueue.badge(b);
   }
   const baseRender = render;
   render = function () {
