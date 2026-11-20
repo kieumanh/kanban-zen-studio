@@ -107,6 +107,7 @@ const spend = (over = {}) => ({ id: 's1', d: '2026-11-12', n: 'Tai nghe mới', 
 assert.equal(GROWTH_SPEND_MAX, 500);
 assert.equal(validWorkspace(workspace(growth({ spend: [] }))), true, 'sổ quy đổi rỗng hợp lệ');
 assert.equal(validWorkspace(workspace(growth({ spend: [spend(), spend({ id: 's2', note: 'Mua ở cửa hàng gần nhà', p: [1, 0, 0, 0, 0, 0, 0, 3], x: true })] }))), true, 'có ghi chú và dòng đã hủy vẫn hợp lệ');
+assert.equal(validWorkspace(workspace(growth({ spend: [spend({ lp: 'p1', li: 'k1' }), spend({ id: 's2', lp: 'a1b2-c3', li: 'k_2', x: true })] }))), true, 'dòng quy đổi nối khoản chi Thu chi (lp + li, v2.74.0) hợp lệ');
 const badSpend = {
   'spend không phải mảng': growth({ spend: {} }),
   'spend là null': growth({ spend: null }),
@@ -131,6 +132,12 @@ const badSpend = {
   'điểm lẻ': growth({ spend: [spend({ p: [0.5, 0, 0, 0, 0, 0, 0, 0] })] }),
   'điểm quá lớn': growth({ spend: [spend({ p: [1000001, 0, 0, 0, 0, 0, 0, 0] })] }),
   'dòng toàn số 0': growth({ spend: [spend({ p: [0, 0, 0, 0, 0, 0, 0, 0] })] }),
+  'lp mà thiếu li (v2.74.0)': growth({ spend: [spend({ lp: 'p1' })] }),
+  'li mà thiếu lp (v2.74.0)': growth({ spend: [spend({ li: 'k1' })] }),
+  'lp không phải chuỗi': growth({ spend: [spend({ lp: 5, li: 'k1' })] }),
+  'li sai ký tự': growth({ spend: [spend({ lp: 'p1', li: 'a b' })] }),
+  'lp quá dài': growth({ spend: [spend({ lp: 'a'.repeat(100), li: 'k1' })] }),
+  'li rỗng': growth({ spend: [spend({ lp: 'p1', li: '' })] }),
 };
 for (const [name, g] of Object.entries(badSpend)) {
   assert.equal(validGrowth(g), false, 'validGrowth phải từ chối quy đổi: ' + name);

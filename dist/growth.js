@@ -1085,7 +1085,10 @@
         const e = { id: uid(), d: day, n: name, p };
         if (note) e.note = note;
         g.spend.push(e);
-        if (money.amount > 0) ledgerProject = window.zenLedger.add(money, name, day);
+        if (money.amount > 0) {
+          ledgerProject = window.zenLedger.add(money, name, day);
+          Object.assign(e, window.zenLedger.link(ledgerProject, money) || {});
+        }
       }
     });
     if (!ok) return;
@@ -1095,13 +1098,25 @@
     notify((editing ? 'Đã cập nhật lần quy đổi “' + name + '” (' + points + ' điểm).' : sd.owner ? 'Chưởng quỹ ' + sd.owner + ' nhận ' + points + ' điểm, giao “' + name + '”. Tu vi hiện có: ' + fmt(total(scores())) + '.' : 'Đã quy đổi ' + points + ' điểm cho “' + name + '”. Tu vi hiện có: ' + fmt(total(scores())) + '.') + (window.zenLedger ? window.zenLedger.note(money, ledgerProject) : ''));
   }
   const spendById = (id) => (growth()?.spend || []).find((e) => e.id === id);
-  function voidSpend(id) {
+  function voidSpend(id, mode) {
     const e = spendById(id);
     if (!e || e.x || contentReadOnly) return contentReadOnly ? notify('Bản chia sẻ chỉ có quyền xem.') : undefined;
+    // v2.74.0 (Khoản Chi Liền): lần quy đổi có khoản chi còn nguyên ở Thu chi thì hỏi có xóa luôn không (mode: 'keep' | 'delete'); không có thì hủy như cũ.
+    const l = mode === undefined && window.zenLedger ? window.zenLedger.linked(e) : null;
+    if (l) return askVoidSpend(e, l);
     const name = e.n, points = fmt(spendPoints(e));
-    if (!wfSave(() => { data.growth.spend.find((x) => x.id === id).x = true; })) return;
+    let removed = false;
+    if (!wfSave(() => { const x = data.growth.spend.find((y) => y.id === id); x.x = true; removed = mode === 'delete' && !!window.zenLedger && window.zenLedger.unlink(x); })) return;
+    if (document.querySelector('#editor[open] [data-gr-spend-void-ok]')) $('#editor').close();
     if (view === 'growth') render();
-    notify('Đã hủy quy đổi “' + name + '”, hoàn lại ' + points + ' điểm vào Bát phương đồ.');
+    notify('Đã hủy quy đổi “' + name + '”, hoàn lại ' + points + ' điểm vào Bát phương đồ.' + (removed ? ' Đã xóa khoản chi đã ghi ở Thu chi.' : ''));
+  }
+  function askVoidSpend(e, l) {
+    const amount = window.zenLedger.money(l.entry.amount);
+    modal('<div class="bg-confirm"><h2>Hủy lần quy đổi này?</h2><p>“' + esc(e.n) + '” sẽ được hoàn điểm vào Bát phương đồ. Lần quy đổi này đã ghi khoản chi <strong>' + amount + '</strong> vào “' + esc(l.p.name) + '” ở Thu chi. Các hạ có muốn xóa luôn khoản chi đó không?</p><div class="bg-confirm-actions gr-void-actions"><button type="button" class="btn" data-gr-spend-void-no>Không hủy</button><button type="button" class="btn" data-gr-spend-void-ok="' + esc(e.id) + '">Hủy, giữ khoản chi</button><button type="button" class="btn bg-confirm-delete" data-gr-spend-void-ok="' + esc(e.id) + '" data-del="1">Hủy và xóa khoản chi</button></div></div>', null, true);
+    const eyebrow = document.querySelector('#modal-eyebrow');
+    if (eyebrow) eyebrow.textContent = 'GIANG HỒ TU LUYỆN';
+    document.querySelector('[data-gr-spend-void-no]')?.focus();
   }
   function restoreSpend(id) {
     const e = spendById(id);
@@ -1122,7 +1137,7 @@
     document.querySelector('[data-gr-spend-del-no]')?.focus();
   }
   document.addEventListener('click', (e) => {
-    const t = e.target.closest?.('[data-gr-spend],[data-gr-spend-edit],[data-gr-spend-void],[data-gr-spend-restore],[data-gr-spend-del],[data-gr-spend-del-ok],[data-gr-spend-del-no],[data-gr-spend-more],[data-gr-spend-split],[data-gr-spend-close]');
+    const t = e.target.closest?.('[data-gr-spend],[data-gr-spend-edit],[data-gr-spend-void],[data-gr-spend-restore],[data-gr-spend-del],[data-gr-spend-del-ok],[data-gr-spend-del-no],[data-gr-spend-void-no],[data-gr-spend-void-ok],[data-gr-spend-more],[data-gr-spend-split],[data-gr-spend-close]');
     if (!t) return;
     const d = t.dataset;
     if (d.grSpend !== undefined) return openSpend();
@@ -1130,7 +1145,8 @@
     if (d.grSpendVoid) return voidSpend(d.grSpendVoid);
     if (d.grSpendRestore) return restoreSpend(d.grSpendRestore);
     if (d.grSpendDel) return askDeleteSpend(d.grSpendDel);
-    if (d.grSpendDelNo !== undefined) return $('#editor').close();
+    if (d.grSpendDelNo !== undefined || d.grSpendVoidNo !== undefined) return $('#editor').close();
+    if (d.grSpendVoidOk) return voidSpend(d.grSpendVoidOk, t.dataset.del ? 'delete' : 'keep');
     if (d.grSpendDelOk) {
       const id = d.grSpendDelOk;
       if (!wfSave(() => { data.growth.spend = data.growth.spend.filter((x) => x.id !== id); })) return;

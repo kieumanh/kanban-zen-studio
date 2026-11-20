@@ -2,7 +2,8 @@
 // v2.70.0 (Hồi Quang): nối hộp “Đổi bảo vật” (growth.js) với Thu chi (budget.js). Bảo vật có giá tiền thật thì người dùng nhập số tiền và chọn đại sự;
 // bấm Ghi vào sổ bảo vật sẽ ghi LUÔN một khoản chi vào đại sự ấy trong cùng một lần lưu (wfSave: lỗi thì cả hai cùng hoàn lại).
 // Dữ liệu: không trường mới. Khoản chi là một dòng ledger đúng hình dạng của budget.js {id,type:'out',amount,category:'Bảo vật',note,date}.
-// Tùy chọn: để trống số tiền thì không ghi gì (hành vi cũ). Chỉ cho lần quy đổi mới; sửa / hủy một lần quy đổi không đụng tới khoản chi đã ghi.
+// Tùy chọn: để trống số tiền thì không ghi gì (hành vi cũ). Chỉ cho lần quy đổi mới; sửa một lần quy đổi không đụng tới khoản chi đã ghi.
+// v2.74.0 (Khoản Chi Liền): lần quy đổi nhớ khoản chi vừa ghi (trường tùy chọn lp + li trên dòng quy đổi); hủy lần quy đổi thì hỏi có xóa luôn khoản chi ấy không (xem voidSpend ở growth.js).
 (() => {
   const MAX_ENTRIES = 5000;
   const MAX_AMOUNT = 1e12;
@@ -46,10 +47,33 @@
     if (!p || p.archived) throw Error('Đại sự không còn để ghi Thu chi.');
     const list = Array.isArray(p.ledger) ? p.ledger.slice() : [];
     if (list.length >= MAX_ENTRIES) throw Error('Đại sự đã đủ ' + MAX_ENTRIES + ' khoản thu chi.');
-    list.push({ id: uid(), type: 'out', amount: r.amount, category: CATEGORY, note: ('Đổi bảo vật: ' + name).slice(0, 200), date: day });
+    const entry = { id: uid(), type: 'out', amount: r.amount, category: CATEGORY, note: ('Đổi bảo vật: ' + name).slice(0, 200), date: day };
+    list.push(entry);
     p.ledger = list;
+    r.entryId = entry.id;
     return p;
   }
+  // v2.74.0 (Khoản Chi Liền): dấu nối giữa lần quy đổi và khoản chi vừa ghi ({ lp: mã đại sự, li: mã khoản chi }); mã lạ (không qua được kiểm của máy chủ) thì không nối.
+  const ID_OK = /^[A-Za-z0-9_-]{1,99}$/;
+  function link(p, r) {
+    return p && r && r.entryId && ID_OK.test(p.id) && ID_OK.test(r.entryId) ? { lp: p.id, li: r.entryId } : null;
+  }
+  // Khoản chi còn nguyên của lần quy đổi (đại sự còn, khoản chi còn, vẫn là khoản chi): { p, entry } hoặc null. Khoản chi đã bị xóa tay thì coi như không còn.
+  function linked(e) {
+    if (!e || !e.lp || !e.li) return null;
+    const p = (data.projects || []).find((x) => x.id === e.lp);
+    const entry = p && Array.isArray(p.ledger) ? p.ledger.find((x) => x.id === e.li && x.type === 'out') : null;
+    return entry ? { p, entry } : null;
+  }
+  // Gọi BÊN TRONG wfSave của lần hủy: xóa đúng khoản chi đã nối và gỡ dấu nối. Trả về true nếu đã xóa.
+  function unlink(e) {
+    const l = linked(e);
+    delete e.lp;
+    delete e.li;
+    if (!l) return false;
+    l.p.ledger = l.p.ledger.filter((x) => x.id !== l.entry.id);
+    return true;
+  }
   const note = (r, p) => (p ? ' Đã ghi khoản chi ' + money(r.amount) + ' vào ' + p.name + '.' : '');
-  window.zenLedger = { fieldset, read, add, note, CATEGORY };
+  window.zenLedger = { fieldset, read, add, note, link, linked, unlink, money, CATEGORY };
 })();

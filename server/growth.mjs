@@ -3,7 +3,7 @@
 // Dữ liệu nằm ngay trong dữ liệu người dùng (workspace.growth): không thêm bảng hay cột nào vào cơ sở dữ liệu.
 // Sổ cái chỉ-thêm: log = [{id, d:'YYYY-MM-DD', s:'task'|'habit'|'archive', k?:khóa chống cộng trùng, n?:tên việc, p:[8 số nguyên]}]
 // p tính theo đơn vị nửa điểm (1 = 0,5 điểm) theo thứ tự 8 chỉ số; điểm từng chỉ số = tổng p của sổ cái.
-// v1.81.0: spend = sổ quy đổi điểm [{id, d, n:vật phẩm, note?, p:[8 số nguyên], x?:true nếu đã hủy}] — điểm trừ khỏi từng chỉ số (cùng đơn vị nửa điểm).
+// v1.81.0: spend = sổ quy đổi điểm [{id, d, n:vật phẩm, note?, p:[8 số nguyên], x?:true nếu đã hủy, lp?/li?: đại sự + khoản chi đã ghi ở Thu chi}] — điểm trừ khỏi từng chỉ số (cùng đơn vị nửa điểm).
 // Sổ quy đổi cũng chỉ-thêm theo id; sửa/hủy chỉ đổi dòng của chính nó nên hai thiết bị gộp được. Máy chủ không so số dư với điểm đã cộng
 // (hai thiết bị cùng quy đổi lúc chưa đồng bộ vẫn phải lưu được); phía giao diện chặn vượt số dư và hiển thị số dư không âm.
 // Lưu theo sổ cái (mỗi lần cộng là một dòng có id) để hai thiết bị cùng cộng điểm vẫn gộp được theo id.
@@ -102,7 +102,7 @@ export function validGrowth(g) {
       typeof e === 'object' &&
       !Array.isArray(e) &&
       Object.keys(e).every((k) =>
-        ['id', 'd', 'n', 'note', 'p', 'x'].includes(k),
+        ['id', 'd', 'n', 'note', 'p', 'x', 'lp', 'li'].includes(k),
       ) &&
       typeof e.id === 'string' &&
       /^[A-Za-z0-9_-]{1,99}$/.test(e.id) &&
@@ -115,6 +115,13 @@ export function validGrowth(g) {
       (e.note === undefined ||
         (typeof e.note === 'string' && e.note.length <= 300)) &&
       (e.x === undefined || e.x === true) &&
+      // v2.74.0: lp + li = khoản chi đã ghi ở Thu chi cùng lần quy đổi (mã đại sự + mã khoản chi), có cả hai hoặc không có.
+      (e.lp === undefined) === (e.li === undefined) &&
+      (e.lp === undefined ||
+        (typeof e.lp === 'string' &&
+          /^[A-Za-z0-9_-]{1,99}$/.test(e.lp) &&
+          typeof e.li === 'string' &&
+          /^[A-Za-z0-9_-]{1,99}$/.test(e.li))) &&
       points(e.p),
   );
 }

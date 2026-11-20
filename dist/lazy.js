@@ -150,9 +150,10 @@
     const spent = new Set();
     return g.spend.every(
       (e) =>
-        !!e && typeof e === 'object' && !Array.isArray(e) && Object.keys(e).every((k) => ['id', 'd', 'n', 'note', 'p', 'x'].includes(k)) && typeof e.id === 'string' && /^[A-Za-z0-9_-]{1,99}$/.test(e.id) &&
+        !!e && typeof e === 'object' && !Array.isArray(e) && Object.keys(e).every((k) => ['id', 'd', 'n', 'note', 'p', 'x', 'lp', 'li'].includes(k)) && typeof e.id === 'string' && /^[A-Za-z0-9_-]{1,99}$/.test(e.id) &&
         !spent.has(e.id) && !!spent.add(e.id) && isDate(e.d) && typeof e.n === 'string' && e.n.length >= 1 && e.n.length <= 120 &&
-        (e.note === undefined || (typeof e.note === 'string' && e.note.length <= 300)) && (e.x === undefined || e.x === true) && points(e.p),
+        (e.note === undefined || (typeof e.note === 'string' && e.note.length <= 300)) && (e.x === undefined || e.x === true) &&
+        (e.lp === undefined) === (e.li === undefined) && (e.lp === undefined || (typeof e.lp === 'string' && /^[A-Za-z0-9_-]{1,99}$/.test(e.lp) && typeof e.li === 'string' && /^[A-Za-z0-9_-]{1,99}$/.test(e.li))) && points(e.p),
     );
   }
   validGrowth.limits = { LOG_MAX, SPEND_MAX };
