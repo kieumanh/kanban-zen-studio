@@ -3846,3 +3846,13 @@ body select:not([multiple]):not([size]):not([data-zen-native]):not(.wf-original-
   background: #7950c8;
   opacity: 0.55;
 }
+
+/* v2.80.0 (Tablet): nhãn giữa vòng "Bức tranh công việc" nằm gọn trong lỗ vòng. Ở khổ ≤1200px vòng bị thu còn 180px (lỗ chỉ ~92px) nên chữ
+   "Tổng công việc" chạm vành; trả vòng về 200px (không bị ép co trong hàng flex), chỉ co khi cột hẹp hơn. Cỡ chữ ≥12px theo thang chữ chung nên không thu chữ. */
+@media (max-width: 1200px) {
+  .work-chart-ring { flex: none; width: 200px; max-width: 100%; height: auto; aspect-ratio: 1; }
+}
+.work-chart-total strong { font-size: 26px; line-height: 1.15; }
+
+/* v2.80.0 (Tablet): số đếm trong tiêu đề "Chưa định ngày" bị `small { display: block }` chung đẩy xuống dòng dưới tiêu đề; để nó nằm cạnh chữ. */
+.zen-unscheduled h2 small { display: inline-block; margin-left: 8px; vertical-align: middle; }

@@ -113,6 +113,14 @@
   background-position: right 16px top 30px;
   background-size: 46px 25px;
 }
+/* v2.80.0 (Tablet): thanh bên chỉ rộng 208px ở 701–1200px nên tường vân bên cạnh tên ứng dụng đè lên chữ "kanban"; ở khổ này đặt nó phía trên tên. */
+@media (min-width: 701px) and (max-width: 1200px) {
+  :root[data-style=giangho] .sidebar,
+  :root[data-style=giangho][data-theme=dark] .sidebar {
+    background-position: right 12px top 5px;
+    background-size: 36px 19px;
+  }
+}
 /* Hộp thoại: viền son phía trên. */
 :root[data-style=giangho] dialog[open] {
   border-top: 4px solid var(--gh-seal);

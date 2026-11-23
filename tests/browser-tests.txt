@@ -194,3 +194,4 @@ tests/release-weeks-browser.mjs
 tests/frame-tidy-browser.mjs
 tests/seal-round-browser.mjs
 tests/levelup-form-browser.mjs
+tests/tablet-fit-browser.mjs
