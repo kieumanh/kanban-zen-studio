@@ -4434,6 +4434,12 @@
 :root[data-theme=dark] .usage-block {
     border-top: 1px solid #3d3843
 }
+:root[data-theme=dark] .usage-board .ub-range .btn[aria-pressed=true] {
+    border-color: #845cd6
+}
+:root[data-theme=dark] .usage-board .ub-table th, :root[data-theme=dark] .usage-board .ub-table td {
+    border-bottom: 1px solid #3d3843
+}
 
 :root[data-theme=dark] {
   color-scheme: dark;

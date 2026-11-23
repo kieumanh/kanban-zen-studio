@@ -7803,6 +7803,20 @@
 :root[data-style=giangho] .usage-block {
     border-top: 1px solid #eeddc5
 }
+:root[data-style=giangho] .usage-board .ub-range .btn[aria-pressed=true] {
+    background: #bc3643;
+    border-color: #b44148;
+    color: #ffffff
+}
+:root[data-style=giangho] .usage-board .ub-table th, :root[data-style=giangho] .usage-board .ub-table td {
+    border-bottom: 1px solid #eeddc5
+}
+:root[data-style=giangho] .usage-board .ub-table thead th {
+    color: var(--muted)
+}
+:root[data-style=giangho] .usage-board .ub-bar {
+    background: #bc3643
+}
 :root[data-style=giangho][data-theme=dark] {
     --bg: #18130c;
     --paper: #1e1811;
@@ -15556,6 +15570,20 @@
 }
 :root[data-style=giangho][data-theme=dark] .usage-block {
     border-top: 1px solid #433830
+}
+:root[data-style=giangho][data-theme=dark] .usage-board .ub-range .btn[aria-pressed=true] {
+    background: #bc3643;
+    border-color: #c24d53;
+    color: #ffffff
+}
+:root[data-style=giangho][data-theme=dark] .usage-board .ub-table th, :root[data-style=giangho][data-theme=dark] .usage-board .ub-table td {
+    border-bottom: 1px solid #433830
+}
+:root[data-style=giangho][data-theme=dark] .usage-board .ub-table thead th {
+    color: var(--muted)
+}
+:root[data-style=giangho][data-theme=dark] .usage-board .ub-bar {
+    background: #bc3643
 }
 
 /* ---- Họa tiết Giang hồ viết tay (v1.86.0 · Chu Mặc) ------------------------------------------------------------------------

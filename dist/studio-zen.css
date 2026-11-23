@@ -3780,3 +3780,59 @@ body select:not([multiple]):not([size]):not([data-zen-native]):not(.wf-original-
   min-height: 44px;
   align-items: center;
 }
+
+/* v2.76.0 (Bảng Thám Báo): bảng số liệu dùng ẩn danh cho chủ triển khai, trong khối Cài đặt. */
+.usage-board h5 {
+  margin: 8px 0 0;
+  font-size: 14px;
+}
+.usage-board .ub-range {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.usage-board .ub-range .btn {
+  min-height: 44px;
+  border-radius: 12px;
+}
+.usage-board .ub-range .btn[aria-pressed=true] {
+  background: #7950c8;
+  border-color: #7950c8;
+  color: #ffffff;
+}
+.usage-board .ub-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: 14px;
+}
+.usage-board .ub-table th,
+.usage-board .ub-table td {
+  padding: 8px 6px;
+  text-align: left;
+  border-bottom: 1px solid #e8dff0;
+  overflow-wrap: anywhere;
+  vertical-align: top;
+}
+.usage-board .ub-table thead th {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.usage-board .ub-table tbody th {
+  font-weight: 500;
+  position: relative;
+}
+.usage-board .ub-table .ub-n {
+  width: 64px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.usage-board .ub-bar {
+  display: block;
+  height: 4px;
+  margin-top: 6px;
+  border-radius: 999px;
+  background: #7950c8;
+  opacity: 0.55;
+}

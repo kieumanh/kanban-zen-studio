@@ -185,6 +185,7 @@ tests/growth-queue-browser.mjs
 tests/growth-queue-badge-browser.mjs
 tests/growth-void-ledger-browser.mjs
 tests/account-prefs-browser.mjs
+tests/usage-board-browser.mjs
 tests/growth-tabs-browser.mjs
 tests/growth-goal-browser.mjs
 tests/growth-hoiquang-browser.mjs

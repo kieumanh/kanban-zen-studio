@@ -64,6 +64,7 @@ import { financeReport, validFinanceSettings } from './finance-report.mjs';
 import { validGrowth, GROWTH_AXIS_IDS } from './growth.mjs';
 import { validWorklist } from './worklist.mjs';
 import { validPrefs } from './prefs.mjs';
+import { isUsageViewer, usageSummary } from './usage-stats.mjs';
 import { clientEvent } from './client-events.mjs';
 export const ORIGIN = 'https://kanban.huongthiennature.com',
   enc = new TextEncoder();
@@ -955,6 +956,16 @@ export async function api(request, env) {
         ),
       );
       return json({ ok: true });
+    }
+    // v2.76.0 (Bảng Thám Báo): số liệu dùng ẩn danh cho chủ triển khai; người khác nhận 404 như không có trang này.
+    if (path === '/api/usage-stats' && request.method === 'GET') {
+      if (!(await isUsageViewer(db, env, u))) fail('Không tìm thấy.', 404);
+      return json(
+        await usageSummary(
+          db,
+          Number(new URL(request.url).searchParams.get('days')),
+        ),
+      );
     }
     if (path === '/api/report-shares')
       return await reportShareOwner(request, env, u);

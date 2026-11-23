@@ -1,6 +1,7 @@
 // v1.73.0: quan sát vận hành không cần bảng mới. Trình duyệt gửi (1) lỗi script chưa bắt và (2) dấu "tính năng này được mở hôm nay"
 // tới đây; máy chủ làm sạch rồi ghi MỘT dòng nhật ký JSON (xem được trong Cloudflare Workers Logs, lọc theo trường `event`).
 // Không ghi vào D1, không lưu mã người dùng, không lưu IP (IP chỉ được băm để giới hạn tốc độ, dùng bảng rate_limits sẵn có).
+import { recordUsage } from './usage-stats.mjs';
 const EVENT_TYPES = ['error', 'rejection', 'usage'];
 
 // Bỏ thứ có thể là dữ liệu cá nhân hoặc bí mật khỏi chuỗi do trình duyệt gửi lên.
@@ -55,5 +56,8 @@ export async function clientEvent(request, env, ip, limiter, hasher) {
   }
   const record = cleanClientEvent(body);
   if (record) console.log(JSON.stringify(record));
+  // v2.76.0: dấu dùng còn được cộng vào bộ đếm ẩn danh (bảng rate_limits) để xem trong ứng dụng; lỗi đếm không ảnh hưởng gì.
+  if (record && record.event === 'client_usage' && env && env.DB)
+    await recordUsage(env.DB, record);
   return record;
 }

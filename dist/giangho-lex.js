@@ -659,6 +659,11 @@
     'Báo lỗi tự động khi một đoạn mã của ứng dụng bị lỗi là mục riêng, không nằm trong công tắc này.': 'Báo lỗi tự động khi một đoạn mã gặp lỗi là mục riêng, không nằm trong công tắc này.',
     'Đã bật chỉ số ẩn danh.': 'Đã mở gửi dấu vết ẩn danh.',
     'Đã tắt chỉ số ẩn danh. Không gửi dấu dùng nào nữa.': 'Đã khóa gửi dấu vết ẩn danh. Không gửi dấu nào nữa.',
+    // v2.76.0 (Bảng Thám Báo): bảng số liệu dùng ẩn danh cho chủ triển khai ở Cài đặt.
+    'Số thiết bị đã mở từng màn hình hoặc tính năng mỗi ngày, từ các dấu ẩn danh. Không có tên người dùng hay nội dung; chỉ chủ triển khai thấy bảng này.':
+      'Số máy đã mở từng mục hoặc môn mỗi ngày, từ các dấu vết ẩn danh. Không có danh tính hay nội dung; chỉ chủ phái thấy bảng này.',
+    'Chưa tải được số liệu. Hãy thử lại sau.': 'Chưa nhận được tin báo. Hãy thử lại sau.',
+    'Chưa có dấu nào trong khoảng này.': 'Chưa có dấu vết nào trong khoảng này.',
     'Đã bật gộp cuối ngày.': 'Đã bật gộp cuối ngày.',
     'Đã trở lại hỏi từng việc.': 'Đã trở lại hỏi từng nhiệm vụ.',
     'Tiến độ dự án và những việc nên ưu tiên cho tuần tới.': 'Tiến cảnh đại sự và những nhiệm vụ nên ưu tiên cho tuần tới.',
