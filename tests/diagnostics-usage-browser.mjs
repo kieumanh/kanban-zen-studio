@@ -1,6 +1,6 @@
 // v2.71.0 (Thám Báo): chỉ số dùng ẩn danh có công tắc tắt và vài dấu đo mới.
 //  1. Cài đặt → Tài khoản & bảo mật có khối “Chỉ số ẩn danh” (mặc định bật), mô tả rõ gửi gì và không gửi gì; tắt thì không còn dấu dùng nào được gửi
-//     (kể cả sau khi tải lại), bật lại thì gửi lại; lựa chọn chỉ nằm ở thiết bị (localStorage zen-usage-off), không gửi lên máy chủ.
+//     (kể cả sau khi tải lại), bật lại thì gửi lại; lựa chọn nằm ở thiết bị (localStorage zen-usage-off); từ v2.75.0 còn đi theo tài khoản (account-prefs-browser.mjs).
 //  2. Dấu mới (mỗi tính năng tối đa một dấu mỗi ngày mỗi thiết bị): award-save / award-later ở bảng vận công (Để sau, Lưu; không đếm lần bảng bị thay chỗ),
 //     growth-<tab> khi mở tab Tu vi, open-report, quickadd; mọi dấu chỉ gồm {type, feature, version}, không mã người dùng hay nội dung việc.
 //  3. Giữ nguyên quy tắc cũ: Do Not Track / Global Privacy Control thì không gửi gì, kể cả dấu mới.
@@ -113,7 +113,7 @@ try {
     assert.match(text, /Do Not Track/, 'nhắc tôn trọng Do Not Track');
     assert.equal(await page.locator('[data-usage-block] [data-group], [data-usage-block] a').count(), 0, 'khối không có liên kết ngoài');
     await page.locator('#usage-share').click();
-    assert.match(await page.locator('#toast').textContent(), /Đã tắt chỉ số ẩn danh trên thiết bị này/, 'thông báo tắt');
+    assert.match(await page.locator('#toast').textContent(), /Đã tắt chỉ số ẩn danh/, 'thông báo tắt');
     assert.equal(await page.evaluate(() => localStorage.getItem('zen-usage-off')), '1', 'lưu ở thiết bị');
     await page.evaluate(() => {
       localStorage.removeItem('zen-usage-day');

@@ -2,18 +2,23 @@
 // v1.73.0: (1) dấu "tính năng này được mở hôm nay" ẩn danh; (2) báo cho chủ tài khoản khi email báo cáo/nhắc việc gửi lỗi.
 // (1) Mỗi màn hình tối đa MỘT dấu mỗi ngày trên mỗi thiết bị, không kèm mã người dùng hay thiết bị; máy chủ chỉ ghi nhật ký (xem
 // server/client-events.mjs). Cho biết tính năng nào được dùng để chọn việc nên đầu tư hay cắt gọn.
-// v2.71.0 (Thám Báo): (a) công tắc “Chỉ số ẩn danh” ở Cài đặt → Tài khoản & bảo mật (mặc định bật, áp dụng cho thiết bị này, khóa localStorage zen-usage-off) mô tả rõ
+// v2.71.0 (Thám Báo): (a) công tắc “Chỉ số ẩn danh” ở Cài đặt → Tài khoản & bảo mật (mặc định bật, khóa localStorage zen-usage-off; từ v2.75.0 đi theo tài khoản qua data.prefs.usage khi đã đăng nhập) mô tả rõ
 // gửi gì và không gửi gì; (b) window.zenUsage.mark(feature) cho mã khác đánh dấu một tính năng đã dùng (cùng quy tắc: tối đa MỘT dấu mỗi tính năng mỗi ngày mỗi thiết bị,
 // đếm theo thiết bị-ngày, không đếm số lần bấm). Các dấu mới: award-save / award-later (bảng vận công), growth-<tab>, open-report, quickadd.
 (function () {
   const KEY = 'zen-usage-day';
   const OFF_KEY = 'zen-usage-off';
-  const enabled = () => {
+  // v2.75.0 (Theo Chân): lựa chọn đi theo tài khoản (data.prefs.usage, ghi khi người dùng tự đổi công tắc); chưa có thì dùng lựa chọn riêng của thiết bị như trước.
+  const local = () => {
     try {
       return localStorage.getItem(OFF_KEY) !== '1';
     } catch {
       return true; // không đọc được thì giữ mặc định (vẫn tôn trọng Do Not Track ở error-report.js)
     }
+  };
+  const enabled = () => {
+    const account = window.zenPrefs?.get('usage');
+    return typeof account === 'boolean' ? account : local();
   };
   function setEnabled(on) {
     try {
@@ -22,6 +27,7 @@
     } catch {
       return false; // không lưu được lựa chọn thì không báo là đã đổi
     }
+    window.zenPrefs?.set('usage', !!on, true); // theo tài khoản, lưu ngay vì là lựa chọn riêng tư
     return true;
   }
   function markUsed(feature) {
@@ -100,8 +106,9 @@
     block.dataset.usageBlock = '';
     block.innerHTML =
       '<h4>Chỉ số ẩn danh</h4>' +
-      '<p class="help-copy">Mỗi ngày, mỗi thiết bị gửi tối đa một dấu cho mỗi màn hình hoặc tính năng đã mở (ví dụ “Điểm tích lũy”, “Thêm nhanh”) cùng số phiên bản ứng dụng. Không kèm tên, email, nội dung việc hay ghi chú, mã tài khoản hay địa chỉ IP. Dấu này chỉ để biết nên cải thiện phần nào. Áp dụng cho thiết bị này; trình duyệt bật “Do Not Track” hoặc Global Privacy Control thì không gửi.</p>' +
-      '<label class="check-row"><input type="checkbox" id="usage-share"' + (enabled() ? ' checked' : '') + '><span>Chia sẻ chỉ số ẩn danh từ thiết bị này</span></label>' +
+      '<p class="help-copy">Mỗi ngày, mỗi thiết bị gửi tối đa một dấu cho mỗi màn hình hoặc tính năng đã mở (ví dụ “Điểm tích lũy”, “Thêm nhanh”) cùng số phiên bản ứng dụng. Không kèm tên, email, nội dung việc hay ghi chú, mã tài khoản hay địa chỉ IP. Dấu này chỉ để biết nên cải thiện phần nào. Trình duyệt bật “Do Not Track” hoặc Global Privacy Control thì không gửi.</p>' +
+      '<p class="help-copy">Lựa chọn này đi theo tài khoản, áp dụng cho mọi thiết bị đã đăng nhập (chưa đăng nhập thì chỉ nhớ trên thiết bị này).</p>' +
+      '<label class="check-row"><input type="checkbox" id="usage-share"' + (enabled() ? ' checked' : '') + '><span>Chia sẻ chỉ số ẩn danh</span></label>' +
       '<p class="help-copy">Báo lỗi tự động khi một đoạn mã của ứng dụng bị lỗi là mục riêng, không nằm trong công tắc này.</p>';
     content.append(block);
   };
@@ -121,6 +128,6 @@
       e.target.checked = enabled();
       return notify('Chưa lưu được lựa chọn. Hãy thử lại.');
     }
-    notify(on ? 'Đã bật chỉ số ẩn danh trên thiết bị này.' : 'Đã tắt chỉ số ẩn danh trên thiết bị này. Thiết bị này không gửi dấu dùng nào nữa.');
+    notify(on ? 'Đã bật chỉ số ẩn danh.' : 'Đã tắt chỉ số ẩn danh. Không gửi dấu dùng nào nữa.');
   });
 })();

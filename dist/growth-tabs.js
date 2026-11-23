@@ -17,7 +17,15 @@
     ['all', 'Tất cả'],
   ];
   const ids = TABS.map((t) => t[0]);
+  // v2.75.0 (Theo Chân): tab đang xem đi theo tài khoản (data.prefs.tab, ghi khi người dùng tự đổi tab; account-prefs.js lưu dồn); chưa có hoặc chưa đăng nhập thì dùng
+  // lựa chọn riêng của thiết bị (localStorage) như trước.
+  const account = () => {
+    const v = window.zenPrefs?.get('tab');
+    return ids.includes(v) ? v : null;
+  };
   let tab = (() => {
+    const a = account();
+    if (a) return a;
     try {
       const v = localStorage.getItem(KEY);
       return ids.includes(v) ? v : 'today';
@@ -27,7 +35,12 @@
   })();
   let last = { level: 0, earned: 0 };
   const open = (info) => ({ today: true, octa: true, story: true, gods: (info.level || 0) >= GODS_FROM, store: (info.earned || 0) > 0, all: true });
-  const current = (info) => (open(info)[tab] ? tab : 'today');
+  const current = (info) => {
+    // Dữ liệu từ thiết bị khác về có tab khác thì theo tài khoản (người dùng tự bấm thì go() đã ghi cả hai nên luôn khớp).
+    const a = account();
+    if (a && a !== tab) tab = a;
+    return open(info)[tab] ? tab : 'today';
+  };
 
   function arrange(html, info) {
     last = info || last;
@@ -55,6 +68,7 @@
     if (!ids.includes(id)) return false;
     tab = id;
     window.zenUsage?.mark('growth-' + id); // v2.71.0: tab nào được mở (đo theo thiết bị-ngày)
+    window.zenPrefs?.set('tab', id);
     try {
       localStorage.setItem(KEY, id);
     } catch {

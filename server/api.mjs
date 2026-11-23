@@ -63,6 +63,7 @@ import {
 import { financeReport, validFinanceSettings } from './finance-report.mjs';
 import { validGrowth, GROWTH_AXIS_IDS } from './growth.mjs';
 import { validWorklist } from './worklist.mjs';
+import { validPrefs } from './prefs.mjs';
 import { clientEvent } from './client-events.mjs';
 export const ORIGIN = 'https://kanban.huongthiennature.com',
   enc = new TextEncoder();
@@ -648,6 +649,8 @@ export function validWorkspace(d) {
     validGrowth(d.growth) &&
     // v2.63.0 (Liên Hoàn Lệnh): chuỗi việc ưu tiên xuyên dự án (tùy chọn; chỉ có khi người dùng tự ghi việc vào chuỗi).
     validWorklist(d.worklist) &&
+    // v2.75.0 (Theo Chân): tab Tu vi và công tắc chỉ số ẩn danh theo tài khoản (tùy chọn; chỉ có khi người dùng tự đổi).
+    validPrefs(d.prefs) &&
     d.projects.every(
       (p) =>
         id(p.id) &&

@@ -535,6 +535,11 @@
     "text/javascript; charset=utf-8"
   ],
   [
+    "/account-prefs.js",
+    "account-prefs.js",
+    "text/javascript; charset=utf-8"
+  ],
+  [
     "/lazy.js",
     "lazy.js",
     "text/javascript; charset=utf-8"
