@@ -1250,7 +1250,11 @@ textarea {
 #editor .notice-list .notice-item[data-kind="late"] .notice-tag { color: #a8244b; background: #fff0f4; }
 #editor .notice-list .notice-item[data-kind="soon"] .notice-tag { color: #8a5200; background: #fff6e3; }
 #editor .notice-list .notice-item[data-kind="important"] .notice-tag { color: #5f3a93; background: #f4edfb; }
-#editor .notice-list .notice-item.release-notice { grid-template-areas: "title title" "meta meta" "action action"; padding-right: 22px; background: #f6faf7; border-color: #cfe5d8; }
+/* v2.82.1: thông báo phiên bản có 3 phần (nhãn · nội dung · nút), một cột. Trước đây vùng lưới tên "tag" không có trong khuôn nên trình duyệt sinh thêm cột ẩn,
+   nội dung bị ép vào cột rộng 0 và chữ xếp dọc từng ký tự (nhất là ở điện thoại, khi nội dung phát hành dài). */
+#editor .notice-list .notice-item.release-notice { grid-template-columns: minmax(0, 1fr); grid-template-areas: "tag" "title" "action"; gap: 6px; padding-right: 22px; background: #f6faf7; border-color: #cfe5d8; }
+#editor .notice-list .notice-item.release-notice .notice-tag { justify-self: start; align-self: start; white-space: normal; }
+#editor .notice-list .notice-item.release-notice .notice-title { font-size: 14px; font-weight: 400; line-height: 1.55; overflow-wrap: anywhere; }
 #editor .notice-list .notice-item.release-notice::after { content: none; }
 #editor .notice-list .notice-item.release-notice .release-actions { grid-area: action; display: flex; flex-wrap: wrap; gap: 8px; justify-self: start; margin-top: 8px; }
 #editor .notice-list .notice-item.release-notice .release-actions .btn { margin: 0; }
