@@ -125,6 +125,7 @@ tests/growth-quyen4-browser.mjs
 tests/growth-emblem-browser.mjs
 tests/growth-pace-browser.mjs
 tests/growth-store-browser.mjs
+tests/growth-ask-browser.mjs
 tests/quickadd-browser.mjs
 tests/quickadd-pick-browser.mjs
 tests/release-notice-browser.mjs

@@ -6177,6 +6177,41 @@
 :root[data-style=giangho] .gr-store-strip .gr-store-close {
     color: var(--muted)
 }
+:root[data-style=giangho] .gr-ask-top p {
+    color: var(--gr-ink)
+}
+:root[data-style=giangho] .gr-ask-pic {
+    border: 1px solid var(--gr-line);
+    background: var(--gr-wash)
+}
+:root[data-style=giangho] .gr-ask-worth h3 {
+    color: var(--gr-ink)
+}
+:root[data-style=giangho] .gr-ask-facts {
+    border: 1px solid var(--gr-line)
+}
+:root[data-style=giangho] .gr-ask-row+.gr-ask-row {
+    border-top: 1px solid var(--gr-line)
+}
+:root[data-style=giangho] .gr-ask-row dt {
+    color: var(--muted)
+}
+:root[data-style=giangho] .gr-ask-row dd {
+    color: var(--gr-ink)
+}
+:root[data-style=giangho] .gr-ask-muted {
+    color: var(--muted)
+}
+:root[data-style=giangho] .gr-ask-axes li {
+    border: 1px solid color-mix(in srgb,var(--c) 55%,var(--gr-line));
+    background: color-mix(in srgb,var(--c) 10%,transparent)
+}
+:root[data-style=giangho] .gr-ask-axes i {
+    background: var(--c)
+}
+:root[data-style=giangho] .gr-ask-dlg .gr-award-foot {
+    background: var(--gr-paper)
+}
 :root[data-style=giangho] .gr-spend-row.is-fit input {
     border-color: var(--gr-gold);
     box-shadow: 0 0 0 1px var(--gr-gold)
@@ -14029,6 +14064,41 @@
 }
 :root[data-style=giangho][data-theme=dark] .gr-store-strip .gr-store-close {
     color: var(--muted)
+}
+:root[data-style=giangho][data-theme=dark] .gr-ask-top p {
+    color: var(--gr-ink)
+}
+:root[data-style=giangho][data-theme=dark] .gr-ask-pic {
+    border: 1px solid var(--gr-line);
+    background: var(--gr-wash)
+}
+:root[data-style=giangho][data-theme=dark] .gr-ask-worth h3 {
+    color: var(--gr-ink)
+}
+:root[data-style=giangho][data-theme=dark] .gr-ask-facts {
+    border: 1px solid var(--gr-line)
+}
+:root[data-style=giangho][data-theme=dark] .gr-ask-row+.gr-ask-row {
+    border-top: 1px solid var(--gr-line)
+}
+:root[data-style=giangho][data-theme=dark] .gr-ask-row dt {
+    color: var(--muted)
+}
+:root[data-style=giangho][data-theme=dark] .gr-ask-row dd {
+    color: var(--gr-ink)
+}
+:root[data-style=giangho][data-theme=dark] .gr-ask-muted {
+    color: var(--muted)
+}
+:root[data-style=giangho][data-theme=dark] .gr-ask-axes li {
+    border: 1px solid color-mix(in srgb,var(--c) 55%,var(--gr-line));
+    background: color-mix(in srgb,var(--c) 10%,transparent)
+}
+:root[data-style=giangho][data-theme=dark] .gr-ask-axes i {
+    background: var(--c)
+}
+:root[data-style=giangho][data-theme=dark] .gr-ask-dlg .gr-award-foot {
+    background: var(--gr-paper)
 }
 :root[data-style=giangho][data-theme=dark] .gr-spend-row.is-fit input {
     border-color: var(--gr-gold);

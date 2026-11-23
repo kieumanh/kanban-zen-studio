@@ -10,7 +10,7 @@
  *    quy đổi khác nên không đổi lược đồ dữ liệu.
  *  - Chỉ vẽ bằng thuộc tính SVG (không style nội tuyến trong hình) nên chạy dưới CSP chặt.
  *  - v2.57.0: tranh chia lớp (nền tĩnh + lớp đèn, tóc, thân, đầu, quạt, khói) để chuyển động chạy trên bộ ghép lớp; xem khối “Tranh quầy theo lớp”.
- *  API: zenStore.ITEMS, .OWNER, .scene(), .portrait(), .pic(mã, cỡ, màu), .advise(món, số dư), .hintOf, .panel(), .strip(món), .ask(mã), .buy(mã). */
+ *  API: zenStore.ITEMS, .OWNER, .scene(), .portrait(), .pic(mã, cỡ, màu), .advise(món, số dư), .hintOf, .panel(), .strip(món), .ask(mã), .buy(mã). v2.83.0: ask mở hộp thông tin giá trị món. */
 (() => {
   'use strict';
   const G = () => window.zenGrowth;
@@ -490,15 +490,77 @@
     clearTimeout(talkTimer);
     talkTimer = setTimeout(() => sc.classList.remove('is-talk'), 1500);
   }
+  // v2.83.0 (Hỏi Bà Chủ): bấm “Hỏi bà chủ” mở hộp thông tin giá trị của món: tiệm không niêm yết giá nên mốc tham khảo lấy từ chính sổ bảo vật
+  // của hiệp khách (số lần đã đổi, trung bình, thấp nhất, cao nhất, các lần gần nhất) cùng mạch hợp và tu vi đang có ở mạch ấy.
+  let askDlg = null;
+  const dmy = (iso) => {
+    const [y, m, d] = String(iso || '').split('-');
+    return y && m && d ? d + '/' + m + '/' + y : '';
+  };
+  function worthOf(it) {
+    const g = G().growth(), step = G().STEP;
+    const pts = (g && g.spend ? g.spend : [])
+      .filter((e) => !e.x && norm(e.n).startsWith(norm(it.base)))
+      .map((e) => ({ d: e.d || '', p: e.p.reduce((a, b) => a + b, 0) * step }));
+    const n = pts.length, sum = pts.reduce((a, b) => a + b.p, 0), all = pts.map((x) => x.p);
+    return {
+      n, sum, avg: n ? sum / n : 0, min: n ? Math.min(...all) : 0, max: n ? Math.max(...all) : 0,
+      recent: pts.slice().sort((a, b) => (a.d < b.d ? 1 : a.d > b.d ? -1 : 0)).slice(0, 3),
+    };
+  }
+  function askHtml(it) {
+    const A = G().AXES, num = G().fmt, bal = G().scores(), fit = fitOf(it), w = worthOf(it), total = bal.reduce((a, b) => a + b, 0);
+    const axes = fit.map((i) => '<li style="--c:' + A[i].color + '"><i aria-hidden="true"></i><span>' + esc(A[i].name) + '</span><em>' + num(bal[i]) + '</em></li>').join('');
+    const row = (k, v) => '<div class="gr-ask-row"><dt>' + k + '</dt><dd>' + v + '</dd></div>';
+    const facts =
+      row('Giá niêm yết', 'Không niêm yết, các hạ tự định theo cảm nhận') +
+      row('Mạch hợp', '<ul class="gr-ask-axes" aria-label="Mạch hợp và tu vi đang có">' + axes + '</ul>') +
+      row('Tu vi đang có', num(total) + ' điểm ở tám mạch') +
+      row('Đã quy đổi', w.n ? w.n + ' lần · ' + num(w.sum) + ' điểm' : '<span class="gr-ask-muted">Chưa đổi lần nào</span>') +
+      (w.n ? row('Mỗi lần', 'Trung bình ' + num(Math.round(w.avg * 10) / 10) + ' điểm' + (w.n > 1 ? ' (từ ' + num(w.min) + ' đến ' + num(w.max) + ')' : '')) : '') +
+      (w.recent.length ? row('Gần đây', '<ul class="gr-ask-hist">' + w.recent.map((r) => '<li><span>' + esc(dmy(r.d) || 'Chưa rõ ngày') + '</span><b>' + num(r.p) + ' điểm</b></li>').join('') + '</ul>') : '');
+    return (
+      '<form class="gr-award-form gr-ask-form" method="dialog" novalidate><header><span class="eyebrow">TÀNG BẢO CÁC</span><h2 id="gr-ask-title" tabindex="-1">Hỏi bà chủ · ' + esc(nameOf(it)) + '</h2></header>' +
+      '<div class="gr-ask-top"><span class="gr-ask-pic">' + picOf(it) + '</span><div><em class="gr-store-tag">' + esc(it.tag) + '</em><p>' + esc(it.blurb) + '</p></div></div>' +
+      strip(it) +
+      '<section class="gr-ask-worth" aria-labelledby="gr-ask-worth-title"><h3 id="gr-ask-worth-title">Giá trị món này</h3><dl class="gr-ask-facts">' + facts + '</dl>' +
+      '<p class="help-copy gr-ask-note">Mốc tham khảo lấy từ sổ bảo vật của chính các hạ; con số cuối cùng vẫn do các hạ tự định khi quy đổi.</p></section>' +
+      '<footer class="gr-award-foot"><button type="button" class="btn" data-gr-ask-close>Đóng</button><span class="gr-grow"></span><button type="button" class="btn primary" data-gr-ask-buy="' + it.id + '">Quy đổi món này</button></footer></form>'
+    );
+  }
+  function closeAsk(back) {
+    if (!askDlg) return;
+    const { el, id } = askDlg;
+    askDlg = null;
+    if (el.open) el.close();
+    el.remove();
+    if (back) document.querySelector('[data-gr-shop-ask="' + id + '"]')?.focus({ preventScroll: true });
+  }
+  function openAsk(it) {
+    closeAsk(false);
+    const d = document.createElement('dialog');
+    d.id = 'gr-store-ask';
+    d.className = 'gr-award gr-ask-dlg';
+    d.setAttribute('aria-labelledby', 'gr-ask-title');
+    d.innerHTML = askHtml(it);
+    document.body.append(d);
+    askDlg = { el: d, id: it.id };
+    d.addEventListener('cancel', (e) => {
+      e.preventDefault();
+      closeAsk(true);
+    });
+    d.addEventListener('click', (e) => {
+      if (e.target === d) closeAsk(true); // bấm ra ngoài hộp
+    });
+    d.showModal();
+    d.querySelector('#gr-ask-title').focus({ preventScroll: true });
+  }
   function ask(id) {
-    if (!itemById(id)) return;
+    const it = itemById(id);
+    if (!it) return;
     mark(id);
     reactTalk();
-    const hero = document.querySelector('.gr-store-hero');
-    if (hero) {
-      const r = hero.getBoundingClientRect();
-      if (r.top < 0 || r.bottom > innerHeight) hero.scrollIntoView({ block: 'nearest', behavior: reduce() ? 'auto' : 'smooth' });
-    }
+    openAsk(it);
   }
   function buy(id) {
     const it = itemById(id);
@@ -514,9 +576,13 @@
     document.getElementById('gr-store-title')?.focus({ preventScroll: true });
   }
   document.addEventListener('click', (e) => {
-    const t = e.target.closest?.('[data-gr-shop-ask],[data-gr-shop-buy],[data-gr-store-go]');
+    const t = e.target.closest?.('[data-gr-shop-ask],[data-gr-shop-buy],[data-gr-store-go],[data-gr-ask-close],[data-gr-ask-buy]');
     if (!t) return;
-    if (t.dataset.grShopAsk) ask(t.dataset.grShopAsk);
+    if (t.dataset.grAskClose !== undefined) closeAsk(true);
+    else if (t.dataset.grAskBuy) {
+      closeAsk(false);
+      buy(t.dataset.grAskBuy);
+    } else if (t.dataset.grShopAsk) ask(t.dataset.grShopAsk);
     else if (t.dataset.grShopBuy) buy(t.dataset.grShopBuy);
     else go();
   });
@@ -529,5 +595,5 @@
     if (sel.item === id) refreshTalk();
   });
 
-  window.zenStore = { OWNER, ITEMS, scene, portrait, pic, advise, hintOf, panel, strip, ask, buy, nameOf, fitOf, usedOf, sel };
+  window.zenStore = { OWNER, ITEMS, scene, portrait, pic, advise, hintOf, panel, strip, ask, buy, nameOf, fitOf, usedOf, worthOf, sel };
 })();

@@ -40,6 +40,15 @@ async function openBuy(page, id) {
   await page.click('[data-gr-shop-buy="' + id + '"]');
   await page.waitForSelector('#growth-spend[open]');
 }
+// v2.83.0: “Hỏi bà chủ” mở hộp thông tin giá trị món (hộp modal); lời tư vấn trên trang vẫn đổi theo như trước.
+async function openAsk(page, id) {
+  await page.click('[data-gr-shop-ask="' + id + '"]');
+  await page.waitForSelector('#gr-store-ask[open]');
+}
+async function closeAsk(page) {
+  await page.keyboard.press('Escape');
+  await page.waitForSelector('#gr-store-ask', { state: 'detached' });
+}
 async function closeDialog(page) {
   await page.click('[data-gr-spend-close]');
   await page.waitForSelector('#growth-spend', { state: 'detached' });
@@ -190,8 +199,9 @@ try {
       const { context, page } = await h.open(width, { touch, workspace: rich() });
       await h.show(page, 'growth');
       await openGrowthTab(page, 'all');
-      await page.click('[data-gr-shop-ask="tro"]');
-      assert.equal(await page.evaluate(() => document.activeElement?.dataset.grShopAsk), 'tro', 'con trỏ vẫn ở nút Hỏi bà chủ' + at);
+      await openAsk(page, 'tro');
+      await closeAsk(page);
+      assert.equal(await page.evaluate(() => document.activeElement?.dataset.grShopAsk), 'tro', 'đóng hộp thì con trỏ về nút Hỏi bà chủ' + at);
       assert.match(await text(page.locator('.gr-store-say')), /Nhà trọ lo chỗ nằm yên cho thân và chỗ nghỉ cho tâm.*Món này hợp mạch Thân thể, Tâm cảnh\. Đang có Thân thể \(260\), Tâm cảnh \(80\): lấy từ đó thì thuận nhất\./, 'tư vấn Nhà trọ' + at);
       assert.equal(await page.locator('.gr-store-item.is-asked').count(), 1);
       assert.equal(await item(page, 'tro').evaluate((n) => n.classList.contains('is-asked')), true, 'thẻ được hỏi được đánh dấu' + at);
@@ -199,11 +209,13 @@ try {
       await settle(page);
       const [bd1, bd2] = await page.evaluate(() => ['tro', 'son'].map((id) => getComputedStyle(document.querySelector('.gr-store-item[data-item="' + id + '"]')).borderTopColor));
       assert.notEqual(bd1, bd2, 'thẻ được hỏi có viền khác' + at);
-      await page.click('[data-gr-shop-ask="ai"]');
+      await openAsk(page, 'ai');
+      await closeAsk(page);
       assert.match(await text(page.locator('.gr-store-say')), /Quân sư AI bày mưu, tướng lĩnh AI xông pha.*hợp mạch Trí tuệ, Sự nghiệp/, 'tư vấn Quân sư AI' + at);
       assert.equal(await page.locator('.gr-store-item.is-asked').count(), 1, 'chỉ một thẻ được đánh dấu' + at);
       assert.deepEqual(await page.evaluate(() => [...document.querySelectorAll('.gr-store-bars li.is-fit span')].map((n) => n.textContent)), ['Trí tuệ', 'Sự nghiệp']);
-      await page.click('[data-gr-shop-ask="ruong"]');
+      await openAsk(page, 'ruong');
+      await closeAsk(page);
       assert.match(await text(page.locator('.gr-store-say')), /Bí kíp tinh thần nuôi trí.*Đổi sỉ thì lấy cả rương trăm quyển/, 'Rương bí kíp: lời của loại tinh thần + đổi sỉ' + at);
       assert.equal(await noOverflow(page), true, 'hỏi bà chủ không làm tràn ngang' + at);
       await context.close();
@@ -447,7 +459,8 @@ try {
     const { context, page } = await h.open(width, { touch: width < 700, workspace: rich(), setup: setStyle(style), ...opts });
     await h.show(page, 'growth');
     await openGrowthTab(page, 'all');
-    await page.click('[data-gr-shop-ask="tro"]');
+    await openAsk(page, 'tro');
+    await closeAsk(page);
     await settle(page);
     const sels = ['.gr-store-blurb', '.gr-store-hint', '.gr-store-say p', '.gr-store-close', '.gr-store-bars li span', '.gr-store-bars li em', '.gr-store-tag', '.gr-store-owner small', '.gr-store-name h3', '.gr-store-item .btn:not(.primary)', '.gr-store-chip:has(input:not(:checked)) span', '.gr-store-chip:has(input:checked) span'];
     for (const s of sels) {

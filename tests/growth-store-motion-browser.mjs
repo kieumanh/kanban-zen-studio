@@ -9,6 +9,12 @@ import { openGrowthTab } from './lib/growth-tab.mjs';
 const day = (n) => new Date(Date.now() + n * 864e5).toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
 const rich = () => ({ schema: 1, projects: [], notes: [], growth: { v: 1, hero: 'nu', name: 'Lam Y', since: day(-200), log: [{ id: 'e1', d: day(-1), s: 'task', k: 'task:e1', n: 'Việc cũ', p: [240, 600, 160, 90, 520, 820, 300, 190] }], spend: [] } });
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+// v2.83.0: “Hỏi bà chủ” mở hộp thông tin giá trị món; cử động của bà chủ vẫn chạy phía sau, nên chỉ cần đóng hộp để hỏi tiếp.
+async function closeAskDialog(page) {
+  await page.waitForSelector('#gr-store-ask[open]');
+  await page.keyboard.press('Escape');
+  await page.waitForSelector('#gr-store-ask', { state: 'detached' });
+}
 const COMPOSITOR = new Set(['rotate', 'scale', 'translate', 'opacity', 'offset', 'composite', 'easing', 'computedOffset']);
 // Đưa mọi hoạt họa của tranh về đúng thời điểm t (ms) rồi giữ nguyên.
 const freezeAt = (page, t) =>
@@ -102,9 +108,11 @@ try {
     const talk = () => page.evaluate(() => ({ on: document.querySelector('.gr-st-scene').classList.contains('is-talk'), anims: document.getAnimations().filter((a) => ['gr-st-nod', 'gr-st-fanwave'].includes(a.animationName)).map((a) => a.animationName).sort() }));
     assert.deepEqual(await talk(), { on: false, anims: [] }, 'chưa hỏi thì chưa phản ứng');
     await page.click('[data-gr-shop-ask="tro"]');
+    await closeAskDialog(page); // v2.83.0: hộp thông tin giá trị mở ra, đóng lại để hỏi món kế
     assert.deepEqual(await talk(), { on: true, anims: ['gr-st-fanwave', 'gr-st-nod'] }, 'hỏi xong bà chủ gật đầu và phe phẩy quạt');
     await wait(700);
     await page.click('[data-gr-shop-ask="son"]');
+    await closeAskDialog(page);
     await wait(1000);
     assert.equal((await talk()).on, true, 'hỏi tiếp thì kéo dài thêm, không bị gỡ sớm');
     await wait(900);
@@ -121,6 +129,7 @@ try {
     assert.equal(await count(), 0, 'giảm chuyển động: không hoạt họa nào');
     assert.equal(await page.evaluate(() => getComputedStyle(document.querySelector('.gr-st-lids')).opacity), '0', 'mí mắt không che mắt khi đứng yên');
     await page.click('[data-gr-shop-ask="tro"]');
+    await closeAskDialog(page);
     assert.equal(await count(), 0, 'hỏi bà chủ cũng không cử động khi giảm chuyển động');
     await context.close();
   }

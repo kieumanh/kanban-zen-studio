@@ -999,6 +999,30 @@ dialog.gr-breakthrough.is-still .gr-bt-emblem{animation:none}
 .gr-store-strip strong{display:block;margin-bottom:4px;font:700 15px/1.3 var(--serif);color:var(--gr-ink)}
 .gr-store-strip p{margin:0 0 5px;font-size:13.5px;line-height:1.5;color:var(--gr-ink);overflow-wrap:anywhere}
 .gr-store-strip .gr-store-close{margin-bottom:0;font-size:12.5px;color:var(--muted)}
+/* v2.83.0 (Hỏi Bà Chủ): hộp thông tin giá trị món vật phẩm. */
+dialog.gr-ask-dlg{max-width:560px}
+.gr-ask-top{display:flex;align-items:flex-start;gap:12px;margin:8px 0 0}
+.gr-ask-top>div{min-width:0}
+.gr-ask-top p{margin:6px 0 0;font-size:14px;line-height:1.5;color:var(--gr-ink);overflow-wrap:anywhere}
+.gr-ask-pic{flex:none;display:grid;place-items:center;width:64px;height:64px;border-radius:14px;border:1px solid var(--gr-line);background:var(--gr-wash)}
+.gr-ask-worth{margin:14px 0 0}
+.gr-ask-worth h3{margin:0 0 8px;font:700 16px/1.3 var(--serif);color:var(--gr-ink)}
+.gr-ask-facts{display:grid;margin:0;border:1px solid var(--gr-line);border-radius:14px;overflow:hidden}
+.gr-ask-row{display:grid;grid-template-columns:104px minmax(0,1fr);gap:10px;align-items:baseline;margin:0;padding:10px 12px}
+.gr-ask-row+.gr-ask-row{border-top:1px solid var(--gr-line)}
+.gr-ask-row dt{margin:0;font-size:12px;font-weight:700;letter-spacing:.03em;color:var(--muted)}
+.gr-ask-row dd{margin:0;font-size:14px;line-height:1.5;color:var(--gr-ink);overflow-wrap:anywhere}
+.gr-ask-muted{color:var(--muted)}
+.gr-ask-axes,.gr-ask-hist{display:flex;flex-wrap:wrap;gap:6px;margin:0;padding:0;list-style:none}
+.gr-ask-axes li{display:inline-flex;align-items:center;gap:6px;min-height:28px;padding:2px 10px;border-radius:99px;border:1px solid color-mix(in srgb,var(--c) 55%,var(--gr-line));background:color-mix(in srgb,var(--c) 10%,transparent);font-size:13px}
+.gr-ask-axes i{display:block;width:9px;height:9px;border-radius:50%;background:var(--c)}
+.gr-ask-axes em{font-style:normal;font-weight:700}
+.gr-ask-hist{flex-direction:column;gap:2px}
+.gr-ask-hist li{display:flex;justify-content:space-between;gap:10px}
+.gr-ask-note{margin:8px 0 0}
+.gr-ask-dlg .gr-award-foot{position:sticky;bottom:-16px;margin-bottom:-4px;padding:12px 0 4px;background:var(--gr-paper)}
+.gr-ask-dlg .gr-award-foot .btn{min-height:44px;border-radius:999px;padding:0 18px}
+@media (max-width:420px){.gr-ask-row{grid-template-columns:88px minmax(0,1fr)}}
 .gr-spend-row.is-fit input{border-color:var(--gr-gold);box-shadow:0 0 0 1px var(--gr-gold)}
 @media (max-width:900px){.gr-store-hero{grid-template-columns:minmax(0,1fr)}}
 @media (max-width:560px){.gr-store-item{padding:12px;gap:10px}.gr-store-bars li{grid-template-columns:minmax(0,78px) minmax(0,1fr) 48px}.gr-store-act .btn{flex:1 1 130px}.gr-store-owner strong{font-size:16px}}
