@@ -4117,6 +4117,30 @@
 :root[data-theme=dark] .qa-empty {
     color: #d0c3da
 }
+:root[data-theme=dark] .qa-quick-btn {
+    border: 1px solid #403a45;
+    background: #1b181f;
+    color: #dcc1f7
+}
+:root[data-theme=dark] .qa-label {
+    color: #d0c3da
+}
+:root[data-theme=dark] .qa-chip {
+    border: 1px solid #403a45;
+    background: #1b181f;
+    color: #dcd3ec
+}
+:root[data-theme=dark] .qa-chip[aria-checked='true'] {
+    border-color: #845cd6;
+    background: #1d1823
+}
+:root[data-theme=dark] .qa-quick-btn:focus-visible, :root[data-theme=dark] .qa-chip:focus-visible, :root[data-theme=dark] .qa-again:focus-visible {
+    outline: 2px solid #845cd6
+}
+:root[data-theme=dark] .qa-again {
+    border: 1px solid #403a45;
+    color: #dcc1f7
+}
 @media screen and (max-width: 700px) {
     :root[data-theme=dark] .zen-bottom-bar {
         background: rgba(27,24,31,0.969);

@@ -7456,6 +7456,32 @@
 :root[data-style=giangho] .qa-empty {
     color: #624d40
 }
+:root[data-style=giangho] .qa-quick-btn {
+    border: 1px solid #ebd9be;
+    background: #fffefb;
+    color: #6d2328
+}
+:root[data-style=giangho] .qa-label {
+    color: #624d40
+}
+:root[data-style=giangho] .qa-chip {
+    border: 1px solid #ebd9be;
+    background: #fffefb;
+    color: #311f13
+}
+:root[data-style=giangho] .qa-chip[aria-checked='true'] {
+    border-color: #b44148;
+    background: #f5e9d4;
+    box-shadow: inset 0 0 0 1px #b44148
+}
+:root[data-style=giangho] .qa-quick-btn:focus-visible, :root[data-style=giangho] .qa-chip:focus-visible, :root[data-style=giangho] .qa-again:focus-visible {
+    outline: 2px solid #b44148
+}
+:root[data-style=giangho] .qa-again {
+    border: 1px solid #ebd9be;
+    background: transparent;
+    color: #6d2328
+}
 @media screen and (max-width: 700px) {
     :root[data-style=giangho] .zen-bottom-bar {
         background: rgba(255,252,246,0.969);
@@ -15282,6 +15308,32 @@
 }
 :root[data-style=giangho][data-theme=dark] .qa-empty {
     color: #e5cdbe
+}
+:root[data-style=giangho][data-theme=dark] .qa-quick-btn {
+    border: 1px solid #453a32;
+    background: #1e1811;
+    color: #fccac8
+}
+:root[data-style=giangho][data-theme=dark] .qa-label {
+    color: #e5cdbe
+}
+:root[data-style=giangho][data-theme=dark] .qa-chip {
+    border: 1px solid #453a32;
+    background: #1e1811;
+    color: #f5dccc
+}
+:root[data-style=giangho][data-theme=dark] .qa-chip[aria-checked='true'] {
+    border-color: #c24d53;
+    background: #21190f;
+    box-shadow: inset 0 0 0 1px #c24d53
+}
+:root[data-style=giangho][data-theme=dark] .qa-quick-btn:focus-visible, :root[data-style=giangho][data-theme=dark] .qa-chip:focus-visible, :root[data-style=giangho][data-theme=dark] .qa-again:focus-visible {
+    outline: 2px solid #c24d53
+}
+:root[data-style=giangho][data-theme=dark] .qa-again {
+    border: 1px solid #453a32;
+    background: transparent;
+    color: #fccac8
 }
 @media screen and (max-width: 700px) {
     :root[data-style=giangho][data-theme=dark] .zen-bottom-bar {

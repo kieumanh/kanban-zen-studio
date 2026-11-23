@@ -389,19 +389,22 @@
     const list = typeof visibleProjects === 'function' ? visibleProjects() : data.projects.filter((p) => !p.archived);
     return { today: today(), minutes: nowVN(), projects: list, activeId: typeof active === 'string' ? active : null };
   }
-  function targetProject(r, ctx) {
+  // Thứ tự ưu tiên: #tag trong câu → ô dự án đã chọn → dự án đang mở → dự án đầu tiên.
+  function targetProject(r, ctx, pickedId) {
     if (r.project) return r.project;
+    const c = pickedId && ctx.projects.find((p) => p.id === pickedId);
+    if (c) return c;
     const a = ctx.projects.find((p) => p.id === ctx.activeId);
     return a || ctx.projects[0] || null;
   }
 
   // Tạo việc đúng hình dạng của biểu mẫu “Thêm một bước tiến mới” (xem taskForm trong app.js).
-  function create(line) {
+  function create(line, pickedId) {
     if (typeof contentReadOnly !== 'undefined' && contentReadOnly) return { ok: false, message: 'Bản chỉ xem không thêm được việc.' };
     const ctx = context();
     const r = parse(line, ctx);
     if (!r.title) return { ok: false, message: 'Hãy gõ tên việc, ví dụ: Gọi anh Sơn mai 9h #farm' };
-    const p = targetProject(r, ctx);
+    const p = targetProject(r, ctx, pickedId);
     if (!p) return { ok: false, message: 'Chưa có dự án nào. Hãy tạo một dự án trước rồi thêm việc.' };
     if (p.tasks.length >= 2000) return { ok: false, message: 'Dự án này đã đủ 2.000 việc.' };
     const col = p.columns.includes('List') ? 'List' : p.columns[0];
@@ -434,29 +437,43 @@
   }
 
   // ---- Hộp “Thêm nhanh” ----------------------------------------------------------------------------------------------------
-  function previewHtml(line) {
+  function previewHtml(line, pickedId) {
     if (!line.trim()) return '<p class="qa-empty">Gõ tên việc, thêm ngày giờ và #tên dự án. Mình sẽ tách giúp.</p>';
     const ctx = context();
     const r = parse(line, ctx);
-    const p = targetProject(r, ctx);
+    const p = targetProject(r, ctx, pickedId);
     const rows = [];
     rows.push(['Việc', r.title ? esc(r.title) : '<span class="qa-warn">Chưa có tên việc</span>']);
     rows.push(['Hạn', r.date ? esc(describe(r, ctx.today)) : '<span class="qa-muted">Chưa đặt hạn</span>']);
     let proj = p ? `<span class="qa-dot" style="background:${esc(p.color)}"></span>${esc(p.name)}` : '<span class="qa-warn">Chưa có dự án</span>';
-    if (!r.project && r.unknownTags.length) proj += `<small class="qa-warn">Không có dự án “${esc(r.unknownTags[0])}”, dùng dự án đang mở.</small>`;
+    if (!r.project && r.unknownTags.length) proj += `<small class="qa-warn">Không có dự án “${esc(r.unknownTags[0])}”, dùng dự án ${p && pickedId && p.id === pickedId && pickedId !== ctx.activeId ? 'đã chọn' : 'đang mở'}.</small>`;
     rows.push(['Dự án', proj]);
     if (r.labels.length) rows.push(['Từ khóa', r.labels.map((l) => esc(l.name)).join(', ')]);
     return rows.map(([k, v]) => `<div class="qa-row"><dt>${k}</dt><dd>${v}</dd></div>`).join('');
   }
 
+  // Gợi ý ngày giờ: bấm là chèn đúng cụm mà parse() đã hiểu, khỏi gõ trên bàn phím điện thoại.
+  const QUICK_WORDS = ['hôm nay', 'mai', 'mốt', '9h'];
+  const tagRe = (tag) => new RegExp('(^|\\s)#' + String(tag).replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(?=\\s|$)', 'iu');
+
   function open(prefill = '') {
     if (document.body.classList.contains('signed-out')) return;
     if (typeof contentReadOnly !== 'undefined' && contentReadOnly) return notify('Bản chỉ xem không thêm được việc.');
     if (document.querySelector('dialog.studio-palette[open]')) document.querySelector('dialog.studio-palette').close();
+    const ctx0 = context();
+    let picked = (ctx0.projects.find((p) => p.id === ctx0.activeId) || ctx0.projects[0] || {}).id || null;
+    const chips = ctx0.projects.length > 1
+      ? '<div class="qa-pick"><span class="qa-label" id="qa-pick-label">Dự án</span><div class="qa-picker" id="qa-picker" role="radiogroup" aria-labelledby="qa-pick-label">' +
+        ctx0.projects.map((p) => `<button type="button" class="qa-chip" role="radio" aria-checked="false" tabindex="-1" data-id="${esc(p.id)}"><span class="qa-dot" style="background:${esc(p.color)}"></span><span class="qa-chip-name">${esc(p.name)}</span></button>`).join('') +
+        '</div></div>'
+      : '';
+    const quick = '<div class="qa-quick" role="group" aria-label="Gợi ý ngày giờ">' + QUICK_WORDS.map((w) => `<button type="button" class="qa-quick-btn" data-ins="${esc(w)}">${esc(w.charAt(0).toUpperCase() + w.slice(1))}</button>`).join('') + '</div>';
     modal(
-      '<h2>Thêm nhanh</h2><label class="field">Gõ một câu<input id="qa-line" name="line" maxlength="300" autocomplete="off" autocapitalize="sentences" enterkeyhint="done" placeholder="Gọi anh Sơn mai 9h #farm" required></label><dl class="qa-preview" id="qa-preview" aria-live="polite"></dl><p class="help-copy qa-hint">Hiểu: hôm nay · mai · mốt · thứ 6 · thứ 6 tuần sau · 20/11 · ngày 20 · 9h · 9h30 · 3 giờ chiều · #tên dự án</p>',
+      '<h2>Thêm nhanh</h2><label class="field">Gõ một câu<input id="qa-line" name="line" maxlength="300" autocomplete="off" autocapitalize="sentences" enterkeyhint="done" placeholder="Gọi anh Sơn mai 9h #farm" required></label>' +
+        quick + chips +
+        '<dl class="qa-preview" id="qa-preview" aria-live="polite"></dl><div class="qa-more"><button type="button" class="qa-again" id="qa-again">Thêm &amp; ghi tiếp</button></div><p class="help-copy qa-hint">Hiểu: hôm nay · mai · mốt · thứ 6 · thứ 6 tuần sau · 20/11 · ngày 20 · 9h · 9h30 · 3 giờ chiều · #tên dự án</p>',
       (fd) => {
-        const r = create(String(fd.get('line') || ''));
+        const r = create(String(fd.get('line') || ''), picked);
         if (!r.ok) return notify(r.message);
         $('#editor').close();
         render();
@@ -466,11 +483,78 @@
     const label = $('#editor-form [type=submit] span');
     if (label) label.textContent = 'Thêm việc';
     const input = $('#qa-line'),
-      box = $('#qa-preview');
-    const paint = () => (box.innerHTML = previewHtml(input.value));
+      box = $('#qa-preview'),
+      picker = $('#qa-picker');
+    const chipEls = picker ? [...picker.querySelectorAll('.qa-chip')] : [];
+    const paint = () => {
+      box.innerHTML = previewHtml(input.value, picked);
+      if (!picker) return;
+      const c = context();
+      const eff = targetProject(parse(input.value, c), c, picked);
+      for (const el of chipEls) {
+        const on = !!eff && el.dataset.id === eff.id;
+        el.setAttribute('aria-checked', String(on));
+        el.tabIndex = on ? 0 : -1;
+      }
+      if (!chipEls.some((el) => el.tabIndex === 0) && chipEls[0]) chipEls[0].tabIndex = 0;
+    };
+    const reveal = () => {
+      const el = chipEls.find((e) => e.getAttribute('aria-checked') === 'true');
+      if (el && picker.scrollWidth > picker.clientWidth) picker.scrollLeft = Math.max(0, el.offsetLeft - (picker.clientWidth - el.offsetWidth) / 2);
+    };
+    const choose = (el) => {
+      // Chọn ô thì #tag trong câu (đang giành quyền) bị gỡ để điều nhìn thấy trên ô khớp điều sẽ xảy ra.
+      const c = context();
+      const r = parse(input.value, c);
+      if (r.project && r.projectTag) input.value = input.value.replace(tagRe(r.projectTag), ' ').replace(/\s{2,}/g, ' ').replace(/^\s+/, '');
+      picked = el.dataset.id;
+      paint();
+      input.focus();
+    };
+    if (picker) {
+      picker.addEventListener('click', (e) => {
+        const el = e.target.closest('.qa-chip');
+        if (el) choose(el);
+      });
+      picker.addEventListener('keydown', (e) => {
+        const i = chipEls.indexOf(document.activeElement);
+        const step = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key];
+        if (i < 0 || !step) return;
+        e.preventDefault();
+        const next = chipEls[(i + step + chipEls.length) % chipEls.length];
+        next.focus();
+        choose(next);
+        next.focus();
+      });
+    }
+    $('.qa-quick')?.addEventListener('click', (e) => {
+      const b = e.target.closest('[data-ins]');
+      if (!b) return;
+      const w = b.dataset.ins;
+      if (!new RegExp('(^|\\s)' + w + '(?=\\s|$)', 'iu').test(input.value)) input.value = (input.value.trim() ? input.value.replace(/\s+$/, '') + ' ' : '') + w + ' ';
+      paint();
+      input.focus();
+    });
+    const again = () => {
+      const r = create(input.value, picked);
+      if (!r.ok) return notify(r.message);
+      render();
+      notify(r.message);
+      input.value = '';
+      paint();
+      input.focus();
+    };
+    $('#qa-again').addEventListener('click', again);
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
+        e.preventDefault();
+        again();
+      }
+    });
     input.addEventListener('input', paint);
     input.value = prefill;
     paint();
+    reveal();
     input.focus();
   }
 

@@ -4118,6 +4118,28 @@
 :root[data-contrast=high] .qa-empty {
     color: #060606
 }
+:root[data-contrast=high] .qa-quick-btn {
+    border: 1px solid #171519;
+    color: #060606
+}
+:root[data-contrast=high] .qa-label {
+    color: #060606
+}
+:root[data-contrast=high] .qa-chip {
+    border: 1px solid #171519;
+    color: #060606
+}
+:root[data-contrast=high] .qa-chip[aria-checked='true'] {
+    border-color: #18102b;
+    background: #ffffff
+}
+:root[data-contrast=high] .qa-quick-btn:focus-visible, :root[data-contrast=high] .qa-chip:focus-visible, :root[data-contrast=high] .qa-again:focus-visible {
+    outline: 2px solid #18102b
+}
+:root[data-contrast=high] .qa-again {
+    border: 1px solid #171519;
+    color: #060606
+}
 @media screen and (max-width: 700px) {
     :root[data-contrast=high] .zen-bottom-bar {
         background: rgba(255,255,255,0.969);
@@ -8569,6 +8591,30 @@
     color: #f5f5f5
 }
 :root[data-theme=dark][data-contrast=high] .qa-empty {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .qa-quick-btn {
+    border: 1px solid #cecece;
+    background: #030303;
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .qa-label {
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .qa-chip {
+    border: 1px solid #cecece;
+    background: #030303;
+    color: #f5f5f5
+}
+:root[data-theme=dark][data-contrast=high] .qa-chip[aria-checked='true'] {
+    border-color: #cecece;
+    background: #030303
+}
+:root[data-theme=dark][data-contrast=high] .qa-quick-btn:focus-visible, :root[data-theme=dark][data-contrast=high] .qa-chip:focus-visible, :root[data-theme=dark][data-contrast=high] .qa-again:focus-visible {
+    outline: 2px solid #cecece
+}
+:root[data-theme=dark][data-contrast=high] .qa-again {
+    border: 1px solid #cecece;
     color: #f5f5f5
 }
 @media screen and (max-width: 700px) {

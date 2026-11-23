@@ -2192,7 +2192,27 @@ body.signed-out .quick-add-btn { display: none; }
 .qa-empty { margin: 0; font-size: 14px; line-height: 1.5; color: #685974; }
 .qa-hint { margin-top: 10px; line-height: 1.55; }
 @media (max-width: 700px) {
-  .qa-row { grid-template-columns: 56px minmax(0, 1fr); }
+  .qa-row { grid-template-columns: 72px minmax(0, 1fr); }
+}
+
+/* v2.82.0 (Thêm Nhanh): hàng chọn dự án một chạm, gợi ý ngày giờ và nút “Thêm & ghi tiếp”. Mọi nút cao tối thiểu 44px, bo tròn. */
+.qa-quick { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0 0; }
+.qa-quick-btn { min-height: 44px; padding: 0 16px; border: 1px solid #e5daee; border-radius: 999px; background: #ffffff; color: #5d3c7a; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; }
+.qa-pick { margin: 14px 0 0; }
+.qa-label { display: block; margin: 0 0 6px; font-size: 12px; font-weight: 700; letter-spacing: 0.04em; color: #685974; }
+.qa-picker { position: relative; display: flex; flex-wrap: nowrap; gap: 8px; margin: 0 -2px; padding: 2px; overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+.qa-picker::-webkit-scrollbar { display: none; }
+.qa-chip { flex: none; display: inline-flex; align-items: center; gap: 8px; min-height: 44px; max-width: 220px; padding: 0 16px; border: 1px solid #e5daee; border-radius: 999px; background: #ffffff; color: #352a44; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; }
+.qa-chip-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.qa-chip[aria-checked='true'] { border-color: #7950c8; background: #efe6fa; box-shadow: inset 0 0 0 1px #7950c8; }
+.qa-quick-btn:focus-visible, .qa-chip:focus-visible, .qa-again:focus-visible { outline: 2px solid #7950c8; outline-offset: 2px; }
+.qa-more { display: flex; justify-content: flex-end; margin: 6px 0 0; }
+.qa-again { min-height: 44px; padding: 0 18px; border: 1px solid #e5daee; border-radius: 999px; background: transparent; color: #5d3c7a; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; }
+@media (min-width: 701px) {
+  .qa-picker { flex-wrap: wrap; max-height: 104px; overflow-y: auto; overflow-x: hidden; }
+}
+@media (max-width: 700px) {
+  .qa-again { width: 100%; }
 }
 /* Nút “+” là phần tử thứ ba của cụm nút bên phải nên cột phải được nới đủ cho nó, nếu không cụm nút lấn sang ô tìm kiếm. */
 @media (max-width: 700px) {
