@@ -15791,7 +15791,7 @@
   display: block;
   color: var(--gh-seal);
 }
-/* v2.58.0: ấn triện kiểu kiếm hiệp, vẽ bằng SVG (dist/giangho-fx.js sealSvg): khối son sứt mẻ, chữ và khung khắc lõm, vết mực mòn. */
+/* v2.58.0: ấn triện kiểu kiếm hiệp, vẽ bằng SVG (dist/giangho-fx.js sealSvg); v2.78.0: ấn tròn (khối son tròn sứt mẻ, viền, hạt châu, gươm, chữ khắc lõm). */
 :root[data-style=giangho] .gh-seal-svg {
   display: block;
   width: 100%;
@@ -15838,7 +15838,7 @@
   position: absolute;
   inset: 0;
   border: 2px solid var(--gh-seal);
-  border-radius: 10px;
+  border-radius: 50%;
   opacity: 0;
   animation: gh-stamp-ring 0.8s ease-out 0.55s both;
 }

@@ -192,3 +192,4 @@ tests/growth-hoiquang-browser.mjs
 tests/diagnostics-usage-browser.mjs
 tests/release-weeks-browser.mjs
 tests/frame-tidy-browser.mjs
+tests/seal-round-browser.mjs
