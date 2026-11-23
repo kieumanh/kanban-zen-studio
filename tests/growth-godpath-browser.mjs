@@ -18,6 +18,7 @@
 import assert from 'node:assert/strict';
 import { startHarness } from './lib/browser-harness.mjs';
 import { openGrowthTab } from './lib/growth-tab.mjs';
+import { closeCelebrations } from './lib/celebrate.mjs';
 
 const day = (n) => new Date(Date.now() + n * 864e5).toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
 const project = { id: 'p1', name: 'Dự án A', description: '', color: '#7950c8', icon: '✺', columns: ['Idea', 'List', 'Doing', 'Done'], columnNames: { Idea: 'Ý tưởng', List: 'Việc cần làm', Doing: 'Đang thực hiện', Done: 'Hoàn thành' }, tasks: [{ id: 'p1t0', title: 'Ngồi thiền', col: 'Doing', description: '', due: day(3), tag: 'Công việc', priority: 'q2', checks: [] }] };
@@ -218,6 +219,7 @@ try {
       await page.click('[data-gr-plus="2"]');
       await page.click('[data-gr-save]');
       await page.mouse.move(2, 2);
+      await closeCelebrations(page); // v2.79.0: thông báo mừng hiện lần lượt; chiến ký chờ lời chúc hoàn thành (và form lên cấp nếu có) đóng
       await page.waitForSelector('dialog.gr-story[open]', { timeout: 5000 });
       const d = await dialog(page);
       assert.deepEqual([d.god, d.eyebrow, d.title], [true, 'THẦN GIỚI · TINH ĐẤU 3 / 35', 'Đấu Tịch Chiếu tinh quân'], 'thắng thêm trận thì chiến ký tự mở' + at);

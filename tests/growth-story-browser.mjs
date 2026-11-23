@@ -14,6 +14,7 @@
 import assert from 'node:assert/strict';
 import { startHarness } from './lib/browser-harness.mjs';
 import { openGrowthTab } from './lib/growth-tab.mjs';
+import { closeCelebrations } from './lib/celebrate.mjs';
 
 const day = (n) => new Date(Date.now() + n * 864e5).toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
 const project = { id: 'p1', name: 'Dự án A', description: '', color: '#7950c8', icon: '✺', columns: ['Idea', 'List', 'Doing', 'Done'], columnNames: { Idea: 'Ý tưởng', List: 'Việc cần làm', Doing: 'Đang thực hiện', Done: 'Hoàn thành' }, tasks: [{ id: 'p1t0', title: 'Gửi báo cáo', col: 'Doing', description: '', due: day(3), tag: 'Công việc', priority: 'q2', checks: [] }] };
@@ -34,7 +35,7 @@ const story = (page) =>
       next: d.querySelector('[data-story-next]').textContent, prevOff: d.querySelector('[data-story-prev]').disabled, fits: r.left >= 0 && r.right <= innerWidth && r.top >= 0 && r.bottom <= innerHeight,
     };
   });
-async function finishTask(page) {
+async function finishTask(page, closeNotices = true) {
   await h.show(page, 'board');
   await page.evaluate(() => moveTask(project('p1'), project('p1').tasks[0], 'Done'));
   await page.waitForSelector('#growth-award[open]');
@@ -43,6 +44,7 @@ async function finishTask(page) {
   await page.click('[data-gr-save]');
   // Con trỏ đang nằm đúng chỗ nút "Tiếp" sắp hiện; dời đi để nút không nhấp nháy theo hiệu ứng rê chuột.
   await page.mouse.move(2, 2);
+  if (closeNotices) await closeCelebrations(page); // v2.79.0: thông báo mừng hiện lần lượt; chương truyện chờ lời chúc hoàn thành và form lên cấp đóng
 }
 
 const h = await startHarness({ seed: seed(growth()) });
@@ -124,7 +126,7 @@ try {
   // 4. Chương đã đọc trên thiết bị khác thì không tự hiện lại.
   {
     const { context, page } = await h.open(390, { touch: true, workspace: seed(growth())(), receiptsSeed: ['notice:tale-5'] });
-    await finishTask(page);
+    await finishTask(page, false); // v2.79.0: giữ lời chúc hoàn thành để kiểm; chương đã đọc vẫn không hiện, chỉ còn thông báo mừng xếp hàng
     await page.waitForSelector('.completion-card');
     await wait(1500);
     assert.equal(await story(page), null, 'chương đã đọc ở thiết bị khác không hiện lại');

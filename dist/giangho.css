@@ -6274,6 +6274,55 @@
     background: #bc3643;
     color: #ffffff
 }
+:root[data-style=giangho] dialog.gr-levelup {
+    border: 1px solid var(--gr-line);
+    border-top: 4px solid var(--gr-seal);
+    background: var(--gr-paper);
+    color: var(--gr-ink)
+}
+:root[data-style=giangho] dialog.gr-levelup::backdrop {
+    background: rgba(48,37,28,0.702)
+}
+:root[data-style=giangho] .gr-lu-x {
+    border: 1px solid var(--gr-line);
+    background: var(--gr-paper);
+    color: var(--gr-seal-text)
+}
+:root[data-style=giangho] .gr-lu-ring {
+    border: 2px solid var(--gr-gold)
+}
+:root[data-style=giangho] .gr-lu-ring.is-2 {
+    border-color: var(--gr-seal)
+}
+:root[data-style=giangho] .gr-lu-emblem.is-plain {
+    border: 3px solid var(--gr-seal);
+    color: var(--gr-seal-text)
+}
+:root[data-style=giangho] dialog.gr-levelup .eyebrow {
+    color: var(--gr-seal-text)
+}
+:root[data-style=giangho] dialog.gr-levelup h2 {
+    color: var(--gr-ink)
+}
+:root[data-style=giangho] .gr-lu-facts>div {
+    border: 1px solid var(--gr-line)
+}
+:root[data-style=giangho] .gr-lu-facts dt {
+    color: var(--gr-seal-text)
+}
+:root[data-style=giangho] .gr-lu-bar {
+    background: var(--gr-track)
+}
+:root[data-style=giangho] .gr-lu-bar i {
+    background: linear-gradient(90deg,var(--gr-seal),var(--gr-gold))
+}
+:root[data-style=giangho] .gr-lu-pct {
+    color: var(--gr-seal-text)
+}
+:root[data-style=giangho] .gr-fw-spark {
+    background: var(--c);
+    box-shadow: 0 0 8px 2px var(--c)
+}
 :root[data-style=giangho] {
     --muted: #685345;
     --text-muted: #685345
@@ -14051,6 +14100,55 @@
 :root[data-style=giangho][data-theme=dark] .sidebar .nav .nav-queue {
     background: #bc3643;
     color: #ffffff
+}
+:root[data-style=giangho][data-theme=dark] dialog.gr-levelup {
+    border: 1px solid var(--gr-line);
+    border-top: 4px solid var(--gr-seal);
+    background: var(--gr-paper);
+    color: var(--gr-ink)
+}
+:root[data-style=giangho][data-theme=dark] dialog.gr-levelup::backdrop {
+    background: rgba(48,37,28,0.702)
+}
+:root[data-style=giangho][data-theme=dark] .gr-lu-x {
+    border: 1px solid var(--gr-line);
+    background: var(--gr-paper);
+    color: var(--gr-seal-text)
+}
+:root[data-style=giangho][data-theme=dark] .gr-lu-ring {
+    border: 2px solid var(--gr-gold)
+}
+:root[data-style=giangho][data-theme=dark] .gr-lu-ring.is-2 {
+    border-color: var(--gr-seal)
+}
+:root[data-style=giangho][data-theme=dark] .gr-lu-emblem.is-plain {
+    border: 3px solid var(--gr-seal);
+    color: var(--gr-seal-text)
+}
+:root[data-style=giangho][data-theme=dark] dialog.gr-levelup .eyebrow {
+    color: var(--gr-seal-text)
+}
+:root[data-style=giangho][data-theme=dark] dialog.gr-levelup h2 {
+    color: var(--gr-ink)
+}
+:root[data-style=giangho][data-theme=dark] .gr-lu-facts>div {
+    border: 1px solid var(--gr-line)
+}
+:root[data-style=giangho][data-theme=dark] .gr-lu-facts dt {
+    color: var(--gr-seal-text)
+}
+:root[data-style=giangho][data-theme=dark] .gr-lu-bar {
+    background: var(--gr-track)
+}
+:root[data-style=giangho][data-theme=dark] .gr-lu-bar i {
+    background: linear-gradient(90deg,var(--gr-seal),var(--gr-gold))
+}
+:root[data-style=giangho][data-theme=dark] .gr-lu-pct {
+    color: var(--gr-seal-text)
+}
+:root[data-style=giangho][data-theme=dark] .gr-fw-spark {
+    background: var(--c);
+    box-shadow: 0 0 8px 2px var(--c)
 }
 :root[data-style=giangho][data-theme=dark] {
     --muted: #e1ccbf;

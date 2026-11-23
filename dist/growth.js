@@ -501,6 +501,7 @@
     let crossing = null;
     let breakthroughTo = null;
     let emblemTo = null;
+    let levelUpTo = null;
     if (commit && a.spent > 0) {
       const entry = { id: uid(), d: today(), s: a.source, k: a.key, n: String(a.title || '').slice(0, 120), p: a.add.slice() };
       if (!a.key) delete entry.k;
@@ -522,6 +523,8 @@
           parts.push('Chúc mừng! ' + heroName() + ' lên cấp ' + after.level + ' · ' + after.title + ' (' + after.name + ').');
           // v2.32.0 (Huy Hiệu Bách Cấp): lên cấp thường thì hiện thẻ huy hiệu mới của cấp vừa đạt (đột phá đã có huy hiệu trong nghi thức).
           emblemTo = [after.level, after.title, after.level - before.level > 1 ? 'vượt ' + (after.level - before.level) + ' cấp' : ''];
+          // v2.79.0 (Lên Cấp): lên cấp thật (không phải bước đầu vào Sơ nhập giang hồ) thì mở form chúc mừng, thay cho thẻ huy hiệu nhỏ.
+          if (before.level >= 1) levelUpTo = { name: heroName(), level: after.level, from: before.level, title: after.title, realm: after.name, nextTitle: after.nextTitle, need: fmt(after.need), pct: after.pct, next: after.next, needRealm: fmt(after.needRealm), top: after.top, held: after.held };
         }
         toastText = parts.join(' ');
       }
@@ -533,12 +536,41 @@
     if (typeof a.then === 'function') a.then();
     if (toastText) notify(toastText);
     window.zenFx?.rank();
-    if (emblemTo) emblemWhenFree(...emblemTo);
+    celebrateAfterAward(levelUpTo, emblemTo, breakthroughTo, crossing);
+  }
+  // v2.79.0 (Lên Cấp): các thông báo mừng sau khi lưu công lực hiện LẦN LƯỢT qua hàng đợi (growth-celebrate.js): form lên cấp, nghi thức
+  // Đột phá, rồi chương truyện ký; cái sau chỉ hiện khi người dùng đã đóng cái trước. Thiếu tệp hàng đợi thì giữ cách cũ (thẻ huy hiệu nhỏ,
+  // nghi thức, chương truyện nối nhau bằng hàm gọi lại).
+  function celebrateAfterAward(levelUpTo, emblemTo, breakthroughTo, crossing) {
     // v1.92.0: vượt mốc 5 cấp thì mở chương truyện ký tương ứng (growth-story.js); v1.97.0: sau nghi thức Đột phá nếu có.
     // v2.12.0: chương giữa cấp mở theo tu vi, nên báo cả khi chưa lên cấp.
-    const story = () => crossing && crossing[3] > crossing[2] && window.zenStory?.crossed(...crossing);
-    if (breakthroughTo) window.zenFx.breakthrough(breakthroughTo, story);
-    else story();
+    const hasStory = () => !!(crossing && crossing[3] > crossing[2] && window.zenStory);
+    const story = () => hasStory() && window.zenStory.crossed(...crossing);
+    const C = window.zenCelebrate;
+    if (!C) {
+      if (emblemTo) emblemWhenFree(...emblemTo);
+      if (breakthroughTo) window.zenFx.breakthrough(breakthroughTo, story);
+      else story();
+      return;
+    }
+    if (levelUpTo) C.enqueue({ id: 'level-up', open: (done) => C.levelUp(levelUpTo, done) });
+    else if (emblemTo && !breakthroughTo) emblemWhenFree(...emblemTo); // lên cấp đầu tiên (bước vào Sơ nhập giang hồ): chỉ thẻ nhỏ
+    if (breakthroughTo) C.enqueue({ id: 'breakthrough', open: (done) => window.zenFx.breakthrough(breakthroughTo, done) });
+    if (hasStory()) {
+      C.enqueue({
+        id: 'story',
+        open: (done) => {
+          story();
+          // crossed() mở chương sau ~0,9 giây (và có thể không mở gì): chờ chương mở rồi chờ chương đóng; không thấy mở thì thôi.
+          let opened = false, n = 0;
+          const t = setInterval(() => {
+            n++;
+            if (window.zenStory.isOpen()) opened = true;
+            else if (opened || n > 5) (clearInterval(t), done());
+          }, 300);
+        },
+      });
+    }
   }
   // v2.32.0: thẻ huy hiệu mới chỉ hiện khi người dùng nhìn thấy được (chờ hộp thoại như chương truyện đóng, tối đa ~24 giây).
   function emblemWhenFree(level, title, more, tries = 0) {

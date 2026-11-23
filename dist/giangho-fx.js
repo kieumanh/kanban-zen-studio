@@ -213,6 +213,7 @@
       { once: true },
     );
     d.showModal();
+    window.zenCelebrate?.fireworks?.(d); // v2.79.0: pháo hoa dùng chung với form lên cấp (giảm chuyển động thì không có)
     d.querySelector('button').focus();
   }
 

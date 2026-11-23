@@ -257,27 +257,26 @@ try {
       page.on('pageerror', (e) => errors.push(e.message));
       await h.show(page, 'projects', 'p1');
       await award(page);
-      await page.waitForSelector('.zem-pop');
-      await closeStory(page);
-      await page.waitForTimeout(700); // chờ hiệu ứng vào xong (trượt xuống từ trên) rồi mới đo vị trí
-      const pop = await page.evaluate(() => {
-        const p = document.querySelector('.zem-pop'), r = p.getBoundingClientRect(), bar = document.querySelector('.topbar').getBoundingClientRect();
-        return { level: p.dataset.level, aria: p.getAttribute('aria-hidden'), small: p.querySelector('small').textContent, strong: p.querySelector('strong').textContent, emblem: p.querySelector('svg.zem').dataset.emblem, fits: r.left >= 0 && r.right <= innerWidth && r.top >= 0 && r.bottom <= innerHeight, belowBar: r.top >= bar.bottom - 1, count: document.querySelectorAll('.zem-pop').length, events: getComputedStyle(p).pointerEvents, toast: document.querySelector('#toast').textContent };
+      // v2.79.0 (Lên Cấp): lên cấp thường mở form chúc mừng mang huy hiệu của cấp mới, thay cho thẻ nhỏ "Huy hiệu mới" (không còn thẻ nhỏ).
+      await page.waitForSelector('dialog.gr-levelup[open]', { timeout: 15000 });
+      await page.waitForTimeout(700); // chờ hiệu ứng vào xong rồi mới đo
+      const form = await page.evaluate(() => {
+        const d = document.querySelector('dialog.gr-levelup[open]'), r = d.getBoundingClientRect(), z = d.querySelector('.gr-lu-emblem svg.zem');
+        return { level: d.dataset.level, emblem: z && z.dataset.emblem, w: z && Math.round(z.getBoundingClientRect().width), title: d.querySelector('#gr-lu-title').textContent, fits: r.left >= 0 && r.right <= innerWidth && r.top >= 0 && r.bottom <= innerHeight, pops: document.querySelectorAll('.zem-pop').length, toast: document.querySelector('#toast').textContent };
       });
-      assert.equal(pop.level, String(UP), 'thẻ báo huy hiệu của cấp vừa đạt' + at);
-      assert.equal(pop.emblem, String(UP), 'thẻ mang hình của cấp vừa đạt' + at);
-      assert.equal(pop.small, 'Huy hiệu mới', 'dòng nhỏ' + at);
-      assert.equal(pop.strong, 'Cấp ' + UP + ' · ' + info.names[UP], 'dòng chính: cấp và danh xưng' + at);
-      assert.equal(pop.aria, 'true', 'thẻ không đọc lại (lời chúc đã được đọc)' + at);
-      assert.ok(pop.fits && pop.belowBar && pop.count === 1, 'thẻ vừa màn hình, nằm dưới thanh đầu trang, chỉ một thẻ' + at);
-      assert.equal(pop.events, 'none', 'thẻ không chặn thao tác' + at);
-      assert.match(pop.toast, new RegExp('lên cấp ' + UP + ' · ' + info.names[UP]), 'lời chúc vẫn như cũ: ' + pop.toast + at);
+      assert.equal(form.level, String(UP), 'form báo cấp vừa đạt' + at);
+      assert.equal(form.emblem, String(UP), 'form mang huy hiệu của cấp vừa đạt' + at);
+      assert.ok(form.w >= 90, 'huy hiệu trong form đủ lớn (' + form.w + 'px)' + at);
+      assert.equal(form.title, 'Cấp ' + UP + ' · ' + info.names[UP], 'tiêu đề form: cấp và danh xưng' + at);
+      assert.ok(form.fits, 'form vừa màn hình' + at);
+      assert.equal(form.pops, 0, 'thẻ nhỏ "Huy hiệu mới" được form thay thế' + at);
+      assert.match(form.toast, new RegExp('lên cấp ' + UP + ' · ' + info.names[UP]), 'lời chúc vẫn như cũ: ' + form.toast + at);
       // Thanh bên đổi theo cấp mới.
       const rank = await page.evaluate(() => { const r = document.querySelector('.sidebar .gh-rank'); return r && { badge: r.querySelector('b').textContent, emblem: r.querySelector('svg.zem')?.dataset.emblem }; });
       assert.deepEqual(rank, { badge: String(UP), emblem: String(UP) }, 'thanh bên đổi sang huy hiệu cấp mới' + at);
-      if (width === 1440) {
-        await page.waitForFunction(() => !document.querySelector('.zem-pop'), null, { timeout: 7000 });
-      }
+      await page.locator('dialog.gr-levelup .gr-lu-x').click();
+      await page.waitForFunction(() => !document.querySelector('dialog.gr-levelup'));
+      await closeStory(page);
       assert.ok(await noOverflow(page), 'không tràn ngang' + at);
       await clearOverlay(page);
       assert.deepEqual(errors, [], 'không lỗi trang' + at);
@@ -328,7 +327,7 @@ try {
     await award(quiet.page);
     await quiet.page.waitForSelector('.completion-card');
     await wait(900);
-    assert.equal(await quiet.page.locator('.zem-pop').count(), 0, 'tắt thông báo điểm nghiệp thì không có thẻ huy hiệu');
+    assert.equal(await quiet.page.locator('.zem-pop, dialog.gr-levelup').count(), 0, 'tắt thông báo điểm nghiệp thì không có thẻ huy hiệu, không có form lên cấp');
     assert.equal(await quiet.page.evaluate(() => document.querySelector('.sidebar .gh-rank svg.zem')?.dataset.emblem), String(UP), 'thanh bên vẫn đổi huy hiệu');
     await quiet.context.close();
 
@@ -342,8 +341,12 @@ try {
     const calmUp = await h.open(1440, { setup: GH, reducedMotion: 'reduce', workspace: seed(growth(UP_HALF))() });
     await h.show(calmUp.page, 'projects', 'p1');
     await award(calmUp.page);
-    await calmUp.page.waitForSelector('.zem-pop');
-    assert.notEqual(await calmUp.page.evaluate(() => getComputedStyle(document.querySelector('.zem-pop')).animationName), 'zem-pop', 'giảm chuyển động: thẻ không trượt vào (không dùng hiệu ứng chuyển động)');
+    await calmUp.page.waitForSelector('dialog.gr-levelup[open]', { timeout: 15000 });
+    assert.deepEqual(
+      await calmUp.page.evaluate(() => { const d = document.querySelector('dialog.gr-levelup'); return [d.classList.contains('is-still'), getComputedStyle(d.querySelector('.gr-lu-emblem')).animationName, d.querySelectorAll('.gr-fw-spark').length]; }),
+      [true, 'none', 0],
+      'giảm chuyển động: form đứng yên, huy hiệu không bay vào, không pháo hoa',
+    );
     await clearOverlay(calmUp.page);
     await calmUp.context.close();
 
@@ -351,13 +354,13 @@ try {
     const dark = await h.open(1440, { setup: GH, colorScheme: 'dark', workspace: seed(growth(UP_HALF))() });
     await h.show(dark.page, 'projects', 'p1');
     await award(dark.page);
-    await dark.page.waitForSelector('.zem-pop');
+    await dark.page.waitForSelector('dialog.gr-levelup[open]', { timeout: 15000 });
     const night = await dark.page.evaluate(() => {
-      const p = document.querySelector('.zem-pop'), c = getComputedStyle(p).backgroundColor.match(/\d+/g).map(Number);
-      return { theme: document.documentElement.dataset.theme, lum: (c[0] + c[1] + c[2]) / 3, drawn: p.querySelector('use').getBBox().width, ink: getComputedStyle(p).color };
+      const p = document.querySelector('dialog.gr-levelup'), c = getComputedStyle(p).backgroundColor.match(/\d+/g).map(Number);
+      return { theme: document.documentElement.dataset.theme, lum: (c[0] + c[1] + c[2]) / 3, drawn: p.querySelector('.gr-lu-emblem use').getBBox().width, ink: getComputedStyle(p).color };
     });
     assert.equal(night.theme, 'dark', 'đang ở chế độ tối');
-    assert.ok(night.lum < 90 && night.drawn > 40, 'chế độ tối: thẻ nền tối (' + night.lum.toFixed(0) + '), hình vẫn vẽ ra');
+    assert.ok(night.lum < 90 && night.drawn > 40, 'chế độ tối: form nền tối (' + night.lum.toFixed(0) + '), hình vẫn vẽ ra');
     await dark.context.close();
 
     // Thiền (phong cách mặc định): không danh hiệu thanh bên, nhưng trang Tu vi vẫn có huy hiệu.
@@ -389,6 +392,8 @@ try {
     await miss.page.waitForSelector('.completion-card');
     await wait(900);
     assert.equal(await miss.page.locator('.zem-pop').count(), 0, 'thiếu tệp: lên cấp không có thẻ huy hiệu');
+    await miss.page.waitForSelector('dialog.gr-levelup[open]', { timeout: 15000 });
+    assert.equal(await miss.page.locator('dialog.gr-levelup .gr-lu-emblem.is-plain').count(), 1, 'thiếu tệp: form lên cấp vẫn hiện, với số cấp thay cho huy hiệu');
     await clearOverlay(miss.page);
     assert.deepEqual(errors, [], 'thiếu tệp huy hiệu: không lỗi trang');
     await miss.context.close();

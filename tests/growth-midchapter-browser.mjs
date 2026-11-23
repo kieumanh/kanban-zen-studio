@@ -11,6 +11,7 @@
 import assert from 'node:assert/strict';
 import { startHarness } from './lib/browser-harness.mjs';
 import { openGrowthTab } from './lib/growth-tab.mjs';
+import { closeCelebrations } from './lib/celebrate.mjs';
 
 const day = (n) => new Date(Date.now() + n * 864e5).toLocaleDateString('en-CA', { timeZone: 'Asia/Ho_Chi_Minh' });
 const project = { id: 'p1', name: 'Dự án A', description: '', color: '#7950c8', icon: '✺', columns: ['Idea', 'List', 'Doing', 'Done'], columnNames: { Idea: 'Ý tưởng', List: 'Việc cần làm', Doing: 'Đang thực hiện', Done: 'Hoàn thành' }, tasks: [{ id: 'p1t0', title: 'Gửi báo cáo', col: 'Doing', description: '', due: day(3), tag: 'Công việc', priority: 'q2', checks: [] }] };
@@ -37,6 +38,7 @@ async function finishTask(page) {
   await page.click('[data-gr-plus="0"]');
   await page.click('[data-gr-save]');
   await page.mouse.move(2, 2);
+  await closeCelebrations(page); // v2.79.0: thông báo mừng hiện lần lượt; chương truyện chờ lời chúc hoàn thành và form lên cấp đóng
 }
 
 const h = await startHarness({ seed: seed(8938) });
