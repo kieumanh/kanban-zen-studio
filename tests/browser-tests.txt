@@ -86,6 +86,7 @@ tests/habit-notes-browser.mjs
 tests/habit-reorder-browser.mjs
 tests/habit-history-report-browser.mjs
 tests/habit-nudge-browser.mjs
+tests/habit-backfill-browser.mjs
 tests/project-tab-wrap-browser.mjs
 tests/project-tab-compact-browser.mjs
 tests/growth-browser.mjs

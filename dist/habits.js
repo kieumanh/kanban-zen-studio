@@ -190,6 +190,24 @@
     const left = p.tr - p.dn;
     return left > 0 ? 'Còn ' + left + ' lượt cần làm tuần này · ' + tail : 'Đã đủ mục tiêu tuần này · ' + tail;
   };
+  // v2.84.0 (Tích Bù): tuần trước còn thiếu lượt so với mục tiêu thì mời xem lại tuần trước để tích bù; đóng thì ẩn cho riêng tuần đó.
+  const backfillKey = () => 'zen-habit-backfill:' + (currentUser?.id || '') + ':' + mondayOf(today());
+  function missedLastWeek() {
+    const mon = addDays(mondayOf(today()), -7);
+    let miss = 0;
+    for (const h of list()) {
+      const st = weekStats(h, mon);
+      if (st) miss += Math.max(0, st.g - st.n);
+    }
+    return miss;
+  }
+  function backfillBanner() {
+    if (week() !== mondayOf(today()) || localRead(backfillKey()) === '1') return '';
+    const miss = missedLastWeek();
+    if (!miss) return '';
+    return '<section class="hb-backfill" role="status" aria-label="Tuần trước còn thiếu lượt"><p><strong>Tuần trước còn thiếu ' + miss + ' lượt so với mục tiêu.</strong><span>Đã làm mà quên tích? Xem tuần trước để tích bù.</span></p><div class="hb-backfill-act"><button type="button" class="btn primary" data-hb-week="-1">Tích bù</button><button type="button" class="btn" data-hb-backfill-close>Để sau</button></div></section>';
+  }
+  const swipeTip = () => '<p class="hb-swipe-tip">Vuốt ngang bảng để đổi tuần.</p>';
   function head() {
     const labels = days().map((d, i) => '<span class="' + (d === today() ? 'is-today' : '') + '"><b>' + SHORT[i] + '</b><small>' + short(d).slice(0, 2) + '</small></span>').join('');
     return '<div class="hb-head" aria-hidden="true"><span></span><div class="hb-days">' + labels + '</div></div>';
@@ -225,7 +243,7 @@
       ? window.zenHabitsReport
         ? window.zenHabitsReport.html(range)
         : ''
-      : '<div class="hb-overview">' + summary() + progressBlock() + '</div>' + weekBar() + (hs.length ? noteTip() + head() + '<ul class="hb-list">' + hs.map(row).join('') + '</ul>' : empty());
+      : '<div class="hb-overview">' + summary() + progressBlock() + '</div>' + (hs.length ? backfillBanner() : '') + weekBar() + (hs.length ? noteTip() + swipeTip() + head() + '<ul class="hb-list">' + hs.map(row).join('') + '</ul>' : empty());
     return heading('', report ? 'Báo cáo việc hằng ngày' : 'Việc hằng ngày', report ? 'Biểu đồ, đánh giá và đề xuất cải thiện từ chính dữ liệu tích của bạn.' : 'Tích từng việc nhỏ mỗi ngày để nuôi dưỡng thói quen tốt.', actions()) + dueBanner(report ? [] : due) + (report ? '' : nudgeBanner()) + '<section class="panel hb-panel' + (report ? ' is-report' : '') + '" aria-label="' + (report ? 'Báo cáo việc hằng ngày' : 'Bảng việc hằng ngày') + '">' + body + '</section>';
   }
 
@@ -383,7 +401,7 @@
   }
 
   document.addEventListener('click', (e) => {
-    const t = e.target.closest('[data-hb-due-dismiss],[data-hb-nudge-close],[data-hb-open],[data-hb-rest],[data-hb-history],[data-hb-hist-days],[data-hb-toggle],[data-hb-add],[data-hb-edit],[data-hb-delete],[data-hb-confirm-delete],[data-hb-cancel],[data-hb-week],[data-hb-preset],[data-hb-icon],[data-hb-mode],[data-hb-range],[data-hb-goal-step],[data-hb-lib],[data-hb-time]');
+    const t = e.target.closest('[data-hb-due-dismiss],[data-hb-nudge-close],[data-hb-backfill-close],[data-hb-open],[data-hb-rest],[data-hb-history],[data-hb-hist-days],[data-hb-toggle],[data-hb-add],[data-hb-edit],[data-hb-delete],[data-hb-confirm-delete],[data-hb-cancel],[data-hb-week],[data-hb-preset],[data-hb-icon],[data-hb-mode],[data-hb-range],[data-hb-goal-step],[data-hb-lib],[data-hb-time]');
     if (!t) return;
     if (t.dataset.hbToggle) {
       const h = find(t.dataset.hbToggle), d = t.dataset.hbDate;
@@ -412,6 +430,10 @@
     }
     if (t.dataset.hbRange) {
       range = [7, 30, 90].includes(Number(t.dataset.hbRange)) ? Number(t.dataset.hbRange) : 30;
+      return render();
+    }
+    if (t.hasAttribute('data-hb-backfill-close')) {
+      localWrite(backfillKey(), '1');
       return render();
     }
     if (t.hasAttribute('data-hb-nudge-close')) {
@@ -603,6 +625,29 @@
       notify('Đã đổi thứ tự việc.');
     }
   };
+  // v2.84.0: vuốt ngang trên bảng tuần (cảm ứng) để lùi / tiến một tuần, vuốt sang phải = tuần trước. Không chạm vào tay cầm đổi thứ tự.
+  let swipe = null;
+  document.addEventListener('pointerdown', (e) => {
+    swipe = null;
+    if (view !== 'habits' || mode !== 'week' || e.pointerType === 'mouse' || !e.isPrimary) return;
+    if (!e.target.closest?.('.hb-list, .hb-head') || e.target.closest('[data-hb-grip]')) return;
+    swipe = { id: e.pointerId, x: e.clientX, y: e.clientY, t: performance.now() };
+  });
+  document.addEventListener('pointerup', (e) => {
+    const s = swipe;
+    swipe = null;
+    if (!s || e.pointerId !== s.id || drag) return;
+    const dx = e.clientX - s.x, dy = e.clientY - s.y;
+    if (Math.abs(dx) < 64 || Math.abs(dx) < Math.abs(dy) * 1.6 || performance.now() - s.t > 900) return;
+    const dir = dx > 0 ? -1 : 1;
+    weekStartDate = addDays(week(), dir * 7);
+    render();
+    for (const el of document.querySelectorAll('.hb-head, .hb-list')) {
+      el.classList.add(dir < 0 ? 'hb-slide-from-left' : 'hb-slide-from-right');
+      el.addEventListener('animationend', () => el.classList.remove('hb-slide-from-left', 'hb-slide-from-right'), { once: true });
+    }
+  });
+  document.addEventListener('pointercancel', () => { swipe = null; });
   document.addEventListener('pointerup', endDrag);
   document.addEventListener('pointercancel', endDrag);
   // v1.34.0: chuông thông báo (studio-zen.js) đọc số việc đến giờ nhắc qua zenHabits.dueReminders(), hiện như nhắc ghi chú.

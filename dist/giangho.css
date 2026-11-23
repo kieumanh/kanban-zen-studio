@@ -4497,6 +4497,19 @@
 :root[data-style=giangho] .hb-nudge span {
     color: var(--muted)
 }
+:root[data-style=giangho] .hb-backfill {
+    border: 1px solid color-mix(in srgb,var(--brand-purple) 22%,var(--line));
+    background: color-mix(in srgb,var(--brand-purple) 7%,var(--paper))
+}
+:root[data-style=giangho] .hb-backfill strong {
+    color: var(--ink)
+}
+:root[data-style=giangho] .hb-backfill span {
+    color: var(--muted)
+}
+:root[data-style=giangho] .hb-swipe-tip {
+    color: var(--muted)
+}
 :root[data-style=giangho] .bg-hint {
     color: var(--muted, #786254)
 }
@@ -12383,6 +12396,19 @@
     color: var(--ink)
 }
 :root[data-style=giangho][data-theme=dark] .hb-nudge span {
+    color: var(--muted)
+}
+:root[data-style=giangho][data-theme=dark] .hb-backfill {
+    border: 1px solid color-mix(in srgb,var(--brand-purple) 22%,var(--line));
+    background: color-mix(in srgb,var(--brand-purple) 7%,var(--paper))
+}
+:root[data-style=giangho][data-theme=dark] .hb-backfill strong {
+    color: var(--ink)
+}
+:root[data-style=giangho][data-theme=dark] .hb-backfill span {
+    color: var(--muted)
+}
+:root[data-style=giangho][data-theme=dark] .hb-swipe-tip {
     color: var(--muted)
 }
 :root[data-style=giangho][data-theme=dark] .bg-hint {
