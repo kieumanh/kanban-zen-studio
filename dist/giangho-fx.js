@@ -140,7 +140,7 @@
       box = document.createElement('button');
       box.type = 'button';
       box.className = 'gh-rank';
-      box.innerHTML = '<span class="gh-rank-seal"><span class="gh-rank-emblem" aria-hidden="true"></span><b></b></span><span class="gh-rank-text"><strong></strong><small></small></span>';
+      box.innerHTML = '<span class="gh-rank-seal"><span class="gh-rank-emblem" aria-hidden="true"></span><b></b></span><span class="gh-rank-text"><strong></strong><small><span class="gh-rank-title"></span><i class="gh-rank-sep"> · </i><span class="gh-rank-next"></span></small></span>';
       box.addEventListener('click', () => {
         document.querySelector('.sidebar')?.classList.remove('open');
         if (typeof go === 'function') go('growth');
@@ -157,7 +157,8 @@
     }
     box.querySelector('b').textContent = r.level;
     box.querySelector('strong').textContent = r.name;
-    box.querySelector('small').textContent = (r.title || 'Chưa nhập cảnh giới') + ' · ' + next;
+    box.querySelector('.gh-rank-title').textContent = r.title || 'Chưa nhập cảnh giới'; // v2.77.0: mỗi thứ một dòng, dấu "·" chỉ còn trong chữ đọc
+    box.querySelector('.gh-rank-next').textContent = next;
     box.setAttribute('aria-label', 'Tu vi: ' + r.name + title + ', cấp ' + r.level + ', ' + next + '. Mở Tu vi');
   }
   if (typeof render === 'function') {

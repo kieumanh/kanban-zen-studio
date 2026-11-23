@@ -7306,6 +7306,16 @@
     background: transparent;
     color: var(--ink, #311f13)
 }
+:root[data-style=giangho] #editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row .wl-add-shortcut {
+    color: #803b3d;
+    background: #fef9ef;
+    border: 1px solid #ecd9bd
+}
+:root[data-style=giangho] #editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row .wl-add-shortcut:hover, :root[data-style=giangho] #editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row .wl-add-shortcut:focus-visible {
+    background: #f5ebd9;
+    border-color: #cfb999;
+    outline: 2px solid #dbc5a5
+}
 :root[data-style=giangho] #editor.wf-task-editor .priority-choice:has(input:focus-visible) {
     outline: 3px solid currentColor
 }
@@ -15074,6 +15084,16 @@
     background: transparent;
     color: var(--ink, #f5dccc)
 }
+:root[data-style=giangho][data-theme=dark] #editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row .wl-add-shortcut {
+    color: #fec0bf;
+    background: #1b160f;
+    border: 1px solid #453a31
+}
+:root[data-style=giangho][data-theme=dark] #editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row .wl-add-shortcut:hover, :root[data-style=giangho][data-theme=dark] #editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row .wl-add-shortcut:focus-visible {
+    background: #1f1810;
+    border-color: #5c4736;
+    outline: 2px solid #564130
+}
 :root[data-style=giangho][data-theme=dark] #editor.wf-task-editor .priority-choice:has(input:focus-visible) {
     outline: 3px solid currentColor
 }
@@ -15991,6 +16011,22 @@
   line-height: 1.3;
   color: var(--zen-text-muted, #6b5a4c);
 }
+/* v2.77.0 (Khung Gọn): danh xưng và tiến cảnh mỗi thứ một dòng (trước đây nối bằng "·" nên "57% tới cấp 10" bị bẻ giữa chừng).
+   Dấu "·" vẫn nằm trong chữ (đọc màn hình, kiểm thử) nhưng được ẩn khi hiển thị. */
+:root[data-style=giangho] .gh-rank-text .gh-rank-sep {
+  display: none;
+}
+:root[data-style=giangho] .gh-rank-text .gh-rank-title,
+:root[data-style=giangho] .gh-rank-text .gh-rank-next {
+  display: block;
+}
+:root[data-style=giangho] .gh-rank-text .gh-rank-next {
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+:root[data-style=giangho] .gh-rank-text strong {
+  overflow-wrap: break-word;
+}
 
 /* v2.32.0 (Huy Hiệu Bách Cấp): ấn tròn trên thanh bên đổi thành huy hiệu của cấp hiện tại; số cấp thành chấm nhỏ ở góc, vòng tiến cấp
    thành thanh mảnh dưới thẻ. Chưa nhập cấp (hoặc thiếu tệp huy hiệu) thì giữ ấn tròn cũ. */
@@ -16000,7 +16036,8 @@
 :root[data-style=giangho] .side-bottom > .gh-rank.has-emblem {
   position: relative;
   min-height: 64px;
-  padding-bottom: 14px;
+  gap: 12px;
+  padding: 8px 12px 14px 10px;
 }
 :root[data-style=giangho] .gh-rank.has-emblem .gh-rank-seal {
   position: relative;
@@ -16018,8 +16055,8 @@
 }
 :root[data-style=giangho] .gh-rank.has-emblem .gh-rank-seal b {
   position: absolute;
-  right: -6px;
-  bottom: -4px;
+  top: -5px;
+  right: -7px;
   width: auto;
   min-width: 20px;
   height: 18px;
@@ -16032,11 +16069,11 @@
 :root[data-style=giangho] .gh-rank.has-emblem::after {
   content: '';
   position: absolute;
-  left: 10px;
-  right: 10px;
+  left: 12px;
+  right: 12px;
   bottom: 5px;
   height: 3px;
-  border-radius: 2px;
+  border-radius: 999px;
   background: linear-gradient(90deg, var(--gh-seal) calc(var(--gh-rank-pct, 0) * 1%), var(--gh-line) 0);
 }
 

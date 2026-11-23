@@ -1886,7 +1886,17 @@ dialog[open] button[aria-label^="Đóng"],
 @media (max-width: 600px) {
   #editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row .task-pin-shortcut { width: 40px; padding: 0; }
 }
-@media (max-width: 380px) {
+/* v2.77.0 (Khung Gọn): hàng tiêu đề hộp chi tiết không còn bị nút đè chữ. Trước đây hai cột lưới (1fr + auto) co cột chữ về gần 0 khi
+   ba nút có nhãn chiếm hết hàng ở 390px, nên "Chi tiết nhiệm vụ" bị cắt dưới nút Ghim. Nay: (1) từ ≤600px cả ba nút chỉ còn icon
+   (vẫn có tên đọc và tooltip) cho khớp nhau; (2) hàng là flex có xuống dòng, nên khi chữ lớn hoặc màn quá hẹp thì cụm nút tự rơi xuống
+   dòng dưới, căn phải, chứ không đè lên chữ. */
+#editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row { display: flex !important; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 12px; }
+#editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row .wf-task-heading-actions { margin-left: auto; flex: 0 0 auto; }
+/* Nút "Liên hoàn lệnh" cùng kiểu viên tròn, cùng màu nền và viền với Ghim và Bế quan (trước đây là hình vuông bo, lệch hai nút còn lại). */
+#editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row .wl-add-shortcut { border-radius: 999px; color: #72518a; background: #fbf8fd; border: 1px solid #e6daef; transition: background 0.18s, border-color 0.18s; }
+#editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row .wl-add-shortcut:hover,
+#editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row .wl-add-shortcut:focus-visible { background: #f1e8f8; border-color: #cdb5df; outline: 2px solid #d8c2e8; outline-offset: 2px; }
+@media (max-width: 600px) {
   #editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row .task-focus-shortcut { width: 40px; padding: 0; gap: 0; }
   #editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row .task-focus-shortcut span { display: none; }
 }

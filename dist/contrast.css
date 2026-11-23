@@ -4054,6 +4054,16 @@
 :root[data-contrast=high] #editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row {
     color: var(--ink, #060606)
 }
+:root[data-contrast=high] #editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row .wl-add-shortcut {
+    color: #060606;
+    background: #ffffff;
+    border: 1px solid #171519
+}
+:root[data-contrast=high] #editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row .wl-add-shortcut:hover, :root[data-contrast=high] #editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row .wl-add-shortcut:focus-visible {
+    background: #ffffff;
+    border-color: #19141d;
+    outline: 2px solid #19141c
+}
 :root[data-contrast=high] .gh-glossary-group li b {
     color: #060606
 }
@@ -8493,6 +8503,16 @@
 }
 :root[data-theme=dark][data-contrast=high] #editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row {
     color: var(--ink, #f5f5f5)
+}
+:root[data-theme=dark][data-contrast=high] #editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row .wl-add-shortcut {
+    color: #f5f5f5;
+    background: #030303;
+    border: 1px solid #cecece
+}
+:root[data-theme=dark][data-contrast=high] #editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row .wl-add-shortcut:hover, :root[data-theme=dark][data-contrast=high] #editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row .wl-add-shortcut:focus-visible {
+    background: #030303;
+    border-color: #cecece;
+    outline: 2px solid #cecece
 }
 :root[data-theme=dark][data-contrast=high] .gh-glossary-group li b {
     color: #f5f5f5

@@ -1,4 +1,6 @@
 // Hồi quy v1.17.5: nút vào Chế độ tập trung trong hộp công việc có chữ rõ ràng ("Chế độ tập trung"), không bị cắt, thẳng hàng với tiêu đề và bấm vào mở đúng việc.
+// v2.77.0 (Khung Gọn): từ ≤600px cả ba nút của hàng tiêu đề (Ghim, Liên hoàn lệnh, Chế độ tập trung) chỉ còn icon, vì ở 390px ba nút có nhãn
+// ép chữ tiêu đề còn ~75px và bị nút đè. Nên ở ≤600px nút này vẫn có tên đọc (aria-label) nhưng không còn chữ; từ 601px vẫn có chữ như cũ.
 import assert from 'node:assert/strict';
 import { startHarness, makeProject } from './lib/browser-harness.mjs';
 
@@ -24,10 +26,11 @@ try {
         document.getAnimations().map((a) => a.finished.catch(() => {})),
       ),
     );
+    const compact = width <= 600;
     assert.equal(
       (await button.innerText()).trim(),
-      'Chế độ tập trung',
-      'chữ trên nút' + at,
+      compact ? '' : 'Chế độ tập trung',
+      (compact ? 'điện thoại: nút chỉ còn icon' : 'chữ trên nút') + at,
     );
     assert.equal(
       await button.getAttribute('aria-label'),
@@ -58,8 +61,12 @@ try {
     });
     assert.ok(m.hasIcon, 'biểu tượng vẫn còn' + at);
     assert.ok(
-      m.w > 100 && m.h >= 40,
-      'nút phải là nút có chữ, cao ≥40px' + at + JSON.stringify(m),
+      (compact ? m.w >= 40 && m.w <= 48 : m.w > 100) && m.h >= 40,
+      (compact
+        ? 'nút icon vuông 40–48px'
+        : 'nút phải là nút có chữ, cao ≥40px') +
+        at +
+        JSON.stringify(m),
     );
     assert.ok(
       !m.clipped && !m.wrapped,
@@ -87,7 +94,7 @@ try {
     await context.close();
   }
   console.log(
-    'PASS: nút Chế độ tập trung có chữ, không bị cắt, thẳng hàng với tiêu đề và mở đúng việc (390/820/1440px).',
+    'PASS: nút Chế độ tập trung (chữ từ 601px, icon ≤600px), không bị cắt, thẳng hàng với tiêu đề và mở đúng việc (390/820/1440px).',
   );
 } finally {
   await h.close();

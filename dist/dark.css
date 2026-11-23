@@ -4053,6 +4053,16 @@
 :root[data-theme=dark] #editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row {
     color: var(--ink, #dcd3ec)
 }
+:root[data-theme=dark] #editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row .wl-add-shortcut {
+    color: #d7bcec;
+    background: #18151c;
+    border: 1px solid #403945
+}
+:root[data-theme=dark] #editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row .wl-add-shortcut:hover, :root[data-theme=dark] #editor.wf-task-editor h2.wf-task-heading.wf-task-heading-row .wl-add-shortcut:focus-visible {
+    background: #1c1821;
+    border-color: #54455e;
+    outline: 2px solid #4d4056
+}
 :root[data-theme=dark] .gh-glossary-group li b {
     color: #feb2b4
 }
