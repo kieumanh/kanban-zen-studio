@@ -4477,6 +4477,31 @@
 :root[data-theme=dark] .usage-board .ub-table th, :root[data-theme=dark] .usage-board .ub-table td {
     border-bottom: 1px solid #3d3843
 }
+:root[data-theme=dark] #editor-body .zen-task-section .wf-state-choices {
+    border: 1px solid #3d3843;
+    background: #151219
+}
+:root[data-theme=dark] #editor-body .zen-task-section .wf-state-choice {
+    color: #d4c6e2
+}
+:root[data-theme=dark] #editor-body .zen-task-section .wf-state-choice[data-state-index="0"] {
+    color: #cec2fd
+}
+:root[data-theme=dark] #editor-body .zen-task-section .wf-state-choice[data-state-index="1"] {
+    color: #f8abda
+}
+:root[data-theme=dark] #editor-body .zen-task-section .wf-state-choice[data-state-index="2"] {
+    color: #f6b794
+}
+:root[data-theme=dark] #editor-body .zen-task-section .wf-state-choice[data-state-index="3"] {
+    color: #a0d6b8
+}
+:root[data-theme=dark] #editor-body .zen-task-section .wf-state-choice[aria-pressed="true"]::after {
+    background: #1b181f
+}
+:root[data-theme=dark] #editor-body .zen-task-section .wf-state-choice:hover:not([aria-pressed="true"]) {
+    background: #1b181f
+}
 
 :root[data-theme=dark] {
   color-scheme: dark;

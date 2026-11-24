@@ -2,7 +2,8 @@
 // v2.52.0 (Việc Chờ Người Khác): đánh dấu một việc đang chờ ai đó (tên người + ngày nhắc hỏi lại).
 // Dữ liệu: hai trường tùy chọn ngay trên việc — waitFor (tên người, ≤ 60 ký tự) và waitUntil (YYYY-MM-DD, có thể trống). Không có waitFor là không chờ ai.
 // Bản cũ bỏ qua hai trường này nên không mất gì; không đổi lược đồ.
-// Hiện ở: trình sửa việc (nhập), thẻ việc (dòng “Đang chờ …”), Tổng quan (khối “Đang chờ” với nút “Đã có phản hồi” / “Nhắc lại sau 3 ngày”), chuông thông báo (đến ngày hẹn).
+// Hiện ở: thẻ việc (dòng “Đang chờ …”), Tổng quan (khối “Đang chờ” với nút “Đã có phản hồi” / “Nhắc lại sau 3 ngày”), chuông thông báo (đến ngày hẹn).
+// v2.85.0: không còn ô nhập trong hộp sửa việc (đã gỡ theo yêu cầu); việc có dấu chờ cũ vẫn xử lý được qua Tổng quan.
 (() => {
   const WHO_MAX = 60;
   const SNOOZE_DAYS = 3;
@@ -49,50 +50,16 @@
     return true;
   }
 
-  // ---- Trình sửa việc ---------------------------------------------------------------------------------------------------------
-  const base = taskForm;
-  taskForm = function (p, t, col) {
-    base.apply(this, arguments);
-    const form = document.querySelector('#editor-form');
-    if (!t || !form || !form.querySelector('[name=title]') || form.querySelector('[name=waitFor]')) return;
-    const section = document.createElement('section');
-    section.className = 'zen-task-section zen-wait';
-    section.innerHTML =
-      '<h3>Đang chờ người khác</h3>' +
-      '<label class="field">Đang chờ ai<input name="waitFor" maxlength="' + WHO_MAX + '" autocomplete="off" placeholder="Ví dụ: anh Sơn, bên nhà in"></label>' +
-      '<label class="field">Nhắc hỏi lại vào ngày<input name="waitUntil" type="date"></label>' +
-      '<div class="zen-wait-presets" role="group" aria-label="Chọn nhanh ngày nhắc"><button type="button" class="btn" data-wait-preset="1">Ngày mai</button><button type="button" class="btn" data-wait-preset="3">3 ngày nữa</button><button type="button" class="btn" data-wait-preset="7">Tuần sau</button></div>' +
-      '<p class="help-copy">Để trống tên nếu không chờ ai. Đến ngày hẹn, việc hiện ở chuông và Tổng quan để bạn hỏi lại.</p>';
-    section.querySelector('[name=waitFor]').value = typeof t.waitFor === 'string' ? t.waitFor : '';
-    section.querySelector('[name=waitUntil]').value = isDay(t.waitUntil) ? t.waitUntil : '';
-    const anchor = form.querySelector('[name=end]')?.closest('.zen-task-section');
-    if (anchor) anchor.after(section);
-    else (form.querySelector('.modal-foot') || form).before(section);
-    // Mốc “chưa đổi gì” của hộp sửa việc phải tính cả hai ô mới, nếu không mở rồi đóng sẽ báo sai là có thay đổi.
-    if (typeof refreshTaskFormSnapshot === 'function') refreshTaskFormSnapshot();
-  };
-  // Hộp sửa việc được sắp lại thành các khối sau khi taskForm chạy xong (taskDetail làm việc đó), nên đặt khối này đúng chỗ — ngay dưới “Lịch & thời hạn” — ở bước cuối.
+  // ---- Trình sửa việc: v2.85.0 đã gỡ khối “Đang chờ người khác” khỏi hộp sửa việc. Dữ liệu waitFor / waitUntil trên việc được giữ nguyên
+  // (lưu việc không đụng hai trường này), nên thẻ, Tổng quan và chuông vẫn hiện đúng cho các việc đã có dấu chờ.
+  // Mốc “chưa đổi gì” của hộp sửa việc được chốt lại sau khi ứng dụng sắp xếp xong hộp (như bản trước v2.85.0),
+  // không thì mở việc rồi bấm Esc sẽ báo là có thay đổi chưa lưu. Việc từ chuông mở hộp khi hộp đang hiện danh sách nhắc nên không thể chỉ chốt khi hộp đóng.
   const baseDetail = taskDetail;
   taskDetail = function () {
     const out = baseDetail.apply(this, arguments);
-    const section = document.querySelector('#editor-form .zen-wait'),
-      anchor = document.querySelector('#editor-form [name=end]')?.closest('.zen-task-section');
-    if (section && anchor && anchor.nextElementSibling !== section) {
-      anchor.after(section);
-      // Thứ tự ô trong biểu mẫu đã đổi nên mốc “chưa đổi gì” phải chốt lại (không thì vừa mở đã bị coi là có thay đổi).
-      if (typeof refreshTaskFormSnapshot === 'function') refreshTaskFormSnapshot();
-    }
+    if (typeof refreshTaskFormSnapshot === 'function') refreshTaskFormSnapshot();
     return out;
   };
-  document.addEventListener('click', (e) => {
-    const preset = e.target.closest('[data-wait-preset]');
-    if (!preset) return;
-    const input = preset.closest('.zen-wait')?.querySelector('[name=waitUntil]');
-    if (!input) return;
-    input.value = plusDays(today(), Number(preset.dataset.waitPreset));
-    input.dispatchEvent(new Event('input', { bubbles: true }));
-    input.dispatchEvent(new Event('change', { bubbles: true }));
-  });
 
   // ---- Thẻ việc -----------------------------------------------------------------------------------------------------------------
   const chipHTML = (info) =>

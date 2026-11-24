@@ -2738,19 +2738,6 @@ body select:not([multiple]):not([size]):not([data-zen-native]):not(.wf-original-
 .wf-wait-panel .wait-actions .text-btn {
   min-height: 44px;
 }
-.zen-wait .zen-wait-presets {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin: 4px 0 8px;
-}
-.zen-wait .zen-wait-presets .btn {
-  min-height: 44px;
-}
-.zen-wait input[type='date'] {
-  min-height: 44px;
-  border-radius: 12px;
-}
 
 /* v2.54.0 (Ôn Tuần): hộp thoại ôn tuần và hai khối ở Tổng quan (dist/weekly-review.js). */
 .zen-review {
@@ -3880,3 +3867,85 @@ body select:not([multiple]):not([size]):not([data-zen-native]):not(.wf-original-
 
 /* v2.80.0 (Tablet): số đếm trong tiêu đề "Chưa định ngày" bị `small { display: block }` chung đẩy xuống dòng dưới tiêu đề; để nó nằm cạnh chữ. */
 .zen-unscheduled h2 small { display: inline-block; margin-left: 8px; vertical-align: middle; }
+
+/* v2.85.0 (Dấu Rõ): “Trạng thái” trong hộp sửa việc là một dải bốn ô ngang (không còn lưới 2×2 cao hai hàng).
+   Mỗi ô chữ màu đúng tông cột; ô đang chọn tô đậm đúng màu, chữ trắng đậm và có dấu ✓ ở góc. aria-pressed giữ nguyên.
+   Màu tô đậm và màu chữ đã chọn để đạt tương phản ≥ 4,5:1; bản tối và Giang hồ do bộ sinh màu suy ra từ đây. Mỗi ô cao ≥ 44px.
+   grid-template-columns: none để xóa lưới 2 cột cũ ở style.css (.zen-task-section .wf-state-choices). */
+#editor-body .zen-task-section .wf-state-choices {
+  display: grid;
+  grid-template-columns: none;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  align-items: stretch;
+  gap: 3px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 5px;
+  border: 1px solid #e8dff0;
+  border-radius: 16px;
+  background: #f7f2fb;
+}
+#editor-body .zen-task-section .wf-state-choice {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  overflow-wrap: break-word;
+  min-height: 44px;
+  margin: 0;
+  padding: 6px 4px !important; /* vượt padding !important cũ của style.css */
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: transparent;
+  color: #5b4b6b;
+  font: 600 13px/1.25 var(--sans);
+  text-align: center;
+  white-space: normal;
+  cursor: pointer;
+  box-shadow: none;
+}
+#editor-body .zen-task-section .wf-state-choice[data-state-index="0"] { color: #5e3fa0; --st-solid: #6a40b8; }
+#editor-body .zen-task-section .wf-state-choice[data-state-index="1"] { color: #9b3f7c; --st-solid: #9b3f7c; }
+#editor-body .zen-task-section .wf-state-choice[data-state-index="2"] { color: #9a4f1e; --st-solid: #9a4f1e; }
+#editor-body .zen-task-section .wf-state-choice[data-state-index="3"] { color: #2a7552; --st-solid: #2a7552; }
+#editor-body .zen-task-section .wf-state-choice[aria-pressed="true"] {
+  background: var(--st-solid);
+  border-color: var(--st-solid);
+  color: #ffffff !important; /* thắng màu chữ theo từng cột của bản tối/Giang hồ (sinh ra, đặc hiệu cao hơn) */
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(53, 42, 68, 0.18);
+}
+#editor-body .zen-task-section .wf-state-choice[aria-pressed="true"]::after {
+  content: "✓";
+  position: absolute;
+  top: -7px;
+  right: -5px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #ffffff;
+  color: var(--st-solid);
+  font: 800 11px/18px var(--sans);
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(53, 42, 68, 0.2);
+}
+#editor-body .zen-task-section .wf-state-choice:hover:not([aria-pressed="true"]) {
+  border-color: currentColor;
+  background: #ffffff;
+}
+#editor-body .zen-task-section .wf-state-choice:focus-visible {
+  outline: 2px solid var(--st-solid);
+  outline-offset: 2px;
+}
+@media (max-width: 420px) {
+  #editor-body .zen-task-section .wf-state-choices {
+    padding: 4px;
+  }
+  #editor-body .zen-task-section .wf-state-choice {
+    font-size: 12px;
+    letter-spacing: -0.01em;
+    padding: 6px 1px !important; /* vượt padding 10px 8px !important của style.css (khối điện thoại cũ) */
+  }
+}

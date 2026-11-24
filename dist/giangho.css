@@ -7950,6 +7950,46 @@
 :root[data-style=giangho] .usage-board .ub-bar {
     background: #bc3643
 }
+:root[data-style=giangho] #editor-body .zen-task-section .wf-state-choices {
+    border: 1px solid #eeddc5;
+    background: #fbf3e7
+}
+:root[data-style=giangho] #editor-body .zen-task-section .wf-state-choice {
+    border: 1px solid transparent;
+    background: transparent;
+    color: #554134;
+    box-shadow: none
+}
+:root[data-style=giangho] #editor-body .zen-task-section .wf-state-choice[data-state-index="0"] {
+    color: #881124
+}
+:root[data-style=giangho] #editor-body .zen-task-section .wf-state-choice[data-state-index="1"] {
+    color: #982c36
+}
+:root[data-style=giangho] #editor-body .zen-task-section .wf-state-choice[data-state-index="2"] {
+    color: #8a4009
+}
+:root[data-style=giangho] #editor-body .zen-task-section .wf-state-choice[data-state-index="3"] {
+    color: #176644
+}
+:root[data-style=giangho] #editor-body .zen-task-section .wf-state-choice[aria-pressed="true"] {
+    background: var(--st-solid);
+    border-color: var(--st-solid);
+    color: #ffffff !important;
+    box-shadow: 0 2px 6px rgba(63,43,27,0.18)
+}
+:root[data-style=giangho] #editor-body .zen-task-section .wf-state-choice[aria-pressed="true"]::after {
+    background: #fffefb;
+    color: var(--st-solid);
+    box-shadow: 0 1px 3px rgba(63,43,27,0.2)
+}
+:root[data-style=giangho] #editor-body .zen-task-section .wf-state-choice:hover:not([aria-pressed="true"]) {
+    border-color: currentColor;
+    background: #fffefb
+}
+:root[data-style=giangho] #editor-body .zen-task-section .wf-state-choice:focus-visible {
+    outline: 2px solid var(--st-solid)
+}
 :root[data-style=giangho][data-theme=dark] {
     --bg: #18130c;
     --paper: #1e1811;
@@ -15850,6 +15890,46 @@
 }
 :root[data-style=giangho][data-theme=dark] .usage-board .ub-bar {
     background: #bc3643
+}
+:root[data-style=giangho][data-theme=dark] #editor-body .zen-task-section .wf-state-choices {
+    border: 1px solid #433830;
+    background: #18120c
+}
+:root[data-style=giangho][data-theme=dark] #editor-body .zen-task-section .wf-state-choice {
+    border: 1px solid transparent;
+    background: transparent;
+    color: #ead1c1;
+    box-shadow: none
+}
+:root[data-style=giangho][data-theme=dark] #editor-body .zen-task-section .wf-state-choice[data-state-index="0"] {
+    color: #ffc5c3
+}
+:root[data-style=giangho][data-theme=dark] #editor-body .zen-task-section .wf-state-choice[data-state-index="1"] {
+    color: #fcbfbe
+}
+:root[data-style=giangho][data-theme=dark] #editor-body .zen-task-section .wf-state-choice[data-state-index="2"] {
+    color: #fcc2a3
+}
+:root[data-style=giangho][data-theme=dark] #editor-body .zen-task-section .wf-state-choice[data-state-index="3"] {
+    color: #aae0c1
+}
+:root[data-style=giangho][data-theme=dark] #editor-body .zen-task-section .wf-state-choice[aria-pressed="true"] {
+    background: var(--st-solid);
+    border-color: var(--st-solid);
+    color: #ffffff !important;
+    box-shadow: 0 2px 6px rgba(200,179,163,0.18)
+}
+:root[data-style=giangho][data-theme=dark] #editor-body .zen-task-section .wf-state-choice[aria-pressed="true"]::after {
+    background: #1e1811;
+    color: var(--st-solid);
+    box-shadow: 0 1px 3px rgba(200,179,163,0.2)
+}
+:root[data-style=giangho][data-theme=dark] #editor-body .zen-task-section .wf-state-choice:hover:not([aria-pressed="true"]) {
+    border-color: currentColor;
+    background: #1e1811
+}
+:root[data-style=giangho][data-theme=dark] #editor-body .zen-task-section .wf-state-choice:focus-visible {
+    outline: 2px solid var(--st-solid)
 }
 
 /* ---- Họa tiết Giang hồ viết tay (v1.86.0 · Chu Mặc) ------------------------------------------------------------------------

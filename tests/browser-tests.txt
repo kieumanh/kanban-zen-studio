@@ -129,6 +129,7 @@ tests/growth-store-browser.mjs
 tests/growth-ask-browser.mjs
 tests/quickadd-browser.mjs
 tests/quickadd-pick-browser.mjs
+tests/task-mark-browser.mjs
 tests/release-notice-browser.mjs
 tests/naming-browser.mjs 16
 tests/lazy-load-browser.mjs 20
