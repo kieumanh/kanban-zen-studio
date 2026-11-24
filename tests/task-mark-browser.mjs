@@ -1,6 +1,6 @@
 // v2.85.0 (Dấu Rõ): hộp sửa việc (dist/waiting.js, dist/studio-zen.css).
 //  1. Đã gỡ khối “Đang chờ người khác” (Giang hồ: “Đang đợi hồi âm”) khỏi hộp sửa việc, ở mọi khổ và cả bốn kiểu giao diện; không còn ô waitFor / waitUntil.
-//  2. Dữ liệu cũ không mất: việc đang có dấu chờ vẫn giữ tên và ngày hẹn sau khi sửa tiêu đề rồi Lưu, thẻ việc vẫn hiện dòng “Đang chờ …”.
+//  2. Dữ liệu cũ không mất: việc đang có dấu chờ vẫn giữ tên và ngày hẹn sau khi sửa tiêu đề rồi Lưu; từ v2.86.0 thẻ không còn dòng “Đang chờ …”.
 //  3. “Trạng thái” là một dải bốn ô nằm trên một hàng; mỗi ô cao ≥ 44px, chữ không bị cắt; đúng một ô được chọn (aria-pressed) và đó là cột của việc;
 //     ô đang chọn có chữ trắng trên nền tô đậm đạt ≥ 4,5:1, ô khác đạt ≥ 4,5:1 trên nền dải; không tràn ngang.
 //  4. Chạm một ô khác chuyển việc sang cột đó trên máy chủ.
@@ -131,9 +131,9 @@ try {
       assert.equal(taskOf(server, 0).waitFor, 'anh Sơn', 'tên người đang chờ không mất khi lưu' + at);
       assert.equal(taskOf(server, 0).waitUntil, vn(1), 'ngày hẹn không mất khi lưu' + at);
       await page.waitForFunction(() => !document.querySelector('#editor').open);
-      // Thẻ việc nằm ở màn “Dự án” (màn Bảng chỉ vẽ việc có hạn trong ngày, các việc này không có hạn).
+      // v2.86.0: thẻ việc không còn dòng “Đang chờ” (dữ liệu chờ vẫn được giữ, kiểm ở trên).
       await h.show(page, 'projects');
-      assert.match(await page.locator('[data-task="p1t0"] .task-card-wait').first().innerText({ timeout: 3000 }), /anh Sơn/, 'thẻ việc vẫn hiện dòng đang chờ' + at);
+      assert.equal(await page.locator('[data-task="p1t0"] .task-card-wait').count(), 0, 'thẻ không còn dòng đang chờ' + at);
 
       // 4. Chạm một ô khác chuyển cột trên máy chủ.
       await openTask(page, 0);

@@ -376,7 +376,7 @@
       panels.push(section);
     }
     if (!panels.length) return;
-    const anchor = document.querySelector('#main .wf-wait-panel') || document.querySelector('#main .wf-today-plan');
+    const anchor = document.querySelector('#main .wf-today-plan');
     if (anchor) anchor.after(...panels);
     else document.querySelector('#main')?.append(...panels);
   }

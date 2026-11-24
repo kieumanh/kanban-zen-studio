@@ -191,15 +191,13 @@ try {
     await check('soạn quyển', 'dialog[open]');
     await close(page);
     // v2.56.0: các màn mới của v2.51–v2.55 (Đang đợi hồi âm, Kiểm điểm tuần, cất nội dung được truyền tới, Sao lục).
+    // v2.86.0: khối “Đang đợi hồi âm” và dòng trên thẻ đã gỡ; kiểm tra Tổng đàn và thẻ nhiệm vụ vẫn hiển thị đủ chữ Giang hồ.
     await h.show(page, 'dashboard');
-    await page.waitForSelector('#main .wf-wait-panel');
-    await check('Đang đợi hồi âm (Tổng đàn)', '#main');
-    await page.locator('#main .wf-wait-panel [data-wait-got]').first().click();
-    await page.waitForFunction(() => document.querySelector('#toast')?.classList.contains('show'));
-    await check('truyền thư sau khi ghi hồi âm', '#toast');
+    await page.waitForSelector('#main');
+    await check('Tổng đàn (sau v2.86.0)', '#main');
     await h.show(page, 'projects', 'p1');
-    await page.waitForSelector('.task-card .wait-label');
-    await check('thẻ nhiệm vụ đang đợi hồi âm', '#main');
+    await page.waitForSelector('.task-card');
+    await check('thẻ nhiệm vụ (sau v2.86.0)', '#main');
     await page.evaluate(() => window.zenWeeklyReview.open());
     await page.waitForSelector('dialog.zen-review[open]');
     await check('Kiểm điểm tuần', 'dialog[open]');

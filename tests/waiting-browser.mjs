@@ -1,13 +1,11 @@
-// v2.52.0 (Việc Chờ Người Khác): đánh dấu việc đang chờ ai (tên người + ngày nhắc hỏi lại), dist/waiting.js.
+// v2.52.0 (Việc Chờ Người Khác): đánh dấu một việc đang chờ ai (tên người + ngày nhắc hỏi lại), dist/waiting.js.
 // A. Dữ liệu: máy chủ giả dùng đúng hàm kiểm của máy chủ thật (validWorkspace) và ứng dụng dùng valid(): chấp nhận waitFor (≤ 60 ký tự) / waitUntil (ngày hợp lệ hoặc trống),
 //    từ chối tên quá dài, sai kiểu, ngày sai; bản cũ không có hai trường vẫn hợp lệ.
 // B. Bộ giúp (zenWaiting): việc đã xong hoặc tên trống không tính là đang chờ; câu nói về ngày hẹn (quá hẹn N ngày / hôm nay / nhắc lại dd-mm).
-// C. Giao diện ở 390 (chạm) / 820 (chạm) / 1440 px × Thiền, tối, Giang hồ:
-//    1. (v2.85.0) trình sửa việc KHÔNG còn khối “Đang chờ người khác”: không ô tên, không ô ngày, không nút chọn nhanh;
-//    2. (v2.85.0) mở rồi đóng bằng Hủy không báo thay đổi chưa lưu; sửa tiêu đề rồi Lưu giữ nguyên tên người và ngày hẹn;
-//    3. thẻ việc có dòng “Đang chờ …”; Tổng quan có khối “Đang chờ” (việc đến hẹn / quá hẹn xếp trước), nút “Đã có phản hồi” và “Nhắc lại sau 3 ngày” đổi dữ liệu đúng;
-//    4. chuông thông báo: việc đến hẹn cộng vào số chưa xem, có mục “Đến lúc hỏi lại”, bấm mở việc và đánh dấu đã xem;
-//    5. chữ đủ tương phản, không tràn ngang, Giang hồ không còn chữ Thiền trong các phần mới; việc đã xong không hiện; chữ lạ (HTML) chỉ là chữ thuần; bản chỉ xem không có nút sửa.
+// C. (v2.86.0 Lặng Chờ) Không còn hiện ở đâu, ở 390 (chạm) / 820 (chạm) / 1440 px × Thiền, tối, Giang hồ:
+//    1. Tổng quan không còn khối “Đang chờ”; thẻ việc không còn dòng “Đang chờ …”; chuông không còn nhắc việc đến hẹn;
+//    2. không còn nút “Đã có phản hồi” / “Nhắc lại sau 3 ngày” ở đâu;
+//    3. dữ liệu chờ vẫn nguyên trên máy chủ khi sửa tiêu đề rồi Lưu; chữ lạ (HTML) trong tên không được hiển thị hay chạy.
 import assert from 'node:assert/strict';
 import { startHarness, makeProject } from './lib/browser-harness.mjs';
 import { validWorkspace } from '../server/api.mjs';
@@ -137,7 +135,7 @@ try {
     console.log('PASS: bộ giúp zenWaiting và valid() của ứng dụng');
   }
 
-  // ---- C. Giao diện ---------------------------------------------------------------------------------------------------------------
+  // ---- C. Không còn hiện ở đâu; dữ liệu vẫn giữ (v2.86.0) ----------------------------------------------------------------------
   for (const [width, touch] of [
     [390, true],
     [820, true],
@@ -148,93 +146,29 @@ try {
       ['tối', 'dark', null],
       ['Giang hồ', 'light', GH],
     ]) {
-      const giang = name === 'Giang hồ';
       const at = ' (' + width + 'px ' + name + ')';
       const { context, page, server } = await h.open(width, { touch, workspace: seed(), colorScheme, setup });
       const errors = [];
       page.on('pageerror', (e) => errors.push(e.message));
 
-      // 1. Tổng quan: khối “Đang chờ” (3 việc: quá hẹn, hẹn sau, chưa hẹn; việc đã xong và tên trống không có).
+      // 1. Tổng quan không còn khối “Đang chờ”; thẻ không còn dòng chờ; chuông không còn nhắc việc đến hẹn.
       await h.show(page, 'dashboard');
-      await page.waitForSelector('.wf-wait-panel');
-      const dash = await page.evaluate(() => {
-        const panel = document.querySelector('.wf-wait-panel');
-        const r = panel.getBoundingClientRect();
-        return {
-          head: panel.querySelector('h2').innerText.replace(/\s+/g, ' ').trim(),
-          rows: [...panel.querySelectorAll('.wait-row')].map((row) => ({
-            title: row.querySelector('strong').textContent,
-            who: row.querySelector('.wait-who').textContent,
-            when: row.querySelector('.wait-when')?.textContent || '',
-            due: row.classList.contains('is-due'),
-            label: row.querySelector('.wait-label').textContent,
-            actions: [...row.querySelectorAll('.wait-actions .text-btn')].map((b) => [b.textContent, b.getBoundingClientRect().height]),
-          })),
-          inside: r.left >= 0 && r.right <= innerWidth + 0.5,
-        };
-      });
-      assert.equal(dash.rows.length, 3, 'ba việc đang chờ' + at);
-      assert.deepEqual(dash.rows.map((x) => x.who), ['anh Sơn', 'bên nhà in', 'chị Lan'], 'quá hẹn trước, rồi có ngày, rồi chưa hẹn' + at);
-      assert.equal(dash.rows[0].due, true, 'việc quá hẹn được nhấn mạnh' + at);
-      assert.equal(dash.rows[1].due || dash.rows[2].due, false, 'việc chưa tới hẹn không nhấn mạnh' + at);
-      assert.equal(dash.rows[2].when, '', 'chưa hẹn ngày thì không có câu ngày' + at);
-      assert.equal(dash.inside, true, 'khối nằm gọn trong màn hình' + at);
-      assert.match(dash.head, giang ? /^Đang đợi hồi âm 3 / : /^Đang chờ 3 việc$/, 'tiêu đề khối' + at);
-      assert.equal(dash.rows[0].label, giang ? 'Đang đợi' : 'Đang chờ', 'nhãn dòng' + at);
-      assert.equal(dash.rows[0].when, giang ? 'Lỡ hẹn hỏi lại 2 ngày' : 'Quá hẹn hỏi lại 2 ngày', 'câu ngày quá hẹn' + at);
-      assert.match(dash.rows[1].when, giang ? /^Hẹn hỏi lại \d{2}[-/]\d{2}$/ : /^Nhắc lại \d{2}[-/]\d{2}$/, 'câu ngày hẹn' + at);
-      assert.deepEqual(dash.rows[0].actions.map((a) => a[0]), giang ? ['Đã có hồi âm', 'Hẹn lại sau 3 ngày'] : ['Đã có phản hồi', 'Nhắc lại sau 3 ngày'], 'hai nút' + at);
-      if (touch) assert.ok(dash.rows[0].actions.every((a) => a[1] >= 43.5), 'nút ≥ 44 px khi chạm' + at);
-      for (const s of ['.wf-wait-panel h2', '.wf-wait-panel .wait-row .wait-who', '.wf-wait-panel .wait-row.is-due .wait-when', '.wf-wait-panel .wait-row:nth-of-type(2) .wait-when', '.wf-wait-panel .wait-actions .text-btn']) {
-        const c = await contrast(page, s);
-        assert.ok(c !== null && c >= 4.5, 'chữ ' + s + ' đủ tương phản (' + c?.toFixed(2) + ')' + at);
-      }
-      assert.equal(await noOverflow(page), true, 'Tổng quan không tràn ngang' + at);
-
-      // 2. Chuông: việc quá hẹn cộng vào số chưa xem, có mục “Đến lúc hỏi lại”, bấm mở việc và đánh dấu đã xem.
-      const count = () => page.evaluate(() => Number(bell.querySelector('.notification-count')?.textContent.replace('+', '') || 0));
-      const before = await count();
-      await page.evaluate(() => bell.click());
-      await page.waitForSelector('#editor-body .notice-list [data-wait-open]');
-      const item = await page.evaluate(() => {
-        const el = document.querySelector('#editor-body .notice-list [data-wait-open]');
-        return { count: document.querySelectorAll('#editor-body .notice-list [data-wait-open]').length, text: el.innerText.replace(/\s+/g, ' ').trim(), title: el.querySelector('span').textContent };
-      });
-      assert.equal(item.count, 1, 'chỉ việc đến hẹn có mục nhắc (việc hẹn sau, chưa hẹn, đã xong thì không)' + at);
-      assert.match(item.text, giang ? /Đang đợi anh Sơn · Lỡ hẹn hỏi lại 2 ngày/ : /Đang chờ anh Sơn · Quá hẹn hỏi lại 2 ngày/, 'nội dung mục nhắc' + at);
-      assert.equal(item.title, 'Việc số 1');
-      await page.click('#editor-body .notice-list [data-wait-open]');
-      await page.waitForSelector('dialog[open] #editor-form [name=title]');
-      assert.equal(await page.inputValue('dialog[open] #editor-form [name=title]'), taskOf(server, 'p1t0').title, 'bấm mục nhắc mở đúng việc' + at);
-      assert.equal(await page.evaluate((k) => localStorage.getItem(k), 'zen-wait-seen:qa:p1t0:' + taskOf(server, 'p1t0').waitUntil), '1', 'đã đánh dấu đã xem' + at);
-      assert.equal(await count(), before - 1, 'số chưa xem giảm đúng một sau khi bấm mục nhắc' + at);
-
-      // 3. (v2.85.0) Trình sửa việc không còn khối “Đang chờ người khác”: không ô tên, không ô ngày, không nút chọn nhanh.
-      await page.keyboard.press('Escape');
-      await page.waitForFunction(() => !document.querySelector('dialog[open]'));
+      assert.equal(await page.locator('.wf-wait-panel').count(), 0, 'Tổng quan không còn khối “Đang chờ”' + at);
+      assert.equal(await page.locator('.wait-row, .wait-actions').count(), 0, 'không còn dòng hay nút chờ ở Tổng quan' + at);
       await h.show(page, 'projects');
-      await page.locator('[data-task="p1t4"]').first().click();
-      await page.waitForSelector('dialog[open] #editor-form [name=title]');
-      const gone = await page.evaluate(() => ({
-        section: !!document.querySelector('#editor-form .zen-wait'),
-        input: !!document.querySelector('#editor-form [name=waitFor], #editor-form [name=waitUntil]'),
-        presets: document.querySelectorAll('[data-wait-preset]').length,
-        heading: [...document.querySelectorAll('#editor-body h3')].some((h) => /Đang chờ người khác|Đang đợi hồi âm/.test(h.textContent)),
-      }));
-      assert.deepEqual(gone, { section: false, input: false, presets: 0, heading: false }, 'hộp sửa việc không còn khối chờ người khác' + at);
+      assert.equal(await page.locator('.task-card-wait').count(), 0, 'thẻ việc không còn dòng “Đang chờ …”' + at);
+      const bellItems = await page.evaluate(() => {
+        bell.click();
+        return document.querySelectorAll('#editor-body .notice-list [data-wait-open]').length;
+      });
+      assert.equal(bellItems, 0, 'chuông không còn nhắc việc đến hẹn hỏi lại' + at);
       await page.keyboard.press('Escape');
-      await page.waitForFunction(() => !document.querySelector('dialog[open]'));
-
-      // 4. Dữ liệu chờ đã lưu trên việc: thẻ hiện đúng; mở rồi Hủy không báo thay đổi; sửa tiêu đề rồi Lưu giữ nguyên tên người và ngày hẹn.
-      await h.show(page, 'projects');
-      const chip = await page.locator('[data-task="p1t0"] .task-card-wait').first().innerText({ timeout: 3000 });
-      assert.match(chip.replace(/\s+/g, ' '), giang ? /^Đang đợi anh Sơn · Lỡ hẹn hỏi lại 2 ngày$/ : /^Đang chờ anh Sơn · Quá hẹn hỏi lại 2 ngày$/, 'dòng trên thẻ' + at);
-      await page.locator('[data-task="p1t0"]').first().click();
-      await page.waitForSelector('dialog[open] #editor-form [name=title]');
-      await page.click('[data-action="close-modal"]');
       await page.waitForFunction(() => !document.querySelector('dialog[open]'), null, { timeout: 5000 }).catch(() => {});
-      assert.equal(await page.locator('.task-unsaved-confirm').count(), 0, 'không báo thay đổi chưa lưu khi chưa đổi gì' + at);
-      assert.equal(await page.locator('dialog[open]').count(), 0, 'đóng được' + at);
+
+      // 2. Không còn nút “Đã có phản hồi” / “Nhắc lại sau 3 ngày” trên trang nào.
+      assert.equal(await page.locator('[data-wait-got], [data-wait-snooze], [data-wait-open]').count(), 0, 'không còn nút chờ' + at);
+
+      // 3. Sửa tiêu đề rồi Lưu: dữ liệu chờ vẫn nguyên trên máy chủ.
       await page.locator('[data-task="p1t0"]').first().click();
       await page.waitForSelector('dialog[open] #editor-form [name=title]');
       await page.fill('#editor-form [name=title]', 'Việc đã sửa');
@@ -243,57 +177,24 @@ try {
       assert.equal(taskOf(server, 'p1t0').waitFor, 'anh Sơn', 'tên người đang chờ không mất khi lưu' + at);
       assert.equal(taskOf(server, 'p1t0').waitUntil, vn(-2), 'ngày hẹn không mất khi lưu' + at);
       await page.waitForFunction(() => !document.querySelector('#editor').open);
-
-      // 5. “Nhắc lại sau 3 ngày” và “Đã có phản hồi” ở Tổng quan.
-      await h.show(page, 'dashboard');
-      await page.waitForSelector('.wf-wait-panel');
-      await page.locator('.wf-wait-panel .wait-row').first().locator('[data-wait-snooze]').click();
-      await until(() => taskOf(server, 'p1t0').waitUntil === vn(3), 'hoãn 3 ngày lên máy chủ' + at);
-      assert.equal(taskOf(server, 'p1t0').waitFor, 'anh Sơn', 'hoãn không đổi tên' + at);
-      await until(() => page.evaluate(() => /sau 3 ngày/.test(document.querySelector('#toast').textContent)), 'thông báo hoãn' + at);
-      const rows = await page.evaluate(() => [...document.querySelectorAll('.wf-wait-panel .wait-row')].map((r) => [r.querySelector('.wait-who').textContent, r.classList.contains('is-due')]));
-      assert.deepEqual(rows.map((r) => r[0]), ['anh Sơn', 'bên nhà in', 'chị Lan'], 'danh sách vẽ lại: hẹn sớm trước, chưa hẹn sau cùng' + at);
-      assert.equal(rows.some((r) => r[1]), false, 'không còn việc đến hẹn' + at);
-      const bellAfter = await page.evaluate(() => {
-        bell.click();
-        return document.querySelectorAll('#editor-body .notice-list [data-wait-open]').length;
-      });
-      assert.equal(bellAfter, 0, 'hoãn rồi thì chuông không còn nhắc' + at);
-      await page.keyboard.press('Escape');
-      await page.waitForFunction(() => !document.querySelector('dialog[open]'));
-      await page.locator('.wf-wait-panel .wait-row').filter({ hasText: 'chị Lan' }).locator('[data-wait-got]').click();
-      await until(() => !('waitFor' in taskOf(server, 'p1t2')), 'đã có phản hồi: xóa trường' + at);
-      assert.equal(await page.evaluate(() => [...document.querySelectorAll('.wf-wait-panel .wait-who')].map((e) => e.textContent).includes('chị Lan')), false, 'khối không còn việc đó' + at);
-      await h.show(page, 'projects');
-      assert.equal(await page.locator('[data-task="p1t2"] .task-card-wait').count(), 0, 'thẻ không còn dòng chờ' + at);
-
-      // 6. Việc đã xong không bao giờ hiện là đang chờ; bản chỉ xem không có nút sửa.
-      assert.equal(await page.locator('[data-task="p1t3"] .task-card-wait').count(), 0, 'việc đã xong không có dòng chờ' + at);
-      await h.show(page, 'dashboard');
-      await page.evaluate(() => {
-        contentReadOnly = true;
-        render();
-      });
-      await page.waitForSelector('.wf-wait-panel');
-      assert.equal(await page.locator('.wf-wait-panel .wait-actions').count(), 0, 'bản chỉ xem: không có nút sửa' + at);
       assert.deepEqual(errors, [], 'không lỗi trang' + at + ': ' + errors);
       await context.close();
     }
   }
-  // Tên người lạ (HTML) lấy từ dữ liệu đã lưu chỉ là chữ thuần; không còn ô nhập nên kiểm bằng dữ liệu có sẵn.
+
+  // Tên người lạ (HTML) trong dữ liệu đã lưu không được hiển thị thành thẻ và không chạy mã.
   {
     const xss = seed();
     Object.assign(xss.projects[0].tasks[0], { waitFor: '<img src=x onerror="window.__xss=1">' });
     const { context, page } = await h.open(390, { touch: true, workspace: xss });
     await h.show(page, 'projects');
-    await page.waitForSelector('[data-task="p1t0"] .task-card-wait');
-    assert.match(await page.locator('[data-task="p1t0"] .task-card-wait .wait-who').innerText(), /<img src=x/, 'hiện nguyên văn, không thành thẻ');
+    await page.waitForTimeout(300);
     await h.show(page, 'dashboard');
-    await page.waitForSelector('.wf-wait-panel');
-    assert.equal(await page.evaluate(() => document.querySelectorAll('.wf-wait-panel img, .task-card img').length + (window.__xss ? 1 : 0)), 0, 'không thành thẻ, không chạy mã');
+    await page.waitForTimeout(300);
+    assert.equal(await page.evaluate(() => document.querySelectorAll('#main img[src="x"]').length + (window.__xss ? 1 : 0)), 0, 'chữ lạ không thành thẻ, không chạy mã');
     await context.close();
   }
-  console.log('PASS: việc chờ người khác — 390, 820, 1440px × Thiền, tối, Giang hồ (v2.85.0: không còn ô nhập; thẻ, Tổng quan, chuông, hoãn, đã có phản hồi, chữ thuần, chỉ xem)');
+  console.log('PASS: việc chờ người khác — v2.86.0: không còn hiện ở thẻ, Tổng quan, chuông; dữ liệu chờ vẫn giữ (390, 820, 1440px × Thiền, tối, Giang hồ)');
 } finally {
   await h.close();
 }
