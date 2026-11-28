@@ -2802,9 +2802,10 @@ body select:not([multiple]):not([size]):not([data-zen-native]):not(.wf-original-
   width: 22px;
   height: 22px;
 }
-.zen-review-pick span {
+.zen-review-pick > span {
   display: grid;
-  gap: 1px;
+  gap: 2px;
+  min-width: 0;
 }
 .zen-review-pick:has(input:checked) {
   border-color: #7950c8;
@@ -3912,5 +3913,69 @@ body select:not([multiple]):not([size]):not([data-zen-native]):not(.wf-original-
     border: 1px solid #e6d3c2;
     border-radius: 13px;
     box-shadow: 0 3px 10px #432a4420;
+  }
+}
+/* v2.88.0 (Kiểm Điểm Gọn): hộp Kiểm điểm tuần dễ quét hơn: mỗi việc là một hàng có tên và dòng thông tin luôn nằm dưới; số đếm thành nhãn bên phải tiêu đề;
+   màn rộng (≥820px) xếp Đã xong | Chưa xong và Việc hằng ngày | Bát phương thành hai cột; nút Lưu luôn thấy được ở đáy hộp. */
+.zen-review-list li {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: #faf6fd;
+}
+.zen-review-list li strong {
+  overflow-wrap: anywhere;
+}
+.zen-review-list li small {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.zen-review-sec h3 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.zen-review-sec h3 small {
+  flex: none;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: #efe7fa;
+  color: #4a3b66;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.zen-review-actions {
+  position: sticky;
+  bottom: -20px;
+  margin: 12px -20px -20px;
+  padding: 12px 20px 16px;
+  background: #fffdfd;
+  border-top: 1px solid #e8dff0;
+}
+@media (min-width: 820px) {
+  .zen-review {
+    width: min(880px, calc(100vw - 48px));
+    max-width: none;
+  }
+  .zen-review-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: 18px;
+    align-items: start;
+  }
+  .zen-review-body > .zen-review-sec {
+    margin-top: 0;
+  }
+  .zen-review-body > .zen-review-sec[data-review-sec='habits'],
+  .zen-review-body > .zen-review-sec[data-review-sec='octa'],
+  .zen-review-body > .zen-review-sec[data-review-sec='money'],
+  .zen-review-body > .zen-review-sec[data-review-sec='picks'] {
+    grid-column: 1 / -1;
+  }
+  .zen-review-choices {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }

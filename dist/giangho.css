@@ -7981,6 +7981,17 @@
         box-shadow: 0 3px 10px rgba(77,40,40,0.125)
     }
 }
+:root[data-style=giangho] .zen-review-list li {
+    background: #fdf7ec
+}
+:root[data-style=giangho] .zen-review-sec h3 small {
+    background: #f5ead6;
+    color: #572627
+}
+:root[data-style=giangho] .zen-review-actions {
+    background: #fffcf6;
+    border-top: 1px solid #eeddc5
+}
 :root[data-style=giangho][data-theme=dark] {
     --bg: #18130c;
     --paper: #1e1811;
@@ -15912,6 +15923,17 @@
         border: 1px solid #493e35;
         box-shadow: 0 3px 10px rgba(203,178,159,0.125)
     }
+}
+:root[data-style=giangho][data-theme=dark] .zen-review-list li {
+    background: #1a150e
+}
+:root[data-style=giangho][data-theme=dark] .zen-review-sec h3 small {
+    background: #21180f;
+    color: #eed6c6
+}
+:root[data-style=giangho][data-theme=dark] .zen-review-actions {
+    background: #1e1811;
+    border-top: 1px solid #433830
 }
 
 /* ---- Họa tiết Giang hồ viết tay (v1.86.0 · Chu Mặc) ------------------------------------------------------------------------

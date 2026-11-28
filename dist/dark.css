@@ -4495,6 +4495,17 @@
         border: 1px solid #493e35
     }
 }
+:root[data-theme=dark] .zen-review-list li {
+    background: #17141b
+}
+:root[data-theme=dark] .zen-review-sec h3 small {
+    background: #1c1822;
+    color: #d6caf1
+}
+:root[data-theme=dark] .zen-review-actions {
+    background: #1b181f;
+    border-top: 1px solid #3d3843
+}
 
 :root[data-theme=dark] {
   color-scheme: dark;
