@@ -5223,6 +5223,10 @@
 :root[data-style=giangho] .gr-spend-item:last-child {
     border-bottom: 0
 }
+:root[data-style=giangho] .gr-spend-thumb {
+    border: 1px solid var(--line);
+    background: var(--paper)
+}
 :root[data-style=giangho] .gr-void-tag {
     background: #f7f1e7;
     border: 1px solid var(--line);
@@ -13165,6 +13169,10 @@
 }
 :root[data-style=giangho][data-theme=dark] .gr-spend-item:last-child {
     border-bottom: 0
+}
+:root[data-style=giangho][data-theme=dark] .gr-spend-thumb {
+    border: 1px solid var(--line);
+    background: var(--paper)
 }
 :root[data-style=giangho][data-theme=dark] .gr-void-tag {
     background: #16100a;

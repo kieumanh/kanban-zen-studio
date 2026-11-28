@@ -317,10 +317,17 @@
     const g = growth(), list = [...(g.spend || [])].reverse(), rows = spendAll ? list : list.slice(0, 10);
     const head = '<h2>Sổ bảo vật <small>' + (list.length ? list.length + ' lần' : 'chưa có lần nào') + '</small></h2>';
     if (!list.length) return '<section class="panel gr-spend" aria-label="Sổ bảo vật">' + head + '<p class="help-copy">Chưa có lần quy đổi nào. Bấm “Đổi bảo vật” để ghi lại món đã mua hoặc quy đổi bằng tu vi; điểm sẽ được trừ khỏi Bát phương đồ.</p></section>';
-    const item = (e) => '<li class="gr-spend-item' + (e.x ? ' is-void' : '') + '" data-spend="' + esc(e.id) + '"><div class="gr-spend-main"><div class="gr-spend-title"><strong>' + esc(e.n) + '</strong>' + (e.x ? '<em class="gr-void-tag">Đã hủy</em>' : '') + '</div><small>' + dateShort(e.d) + ' · ' + (e.x ? 'đã hoàn ' : 'trừ ') + fmt(spendPoints(e)) + ' điểm' + (e.note ? ' · ' + esc(e.note) : '') + '</small></div>' + spendChips(e) +
-      '<div class="gr-spend-act">' + (e.x
-        ? '<button type="button" class="btn" data-gr-spend-restore="' + esc(e.id) + '">Khôi phục</button><button type="button" class="btn" data-gr-spend-del="' + esc(e.id) + '">Xóa hẳn</button>'
-        : '<button type="button" class="btn" data-gr-spend-edit="' + esc(e.id) + '">Sửa</button><button type="button" class="btn" data-gr-spend-void="' + esc(e.id) + '">Hủy quy đổi</button>') + '</div></li>';
+    // v2.89.0: mỗi dòng có hình minh họa đúng món (ô bên trái), tên và chi tiết xếp một cột, nút thao tác nằm dưới.
+    const item = (e) => {
+      const key = window.zenStore ? window.zenStore.keyFor(e.n) : 'chest';
+      const thumb = window.zenStore ? window.zenStore.iconFor(e.n, 48) : '';
+      return '<li class="gr-spend-item' + (e.x ? ' is-void' : '') + '" data-spend="' + esc(e.id) + '">' +
+        '<span class="gr-spend-thumb" data-pic="' + key + '" aria-hidden="true">' + thumb + '</span>' +
+        '<div class="gr-spend-main"><div class="gr-spend-title"><strong>' + esc(e.n) + '</strong>' + (e.x ? '<em class="gr-void-tag">Đã hủy</em>' : '') + '</div><small>' + dateShort(e.d) + ' · ' + (e.x ? 'đã hoàn ' : 'trừ ') + fmt(spendPoints(e)) + ' điểm' + (e.note ? ' · ' + esc(e.note) : '') + '</small>' + spendChips(e) + '</div>' +
+        '<div class="gr-spend-act">' + (e.x
+          ? '<button type="button" class="btn" data-gr-spend-restore="' + esc(e.id) + '">Khôi phục</button><button type="button" class="btn" data-gr-spend-del="' + esc(e.id) + '">Xóa hẳn</button>'
+          : '<button type="button" class="btn" data-gr-spend-edit="' + esc(e.id) + '">Sửa</button><button type="button" class="btn" data-gr-spend-void="' + esc(e.id) + '">Hủy quy đổi</button>') + '</div></li>';
+    };
     return '<section class="panel gr-spend" aria-label="Sổ bảo vật">' + head + '<p class="help-copy">Ghi nhầm? Bấm Sửa để chỉnh lại, hoặc Hủy quy đổi để hoàn tu vi về Bát phương đồ (có thể khôi phục).</p><ul class="gr-spend-list">' + rows.map(item).join('') + '</ul>' +
       (list.length > 10 ? '<button type="button" class="btn" data-gr-spend-more aria-expanded="' + spendAll + '">' + (spendAll ? 'Thu gọn' : 'Xem tất cả ' + list.length + ' lần') + '</button>' : '') + '</section>';
   }

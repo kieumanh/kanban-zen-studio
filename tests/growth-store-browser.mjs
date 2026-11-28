@@ -96,9 +96,10 @@ try {
       says: zenStore.ITEMS.flatMap((i) => (i.pick || [null]).map((p) => { zenStore.sel.pick[i.id] = p ? p.id : undefined; return zenStore.advise(i, [1, 1, 1, 1, 1, 1, 1, 1]).item; })),
       owner: zenStore.OWNER,
     }));
-    assert.deepEqual(info.ids, ['tro', 'son', 'kip', 'ruong', 'nhan', 'ai'], 'sáu món theo thứ tự');
-    assert.deepEqual(info.names, ['Nhà trọ', 'Sơn trang', 'Bí kíp tu luyện', 'Rương bí kíp', 'Thiên Lý Nhãn', 'Quân sư & tướng lĩnh AI']);
-    assert.deepEqual(info.tags, ['Nghỉ chân', 'Ẩn cư', 'Đổi lẻ · 1 quyển', 'Đổi sỉ · 100 quyển', 'Mắt thần truyền thông', 'Trợ thủ AI'], 'Bí kíp đổi lẻ, Rương bí kíp đổi sỉ, camera là Mắt thần truyền thông');
+    // v2.89.0: thêm Vạn Thư Ngọc Hạp (USB chứa dữ liệu) ở cuối; đây là thay đổi có chủ đích của danh mục, không phải sửa test cho xanh.
+    assert.deepEqual(info.ids, ['tro', 'son', 'kip', 'ruong', 'nhan', 'ai', 'usb'], 'bảy món theo thứ tự');
+    assert.deepEqual(info.names, ['Nhà trọ', 'Sơn trang', 'Bí kíp tu luyện', 'Rương bí kíp', 'Thiên Lý Nhãn', 'Quân sư & tướng lĩnh AI', 'Vạn Thư Ngọc Hạp']);
+    assert.deepEqual(info.tags, ['Nghỉ chân', 'Ẩn cư', 'Đổi lẻ · 1 quyển', 'Đổi sỉ · 100 quyển', 'Mắt thần truyền thông', 'Trợ thủ AI', 'USB chứa dữ liệu'], 'Bí kíp đổi lẻ, Rương bí kíp đổi sỉ, camera là Mắt thần truyền thông, USB chứa dữ liệu');
     assert.deepEqual(info.picks, { kip: ['Tinh thần', 'Vật chất'], ruong: ['Tinh thần', 'Vật chất'], ai: ['Gemini Pro', 'ChatGPT Plus', 'Claude Pro'] }, 'bí kíp có hai loại, AI có đúng ba loại');
     for (const f of info.fits) assert.ok(f.length >= 1 && f.every((i) => Number.isInteger(i) && i >= 0 && i <= 7), 'mạch hợp nằm trong tám mạch: ' + f);
     for (const s of info.says) assert.ok(s && !/\d/.test(s), 'lời giới thiệu món không có giá/số: ' + s);
@@ -170,8 +171,8 @@ try {
       assert.equal(await page.locator('.gr-store-say').getAttribute('role'), 'status');
       assert.match(await text(page.locator('.gr-store-say')), /Tu vi các hạ đang có 1\.460 điểm; dồi dào nhất là Trí tuệ \(410\), kế đó Tài lộc \(300\)\..*Giá do các hạ tự định/, 'lời chào theo điểm hiện có' + at);
       assert.equal(await page.locator('.gr-store-bars li').count(), 8, 'tám thanh điểm' + at);
-      assert.equal(await page.locator('.gr-store-item').count(), 6, 'sáu món' + at);
-      for (const id of ['tro', 'son', 'kip', 'ruong', 'nhan', 'ai']) {
+      assert.equal(await page.locator('.gr-store-item').count(), 7, 'bảy món' + at);
+      for (const id of ['tro', 'son', 'kip', 'ruong', 'nhan', 'ai', 'usb']) {
         const it = item(page, id);
         assert.equal(await it.locator('.gr-store-pic svg.gr-st-pic').count(), 1, 'hình món ' + id + at);
         assert.equal(await it.locator('.gr-store-pay i').count(), 8, 'món ' + id + ' trả được bằng cả tám mạch' + at);

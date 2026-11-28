@@ -343,6 +343,15 @@
       '<rect x="13" y="20" width="7" height="22" rx="3.5" fill="#f4e8cc" transform="rotate(-10 16.5 31)"/><rect x="21" y="15" width="7" height="27" rx="3.5" fill="#efdfba"/><rect x="29.5" y="18" width="7" height="24" rx="1.2" fill="#b3402f"/><rect x="37" y="21" width="7" height="21" rx="1.2" fill="#2f6d8f"/><rect x="44" y="24" width="6" height="18" rx="1.2" fill="#4f8a5b"/>' +
       '<path d="M21,22 h7 M29.5,24 h7" stroke="#c9382a" stroke-width="1.4" opacity=".85"/><rect x="8" y="34" width="48" height="21" rx="2" fill="#8a5a36"/><rect x="8" y="34" width="48" height="4" fill="#a8794a"/><rect x="15" y="34" width="4" height="21" fill="#d4a84a"/><rect x="45" y="34" width="4" height="21" fill="#d4a84a"/>' +
       '<rect x="28" y="38" width="8" height="9" rx="1.5" fill="#f1dca0"/><circle cx="32" cy="42" r="1.4" fill="#5a3622"/>',
+    // v2.89.0: Vạn Thư Ngọc Hạp (USB chứa dữ liệu): ngọc hạp xanh ngọc, mang theo móc khóa, cổng kim loại và tài liệu bay quanh.
+    usb: () =>
+      '<ellipse cx="32" cy="57" rx="26" ry="3" fill="#000" opacity=".16"/><circle cx="31" cy="32" r="24" fill="#ffe8a3" opacity=".24"/>' +
+      '<rect x="36" y="6" width="12" height="15" rx="1.4" fill="#f4e8cc" transform="rotate(8 42 13)"/><path d="M39.5,10.5 h5 M39.5,13.5 h5 M39.5,16.5 h3.5" stroke="#c9382a" stroke-width="1.1" transform="rotate(8 42 13)"/><rect x="24" y="8" width="11" height="13" rx="1.4" fill="#efdfba" transform="rotate(-8 29.5 14.5)"/>' +
+      '<circle cx="16" cy="15" r="2.6" fill="none" stroke="#d4a84a" stroke-width="1.4"/><path d="M16,17.6 V22" stroke="#d4a84a" stroke-width="1.4"/>' +
+      '<rect x="12" y="22" width="36" height="20" rx="5" fill="#4f8a5b"/><rect x="12" y="22" width="36" height="4" rx="2.4" fill="#6caa78"/><rect x="12" y="37" width="36" height="5" rx="2.4" fill="#3d6f49"/>' +
+      '<rect x="18" y="27" width="16" height="8" rx="1.2" fill="#f4e8cc"/><path d="M21,30 H31 M21,32.6 H28" stroke="#8f2616" stroke-width="1.1" stroke-linecap="round"/><rect x="40" y="28" width="6" height="6" rx="1" fill="#ffd98a"/>' +
+      '<rect x="48" y="27" width="10" height="10" rx="1.6" fill="#b8c0c8"/><path d="M51,29.4 V34.6 M54.4,29.4 V34.6" stroke="#6b7480" stroke-width="1.2" stroke-linecap="round"/>' +
+      '<path d="M56,8 l1.2,2.6 2.6,1.2 -2.6,1.2 -1.2,2.6 -1.2,-2.6 -2.6,-1.2 2.6,-1.2z" fill="#ffd45a"/>',
     eye: () =>
       '<path d="M32,44 L24,59 M32,44 L40,59 M32,44 V59" stroke="#4a3a2a" stroke-width="2" stroke-linecap="round" fill="none"/><rect x="8" y="16" width="48" height="30" rx="7" fill="#2f2a33"/><rect x="8" y="16" width="48" height="8" rx="4" fill="#443c4a"/><rect x="14" y="10" width="14" height="7" rx="2" fill="#2f2a33"/>' +
       '<circle cx="48" cy="22" r="4.6" fill="#e0443a" opacity=".24"/><circle cx="48" cy="22" r="2.4" fill="#e0443a"/><circle cx="32" cy="31" r="12.5" fill="#d4a84a"/><circle cx="32" cy="31" r="10.5" fill="#1e1a22"/>' +
@@ -374,6 +383,8 @@
     { id: 'nhan', name: 'Thiên Lý Nhãn', tag: 'Mắt thần truyền thông', base: 'Thiên Lý Nhãn', pic: 'eye', fit: [6, 1, 3], blurb: 'Camera: con mắt thần ghi lại hình ảnh và truyền đi xa, cho việc làm lẫn kỷ niệm.', say: 'Thiên Lý Nhãn nhìn xa ngàn dặm: ghi hình cho công việc, cho kỷ niệm, cho người ở xa.', pre: () => 'Thiên Lý Nhãn (camera)' },
     { id: 'ai', name: 'Quân sư & tướng lĩnh AI', tag: 'Trợ thủ AI', base: 'Quân sư AI', pic: 'ai', fit: [5, 6], blurb: 'Quân sư bày mưu, tướng lĩnh xông pha việc học và việc làm. Chọn một trong ba: Gemini Pro, ChatGPT Plus hoặc Claude Pro.', say: 'Quân sư AI bày mưu, tướng lĩnh AI xông pha: tùy các hạ chọn vị nào hợp tay.',
       pick: [{ id: 'gemini', label: 'Gemini Pro', color: '#4f7cf0' }, { id: 'chatgpt', label: 'ChatGPT Plus', color: '#2fa58a' }, { id: 'claude', label: 'Claude Pro', color: '#d9714a' }], pre: (p) => 'Quân sư AI · ' + p.label },
+    // v2.89.0: kho dữ liệu, chứa được nhiều thứ quý; tên Hán Việt theo phong cách giang hồ.
+    { id: 'usb', name: 'Vạn Thư Ngọc Hạp', tag: 'USB chứa dữ liệu', base: 'Vạn Thư Ngọc Hạp', pic: 'usb', fit: [5, 6], blurb: 'Ngọc hạp nhỏ như chiếc USB, cất được vạn thứ quý: tài liệu, hình ảnh, bản thảo, bản sao lưu. Một món chứa được nhiều bảo vật.', say: 'Ngọc hạp này nhỏ mà chứa được nhiều: tài liệu, hình ảnh, bài học, mọi thứ đáng giữ. Mang theo bên người, không lo thất lạc.', pre: () => 'Vạn Thư Ngọc Hạp (USB)' },
   ];
   const sel = { item: '', pick: {} };
   const itemById = (id) => ITEMS.find((x) => x.id === id);
@@ -386,6 +397,20 @@
     return pic(p?.pic || it.pic, 64, p?.color);
   };
   const norm = (s) => String(s).trim().toLocaleLowerCase('vi');
+  // v2.89.0: hình minh họa cho từng dòng Sổ bảo vật. Món được nhận ra từ tên đã ghi (bắt đầu bằng tên gốc của món, như usedOf),
+  // mạch đi kèm (tinh thần, Gemini Pro…) được chọn theo chữ trong tên; không nhận ra thì dùng hình rương chung.
+  function itemFor(name) {
+    const n = norm(name);
+    const it = ITEMS.find((x) => n.startsWith(norm(x.base)));
+    if (!it) return { key: 'chest' };
+    const p = it.pick ? it.pick.find((q) => n.includes(norm(q.label))) || it.pick[0] : null;
+    return { key: p?.pic || it.pic || 'chest', color: p?.color };
+  }
+  const keyFor = (name) => itemFor(name).key;
+  const iconFor = (name, size) => {
+    const f = itemFor(name);
+    return pic(f.key, size, f.color);
+  };
   // Số lần đã đổi món này (các lần chưa hủy, tên bắt đầu bằng tên gốc của món) và tổng điểm đã trừ.
   function usedOf(it) {
     const g = G().growth(), list = (g && g.spend ? g.spend : []).filter((e) => !e.x && norm(e.n).startsWith(norm(it.base)));
@@ -595,5 +620,5 @@
     if (sel.item === id) refreshTalk();
   });
 
-  window.zenStore = { OWNER, ITEMS, scene, portrait, pic, advise, hintOf, panel, strip, ask, buy, nameOf, fitOf, usedOf, worthOf, sel };
+  window.zenStore = { OWNER, ITEMS, scene, portrait, pic, advise, hintOf, panel, strip, ask, buy, nameOf, fitOf, usedOf, worthOf, sel, keyFor, iconFor };
 })();
