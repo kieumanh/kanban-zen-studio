@@ -4488,6 +4488,13 @@
 :root[data-theme=dark] #editor-body .zen-task-section .wf-state-choice:hover:not([aria-pressed="true"]) {
     background: #1b181f
 }
+@media (max-width: 700px) {
+    :root[data-theme=dark] .mobile-menu-close {
+        color: #cab8fe;
+        background: #19151d;
+        border: 1px solid #493e35
+    }
+}
 
 :root[data-theme=dark] {
   color-scheme: dark;

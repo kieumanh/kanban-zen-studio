@@ -201,3 +201,4 @@ tests/seal-round-browser.mjs
 tests/levelup-form-browser.mjs
 tests/tablet-fit-browser.mjs
 tests/mountain-edge-browser.mjs
+tests/nav-polish-browser.mjs

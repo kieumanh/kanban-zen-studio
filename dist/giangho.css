@@ -7973,6 +7973,14 @@
 :root[data-style=giangho] #editor-body .zen-task-section .wf-state-choice:focus-visible {
     outline: 2px solid var(--st-solid)
 }
+@media (max-width: 700px) {
+    :root[data-style=giangho] .mobile-menu-close {
+        color: #ab2435;
+        background: #fff9f0;
+        border: 1px solid #e6d3c2;
+        box-shadow: 0 3px 10px rgba(77,40,40,0.125)
+    }
+}
 :root[data-style=giangho][data-theme=dark] {
     --bg: #18130c;
     --paper: #1e1811;
@@ -15897,6 +15905,14 @@
 :root[data-style=giangho][data-theme=dark] #editor-body .zen-task-section .wf-state-choice:focus-visible {
     outline: 2px solid var(--st-solid)
 }
+@media (max-width: 700px) {
+    :root[data-style=giangho][data-theme=dark] .mobile-menu-close {
+        color: #febab9;
+        background: #1c1610;
+        border: 1px solid #493e35;
+        box-shadow: 0 3px 10px rgba(203,178,159,0.125)
+    }
+}
 
 /* ---- Họa tiết Giang hồ viết tay (v1.86.0 · Chu Mặc) ------------------------------------------------------------------------
    Chép nguyên vào cuối dist/giangho.css bởi scripts/generate-themes.mjs. Quy tắc: không dùng !important (thắng bằng độ ưu tiên
@@ -16018,6 +16034,13 @@
   :root[data-style=giangho][data-theme=dark] .sidebar {
     background-position: right 12px top 5px;
     background-size: 36px 19px;
+  }
+}
+/* v2.87.0 (Thanh Điều Hướng): trên điện thoại nút × đóng menu nằm góc phải trên, nên tường vân lùi sang trái nó để không đè lên dấu ×. */
+@media (max-width: 700px) {
+  :root[data-style=giangho] .sidebar,
+  :root[data-style=giangho][data-theme=dark] .sidebar {
+    background-position: right 62px top 30px;
   }
 }
 /* Hộp thoại: viền son phía trên. */

@@ -3894,3 +3894,23 @@ body select:not([multiple]):not([size]):not([data-zen-native]):not(.wf-original-
     padding: 6px 1px !important; /* vượt padding 10px 8px !important của style.css (khối điện thoại cũ) */
   }
 }
+
+/* v2.87.0 (Thanh Điều Hướng): nút × đóng menu bên thành ô 44px bo tròn, nền kem, viền nhạt, như nút đóng hộp thoại. Trước đây là dấu × nhỏ, trơ, đè lên tường vân bên cạnh tên ứng dụng. */
+@media (max-width: 700px) {
+  .mobile-menu-close {
+    top: 10px;
+    right: 10px;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    font-size: 26px;
+    line-height: 1;
+    color: #7950c8;
+    background: #fff9f2;
+    border: 1px solid #e6d3c2;
+    border-radius: 13px;
+    box-shadow: 0 3px 10px #432a4420;
+  }
+}

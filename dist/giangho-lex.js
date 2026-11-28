@@ -21,6 +21,8 @@
     'Việc hằng ngày': ['Nhật khóa', 'Việc hằng ngày'],
     'Chế độ tập trung': ['Bế quan', 'Tập trung'],
     'Liên hoàn lệnh': ['Liên hoàn lệnh', 'Việc ưu tiên'],
+    // v2.87.0: nhãn rút gọn trên thanh điện thoại cũng có dòng phụ như các mục khác.
+    'Liên hoàn': ['Liên hoàn', 'Việc ưu tiên'],
     'Ghi chú': ['Tàng thư', 'Ghi chú'],
     'Tài nguyên': ['Bảo khố', 'Tài nguyên'],
     'Lưu trữ': ['Phong ấn', 'Lưu trữ'],
